@@ -113,11 +113,11 @@
         <grabValueFrom selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}"  stepKey="grabTextFromContent"/>
         <fillField stepKey="fillMoreThan64Symbols" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="01234567890123456789012345678901234567890123456789012345678901234"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct1"/>
-        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup1"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.close}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.close}}" visible="true" stepKey="clickOnCloseInPopup"/>
         <see stepKey="seeErrorMessage" userInput="Please enter less or equal than 64 symbols."/>
         <fillField stepKey="fillCorrectSKU" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="$grabTextFromContent"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
-        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup2"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
         <waitForPageLoad stepKey="waitForProductAttributes"/>
