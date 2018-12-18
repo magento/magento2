@@ -29,10 +29,10 @@
                 <field key="name">Virtual Product for Test</field>
                 <field key="sku">Virtual Product for Test</field>
             </createData>
-            <!--Create Gift Card product-->
-            <createData entity="ApiGiftCard" stepKey="createApiGiftCard">
-                <field key="name">Api Gift Card for Test</field>
-                <field key="sku">Api Gift Card for Test</field>
+            <!-- Create Downloadable product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct">
+                <field key="name">Api Downloadable Product for Test</field>
+                <field key="sku">Api Downloadable Product for Test</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -59,8 +59,8 @@
             <argument name="product" value="$$createVirtualProduct$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridNoData}}" userInput="We couldn't find any records." stepKey="assertDataGridNoDataMessage1"/>
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchGiftCardOnBackend">
-            <argument name="product" value="$$createApiGiftCard$$"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchDownloadableProductOnBackend">
+            <argument name="product" value="$$createDownloadableProduct$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridNoData}}" userInput="We couldn't find any records." stepKey="assertDataGridNoDataMessage2"/>
     </test>
