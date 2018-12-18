@@ -34,11 +34,6 @@
                 <field key="name">Api Gift Card for Test</field>
                 <field key="sku">Api Gift Card for Test</field>
             </createData>
-            <!-- Create Downloadable product -->
-            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct">
-                <field key="name">Api Downloadable Product for Test</field>
-                <field key="sku">Api Downloadable Product for Test</field>
-            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -55,7 +50,7 @@
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
         <waitForAjaxLoad stepKey="waitForFileToImportProcessed1"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminImportMainSection.noticeMessage}}" userInput="Created: 0, Updated: 0, Deleted: 4" stepKey="assertNoticeMessage"/>
+        <see selector="{{AdminImportMainSection.noticeMessage}}" userInput="Created: 0, Updated: 0, Deleted: 3" stepKey="assertNoticeMessage"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchSimpleProductOnBackend">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -68,9 +63,5 @@
             <argument name="product" value="$$createApiGiftCard$$"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridNoData}}" userInput="We couldn't find any records." stepKey="assertDataGridNoDataMessage2"/>
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchDownloadableProductOnBackend">
-            <argument name="product" value="$$createDownloadableProduct$$"/>
-        </actionGroup>
-        <see selector="{{AdminDataGridTableSection.dataGridNoData}}" userInput="We couldn't find any records." stepKey="assertDataGridNoDataMessage3"/>
     </test>
 </tests>
