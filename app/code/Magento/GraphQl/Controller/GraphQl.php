@@ -113,7 +113,8 @@ class GraphQl implements FrontControllerInterface
                 $data = $this->jsonSerializer->unserialize($request->getContent());
             } else {
                 $data = $request->getParams();
-                $data['variables'] = $this->jsonSerializer->unserialize($data['variables']);
+                $data['variables'] = isset($data['variables']) ?
+                    $this->jsonSerializer->unserialize($data['variables']) : null;
 
                 // The easiest way to determine mutations without additional parsing
                 if (strpos(trim($data['query']), 'mutation') === 0) {

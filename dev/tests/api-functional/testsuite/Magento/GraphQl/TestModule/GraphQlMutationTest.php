@@ -34,4 +34,23 @@ MUTATION;
         $this->assertArrayHasKey('integer_list', $testItem);
         $this->assertEquals([4, 5, 6], $testItem['integer_list']);
     }
+
+    public function testMutationIsNotAllowedViaGetRequest()
+    {
+        $id = 3;
+
+        $query = <<<MUTATION
+mutation {
+  testItem(id: {$id}) {
+    item_id,
+    name,
+    integer_list
+  }
+}
+MUTATION;
+
+        self::expectExceptionMessage('Mutation requests allowed only for POST requests');
+
+        $this->graphQlQuery($query, [], '', [], 'GET');
+    }
 }

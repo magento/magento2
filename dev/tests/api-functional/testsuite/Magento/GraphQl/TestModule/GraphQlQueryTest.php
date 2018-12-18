@@ -58,4 +58,23 @@ QUERY;
         $this->assertArrayHasKey('integer_list', $testItem);
         $this->assertEquals([3, 4, 5], $testItem['integer_list']);
     }
+
+    public function testQueryViaGetRequestReturnsResults()
+    {
+        $id = 1;
+
+        $query = <<<QUERY
+{
+    testItem(id: {$id})
+    {
+        item_id
+        name
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query, [], '', [], 'GET');
+
+        $this->assertArrayHasKey('testItem', $response);
+    }
 }

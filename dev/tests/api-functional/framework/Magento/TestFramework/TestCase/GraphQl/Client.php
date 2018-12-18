@@ -79,6 +79,41 @@ class Client
     }
 
     /**
+     * Perform HTTP GET request for query
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getQuery(string $query, array $variables = [], string $operationName = '', array $headers = [])
+    {
+        $url = $this->getEndpointUrl();
+        $requestArray = [
+            'query' => $query,
+            'variables' => empty($variables) ? $variables : null,
+            'operationName' => empty($operationName) ? $operationName : null
+        ];
+
+        $responseBody = $this->curlClient->get($url, $requestArray, $headers);
+        $responseBodyArray = $this->json->jsonDecode($responseBody);
+
+        if (!is_array($responseBodyArray)) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        }
+
+        $this->processErrors($responseBodyArray);
+
+        if (!isset($responseBodyArray['data'])) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        } else {
+            return $responseBodyArray['data'];
+        }
+    }
+
+    /**
      * Process errors
      *
      * @param array $responseBodyArray

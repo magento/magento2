@@ -34,6 +34,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param string $requestType
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
@@ -41,14 +42,28 @@ abstract class GraphQlAbstract extends WebapiAbstract
         string $query,
         array $variables = [],
         string $operationName = '',
-        array $headers = []
+        array $headers = [],
+        string $requestType = 'POST'
     ) {
-        return $this->getGraphQlClient()->postQuery(
-            $query,
-            $variables,
-            $operationName,
-            $this->composeHeaders($headers)
-        );
+        if ($requestType === 'POST') {
+            $response = $this->getGraphQlClient()->postQuery(
+                $query,
+                $variables,
+                $operationName,
+                $this->composeHeaders($headers)
+            );
+        } elseif ($requestType === 'GET') {
+            $response = $this->getGraphQlClient()->getQuery(
+                $query,
+                $variables,
+                $operationName,
+                $this->composeHeaders($headers)
+            );
+        } else {
+            throw new \Exception("Unsupported request type");
+        }
+
+        return $response;
     }
 
     /**
