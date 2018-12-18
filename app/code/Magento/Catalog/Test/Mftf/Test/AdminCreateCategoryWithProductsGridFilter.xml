@@ -22,6 +22,32 @@
         </before>
         <after>
             <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+            <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+            <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{SimpleProduct.sku}}" stepKey="fillProductSkuFilter"/>
+            <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+            <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{SimpleProduct.sku}}"  stepKey="seeProductSkuInGrid"/>
+            <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+            <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+            <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+            <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
+            <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+            <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial1"/>
+            <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters1"/>
+            <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSkuFilter1"/>
+            <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters1"/>
+            <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{defaultSimpleProduct.sku}}"  stepKey="seeProductSkuInGrid1"/>
+            <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown1"/>
+            <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid1"/>
+            <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown1"/>
+            <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction1"/>
+            <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal1"/>
+            <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
@@ -60,12 +86,12 @@
         <!--Select the default product and product with grid filter-->
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-        <fillField selector="{{AdminCategoryContentSection.ProductTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.ProductSearch}}" stepKey="clickSearchButton"/>
-        <click selector="{{AdminCategoryContentSection.ProductTableRow}}" stepKey="selectProductFromRow"/>
-        <fillField selector="{{AdminCategoryContentSection.ProductTableColumnName}}" userInput="{{SimpleProduct.name}}"  stepKey="selectDefaultProduct"/>
-        <click selector="{{AdminCategoryContentSection.ProductSearch}}" stepKey="clickSearchButton1"/>
-        <click selector="{{AdminCategoryContentSection.ProductTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromRow"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{SimpleProduct.name}}"  stepKey="selectDefaultProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton1"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="slickSaveButton"/>
         <waitForPageLoad stepKey="WaitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="successMessageYouSavedTheCategory"/>
@@ -77,32 +103,5 @@
         <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="seeDefaultProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductInStoreFrontPage"/>
-        <!--Delete the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
-        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{SimpleProduct.sku}}" stepKey="fillProductSkuFilter"/>
-        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{SimpleProduct.sku}}"  stepKey="seeProductSkuInGrid"/>
-        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
-        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
-        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
-        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
-        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial1"/>
-        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters1"/>
-        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSkuFilter1"/>
-        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters1"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{defaultSimpleProduct.sku}}"  stepKey="seeProductSkuInGrid1"/>
-        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown1"/>
-        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid1"/>
-        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown1"/>
-        <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction1"/>
-        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal1"/>
-        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
     </test>
 </tests>

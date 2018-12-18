@@ -21,6 +21,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
+            <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
             <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
             </actionGroup>
@@ -32,11 +37,10 @@
         <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
             <argument name="categoryEntity" value="NewRootCategory"/>
         </actionGroup>
-        <!--Create root category-->
+        <!--Create subcategory-->
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name)}}" stepKey="clickOnCreatedNewRootCategory"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-        <!--Create subcategory-->
         <actionGroup ref="CreateCategory" stepKey="createSubcategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
@@ -65,19 +69,8 @@
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <!--Verify subcategory displayed in store front page-->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="selectMainWebsite"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}"  stepKey="selectMainWebsite1"/>
+        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}"  stepKey="selectCustomStore"/>
         <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="SeeSubCategory"/>
-        <!--Delete the store/-->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
-        <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
-        <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
-        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
-        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreView"/>
-        <selectOption selector="{{AdminStoreBackupOptionsSection.createBackupSelect}}" userInput="No" stepKey="dontCreateDbBackup"/>
-        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewAgain"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see userInput="You deleted the store." stepKey="seeDeleteMessage"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeSubCategoryInStoreFrontPage"/>
     </test>
 </tests>
