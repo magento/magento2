@@ -11,7 +11,10 @@ use InvalidArgumentException;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -49,24 +52,32 @@ class AdaptStockStatusFilterPlugin
     private $resourceConnection;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param ResourceConnection $resourceConnection
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         ConditionManager $conditionManager,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->conditionManager = $conditionManager;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -77,7 +88,9 @@ class AdaptStockStatusFilterPlugin
      * @param string $type
      * @param bool $showOutOfStockFlag
      * @return Select
-     * @throws \InvalidArgumentException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws \Zend_Db_Select_Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundApply(
@@ -88,6 +101,10 @@ class AdaptStockStatusFilterPlugin
         $type,
         $showOutOfStockFlag
     ) {
+        if ($this->getStockId()=== $this->defaultStockProvider->getId()) {
+            return $proceed($select, $stockValues, $type, $showOutOfStockFlag);
+        }
+
         if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
             && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
         ) {
@@ -145,7 +162,7 @@ class AdaptStockStatusFilterPlugin
             []
         );
         if ($showOutOfStockFlag === false) {
-            $condition = $this->conditionManager->generateCondition('stock_index.'. IndexStructure::IS_SALABLE, '=', 1);
+            $condition = $this->conditionManager->generateCondition('stock_index.' . IndexStructure::IS_SALABLE, '=', 1);
             $select->where($condition);
         }
     }
@@ -174,6 +191,7 @@ class AdaptStockStatusFilterPlugin
      *
      * @param Select $select
      * @return string|null
+     * @throws \Zend_Db_Select_Exception
      */
     private function extractTableAliasFromSelect(Select $select)
     {
@@ -189,15 +207,25 @@ class AdaptStockStatusFilterPlugin
 
     /**
      * @return string
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function getStockTableName(): string
     {
-        $website = $this->storeManager->getWebsite();
-        $stock = $this->stockResolver->execute(
-            SalesChannelInterface::TYPE_WEBSITE,
-            $website->getCode()
-        );
-        $tableName = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
+        $tableName = $this->stockIndexTableNameResolver->execute((int)$this->getStockId());
         return $this->resourceConnection->getTableName($tableName);
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getStockId()
+    {
+        return $this->stockResolver->execute(
+            SalesChannelInterface::TYPE_WEBSITE,
+            $this->storeManager->getWebsite()->getCode()
+        )->getStockId();
     }
 }
