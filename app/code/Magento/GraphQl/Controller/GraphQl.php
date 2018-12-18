@@ -11,6 +11,7 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -113,6 +114,13 @@ class GraphQl implements FrontControllerInterface
             } else {
                 $data = $request->getParams();
                 $data['variables'] = $this->jsonSerializer->unserialize($data['variables']);
+
+                // The easiest way to determine mutations without additional parsing
+                if (strpos(trim($data['query']), 'mutation') === 0) {
+                    throw new LocalizedException(
+                        __('Mutation requests allowed only for POST requests')
+                    );
+                }
             }
 
             $query = isset($data['query']) ? $data['query'] : '';
