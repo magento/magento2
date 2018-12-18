@@ -188,7 +188,9 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $this->addToolbarBlock($collection);
 
-        $collection->load();
+        if (!$collection->isLoaded()){
+            $collection->load();
+        }
 
         return parent::_beforeToHtml();
     }

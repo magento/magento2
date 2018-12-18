@@ -24,6 +24,9 @@ class Binder
         $data['queries'] = $this->processData($requestData['queries'], $bindData['placeholder']);
         $data['filters'] = $this->processData($requestData['filters'], $bindData['placeholder']);
         $data['aggregations'] = $this->processData($requestData['aggregations'], $bindData['placeholder']);
+        if (isset($bindData['sort']) && isset($requestData['sort'])) {
+            $data['sort'] = $this->processData($requestData['sort'], $bindData['sort']);
+        }
 
         return $data;
     }

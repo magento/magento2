@@ -68,6 +68,7 @@ class Search implements SearchInterface
 
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
+        $this->requestBuilder->setSort($searchCriteria->getSortOrders());
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
 

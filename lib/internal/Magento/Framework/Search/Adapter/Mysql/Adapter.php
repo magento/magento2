@@ -86,6 +86,7 @@ class Adapter implements AdapterInterface
         $response = [
             'documents' => $documents,
             'aggregations' => $aggregations,
+            'total' => count($documents)
         ];
         return $this->responseFactory->create($response);
     }

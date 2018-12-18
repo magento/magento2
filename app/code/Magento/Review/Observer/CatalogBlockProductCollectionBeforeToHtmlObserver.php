@@ -35,7 +35,9 @@ class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInter
     {
         $productCollection = $observer->getEvent()->getCollection();
         if ($productCollection instanceof \Magento\Framework\Data\Collection) {
-            $productCollection->load();
+            if (!$productCollection->isLoaded()) {
+                $productCollection->load();
+            }
             $this->_reviewFactory->create()->appendSummary($productCollection);
         }
 

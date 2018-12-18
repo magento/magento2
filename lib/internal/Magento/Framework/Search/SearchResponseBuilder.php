@@ -46,7 +46,7 @@ class SearchResponseBuilder
         $documents = iterator_to_array($response);
         $searchResult->setItems($documents);
         $searchResult->setAggregations($response->getAggregations());
-        $searchResult->setTotalCount(count($documents));
+        $searchResult->setTotalCount($response->getTotal());
 
         return $searchResult;
     }

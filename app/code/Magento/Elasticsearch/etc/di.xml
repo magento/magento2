@@ -13,6 +13,101 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <preference for="Magento\CatalogSearch\Model\Layer\Search\ItemCollectionProvider" type="elasticsearchLayerSearchItemCollectionProvider" />
+    <preference for="Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider" type="elasticsearchLayerCategoryItemCollectionProvider" />
+
+    <virtualType name="elasticsearchFulltextSearchCollection" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchFulltextSearchCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchFulltextSearchCollection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchLayerSearchItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory</item>
+                <item name="elasticsearch" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchCategoryCollection" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">catalog_view_container</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchCategoryCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchCategoryCollection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchLayerCategoryItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory</item>
+                <item name="elasticsearch" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchAdvancedCollection" type="Magento\Elasticsearch\Model\ResourceModel\Advanced\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">advanced_search_container</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchAdvancedCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">elasticsearchAdvancedCollection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+                <item name="elasticsearch5" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer">
+        <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer" disabled="true" />
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="add_stock_information" type="Magento\CatalogInventory\Model\AddStockStatusToCollection" disabled="true" />
+    </type>
+    <virtualType name="elasticsearchSearchCriteriaResolverFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="elasticsearchSearchResultApplier\Factory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
+            <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Model\ResourceModel\Advanced\Collection">
+        <arguments>
+            <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
+            <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
@@ -21,7 +116,7 @@
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver" />
-    <virtualType name="AdditionalFieldsForElasticsearchDataMapper" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
+    <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
                 <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
@@ -31,7 +126,7 @@
     </virtualType>
     <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper">
         <arguments>
-            <argument name="additionalFieldsProvider" xsi:type="object">AdditionalFieldsForElasticsearchDataMapper</argument>
+            <argument name="additionalFieldsProvider" xsi:type="object">additionalFieldsProviderForElasticsearch</argument>
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />

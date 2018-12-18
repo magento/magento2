@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -97,6 +101,29 @@ class CollectionTest extends BaseCollection
         $temporaryStorageFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->temporaryStorage);
+        $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMockForAbstractClass();
+        $searchCriteriaResolverFactory = $this->getMockBuilder(SearchCriteriaResolverFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $searchCriteriaResolverFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($searchCriteriaResolver);
+
+        $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['apply'])
+            ->getMockForAbstractClass();
+        $searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $searchResultApplierFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($searchResultApplier);
 
         $this->model = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
@@ -106,6 +133,8 @@ class CollectionTest extends BaseCollection
                 'scopeConfig' => $this->scopeConfig,
                 'temporaryStorageFactory' => $temporaryStorageFactory,
                 'productLimitationFactory' => $productLimitationFactoryMock,
+                'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
+                'searchResultApplierFactory' => $searchResultApplierFactory
             ]
         );
 
@@ -124,37 +153,10 @@ class CollectionTest extends BaseCollection
         $reflectionProperty->setValue(null);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage setRequestName
-     */
-    public function testGetFacetedDataWithException()
-    {
-        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
-        $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
-        $criteria->expects($this->once())
-            ->method('setRequestName')
-            ->withConsecutive(['catalog_view_container'])
-            ->willThrowException(new \Exception('setRequestName', 333));
-        $this->model->getFacetedData('field');
-    }
-
     public function testGetFacetedDataWithEmptyAggregations()
     {
-        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
-        $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
-        $criteria->expects($this->once())
-            ->method('setRequestName')
-            ->withConsecutive(['catalog_view_container']);
         $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
             ->getMockForAbstractClass();
-        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
-            ->setMethods(['getName'])
-            ->getMock();
-        $this->temporaryStorage->expects($this->once())
-            ->method('storeApiDocuments')
-            ->willReturn($table);
         $this->search->expects($this->once())
             ->method('search')
             ->willReturn($searchResult);

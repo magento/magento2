@@ -11,6 +11,7 @@
 /**
  * @var $block \Magento\CatalogSearch\Block\Advanced\Result
  */
+$productList = $block->getProductListHtml();
 ?>
 <?php if ($results = $block->getResultCount()): ?>
     <div class="search found">
@@ -49,6 +50,6 @@
     </div>
 <?php endif; ?>
 <?php if ($block->getResultCount()): ?>
-    <div class="search results"><?= $block->getProductListHtml() ?></div>
+    <div class="search results"><?= $productList ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

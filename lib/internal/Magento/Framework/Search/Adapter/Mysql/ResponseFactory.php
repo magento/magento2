@@ -68,7 +68,8 @@ class ResponseFactory
             \Magento\Framework\Search\Response\QueryResponse::class,
             [
                 'documents' => $documents,
-                'aggregations' => $aggregations
+                'aggregations' => $aggregations,
+                'total' => $rawResponse['total']
             ]
         );
     }
