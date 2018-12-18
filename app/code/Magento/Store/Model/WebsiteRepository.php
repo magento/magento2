@@ -6,10 +6,10 @@
 
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
-use Magento\Framework\App\Config;
 
 /**
  * Information Expert in store websites handling
@@ -64,7 +64,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($code)
     {
@@ -79,7 +79,12 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
         if ($website->getId() === null) {
             throw new NoSuchEntityException(
-                __(sprintf("The website with code %s that was requested wasn't found. Verify the website and try again.", $code))
+                __(
+                    sprintf(
+                        "The website with code %s that was requested wasn't found. Verify the website and try again.",
+                        $code
+                    )
+                )
             );
         }
         $this->entities[$code] = $website;
@@ -88,7 +93,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -103,7 +108,12 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
         if ($website->getId() === null) {
             throw new NoSuchEntityException(
-                __(sprintf("The website with id %s that was requested wasn't found. Verify the website and try again.", $id))
+                __(
+                    sprintf(
+                        "The website with id %s that was requested wasn't found. Verify the website and try again.",
+                        $id
+                    )
+                )
             );
         }
         $this->entities[$website->getCode()] = $website;
@@ -112,7 +122,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList()
     {
@@ -131,7 +141,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefault()
     {
@@ -154,7 +164,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clean()
     {
@@ -180,6 +190,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 
     /**
      * Initialize default website.
+     *
      * @return void
      */
     private function initDefaultWebsite()
