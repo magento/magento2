@@ -142,10 +142,10 @@ class InvoiceService implements InvoiceManagementInterface
                 continue;
             }
             $item = $this->orderConverter->itemToInvoiceItem($orderItem);
-            if ($orderItem->isDummy()) {
-                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (isset($qtys[$orderItem->getId()])) {
+            if (isset($qtys[$orderItem->getId()])) {
                 $qty = (double) $qtys[$orderItem->getId()];
+            } elseif ($orderItem->isDummy()) {
+                $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
             } elseif (empty($qtys)) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
@@ -172,25 +172,42 @@ class InvoiceService implements InvoiceManagementInterface
     {
         foreach ($order->getAllItems() as $orderItem) {
             if (empty($qtys[$orderItem->getId()])) {
-                continue;
-            }
-            if ($orderItem->isDummy()) {
-                if ($orderItem->getHasChildren()) {
-                    foreach ($orderItem->getChildrenItems() as $child) {
-                        if (!isset($qtys[$child->getId()])) {
-                            $qtys[$child->getId()] = $child->getQtyToInvoice();
-                        }
-                    }
-                } elseif ($orderItem->getParentItem()) {
-                    $parent = $orderItem->getParentItem();
-                    if (!isset($qtys[$parent->getId()])) {
-                        $qtys[$parent->getId()] = $parent->getQtyToInvoice();
-                    }
+                $parentId = $orderItem->getParentItemId();
+                if ($parentId && array_key_exists($parentId, $qtys)) {
+                    $qtys[$orderItem->getId()] = $qtys[$parentId];
+                } else {
+                    continue;
                 }
             }
+            $this->prepareItemQty($orderItem, $qtys);
         }
 
         return $qtys;
+    }
+
+    /**
+     * Prepare qty to invoice item.
+     *
+     * @param Order\Item $orderItem
+     * @param array $qtys
+     * @return void
+     */
+    private function prepareItemQty(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, &$qtys)
+    {
+        if ($orderItem->isDummy()) {
+            if ($orderItem->getHasChildren()) {
+                foreach ($orderItem->getChildrenItems() as $child) {
+                    if (!isset($qtys[$child->getId()])) {
+                        $qtys[$child->getId()] = $child->getQtyToInvoice();
+                    }
+                }
+            } elseif ($orderItem->getParentItem()) {
+                $parent = $orderItem->getParentItem();
+                if (!isset($qtys[$parent->getId()])) {
+                    $qtys[$parent->getId()] = $parent->getQtyToInvoice();
+                }
+            }
+        }
     }
 
     /**
