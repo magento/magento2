@@ -15,6 +15,12 @@ use Magento\Framework\Serialize\SerializerInterface;
  */
 class Json implements SerializerInterface
 {
+    private $appState = NULL;
+
+    public function __construct(){
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->appState = $this->objectmanager->get('Magento\Framework\App\State');
+    }
     /**
      * {@inheritDoc}
      * @since 100.2.0
@@ -23,7 +29,11 @@ class Json implements SerializerInterface
     {
         $result = json_encode($data);
         if (false === $result) {
-            throw new \InvalidArgumentException('Unable to serialize value.');
+            $errorMessage = "Unable to serialize value.";
+            if(!$this->isOnProduction()){
+                $errorMessage .= "Error: " . json_last_error_msg();
+            }
+            throw new \InvalidArgumentException($errorMessage);
         }
         return $result;
     }
@@ -36,8 +46,16 @@ class Json implements SerializerInterface
     {
         $result = json_decode($string, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \InvalidArgumentException('Unable to unserialize value.');
+            $errorMessage = "Unable to unserialize value.";
+            if(!$this->isOnProduction()){
+                $errorMessage .= "Error: " . json_last_error_msg();
+            }
+            throw new \InvalidArgumentException($errorMessage);
         }
         return $result;
+    }
+    
+    private function isOnProduction(){
+        return $this->appState === \Magento\Framework\App\State::MODE_PRODUCTION;
     }
 }
