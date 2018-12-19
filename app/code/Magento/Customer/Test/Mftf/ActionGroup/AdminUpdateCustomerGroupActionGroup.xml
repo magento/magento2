@@ -14,25 +14,26 @@
             <argument name="customerGroup" type="string"/>
         </arguments>
 
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomerPage1"/>
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomerPage01"/>
         <waitForPageLoad stepKey="waitForPageLoad01"/>
 
         <!-- Start of Action Group: searchAdminDataGridByKeyword -->
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
-        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{emailAddress}}" stepKey="fillKeywordSearchField1"/>
-        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters0"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{emailAddress}}" stepKey="fillKeywordSearchField01"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch01"/>
+        <waitForPageLoad stepKey="waitForPageLoad02"/>
         <!-- End of Action Group: searchAdminDataGridByKeyword -->
 
-        <click selector="{{AdminGridRow.editByValue($customer.customer[email]$)}}" stepKey="clickOnCustomer1"/>
-        <waitForPageLoad stepKey="waitForPageLoad02"/>
-
-        <conditionalClick selector="#tab_customer" dependentSelector="#tab_customer" visible="true" stepKey="clickOnAccountInformation1"/>
+        <click selector="{{AdminGridRow.editByValue(emailAddress)}}" stepKey="clickOnCustomer01"/>
         <waitForPageLoad stepKey="waitForPageLoad03"/>
 
-        <click selector=".admin__control-select[name='customer[group_id]']" stepKey="clickOnCustomerGroup1"/>
-        <selectOption selector=".admin__control-select[name='customer[group_id]']" userInput="{{customerGroup}}" stepKey="selectCustomerGroup1"/>
-
-        <click selector="#save" stepKey="clickOnSave1"/>
+        <conditionalClick selector="#tab_customer" dependentSelector="#tab_customer" visible="true" stepKey="clickOnAccountInformation01"/>
         <waitForPageLoad stepKey="waitForPageLoad04"/>
+
+        <click selector=".admin__control-select[name='customer[group_id]']" stepKey="clickOnCustomerGroup01"/>
+        <selectOption selector=".admin__control-select[name='customer[group_id]']" userInput="{{customerGroup}}" stepKey="selectCustomerGroup01"/>
+
+        <click selector="#save" stepKey="clickOnSave01"/>
+        <waitForPageLoad stepKey="waitForPageLoad05"/>
     </actionGroup>
 </actionGroups>
