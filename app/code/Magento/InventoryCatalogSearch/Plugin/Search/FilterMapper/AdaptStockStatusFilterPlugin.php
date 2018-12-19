@@ -89,6 +89,7 @@ class AdaptStockStatusFilterPlugin
      * @return Select
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function aroundApply(
         StockStatusFilter $subject,
