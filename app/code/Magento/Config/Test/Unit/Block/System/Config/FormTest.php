@@ -532,7 +532,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $elementVisibilityMock->expects($this->once())
+        $elementVisibilityMock->expects($this->any())
             ->method('isDisabled')
             ->willReturn($isDisabled);
 
