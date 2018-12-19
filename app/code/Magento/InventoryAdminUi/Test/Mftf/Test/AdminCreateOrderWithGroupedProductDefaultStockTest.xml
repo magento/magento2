@@ -45,6 +45,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
 
+            <actionGroup ref="AdminUpdateCustomerGroupByEmailActionGroup" stepKey="updateCustomerGroup1">
+                <argument name="emailAddress" value="$customer.customer[email]$"/>
+                <argument name="customerGroup" value="General"/>
+            </actionGroup>
+
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
             <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>

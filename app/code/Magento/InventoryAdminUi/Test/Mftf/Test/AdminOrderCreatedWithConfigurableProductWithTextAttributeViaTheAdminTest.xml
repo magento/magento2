@@ -46,6 +46,11 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+            <actionGroup ref="AdminUpdateCustomerGroupByEmailActionGroup" stepKey="updateCustomerGroup1">
+                <argument name="emailAddress" value="$createCustomer1.customer[email]$"/>
+                <argument name="customerGroup" value="General"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
