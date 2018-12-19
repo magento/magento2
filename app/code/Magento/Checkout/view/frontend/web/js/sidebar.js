@@ -25,6 +25,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -215,6 +216,9 @@ define([
                 'item_id': itemId,
                 'item_qty': $('#cart-item-' + itemId + '-qty').val()
             }, elem, this._updateItemQtyAfter);
+            if (window.location.href === this.shoppingCartUrl) {
+                window.location.reload(false);
+            }
         },
 
         /**
