@@ -77,6 +77,5 @@ class AddStockDataToCollection
             $collection->getSelect()
                 ->where('stock_status_index.' . $isSalableColumnName . ' = ?', 1);
         }
-
     }
 }
