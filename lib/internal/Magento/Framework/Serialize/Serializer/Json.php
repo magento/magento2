@@ -19,7 +19,7 @@ class Json implements SerializerInterface
 
     public function __construct(){
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->appState = $this->objectmanager->get('Magento\Framework\App\State');
+        $this->appState = $objectmanager->get('Magento\Framework\App\State');
     }
     /**
      * {@inheritDoc}
