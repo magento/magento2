@@ -33,7 +33,6 @@
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
