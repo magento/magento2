@@ -15,12 +15,6 @@ use Magento\Framework\Serialize\SerializerInterface;
  */
 class Json implements SerializerInterface
 {
-    private $appState = NULL;
-
-    public function __construct(){
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->appState = $objectManager->get('Magento\Framework\App\State');
-    }
     /**
      * {@inheritDoc}
      * @since 100.2.0
@@ -56,6 +50,8 @@ class Json implements SerializerInterface
     }
     
     private function isOnProduction(){
-        return $this->appState === \Magento\Framework\App\State::MODE_PRODUCTION;
+        $appState = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get('Magento\Framework\App\State');
+        return $appState === \Magento\Framework\App\State::MODE_PRODUCTION;
     }
 }
