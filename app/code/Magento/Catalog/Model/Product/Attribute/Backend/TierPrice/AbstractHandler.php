@@ -54,12 +54,12 @@ abstract class AbstractHandler implements ExtensionInterface
      * Check whether price has percentage value.
      *
      * @param array $priceRow
-     * @return int|null
+     * @return float|null
      */
-    protected function getPercentage(array $priceRow): ?int
+    protected function getPercentage(array $priceRow): ?float
     {
         return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
-            ? (int)$priceRow['percentage_value']
+            ? (float)$priceRow['percentage_value']
             : null;
     }
 
