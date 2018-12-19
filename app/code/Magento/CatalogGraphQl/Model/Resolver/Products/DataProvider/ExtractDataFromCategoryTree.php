@@ -54,7 +54,7 @@ class ExtractDataFromCategoryTree
             $iterator->next();
 
             $pathElements = explode("/", $category->getPath());
-            if (empty($tree)){
+            if (empty($tree)) {
                 $this->startCategoryFetchLevel = count($pathElements) - 1;
             }
 

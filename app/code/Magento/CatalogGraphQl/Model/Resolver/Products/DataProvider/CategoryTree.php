@@ -105,7 +105,7 @@ class CategoryTree
         $collection->setOrder('level');
         $collection->setOrder(
             'position',
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::SORT_ORDER_DESC
+            $collection::SORT_ORDER_DESC
         );
         $collection->getSelect()->orWhere(
             $collection->getSelect()
