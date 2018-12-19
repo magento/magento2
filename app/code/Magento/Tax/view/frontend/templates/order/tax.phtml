@@ -26,7 +26,7 @@
                 <td <?= /* @escapeNotVerified */ $block->getLabelProperties() ?>>
                     <?= $block->escapeHtml($title) ?>
                     <?php if (!is_null($percent)): ?>
-                        (<?= /* @noEscape */ $_order->formatPrice((float)$percent) ?>%)
+                        (<?= /* @noEscape */ $_order->getOrderCurrency()->formatTxt((float)$percent, ['display' => \Magento\Framework\Currency::NO_SYMBOL]) ?>%)
                     <?php endif; ?>
                     <br />
                 </td>

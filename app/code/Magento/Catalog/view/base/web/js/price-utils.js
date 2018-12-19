@@ -56,6 +56,7 @@ define([
             s = amount < 0 ? '-' : isShowSign ? '+' : '';
         } else if (isShowSign === false) {
             s = '';
+            pattern = '%s';
         }
         pattern = pattern.indexOf('{sign}') < 0 ? s + pattern : pattern.replace('{sign}', s);
 
