@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper;
 
-use InvalidArgumentException;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -107,7 +106,7 @@ class AdaptStockStatusFilterPlugin
             if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
                 && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
             ) {
-                throw new InvalidArgumentException('Invalid filter type: ' . $type);
+                throw new \InvalidArgumentException('Invalid filter type: ' . $type);
             }
 
             $mainTableAlias = $this->extractTableAliasFromSelect($select);
@@ -119,7 +118,7 @@ class AdaptStockStatusFilterPlugin
                 $this->addSubProductInventoryStockJoin($select, $showOutOfStockFlag);
             }
         } catch (\Exception $e) {
-            throw new InvalidArgumentException($e->getMessage());
+            throw new \InvalidArgumentException($e->getMessage());
         }
 
         return $select;
