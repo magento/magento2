@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="NewCustomerPageSection">
         <element name="associateToWebsite" type="select" selector="//*[@class='admin__field-control _with-tooltip']//*[@class='admin__control-select']"/>
         <element name="group" type="select" selector="//div[@class='admin__field-control admin__control-fields required']//div[@class='admin__field-control']//select[@class='admin__control-select']"/>
