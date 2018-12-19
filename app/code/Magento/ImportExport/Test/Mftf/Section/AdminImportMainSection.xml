@@ -13,6 +13,5 @@
         <element name="importBehavior" type="select" selector="#basic_behavior"/>
         <element name="selectFileToImport" type="input" selector="#import_file"/>
         <element name="importButton" type="button" selector="#import_validation_container button" timeout="30"/>
-        <element name="noticeMessage" type="text" selector="#import_validation_messages .message.message-notice.notice"/>
     </section>
 </sections>
