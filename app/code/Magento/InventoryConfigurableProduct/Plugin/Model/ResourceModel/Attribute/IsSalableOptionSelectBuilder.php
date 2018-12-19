@@ -58,7 +58,8 @@ class IsSalableOptionSelectBuilder
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
+            ->get(DefaultStockProviderInterface::class);
     }
 
     /**

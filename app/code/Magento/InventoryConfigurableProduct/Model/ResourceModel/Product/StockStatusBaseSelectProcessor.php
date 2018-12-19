@@ -77,7 +77,8 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->resource = $resource;
-        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
+            ->get(DefaultStockProviderInterface::class);
     }
 
     /**
