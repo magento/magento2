@@ -89,7 +89,6 @@ class AdaptStockStatusFilterPlugin
      * @return Select
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function aroundApply(
         StockStatusFilter $subject,
@@ -194,7 +193,6 @@ class AdaptStockStatusFilterPlugin
      *
      * @param Select $select
      * @return string|null
-     * @throws \Zend_Db_Select_Exception
      */
     private function extractTableAliasFromSelect(Select $select)
     {
