@@ -24,6 +24,20 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
+    <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
+        <arguments>
+            <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
+        </arguments>
+        <remove keyForRemoval="selectActionType"/>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="fillRuleName"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible" after="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode" after="waitForElementVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon" after="fillCouponCode"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionTypeToFixed" after="clickToExpandActions"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1" stepKey="fillDiscountAmount" after="selectActionTypeToFixed"/>
+    </actionGroup>
+
     <!--Delete Cart price Rule for Retailer customer-->
     <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="goToCartPriceRules"/>
