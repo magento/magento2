@@ -292,6 +292,7 @@ define([
 
             if (images) {
                 images = this._sortImages(images);
+
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
