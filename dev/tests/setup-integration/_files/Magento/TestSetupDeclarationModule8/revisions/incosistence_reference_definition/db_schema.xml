@@ -9,13 +9,13 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="test_table" resource="default" comment="Test Table">
         <column xsi:type="int" name="page_id" nullable="false" unsigned="false" identity="true"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="page_id"/>
         </constraint>
     </table>
     <table name="dependent" resource="default" comment="Lol">
         <column xsi:type="int" name="page_id_on" nullable="true" unsigned="true"/>
-        <constraint xsi:type="foreign" name="FOREIGN" table="dependent" column="page_id_on" referenceColumn="page_id"
+        <constraint xsi:type="foreign" referenceId="FOREIGN" table="dependent" column="page_id_on" referenceColumn="page_id"
                     referenceTable="test_table"/>
     </table>
 </schema>

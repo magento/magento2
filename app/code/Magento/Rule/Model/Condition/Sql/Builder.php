@@ -32,13 +32,25 @@ class Builder
         '=='    => ':field = ?',
         '!='    => ':field <> ?',
         '>='    => ':field >= ?',
+        '&gt;=' => ':field >= ?',
         '>'     => ':field > ?',
+        '&gt;'  => ':field > ?',
         '<='    => ':field <= ?',
+        '&lt;=' => ':field <= ?',
         '<'     => ':field < ?',
+        '&lt;'  => ':field < ?',
         '{}'    => ':field IN (?)',
         '!{}'   => ':field NOT IN (?)',
         '()'    => ':field IN (?)',
         '!()'   => ':field NOT IN (?)',
+    ];
+
+    /**
+     * @var array
+     */
+    private $stringConditionOperatorMap = [
+        '{}' => ':field LIKE ?',
+        '!{}' => ':field NOT LIKE ?',
     ];
 
     /**
@@ -152,15 +164,27 @@ class Builder
         }
 
         $defaultValue = 0;
-        $sql = str_replace(
-            ':field',
-            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
-            $this->_conditionOperatorMap[$conditionOperator]
-        );
-
-        $bindValue = $condition->getBindArgumentValue();
-        $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
-
+        //operator 'contains {}' is mapped to 'IN()' query that cannot work with substrings
+        // adding mapping to 'LIKE %%'
+        if ($condition->getInputType() === 'string'
+            && in_array($conditionOperator, array_keys($this->stringConditionOperatorMap), true)
+        ) {
+            $sql = str_replace(
+                ':field',
+                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+                $this->stringConditionOperatorMap[$conditionOperator]
+            );
+            $bindValue = $condition->getBindArgumentValue();
+            $expression = $value . $this->_connection->quoteInto($sql, "%$bindValue%");
+        } else {
+            $sql = str_replace(
+                ':field',
+                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+                $this->_conditionOperatorMap[$conditionOperator]
+            );
+            $bindValue = $condition->getBindArgumentValue();
+            $expression = $value . $this->_connection->quoteInto($sql, $bindValue);
+        }
         // values for multiselect attributes can be saved in comma-separated format
         // below is a solution for matching such conditions with selected values
         if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {

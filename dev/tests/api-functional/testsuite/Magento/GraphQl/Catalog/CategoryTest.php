@@ -170,7 +170,9 @@ QUERY;
         attribute_set_id
         country_of_manufacture
         created_at
-        description
+        description {
+            html
+        }
         gift_message_available
         id
         categories {
@@ -179,8 +181,7 @@ QUERY;
           available_sort_by
           level
         }
-        image
-        image_label
+        image { url, label }
         meta_description
         meta_keyword
         meta_title
@@ -261,18 +262,16 @@ QUERY;
           position
           sku
         }
-        short_description
-        sku
-        small_image {
-            path
+        short_description {
+            html
         }
-        small_image_label
+        sku
+        small_image { url, label }
+        thumbnail { url, label }
         special_from_date
         special_price
         special_to_date
         swatch_image
-        thumbnail
-        thumbnail_label
         tier_price
         tier_prices {
           customer_group_id

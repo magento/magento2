@@ -11,12 +11,13 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Url\EncoderInterface;
 
 /**
  * Catalog Products List widget block
  *
- * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
@@ -96,6 +97,11 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     private $json;
 
     /**
+     * @var \Magento\Framework\Url\EncoderInterface|null
+     */
+    private $urlEncoder;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -105,6 +111,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      * @param Json|null $json
+     * @param \Magento\Framework\Url\EncoderInterface|null $urlEncoder
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -115,7 +122,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null
+        Json $json = null,
+        EncoderInterface $urlEncoder = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -124,6 +132,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
+        $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         parent::__construct(
             $context,
             $data
@@ -131,7 +140,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * @inheritdoc
+     * Internal constructor, that is called from real constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -152,6 +163,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Get key pieces for caching block content
      *
      * @return array
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getCacheKeyInfo()
     {
@@ -197,17 +209,22 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
-
-        $price = '';
-        if ($priceRender) {
-            $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
-                $product,
-                $arguments
+        if (!$priceRender) {
+            $priceRender = $this->getLayout()->createBlock(
+                \Magento\Framework\Pricing\Render::class,
+                'product.price.render.default',
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
         }
+
+        $price = $priceRender->render(
+            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+            $product,
+            $arguments
+        );
+
         return $price;
     }
 
@@ -224,6 +241,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * Prepare and return product collection
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function createCollection()
     {
@@ -250,7 +268,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns conditions
+     * Get conditions
      *
      * @return \Magento\Rule\Model\Condition\Combine
      */
@@ -341,7 +359,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
                     \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
-                    'widget.products.list.pager'
+                    $this->getWidgetPagerBlockName()
                 );
 
                 $this->pager->setUseContainer(true)
@@ -389,10 +407,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Returns PriceCurrencyInterface instance
+     * Get currency of product
      *
      * @return PriceCurrencyInterface
-     *
      * @deprecated 100.2.0
      */
     private function getPriceCurrency()
@@ -402,5 +419,38 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAddToCartUrl($product, $additional = [])
+    {
+        $requestingPageUrl = $this->getRequest()->getParam('requesting_page_url');
+
+        if (!empty($requestingPageUrl)) {
+            $additional['useUencPlaceholder'] = true;
+            $url = parent::getAddToCartUrl($product, $additional);
+            return str_replace('%25uenc%25', $this->urlEncoder->encode($requestingPageUrl), $url);
+        }
+
+        return parent::getAddToCartUrl($product, $additional);
+    }
+
+    /**
+     * Get widget block name
+     *
+     * @return string
+     */
+    private function getWidgetPagerBlockName()
+    {
+        $pageName = $this->getData('page_var_name');
+        $pagerBlockName = 'widget.products.list.pager';
+
+        if (!$pageName) {
+            return $pagerBlockName;
+        }
+
+        return $pagerBlockName . '.' . $pageName;
     }
 }
