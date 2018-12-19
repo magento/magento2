@@ -59,6 +59,16 @@ class CustomFlatAttributeTest extends IndexerTestCase
     private $flatState;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Store\Api\Data\StoreInterface
+     */
+    private $savedCurrentStore;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -71,6 +81,16 @@ class CustomFlatAttributeTest extends IndexerTestCase
         $this->flatState = $this->objectManager->create(FlatState::class, [
             'isAvailable' => true
         ]);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->savedCurrentStore = $this->storeManager->getStore();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->storeManager->setCurrentStore($this->savedCurrentStore);
     }
 
     /**
@@ -176,9 +196,7 @@ class CustomFlatAttributeTest extends IndexerTestCase
     private function getFlatProductFromStore(string $sku, $store = null): ProductInterface
     {
         if ($store) {
-            /** @var StoreManagerInterface $storeManager */
-            $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-            $storeManager->setCurrentStore($store);
+            $this->storeManager->setCurrentStore($store);
         }
 
         /** @var Collection $productCollection */
