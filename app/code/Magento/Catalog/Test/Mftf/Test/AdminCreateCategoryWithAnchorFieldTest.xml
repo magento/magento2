@@ -37,8 +37,6 @@
         <!--Select Content and fill the options-->
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
-        <scrollTo selector="{{AdminCategoryContentSection.description}}" stepKey="scrollToDescription"/>
-        <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Anchor Subcategory All Fields" stepKey="fillTheDescription"/>
         <scrollTo selector="{{AdminCategoryContentSection.AddCMSBlock}}" x="0" y="-80" stepKey="scrollToAddCMSBlock"/>
         <selectOption selector="{{AdminCategoryContentSection.AddCMSBlock}}" userInput="$$createDefaultCMSBlock.title$$" stepKey="selectCMSBlock"/>
         <!--Select Display Setting and fill the options-->
