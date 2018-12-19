@@ -171,7 +171,7 @@ class StockedProductFilterByInventoryStock
         );
         $select->joinInner(
             ['stock' => $stockTable],
-            'product.sku = stock.sky',
+            'product.sku = stock.sku',
             ['is_salable']
         );
         $select->where('product.entity_id IN (?)', $productIds);
