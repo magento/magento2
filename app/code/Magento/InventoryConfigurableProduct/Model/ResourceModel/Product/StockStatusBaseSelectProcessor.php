@@ -54,29 +54,30 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
 
     /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param StockConfigurationInterface $stockConfig
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
+     * @param ResourceConnection $resourceConnection
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param ResourceConnection $resource
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         StockConfigurationInterface $stockConfig,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
-        ResourceConnection $resource,
+        ResourceConnection $resourceConnection = null,
         DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->stockConfig = $stockConfig;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
-        $this->resource = $resource;
+        $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()
+            ->get(ResourceConnection::class);
         $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
             ->get(DefaultStockProviderInterface::class);
     }
@@ -94,7 +95,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
             $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
             $stockId = (int)$stock->getStockId();
             if ($stockId === $this->defaultStockProvider->getId()) {
-                $stockTable = $this->resource->getTableName('cataloginventory_stock_status');
+                $stockTable = $this->resourceConnection->getTableName('cataloginventory_stock_status');
                 $isSalableColumnName = 'stock_status';
 
                 /** @var Select $select */

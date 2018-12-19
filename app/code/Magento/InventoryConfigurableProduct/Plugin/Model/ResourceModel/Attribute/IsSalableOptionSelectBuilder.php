@@ -46,8 +46,8 @@ class IsSalableOptionSelectBuilder
     /**
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
-     * @param DefaultStockProviderInterface $defaultStockProvider
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         StoreManagerInterface $storeManager,
