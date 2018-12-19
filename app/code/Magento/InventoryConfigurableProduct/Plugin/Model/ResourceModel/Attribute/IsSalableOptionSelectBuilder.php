@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Plugin\Model\ResourceModel\Attribute;
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -51,13 +52,13 @@ class IsSalableOptionSelectBuilder
     public function __construct(
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
-        DefaultStockProviderInterface $defaultStockProvider,
-        StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+        StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
+        DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
     }
 
     /**

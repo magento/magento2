@@ -9,6 +9,7 @@ namespace Magento\InventoryConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
@@ -68,15 +69,15 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
         StockConfigurationInterface $stockConfig,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
-        DefaultStockProviderInterface $defaultStockProvider,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->stockConfig = $stockConfig;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
-        $this->defaultStockProvider = $defaultStockProvider;
         $this->resource = $resource;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
     }
 
     /**

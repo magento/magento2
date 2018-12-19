@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper;
 
 use InvalidArgumentException;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
@@ -68,14 +69,14 @@ class AdaptStockStatusFilterPlugin
         StockResolverInterface $stockResolver,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         ResourceConnection $resourceConnection,
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->conditionManager = $conditionManager;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
     }
 
     /**

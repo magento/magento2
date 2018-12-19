@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\App\ObjectManager;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
  * Add Stock data to collection
@@ -33,10 +34,10 @@ class AddStockDataToCollection
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
-        DefaultStockProviderInterface $defaultStockProvider
+        DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
     }
 
     /**
