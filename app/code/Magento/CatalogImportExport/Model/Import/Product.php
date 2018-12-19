@@ -1580,7 +1580,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 if ($this->getErrorAggregator()->hasToBeTerminated()) {
                     if (ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS !==
-                        $this->_parameters[Import::FIELD_NAME_VALIDATION_STRATEGY]) {
+                            $this->_parameters[Import::FIELD_NAME_VALIDATION_STRATEGY]) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
                     }
