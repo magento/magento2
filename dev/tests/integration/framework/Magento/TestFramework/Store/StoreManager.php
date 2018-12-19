@@ -66,7 +66,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function hasSingleStore()
     {
         $result = $this->decoratedStoreManager->hasSingleStore();
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -76,7 +75,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function isSingleStoreMode()
     {
         $result = $this->decoratedStoreManager->isSingleStoreMode();
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -86,7 +84,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getStore($storeId = null)
     {
         $result = $this->decoratedStoreManager->getStore($storeId);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -96,7 +93,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getStores($withDefault = false, $codeKey = false)
     {
         $result = $this->decoratedStoreManager->getStores($withDefault, $codeKey);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -106,7 +102,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getWebsite($websiteId = null)
     {
         $result = $this->decoratedStoreManager->getWebsite($websiteId);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -116,7 +111,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getWebsites($withDefault = false, $codeKey = false)
     {
         $result = $this->decoratedStoreManager->getWebsites($withDefault, $codeKey);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -144,7 +138,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getDefaultStoreView()
     {
         $result = $this->decoratedStoreManager->getDefaultStoreView();
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -154,7 +147,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getGroup($groupId = null)
     {
         $result = $this->decoratedStoreManager->getGroup($groupId);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
@@ -164,7 +156,6 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function getGroups($withDefault = false)
     {
         $result = $this->decoratedStoreManager->getGroups($withDefault);
-        $this->dispatchInitCurrentStoreAfterEvent();
         return $result;
     }
 
