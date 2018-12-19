@@ -1,87 +1,90 @@
 {
-  "inventory_source": {
-    "column": {
-      "source_code": true,
-      "name": true,
-      "enabled": true,
-      "description": true,
-      "latitude": true,
-      "longitude": true,
-      "country_id": true,
-      "region_id": true,
-      "region": true,
-      "city": true,
-      "street": true,
-      "postcode": true,
-      "contact_name": true,
-      "email": true,
-      "phone": true,
-      "fax": true,
-      "use_default_carrier_config": true
+    "inventory_source": {
+        "column": {
+            "source_code": true,
+            "name": true,
+            "enabled": true,
+            "description": true,
+            "latitude": true,
+            "longitude": true,
+            "country_id": true,
+            "region_id": true,
+            "region": true,
+            "city": true,
+            "street": true,
+            "postcode": true,
+            "contact_name": true,
+            "email": true,
+            "phone": true,
+            "fax": true,
+            "use_default_carrier_config": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     },
-    "constraint": {
-      "PRIMARY": true
+    "inventory_source_carrier_link": {
+        "column": {
+            "link_id": true,
+            "source_code": true,
+            "carrier_code": true,
+            "position": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "INV_SOURCE_CARRIER_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE": true
+        }
+    },
+    "inventory_source_item": {
+        "column": {
+            "source_item_id": true,
+            "source_code": true,
+            "sku": true,
+            "quantity": true,
+            "status": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "INVENTORY_SOURCE_ITEM_SOURCE_CODE_INVENTORY_SOURCE_SOURCE_CODE": true,
+            "INVENTORY_SOURCE_ITEM_SOURCE_CODE_SKU": true
+        },
+        "index": {
+            "INVENTORY_SOURCE_ITEM_SKU_SOURCE_CODE_QUANTITY": true
+        }
+    },
+    "inventory_stock": {
+        "column": {
+            "stock_id": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "inventory_source_stock_link": {
+        "column": {
+            "link_id": true,
+            "stock_id": true,
+            "source_code": true,
+            "priority": true
+        },
+        "index": {
+            "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_PRIORITY": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_INVENTORY_STOCK_STOCK_ID": true,
+            "INV_SOURCE_STOCK_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE": true,
+            "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_SOURCE_CODE": true
+        }
+    },
+    "patch_list": {
+        "column": {
+            "patch_id": true,
+            "patch_name": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
-  },
-  "inventory_source_carrier_link": {
-    "column": {
-      "link_id": true,
-      "source_code": true,
-      "carrier_code": true,
-      "position": true
-    },
-    "constraint": {
-      "PRIMARY": true,
-      "INV_SOURCE_CARRIER_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE": true
-    }
-  },
-  "inventory_source_item": {
-    "column": {
-      "source_item_id": true,
-      "source_code": true,
-      "sku": true,
-      "quantity": true,
-      "status": true
-    },
-    "constraint": {
-      "PRIMARY": true,
-      "INVENTORY_SOURCE_ITEM_SOURCE_CODE_INVENTORY_SOURCE_SOURCE_CODE": true,
-      "INVENTORY_SOURCE_ITEM_SOURCE_CODE_SKU": true
-    }
-  },
-  "inventory_stock": {
-    "column": {
-      "stock_id": true,
-      "name": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
-  },
-  "inventory_source_stock_link": {
-    "column": {
-      "link_id": true,
-      "stock_id": true,
-      "source_code": true,
-      "priority": true
-    },
-    "index": {
-      "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_PRIORITY": true
-    },
-    "constraint": {
-      "PRIMARY": true,
-      "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_INVENTORY_STOCK_STOCK_ID": true,
-      "INV_SOURCE_STOCK_LNK_SOURCE_CODE_INV_SOURCE_SOURCE_CODE": true,
-      "INVENTORY_SOURCE_STOCK_LINK_STOCK_ID_SOURCE_CODE": true
-    }
-  },
-  "patch_list": {
-    "column": {
-      "patch_id": true,
-      "patch_name": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
-  }
 }
