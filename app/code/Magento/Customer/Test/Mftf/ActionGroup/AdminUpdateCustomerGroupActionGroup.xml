@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCustomerGroupByEmailActionGroup">
+        <arguments>
+            <argument name="emailAddress"/>
+            <argument name="customerGroup" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomerPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad01"/>
+
+        <!-- Start of Action Group: searchAdminDataGridByKeyword -->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{emailAddress}}" stepKey="fillKeywordSearchField1"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch1"/>
+        <!-- End of Action Group: searchAdminDataGridByKeyword -->
+
+        <click selector="{{AdminGridRow.editByValue($customer.customer[email]$)}}" stepKey="clickOnCustomer1"/>
+        <waitForPageLoad stepKey="waitForPageLoad02"/>
+
+        <conditionalClick selector="#tab_customer" dependentSelector="#tab_customer" visible="true" stepKey="clickOnAccountInformation1"/>
+        <waitForPageLoad stepKey="waitForPageLoad03"/>
+
+        <click selector=".admin__control-select[name='customer[group_id]']" stepKey="clickOnCustomerGroup1"/>
+        <selectOption selector=".admin__control-select[name='customer[group_id]']" userInput="{{customerGroup}}" stepKey="selectCustomerGroup1"/>
+
+        <click selector="#save" stepKey="clickOnSave1"/>
+        <waitForPageLoad stepKey="waitForPageLoad04"/>
+    </actionGroup>
+</actionGroups>
