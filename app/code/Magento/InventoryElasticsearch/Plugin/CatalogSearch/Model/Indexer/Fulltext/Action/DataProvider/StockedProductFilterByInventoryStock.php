@@ -9,12 +9,18 @@ namespace Magento\InventoryElasticsearch\Plugin\CatalogSearch\Model\Indexer\Full
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 
+/**
+ * Filter products by stock status.
+ */
 class StockedProductFilterByInventoryStock
 {
     /**
@@ -43,24 +49,48 @@ class StockedProductFilterByInventoryStock
     private $stockByWebsiteIdResolver;
 
     /**
+     * @var StockStatusCriteriaInterfaceFactory
+     */
+    private $stockStatusCriteriaFactory;
+
+    /**
+     * @var StockStatusRepositoryInterface
+     */
+    private $stockStatusRepository;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param Config $config
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param ResourceConnection $resourceConnection
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
+     * @param StockStatusRepositoryInterface $stockStatusRepository
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         Config $config,
         StockConfigurationInterface $stockConfiguration,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         ResourceConnection $resourceConnection,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
+        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
+        StockStatusRepositoryInterface $stockStatusRepository,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->config = $config;
         $this->stockConfiguration = $stockConfiguration;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
+        $this->stockStatusRepository = $stockStatusRepository;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -83,28 +113,15 @@ class StockedProductFilterByInventoryStock
             $productIds = array_keys($indexData);
             $stockStatuses = [];
 
-            foreach ($this->getProductIdsByWebsiteIds($productIds) as $websiteId => $productIds) {
+            foreach ($this->getProductIdsByWebsiteIds($productIds) as $websiteId => $productIdsStr) {
                 $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
-                $stockTable = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
+                $stockId = (int)$stock->getStockId();
+                $productIdsByWebsite = explode(',', $productIdsStr);
 
-                if ($this->resourceConnection->getConnection()->isTableExists($stockTable)) {
-                    $connection = $this->resourceConnection->getConnection();
-                    $select = $connection->select();
-                    $select->from(
-                        ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                        ['entity_id']
-                    );
-                    $select->joinInner(
-                        ['stock' => $stockTable],
-                        "product.sku = stock.sku",
-                        ['is_salable']
-                    );
-                    $select->where('product.entity_id IN (?)', $productIds);
-                    $productsSalable = $connection->fetchAssoc($select);
-                    $productsSalable = array_filter($productsSalable, function ($productSalable) {
-                        return StockStatusInterface::STATUS_IN_STOCK == $productSalable['is_salable'];
-                    });
-                    $stockStatuses += $productsSalable;
+                if ($this->defaultStockProvider->getId() === $stockId) {
+                    $stockStatuses += $this->getStockStatusesFromDefaultStock($productIdsByWebsite);
+                } else {
+                    $stockStatuses += $this->getStockStatusesFromCustomStock($productIdsByWebsite, $stockId);
                 }
             }
 
@@ -119,6 +136,51 @@ class StockedProductFilterByInventoryStock
     }
 
     /**
+     * Get product stock statuses on default stock.
+     *
+     * @param array $productIds
+     * @return array
+     */
+    private function getStockStatusesFromDefaultStock(array $productIds): array
+    {
+        $stockStatusCriteria = $this->stockStatusCriteriaFactory->create();
+        $stockStatusCriteria->setProductsFilter($productIds);
+        $stockStatusCollection = $this->stockStatusRepository->getList($stockStatusCriteria);
+        $stockStatuses = $stockStatusCollection->getItems();
+
+        return array_filter($stockStatuses, function (StockStatusInterface $stockStatus) {
+            return StockStatusInterface::STATUS_IN_STOCK === (int)$stockStatus->getStockStatus();
+        });
+    }
+
+    /**
+     * Get product stock statuses on custom stock.
+     *
+     * @param array $productIds
+     * @param int $stockId
+     * @return array
+     */
+    private function getStockStatusesFromCustomStock(array $productIds, int $stockId): array
+    {
+        $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select();
+        $select->from(
+            ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            ['entity_id']
+        );
+        $select->joinInner(
+            ['stock' => $stockTable],
+            'product.sku = stock.sky',
+            ['is_salable']
+        );
+        $select->where('product.entity_id IN (?)', $productIds);
+        $select->where('stock.is_salable = ?', 1);
+
+        return $connection->fetchAssoc($select);
+    }
+
+    /**
      * Get all website ids by product ids.
      *
      * @param array $entityIds
@@ -126,18 +188,17 @@ class StockedProductFilterByInventoryStock
      */
     private function getProductIdsByWebsiteIds(array $entityIds): array
     {
-        $result = [];
-
         $connection = $this->resourceConnection->getConnection('indexer');
         $select = $connection->select();
         $select->from(
             ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
-            ['website_id', 'product_id']
-        )->where('product_in_websites.product_id IN (?)', $entityIds)->distinct();
-        foreach ($connection->fetchAll($select) as $websiteData) {
-            $result[(int)$websiteData['website_id']][] = (int)$websiteData['product_id'];
-        }
+            [
+                'website_id',
+                'GROUP_CONCAT(product_in_websites.product_id)'
+            ]
+        )->where('product_in_websites.product_id IN (?)', $entityIds)
+            ->group('product_in_websites.website_id');
 
-        return $result;
+        return $connection->fetchPairs($select);
     }
 }

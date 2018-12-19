@@ -7,6 +7,7 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-search": "*",
         "magento/module-elasticsearch": "*",
+        "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-indexer": "*",
         "magento/module-inventory-sales-api": "*"
 
