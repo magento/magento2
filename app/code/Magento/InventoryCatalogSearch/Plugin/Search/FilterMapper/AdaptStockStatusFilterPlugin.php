@@ -11,8 +11,6 @@ use InvalidArgumentException;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
@@ -88,9 +86,7 @@ class AdaptStockStatusFilterPlugin
      * @param string $type
      * @param bool $showOutOfStockFlag
      * @return Select
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     * @throws \Zend_Db_Select_Exception
+     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundApply(
@@ -101,23 +97,27 @@ class AdaptStockStatusFilterPlugin
         $type,
         $showOutOfStockFlag
     ) {
-        if ($this->getStockId()=== $this->defaultStockProvider->getId()) {
-            return $proceed($select, $stockValues, $type, $showOutOfStockFlag);
-        }
+        try {
+            if ($this->getStockId() === $this->defaultStockProvider->getId()) {
+                return $proceed($select, $stockValues, $type, $showOutOfStockFlag);
+            }
 
-        if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
-            && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
-        ) {
-            throw new InvalidArgumentException('Invalid filter type: ' . $type);
-        }
+            if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
+                && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
+            ) {
+                throw new InvalidArgumentException('Invalid filter type: ' . $type);
+            }
 
-        $mainTableAlias = $this->extractTableAliasFromSelect($select);
-        $this->addProductEntityJoin($select, $mainTableAlias);
-        $this->addInventoryStockJoin($select, $showOutOfStockFlag);
+            $mainTableAlias = $this->extractTableAliasFromSelect($select);
+            $this->addProductEntityJoin($select, $mainTableAlias);
+            $this->addInventoryStockJoin($select, $showOutOfStockFlag);
 
-        if ($type === StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS) {
-            $this->addSubProductEntityJoin($select, $mainTableAlias);
-            $this->addSubProductInventoryStockJoin($select, $showOutOfStockFlag);
+            if ($type === StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS) {
+                $this->addSubProductEntityJoin($select, $mainTableAlias);
+                $this->addSubProductInventoryStockJoin($select, $showOutOfStockFlag);
+            }
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException($e->getMessage());
         }
 
         return $select;
@@ -208,8 +208,6 @@ class AdaptStockStatusFilterPlugin
 
     /**
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function getStockTableName(): string
     {
@@ -219,12 +217,10 @@ class AdaptStockStatusFilterPlugin
 
     /**
      * @return int
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function getStockId()
     {
-        return $this->stockResolver->execute(
+        return (int)$this->stockResolver->execute(
             SalesChannelInterface::TYPE_WEBSITE,
             $this->storeManager->getWebsite()->getCode()
         )->getStockId();
