@@ -94,7 +94,7 @@ class StockedProductFilterByInventoryStock
     }
 
     /**
-     * Filter out of stock options for configurable product.
+     * Filter out stock options for configurable product.
      *
      * @param DataProvider $dataProvider
      * @param array $indexData
@@ -105,24 +105,20 @@ class StockedProductFilterByInventoryStock
      */
     public function beforePrepareProductIndex(
         DataProvider $dataProvider,
-        array $indexData,
-        array $productData,
-        int $storeId
-    ): array {
+        $indexData,
+        $productData,
+        $storeId
+    ) {
         if ($this->config->isElasticsearchEnabled() && !$this->stockConfiguration->isShowOutOfStock($storeId)) {
             $productIds = array_keys($indexData);
-            $stockStatuses = [];
+            $websiteId = $this->getWebsiteIdByStoreId($storeId);
+            $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
+            $stockId = $stock->getStockId();
 
-            foreach ($this->getProductIdsByWebsiteIds($productIds) as $websiteId => $productIdsStr) {
-                $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
-                $stockId = (int)$stock->getStockId();
-                $productIdsByWebsite = explode(',', $productIdsStr);
-
-                if ($this->defaultStockProvider->getId() === $stockId) {
-                    $stockStatuses += $this->getStockStatusesFromDefaultStock($productIdsByWebsite);
-                } else {
-                    $stockStatuses += $this->getStockStatusesFromCustomStock($productIdsByWebsite, $stockId);
-                }
+            if ($this->defaultStockProvider->getId() === $stockId) {
+                $stockStatuses = $this->getStockStatusesFromDefaultStock($productIds);
+            } else {
+                $stockStatuses = $this->getStockStatusesFromCustomStock($productIds, $stockId);
             }
 
             $indexData = array_intersect_key($indexData, $stockStatuses);
@@ -181,24 +177,20 @@ class StockedProductFilterByInventoryStock
     }
 
     /**
-     * Get all website ids by product ids.
+     * Get website id by store id.
      *
-     * @param array $entityIds
-     * @return array
+     * @param int $storeId
+     * @return int
      */
-    private function getProductIdsByWebsiteIds(array $entityIds): array
+    private function getWebsiteIdByStoreId($storeId): int
     {
         $connection = $this->resourceConnection->getConnection('indexer');
         $select = $connection->select();
         $select->from(
-            ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
-            [
-                'website_id',
-                'GROUP_CONCAT(product_in_websites.product_id)'
-            ]
-        )->where('product_in_websites.product_id IN (?)', $entityIds)
-            ->group('product_in_websites.website_id');
+            [$this->resourceConnection->getTableName('store')],
+            ['website_id']
+        )->where('store_id = ?', $storeId);
 
-        return $connection->fetchPairs($select);
+        return (int)current($connection->fetchAssoc($select))['website_id'];
     }
 }
