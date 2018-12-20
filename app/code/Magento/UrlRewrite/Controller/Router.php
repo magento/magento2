@@ -164,7 +164,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                 UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
                 UrlRewrite::STORE_ID => $storeId,
             ]);
-            if( $rewrite ){
+            if ($rewrite) {
                 return $rewrite;
             }
         }

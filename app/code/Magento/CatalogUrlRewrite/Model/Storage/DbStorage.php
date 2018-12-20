@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Model\Storage;
 
 use Magento\Catalog\Model\ProductRepository;
@@ -16,6 +18,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class DbStorage
+ */
 class DbStorage extends BaseDbStorage
 {
     /**
@@ -139,7 +144,7 @@ class DbStorage extends BaseDbStorage
     /**
      * Find product rewrite by request data
      *
-     * @param $data
+     * @param array $data
      * @return array|null
      */
     private function findProductRewriteByData($data)
@@ -156,12 +161,13 @@ class DbStorage extends BaseDbStorage
         }
 
         try {
-            $productCategories = $this->productRepository->getById($productFromDb['entity_id'])->getAvailableInCategories();
+            $product = $this->productRepository->getById($productFromDb['entity_id']);
         } catch (NoSuchEntityException $e) {
             return null;
         }
+        $productCategories = $product->getAvailableInCategories();
 
-        $categoryPath = str_replace( '/' . $productUrl, '', $requestPath)
+        $categoryPath = str_replace('/' . $productUrl, '', $requestPath)
             . $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]);
         if ($categoryPath) {
             $data[UrlRewrite::REQUEST_PATH] = [$categoryPath];

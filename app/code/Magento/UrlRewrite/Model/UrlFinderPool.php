@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model;
 
-
+/**
+ * Class UrlFinderPool
+ */
 class UrlFinderPool
 {
     private const SORT_KEY = 'sortOrder';
@@ -22,8 +24,8 @@ class UrlFinderPool
      */
     public function __construct(array $urlFinders)
     {
-        foreach($urlFinders as $urlFinder) {
-            if( ! $urlFinder['object'] instanceof UrlFinderInterface) {
+        foreach ($urlFinders as $urlFinder) {
+            if (!$urlFinder['object'] instanceof UrlFinderInterface) {
                 throw new \InvalidArgumentException('Must be instance of ' . UrlFinderInterface::class);
             }
         }
@@ -36,9 +38,11 @@ class UrlFinderPool
      *
      * @return array
      */
-    public function getUrlFinders() : array
+    public function getUrlFinders(): array
     {
-        return array_map(function($u){return $u['object'];}, $this->urlFinders);
+        return array_map(function ($u) {
+            return $u['object'];
+        }, $this->urlFinders);
     }
 
     /**

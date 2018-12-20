@@ -16,7 +16,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Model\MergeDataProvider;
@@ -80,11 +79,6 @@ class UrlRewriteHandler
     private $productScopeRewriteGenerator;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -104,8 +98,7 @@ class UrlRewriteHandler
         CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         Json $serializer = null,
-        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
-        ScopeConfigInterface $scopeConfig = null
+        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -120,7 +113,6 @@ class UrlRewriteHandler
         $this->serializer = $serializer ?: $objectManager->get(Json::class);
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator
             ?: $objectManager->get(ProductScopeRewriteGenerator::class);
-        $this->scopeConfig = $scopeConfig ?? $objectManager->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -205,11 +197,6 @@ class UrlRewriteHandler
         $rootCategoryId = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
-        $generateProductRewrite = (bool)$this->scopeConfig->getValue(
-            'catalog/seo/generate_rewrites_on_save',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
 
         /** @var Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
@@ -230,7 +217,6 @@ class UrlRewriteHandler
             $this->isSkippedProduct[$category->getEntityId()][] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
-            $product->setData('generate_rewrites', $generateProductRewrite);
             $mergeDataProvider->merge(
                 $this->categoryBasedProductRewriteGenerator->generate($product, $rootCategoryId)
             );
