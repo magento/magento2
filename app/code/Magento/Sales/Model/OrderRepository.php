@@ -177,7 +177,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             $additionalInformationObject = $this->paymentAdditionalInfoFactory->create();
             $additionalInformationObject->setKey($key);
 
-            $value = $this->serializer->serialize($value);
+            if (!is_string($value)) {
+                $value = $this->serializer->serialize($value);
+            }
             $additionalInformationObject->setValue($value);
 
             $objects[] = $additionalInformationObject;
