@@ -11,7 +11,7 @@
     <test name="CreateAdminOrderPayedWithOnlinePaymentIncludingTaxAndDiscount">
         <annotations>
             <features value="Braintree"/>
-            <stories value="Get access to a New Credit Memo Page from Invocie for Order payed with online payment via Admin"/>
+            <stories value="Get access to a New Credit Memo Page from Invoice for Order payed with online payment via Admin"/>
             <title value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <description value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <severity value="CRITICAL"/>
