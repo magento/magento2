@@ -86,7 +86,7 @@ class Render extends AbstractAction
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
-            }else {
+            } else {
                 /** @var \Magento\Framework\Controller\Result\Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
                 $resultJson->setStatusHeader(
