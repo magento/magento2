@@ -200,6 +200,7 @@ class CreditmemoFactory
     {
         if (isset($data['shipping_amount'])) {
             $creditmemo->setBaseShippingAmount((double)$data['shipping_amount']);
+            $creditmemo->setBaseShippingInclTax((double)$data['shipping_amount']);
         }
         if (isset($data['adjustment_positive'])) {
             $creditmemo->setAdjustmentPositive($data['adjustment_positive']);
