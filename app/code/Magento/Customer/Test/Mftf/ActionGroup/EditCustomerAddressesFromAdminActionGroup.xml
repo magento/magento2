@@ -12,11 +12,10 @@
             <argument name="customerAddress"/>
         </arguments>
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
-        <click selector="{{AdminEditCustomerAddressesSection.addNewAddresses}}" stepKey="addNewAddresses"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="addNewAddresses"/>
+        <waitForPageLoad time="60" stepKey="wait5678" />
         <fillField  stepKey="fillPrefixName" userInput="{{customerAddress.prefix}}" selector="{{AdminEditCustomerAddressesSection.prefixName}}"/>
-        <fillField  stepKey="fillFirstName" userInput="{{customerAddress.firstname}}" selector="{{AdminEditCustomerAddressesSection.firstName}}"/>
         <fillField  stepKey="fillMiddleName" userInput="{{customerAddress.middlename}}" selector="{{AdminEditCustomerAddressesSection.middleName}}"/>
-        <fillField  stepKey="fillLastName" userInput="{{customerAddress.lastname}}" selector="{{AdminEditCustomerAddressesSection.lastName}}"/>
         <fillField  stepKey="fillSuffixName" userInput="{{customerAddress.suffix}}" selector="{{AdminEditCustomerAddressesSection.suffixName}}"/>
         <fillField  stepKey="fillCompany" userInput="{{customerAddress.company}}" selector="{{AdminEditCustomerAddressesSection.company}}"/>
         <fillField  stepKey="fillStreetAddress" userInput="{{customerAddress.street}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
@@ -26,10 +25,7 @@
         <fillField  stepKey="fillZipCode" userInput="{{customerAddress.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
         <fillField  stepKey="fillPhone" userInput="{{customerAddress.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
         <fillField  stepKey="fillVAT" userInput="{{customerAddress.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
-        <click selector="{{CustomerAccountSection.save}}" stepKey="saveAddress"/>
-        <waitForPageLoad stepKey="waitForStorefrontPage"/>
-        <conditionalClick selector="{{CustomerAccountSection.save}}" dependentSelector="{{CustomerAccountSection.save}}" visible="true" stepKey="clickSaveAgain"/>
-        <waitForPageLoad stepKey="waitForCustomerSaved"/>
-        <see stepKey="seeSaveMessage" userInput="You saved the customer."/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
     </actionGroup>
 </actionGroups>
