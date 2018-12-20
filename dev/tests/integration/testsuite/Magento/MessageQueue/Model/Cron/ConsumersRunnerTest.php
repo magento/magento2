@@ -118,9 +118,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         $this->markTestSkipped('MC-5904: Test Fails randomly,');
         $this->consumersRunner->run();
-
-        sleep(20);
-
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $this->waitConsumerPidFile($consumer->getName());
         }
