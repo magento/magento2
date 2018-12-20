@@ -73,7 +73,6 @@
                     <caption class="table-caption"><?= /* @escapeNotVerified */ __('Additional addresses') ?></caption>
                     <thead>
                     <tr>
-                        <th scope="col" class="col id"><?= /* @escapeNotVerified */ __('Address #') ?></th>
                         <th scope="col" class="col firstname"><?= /* @escapeNotVerified */ __('First Name') ?></th>
                         <th scope="col" class="col lastname"><?= /* @escapeNotVerified */ __('Last Name') ?></th>
                         <th scope="col" class="col streetaddress"><?= /* @escapeNotVerified */ __('Street Address') ?></th>
@@ -82,13 +81,12 @@
                         <th scope="col" class="col state"><?= /* @escapeNotVerified */ __('State') ?></th>
                         <th scope="col" class="col zip"><?= /* @escapeNotVerified */ __('Zip/Postal Code') ?></th>
                         <th scope="col" class="col phone"><?= /* @escapeNotVerified */ __('Phone') ?></th>
-                        <th scope="col" class="col actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                        <th scope="col" class="col actions"> </th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($_pAddsses as $address): ?>
                         <tr>
-                            <td data-th="<?= $block->escapeHtml(__('Address #')) ?>" class="col id"><?= /* @escapeNotVerified */ $address->getId() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= /* @escapeNotVerified */ $address->getFirstname() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= /* @escapeNotVerified */ $address->getLastname() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->getStreetAddress($address->getStreet()) ?></td>
@@ -98,8 +96,8 @@
                             <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= /* @escapeNotVerified */ $address->getPostcode() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= /* @escapeNotVerified */ $address->getTelephone() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                                <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
-                                <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete Address')) ?></span></a>
+                                <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit')) ?></span></a>
+                                <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete')) ?></span></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

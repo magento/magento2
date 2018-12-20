@@ -249,6 +249,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get one string street address from "two fields" array or just returns string if it was passed in parameters
+     *
      * @param $street
      * @return string
      */
@@ -266,6 +268,20 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');
+    }
+
+    /**
+     * Get country name by $countryId
+     * Using \Magento\Directory\Model\Country to get country name by $countryId
+     *
+     * @param $countryId
+     * @return string
+     */
+    public function getCountryById($countryId)
+    {
+        /** @var \Magento\Directory\Model\Country $country */
+        $country = $this->countryFactory->create();
+        return $country->loadByCode($countryId)->getName();
     }
 
     /**
@@ -288,19 +304,5 @@ class Book extends \Magento\Framework\View\Element\Template
         }
 
         return $this->addressesCollection;
-    }
-
-    /**
-     * Get country name by $countryId
-     * Using \Magento\Directory\Model\Country to get country name by $countryId
-     *
-     * @param $countryId
-     * @return string
-     */
-    public function getCountryById($countryId) :string
-    {
-        /** @var \Magento\Directory\Model\Country $country */
-        $country = $this->countryFactory->create();
-        return $country->loadByCode($countryId)->getName();
     }
 }
