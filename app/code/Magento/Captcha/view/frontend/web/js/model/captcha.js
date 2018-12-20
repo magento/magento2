@@ -22,6 +22,7 @@ define([
             imageHeight: captchaData.imageHeight,
             refreshUrl: captchaData.refreshUrl,
             isLoading: ko.observable(false),
+            timestamp: null,
 
             /**
              * @return {String}

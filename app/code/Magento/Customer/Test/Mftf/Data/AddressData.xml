@@ -125,4 +125,11 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
+    <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster Bridge Rd</item>
+            <item>7700 xyz street</item>
+        </array>
+        <data key="state">California</data>
+    </entity>
 </entities>

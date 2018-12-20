@@ -26,10 +26,13 @@
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Clear filters-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -76,6 +79,7 @@
 
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
+        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
         <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
