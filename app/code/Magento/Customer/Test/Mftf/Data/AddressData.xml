@@ -108,6 +108,23 @@
         <data key="country_id">GB</data>
         <data key="telephone">444-44-444-44</data>
     </entity>
+    <entity name="US_Address_Utah" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>1234 Some Utah address</item>
+        </array>
+        <data key="city">Provo</data>
+        <data key="state">Utah</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">84001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
+    </entity>
     <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
         <array key="street">
             <item>172, Westminster Bridge Rd</item>
