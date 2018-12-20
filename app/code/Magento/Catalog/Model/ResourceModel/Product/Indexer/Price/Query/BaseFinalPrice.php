@@ -218,7 +218,7 @@ class BaseFinalPrice
 
         if ($entityIds !== null) {
             if (count($entityIds) > 1) {
-                $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+                $select->where(sprintf('e.entity_id IN (%s)' , implode(',',$entityIds)));
             } else {
                 $select->where('e.entity_id = ?', $entityIds);
             }
