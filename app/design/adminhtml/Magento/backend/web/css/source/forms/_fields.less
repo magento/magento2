@@ -128,7 +128,13 @@
         }
 
         &:extend(.abs-field-sizes all);
-
+        
+        &.field-subscription{
+            > .admin__field-control{
+                line-height: 32px;
+            }
+        }
+        
         &.admin__field-no-label {
             > .admin__field-label {
                 display: none;
