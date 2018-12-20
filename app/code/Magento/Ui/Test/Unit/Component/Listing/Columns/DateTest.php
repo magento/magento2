@@ -77,7 +77,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->contextMock,
                 'uiComponentFactory' => $this->uiComponentFactoryMock,
                 'data' => $this->data,
-                'timezone' => $this->timezoneMock
+                'timezone' => $this->timezoneMock,
             ]
         );
     }
