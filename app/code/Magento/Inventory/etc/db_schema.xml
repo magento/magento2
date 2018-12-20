@@ -61,6 +61,11 @@
             <column name="source_code"/>
             <column name="sku"/>
         </constraint>
+        <index referenceId="INVENTORY_SOURCE_ITEM_SKU_SOURCE_CODE_QUANTITY" indexType="btree">
+            <column name="sku"/>
+            <column name="source_code"/>
+            <column name="quantity"/>
+        </index>
     </table>
     <table name="inventory_stock" resource="default" engine="innodb">
         <column xsi:type="int" name="stock_id" padding="10" unsigned="true" nullable="false" identity="true"/>

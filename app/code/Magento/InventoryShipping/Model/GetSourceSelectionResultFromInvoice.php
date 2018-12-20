@@ -101,10 +101,10 @@ class GetSourceSelectionResultFromInvoice
     }
 
     /**
-     * @param InvoiceItemInterface[]|Traversable $invoiceItems
+     * @param InvoiceItemInterface[]|iterable $invoiceItems
      * @return array
      */
-    private function getSelectionRequestItems(Traversable $invoiceItems): array
+    private function getSelectionRequestItems(iterable $invoiceItems): array
     {
         $selectionRequestItems = [];
         foreach ($invoiceItems as $invoiceItem) {
