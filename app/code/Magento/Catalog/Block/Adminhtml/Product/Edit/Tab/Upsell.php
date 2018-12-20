@@ -8,6 +8,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 /**
  * @api
  * @since 100.0.2
+ * @deprecated Not used since upsell products grid moved to UI components.
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Related\CrossSellDataProvider
  */
 class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 {

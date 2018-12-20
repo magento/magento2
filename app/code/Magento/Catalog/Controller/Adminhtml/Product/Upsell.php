@@ -6,6 +6,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class Upsell
+ *
+ * @package Magento\Catalog\Controller\Adminhtml\Product
+ * @deprecated Not used since upsell products grid moved to UI components.
+ * @see Magento_Catalog::view/adminhtml/ui_component/upsell_product_listing.xml
+ */
 class Upsell extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
