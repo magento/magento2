@@ -21,7 +21,7 @@ use Magento\Framework\View\Element\Template;
 class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInterface
 {
     /** Default block lifetime */
-    const DEFAULT_LIFETIME = 3600;
+    const DEFAULT_LIFETIME = 86400;
 
     /**
      * @var SaleableInterface
@@ -86,7 +86,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      */
     protected function getCacheLifetime()
     {
-        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : null;
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : self::DEFAULT_LIFETIME;
     }
     
     /**
