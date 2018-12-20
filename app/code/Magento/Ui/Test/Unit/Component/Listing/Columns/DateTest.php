@@ -17,10 +17,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     private $data = [
         'js_config' => [
-            'extends' => 'test_config_extends'
+            'extends' => 'test_config_extends',
         ],
         'config' => [
-            'dataType' => 'testType'
+            'dataType' => 'testType',
         ],
         'name' => 'field_name',
     ];
@@ -94,10 +94,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
             'templates' => [
                 'date' => [
                     'options' => [
-                        'dateFormat' => $dateFormat
-                    ]
-                ]
-            ]
+                        'dateFormat' => $dateFormat,
+                    ],
+                ],
+            ],
         ];
 
         $this->timezoneMock->expects($this->once())

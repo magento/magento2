@@ -60,10 +60,10 @@ class Date extends Column
             'templates' => [
                 'date' => [
                     'options' => [
-                        'dateFormat' => $this->timezone->getDateFormatWithLongYear()
-                    ]
-                ]
-            ]
+                        'dateFormat' => $this->timezone->getDateFormatWithLongYear(),
+                    ],
+                ],
+            ],
         ];
 
         $this->setData('config', $config);
