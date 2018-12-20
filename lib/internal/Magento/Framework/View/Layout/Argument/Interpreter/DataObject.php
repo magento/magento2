@@ -48,10 +48,7 @@ class DataObject implements InterpreterInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @return object
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @inheritdoc
      */
     public function evaluate(array $data)
     {
