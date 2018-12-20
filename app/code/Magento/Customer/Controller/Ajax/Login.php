@@ -27,9 +27,9 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 class Login extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var AccountManagementInterface
@@ -202,17 +202,15 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
-        } catch (LocalizedException | InvalidEmailOrPasswordException | EmailNotConfirmedException $e) {
+        } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage(),
-                'captcha' => $this->customerSession->getData('user_login_show_captcha')
             ];
         } catch (\Exception $e) {
             $response = [
                 'errors' => true,
                 'message' => __('Invalid login or password.'),
-                'captcha' => $this->customerSession->getData('user_login_show_captcha')
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
