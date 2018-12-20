@@ -7,17 +7,18 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateStoreGroupActionGroup">
+    <actionGroup name="AdminStoreGroupCreateActionGroup">
         <arguments>
             <argument name="Website" defaultValue="_defaultWebsite"/>
+            <argument name="storeGroup"/>
         </arguments>
         <amOnPage url="{{AdminSystemStoreGroupPage.url}}" stepKey="navigateToNewStoreGroup"/>
         <waitForPageLoad stepKey="waitForStoreGroupPageLoad" />
 
         <comment userInput="Creating Store Group" stepKey="storeGroupCreationComment" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{Website.name}}" stepKey="selectWebsite" />
-        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{CustomStoreGroupCustomWebsite.name}}" stepKey="enterStoreGroupName" />
-        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{CustomStoreGroupCustomWebsite.code}}" stepKey="enterStoreGroupCode" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroup.name}}" stepKey="enterStoreGroupName" />
+        <fillField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroup.code}}" stepKey="enterStoreGroupCode" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category"  stepKey="setRootCategory" />
         <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
