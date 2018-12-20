@@ -70,6 +70,9 @@ class ProductScopeRewriteGenerator
      */
     private $categoryRepository;
 
+    /**
+     * @var ScopeConfigInterface
+     */
     private $config;
 
     /**

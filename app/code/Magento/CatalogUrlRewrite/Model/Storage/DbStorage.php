@@ -95,24 +95,24 @@ class DbStorage extends BaseDbStorage
      */
     protected function doFindOneByData(array $data)
     {
-
-        if (isset($data[UrlRewrite::ENTITY_TYPE])
-            && $data[UrlRewrite::ENTITY_TYPE] == 'product'
-            && !empty($data[UrlRewrite::METADATA]["category_id"])
-        ) {
-            $categoryId = $data[UrlRewrite::METADATA]["category_id"];
+        if (isset($data[UrlRewrite::ENTITY_TYPE]) && $data[UrlRewrite::ENTITY_TYPE] == 'product') {
+            $metadata = $data[UrlRewrite::METADATA];
             unset($data[UrlRewrite::METADATA]);
             $productFromDb = $this->connection->fetchRow($this->prepareSelect($data));
-            $data[UrlRewrite::ENTITY_ID] = $categoryId;
-            $data[UrlRewrite::ENTITY_TYPE] = 'category';
-            $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
 
-            $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
-                    $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
-                    '',
-                    $categoryFromDb[UrlRewrite::REQUEST_PATH]
-                )
-                . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
+            if (!empty($metadata["category_id"])) {
+                $categoryId = $metadata["category_id"];
+                $data[UrlRewrite::ENTITY_ID] = $categoryId;
+                $data[UrlRewrite::ENTITY_TYPE] = 'category';
+                $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
+                $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
+                        $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
+                        '',
+                        $categoryFromDb[UrlRewrite::REQUEST_PATH]
+                    )
+                    . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
+            }
+
             return $productFromDb;
         }
 
@@ -123,7 +123,7 @@ class DbStorage extends BaseDbStorage
             return null;
         }
 
-        return $this->findProductRewriteByData($data);
+        return $this->findProductRewriteByRequestPath($data);
     }
 
     /**
@@ -147,7 +147,7 @@ class DbStorage extends BaseDbStorage
      * @param array $data
      * @return array|null
      */
-    private function findProductRewriteByData($data)
+    private function findProductRewriteByRequestPath($data)
     {
         $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
 
