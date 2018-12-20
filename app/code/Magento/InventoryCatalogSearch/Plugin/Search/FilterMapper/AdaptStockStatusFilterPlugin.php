@@ -21,6 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adapt stock status filter to multi stocks
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdaptStockStatusFilterPlugin
 {
@@ -211,14 +212,14 @@ class AdaptStockStatusFilterPlugin
      */
     private function getStockTableName(): string
     {
-        $tableName = $this->stockIndexTableNameResolver->execute((int)$this->getStockId());
+        $tableName = $this->stockIndexTableNameResolver->execute($this->getStockId());
         return $this->resourceConnection->getTableName($tableName);
     }
 
     /**
      * @return int
      */
-    private function getStockId()
+    private function getStockId(): int
     {
         return (int)$this->stockResolver->execute(
             SalesChannelInterface::TYPE_WEBSITE,

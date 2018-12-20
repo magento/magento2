@@ -12,7 +12,6 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
@@ -85,7 +84,6 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @param Select $select
      * @return Select
-     * @throws LocalizedException
      * @throws NoSuchEntityException
      */
     public function process(Select $select)
