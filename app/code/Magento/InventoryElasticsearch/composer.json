@@ -9,7 +9,8 @@
         "magento/module-elasticsearch": "*",
         "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-indexer": "*",
-        "magento/module-inventory-sales-api": "*"
+        "magento/module-inventory-sales-api": "*",
+        "magento/module-store": "*"
 
     },
     "type": "magento2-module",
