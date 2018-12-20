@@ -115,4 +115,11 @@
         </arguments>
         <uncheckOption selector="{{AdminCategorySEOSection.urlKeyDefaultValueCheckbox}}" before="enterURLKey" stepKey="uncheckDefaultValue"/>
     </actionGroup>
+
+    <!-- Save category form -->
+    <actionGroup name="saveCategoryForm">
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
+    </actionGroup>
 </actionGroups>
