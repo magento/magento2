@@ -18,11 +18,11 @@
     </actionGroup>
 
     <!--Set Subtotal condition for Customer Segment-->
-    <actionGroup name="setCartAttributeConditionForCartPriceRuleActionGroup">
+    <actionGroup name="SetCartAttributeConditionForCartPriceRuleActionGroup">
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="operatorType" defaultValue="is" type="string"/>
-            <argument name="value" defaultValue="100" type="string"/>
+            <argument name="value" type="string"/>
         </arguments>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToActionTab"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeaderOpen}}"

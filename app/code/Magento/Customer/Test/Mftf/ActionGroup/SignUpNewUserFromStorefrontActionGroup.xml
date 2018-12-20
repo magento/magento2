@@ -11,7 +11,7 @@
         <arguments>
             <argument name="Customer" defaultValue="CustomerEntityOne"/>
         </arguments>
-        <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
+        <amOnPage stepKey="amOnStorefrontPage"  url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefrontPage"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
