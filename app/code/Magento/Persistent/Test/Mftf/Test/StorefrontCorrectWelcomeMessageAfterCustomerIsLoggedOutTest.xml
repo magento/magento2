@@ -48,7 +48,7 @@
         </actionGroup>
 
         <!--Check customer name and last name in welcome message-->
-        <seeCurrentUrlMatches regex="~/customer/account/~" stepKey="seeCustomerAccoutPageUrl"/>
+        <seeCurrentUrlMatches regex="~/customer/account/~" stepKey="seeCustomerAccountPageUrl"/>
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage"/>
@@ -64,13 +64,13 @@
             <argument name="customer" value="$$createCustomerForPersistent$$"/>
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
-        <seeCurrentUrlMatches regex="~/customer/account/~" stepKey="seeCustomerAccoutPageUrl1"/>
+        <seeCurrentUrlMatches regex="~/customer/account/~" stepKey="seeCustomerAccountPageUrl1"/>
         <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage1"/>
 
         <!--Logout and check persistent customer welcome message-->
-        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="StorefrontCustomerLogout1"/>
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
         <seeCurrentUrlMatches regex="~/customer/account/logoutSuccess/~" wait="5" stepKey="seeCustomerSignOutPageUrl1"/>
         <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
