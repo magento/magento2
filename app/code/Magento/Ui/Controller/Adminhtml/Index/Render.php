@@ -96,7 +96,7 @@ class Render extends AbstractAction
                 );
                 return $resultJson->setData([
                         'error' => $this->escaper->escapeHtml('Forbidden'),
-                        'errorcode' => 403]
+                        'errorcode' => 403
                 );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
