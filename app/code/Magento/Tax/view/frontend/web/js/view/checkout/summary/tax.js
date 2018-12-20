@@ -97,7 +97,7 @@ define([
         formatPrice: function (amount) {
             return this.getFormattedPrice(amount);
         },
-        
+
         /**
          * @param {*} percent
          * @return {*|String}

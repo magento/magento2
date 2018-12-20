@@ -20,7 +20,11 @@ define([
         getFormattedPrice: function (price) {
             return priceUtils.formatPrice(price, quote.getPriceFormat());
         },
-        
+
+        /**
+         * @param {*} price
+         * @return {*|String}
+         */
         getFormattedPriceWithoutSign: function (price) {
             return priceUtils.formatPrice(price, quote.getPriceFormat(), false);
         },
