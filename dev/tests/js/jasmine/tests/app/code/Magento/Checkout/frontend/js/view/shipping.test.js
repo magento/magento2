@@ -12,7 +12,7 @@ require.config({
     }
 });
 
-define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
+define(['squire', 'ko', 'jquery', 'uiRegistry', 'jquery/validate'], function (Squire, ko, $, registry) {
     'use strict';
 
     var injector = new Squire(),
@@ -28,7 +28,17 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             'Magento_Checkout/js/model/address-converter': jasmine.createSpy(),
             'Magento_Checkout/js/model/quote': {
                 isVirtual: jasmine.createSpy(),
-                shippingMethod: ko.observable()
+                shippingMethod: ko.observable(),
+
+                /**
+                 * Stub
+                 */
+                shippingAddress: function () {
+
+                    return {
+                        'countryId': 'AD'
+                    };
+                }
             },
             'Magento_Checkout/js/action/create-shipping-address': jasmine.createSpy().and.returnValue(
                 jasmine.createSpyObj('newShippingAddress', ['getKey'])
@@ -52,7 +62,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                 'checkoutData',
                 ['setSelectedShippingAddress', 'setNewCustomerShippingAddress', 'setSelectedShippingRate']
             ),
-            'uiRegistry': jasmine.createSpy(),
+            'Magento_Ui/js/lib/registry/registry': registry,
             'Magento_Checkout/js/model/shipping-rate-service': jasmine.createSpy()
         },
         obj;
@@ -63,6 +73,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             obj = new Constr({
                 provider: 'provName',
                 name: '',
+                parentName: 'test',
                 index: '',
                 popUpForm: {
                     options: {
@@ -156,12 +167,26 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
 
         describe('"setShippingInformation" method', function () {
             it('Check method call.', function () {
+                spyOn(obj, 'validateShippingInformation').and.returnValue(false);
                 expect(obj.setShippingInformation()).toBeUndefined();
             });
         });
 
         describe('"validateShippingInformation" method', function () {
             it('Check method call on negative cases.', function () {
+                var country = {
+                    'indexedOptions': {
+                        'AD':
+                            {
+                                label: 'Andorra',
+                                labeltitle: 'Andorra',
+                                value: 'AD'
+                            }
+                    }
+                };
+
+                registry.set('test.shippingAddress.shipping-address-fieldset.country_id', country);
+                registry.set('checkout.errors', {});
                 obj.source = {
                     get: jasmine.createSpy().and.returnValue(true),
                     set: jasmine.createSpy(),
