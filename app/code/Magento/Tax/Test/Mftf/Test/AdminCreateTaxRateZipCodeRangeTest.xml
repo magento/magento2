@@ -11,7 +11,7 @@
     <test name="AdminCreateTaxRateZipCodeRangeTest">
         <annotations>
             <stories value="Create tax rate"/>
-            <title value="Create tax tate, zip code range"/>
+            <title value="Create tax rate, zip code range"/>
             <description value="Test log in to Create Tax Rate and Create Zip Code Range"/>
             <testCaseId value="MC-5319"/>
             <severity value="CRITICAL"/>
