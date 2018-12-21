@@ -667,10 +667,9 @@ define([
         /**
          * Load media gallery using ajax or json config.
          *
-         * @param {String|undefined} eventName
          * @private
          */
-        _loadMedia: function (eventName) {
+        _loadMedia: function () {
             var $main = this.inProductList ?
                     this.element.parents('.product-item-info') :
                     this.element.parents('.column.main'),

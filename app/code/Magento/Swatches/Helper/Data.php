@@ -332,14 +332,14 @@ class Data
                 $baseImage = $mediaEntry->getFile();
             }
 
-            $gallery[$mediaEntry->getId()] = $this->collectImageData($mediaEntry);
+            $gallery[$mediaEntry->getId()] = $this->collectImageData($product, $mediaEntry);
         }
 
         if (!$baseImage) {
             return [];
         }
 
-        $resultGallery = $this->collectImageData($baseImage);
+        $resultGallery = $this->collectImageData($product, $baseImage);
         $resultGallery['gallery'] = $gallery;
 
         return $resultGallery;
@@ -359,14 +359,17 @@ class Data
     /**
      * Returns image data for swatches
      *
+     * @param ModelProduct $product
      * @param ProductAttributeMediaGalleryEntryInterface $mediaEntry
      * @return array
      */
-    private function collectImageData(ProductAttributeMediaGalleryEntryInterface $mediaEntry): array
-    {
-        $image = $this->getAllSizeImages($mediaEntry->getFile());
-        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] =  $mediaEntry->getPosition();
-        $image['isMain'] =$this->isMainImage($mediaEntry);
+    private function collectImageData(
+        ModelProduct $product,
+        ProductAttributeMediaGalleryEntryInterface $mediaEntry
+    ): array {
+        $image = $this->getAllSizeImages($product, $mediaEntry->getFile());
+        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] = $mediaEntry->getPosition();
+        $image['isMain'] = $this->isMainImage($mediaEntry);
         return $image;
     }
 
