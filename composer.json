@@ -167,6 +167,7 @@
         "magento/module-cms-graph-ql": "*",
         "magento/module-grouped-import-export": "*",
         "magento/module-grouped-product": "*",
+        "magento/module-grouped-catalog-inventory": "*",
         "magento/module-grouped-product-graph-ql": "*",
         "magento/module-import-export": "*",
         "magento/module-indexer": "*",
