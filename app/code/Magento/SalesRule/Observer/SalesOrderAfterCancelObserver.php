@@ -98,15 +98,17 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
-        $order = $observer->getOrder();
-        $customerId = $order->getCustomerId();
+        $order = $observer->getEvent()->getOrder();
+        if (!$order || $order->getCustomerId() === null || empty($order->getCouponCode())) {
+            return $this;
+        }
+
         $couponCode = $order->getCouponCode();
-        if ($customerId !== null && !empty($couponCode)) {
-            /** @var Coupon $coupon */
-            $coupon = $this->coupon->loadByCode($couponCode);
-            if ($coupon->getCouponId()) {
-                $this->restoreCoupon($coupon, $customerId);
-            }
+        /** @var Coupon $coupon */
+        $coupon = $this->coupon->loadByCode($couponCode);
+        if ($coupon->getCouponId()) {
+            $customerId = $order->getCustomerId();
+            $this->restoreCoupon($coupon, $customerId);
         }
 
         return $this;
