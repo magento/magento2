@@ -7,7 +7,6 @@
 namespace Magento\SalesRule\Setup\Patch\Data;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
@@ -18,16 +17,16 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
+     * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
     }
