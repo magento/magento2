@@ -204,6 +204,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
+        // Need to use attribute set or future updates can cause data loss
+        if (!$customerModel->getAttributeSetId()) {
+            $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
+        }
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
