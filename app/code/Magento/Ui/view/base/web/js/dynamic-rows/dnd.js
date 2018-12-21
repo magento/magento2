@@ -120,13 +120,13 @@ define([
          * @param {Object} event - key down event
          */
         mousedownHandler: function (data, elem, event) {
-            this.disableScroll();
             var recordNode = this.getRecordNode(elem),
                 originRecord = $(elem).parents('tr').eq(0),
                 drEl = this.draggableElement,
                 $table = $(elem).parents('table').eq(0),
                 $tableWrapper = $table.parent();
 
+            this.disableScroll();
             $(recordNode).addClass(this.draggableElementClass);
             $(originRecord).addClass(this.draggableElementClass);
             this.step = this.step === 'auto' ? originRecord.height() / 2 : this.step;
@@ -178,12 +178,12 @@ define([
          * Mouse up handler
          */
         mouseupHandler: function (event) {
-            this.enableScroll();
             var depElementCtx,
                 drEl = this.draggableElement,
                 pageY = this.getPageY(event),
                 positionY = pageY - drEl.eventMousedownY;
 
+            this.enableScroll();
             drEl.depElement = this.getDepElement(drEl.instance, positionY, this.draggableElement.originRow);
 
             drEl.instance.remove();
@@ -385,14 +385,16 @@ define([
 
             return this.recordsCache()[index];
         },
+
         /**
          * Get correct page Y
          *
          * @param {Object} event - current event
          * @returns {integer}
          */
-        getPageY: function(event) {
-            let pageY;
+        getPageY: function (event) {
+            var pageY;
+
             if (event.type.indexOf('touch') >= 0) {
                 if (event.originalEvent.touches[0]) {
                     pageY = event.originalEvent.touches[0].pageY;
@@ -402,6 +404,7 @@ define([
             } else {
                 pageY = event.pageY;
             }
+
             return pageY;
         },
 
@@ -409,14 +412,18 @@ define([
          * Disable page scrolling
          */
         disableScroll: function () {
-            document.body.addEventListener('touchmove', this.preventDefault, { passive: false });
+            document.body.addEventListener('touchmove', this.preventDefault, {
+                passive: false
+            });
         },
 
         /**
          * Enable page scrolling
          */
         enableScroll: function () {
-            document.body.removeEventListener('touchmove', this.preventDefault, { passive: false });
+            document.body.removeEventListener('touchmove', this.preventDefault, {
+                passive: false
+            });
         },
 
         /**
