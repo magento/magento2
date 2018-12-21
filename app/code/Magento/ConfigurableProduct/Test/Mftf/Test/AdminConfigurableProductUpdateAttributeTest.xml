@@ -231,9 +231,9 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-
-        <click selector="{{AdminProductGridSection.firstProductRowEditButton}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
+            <argument name="product" value="ApiConfigurableProduct" />
+        </actionGroup>
 
         <!-- Open the wizard for editing configurations and fill out a new attribute -->
         <click stepKey="clickEditConfig" selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"/>
