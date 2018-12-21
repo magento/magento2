@@ -11,7 +11,6 @@ use Magento\Config\Model\Config\Factory as ConfigFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Config\Model\PreparedValueFactory;
 
@@ -48,11 +47,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
     private $preparedValueFactory;
 
     /**
-     * @var ScopeResolverPool
-     */
-    private $scopeResolverPool;
-
-    /**
      * @var ConfigFactory
      */
     private $configFactory;
@@ -61,21 +55,18 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      * @param PreparedValueFactory $preparedValueFactory The factory for prepared value
      * @param DeploymentConfig $deploymentConfig The deployment configuration reader
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
-     * @param ScopeResolverPool|null $scopeResolverPool
      * @param ConfigFactory|null $configFactory
      */
     public function __construct(
         PreparedValueFactory $preparedValueFactory,
         DeploymentConfig $deploymentConfig,
         ConfigPathResolver $configPathResolver,
-        ScopeResolverPool $scopeResolverPool = null,
         ConfigFactory $configFactory = null
     ) {
         $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->configPathResolver = $configPathResolver;
 
-        $this->scopeResolverPool = $scopeResolverPool ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
         $this->configFactory = $configFactory ?? ObjectManager::getInstance()->get(ConfigFactory::class);
     }
 
@@ -99,12 +90,9 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         }
 
         try {
-            $resolvedScope = $this->scopeResolverPool->get($scope)
-                ->getScope($scopeCode);
             $config = $this->configFactory->create([
-                'scope' => $resolvedScope->getScopeType(),
-                'scope_id' => $resolvedScope->getId(),
-                'scope_code' => $resolvedScope->getCode(),
+                'scope' => $scope,
+                'scope_code' => $scopeCode,
             ]);
             $config->setDataByPath($path, $value);
             $config->save();

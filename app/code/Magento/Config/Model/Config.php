@@ -119,6 +119,7 @@ class Config extends \Magento\Framework\DataObject
      * @param Config\Reader\Source\Deployed\SettingChecker|null $settingChecker
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
@@ -529,7 +530,7 @@ class Config extends \Magento\Framework\DataObject
     }
 
     /**
-     * Resolve scope data
+     * Set scope data
      *
      * @return void
      */
@@ -545,33 +546,46 @@ class Config extends \Magento\Framework\DataObject
             $this->setStore('');
         }
 
-        if ($this->getScope() && $this->getScopeId() && $this->getScopeCode()) {
+        if ($this->getScope()) {
             $scope = $this->scopeResolverPool->get($this->getScope())
-                ->getScope($this->getScopeId());
+                ->getScope($this->getScopeCode());
             if (StoreScopeInterface::SCOPE_WEBSITE === $scope->getScopeType()) {
                 $this->setWebsite($scope->getId());
             } elseif (StoreScopeInterface::SCOPE_STORE === $scope->getScopeType()) {
                 $this->setStore($scope->getId());
             }
+            $this->setScopeId($scope->getId());
         } else {
-            switch (true) {
-                case $this->getStore():
-                    $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_STORE)
-                        ->getScope($this->getStore());
-                    break;
-                case $this->getWebsite():
-                    $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_WEBSITE)
-                        ->getScope($this->getWebsite());
-                    break;
-                default:
-                    $scope = $this->scopeResolverPool->get(ScopeInterface::SCOPE_DEFAULT)
-                        ->getScope(0);
-                    break;
-            }
+            $scope = $this->resolveScope();
             $this->setScope($scope->getScopeType());
             $this->setScopeId($scope->getId());
             $this->setScopeCode($scope->getCode());
         }
+    }
+
+    /**
+     * Resolve scope
+     *
+     * @return ScopeInterface
+     */
+    private function resolveScope(): ScopeInterface
+    {
+        switch (true) {
+            case $this->getStore():
+                $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_STORE)
+                    ->getScope($this->getStore());
+                break;
+            case $this->getWebsite():
+                $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_WEBSITE)
+                    ->getScope($this->getWebsite());
+                break;
+            default:
+                $scope = $this->scopeResolverPool->get(ScopeInterface::SCOPE_DEFAULT)
+                    ->getScope(0);
+                break;
+        }
+
+        return $scope;
     }
 
     /**
