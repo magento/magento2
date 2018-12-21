@@ -42,7 +42,7 @@ class Manager
      * @param string $entityType
      * @param int $storeId
      *
-     * @return \Magento\SalesSequence\Model\Sequence
+     * @return \Magento\Framework\DB\Sequence\SequenceInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSequence($entityType, $storeId)
