@@ -29,8 +29,6 @@ class Client
     private $json;
 
     /**
-     * CurlClient constructor.
-     *
      * @param CurlClient|null $curlClient
      * @param JsonSerializer|null $json
      */
@@ -81,6 +79,8 @@ class Client
     }
 
     /**
+     * Process errors
+     *
      * @param array $responseBodyArray
      * @throws \Exception
      */
@@ -102,13 +102,18 @@ class Client
                     }
                 }
 
-                throw new \Exception('GraphQL response contains errors: ' . $errorMessage);
+                throw new ResponseContainsErrorsException(
+                    'GraphQL response contains errors: ' . $errorMessage,
+                    $responseBodyArray
+                );
             }
             throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
     }
 
     /**
+     * Get endpoint url
+     *
      * @return string resource URL
      * @throws \Exception
      */
