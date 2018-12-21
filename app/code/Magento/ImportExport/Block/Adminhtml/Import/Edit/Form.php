@@ -113,6 +113,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'class' => $behaviorCode,
                     'onchange' => 'varienImport.handleImportBehaviorSelector();',
                     'note' => ' ',
+                    'after_element_html' => $this->getImportBehaviorTooltip(),
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
@@ -212,7 +213,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Select File to Import'),
                 'title' => __('Select File to Import'),
                 'required' => true,
-                'class' => 'input-file'
+                'class' => 'input-file',
+                'note' => __(
+                    'File must be saved in UTF-8 encoding for proper import'
+                ),
             ]
         );
         $fieldsets['upload']->addField(
@@ -247,6 +251,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $html = '<span id="sample-file-span" class="no-display"><a id="sample-file-link" href="#">'
             . __('Download Sample File')
             . '</a></span>';
+        return $html;
+    }
+
+    /**
+     * Get Import Behavior field tooltip
+     *
+     * @return string
+     */
+    private function getImportBehaviorTooltip()
+    {
+        $html = '<div class="admin__field-tooltip tooltip">
+            <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?" 
+                href="https://docs.magento.com/m2/ce/user_guide/system/data-import.html"><span>'
+            . __('What is this?')
+            . '</span></a></div>';
         return $html;
     }
 }
