@@ -58,13 +58,15 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @param \Magento\Vault\Model\ResourceModel\PaymentToken $resourceModel
+     * PaymentTokenRepository constructor.
+     *
+     * @param PaymentTokenResourceModel $resourceModel
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
-     * @param CollectionProcessorInterface | null $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         PaymentTokenResourceModel $resourceModel,

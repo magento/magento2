@@ -6,6 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
  * Class Upsell
  *
@@ -13,7 +16,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
  * @deprecated Not used since upsell products grid moved to UI components.
  * @see Magento_Catalog::view/adminhtml/ui_component/upsell_product_listing.xml
  */
-class Upsell extends \Magento\Catalog\Controller\Adminhtml\Product
+class Upsell extends Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory

@@ -10,6 +10,8 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product;
 
 /**
+ * Crossel product edit tab
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
