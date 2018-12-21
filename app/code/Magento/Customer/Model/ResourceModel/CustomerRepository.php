@@ -204,6 +204,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
+        // Need to use attribute set or future updates can cause data loss
+        if (!$customerModel->getAttributeSetId()) {
+            $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
+        }
         $this->populateCustomerWithSecureData($customerModel, $passwordHash);
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
@@ -222,6 +226,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         ) {
             $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
+        $this->setValidationFlag($customerArr, $customerModel);
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -231,7 +236,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         ) {
             $customer->setAddresses($delegatedNewOperation->getCustomer()->getAddresses());
         }
-        if ($customer->getAddresses() !== null) {
+        if ($customer->getAddresses() !== null && !$customerModel->getData('ignore_validation_flag')) {
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
                 $getIdFunc = function ($address) {
@@ -394,6 +399,20 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         if ($fields) {
             $collection->addFieldToFilter($fields);
+        }
+    }
+
+    /**
+     * Set ignore_validation_flag to skip model validation
+     *
+     * @param array $customerArray
+     * @param Customer $customerModel
+     * @return void
+     */
+    private function setValidationFlag($customerArray, $customerModel)
+    {
+        if (isset($customerArray['ignore_validation_flag'])) {
+            $customerModel->setData('ignore_validation_flag', true);
         }
     }
 }
