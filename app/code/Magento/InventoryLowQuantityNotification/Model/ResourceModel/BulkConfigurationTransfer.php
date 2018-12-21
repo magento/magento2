@@ -63,52 +63,60 @@ class BulkConfigurationTransfer
         $tableName = $this->resourceConnection->getTableName('inventory_low_stock_notification_configuration');
         $connection = $this->resourceConnection->getConnection();
 
-        $types = $this->getProductTypesBySkus->execute($skus);
+        $skuTypes = $this->getProductTypesBySkus->execute($skus);
 
         /**
          * We are filtering SKU list for products which are not allowed to move configuration for
          */
-        foreach ($types as $sku => $type) {
+        foreach ($skuTypes as $sku => $type) {
             if (!$this->isSourceItemManagementAllowedForProductType->execute($type)) {
-                unset($types[$sku]);
+                unset($skuTypes[$sku]);
             }
         }
 
-        /**
-         * Get configuration from DB to transfer
-         */
-        $allowedSkus = array_keys($types);
-        $query = $connection
+        $destinationItemsQuery = $connection
             ->select()
-            ->from($tableName, ['sku','notify_stock_qty'])
-            ->where('sku IN (?)', $allowedSkus)
-            ->where('source_code = ?', $originSource);
-        $queryResult = $connection->fetchAll($query);
+            ->from($tableName, ['sku', 'notify_stock_qty'])
+            ->where('source_code = ?', $destinationSource);
+        $destinationQueryResult = $connection->fetchPairs($destinationItemsQuery);
 
-        /**
-         * Collect information about items to be copied
-         * and also create an array of items that are not presented in original source
-         */
-        $notPresentedSkus = $types;
-        $itemsAllowedToMove = [];
-        foreach ($queryResult as $inventoryNotificationItem) {
-            $inventoryNotificationItem['source_code'] = $destinationSource;
-            $itemsAllowedToMove[] = $inventoryNotificationItem;
-            unset($notPresentedSkus[$inventoryNotificationItem['sku']]);
+        $destinationSkus = array_diff_key($skuTypes, $destinationQueryResult);
+        if (!empty($destinationSkus)) {
+            /**
+             * Get configuration from DB to transfer
+             */
+            $allowedSkus = array_keys($destinationSkus);
+            $sourceItemsQuery = $connection
+                ->select()
+                ->from($tableName, ['sku','notify_stock_qty'])
+                ->where('sku IN (?)', $allowedSkus)
+                ->where('source_code = ?', $originSource);
+            $sourceQueryResult = $connection->fetchAll($sourceItemsQuery);
+
+            /**
+             * Collect information about items to be copied
+             * and also create an array of items that are not presented in original source
+             */
+            $notPresentedSkus = $destinationSkus;
+            $itemsAllowedToMove = [];
+            foreach ($sourceQueryResult as $inventoryNotificationItem) {
+                $inventoryNotificationItem['source_code'] = $destinationSource;
+                $itemsAllowedToMove[] = $inventoryNotificationItem;
+                unset($notPresentedSkus[$inventoryNotificationItem['sku']]);
+            }
+
+            foreach ($notPresentedSkus as $sku => $type) {
+                $itemsAllowedToMove[] = [
+                    'sku' => $sku,
+                    'notify_stock_qty' => null,
+                    'source_code' => $destinationSource,
+                ];
+            }
+
+            $connection->insertMultiple(
+                $tableName,
+                $itemsAllowedToMove
+            );
         }
-
-        foreach ($notPresentedSkus as $sku => $type) {
-            $itemsAllowedToMove[] = [
-                'sku' => $sku,
-                'notify_stock_qty' => null,
-                'source_code' => $destinationSource,
-            ];
-        }
-
-        $connection->insertOnDuplicate(
-            $tableName,
-            $itemsAllowedToMove,
-            ['notify_stock_qty']
-        );
     }
 }
