@@ -16,6 +16,6 @@
         <data key="shippingPostCode">Magento\SalesRule\Model\Rule\Condition\Address|postcode</data>
         <data key="shippingRegion">Magento\SalesRule\Model\Rule\Condition\Address|region</data>
         <data key="shippingState">Magento\SalesRule\Model\Rule\Condition\Address|region_id</data>
-        <data key="ShippingCountry">Magento\SalesRule\Model\Rule\Condition\Address|country_id</data>
+        <data key="shippingCountry">Magento\SalesRule\Model\Rule\Condition\Address|country_id</data>
     </entity>
 </entities>

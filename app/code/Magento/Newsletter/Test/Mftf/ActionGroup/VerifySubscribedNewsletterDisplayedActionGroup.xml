@@ -28,6 +28,6 @@
     <!--Check Subscribed Newsletter via StoreFront-->
     <actionGroup name="CheckSubscribedNewsletterActionGroup">
         <amOnPage url="{{StorefrontNewsletterManagePage.url}}" stepKey="goToNewsletterManage"/>
-        <seeElement selector="{{StorefrontNewsletterManageSection.subscriptionChecked}}" stepKey="checkSubscribedNewsletter"/>
+        <seeCheckboxIsChecked selector="{{StorefrontNewsletterManageSection.subscriptionCheckbox}}" stepKey="checkSubscribedNewsletter"/>
     </actionGroup>
 </actionGroups>
