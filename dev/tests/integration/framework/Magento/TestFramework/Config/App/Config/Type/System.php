@@ -7,7 +7,6 @@ namespace Magento\TestFramework\Config\App\Config\Type;
 
 use Magento\Config\App\Config\Type\System as SystemCache;
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -110,20 +109,6 @@ class System extends SystemCache
     }
 
     /**
-     * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
-     * from its parent scope (store inherits website).
-     *
-     * Because there can be many scopes on single instance of application, the configuration data can be pretty large,
-     * so it does not make sense to load all of it on every application request. That is why we cache configuration
-     * data by scope and only load configuration scope when a value from that scope is requested.
-     *
-     * Possible path values:
-     * '' - will return whole system configuration (default scope + all other scopes)
-     * 'default' - will return all default scope configuration values
-     * '{scopeType}' - will return data from all scopes of a specified {scopeType} (websites, stores)
-     * '{scopeType}/{scopeCode}' - will return data for all values of the scope specified by {scopeCode} and scope type
-     * '{scopeType}/{scopeCode}/some/config/variable' - will return value of the config variable in the specified scope
-     *
      * @inheritdoc
      */
     public function get($path = '')
@@ -324,13 +309,7 @@ class System extends SystemCache
     }
 
     /**
-     * Clean cache and global variables cache
-     *
-     * Next items cleared:
-     * - Internal property intended to store already loaded configuration data
-     * - All records in cache storage tagged with CACHE_TAG
-     *
-     * @return void
+     * @inheritdoc
      */
     public function clean()
     {
