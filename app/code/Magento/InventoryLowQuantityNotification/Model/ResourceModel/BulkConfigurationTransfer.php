@@ -77,15 +77,16 @@ class BulkConfigurationTransfer
         $destinationItemsQuery = $connection
             ->select()
             ->from($tableName, ['sku', 'notify_stock_qty'])
+            ->where('sku IN (?)', array_keys($skuTypes))
             ->where('source_code = ?', $destinationSource);
         $destinationQueryResult = $connection->fetchPairs($destinationItemsQuery);
 
-        $destinationSkus = array_diff_key($skuTypes, $destinationQueryResult);
-        if (!empty($destinationSkus)) {
+        $skusForDestination = array_diff_key($skuTypes, $destinationQueryResult);
+        if (!empty($skusForDestination)) {
             /**
              * Get configuration from DB to transfer
              */
-            $allowedSkus = array_keys($destinationSkus);
+            $allowedSkus = array_keys($skusForDestination);
             $sourceItemsQuery = $connection
                 ->select()
                 ->from($tableName, ['sku','notify_stock_qty'])
@@ -97,7 +98,7 @@ class BulkConfigurationTransfer
              * Collect information about items to be copied
              * and also create an array of items that are not presented in original source
              */
-            $notPresentedSkus = $destinationSkus;
+            $notPresentedSkus = $skusForDestination;
             $itemsAllowedToMove = [];
             foreach ($sourceQueryResult as $inventoryNotificationItem) {
                 $inventoryNotificationItem['source_code'] = $destinationSource;
