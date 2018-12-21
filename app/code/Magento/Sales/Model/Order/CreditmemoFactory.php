@@ -211,6 +211,8 @@ class CreditmemoFactory
     }
 
     /**
+     * Calculate product options.
+     *
      * @param Item $orderItem
      * @param int $parentQty
      * @return int
