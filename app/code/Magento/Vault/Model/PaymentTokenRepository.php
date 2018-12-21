@@ -142,7 +142,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Performs persist operations for a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The payment token.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Saved payment token data.
      */
     public function save(Data\PaymentTokenInterface $paymentToken)
