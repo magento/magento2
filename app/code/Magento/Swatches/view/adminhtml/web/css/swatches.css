@@ -150,12 +150,12 @@
 }
 
 .col-swatch, [class^=swatch-col] {
-  min-width: 150px;
+    min-width: 150px;
 }
 
 #swatch-text-options-panel {
-  overflow: auto;
-  width: 100%;
+    overflow: auto;
+    width: 100%;
 }
 
 .swatches-visual-col.unavailable:after {
