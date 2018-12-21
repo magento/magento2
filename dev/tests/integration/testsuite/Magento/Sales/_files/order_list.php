@@ -48,6 +48,7 @@ $orders = [
     ],
 ];
 
+$orderList = [];
 /** @var array $orderData */
 foreach ($orders as $orderData) {
     /** @var $order \Magento\Sales\Model\Order */
@@ -60,4 +61,5 @@ foreach ($orders as $orderData) {
         ->setBillingAddress($billingAddress)
         ->setBillingAddress($shippingAddress)
         ->save();
+    $orderList[] = $order;
 }

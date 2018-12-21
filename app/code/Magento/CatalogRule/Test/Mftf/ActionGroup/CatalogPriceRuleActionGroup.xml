@@ -80,4 +80,18 @@
         <fillField selector="{{AdminCatalogPriceRuleConditionsSection.targetInput('1', '1')}}" userInput="{{categoryId}}" after="clickEllipsis" stepKey="fillCategoryId"/>
         <click selector="{{AdminCatalogPriceRuleConditionsSection.applyButton('1', '1')}}" after="fillCategoryId" stepKey="clickApply"/>
     </actionGroup>
+
+    <!-- Open rule for Edit -->
+    <actionGroup name="OpenCatalogPriceRule">
+        <arguments>
+            <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
 </actionGroups>
