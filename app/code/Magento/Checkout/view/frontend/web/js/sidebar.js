@@ -216,9 +216,6 @@ define([
                 'item_id': itemId,
                 'item_qty': $('#cart-item-' + itemId + '-qty').val()
             }, elem, this._updateItemQtyAfter);
-            if (window.location.href === this.shoppingCartUrl) {
-                window.location.reload(false);
-            }
         },
 
         /**
@@ -231,6 +228,9 @@ define([
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:updateCartItemQty');
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
             }
             this._hideItemButton(elem);
         },
