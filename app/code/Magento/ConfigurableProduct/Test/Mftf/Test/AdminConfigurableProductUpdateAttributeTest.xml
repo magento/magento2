@@ -232,7 +232,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
 
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
+        <click selector="{{AdminProductGridSection.firstProductRowEditButton}}" stepKey="clickOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Open the wizard for editing configurations and fill out a new attribute -->
