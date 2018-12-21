@@ -29,11 +29,11 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->helper = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Helper\Amqp::class);
-        try {
-            $this->helper->isAvailable();
-        } catch (PreconditionFailedException $e) {
-            $this->fail($e->getMessage());
+
+        if (!$this->helper->isAvailable()) {
+            $this->fail('This test relies on RabbitMQ Management Plugin.');
         }
+
         $this->declaredExchanges = $this->helper->getExchanges();
     }
 
