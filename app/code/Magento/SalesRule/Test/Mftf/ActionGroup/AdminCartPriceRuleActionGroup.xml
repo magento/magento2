@@ -35,7 +35,7 @@
         <selectOption userInput="{{operatorType}}" selector="{{AdminCartPriceRulesFormSection.conditionsOperator}}" stepKey="setOperatorType"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption1"/>
         <fillField userInput="{{value}}" selector="{{AdminCartPriceRulesFormSection.conditionsValue}}" stepKey="fillActionValue"/>
-        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+        <click selector="{{AdminMainActionsSection.saveAndContinue}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
