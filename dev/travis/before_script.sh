@@ -164,7 +164,5 @@ case $TEST_SUITE in
         cp ./phpunit_msi.xml.dist ./phpunit.xml
         sed -e "s?magento.url?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
 
-        echo "Enabling production mode"
-        php bin/magento deploy:mode:set production
         ;;
 esac
