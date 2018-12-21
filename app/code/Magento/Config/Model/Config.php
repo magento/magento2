@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\ScopeTypeNormalizer;
 
 /**
  * Backend config model
@@ -109,6 +110,11 @@ class Config extends \Magento\Framework\DataObject
     private $scopeResolverPool;
 
     /**
+     * @var ScopeTypeNormalizer
+     */
+    private $scopeTypeNormalizer;
+
+    /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Config\Model\Config\Structure $configStructure
@@ -119,6 +125,7 @@ class Config extends \Magento\Framework\DataObject
      * @param Config\Reader\Source\Deployed\SettingChecker|null $settingChecker
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
+     * @param ScopeTypeNormalizer|null $scopeTypeNormalizer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,7 +138,8 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         SettingChecker $settingChecker = null,
         array $data = [],
-        ScopeResolverPool $scopeResolverPool = null
+        ScopeResolverPool $scopeResolverPool = null,
+        ScopeTypeNormalizer $scopeTypeNormalizer = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -141,8 +149,12 @@ class Config extends \Magento\Framework\DataObject
         $this->_configLoader = $configLoader;
         $this->_configValueFactory = $configValueFactory;
         $this->_storeManager = $storeManager;
-        $this->settingChecker = $settingChecker ?? ObjectManager::getInstance()->get(SettingChecker::class);
-        $this->scopeResolverPool = $scopeResolverPool ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
+        $this->settingChecker = $settingChecker
+            ?? ObjectManager::getInstance()->get(SettingChecker::class);
+        $this->scopeResolverPool = $scopeResolverPool
+            ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
+        $this->scopeTypeNormalizer = $scopeTypeNormalizer
+            ?? ObjectManager::getInstance()->get(ScopeTypeNormalizer::class);
     }
 
     /**
@@ -539,53 +551,34 @@ class Config extends \Magento\Framework\DataObject
         if ($this->getSection() === null) {
             $this->setSection('');
         }
+
+        if (!$this->getScope()) {
+            switch (true) {
+                case $this->getStore():
+                    $this->setScope(StoreScopeInterface::SCOPE_STORES);
+                    $this->setScopeCode($this->getStore());
+                    break;
+                case $this->getWebsite():
+                    $this->setScope(StoreScopeInterface::SCOPE_WEBSITES);
+                    $this->setScopeCode($this->getWebsite());
+                    break;
+                default:
+                    $this->setScope(ScopeInterface::SCOPE_DEFAULT);
+                    $this->setScopeCode('');
+                    break;
+            }
+        }
+        $scope = $this->scopeResolverPool->get($this->getScope())
+            ->getScope($this->getScopeCode());
+        $this->setScope($this->scopeTypeNormalizer->normalize($scope->getScopeType()));
+        $this->setScopeCode($scope->getCode());
+        $this->setScopeId($scope->getId());
         if ($this->getWebsite() === null) {
-            $this->setWebsite('');
+            $this->setWebsite(StoreScopeInterface::SCOPE_WEBSITES === $this->getScope() ? $scope->getId() : '');
         }
         if ($this->getStore() === null) {
-            $this->setStore('');
+            $this->setStore(StoreScopeInterface::SCOPE_STORES === $this->getScope() ? $scope->getId() : '');
         }
-
-        if ($this->getScope()) {
-            $scope = $this->scopeResolverPool->get($this->getScope())
-                ->getScope($this->getScopeCode());
-            if (StoreScopeInterface::SCOPE_WEBSITE === $scope->getScopeType()) {
-                $this->setWebsite($scope->getId());
-            } elseif (StoreScopeInterface::SCOPE_STORE === $scope->getScopeType()) {
-                $this->setStore($scope->getId());
-            }
-            $this->setScopeId($scope->getId());
-        } else {
-            $scope = $this->resolveScope();
-            $this->setScope($scope->getScopeType());
-            $this->setScopeId($scope->getId());
-            $this->setScopeCode($scope->getCode());
-        }
-    }
-
-    /**
-     * Resolve scope
-     *
-     * @return ScopeInterface
-     */
-    private function resolveScope(): ScopeInterface
-    {
-        switch (true) {
-            case $this->getStore():
-                $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_STORE)
-                    ->getScope($this->getStore());
-                break;
-            case $this->getWebsite():
-                $scope = $this->scopeResolverPool->get(StoreScopeInterface::SCOPE_WEBSITE)
-                    ->getScope($this->getWebsite());
-                break;
-            default:
-                $scope = $this->scopeResolverPool->get(ScopeInterface::SCOPE_DEFAULT)
-                    ->getScope(0);
-                break;
-        }
-
-        return $scope;
     }
 
     /**

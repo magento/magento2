@@ -77,6 +77,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $scope;
 
+    /**
+     * @var \Magento\Store\Model\ScopeTypeNormalizer|MockObject
+     */
+    private $scopeTypeNormalizer;
+
     protected function setUp()
     {
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -118,6 +123,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolver->method('getScope')
             ->willReturn($this->scope);
 
+        $this->scopeTypeNormalizer = $this->createMock(\Magento\Store\Model\ScopeTypeNormalizer::class);
+
         $this->model = new \Magento\Config\Model\Config(
             $this->appConfigMock,
             $this->eventManagerMock,
@@ -128,7 +135,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->storeManager,
             $this->settingsChecker,
             [],
-            $this->scopeResolverPool
+            $this->scopeResolverPool,
+            $this->scopeTypeNormalizer
         );
     }
 
@@ -284,6 +292,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scope->expects($this->atLeastOnce())
             ->method('getCode')
             ->willReturn('website_code');
+        $this->scopeTypeNormalizer->expects($this->atLeastOnce())
+            ->method('normalize')
+            ->with('website')
+            ->willReturn('websites');
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $this->storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue([$website]));
         $this->storeManager->expects($this->any())->method('isSingleStoreMode')->will($this->returnValue(true));
@@ -302,7 +314,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'field' => 'key',
                 'groups' => [1 => ['fields' => ['key' => ['data']]]],
                 'group_id' => null,
-                'scope' => 'website',
+                'scope' => 'websites',
                 'scope_id' => 1,
                 'scope_code' => 'website_code',
                 'field_config' => null,
