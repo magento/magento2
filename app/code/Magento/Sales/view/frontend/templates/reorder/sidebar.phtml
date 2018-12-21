@@ -26,14 +26,18 @@
             <ol id="cart-sidebar-reorder" class="product-items product-items-names"
                 data-bind="foreach: lastOrderedItems().items">
                 <li class="product-item">
-                    <div class="field item choice no-display" data-bind="css: {'no-display': !is_saleable}">
+                    <div class="field item choice">
                         <label class="label" data-bind="attr: {'for': 'reorder-item-' + id}">
                             <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                         </label>
                         <div class="control">
                             <input type="checkbox" name="order_items[]"
-                                   data-bind="attr: {id: 'reorder-item-' + id, value: id}"
-                                   title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>"
+                                   data-bind="attr: {
+                                        id: 'reorder-item-' + id,
+                                        value: id,
+                                        title: is_saleable ? '<?= /* @escapeNotVerified */ __('Add to Cart') ?>' : '<?= /* @escapeNotVerified */ __('Product is not salable.') ?>'
+                                   },
+                                   disable: !is_saleable"
                                    class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
                         </div>
                     </div>
@@ -46,8 +50,8 @@
             </ol>
             <div id="cart-sidebar-reorder-advice-container"></div>
             <div class="actions-toolbar">
-                <div class="primary no-display"
-                     data-bind="css: {'no-display': !lastOrderedItems().isShowAddToCart}">
+                <div class="primary"
+                     data-bind="visible: isShowAddToCart">
                     <button type="submit" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>" class="action tocart primary">
                         <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                     </button>
