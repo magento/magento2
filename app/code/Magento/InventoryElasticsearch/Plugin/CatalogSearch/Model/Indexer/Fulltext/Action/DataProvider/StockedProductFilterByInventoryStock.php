@@ -17,7 +17,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\Store\Api\GroupRepositoryInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Filter products by stock status.
@@ -65,9 +65,9 @@ class StockedProductFilterByInventoryStock
     private $defaultStockProvider;
 
     /**
-     * @var GroupRepositoryInterface
+     * @var StoreRepositoryInterface
      */
-    private $groupRepository;
+    private $storeRepository;
 
     /**
      * @param Config $config
@@ -78,7 +78,7 @@ class StockedProductFilterByInventoryStock
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
      * @param StockStatusRepositoryInterface $stockStatusRepository
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param GroupRepositoryInterface $groupRepository
+     * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
         Config $config,
@@ -89,7 +89,7 @@ class StockedProductFilterByInventoryStock
         StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
         StockStatusRepositoryInterface $stockStatusRepository,
         DefaultStockProviderInterface $defaultStockProvider,
-        GroupRepositoryInterface $groupRepository
+        StoreRepositoryInterface $storeRepository
     ) {
         $this->config = $config;
         $this->stockConfiguration = $stockConfiguration;
@@ -99,7 +99,7 @@ class StockedProductFilterByInventoryStock
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
         $this->stockStatusRepository = $stockStatusRepository;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->groupRepository = $groupRepository;
+        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -120,8 +120,8 @@ class StockedProductFilterByInventoryStock
     ) {
         if ($this->config->isElasticsearchEnabled() && !$this->stockConfiguration->isShowOutOfStock($storeId)) {
             $productIds = array_keys($indexData);
-            $group = $this->groupRepository->get($storeId);
-            $stock = $this->stockByWebsiteIdResolver->execute((int)$group->getWebsiteId());
+            $store = $this->storeRepository->getById($storeId);
+            $stock = $this->stockByWebsiteIdResolver->execute((int)$store->getWebsiteId());
             $stockId = $stock->getStockId();
 
             if ($this->defaultStockProvider->getId() === $stockId) {
