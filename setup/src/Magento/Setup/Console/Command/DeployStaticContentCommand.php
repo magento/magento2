@@ -119,7 +119,9 @@ class DeployStaticContentCommand extends Command
         $this->inputValidator->validate($input);
 
         $options = $input->getOptions();
-        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
+        $language = $input->getOption(Options::LANGUAGE) ?: ['all'];
+        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?
+            array_merge($input->getArgument(Options::LANGUAGES_ARGUMENT), $language): $language;
         $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
             && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 

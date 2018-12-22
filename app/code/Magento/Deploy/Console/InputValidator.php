@@ -85,6 +85,10 @@ class InputValidator
             $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'],
             $input->getOption(Options::EXCLUDE_LANGUAGE)
         );
+        $this->checkLanguagesInput(
+            $input->getOption(Options::LANGUAGE) ?: ['all'],
+            $input->getOption(Options::EXCLUDE_LANGUAGE)
+        );
     }
 
     /**
