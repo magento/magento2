@@ -22,6 +22,11 @@ class TranslatedLists implements ListsInterface
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $localeResolver;
+    
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\Locale\ConfigInterface $config
@@ -29,6 +34,7 @@ class TranslatedLists implements ListsInterface
      * @param string $locale
      */
     public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Locale\ConfigInterface $config,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $locale = null
@@ -38,6 +44,7 @@ class TranslatedLists implements ListsInterface
         if ($locale !== null) {
             $this->localeResolver->setLocale($locale);
         }
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -150,10 +157,20 @@ class TranslatedLists implements ListsInterface
         $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'] ?: [];
         $options = [];
         $allowed = $this->_config->getAllowedCurrencies();
+        $selectedCurrencies = explode(
+            ',', $this->scopeConfig->getValue(
+                'system/currency/installed',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         foreach ($currencies as $code => $data) {
             if (!in_array($code, $allowed)) {
                 continue;
             }
+            if (!in_array($code, $selectedCurrencies)) {
+                continue;
+            }
+            
             $options[] = ['label' => $data[1], 'value' => $code];
         }
         return $this->_sortOptionArray($options);
