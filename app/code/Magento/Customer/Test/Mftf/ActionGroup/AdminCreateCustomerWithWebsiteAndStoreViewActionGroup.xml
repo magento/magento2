@@ -56,6 +56,7 @@
         <fillField stepKey="FillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
         <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
         <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeView}}"/>
+        <waitForElement selector="{{AdminCustomerAccountInformationSection.storeView}}" stepKey="waitForCustomerStoreViewExpand"/>
         <click selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="ClickToExpandGroup"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceGroupOrCatalogOption('Default (General)')}}" stepKey="waitForCustomerGroupExpand"/>
         <click selector="{{AdminCustomerAccountInformationSection.groupValue('Default (General)')}}" after="waitForCustomerGroupExpand" stepKey="ClickToSelectGroup"/>
