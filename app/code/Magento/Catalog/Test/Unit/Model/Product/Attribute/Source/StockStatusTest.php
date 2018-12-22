@@ -15,9 +15,8 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->stockStatus = $this->objectManagerHelper->getObject(
+        $this->stockStatus = $this->createMock(
             \Magento\Catalog\Model\Product\Attribute\Source\StockStatus::class
         );
     }

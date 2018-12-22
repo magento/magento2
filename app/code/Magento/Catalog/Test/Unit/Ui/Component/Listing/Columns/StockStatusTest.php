@@ -35,9 +35,9 @@ class StockStatusTest extends AbstractColumnTest
         parent::setUp();
 
         $this->statusMock = $this->getMockBuilder(StockStatus::class)
-            ->setMethods(['getOptionText'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                                 ->setMethods(['getOptionText'])
+                                 ->disableOriginalConstructor()
+                                 ->getMock();
     }
 
     /**
@@ -47,13 +47,16 @@ class StockStatusTest extends AbstractColumnTest
      */
     protected function getModel()
     {
-        return $this->objectManager->getObject(StockStatus::class, [
-            'context' => $this->contextMock,
-            'uiComponentFactory' => $this->uiComponentFactoryMock,
-            'status' => $this->statusMock,
-            'components' => [],
-            'data' => [],
-        ]);
+        return $this->objectManager->getObject(
+            StockStatus::class,
+            [
+                'context'            => $this->contextMock,
+                'uiComponentFactory' => $this->uiComponentFactoryMock,
+                'status'             => $this->statusMock,
+                'components'         => [],
+                'data'               => [],
+            ]
+        );
     }
 
     /**
@@ -74,16 +77,16 @@ class StockStatusTest extends AbstractColumnTest
             'data' => [
                 'items' => [
                     [
-                        StockStatus::NAME =>  self::STOCK_STATUS_TEXT,
+                        StockStatus::NAME => self::STOCK_STATUS_TEXT,
                     ]
                 ],
             ],
         ];
 
         $this->statusMock->expects($this->once())
-            ->method('getOptionText')
-            ->with( \Magento\Catalog\Model\Product\Attribute\Source\StockStatus::IN_STOCK)
-            ->willReturn(self::STOCK_STATUS_TEXT);
+                         ->method('getOptionText')
+                         ->with(\Magento\Catalog\Model\Product\Attribute\Source\StockStatus::IN_STOCK)
+                         ->willReturn(self::STOCK_STATUS_TEXT);
 
         $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }
