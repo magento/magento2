@@ -6,6 +6,7 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -32,10 +33,12 @@ class PathProcessor
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
     ) {
         $this->storeManager = $storeManager;
-        $this->localeResolver = $localeResolver;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Locale\ResolverInterface::class
+        );
     }
 
     /**

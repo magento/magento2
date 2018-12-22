@@ -18,7 +18,7 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Locale\ResolverInterface::class
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @var \Magento\Webapi\Controller\PathProcessor
