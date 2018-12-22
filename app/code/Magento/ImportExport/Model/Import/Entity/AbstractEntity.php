@@ -438,7 +438,7 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
-        $this->_processedEntitiesCount = count($skuSet);
+        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
 
         return $this;
     }
