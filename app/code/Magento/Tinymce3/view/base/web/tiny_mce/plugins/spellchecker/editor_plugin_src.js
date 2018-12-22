@@ -167,7 +167,7 @@
 		},
 
 		_getSeparators : function() {
-			var re = '', i, str = this.editor.getParam('spellchecker_word_separator_chars', '\\s!"#$%&()*+,-./:;<=>?@[\]^_{|}����������������\u201d\u201c');
+			var re = '', i, str = this.editor.getParam('spellchecker_word_separator_chars', '\\s!"#$%&()*+,-./:;<=>?@[\]^_{|}\u599d\u57a3\u6377\u6ea2\u905e\u8768\u8b02\u9ad0\u201d\u201c');
 
 			// Build word separator regexp
 			for (i=0; i<str.length; i++)
