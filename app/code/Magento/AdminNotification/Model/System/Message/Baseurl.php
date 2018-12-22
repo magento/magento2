@@ -55,6 +55,8 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Get url for config settings where base url option can be changed
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _getConfigUrl()
     {
@@ -63,14 +65,14 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
 
         $defaultSecure = $this->_config->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default');
 
-        if ($defaultSecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER ||
-            $defaultUnsecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
+        if ($defaultSecure == Store::BASE_URL_PLACEHOLDER ||
+            $defaultUnsecure == Store::BASE_URL_PLACEHOLDER
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => 'web']);
         } else {
             /** @var $dataCollection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
             $dataCollection = $this->_configValueFactory->create()->getCollection();
-            $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
+            $dataCollection->addValueFilter(Store::BASE_URL_PLACEHOLDER);
 
             /** @var $data \Magento\Framework\App\Config\ValueInterface */
             foreach ($dataCollection as $data) {
@@ -98,6 +100,8 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getIdentity()
     {
@@ -108,6 +112,8 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Check whether
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isDisplayed()
     {
@@ -118,6 +124,8 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message text
      *
      * @return \Magento\Framework\Phrase
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getText()
     {

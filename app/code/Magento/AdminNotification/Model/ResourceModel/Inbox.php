@@ -27,7 +27,9 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Load latest notice
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
+     *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadLatestNotice(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -58,8 +60,10 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get notifications grouped by severity
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
+     *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -87,7 +91,8 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @param array $data
-     * @return void
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)

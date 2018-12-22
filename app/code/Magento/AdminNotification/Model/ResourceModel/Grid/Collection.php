@@ -20,7 +20,7 @@ class Collection extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Co
     /**
      * Add remove filter
      *
-     * @return Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return $this|\Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
      */
     protected function _initSelect()
     {

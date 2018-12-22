@@ -31,7 +31,11 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
     protected $_isDisplayed = null;
 
     /**
+     * AbstractSynchronization constructor.
+     *
      * @param \Magento\MediaStorage\Model\File\Storage\Flag $fileStorage
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(\Magento\MediaStorage\Model\File\Storage\Flag $fileStorage)
     {
@@ -59,6 +63,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      * Check whether
      *
      * @return bool
+     * @throws \Exception
      */
     public function isDisplayed()
     {

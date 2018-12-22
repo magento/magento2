@@ -7,25 +7,24 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\AdminNotification\Model\InboxInterface;
 
 /**
  * AdminNotification Inbox model
  *
  * @method int getSeverity()
- * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
+ * @method setSeverity(int $value)
  * @method string getDateAdded()
- * @method \Magento\AdminNotification\Model\Inbox setDateAdded(string $value)
+ * @method setDateAdded(string $value)
  * @method string getTitle()
- * @method \Magento\AdminNotification\Model\Inbox setTitle(string $value)
+ * @method setTitle(string $value)
  * @method string getDescription()
- * @method \Magento\AdminNotification\Model\Inbox setDescription(string $value)
+ * @method setDescription(string $value)
  * @method string getUrl()
- * @method \Magento\AdminNotification\Model\Inbox setUrl(string $value)
+ * @method setUrl(string $value)
  * @method int getIsRead()
- * @method \Magento\AdminNotification\Model\Inbox setIsRead(int $value)
+ * @method setIsRead(int $value)
  * @method int getIsRemove()
- * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
+ * @method setIsRemove(int $value)
  *
  * @api
  * @since 100.0.2
@@ -41,7 +40,9 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @param null $severity
+     *
+     * @return array|mixed|null|string
      */
     public function getSeverities($severity = null)
     {
@@ -134,7 +135,9 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Notification\NotifierInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addCritical($title, $description, $url = '', $isInternal = true)
     {
@@ -149,7 +152,9 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Notification\NotifierInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addMajor($title, $description, $url = '', $isInternal = true)
     {
@@ -164,7 +169,9 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Notification\NotifierInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addMinor($title, $description, $url = '', $isInternal = true)
     {
@@ -179,7 +186,9 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Notification\NotifierInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addNotice($title, $description, $url = '', $isInternal = true)
     {

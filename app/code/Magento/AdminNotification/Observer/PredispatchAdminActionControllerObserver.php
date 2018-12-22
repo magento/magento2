@@ -25,6 +25,8 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
     protected $_backendAuthSession;
 
     /**
+     * PredispatchAdminActionControllerObserver constructor.
+     *
      * @param \Magento\AdminNotification\Model\FeedFactory $feedFactory
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      */
