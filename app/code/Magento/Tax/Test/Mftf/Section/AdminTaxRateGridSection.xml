@@ -16,5 +16,6 @@
         <element name="filterByCountry" type="input" selector="#tax_rate_grid_filter_tax_country_id"/>
         <element name="filterByPostCode" type="input" selector="#tax_rate_grid_filter_tax_postcode"/>
         <element name="nthRow" type="block" selector="tr[data-role='row']:nth-of-type({{var}})" parameterized="true" timeout="30"/>
+        <element name="emptyText" type="text" selector=".empty-text"/>
     </section>
 </sections>
