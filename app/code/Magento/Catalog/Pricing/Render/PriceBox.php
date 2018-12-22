@@ -69,9 +69,11 @@ class PriceBox extends PriceBoxRender
     /**
      * Get random string
      *
-     * @param int $length
+     * @param int         $length
      * @param string|null $chars
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRandomString($length, $chars = null)
     {
@@ -92,5 +94,15 @@ class PriceBox extends PriceBoxRender
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param float $percent
+     *
+     * @return string
+     */
+    public function formatPercent(float $percent):string
+    {
+        return rtrim(number_format($percent, 2), '.0');
     }
 }
