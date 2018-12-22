@@ -86,7 +86,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
-
+        $itemsOrderItemId = [];
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);
