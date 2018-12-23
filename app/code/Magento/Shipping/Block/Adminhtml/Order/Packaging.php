@@ -86,6 +86,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
+        $itemsOrderItemId = [];
 
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
