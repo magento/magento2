@@ -59,12 +59,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -168,7 +173,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
-                'entityFactory' => $entityFactory,
+                'entityFactory' => $this->entityFactory,
                 'logger' => $logger,
                 'fetchStrategy' => $fetchStrategy,
                 'eventManager' => $eventManager,
@@ -378,5 +383,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $backend->expects($this->once())->method('setPriceData')->with($itemMock, [['product_id' => 1]]);
 
         $this->assertSame($this->collection, $this->collection->addTierPriceData());
+    }
+
+    /**
+     * Test for getNewEmptyItem() method
+     *
+     * @return void
+     */
+    public function testGetNewEmptyItem()
+    {
+        $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($item);
+        $firstItem = $this->collection->getNewEmptyItem();
+        $secondItem = $this->collection->getNewEmptyItem();
+        $this->assertEquals($firstItem, $secondItem);
     }
 }
