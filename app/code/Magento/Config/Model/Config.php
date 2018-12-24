@@ -552,33 +552,65 @@ class Config extends \Magento\Framework\DataObject
             $this->setSection('');
         }
 
-        if (!$this->getScope()) {
-            switch (true) {
-                case $this->getStore():
-                    $this->setScope(StoreScopeInterface::SCOPE_STORES);
-                    $this->setScopeCode($this->getStore());
-                    break;
-                case $this->getWebsite():
-                    $this->setScope(StoreScopeInterface::SCOPE_WEBSITES);
-                    $this->setScopeCode($this->getWebsite());
-                    break;
-                default:
-                    $this->setScope(ScopeInterface::SCOPE_DEFAULT);
-                    $this->setScopeCode('');
-                    break;
-            }
-        }
-        $scope = $this->scopeResolverPool->get($this->getScope())
-            ->getScope($this->getScopeCode());
+        $scope = $this->retrieveScope();
         $this->setScope($this->scopeTypeNormalizer->normalize($scope->getScopeType()));
         $this->setScopeCode($scope->getCode());
         $this->setScopeId($scope->getId());
+
         if ($this->getWebsite() === null) {
             $this->setWebsite(StoreScopeInterface::SCOPE_WEBSITES === $this->getScope() ? $scope->getId() : '');
         }
         if ($this->getStore() === null) {
             $this->setStore(StoreScopeInterface::SCOPE_STORES === $this->getScope() ? $scope->getId() : '');
         }
+    }
+
+    /**
+     * Retrieve scope from initial data
+     *
+     * @return ScopeInterface
+     */
+    private function retrieveScope(): ScopeInterface
+    {
+        $scopeType = $this->getScope();
+        if (!$scopeType) {
+            switch (true) {
+                case $this->getStore():
+                    $scopeType = StoreScopeInterface::SCOPE_STORES;
+                    $scopeIdentifier = $this->getStore();
+                    break;
+                case $this->getWebsite():
+                    $scopeType = StoreScopeInterface::SCOPE_WEBSITES;
+                    $scopeIdentifier = $this->getWebsite();
+                    break;
+                default:
+                    $scopeType = ScopeInterface::SCOPE_DEFAULT;
+                    $scopeIdentifier = null;
+                    break;
+            }
+        } else {
+            switch (true) {
+                case $this->getScopeId() !== null:
+                    $scopeIdentifier = $this->getScopeId();
+                    break;
+                case $this->getScopeCode() !== null:
+                    $scopeIdentifier = $this->getScopeCode();
+                    break;
+                case $this->getStore() !== null:
+                    $scopeIdentifier = $this->getStore();
+                    break;
+                case $this->getWebsite() !== null:
+                    $scopeIdentifier = $this->getWebsite();
+                    break;
+                default:
+                    $scopeIdentifier = null;
+                    break;
+            }
+        }
+        $scope = $this->scopeResolverPool->get($scopeType)
+            ->getScope($scopeIdentifier);
+
+        return $scope;
     }
 
     /**

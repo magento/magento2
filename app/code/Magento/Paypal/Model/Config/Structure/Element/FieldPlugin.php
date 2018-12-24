@@ -36,7 +36,7 @@ class FieldPlugin
      */
     public function afterGetConfigPath(FieldConfigStructure $subject, $result)
     {
-        if (!$result && $this->request->getParam('section') == 'payment') {
+        if (!$result && strpos($subject->getPath(), 'payment_') === 0) {
             $result = preg_replace(
                 '@^(' . implode('|', ConfigStructurePlugin::getPaypalConfigCountries(true)) . ')/@',
                 'payment/',
