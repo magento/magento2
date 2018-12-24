@@ -6,9 +6,8 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\Registry;
-use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var Registry $registry */
@@ -16,13 +15,9 @@ $registry = Bootstrap::getObjectManager()->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$mutableScopeConfig = Bootstrap::getObjectManager()->create(MutableScopeConfigInterface::class);
-$mutableScopeConfig->setValue(
-    'customer/create_account/confirm',
-    $this->confirmationConfigScopeValue,
-    ScopeInterface::SCOPE_WEBSITES,
-    null
-);
+/** @var Config $config */
+$config = Bootstrap::getObjectManager()->create(Config::class);
+$config->deleteConfig('customer/create_account/confirm');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

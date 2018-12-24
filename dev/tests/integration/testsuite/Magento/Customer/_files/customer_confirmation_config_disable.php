@@ -13,12 +13,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 $objectManager = Bootstrap::getObjectManager();
 $mutableScopeConfig = $objectManager->create(MutableScopeConfigInterface::class);
 
-$this->confirmationConfigScopeValue = $mutableScopeConfig->getValue(
-    'customer/create_account/confirm',
-    ScopeInterface::SCOPE_WEBSITES,
-    null
-);
-
 $mutableScopeConfig->setValue(
     'customer/create_account/confirm',
     0,

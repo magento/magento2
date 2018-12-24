@@ -8,20 +8,21 @@ declare(strict_types=1);
 
 include __DIR__ . '/customer_confirmation_config_enable_rollback.php';
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Model\Customer;
 
 /** @var Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var Customer $customer */
-$customer = Bootstrap::getObjectManager()->create(Customer::class);
-$customer->load(1);
+/** @var CustomerRepositoryInterface $customerRepository */
+$customerRepository = Bootstrap::getObjectManager()->create(CustomerRepositoryInterface::class);
+$customer = $customerRepository->get('customer+confirmation@example.com');
+
 if ($customer->getId()) {
-    $customer->delete();
+    $customerRepository->delete($customer);
 }
 
 $registry->unregister('isSecureArea');

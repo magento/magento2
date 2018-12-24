@@ -38,6 +38,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     private $transportBuilderMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -682,10 +685,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('To: ' . $email, $rawMessage);
 
         $content = $message->getBody()->getPartContent(0);
-        preg_match('<a\s*href="(?<url>.*?)".*>', $content, $matches);
-        $confirmationUrl = $matches['url'];
-        $confirmationUrl = str_replace('http://localhost/index.php/','',$confirmationUrl);
-        $confirmationUrl = html_entity_decode($confirmationUrl);
+        $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
         $this->setRequestInfo($confirmationUrl, 'confirm');
         $this->clearCookieMessagesList();
         $this->dispatch($confirmationUrl);
@@ -843,5 +843,24 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             MessagePlugin::MESSAGES_COOKIES_NAME,
             $jsonSerializer->serialize([])
         );
+    }
+
+    /**
+     * Get confirmation URL from message content.
+     *
+     * @param string $content
+     * @return string
+     */
+    private function getConfirmationUrlFromMessageContent(string $content)
+    {
+        $confirmationUrl = '';
+
+        if (preg_match('<a\s*href="(?<url>.*?)".*>', $content, $matches)) {
+            $confirmationUrl = $matches['url'];
+            $confirmationUrl = str_replace('http://localhost/index.php/', '', $confirmationUrl);
+            $confirmationUrl = html_entity_decode($confirmationUrl);
+        }
+
+        return $confirmationUrl;
     }
 }
