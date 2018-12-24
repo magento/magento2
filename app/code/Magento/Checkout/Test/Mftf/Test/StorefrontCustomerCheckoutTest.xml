@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="#"/>
+            <testCaseId value="MC-5922"/>
             <group value="checkout"/>
         </annotations>
         <before>
