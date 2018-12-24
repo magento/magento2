@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\Setup\Model\FixtureGenerator\EntityGeneratorFactory;
+namespace Magento\InventorySetupFixtureGenerator\Plugin\Setup\Model\FixtureGenerator\EntityGeneratorFactory;
 
 use Magento\Setup\Model\FixtureGenerator\EntityGenerator;
 use Magento\Setup\Model\FixtureGenerator\EntityGeneratorFactory;
