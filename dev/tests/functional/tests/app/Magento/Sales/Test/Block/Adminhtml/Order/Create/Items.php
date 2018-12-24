@@ -73,6 +73,7 @@ class Items extends Block
                 return $addProductsButton->isVisible() ? true : null;
             }
         );
+        $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find($this->addProducts, Locator::SELECTOR_XPATH)->click();
         $this->getTemplateBlock()->waitLoader();
     }
