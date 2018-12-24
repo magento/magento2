@@ -23,6 +23,11 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Theme\Controller\Result\MessagePlugin;
 use Zend\Stdlib\Parameters;
 
 /**
@@ -30,6 +35,23 @@ use Zend\Stdlib\Parameters;
  */
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * @var MutableScopeConfigInterface
+     */
+    private $mutableScopeConfig;
+
+    /**
+     * @var TransportBuilderMock
+     */
+    private $transportBuilderMock;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->mutableScopeConfig = $this->_objectManager->get(MutableScopeConfigInterface::class);
+        $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
+    }
+
     /**
      * Login the user
      *
@@ -102,11 +124,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
 
-        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
-        $transportBuilder = $this->_objectManager->get(
-            \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
-        );
-        $subject = $transportBuilder->getSentMessage()->getSubject();
+        $subject = $this->transportBuilderMock->getSentMessage()->getSubject();
         $this->assertContains(
             'Test special\' characters',
             $subject
@@ -228,26 +246,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_disable.php
      */
     public function testNoConfirmCreatePostAction()
     {
-        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
-        $mutableScopeConfig = Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
-
-        $scopeValue = $mutableScopeConfig->getValue(
-            'customer/create_account/confirm',
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
-
-        $mutableScopeConfig->setValue(
-            'customer/create_account/confirm',
-            0,
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
-
         $this->fillRequestWithAccountDataAndFormKey();
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringEndsWith('customer/account/'));
@@ -255,38 +257,15 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(['Thank you for registering with Main Website Store.']),
             MessageInterface::TYPE_SUCCESS
         );
-
-        $mutableScopeConfig->setValue(
-            'customer/create_account/confirm',
-            $scopeValue,
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
     }
 
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      */
     public function testWithConfirmCreatePostAction()
     {
-        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
-        $mutableScopeConfig = Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
-
-        $scopeValue = $mutableScopeConfig->getValue(
-            'customer/create_account/confirm',
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
-
-        $mutableScopeConfig->setValue(
-            'customer/create_account/confirm',
-            1,
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
-
         $this->fillRequestWithAccountDataAndFormKey();
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
@@ -297,13 +276,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                     . 'test1%40email.com/">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
-        );
-
-        $mutableScopeConfig->setValue(
-            'customer/create_account/confirm',
-            $scopeValue,
-            ScopeInterface::SCOPE_WEBSITES,
-            null
         );
     }
 
@@ -691,6 +663,49 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test that confirmation email address displays special characters correctly.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_email_address_with_special_chars.php
+     *
+     * @return void
+     */
+    public function testConfirmationEmailWithSpecialCharacters()
+    {
+        $email = 'customer+confirmation@example.com';
+        $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
+        $this->getRequest()->setPostValue('email', $email);
+        $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
+
+        $this->assertRedirect($this->stringContains('customer/account/index'));
+        $this->assertSessionMessages(
+            $this->equalTo(['Please check your email for confirmation key.']),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        /** @var $message \Magento\Framework\Mail\Message */
+        $message = $this->transportBuilderMock->getSentMessage();
+        $rawMessage = $message->getRawMessage();
+
+        $this->assertContains('To: ' . $email, $rawMessage);
+
+        $content = $message->getBody()->getPartContent(0);
+        preg_match('<a\s*href="(?<url>.*?)".*>', $content, $matches);
+        $confirmationUrl = $matches['url'];
+        $confirmationUrl = str_replace('http://localhost/index.php/','',$confirmationUrl);
+        $confirmationUrl = html_entity_decode($confirmationUrl);
+        $this->setRequestInfo($confirmationUrl, 'confirm');
+        $this->clearCookieMessagesList();
+        $this->dispatch($confirmationUrl);
+
+        $this->assertRedirect($this->stringContains('customer/account/index'));
+        $this->assertSessionMessages(
+            $this->equalTo(['Thank you for registering with Main Website Store.']),
+            MessageInterface::TYPE_SUCCESS
+        );
+    }
+
+    /**
      * Data provider for testLoginPostRedirect.
      *
      * @return array
@@ -705,16 +720,17 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @param string $email
      * @return void
      */
-    private function fillRequestWithAccountData()
+    private function fillRequestWithAccountData(string $email = 'test1@email.com')
     {
         $this->getRequest()
             ->setMethod('POST')
             ->setParam('firstname', 'firstname1')
             ->setParam('lastname', 'lastname1')
             ->setParam('company', '')
-            ->setParam('email', 'test1@email.com')
+            ->setParam('email', $email)
             ->setParam('password', '_Password1')
             ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
@@ -731,11 +747,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @param string $email
      * @return void
      */
-    private function fillRequestWithAccountDataAndFormKey()
+    private function fillRequestWithAccountDataAndFormKey(string $email = 'test1@email.com')
     {
-        $this->fillRequestWithAccountData();
+        $this->fillRequestWithAccountData($email);
         $formKey = $this->_objectManager->get(FormKey::class);
         $this->getRequest()->setParam('form_key', $formKey->getFormKey());
     }
@@ -804,5 +821,35 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->assertTrue($response->isRedirect());
         $this->assertSame($redirectUrl, $response->getHeader('Location')->getUri());
+    }
+
+    /**
+     * Add new request info (request uri, path info, action name).
+     *
+     * @param string $uri
+     * @param string $actionName
+     * @return void
+     */
+    private function setRequestInfo(string $uri, string $actionName)
+    {
+        $this->getRequest()
+            ->setRequestUri($uri)
+            ->setPathInfo()
+            ->setActionName($actionName);
+    }
+
+    /**
+     * Clear cookie messages list.
+     *
+     * @return void
+     */
+    private function clearCookieMessagesList()
+    {
+        $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+        $jsonSerializer = $this->_objectManager->get(Json::class);
+        $cookieManager->setPublicCookie(
+            MessagePlugin::MESSAGES_COOKIES_NAME,
+            $jsonSerializer->serialize([])
+        );
     }
 }
