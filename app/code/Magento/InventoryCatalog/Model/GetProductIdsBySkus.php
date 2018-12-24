@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 
 /**
@@ -19,33 +17,22 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 class GetProductIdsBySkus implements GetProductIdsBySkusInterface
 {
     /**
+     * @var array
+     */
+    private $productIdsBySkus = [];
+
+    /**
      * @var ProductResourceModel
      */
     private $productResource;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param ProductResourceModel $productResource
-     * @param CacheInterface $cache
-     * @param SerializerInterface $serializer
      */
     public function __construct(
-        ProductResourceModel $productResource,
-        CacheInterface $cache,
-        SerializerInterface $serializer
+        ProductResourceModel $productResource
     ) {
         $this->productResource = $productResource;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -55,21 +42,17 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
     {
         $cacheKey = hash('md5', implode(',', $skus));
 
-        if ($cachedIds = $this->cache->load($cacheKey)) {
-            return $this->serializer->unserialize($cachedIds);
+        if (!isset($this->productIdsBySkus[$cacheKey])) {
+            $this->productIdsBySkus[$cacheKey] = $this->productResource->getProductsIdsBySkus($skus);
+            $notFoundedSkus = array_diff($skus, array_keys($this->productIdsBySkus[$cacheKey]));
+
+            if (!empty($notFoundedSkus)) {
+                throw new NoSuchEntityException(
+                    __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
+                );
+            }
         }
 
-        $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
-        $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
-
-        if (!empty($notFoundedSkus)) {
-            throw new NoSuchEntityException(
-                __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
-            );
-        }
-
-        $this->cache->save($this->serializer->serialize($idsBySkus), $cacheKey);
-
-        return $idsBySkus;
+        return $this->productIdsBySkus[$cacheKey];
     }
 }
