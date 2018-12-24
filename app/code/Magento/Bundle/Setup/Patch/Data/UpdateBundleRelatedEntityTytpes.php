@@ -15,10 +15,10 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 
 /**
- * Class UpdateBundleRelatedEntityTytpes
+ * Class UpdateBundleRelatedEntityTypes
  * @package Magento\Bundle\Setup\Patch
  */
-class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, PatchVersionInterface
+class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -31,7 +31,7 @@ class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, PatchVersio
     private $eavSetupFactory;
 
     /**
-     * UpdateBundleRelatedEntityTytpes constructor.
+     * UpdateBundleRelatedEntityTypes constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
