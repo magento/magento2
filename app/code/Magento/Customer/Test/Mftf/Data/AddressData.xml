@@ -68,6 +68,22 @@
         <requiredEntity type="region">RegionNY</requiredEntity>
         <data key="country">United States</data>
     </entity>
+    <entity name="US_Address_NY_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>Apt. 113</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="country_id">US</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country">United States</data>
+    </entity>
     <entity name="US_Address_CA" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -107,6 +123,23 @@
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
         <data key="telephone">444-44-444-44</data>
+    </entity>
+    <entity name="US_Address_Utah" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>1234 Some Utah address</item>
+        </array>
+        <data key="city">Provo</data>
+        <data key="state">Utah</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">84001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
     <entity name="UK_Simple_Address" extends="UK_Not_Default_Address">
         <array key="street">
