@@ -121,7 +121,6 @@
             <argument name="simpleProduct"/>
         </arguments>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -257,11 +256,10 @@
         <arguments>
             <argument name="website" type="string"/>
         </arguments>
-        <scrollTo selector="{{CreateProductSection.productInWebsite}}" stepKey="ScrollToWebsites"/>
-        <click selector="{{CreateProductSection.productInWebsite}}" stepKey="ClickTpOpenProductInWebsite"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickToOpenProductInWebsite"/>
         <waitForPageLoad stepKey="waitForPageOpened"/>
-        <click selector="{{CreateProductSection.isSelected(website)}}" stepKey="SelectWebsite"/>
-        <click selector="{{CreateProductSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
 
     <!--Switch to New Store view-->
@@ -275,6 +273,58 @@
         <click selector="{{AdminProductFormActionSection.selectStoreView(storeViewName)}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!--Create a Simple Product-->
+    <actionGroup name="createSimpleProductAndAddToWebsite">
+        <arguments>
+            <argument name="product"/>
+            <argument name="website" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSKU"/>
+        <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillProductQuantity"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsites"/>
+        <click selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+
+    <actionGroup name="CreatedProductConnectToWebsite">
+        <arguments>
+            <argument name="website"/>
+            <argument name="product"/>
+        </arguments>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductsList"/>
+        <click stepKey="openProduct" selector="{{AdminProductGridActionSection.productName(product.name)}}"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="ScrollToWebsites"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openWebsitesList"/>
+        <waitForPageLoad stepKey="waitForWebsitesList"/>
+        <click selector="{{ProductInWebsitesSection.website(website.name)}}" stepKey="SelectWebsite"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+    </actionGroup>
+
+    <!--Check tier price with a discount percentage on product-->
+    <actionGroup name="AssertDiscountsPercentageOfProducts">
+        <arguments>
+            <argument name="amount" type="string" defaultValue="45"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <grabValueFrom selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" stepKey="grabProductTierPriceInput"/>
+        <assertEquals stepKey="assertProductTierPriceInput">
+            <expectedResult type="string">{{amount}}</expectedResult>
+            <actualResult type="string">$grabProductTierPriceInput</actualResult>
+        </assertEquals>
     </actionGroup>
 
 </actionGroups>

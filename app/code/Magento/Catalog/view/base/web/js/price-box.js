@@ -78,7 +78,11 @@ define([
                 pricesCode = [],
                 priceValue, origin, finalPrice;
 
-            this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
+            if (typeof newPrices !== 'undefined' && newPrices.hasOwnProperty('prices')) {
+                this.cache.additionalPriceObject = {};
+            } else {
+                this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
+            }
 
             if (newPrices) {
                 $.extend(this.cache.additionalPriceObject, newPrices);
