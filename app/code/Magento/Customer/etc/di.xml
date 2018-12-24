@@ -127,6 +127,13 @@
             <argument name="groupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Metadata\CustomerMetadata">
+        <arguments>
+            <argument name="systemAttributes" xsi:type="array">
+                <item name="disable_auto_group_change" xsi:type="string">disable_auto_group_change</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="SectionInvalidationConfigReader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="idAttributes" xsi:type="array">
@@ -223,6 +230,7 @@
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
                 <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Online\Grid\Collection</item>
                 <item name="customer_group_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Group\Grid\Collection</item>
+                <item name="customer_address_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Address\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -447,6 +455,14 @@
             <argument name="eventPrefix" xsi:type="string">customer_group_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customer_group_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Group</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Address\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_address_entity</argument>
+            <argument name="eventPrefix" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">customer_address_entity_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Address</argument>
         </arguments>
     </type>
     <preference
