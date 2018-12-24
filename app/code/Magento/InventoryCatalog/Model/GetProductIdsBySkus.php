@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 
 /**
@@ -22,12 +24,28 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
     private $productResource;
 
     /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param ProductResourceModel $productResource
+     * @param CacheInterface $cache
+     * @param SerializerInterface $serializer
      */
     public function __construct(
-        ProductResourceModel $productResource
+        ProductResourceModel $productResource,
+        CacheInterface $cache,
+        SerializerInterface $serializer
     ) {
         $this->productResource = $productResource;
+        $this->cache = $cache;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -35,6 +53,12 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
      */
     public function execute(array $skus): array
     {
+        $cacheKey = hash('md5', implode(',', $skus));
+
+        if ($cachedIds = $this->cache->load($cacheKey)) {
+            return $this->serializer->unserialize($cachedIds);
+        }
+
         $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
         $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
 
@@ -43,6 +67,8 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
                 __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
             );
         }
+
+        $this->cache->save($this->serializer->serialize($idsBySkus), $cacheKey);
 
         return $idsBySkus;
     }
