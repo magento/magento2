@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfProductAddedBySkuTest">
+        <annotations>
+            <features value="SalesSequence"/>
+            <title value="Check that Configurable product added by SKU to an Order"/>
+            <description value="Check that Configurable product added by SKU to an Order"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-97251"/>
+            <useCaseId value="MAGETWO-91696"/>
+            <group value="SalesSequence"/>
+        </annotations>
+        <before>
+            <!--create new Category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!--one Configurable product is created-->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer"/>
+
+            <!--Login to admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <!--Log out-->
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+        </after>
+
+        <!--Create new order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="CreateNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!--Click on "Add products by SKU" button > Type SKU > And add it to order without qty value-->
+        <click selector="{{AdminOrderFormItemsOrderedSection.addProductsBySku}}" stepKey="clickAddProductsBySKUButton"/>
+        <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminOrderFormItemsSection.skuNumber('0')}}"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" stepKey="typeCreatedProductGroupSKU" userInput="$$createConfigProduct.sku$$"/>
+        <pressKey selector="{{AdminOrderFormItemsSection.skuNumber('0')}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKey2"/>
+
+        <!--Click on "Configure" button-->
+        <waitForElementVisible stepKey="waitForConfigureButtonBySkuAppeared" selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}"/>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigureButtonBySKUButton"/>
+
+        <!--Choose an Option, click on "Ok" button-->
+        <waitForElementVisible stepKey="waitForConfigureProductFrameVisible" selector="{{AdminOrderFormItemsOrderedSection.configureProductOk}}"/>
+        <selectOption selector="{{AdminOrderFormItemsOrderedSection.configureSelectAttribute}}" userInput="option1" stepKey="selectOption1" after="waitForConfigureProductFrameVisible"/>
+
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureProductOk}}" stepKey="clickConfigureProductFrameOkButton"/>
+        <waitForPageLoad stepKey="waitForSavedConfigure"/>
+
+        <!--Click on "Add Products to Order" button-->
+        <click selector="{{AdminOrderFormItemsOrderedSection.addProductToOrder}}" stepKey="clickAddProductToOrderButton"/>
+        <waitForPageLoad stepKey="waitForProductAdded"/>
+        <seeInCurrentUrl url="{{AdminOrderProcessDataPage.url}}" stepKey="seeOnOrderProcessDataPage"/>
+
+        <!--Verify that Product successfully added to items-->
+        <see selector="{{AdminOrderItemsOrderedSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="grabSkuAddedProduct"/>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.productTotal}}" stepKey="grabAddedProductTotalCount"/>
+
+        <assertEquals stepKey="assertToMakeSureThatProductSuccessfullyAdded">
+            <actualResult type="variable">$grabAddedProductTotalCount</actualResult>
+            <expectedResult type="string">Total 1 product(s)</expectedResult>
+        </assertEquals>
+    </test>
+</tests>
