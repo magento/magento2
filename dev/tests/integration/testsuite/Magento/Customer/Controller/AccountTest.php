@@ -19,12 +19,10 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Http;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
@@ -36,11 +34,6 @@ use Zend\Stdlib\Parameters;
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @var MutableScopeConfigInterface
-     */
-    private $mutableScopeConfig;
-
-    /**
      * @var TransportBuilderMock
      */
     private $transportBuilderMock;
@@ -48,7 +41,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $this->mutableScopeConfig = $this->_objectManager->get(MutableScopeConfigInterface::class);
         $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
     }
 
