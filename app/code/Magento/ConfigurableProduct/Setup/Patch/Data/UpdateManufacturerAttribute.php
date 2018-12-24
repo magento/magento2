@@ -15,8 +15,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * Class UpdateManufacturerAttribute
- * @package Magento\ConfigurableProduct\Setup\Patch
+ * Update manufacturer attribute if it's presented in system.
  */
 class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInterface
 {
@@ -31,7 +30,6 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     private $eavSetupFactory;
 
     /**
-     * UpdateTierPriceAttribute constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
@@ -44,30 +42,37 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $relatedProductTypes = explode(
-            ',',
-            $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'manufacturer', 'apply_to')
-        );
 
-        if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-            $relatedProductTypes[] = Configurable::TYPE_CODE;
-            $eavSetup->updateAttribute(
-                \Magento\Catalog\Model\Product::ENTITY,
-                'manufacturer',
-                'apply_to',
-                implode(',', $relatedProductTypes)
+        if ($manufacturer = $eavSetup->getAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'manufacturer',
+            'apply_to'
+        )) {
+            $relatedProductTypes = explode(
+                ',',
+                $manufacturer
             );
+
+            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+                $relatedProductTypes[] = Configurable::TYPE_CODE;
+                $eavSetup->updateAttribute(
+                    \Magento\Catalog\Model\Product::ENTITY,
+                    'manufacturer',
+                    'apply_to',
+                    implode(',', $relatedProductTypes)
+                );
+            }
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -77,7 +82,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}\
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -85,7 +90,7 @@ class UpdateManufacturerAttribute implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
