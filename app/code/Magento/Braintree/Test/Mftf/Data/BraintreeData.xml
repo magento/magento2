@@ -42,6 +42,7 @@
         <requiredEntity type="merchant_id">MerchantId</requiredEntity>
         <requiredEntity type="public_key">PublicKey</requiredEntity>
         <requiredEntity type="private_key">PrivateKey</requiredEntity>
+        <requiredEntity type="active">Status</requiredEntity>
     </entity>
     <entity name="BraintreeTitle" type="title">
         <data key="value">Credit Card (Braintree)</data>
@@ -128,7 +129,7 @@
         <data key="firstName">John</data>
         <data key="lastName">Smith</data>
         <data key="password">admin123</data>
-        <data key="email">mail@mail.com</data>
+        <data key="email" unique="prefix">mail@mail.com</data>
     </entity>
 
     <entity name="PaymentAndShippingInfo" type="data">
