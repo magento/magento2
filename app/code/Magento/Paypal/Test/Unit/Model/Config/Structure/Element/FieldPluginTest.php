@@ -7,7 +7,6 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\RequestInterface;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructureMock;
 
 class FieldPluginTest extends \PHPUnit\Framework\TestCase
@@ -23,27 +22,19 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $requestMock;
-
-    /**
      * @var FieldConfigStructureMock|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(FieldConfigStructureMock::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
-            FieldConfigStructurePlugin::class,
-            ['request' => $this->requestMock]
+            FieldConfigStructurePlugin::class
         );
     }
 
@@ -56,10 +47,9 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetConfigPathNonPaymentSection()
     {
-        $this->requestMock->expects(static::once())
-            ->method('getParam')
-            ->with('section')
-            ->willReturn('non-payment');
+        $this->subjectMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn('non-payment/group/field');
 
         $this->assertNull($this->plugin->afterGetConfigPath($this->subjectMock, null));
     }
@@ -72,11 +62,7 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundGetConfigPath($subjectPath, $expectedConfigPath)
     {
-        $this->requestMock->expects(static::once())
-            ->method('getParam')
-            ->with('section')
-            ->willReturn('payment');
-        $this->subjectMock->expects(static::once())
+        $this->subjectMock->expects($this->exactly(2))
             ->method('getPath')
             ->willReturn($subjectPath);
 
