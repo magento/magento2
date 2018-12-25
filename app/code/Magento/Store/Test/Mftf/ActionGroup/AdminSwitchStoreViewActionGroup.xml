@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchStoreViewActionGroup">
+        <arguments>
+            <argument name="storeView" defaultValue="customStore.name"/>
+        </arguments>
+        <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickStoreViewSwitchDropdown"/>
+        <waitForElementVisible selector="{{AdminMainActionsSection.storeViewByName('Default Store View')}}" stepKey="waitForStoreViewsAreVisible"/>
+        <click selector="{{AdminMainActionsSection.storeViewByName(storeView)}}" stepKey="clickStoreViewByName"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
+        <waitForPageLoad stepKey="waitForStoreViewSwitched"/>
+        <see userInput="{{storeView}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
+    </actionGroup>
+</actionGroups>

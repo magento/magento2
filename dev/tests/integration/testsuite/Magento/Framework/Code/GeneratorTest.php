@@ -23,7 +23,8 @@ require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
  */
 class GeneratorTest extends TestCase
 {
-    const CLASS_NAME_WITH_NAMESPACE = GeneratorTest\SourceClassWithNamespace::class;
+    const CLASS_NAME_WITH_NAMESPACE = \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace::class;
+    const CLASS_NAME_WITH_NAMESPACE_71 = \Magento\Framework\Code\Generator71Test\SourceClassWithNamespace::class;
 
     /**
      * @var Generator
@@ -170,6 +171,62 @@ class GeneratorTest extends TestCase
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
         );
         $this->assertEquals($expectedContent, $content);
+    }
+
+    /**
+     * @requires PHP 7.1
+     */
+    public function testGenerateClassProxyWithNamespace71()
+    {
+        $proxyClassName = self::CLASS_NAME_WITH_NAMESPACE_71 . '\Proxy';
+        $result = false;
+        $generatorResult = $this->_generator->generateClass($proxyClassName);
+        if (\Magento\Framework\Code\Generator::GENERATION_ERROR !== $generatorResult) {
+            $result = true;
+        }
+        $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
+
+        $proxy = Bootstrap::getObjectManager()->create($proxyClassName);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE_71, $proxy);
+
+        // This test is only valid if the factory created the object if Autoloader did not pick it up automatically
+        if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
+            $content = $this->_clearDocBlock(
+                file_get_contents(
+                    $this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE_71 . '\Proxy')
+                )
+            );
+            $expectedContent = $this->_clearDocBlock(
+                file_get_contents(__DIR__ . '/_expected71/SourceClassWithNamespaceProxy.php.sample')
+            );
+            $this->assertEquals($expectedContent, $content);
+        }
+    }
+
+    /**
+     * @requires PHP 7.1
+     */
+    public function testGenerateClassInterceptorWithNamespace71()
+    {
+        $interceptorClassName = self::CLASS_NAME_WITH_NAMESPACE_71 . '\Interceptor';
+        $result = false;
+        $generatorResult = $this->_generator->generateClass($interceptorClassName);
+        if (\Magento\Framework\Code\Generator::GENERATION_ERROR !== $generatorResult) {
+            $result = true;
+        }
+        $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
+
+        if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
+            $content = $this->_clearDocBlock(
+                file_get_contents(
+                    $this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE_71 . '\Interceptor')
+                )
+            );
+            $expectedContent = $this->_clearDocBlock(
+                file_get_contents(__DIR__ . '/_expected71/SourceClassWithNamespaceInterceptor.php.sample')
+            );
+            $this->assertEquals($expectedContent, $content);
+        }
     }
 
     /**
