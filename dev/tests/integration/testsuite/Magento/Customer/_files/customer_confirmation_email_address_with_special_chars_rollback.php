@@ -19,10 +19,12 @@ $registry->register('isSecureArea', true);
 
 /** @var CustomerRepositoryInterface $customerRepository */
 $customerRepository = Bootstrap::getObjectManager()->create(CustomerRepositoryInterface::class);
-$customer = $customerRepository->get('customer+confirmation@example.com');
 
-if ($customer->getId()) {
+try {
+    $customer = $customerRepository->get('customer+confirmation@example.com');
     $customerRepository->delete($customer);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+    // Customer with the specified email does not exist
 }
 
 $registry->unregister('isSecureArea');

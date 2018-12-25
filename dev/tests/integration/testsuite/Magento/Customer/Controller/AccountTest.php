@@ -851,7 +851,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $content
      * @return string
      */
-    private function getConfirmationUrlFromMessageContent(string $content)
+    private function getConfirmationUrlFromMessageContent(string $content): string
     {
         $confirmationUrl = '';
 
