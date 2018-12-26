@@ -622,6 +622,9 @@ class EavSetup
                 $id = $this->defaultGroupIdAssociations[$id];
             } else {
                 $searchField = 'attribute_group_code';
+                if ($id === 'images') {
+                    $id = 'image-management';
+                }
             }
         }
 
