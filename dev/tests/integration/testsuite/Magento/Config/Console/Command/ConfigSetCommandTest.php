@@ -28,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Tests the different flows of config:set command.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoDbIsolation enabled
  */
@@ -292,8 +292,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $scope
      * @param $scopeCode string|null
      * @dataProvider configSetValidationErrorDataProvider
-     *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testConfigSetValidationError(
         $path,
@@ -307,6 +306,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Data provider for testConfigSetValidationError
+     *
      * @return array
      */
     public function configSetValidationErrorDataProvider()
@@ -399,7 +399,6 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * Saving values with successful validation
      *
      * @dataProvider configSetValidDataProvider
-     *
      * @magentoDbIsolation enabled
      */
     public function testConfigSetValid()
