@@ -11,7 +11,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
-
 /**
  * Class MassEnable
  */
