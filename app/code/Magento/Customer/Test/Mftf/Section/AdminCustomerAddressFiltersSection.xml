@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAddressFiltersSection">
+        <element name="filtersButton" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
+        <element name="firstnameInput" type="input" selector="input[name=firstname]"/>
+        <element name="lastnameInput" type="input" selector="input[name=lastname]"/>
+        <element name="streetInput" type="input" selector="input[name=street]"/>
+        <element name="cityInput" type="input" selector="input[name=city]"/>
+        <element name="stateSelector" type="select" selector="input[name=input]"/>
+        <element name="postcodeInput" type="input" selector="input[name=postcode]"/>
+        <element name="countryInput" type="input" selector="select[name=country_id]"/>
+        <element name="telephoneInput" type="input" selector="input[name=telephone]"/>
+        <element name="applyFilter" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
+    </section>
+</sections>

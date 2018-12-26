@@ -404,6 +404,10 @@
                                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/subtotal</item>
                                                                         <item name="displayArea" xsi:type="string">after_details</item>
                                                                     </item>
+                                                                    <item name="message" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/message</item>
+                                                                        <item name="displayArea" xsi:type="string">item_message</item>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>

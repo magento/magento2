@@ -88,7 +88,7 @@ define([
     };
 
     /**
-     * Adds specfied bindings to each DOM elemenet in
+     * Adds specified bindings to each DOM element in
      * collection and evalutes them with provided context.
      *
      * @param {(Object|Function)} data - Either bindings object or a function
