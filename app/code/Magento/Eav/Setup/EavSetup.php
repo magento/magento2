@@ -622,7 +622,7 @@ class EavSetup
                 $id = $this->defaultGroupIdAssociations[$id];
             } else {
                 $searchField = 'attribute_group_code';
-                if($id == 'images'){   
+                if($id == 'images') {   
                     $searchField = 'attribute_group_name';
                     $id = ucfirst($id);     
                 }
