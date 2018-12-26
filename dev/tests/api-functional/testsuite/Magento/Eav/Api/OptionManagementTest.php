@@ -19,6 +19,7 @@ class OptionManagementTest extends WebapiAbstract
     {
         $option = [
             'label' => 'test_option_' . md5(random_int(0, PHP_INT_MAX)),
+            'value' => 'test_option_' . md5(random_int(0, PHP_INT_MAX)),
         ];
         $attributeCode = 'multiselect_attribute';
 
@@ -27,8 +28,8 @@ class OptionManagementTest extends WebapiAbstract
             'numeric',
             $this->addAttributeOption($attributeCode, $option)
         );
-        // False should be returned - this indicates Option already exists.
-        $this->assertFalse(
+        // Empty result should be returned - this indicates Option already exists.
+        $this->assertEmpty(
             $this->addAttributeOption($attributeCode, $option)
         );
     }
@@ -48,10 +49,10 @@ class OptionManagementTest extends WebapiAbstract
             'soap' => [
                 'service' => 'catalogProductAttributeOptionManagementV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'catalogProductAttributeOptionManagementV1getItems',
+                'operation' => 'catalogProductAttributeOptionManagementV1add',
             ],
         ];
 
-        return $this->_webApiCall($serviceInfo, ['option' => $option]);
+        return $this->_webApiCall($serviceInfo, ['option' => $option, 'attributeCode' => $attributeCode]);
     }
 }

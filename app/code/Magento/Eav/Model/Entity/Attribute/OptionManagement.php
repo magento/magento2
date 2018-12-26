@@ -7,6 +7,7 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 use Magento\Eav\Model\ResourceModel\GetAttributeOptionId;
@@ -71,11 +72,7 @@ class OptionManagement implements AttributeOptionManagementInterface
         $options['order'][$optionValue] = $option->getSortOrder();
         $attributeId = $attribute->getAttributeId();
 
-        if (is_array($option->getStoreLabels())) {
-            foreach ($option->getStoreLabels() as $label) {
-                $options['value'][$optionValue][$label->getStoreId()] = $label->getLabel();
-            }
-        }
+        $options = $this->processStoreLabels($option, $options, $optionValue);
 
         if ($option->getIsDefault()) {
             $attribute->setDefault([$optionValue]);
@@ -170,10 +167,10 @@ class OptionManagement implements AttributeOptionManagementInterface
     /**
      * Returns option value
      *
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param AttributeOptionInterface $option
      * @return string
      */
-    private function getOptionValue(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
+    private function getOptionValue(AttributeOptionInterface $option) : string
     {
         return 'value_' . ($option->getValue() ?: 'new_option');
     }
@@ -181,13 +178,13 @@ class OptionManagement implements AttributeOptionManagementInterface
     /**
      * Set option value
      *
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param AttributeOptionInterface $option
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @param string $optionLabel
      * @return void
      */
     private function setOptionValue(
-        \Magento\Eav\Api\Data\AttributeOptionInterface $option,
+        AttributeOptionInterface $option,
         \Magento\Eav\Api\Data\AttributeInterface $attribute,
         string $optionLabel
     ) {
@@ -202,5 +199,24 @@ class OptionManagement implements AttributeOptionManagementInterface
                 }
             }
         }
+    }
+
+    /**
+     * Process option store labels.
+     *
+     * @param AttributeOptionInterface $option
+     * @param array $options
+     * @param string $optionValue
+     * @return array
+     */
+    private function processStoreLabels(AttributeOptionInterface $option, array $options, string $optionValue): array
+    {
+        if (is_array($option->getStoreLabels())) {
+            foreach ($option->getStoreLabels() as $label) {
+                $options['value'][$optionValue][$label->getStoreId()] = $label->getLabel();
+            }
+        }
+
+        return $options;
     }
 }

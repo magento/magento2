@@ -82,7 +82,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('usesSource')->willReturn(true);
         $optionMock->expects($this->once())->method('getLabel')->willReturn('optionLabel');
         $optionMock->expects($this->once())->method('getSortOrder')->willReturn('optionSortOrder');
-        $optionMock->expects($this->exactly(2))->method('getStoreLabels')->willReturn([$labelMock]);
+        $optionMock->expects($this->exactly(3))->method('getStoreLabels')->willReturn([$labelMock]);
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(42);
         $labelMock->expects($this->once())->method('getLabel')->willReturn('labelLabel');
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
@@ -93,7 +93,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->getAttributeOptionIdMock
             ->expects($this->once())
             ->method('execute')
-            ->with(93, 'optionLabel')
+            ->with(93, 'value_new_option')
             ->willReturn(42);
         $this->assertEquals(42, $this->model->add($entityType, $attributeCode, $optionMock));
     }
@@ -176,7 +176,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             true,
-            ['usesSource', 'setDefault', 'setOption']
+            ['usesSource', 'setDefault', 'setOption', 'getAttributeCode']
         );
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
