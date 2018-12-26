@@ -75,12 +75,12 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
      */
     private $customer;
 
+
     /**
-     * AssignCouponDataAfterOrderCustomerAssignTest constructor.
+     * @inheritdoc
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setUp()
     {
-        parent::__construct($name, $data, $dataName);
         $this->objectManager = Bootstrap::getObjectManager();
         $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->orderRepository = $this->objectManager->get(\Magento\Sales\Model\OrderRepository::class);
@@ -90,13 +90,7 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
         $this->assignCouponToCustomerObserver = $this->objectManager->get(
             \Magento\SalesRule\Observer\AssignCouponDataAfterOrderCustomerAssignObserver::class
         );
-    }
 
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
         $this->salesRule = $this->prepareSalesRule();
         $this->coupon = $this->attachSalesruleCoupon($this->salesRule);
         $this->order  = $this->makeOrderWithCouponAsGuest($this->coupon);
