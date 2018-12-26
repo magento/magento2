@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
+    <?php foreach ($_order->getTracksCollection($_shipment->getId()) as $_item): ?>
         <tr>
             <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
             <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
