@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="#"/>
+            <testCaseId value="MC-5922"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -79,6 +79,7 @@
 
         <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
         <waitForPageLoad stepKey="s97"/>
+        <waitForElementVisible selector="{{AdminCustomerFiltersSection.filtersButton}}" time="30" stepKey="waitFiltersButton"/>
         <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
         <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
         <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>

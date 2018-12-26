@@ -282,10 +282,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quote = $this->checkoutSession->getQuote();
         $quoteId = $quote->getId();
         $email = $quote->getShippingAddress()->getEmail();
+        $quoteItemData = $this->getQuoteItemData();
         $output['formKey'] = $this->formKey->getFormKey();
         $output['customerData'] = $this->getCustomerData();
         $output['quoteData'] = $this->getQuoteData();
-        $output['quoteItemData'] = $this->getQuoteItemData();
+        $output['quoteItemData'] = $quoteItemData;
+        $output['quoteMessages'] = $this->getQuoteItemsMessages($quoteItemData);
         $output['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         $output['selectedShippingMethod'] = $this->getSelectedShippingMethod();
         if ($email && !$this->isCustomerLoggedIn()) {
@@ -316,6 +318,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
+
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [
             'isEnabled' => $this->scopeConfig->isSetFlag(
@@ -450,6 +453,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     $quoteItem->getProduct(),
                     'product_thumbnail_image'
                 )->getUrl();
+                $quoteItemData[$index]['message'] = $quoteItem->getMessage();
             }
         }
         return $quoteItemData;
@@ -775,5 +779,23 @@ class DefaultConfigProvider implements ConfigProviderInterface
         }
 
         return $attributeOptionLabels;
+    }
+
+    /**
+     * Get notification messages for the quote items
+     *
+     * @param array $quoteItemData
+     * @return array
+     */
+    private function getQuoteItemsMessages(array $quoteItemData): array
+    {
+        $quoteItemsMessages = [];
+        if ($quoteItemData) {
+            foreach ($quoteItemData as $item) {
+                $quoteItemsMessages[$item['item_id']] = $item['message'];
+            }
+        }
+
+        return $quoteItemsMessages;
     }
 }
