@@ -29,14 +29,14 @@ class GetAttributeOptionId
     }
 
     /**
-     * Returns Attribute Option Id by Attribute Id and Option Label.
+     * Returns Attribute Option Id by Attribute Id and Option Value.
      *
      * @param int $attributeId
-     * @param string $optionLabel
+     * @param string $optionValue
      *
      * @return string
      */
-    public function execute(int $attributeId, string $optionLabel): string
+    public function execute(int $attributeId, string $optionValue): string
     {
         $connection = $this->resource->getConnection();
         $optionTable = $this->resource->getTableName('eav_attribute_option');
@@ -51,12 +51,12 @@ class GetAttributeOptionId
                 []
             )->where(
                 'ovt.value = ?',
-                $optionLabel
+                $optionValue
             )->where(
                 'ot.attribute_id = ?',
                 $attributeId
             );
 
-        return $connection->fetchOne($select);
+        return (string)$connection->fetchOne($select);
     }
 }

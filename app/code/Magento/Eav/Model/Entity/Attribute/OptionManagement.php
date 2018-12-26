@@ -91,7 +91,9 @@ class OptionManagement implements AttributeOptionManagementInterface
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
-        return $this->getAttributeOptionId->execute($attributeId, $optionLabel);
+        $optionValue = is_array($option->getStoreLabels()) ? $optionValue : $optionLabel;
+
+        return $this->getAttributeOptionId->execute($attributeId, $optionValue);
     }
 
     /**
