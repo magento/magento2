@@ -47,7 +47,8 @@
 
     <actionGroup name="SubmitInvoice">
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageInvoice"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
     </actionGroup>
 </actionGroups>

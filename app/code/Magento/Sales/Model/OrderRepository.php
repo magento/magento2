@@ -17,6 +17,7 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Tax\Api\OrderTaxManagementInterface;
 
 /**
  * Repository class
@@ -61,6 +62,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var OrderTaxManagementInterface
+     */
+    private $orderTaxManagement;
+
+    /**
      * Constructor
      *
      * @param Metadata $metadata
@@ -68,13 +74,15 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param OrderTaxManagementInterface|null $orderTaxManagement
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
-        JoinProcessorInterface $extensionAttributesJoinProcessor = null
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
+        OrderTaxManagementInterface $orderTaxManagement = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -84,10 +92,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
+        $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
+            ->get(OrderTaxManagementInterface::class);
     }
 
     /**
-     * load entity
+     * Load entity.
      *
      * @param int $id
      * @return \Magento\Sales\Api\Data\OrderInterface
@@ -105,10 +115,34 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
+            $this->setOrderTaxDetails($entity);
             $this->setShippingAssignments($entity);
             $this->registry[$id] = $entity;
         }
         return $this->registry[$id];
+    }
+
+    /**
+     * Set order tax details to extension attributes.
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    private function setOrderTaxDetails(OrderInterface $order)
+    {
+        $extensionAttributes = $order->getExtensionAttributes();
+        $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getEntityId());
+        $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
+
+        $extensionAttributes->setAppliedTaxes($appliedTaxes);
+        if (!empty($appliedTaxes)) {
+            $extensionAttributes->setConvertingFromQuote(true);
+        }
+
+        $items = $orderTaxDetails->getItems();
+        $extensionAttributes->setItemAppliedTaxes($items);
+
+        $order->setExtensionAttributes($extensionAttributes);
     }
 
     /**
@@ -126,6 +160,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $searchResult->setSearchCriteria($searchCriteria);
         foreach ($searchResult->getItems() as $order) {
             $this->setShippingAssignments($order);
+            $this->setOrderTaxDetails($order);
         }
         return $searchResult;
     }
@@ -179,6 +214,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
+     * Set shipping assignments to extension attributes.
+     *
      * @param OrderInterface $order
      * @return void
      */
