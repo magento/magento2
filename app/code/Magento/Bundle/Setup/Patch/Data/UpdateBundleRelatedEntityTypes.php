@@ -6,16 +6,16 @@
 
 namespace Magento\Bundle\Setup\Patch\Data;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Eav\Setup\EavSetup;
 
 /**
  * Class UpdateBundleRelatedEntityTypes
+ *
  * @package Magento\Bundle\Setup\Patch
  */
 class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersionInterface
@@ -44,7 +44,7 @@ class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -177,7 +177,7 @@ class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -187,7 +187,7 @@ class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -195,7 +195,7 @@ class UpdateBundleRelatedEntityTypes implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
