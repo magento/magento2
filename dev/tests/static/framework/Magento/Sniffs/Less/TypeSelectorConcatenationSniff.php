@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Files\File;
  * Ensure that selector in one line, concatenation is not used
  *
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#formatting-1
- *
  */
 class TypeSelectorConcatenationSniff implements Sniff
 {
@@ -34,7 +33,7 @@ class TypeSelectorConcatenationSniff implements Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -42,7 +41,7 @@ class TypeSelectorConcatenationSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

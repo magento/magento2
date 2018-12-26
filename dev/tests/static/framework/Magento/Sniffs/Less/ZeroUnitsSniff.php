@@ -16,7 +16,6 @@ use PHP_CodeSniffer\Files\File;
  *
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#and-units
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#floating-values
- *
  */
 class ZeroUnitsSniff implements Sniff
 {
@@ -43,7 +42,7 @@ class ZeroUnitsSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -51,7 +50,7 @@ class ZeroUnitsSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

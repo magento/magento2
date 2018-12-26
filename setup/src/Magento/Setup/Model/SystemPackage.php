@@ -154,6 +154,8 @@ class SystemPackage
     }
 
     /**
+     * Get installed system packages.
+     *
      * @return array
      * @throws \Exception
      * @throws \RuntimeException
@@ -187,6 +189,8 @@ class SystemPackage
     }
 
     /**
+     * Sort versions.
+     *
      * @param array $enterpriseVersions
      * @return array
      */
@@ -241,6 +245,8 @@ class SystemPackage
     }
 
     /**
+     * Filter enterprise versions.
+     *
      * @param string $currentCE
      * @param array $enterpriseVersions
      * @param string $maxVersion

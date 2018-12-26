@@ -27,6 +27,8 @@ class LandingInstaller extends AbstractActionController
     }
 
     /**
+     * Setup index action.
+     *
      * @return array|ViewModel
      */
     public function indexAction()

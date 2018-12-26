@@ -19,7 +19,6 @@ use PHP_CodeSniffer\Files\File;
  * - Write selector in one line, do not use concatenation
  *
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selectors-naming
- *
  */
 class TypeSelectorsSniff implements Sniff
 {
@@ -56,7 +55,7 @@ class TypeSelectorsSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -64,7 +63,7 @@ class TypeSelectorsSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

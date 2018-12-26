@@ -18,7 +18,6 @@ use PHP_CodeSniffer\Files\File;
  * - words should be separated with dash '-';
  *
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#standard-classes
- *
  */
 class ClassNamingSniff implements Sniff
 {
@@ -35,7 +34,7 @@ class ClassNamingSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -43,7 +42,7 @@ class ClassNamingSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

@@ -18,7 +18,6 @@ use PHP_CodeSniffer\Files\File;
  *
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#local-variables
  * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#naming
- *
  */
 class VariablesSniff implements Sniff
 {
@@ -30,7 +29,7 @@ class VariablesSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -38,7 +37,7 @@ class VariablesSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

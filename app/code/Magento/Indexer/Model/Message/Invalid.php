@@ -6,6 +6,9 @@
 
 namespace Magento\Indexer\Model\Message;
 
+/**
+ * Message about invalid indexers.
+ */
 class Invalid implements \Magento\Framework\Notification\MessageInterface
 {
     /**
