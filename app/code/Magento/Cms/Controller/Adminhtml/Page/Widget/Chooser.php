@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
+/**
+ * Chooser Source action.
+ */
 class Chooser extends Action implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**

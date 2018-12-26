@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +11,9 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Save CMS page action.
+ */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
