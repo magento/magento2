@@ -29,7 +29,7 @@ class DataBuilder
      * Add Item Data
      *
      * @param string $label
-     * @param string $label
+     * @param string $value
      * @param int $count
      * @return void
      */
