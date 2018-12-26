@@ -1158,20 +1158,21 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             self::CACHE_TAG . '_' . $this->getId(),
         ];
 
-        if (!$this->getId() || $this->hasDataChanges()
-            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
-        ) {
-            $identities[] = self::CACHE_TAG;
-            if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
-                foreach ($this->getPathIds() as $id) {
-                    $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
-                }
-            } else {
-                $identities[]= Product::CACHE_PRODUCT_CATEGORY_TAG . $this->getId();
+        if ($this->hasDataChanges()) {
+            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        }
+
+        if ($this->dataHasChangedFor('is_anchor') || $this->dataHasChangedFor('is_active')) {
+            foreach ($this->getPathIds() as $id) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $id;
             }
         }
 
-        return $identities;
+        if (!$this->getId() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+            $identities[] = self::CACHE_TAG;
+            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        }
+        return array_unique($identities);
     }
 
     /**
