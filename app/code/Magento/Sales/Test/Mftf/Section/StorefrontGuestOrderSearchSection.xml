@@ -13,6 +13,6 @@
         <element name="billingLastName" type="input" selector="#oar-billing-lastname"/>
         <element name="findOrderBy" type="select" selector="#quick-search-type-id"/>
         <element name="email" type="input" selector="#oar_email"/>
-        <element name="continue" type="button" selector="//*/span[contains(text(), 'Continue')]"/>
+        <element name="continue" type="button" selector="//span[contains(text(), 'Continue')]"/>
     </section>
 </sections>
