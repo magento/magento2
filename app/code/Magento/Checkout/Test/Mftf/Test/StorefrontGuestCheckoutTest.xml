@@ -128,9 +128,10 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
 
         <!-- Fill US Address and verify that no payment available -->
-        <actionGroup ref="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup" stepKey="guestCheckoutFillingShippingSection">
+        <actionGroup ref="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
+            <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
