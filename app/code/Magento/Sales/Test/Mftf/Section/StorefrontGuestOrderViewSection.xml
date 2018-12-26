@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontGuestOrderViewSection">
-        <element name="orderInformationTab" type="text" selector="//*[@class='nav item current']/strong[contains(text(), 'Order Information')]"/>
+        <element name="orderInformationTab" type="text" selector="//*[contains(@class,'nav')]/strong[contains(text(), 'Order Information')]"/>
     </section>
 </sections>
