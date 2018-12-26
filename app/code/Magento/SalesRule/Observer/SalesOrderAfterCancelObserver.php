@@ -20,57 +20,53 @@ use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SalesOrderAfterCancelObserver
- *
- * @package Magento\SalesRule\Observer
+ * Restore coupon in case order has been canceled.
  */
 class SalesOrderAfterCancelObserver implements ObserverInterface
 {
     /**
      * @var Coupon
      */
-    public $coupon;
+    private $coupon;
 
     /**
      * @var CouponRepositoryInterface
      */
-    protected $couponRepository;
+    private $couponRepository;
 
     /**
      * @var RuleRepositoryInterface
      */
-    protected $ruleRepository;
+    private $ruleRepository;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage
+     * @var Usage
      */
-    protected $couponUsage;
+    private $couponUsage;
 
     /**
      * @var CustomerFactory
      */
-    protected $customerFactory;
+    private $customerFactory;
 
     /**
      * @var ResourceConnection
      */
-    protected $resourceConnection;
+    private $resourceConnection;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
-     * SalesOrderAfterCancelObserver constructor.
-     *
-     * @param \Magento\SalesRule\Model\Coupon                     $coupon
-     * @param \Magento\SalesRule\Api\CouponRepositoryInterface    $couponRepository
-     * @param \Magento\SalesRule\Api\RuleRepositoryInterface      $ruleRepository
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\Usage $couponUsage
-     * @param \Magento\SalesRule\Model\Rule\CustomerFactory       $customerFactory
-     * @param \Magento\Framework\App\ResourceConnection           $resourceConnection
-     * @param \Psr\Log\LoggerInterface                            $logger
+     * @param Coupon $coupon
+     * @param CouponRepositoryInterface $couponRepository
+     * @param RuleRepositoryInterface $ruleRepository
+     * @param Usage $couponUsage
+     * @param CustomerFactory $customerFactory
+     * @param ResourceConnection $resourceConnection
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Coupon $coupon,
@@ -91,11 +87,13 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     }
 
     /**
+     * Restore coupon after order cancellation.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      *
      * @return $this
      */
-    public function execute(EventObserver $observer)
+    public function execute(EventObserver $observer): self
     {
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $observer->getEvent()->getOrder();
@@ -107,7 +105,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
         /** @var Coupon $coupon */
         $coupon = $this->coupon->loadByCode($couponCode);
         if ($coupon->getCouponId()) {
-            $customerId = $order->getCustomerId();
+            $customerId = (int)$order->getCustomerId();
             $this->restoreCoupon($coupon, $customerId);
         }
 
@@ -115,14 +113,14 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
     }
 
     /**
-     * Restore coupon
+     * Restore coupon.
      *
      * @param CouponInterface $coupon
-     * @param int             $customerId
+     * @param int $customerId
      *
      * @return bool
      */
-    protected function restoreCoupon(CouponInterface $coupon, $customerId)
+    private function restoreCoupon(CouponInterface $coupon, int $customerId): bool
     {
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
