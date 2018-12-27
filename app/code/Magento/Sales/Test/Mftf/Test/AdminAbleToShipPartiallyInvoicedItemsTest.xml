@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAbleToShipPartiallyInvoicedItemsTest">
         <annotations>
             <title value="Ship Action is available for remaining of the partially invoiced items "/>
@@ -75,7 +75,7 @@
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceToSubmit"/>
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit1"/>
         <!--Invoice created successfully-->
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems"/>
@@ -137,8 +137,9 @@
         <see selector="{{AdminInvoiceItemsSection.itemQty('1')}}" userInput="Refunded 5" stepKey="seeQtyOfItemsRefunded"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2" />
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit2"/>
         <!--Invoice created successfully for the rest of the ordered items-->
-        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." after="submitInvoice2" stepKey="seeInvoiceSuccessMessage2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage2"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems3"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 10" stepKey="see10itemsInvoiced"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage3"/>
