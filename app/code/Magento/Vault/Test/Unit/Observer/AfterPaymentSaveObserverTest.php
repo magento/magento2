@@ -123,10 +123,10 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
      * @param string $token
      * @param bool $isActive
      * @param string $method
-     * @param array $additionalInformation
+     * @param array $additionalInfo
      * @dataProvider positiveCaseDataProvider
      */
-    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $additionalInformation)
+    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $additionalInfo)
     {
         $this->paymentTokenMock->setGatewayToken($token);
         $this->paymentTokenMock->setCustomerId($customerId);
@@ -138,7 +138,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
 
-        $this->salesOrderPaymentMock->method('getAdditionalInformation')->willReturn($additionalInformation);
+        $this->salesOrderPaymentMock->method('getAdditionalInformation')->willReturn($additionalInfo);
 
         if (!empty($token)) {
             $this->paymentTokenManagementMock->expects($this->once())
@@ -162,7 +162,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($token, $paymentToken->getGatewayToken());
         static::assertEquals($isActive, $paymentToken->getIsActive());
         static::assertEquals($createdAt, $paymentToken->getCreatedAt());
-        static::assertEquals($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE] ?? false, $paymentToken->getIsVisible());
+        static::assertEquals($additionalInfo[VaultConfigProvider::IS_ACTIVE_CODE] ?? false, $paymentToken->getIsVisible());
     }
 
     /**
