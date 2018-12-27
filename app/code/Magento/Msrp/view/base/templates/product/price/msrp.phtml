@@ -72,6 +72,8 @@ if ($product->isSaleable()) {
         } else {
             $data['addToCart']['addToCartButton'] = sprintf(
                 'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
+                (int) $productId) . ',' .
+                sprintf('.block.widget .price-box[data-product-id=%s]+.product-item-actions button.tocart',
                 (int) $productId
             );
         }
