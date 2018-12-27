@@ -148,7 +148,17 @@ class StockManagement implements StockManagementInterface
         //if (!$websiteId) {
         $websiteId = $this->stockConfiguration->getDefaultScopeId();
         //}
-        $this->qtyCounter->correctItemsQty($items, $websiteId, '+');
+        $revertItems = [];
+        foreach ($items as $productId => $qty) {
+            $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+            $canSubtractQty = $stockItem->getItemId() && $this->canSubtractQty($stockItem);
+            if (!$canSubtractQty || !$this->stockConfiguration->isQty($stockItem->getTypeId())) {
+                continue;
+            }
+            $revertItems[$productId] = $qty;
+        }
+        $this->qtyCounter->correctItemsQty($revertItems, $websiteId, '+');
+
         return true;
     }
 
