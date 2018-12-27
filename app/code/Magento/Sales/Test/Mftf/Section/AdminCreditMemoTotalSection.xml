@@ -11,7 +11,7 @@
     <section name="AdminCreditMemoTotalSection">
         <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td/span/span[contains(@class, 'price')]" parameterized="true"/>
         <element name="refundShipping" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[shipping_amount]']"/>
-        <element name="updateTotals" type="button" selector=".update-totals-button"/>
+        <element name="updateTotals" type="button" selector=".update-totals-button" timeout="30"/>
         <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[title='Refund Offline']" timeout="30"/>
     </section>
 </sections>

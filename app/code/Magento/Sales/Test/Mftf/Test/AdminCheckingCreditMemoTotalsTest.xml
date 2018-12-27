@@ -69,6 +69,7 @@
         <actionGroup ref="AdminOrderFillBraintreeCreditCardActionGroup" stepKey="fillBraintreeCreditCard"/>
         <!--Submit order-->
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order."
              stepKey="seeSuccessMessage"/>
 
@@ -88,7 +89,7 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
-        <waitForPageLoad stepKey="waitForUpdateTotals"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForUpdateTotals"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo."
              stepKey="seeCreatedCreditMemoSuccessMessage"/>
