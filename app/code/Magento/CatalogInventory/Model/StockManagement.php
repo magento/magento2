@@ -140,8 +140,9 @@ class StockManagement implements StockManagementInterface
 
     /**
      * @param string[] $items
-     * @param int $websiteId
-     * @return bool
+     * @param int|null $websiteId
+     *
+     * @return array|bool
      */
     public function revertProductsSale($items, $websiteId = null)
     {
@@ -159,7 +160,7 @@ class StockManagement implements StockManagementInterface
         }
         $this->qtyCounter->correctItemsQty($revertItems, $websiteId, '+');
 
-        return true;
+        return $revertItems;
     }
 
     /**
