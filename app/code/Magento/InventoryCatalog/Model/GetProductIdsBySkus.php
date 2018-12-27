@@ -43,14 +43,16 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
         $cacheKey = hash('md5', implode(',', $skus));
 
         if (!isset($this->productIdsBySkus[$cacheKey])) {
-            $this->productIdsBySkus[$cacheKey] = $this->productResource->getProductsIdsBySkus($skus);
-            $notFoundedSkus = array_diff($skus, array_keys($this->productIdsBySkus[$cacheKey]));
+            $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
+            $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
 
             if (!empty($notFoundedSkus)) {
                 throw new NoSuchEntityException(
                     __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
                 );
             }
+
+            $this->productIdsBySkus[$cacheKey] = $idsBySkus;
         }
 
         return $this->productIdsBySkus[$cacheKey];
