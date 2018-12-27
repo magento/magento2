@@ -6,6 +6,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Debug;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
@@ -79,7 +80,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param ResponseHttp $response
      * @param ConfigLoaderInterface $configLoader
      * @param State $state
-     * @param Filesystem $filesystem,
+     * @param Filesystem $filesystem
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
@@ -149,7 +150,7 @@ class Http implements \Magento\Framework\AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -214,7 +215,7 @@ class Http implements \Magento\Framework\AppInterface
                 $index,
                 get_class($exception),
                 $exception->getMessage(),
-                $exception->getTraceAsString()
+                Debug::trace($exception->getTrace(), true, true, false)
             );
         }
 
@@ -312,7 +313,15 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleGenericReport(Bootstrap $bootstrap, \Exception $exception)
     {
-        $reportData = [$exception->getMessage(), $exception->getTraceAsString()];
+        $reportData = [
+            $exception->getMessage(),
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)DEBUG_BACKTRACE_IGNORE_ARGS
+            )
+        ];
         $params = $bootstrap->getParams();
         if (isset($params['REQUEST_URI'])) {
             $reportData['url'] = $params['REQUEST_URI'];
