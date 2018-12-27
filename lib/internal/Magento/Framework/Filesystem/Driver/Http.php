@@ -39,6 +39,11 @@ class Http extends File
         if (strpos($status, '302 Found') !== false && isset($headers[1])) {
             $status = $headers[1];
         }
+        
+        /* Handling 301 redirection */
+        if (strpos($status, '301 Moved Permanently') !== false && isset($headers[1])) {
+            $status = $headers[1];
+        }
 
         if (strpos($status, '200 OK') === false) {
             $result = false;
