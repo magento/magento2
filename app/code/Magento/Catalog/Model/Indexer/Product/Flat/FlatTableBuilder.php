@@ -355,6 +355,7 @@ class FlatTableBuilder
                 //Update not simple attributes (eg. dropdown)
                 $columnName = $attributeCode . $valueFieldSuffix;
                 if (isset($flatColumns[$columnName])) {
+                    $columnValue = $this->_connection->getIfNullSql('ts.value', 't0.value');
                     $select = $this->_connection->select();
                     $select->joinLeft(
                         ['t0' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
@@ -365,8 +366,8 @@ class FlatTableBuilder
                         'ts.option_id = et.' . $attributeCode . ' AND ts.store_id = ' . $storeId,
                         []
                     )->columns(
-                        [$columnName => $this->_connection->getIfNullSql('ts.value', 't0.value')]
-                    )->where($columnName . ' IS NOT NULL');
+                        [$columnName => $columnValue]
+                    )->where($columnValue . ' IS NOT NULL');
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
