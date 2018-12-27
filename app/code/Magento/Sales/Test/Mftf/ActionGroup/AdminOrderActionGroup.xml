@@ -69,6 +69,7 @@
         <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
         <!--Clear grid filters-->
         <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFilterReset"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
