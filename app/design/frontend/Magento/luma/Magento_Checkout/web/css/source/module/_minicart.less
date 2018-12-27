@@ -110,9 +110,9 @@
             @_toggle-selector: ~'.action.showcart',
             @_options-selector: ~'.block-minicart',
             @_dropdown-list-width: 320px,
-            @_dropdown-list-position-right: 0,
+            @_dropdown-list-position-right: -10px,
             @_dropdown-list-pointer-position: right,
-            @_dropdown-list-pointer-position-left-right: 26px,
+            @_dropdown-list-pointer-position-left-right: 12px,
             @_dropdown-list-z-index: 101,              
             @_dropdown-toggle-icon-content: @icon-cart,
             @_dropdown-toggle-active-icon-content: @icon-cart,
@@ -153,17 +153,17 @@
 
         .action {
             &.close {
-                height: 40px;
+                height: 30px;
                 position: absolute;
                 right: 0;
                 top: 0;
-                width: 40px;
+                width: 25px;
                 .lib-button-reset();
                 .lib-button-icon(
                     @icon-remove,
                     @_icon-font-color: @minicart-icons-color,
-                    @_icon-font-size: 16px,
-                    @_icon-font-line-height: 16px,
+                    @_icon-font-size: 14px,
+                    @_icon-font-line-height: 14px,
                     @_icon-font-text-hide: true
                 );
             }
@@ -415,7 +415,6 @@
         margin-left: 13px;
 
         .block-minicart {
-            right: -15px;
             width: 390px;
         }
     }

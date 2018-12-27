@@ -783,7 +783,7 @@
         box-sizing: border-box;
         border: 1px solid #adadad;
         border-radius: 1px;
-        padding: 4px;
+        padding: .6rem 1rem .6rem;
         color: #303030;
         background-color: @color-white;
         font-weight: 500;
@@ -1188,7 +1188,7 @@
     }
 
     //
-    //  Collapsable fieldset-wrapper
+    //  collapsible fieldset-wrapper
     //  --------------------------------------
 
     // Fieldset styles in another fieldset
@@ -2544,6 +2544,8 @@
     .order-summary:after,
     .order-methods:before,
     .order-methods:after,
+    .payment-methods:before,
+    .payment-methods:after,
     .grid-actions:before,
     .grid-actions:after,
     .fieldset-wrapper-title:before,
@@ -2559,6 +2561,7 @@
     .order-addresses:after,
     .order-summary:after,
     .order-methods:after,
+    .payment-methods:after,
     .grid-actions:after,
     .fieldset-wrapper-title:after {
         clear: both;
@@ -2898,6 +2901,7 @@
         .style28();
     }
 
+    #order-billing-method-summary a,
     #order-shipping-method-summary a {
         .style3();
     }
@@ -2936,7 +2940,8 @@
         margin: 0 0 0 20px;
     }
 
-    #order-data .order-methods ul {
+    #order-data .order-methods ul,
+    #order-data .payment-methods ul {
         list-style: none;
         margin: 0;
         padding: 0;
