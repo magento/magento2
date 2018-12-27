@@ -67,6 +67,7 @@
         <data key="state">California</data>
         <data key="postcode">90230</data>
         <data key="country_id">US</data>
+        <data key="country">United States</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionCA</requiredEntity>
