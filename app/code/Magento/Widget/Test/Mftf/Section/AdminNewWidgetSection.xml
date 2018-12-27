@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
@@ -17,6 +17,7 @@
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
+        <element name="selectTemplate" type="select" selector=".widget-layout-updates .block_template_container .select"/>
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
         <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>
@@ -25,5 +26,6 @@
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
         <element name="openChooser" type="button" selector=".rule-chooser-trigger"/>
         <element name="selectAll" type="checkbox" selector=".admin__control-checkbox"/>
+        <element name="selectProduct" type="button" selector=".btn-chooser" timeout="30"/>
     </section>
 </sections>

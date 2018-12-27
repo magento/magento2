@@ -19,4 +19,9 @@
         <data key="display_on">All Pages</data>
         <data key="container">Main Content Area</data>
     </entity>
+    <entity name="ProductLinkWidget" extends="ProductsListWidget">
+        <remove keyForRemoval="condition"/>
+        <data key="type">Catalog Product Link</data>
+        <data key="template">Product Link Block Template</data>
+    </entity>
 </entities>
