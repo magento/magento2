@@ -323,8 +323,6 @@ class Widget
 
         $directive .= $this->getWidgetPageVarName($params);
 
-        $directive .= sprintf(' type_name="%s"', $widget['name']);
-
         $directive .= '}}';
 
         if ($asIs) {
