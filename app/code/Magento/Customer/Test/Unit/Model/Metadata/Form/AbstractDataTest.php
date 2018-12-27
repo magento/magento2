@@ -226,12 +226,10 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $validationRule->method('getValue')
             ->willReturn($inputValidation);
 
-        $this->_attributeMock
-            ->method('getStoreLabel')
+        $this->_attributeMock->method('getStoreLabel')
             ->willReturn($label);
 
-        $this->_attributeMock
-            ->method('getValidationRules')
+        $this->_attributeMock->method('getValidationRules')
             ->willReturn([$validationRule]);
 
         $this->assertEquals($expectedOutput, $this->_model->validateInputRule($value));

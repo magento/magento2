@@ -15,7 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 {
