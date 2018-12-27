@@ -60,12 +60,11 @@ class DeployStaticContentCommand extends Command
     private $appState;
 
     /**
-     * StaticContentCommand constructor
-     *
-     * @param InputValidator        $inputValidator
-     * @param ConsoleLoggerFactory  $consoleLoggerFactory
-     * @param Options               $options
+     * @param InputValidator $inputValidator
+     * @param ConsoleLoggerFactory $consoleLoggerFactory
+     * @param Options $options
      * @param ObjectManagerProvider $objectManagerProvider
+     * @throws \Magento\Setup\Exception
      */
     public function __construct(
         InputValidator $inputValidator,
@@ -82,7 +81,8 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Configures the current command.{@inheritdoc}
+     *
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -96,9 +96,13 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Executes static content deploy command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @throws \InvalidArgumentException
      * @throws LocalizedException
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -119,9 +123,11 @@ class DeployStaticContentCommand extends Command
         $this->inputValidator->validate($input);
 
         $options = $input->getOptions();
-        $language = $input->getOption(Options::LANGUAGE) ?: ['all'];
-        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?
-            array_merge($input->getArgument(Options::LANGUAGES_ARGUMENT), $language): $language;
+        $language = $input->getOption(Options::LANGUAGE);
+        $languageArgs = $input->getArgument(Options::LANGUAGES_ARGUMENT);
+
+        $options[Options::LANGUAGE] = (empty($language) && empty($languageArgs)) ? ['all'] :
+            array_merge($language, $languageArgs);
         $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
             && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 
@@ -163,6 +169,8 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
+     * Get App/State instance.
+     *
      * @return State
      */
     private function getAppState()
