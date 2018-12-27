@@ -86,8 +86,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30"
-                        stepKey="waitForPaymentSectionLoaded"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
 
@@ -126,6 +126,8 @@
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage1"/>
 
