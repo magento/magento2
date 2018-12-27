@@ -50,7 +50,7 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $storeCodeInPath
      * @param string $storeCodeSet
-     * @param int    $setCurrentStoreCallCtr
+     * @param int $setCurrentStoreCallCtr
      */
     public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
     {
