@@ -10,7 +10,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\Algorithms;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetGeoReferenceProvider;
 use Magento\InventorySourceSelectionApi\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
@@ -79,7 +79,7 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
      * Get enabled sources ordered by priority by $stockId
      *
      * @param int $stockId
-     * @param AddressRequestInterface $addressRequest
+     * @param AddressInterface $address
      * @return array
      *
      * @throws \Magento\Framework\Exception\InputException
@@ -87,7 +87,7 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
      */
     private function getEnabledSourcesOrderedByDistanceByStockId(
         int $stockId,
-        AddressRequestInterface $addressRequest
+        AddressInterface $address
     ): array {
         // We keep priority order as computational base
         $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute($stockId);
@@ -101,7 +101,7 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
             try {
                 $distanceBySourceCode[$source->getSourceCode()] = $geoReferenceProvider->getDistance(
                     $source,
-                    $addressRequest
+                    $address
                 );
                 $sortSources[] = $source;
             } catch (LocalizedException $e) {

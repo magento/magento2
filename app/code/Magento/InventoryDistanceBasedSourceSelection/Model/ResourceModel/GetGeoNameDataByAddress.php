@@ -9,13 +9,13 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\AddressToString;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
 
 /**
  * Get geoname data by postcode
  */
-class GetGeoNameDataByAddressRequest
+class GetGeoNameDataByAddress
 {
     /**
      * @var ResourceConnection
@@ -23,46 +23,46 @@ class GetGeoNameDataByAddressRequest
     private $resourceConnection;
 
     /**
-     * @var AddressRequestToString
+     * @var AddressToString
      */
-    private $addressRequestToString;
+    private $addressToString;
 
     /**
      * GetGeoNameDataByPostcode constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param AddressRequestToString $addressRequestToString
+     * @param AddressToString $addressToString
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        AddressRequestToString $addressRequestToString
+        AddressToString $addressToString
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->addressRequestToString = $addressRequestToString;
+        $this->addressToString = $addressToString;
     }
 
     /**
      * Return geonames information using a fallback mechanism
      *
-     * @param AddressRequestInterface $addressRequest
+     * @param AddressInterface $address
      * @return array
      * @throws NoSuchEntityException
      */
-    public function execute(AddressRequestInterface $addressRequest): array
+    public function execute(AddressInterface $address): array
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_geoname');
 
         $qry = $connection->select()->from($tableName)
-            ->where('country_code = ?', $addressRequest->getCountry())
-            ->where('postcode = ?', $addressRequest->getPostcode())
+            ->where('country_code = ?', $address->getCountry())
+            ->where('postcode = ?', $address->getPostcode())
             ->limit(1);
 
         $row = $connection->fetchRow($qry);
         if (!$row) {
             $qry = $connection->select()->from($tableName)
-                ->where('country_code = ?', $addressRequest->getCountry())
-                ->where('city = ?', $addressRequest->getCity())
+                ->where('country_code = ?', $address->getCountry())
+                ->where('city = ?', $address->getCity())
                 ->limit(1);
 
             $row = $connection->fetchRow($qry);
@@ -70,8 +70,8 @@ class GetGeoNameDataByAddressRequest
 
         if (!$row) {
             $qry = $connection->select()->from($tableName)
-                ->where('country_code = ?', $addressRequest->getCountry())
-                ->where('region = ?', $addressRequest->getRegion())
+                ->where('country_code = ?', $address->getCountry())
+                ->where('region = ?', $address->getRegion())
                 ->limit(1);
 
             $row = $connection->fetchRow($qry);
@@ -79,7 +79,7 @@ class GetGeoNameDataByAddressRequest
 
         if (!$row) {
             throw new NoSuchEntityException(
-                __('Unknown geoname for %1', $this->addressRequestToString->execute($addressRequest))
+                __('Unknown geoname for %1', $this->addressToString->execute($address))
             );
         }
 

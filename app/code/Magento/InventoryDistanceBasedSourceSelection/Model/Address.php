@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelection\Model\Request;
+namespace Magento\InventoryDistanceBasedSourceSelection\Model;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
 
 /**
  * @inheritdoc
  */
-class AddressRequest implements AddressRequestInterface
+class Address implements AddressInterface
 {
     /**
      * @var string

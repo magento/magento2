@@ -12,8 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
-use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\LatLngRequestToQueryString;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\LatLngToQueryString;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
 
 /**
  * @inheritdoc
@@ -51,9 +51,9 @@ class GetDistance implements GetDistanceInterface
     private $getApiKey;
 
     /**
-     * @var LatLngRequestToQueryString
+     * @var LatLngToQueryString
      */
-    private $latLngRequestToQueryString;
+    private $latLngToQueryString;
 
     /**
      * GetLatLngFromAddress constructor.
@@ -62,30 +62,30 @@ class GetDistance implements GetDistanceInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param Json $json
      * @param GetApiKey $getApiKey
-     * @param LatLngRequestToQueryString $latLngRequestToQueryString
+     * @param LatLngToQueryString $latLngToQueryString
      */
     public function __construct(
         ClientInterface $client,
         ScopeConfigInterface $scopeConfig,
         Json $json,
         GetApiKey $getApiKey,
-        LatLngRequestToQueryString $latLngRequestToQueryString
+        LatLngToQueryString $latLngToQueryString
     ) {
         $this->client = $client;
         $this->json = $json;
         $this->getApiKey = $getApiKey;
         $this->scopeConfig = $scopeConfig;
-        $this->latLngRequestToQueryString = $latLngRequestToQueryString;
+        $this->latLngToQueryString = $latLngToQueryString;
     }
 
     /**
      * @inheritdoc
      * @throws LocalizedException
      */
-    public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
+    public function execute(LatLngInterface $source, LatLngInterface $destination): float
     {
-        $sourceString = $this->latLngRequestToQueryString->execute($source);
-        $destinationString =  $this->latLngRequestToQueryString->execute($destination);
+        $sourceString = $this->latLngToQueryString->execute($source);
+        $destinationString =  $this->latLngToQueryString->execute($destination);
 
         $key = $sourceString . '|' . $destinationString;
 

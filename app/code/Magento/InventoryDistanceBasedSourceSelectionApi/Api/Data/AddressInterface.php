@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data;
 
 /**
- * DTO for requested shipping address for particular product
+ * DTO for shipping source or shipping destination
  *
  * @api
  */
-interface AddressRequestInterface
+interface AddressInterface
 {
     /**
      * Requested shipping country

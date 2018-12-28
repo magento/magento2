@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
 
 /**
  * Get distance between two LatLngRequest points
@@ -19,9 +19,9 @@ interface GetDistanceInterface
     /**
      * Get distance between two points
      *
-     * @param LatLngRequestInterface $source
-     * @param LatLngRequestInterface $destination
+     * @param LatLngInterface $source
+     * @param LatLngInterface $destination
      * @return float
      */
-    public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float;
+    public function execute(LatLngInterface $source, LatLngInterface $destination): float;
 }

@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelection\Model;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterfaceFactory;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
- * Create an address request from an order
+ * Create an address  from an order
  */
-class GetAddressRequestFromOrder
+class GetAddressFromOrder
 {
     /**
-     * @var AddressRequestInterfaceFactory
+     * @var AddressInterfaceFactory
      */
-    private $addressRequestInterfaceFactory;
+    private $addressInterfaceFactory;
 
     /**
      * @var OrderRepositoryInterface
@@ -27,34 +27,34 @@ class GetAddressRequestFromOrder
     private $orderRepository;
 
     /**
-     * GetAddressRequestFromOrder constructor
+     * GetAddressFromOrder constructor
      *
      * @param OrderRepositoryInterface $orderRepository
-     * @param AddressRequestInterfaceFactory $addressRequestInterfaceFactory
+     * @param AddressInterfaceFactory $addressInterfaceFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        AddressRequestInterfaceFactory $addressRequestInterfaceFactory
+        AddressInterfaceFactory $addressInterfaceFactory
     ) {
-        $this->addressRequestInterfaceFactory = $addressRequestInterfaceFactory;
+        $this->addressInterfaceFactory = $addressInterfaceFactory;
         $this->orderRepository = $orderRepository;
     }
 
     /**
-     * Create an address request from an order
+     * Create an address  from an order
      *
      * @param int $orderId
-     * @return AddressRequestInterface
+     * @return AddressInterface
      */
-    public function execute(int $orderId): AddressRequestInterface
+    public function execute(int $orderId): AddressInterface
     {
         $order = $this->orderRepository->get($orderId);
 
         /** @var \Magento\Sales\Model\Order\Address $shippingAddress */
         $shippingAddress = $order->getShippingAddress();
 
-        return $this->addressRequestInterfaceFactory->create([
+        return $this->addressInterfaceFactory->create([
             'country' => $shippingAddress->getCountryId(),
             'postcode' => $shippingAddress->getPostcode(),
             'streetAddress' => implode("\n", $shippingAddress->getStreet()),

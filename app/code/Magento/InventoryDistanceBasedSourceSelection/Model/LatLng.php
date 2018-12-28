@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelection\Model\Request;
+namespace Magento\InventoryDistanceBasedSourceSelection\Model;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
 
 /**
  * @inheritdoc
  */
-class LatLngRequest implements LatLngRequestInterface
+class LatLng implements LatLngInterface
 {
     /**
      * @var float

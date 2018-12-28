@@ -10,6 +10,6 @@
 
     <extension_attributes for="Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface">
         <attribute code="destination_address"
-                   type="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface" />
+                   type="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface" />
     </extension_attributes>
 </config>

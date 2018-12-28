@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelectionApi\Model;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
 
 /**
  * Geo reference provider
@@ -22,24 +21,24 @@ interface GeoReferenceProviderInterface
      * Return distance in kilometers between a source and a destination address
      *
      * @param SourceInterface $source
-     * @param AddressRequestInterface $destination
+     * @param AddressInterface $destination
      * @return float
      */
-    public function getDistance(SourceInterface $source, AddressRequestInterface $destination): float;
+    public function getDistance(SourceInterface $source, AddressInterface $destination): float;
 
     /**
      * Get latitude and longitude for one address
      *
-     * @param AddressRequestInterface $destination
-     * @return LatLngRequestInterface
+     * @param AddressInterface $destination
+     * @return LatLngInterface
      */
-    public function getAddressLatLng(AddressRequestInterface $destination): LatLngRequestInterface;
+    public function getAddressLatLng(AddressInterface $destination): LatLngInterface;
 
     /**
      * Get latitude and longitude for one source
      *
      * @param SourceInterface $source
-     * @return LatLngRequestInterface
+     * @return LatLngInterface
      */
-    public function getSourceLatLng(SourceInterface $source): LatLngRequestInterface;
+    public function getSourceLatLng(SourceInterface $source): LatLngInterface;
 }

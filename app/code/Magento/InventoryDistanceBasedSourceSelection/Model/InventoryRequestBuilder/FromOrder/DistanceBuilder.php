@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\InventoryRequestBuilder\FromOrder;
 
-use Magento\InventoryDistanceBasedSourceSelection\Model\GetAddressRequestFromOrder;
+use Magento\InventoryDistanceBasedSourceSelection\Model\GetAddressFromOrder;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
@@ -24,9 +24,9 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
     private $inventoryRequestFactory;
 
     /**
-     * @var GetAddressRequestFromOrder
+     * @var GetAddressFromOrder
      */
-    private $getAddressRequestFromOrder;
+    private $getAddressFromOrder;
 
     /**
      * @var InventoryRequestExtensionInterfaceFactory
@@ -37,17 +37,17 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
      * DistanceBuilder constructor.
      *
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
-     * @param GetAddressRequestFromOrder $getAddressRequestFromOrder
+     * @param GetAddressFromOrder $getAddressFromOrder
      * @param InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        GetAddressRequestFromOrder $getAddressRequestFromOrder,
+        GetAddressFromOrder $getAddressFromOrder,
         InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionInterfaceFactory
     ) {
         $this->inventoryRequestFactory = $inventoryRequestFactory;
-        $this->getAddressRequestFromOrder = $getAddressRequestFromOrder;
+        $this->getAddressFromOrder = $getAddressFromOrder;
         $this->inventoryRequestExtensionInterfaceFactory = $inventoryRequestExtensionInterfaceFactory;
     }
 
@@ -56,7 +56,7 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
      */
     public function execute(int $stockId, int $orderId, array $requestItems): InventoryRequestInterface
     {
-        $address = $this->getAddressRequestFromOrder->execute($orderId);
+        $address = $this->getAddressFromOrder->execute($orderId);
 
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stockId,

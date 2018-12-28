@@ -9,11 +9,11 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterfaceFactory;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetLatLngFromAddressInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterfaceFactory;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterfaceFactory;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GeoReferenceProviderInterface;
 
 /**
@@ -22,9 +22,9 @@ use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GeoReferenceProviderI
 class GeoReferenceProvider implements GeoReferenceProviderInterface
 {
     /**
-     * @var GetLatLngRequestFromAddressInterface
+     * @var GetLatLngFromAddressInterface
      */
-    private $getLatLngRequestFromAddress;
+    private $getLatLngFromAddress;
 
     /**
      * @var GetDistanceInterface
@@ -32,44 +32,44 @@ class GeoReferenceProvider implements GeoReferenceProviderInterface
     private $getDistance;
 
     /**
-     * @var LatLngRequestInterfaceFactory
+     * @var LatLngInterfaceFactory
      */
-    private $latLngRequestInterfaceFactory;
+    private $latLngInterfaceFactory;
 
     /**
-     * @var AddressRequestInterfaceFactory
+     * @var AddressInterfaceFactory
      */
-    private $addressRequestInterfaceFactory;
+    private $addressInterfaceFactory;
 
     /**
      * GeoReferenceProvider constructor.
      *
-     * @param LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
-     * @param AddressRequestInterfaceFactory $addressRequestInterfaceFactory
-     * @param GetLatLngRequestFromAddressInterface $getLatLngRequestFromAddress
+     * @param LatLngInterfaceFactory $latLngInterfaceFactory
+     * @param AddressInterfaceFactory $addressInterfaceFactory
+     * @param GetLatLngFromAddressInterface $getLatLngFromAddress
      * @param GetDistanceInterface $getDistance
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory,
-        AddressRequestInterfaceFactory $addressRequestInterfaceFactory,
-        GetLatLngRequestFromAddressInterface $getLatLngRequestFromAddress,
+        LatLngInterfaceFactory $latLngInterfaceFactory,
+        AddressInterfaceFactory $addressInterfaceFactory,
+        GetLatLngFromAddressInterface $getLatLngFromAddress,
         GetDistanceInterface $getDistance
     ) {
 
-        $this->getLatLngRequestFromAddress = $getLatLngRequestFromAddress;
+        $this->getLatLngFromAddress = $getLatLngFromAddress;
         $this->getDistance = $getDistance;
-        $this->latLngRequestInterfaceFactory = $latLngRequestInterfaceFactory;
-        $this->addressRequestInterfaceFactory = $addressRequestInterfaceFactory;
+        $this->latLngInterfaceFactory = $latLngInterfaceFactory;
+        $this->addressInterfaceFactory = $addressInterfaceFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function getDistance(SourceInterface $source, AddressRequestInterface $destination): float
+    public function getDistance(SourceInterface $source, AddressInterface $destination): float
     {
         $sourceLatLng = $this->getSourceLatLng($source);
-        $destinationLatLng = $this->getLatLngRequestFromAddress->execute($destination);
+        $destinationLatLng = $this->getLatLngFromAddress->execute($destination);
 
         return $this->getDistance->execute($sourceLatLng, $destinationLatLng);
     }
@@ -77,18 +77,18 @@ class GeoReferenceProvider implements GeoReferenceProviderInterface
     /**
      * @inheritdoc
      */
-    public function getAddressLatLng(AddressRequestInterface $destination): LatLngRequestInterface
+    public function getAddressLatLng(AddressInterface $destination): LatLngInterface
     {
-        return $this->getLatLngRequestFromAddress->execute($destination);
+        return $this->getLatLngFromAddress->execute($destination);
     }
 
     /**
      * @inheritdoc
      */
-    public function getSourceLatLng(SourceInterface $source): LatLngRequestInterface
+    public function getSourceLatLng(SourceInterface $source): LatLngInterface
     {
         if (!$source->getLatitude() || !$source->getLongitude()) {
-            $sourceAddress = $this->addressRequestInterfaceFactory->create([
+            $sourceAddress = $this->addressInterfaceFactory->create([
                 'country' => $source->getCountryId() ?? '',
                 'postcode' => $source->getPostcode() ?? '',
                 'streetAddress' => $source->getStreet() ?? '',
@@ -99,7 +99,7 @@ class GeoReferenceProvider implements GeoReferenceProviderInterface
             return $this->getAddressLatLng($sourceAddress);
         }
 
-        return $this->latLngRequestInterfaceFactory->create([
+        return $this->latLngInterfaceFactory->create([
             'lat' => (float) $source->getLatitude(),
             'lng' => (float) $source->getLongitude()
         ]);

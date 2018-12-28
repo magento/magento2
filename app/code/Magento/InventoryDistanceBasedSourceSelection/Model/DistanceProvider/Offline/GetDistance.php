@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline;
 
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
 
 /**
  * @inheritdoc
@@ -21,7 +21,7 @@ class GetDistance implements GetDistanceInterface
     /**
      * @inheritdoc
      */
-    public function execute(LatLngRequestInterface $source, LatLngRequestInterface $destination): float
+    public function execute(LatLngInterface $source, LatLngInterface $destination): float
     {
         $latFrom = deg2rad($source->getLat());
         $lonFrom = deg2rad($source->getLng());

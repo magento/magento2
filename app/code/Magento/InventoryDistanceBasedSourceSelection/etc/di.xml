@@ -9,10 +9,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetGeoReferenceProviderCode"/>
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface"
-                type="Magento\InventoryDistanceBasedSourceSelection\Model\Request\AddressRequest"/>
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface"
-                type="Magento\InventoryDistanceBasedSourceSelection\Model\Request\LatLngRequest"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\Address"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\LatLng"/>
 
     <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
         <arguments>
@@ -27,7 +27,7 @@
                  type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
         <arguments>
             <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetDistance</argument>
-            <argument xsi:type="object" name="getLatLngRequestFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngRequestFromAddress</argument>
+            <argument xsi:type="object" name="getLatLngFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngFromAddress</argument>
         </arguments>
     </virtualType>
 
@@ -35,7 +35,7 @@
                  type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
         <arguments>
             <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetDistance</argument>
-            <argument xsi:type="object" name="getLatLngRequestFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetLatLngRequestFromAddress</argument>
+            <argument xsi:type="object" name="getLatLngFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetLatLngFromAddress</argument>
         </arguments>
     </virtualType>
 
