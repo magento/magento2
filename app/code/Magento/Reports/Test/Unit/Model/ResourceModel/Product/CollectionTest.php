@@ -149,6 +149,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->connectionMock,
             $this->createMock(ProductLimitationFactory::class),
             $this->createMock(MetadataPool::class),
+            $this->createMock(\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer::class),
+            $this->createMock(\Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver::class),
+            $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class),
             $resourceModelPoolMock
         );
     }

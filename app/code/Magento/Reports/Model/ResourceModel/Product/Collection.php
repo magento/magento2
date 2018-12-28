@@ -11,8 +11,11 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
@@ -93,8 +96,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
      * @param mixed $connection
-     *
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      * @param ResourceModelPoolInterface $resourceModelPool
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,6 +132,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
         ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
@@ -152,6 +163,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection,
             $productLimitationFactory,
             $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
             $resourceModelPool
         );
         $this->_eventTypeFactory = $eventTypeFactory;

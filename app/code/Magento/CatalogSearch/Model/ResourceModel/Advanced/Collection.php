@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Advanced search collection
@@ -88,8 +92,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
-     * @param MetadataPool|null $metadataPool
-     *
+     * @param MetadataPool|null $metadataPool     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -120,6 +126,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
         ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->requestBuilder = $requestBuilder;
@@ -152,6 +161,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection,
             $productLimitationFactory,
             $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
             $resourceModelPool
         );
     }

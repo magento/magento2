@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
+use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Fulltext Collection
@@ -133,7 +137,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -166,6 +172,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
         ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->queryFactory = $catalogSearchData;
@@ -196,6 +205,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection,
             $productLimitationFactory,
             $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
             $resourceModelPool
         );
         $this->requestBuilder = $requestBuilder;
@@ -382,7 +394,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         if ($this->relevanceOrderDirection) {
             $this->getSelect()->order(
-                'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
+                'search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
             );
         }
         return parent::_renderFiltersBefore();
