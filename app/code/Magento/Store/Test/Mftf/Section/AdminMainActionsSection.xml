@@ -12,5 +12,6 @@
         <element name="storeSwitcher" type="text" selector=".store-switcher"/>
         <element name="storeViewDropdown" type="button" selector="#store-change-button"/>
         <element name="storeViewByName" type="button" selector="//*[@class='store-switcher-store-view  ']/a[contains(text(), '{{storeViewName}}')]" timeout="30" parameterized="true"/>
+        <element name="websiteByName" type="button" selector="//*[@class='store-switcher-website  ']/a[contains(text(), '{{websiteName}}')]" timeout="30" parameterized="true"/>
     </section>
 </sections>
