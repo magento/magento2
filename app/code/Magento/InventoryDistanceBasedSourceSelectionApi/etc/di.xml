@@ -18,4 +18,9 @@
             </argument>
         </arguments>
     </type>
+
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceInterface"
+                type="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetDistance"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface"
+                type="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetLatLngFromAddress"/>
 </config>

@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider;
+namespace Magento\InventoryDistanceBasedSourceSelection\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface;
 
 /**
  * @inheritdoc
  */
-class GetGeoReferenceProviderCode implements GetGeoReferenceProviderCodeInterface
+class GetDistanceProviderCode implements GetDistanceProviderCodeInterface
 {
     // XML path for default distance provider configuration value
     private const XML_PATH_DEFAULT_DISTANCE_PROVIDER = 'cataloginventory/source_selection_distance_based/provider';
@@ -24,7 +24,7 @@ class GetGeoReferenceProviderCode implements GetGeoReferenceProviderCodeInterfac
     private $scopeConfig;
 
     /**
-     * GetDefaultDistanceProvider constructor.
+     * GetDistanceProviderCode constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */

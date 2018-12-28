@@ -10,8 +10,8 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\Algorithms;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetDistanceFromSourceToAddress;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetGeoReferenceProvider;
 use Magento\InventorySourceSelectionApi\Model\Algorithms\Result\GetDefaultSortedSourcesResult;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
@@ -29,30 +29,30 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
     private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
-     * @var GetGeoReferenceProvider
-     */
-    private $getGeoReferenceProvider;
-
-    /**
      * @var GetDefaultSortedSourcesResult
      */
     private $getDefaultSortedSourcesResult;
+
+    /**
+     * @var GetDistanceFromSourceToAddress
+     */
+    private $getDistanceFromSourceToAddress;
 
     /**
      * DistanceBasedAlgorithm constructor.
      *
      * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      * @param GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult
-     * @param GetGeoReferenceProvider $getGeoReferenceProvider
+     * @param GetDistanceFromSourceToAddress $getDistanceFromSourceToAddress
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,
         GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult,
-        GetGeoReferenceProvider $getGeoReferenceProvider
+        GetDistanceFromSourceToAddress $getDistanceFromSourceToAddress
     ) {
         $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
-        $this->getGeoReferenceProvider = $getGeoReferenceProvider;
         $this->getDefaultSortedSourcesResult = $getDefaultSortedSourcesResult;
+        $this->getDistanceFromSourceToAddress = $getDistanceFromSourceToAddress;
     }
 
     /**
@@ -95,11 +95,10 @@ class DistanceBasedAlgorithm implements SourceSelectionInterface
             return $source->isEnabled();
         });
 
-        $geoReferenceProvider = $this->getGeoReferenceProvider->execute();
         $distanceBySourceCode = $sortSources = $sourcesWithoutDistance = [];
         foreach ($sources as $source) {
             try {
-                $distanceBySourceCode[$source->getSourceCode()] = $geoReferenceProvider->getDistance(
+                $distanceBySourceCode[$source->getSourceCode()] = $this->getDistanceFromSourceToAddress->execute(
                     $source,
                     $address
                 );

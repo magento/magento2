@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\Convert;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface;
 
 class LatLngToQueryString
 {

@@ -7,11 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface"
-                type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetGeoReferenceProviderCode"/>
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface"
+                type="Magento\InventoryDistanceBasedSourceSelection\Model\GetDistanceProviderCode"/>
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\Address"/>
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface"
+    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\LatLng"/>
 
     <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
@@ -23,29 +23,19 @@
         </arguments>
     </type>
 
-    <virtualType name="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMapProvider"
-                 type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
-        <arguments>
-            <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetDistance</argument>
-            <argument xsi:type="object" name="getLatLngFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngFromAddress</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\OfflineProvider"
-                 type="Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GeoReferenceProvider">
-        <arguments>
-            <argument xsi:type="object" name="getDistance">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetDistance</argument>
-            <argument xsi:type="object" name="getLatLngFromAddress">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetLatLngFromAddress</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GeoReferenceProviderPool">
+    <type name="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetDistance">
         <arguments>
             <argument name="providers" xsi:type="array">
-                <item name="google"
-                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMapProvider</item>
-                <item name="offline"
-                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\OfflineProvider</item>
+                <item name="google" xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetDistance</item>
+                <item name="offline" xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetDistance</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetLatLngFromAddress">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="google" xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GoogleMap\GetLatLngFromAddress</item>
+                <item name="offline" xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline\GetLatLngFromAddress</item>
             </argument>
         </arguments>
     </type>

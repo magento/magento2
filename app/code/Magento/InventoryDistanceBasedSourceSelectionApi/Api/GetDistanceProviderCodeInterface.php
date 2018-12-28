@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelectionApi\Api;
 
 /**
- * Service returns Default geo reference provider Code
+ * Get selected distance provider code
  *
  * @api
  */
-interface GetGeoReferenceProviderCodeInterface
+interface GetDistanceProviderCodeInterface
 {
     /**
      * Get Default distance provider code

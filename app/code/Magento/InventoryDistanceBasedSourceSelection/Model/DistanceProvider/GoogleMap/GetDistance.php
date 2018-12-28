@@ -11,9 +11,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\LatLngToQueryString;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Model\LatLngInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceInterface;
 
 /**
  * @inheritdoc

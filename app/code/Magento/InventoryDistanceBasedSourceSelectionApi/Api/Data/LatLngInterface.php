@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelectionApi\Model;
+namespace Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data;
 
 /**
  * DTO for latitude and longitude request

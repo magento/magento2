@@ -12,4 +12,18 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
+
+    <route url="/V1/inventory/get-distance" method="GET">
+        <service class="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+
+    <route url="/V1/inventory/get-latlng-from-address" method="GET">
+        <service class="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
 </routes>
