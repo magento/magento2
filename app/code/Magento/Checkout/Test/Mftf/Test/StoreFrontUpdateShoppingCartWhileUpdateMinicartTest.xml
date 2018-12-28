@@ -38,7 +38,7 @@
 
         <!--Go to Shopping cart and check Qty-->
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCart"/>
-        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart"/>
         <assertEquals expected="1" actual="$grabQtyShoppingCart" stepKey="assertQtyShoppingCart"/>
 
         <!--Open minicart and change Qty-->
@@ -50,7 +50,7 @@
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
 
        <!--Check Qty in shopping cart after updating-->
-        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart1"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart1"/>
         <assertEquals expected="5" actual="$grabQtyShoppingCart1" stepKey="assertQtyShoppingCart1"/>
     </test>
 </tests>
