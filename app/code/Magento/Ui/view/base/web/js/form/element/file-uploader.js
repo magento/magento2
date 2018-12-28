@@ -6,7 +6,7 @@
 /**
  * @api
  */
-/* global Base64 */
+/* global Base64 is loaded by 'mage/adminhtml/tools' */
 define([
     'jquery',
     'underscore',
@@ -16,7 +16,8 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'mage/backend/notification',
     'mage/translate',
-    'jquery/file-uploader'
+    'jquery/file-uploader',
+    'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
     'use strict';
 
