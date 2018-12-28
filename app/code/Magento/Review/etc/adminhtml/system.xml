@@ -10,7 +10,11 @@
         <section id="catalog">
             <group id="review" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Product Reviews</label>
-                <field id="allow_guest" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="allow_guest" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Allow Guests to Write Reviews</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
