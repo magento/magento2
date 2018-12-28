@@ -38,6 +38,7 @@
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitForStoreGroupPageLoad" />
         <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website.name}}" stepKey="selectWebsite" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory" />
         <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage" />
