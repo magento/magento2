@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" summary="Create Category from Category Page" ticketId="MAGETWO-23411">
         <variation name="CreateCategoryEntityTestVariation1_RootCategory_RequiredFields">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="description" xsi:type="string">Create root category with required fields only</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>

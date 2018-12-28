@@ -292,6 +292,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $dimensionFactory;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $emptyItem;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -556,7 +561,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getNewEmptyItem()
     {
-        $object = parent::getNewEmptyItem();
+        if (null === $this->emptyItem) {
+            $this->emptyItem = parent::getNewEmptyItem();
+        }
+        $object = clone $this->emptyItem;
         if ($this->isEnabledFlat()) {
             $object->setIdFieldName($this->getEntity()->getIdFieldName());
         }

@@ -2881,12 +2881,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -4906,12 +4906,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5272,12 +5272,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5566,12 +5566,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -5739,12 +5739,12 @@ vars.put("product_sku", product.get("sku"));
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
               <stringProp name="Argument.name">sections</stringProp>
             </elementProp>
-            <elementProp name="update_section_id" elementType="HTTPArgument">
+            <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
               <stringProp name="Argument.value">false</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
-              <stringProp name="Argument.name">update_section_id</stringProp>
+              <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
             </elementProp>
             <elementProp name="_" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6171,12 +6171,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6349,12 +6349,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -6787,12 +6787,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -7153,12 +7153,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -7869,12 +7869,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -8105,12 +8105,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -8471,12 +8471,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9146,12 +9146,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9330,12 +9330,12 @@ vars.put("product_sku", product.get("sku"));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9662,12 +9662,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -9929,12 +9929,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10295,12 +10295,12 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10492,12 +10492,12 @@ vars.put("item_id", vars.get("cart_items_qty_inputs_" + id));
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">true</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -10813,12 +10813,12 @@ vars.put("customer_email", customerUser);
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">sections</stringProp>
           </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
+          <elementProp name="force_new_section_timestamp" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.value">false</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
+            <stringProp name="Argument.name">force_new_section_timestamp</stringProp>
           </elementProp>
           <elementProp name="_" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
@@ -25118,6 +25118,39 @@ catch (java.lang.Exception e) {
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Filled Order Page" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">200000</stringProp>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}${admin_path}/sales/order_create/index/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+        <stringProp name="TestPlan.comments">Detected the start of a redirect chain</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Filled Order Page" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-37823069">Select from existing customer addresses</stringProp>
+            <stringProp name="-13185722">Submit Order</stringProp>
+            <stringProp name="-209419315">Items Ordered</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Save Order" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
@@ -33509,7 +33542,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_entity_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_entity_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{"entity_id":"(\d+)".+?"parent_id":"${admin_customer_entity_id}"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{"entity_id":"(\d+)".+?"parent_id":"${admin_customer_entity_id}"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33518,7 +33551,7 @@ vars.put("admin_user", adminUser);
        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_created_at" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_created_at</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"created_at":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"created_at":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33527,7 +33560,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_updated_at" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_updated_at</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"updated_at":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"updated_at":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33536,7 +33569,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_is_active" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_is_active</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"is_active":"(\d+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"is_active":"(\d+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33545,7 +33578,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_city" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_city</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"city":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"city":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33554,7 +33587,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_country_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_country_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"country_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"country_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33563,7 +33596,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_firstname" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_firstname</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"firstname":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"firstname":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33572,7 +33605,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_lastname" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_lastname</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"lastname":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"lastname":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33581,7 +33614,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_postcode" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_postcode</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"postcode":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"postcode":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33590,7 +33623,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_region" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_region</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"region":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"region":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33599,7 +33632,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_region_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_region_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"region_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"region_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33608,7 +33641,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address street" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_street</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"street":\["([^"]+)"\]</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"street":\["([^"]+)"\]</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33617,7 +33650,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_telephone" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_telephone</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"telephone":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"telephone":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -33626,7 +33659,7 @@ vars.put("admin_user", adminUser);
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract address_customer_id" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
           <stringProp name="RegexExtractor.refname">admin_customer_address_customer_id</stringProp>
-          <stringProp name="RegexExtractor.regex">"address":\{"\d+":{.+?"parent_id":"${admin_customer_entity_id}".+?"customer_id":"([^"]+)"</stringProp>
+          <stringProp name="RegexExtractor.regex">_address":\{.+?"parent_id":"${admin_customer_entity_id}".+?"customer_id":"([^"]+)"</stringProp>
           <stringProp name="RegexExtractor.template">$1$</stringProp>
           <stringProp name="RegexExtractor.default"/>
           <stringProp name="RegexExtractor.match_number">1</stringProp>

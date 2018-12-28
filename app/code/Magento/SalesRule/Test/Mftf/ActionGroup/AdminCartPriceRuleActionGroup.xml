@@ -11,4 +11,9 @@
         <!-- This actionGroup was created to be merged from B2B because B2B has a very different form control here -->
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
     </actionGroup>
+
+    <actionGroup name="selectRetailerCustomerGroup">
+        <!-- This actionGroup was created to be merged from B2B. Retailer Customer Group -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectRetailerCustomerGroup"/>
+    </actionGroup>
 </actionGroups>
