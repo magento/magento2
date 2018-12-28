@@ -15,12 +15,10 @@ use Magento\Framework\HTTP\ClientInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel\UpdateGeoNames;
 
 /**
- * Import geonames from geonames.org
+ * Import geonames
  */
 class ImportGeoNames
 {
-    private const GEONAMES_BASE_URL = 'http://download.geonames.org/export/zip/';
-
     /**
      * @var ClientInterface
      */
@@ -42,23 +40,31 @@ class ImportGeoNames
     private $updateGeoNames;
 
     /**
+     * @var string
+     */
+    private $geoNamesBaseUrl;
+
+    /**
      * ImportGeoNames constructor.
      *
      * @param ClientInterface $client
      * @param Filesystem $filesystem
      * @param File $file
      * @param UpdateGeoNames $updateGeoNames
+     * @param string $geoNamesBaseUrl
      */
     public function __construct(
         ClientInterface $client,
         Filesystem $filesystem,
         File $file,
-        UpdateGeoNames $updateGeoNames
+        UpdateGeoNames $updateGeoNames,
+        string $geoNamesBaseUrl
     ) {
         $this->client = $client;
         $this->file = $file;
         $this->filesystem = $filesystem;
         $this->updateGeoNames = $updateGeoNames;
+        $this->geoNamesBaseUrl = $geoNamesBaseUrl;
     }
 
     /**
@@ -70,7 +76,7 @@ class ImportGeoNames
      */
     private function downloadCountry(string $countryCode): string
     {
-        $countryZipFile = self::GEONAMES_BASE_URL . $countryCode. '.zip';
+        $countryZipFile = $this->geoNamesBaseUrl . $countryCode. '.zip';
         $this->client->get($countryZipFile);
 
         $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
