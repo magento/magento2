@@ -131,7 +131,7 @@
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
 
-    <actionGroup name="createConfigurationsForTwoAttribute" extends="createConfigurationsForAttribute">
+    <actionGroup name="createConfigurationsForTwoAttribute" extends="generateConfigurationsByAttributeCode">
         <arguments>
             <argument name="secondAttributeCode" type="string"/>
         </arguments>
@@ -147,5 +147,7 @@
         <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(secondAttributeCode)}}" stepKey="grabSecondAttributeDefaultLabel" after="grabFirstAttributeDefaultLabel"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabFirstAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForFistAttribute" after="clickOnNextButton1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabSecondAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForSecondAttribute" after="clickOnSelectAllForFistAttribute"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
 </actionGroups>
