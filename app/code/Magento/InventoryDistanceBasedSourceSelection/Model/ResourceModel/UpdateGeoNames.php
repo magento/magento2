@@ -34,7 +34,7 @@ class UpdateGeoNames
      * @param array $geoNames
      * @param string $countryCode
      */
-    public function execute(array $geoNames, string $countryCode)
+    public function execute(array $geoNames, string $countryCode): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('inventory_geoname');
