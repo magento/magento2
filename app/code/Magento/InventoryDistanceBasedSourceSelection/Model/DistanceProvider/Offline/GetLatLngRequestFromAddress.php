@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;

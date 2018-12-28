@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetDistanceInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\LatLngRequestToQueryString;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 
@@ -23,7 +23,7 @@ class GetDistance implements GetDistanceInterface
     private const GOOGLE_ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json';
     private const XML_PATH_MODE = 'cataloginventory/source_selection_distance_based_google/mode';
     private const XML_PATH_VALUE = 'cataloginventory/source_selection_distance_based_google/value';
-    private const ZERO_RESULT_RESPONSE = "ZERO_RESULTS";
+    private const ZERO_RESULT_RESPONSE = 'ZERO_RESULTS';
 
     /**
      * @var array

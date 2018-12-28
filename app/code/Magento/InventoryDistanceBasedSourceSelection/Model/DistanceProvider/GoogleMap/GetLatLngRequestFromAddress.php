@@ -10,7 +10,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\G
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToComponentsString;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToQueryString;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Request\Convert\AddressRequestToString;

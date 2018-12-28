@@ -5,13 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider;
+namespace Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider;
 
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
 
 /**
  * Get latitude and longitude from address request
+ *
+ * @api
  */
 interface GetLatLngRequestFromAddressInterface
 {

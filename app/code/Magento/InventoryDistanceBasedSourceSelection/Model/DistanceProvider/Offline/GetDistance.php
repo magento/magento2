@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\Offline;
 
-use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetDistanceInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterface;
 
 /**

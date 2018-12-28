@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetDistanceInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Model\DistanceProvider\GetLatLngRequestFromAddressInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\Request\LatLngRequestInterfaceFactory;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressRequestInterfaceFactory;
@@ -40,7 +42,7 @@ class GeoReferenceProvider implements GeoReferenceProviderInterface
     private $addressRequestInterfaceFactory;
 
     /**
-     * Offline constructor.
+     * GeoReferenceProvider constructor.
      *
      * @param LatLngRequestInterfaceFactory $latLngRequestInterfaceFactory
      * @param AddressRequestInterfaceFactory $addressRequestInterfaceFactory
