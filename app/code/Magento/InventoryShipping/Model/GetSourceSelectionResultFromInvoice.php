@@ -69,6 +69,7 @@ class GetSourceSelectionResultFromInvoice
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetInventoryRequestFromOrderBuilder|null $getInventoryRequestFromOrderBuilder
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,

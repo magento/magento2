@@ -45,6 +45,7 @@ class PriorityBasedAlgorithm implements SourceSelectionInterface
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param GetDefaultSortedSourcesResult $getDefaultSortedSourcesResult
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority,

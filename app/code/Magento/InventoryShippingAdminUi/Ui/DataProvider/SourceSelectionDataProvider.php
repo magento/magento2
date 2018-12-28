@@ -71,6 +71,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         $name,
