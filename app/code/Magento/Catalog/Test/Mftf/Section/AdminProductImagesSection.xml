@@ -16,6 +16,7 @@
         <element name="removeImageButton" type="button" selector=".action-remove"/>
         <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
         <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
+        <element name="productImagesToggleState" type="button" selector="[data-index='gallery'] > [data-state-collapsible='{{status}}']" parameterized="true"/>
 
         <element name="nthProductImage" type="button" selector="#media_gallery_content > div:nth-child({{var}}) img.product-image" parameterized="true"/>
         <element name="nthRemoveImageBtn" type="button" selector="#media_gallery_content > div:nth-child({{var}}) button.action-remove" parameterized="true"/>
