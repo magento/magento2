@@ -40,5 +40,6 @@
         <element name="goToShipping" type="button" selector="#checkout>ul>li.opc-progress-bar-item._complete>span"/>
         <element name="orderSummarySubtotal" type="text" selector=".totals.sub span" />
         <element name="billingAddressSameAsShipping" type="checkbox" selector=".payment-method._active [name='billing-address-same-as-shipping']"/>
+        <element name="noPaymentMethods" type="text" selector=".no-payments-block"/>
     </section>
 </sections>
