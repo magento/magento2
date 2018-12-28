@@ -110,6 +110,7 @@
             <data name="product" xsi:type="array">
                 <item name="0" xsi:type="string">bundleProduct::with_special_price_and_custom_options</item>
             </data>
+            <data name="configure" xsi:type="boolean">false</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist"/>
