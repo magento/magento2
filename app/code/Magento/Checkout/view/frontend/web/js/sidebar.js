@@ -228,6 +228,7 @@ define([
 
             if (!_.isUndefined(productData)) {
                 $(document).trigger('ajax:updateCartItemQty');
+
                 if (window.location.href === this.shoppingCartUrl) {
                     window.location.reload(false);
                 }
