@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Test\Integration;
+namespace Magento\InventoryDistanceBasedSourceSelection\Test\Integration;
 
-use Magento\InventorySourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface;
+use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetGeoReferenceProviderCodeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +32,7 @@ class GetGeoReferenceProviderCodeTest extends TestCase
      *
      * @return void
      */
-    public function testGetDistanceProviderCode()
+    public function testGetDistanceProviderCode(): void
     {
         self::assertEquals('test_provider', $this->getGeoReferenceProviderCode->execute());
     }

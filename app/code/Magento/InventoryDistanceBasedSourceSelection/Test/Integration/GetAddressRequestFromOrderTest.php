@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Test\Integration;
+namespace Magento\InventoryDistanceBasedSourceSelection\Test\Integration;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventorySourceSelection\Model\GetAddressRequestFromOrder;
+use Magento\InventoryDistanceBasedSourceSelection\Model\GetAddressFromOrder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 class GetAddressRequestFromOrderTest extends TestCase
 {
     /**
-     * @var GetAddressRequestFromOrder
+     * @var GetAddressFromOrder
      */
-    private $getAddressRequestFromOrder;
+    private $getAddressFromOrder;
 
     /**
      * @var OrderRepositoryInterface
@@ -31,7 +31,7 @@ class GetAddressRequestFromOrderTest extends TestCase
      */
     protected function setUp()
     {
-        $this->getAddressRequestFromOrder = Bootstrap::getObjectManager()->get(GetAddressRequestFromOrder::class);
+        $this->getAddressFromOrder = Bootstrap::getObjectManager()->get(GetAddressFromOrder::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
     }
 
@@ -58,10 +58,10 @@ class GetAddressRequestFromOrderTest extends TestCase
      *
      * @return void
      */
-    public function testGetDistanceProviderCode()
+    public function testGetDistanceProviderCode(): void
     {
         $order = $this->getOrderByIncrementId('100000001');
-        $addressRequest = $this->getAddressRequestFromOrder->execute((int) $order->getEntityId());
+        $addressRequest = $this->getAddressFromOrder->execute((int) $order->getEntityId());
 
         self::assertEquals('11111', $addressRequest->getPostcode());
         self::assertEquals('Los Angeles', $addressRequest->getCity());
