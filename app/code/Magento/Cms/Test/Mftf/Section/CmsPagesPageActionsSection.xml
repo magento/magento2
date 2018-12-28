@@ -17,7 +17,7 @@
         <element name="addNewPageButton" type="button" selector="#add" timeout="30"/>
         <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//button[text()='Select']" parameterized="true"/>
         <element name="edit" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Edit']" parameterized="true"/>
-        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Preview']" parameterized="true"/>
+        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='View']" parameterized="true"/>
         <element name="clearAllButton" type="button" selector="//div[@class='admin__data-grid-header']//button[contains(text(), 'Clear all')]"/>
         <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
         <element name="spinner" type="input" selector='//div[@data-component="cms_page_listing.cms_page_listing.cms_page_columns"]'/>
