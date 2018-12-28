@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ImportGeoNamesCommand extends Command
 {
-    private const COUNTRIES = 'countries';
+    private const COUNTRIES = 'countries'; // Parameter name for countries list
 
     /**
      * @var ImportGeoNames
