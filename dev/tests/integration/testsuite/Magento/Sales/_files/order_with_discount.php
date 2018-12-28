@@ -47,7 +47,9 @@ $orderItem->setProductId($product->getId())
     ->setProductType('simple')
     ->setDiscountAmount(2)
     ->setBaseRowTotal($product->getPrice())
-    ->setBaseDiscountAmount(2);
+    ->setBaseDiscountAmount(2)
+    ->setTaxAmount(1)
+    ->setBaseTaxAmount(1);
 
 /** @var Order $order */
 $order = $objectManager->create(Order::class);
