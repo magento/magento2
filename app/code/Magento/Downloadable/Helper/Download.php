@@ -200,10 +200,11 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-           if(is_array($this->_handle->stat($this->_resourceFile)['type'])){
+            if (is_array($this->_handle->stat($this->_resourceFile)['type'])) {
                 return end($this->_handle->stat($this->_resourceFile)['type']);
-            }else
-            return $this->_handle->stat($this->_resourceFile)['type'];
+            } else {
+                return $this->_handle->stat($this->_resourceFile)['type'];
+            }
         }
         return $this->_contentType;
     }
