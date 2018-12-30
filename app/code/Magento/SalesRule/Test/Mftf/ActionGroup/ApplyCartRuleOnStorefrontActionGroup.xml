@@ -20,5 +20,6 @@
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{couponCode}}" stepKey="fillCouponCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput='You used coupon code' stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
