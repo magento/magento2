@@ -17,6 +17,11 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 class GetProductIdsBySkus implements GetProductIdsBySkusInterface
 {
     /**
+     * @var array
+     */
+    private $productIdsBySkus = [];
+
+    /**
      * @var ProductResourceModel
      */
     private $productResource;
@@ -35,15 +40,21 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
      */
     public function execute(array $skus): array
     {
-        $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
-        $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
+        $cacheKey = hash('md5', implode(',', $skus));
 
-        if (!empty($notFoundedSkus)) {
-            throw new NoSuchEntityException(
-                __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
-            );
+        if (!isset($this->productIdsBySkus[$cacheKey])) {
+            $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
+            $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
+
+            if (!empty($notFoundedSkus)) {
+                throw new NoSuchEntityException(
+                    __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
+                );
+            }
+
+            $this->productIdsBySkus[$cacheKey] = $idsBySkus;
         }
 
-        return $idsBySkus;
+        return $this->productIdsBySkus[$cacheKey];
     }
 }
