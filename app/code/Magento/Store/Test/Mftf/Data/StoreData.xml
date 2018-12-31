@@ -22,8 +22,8 @@
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
     <entity name="customStoreEN" type="store">
-        <data key="name">EN</data>
-        <data key="code">en</data>
+        <data key="name" unique="suffix">EN</data>
+        <data key="code" unique="suffix">en</data>
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>
@@ -31,8 +31,8 @@
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
     <entity name="customStoreFR" type="store">
-        <data key="name">FR</data>
-        <data key="code">fr</data>
+        <data key="name" unique="suffix">FR</data>
+        <data key="code" unique="suffix">fr</data>
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_action">add</data>

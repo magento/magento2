@@ -54,6 +54,11 @@
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 
+    <actionGroup name="GuestCheckoutFillShippingNoWaitForPaymentActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <remove keyForRemoval="waitForPaymentSectionLoaded"/>
+        <remove keyForRemoval="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
     <!-- Guest checkout filling shipping section without region -->
     <actionGroup name="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup">
         <arguments>
@@ -99,6 +104,13 @@
         <see userInput="No Payment method available." stepKey="checkMessage"/>
     </actionGroup>
 
+    <actionGroup name="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" extends="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup">
+        <arguments>
+            <argument name="paymentMethod" type="string"/>
+        </arguments>
+        <remove keyForRemoval="checkMessage"/>
+        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" parametrized="true" stepKey="paymentMethodDoesNotAvailable"/>
+    </actionGroup>
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
         <arguments>
