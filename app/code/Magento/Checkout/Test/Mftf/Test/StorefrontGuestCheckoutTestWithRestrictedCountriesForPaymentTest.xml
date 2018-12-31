@@ -50,7 +50,7 @@
         </actionGroup>
 
         <waitForElementVisible selector="{{CheckoutPaymentSection.noPaymentMethods}}" stepKey="waitMessage"/>
-        <see userInput="No Payment Methods" stepKey="checkMessage"/>
+        <see userInput="No Payment method available." stepKey="checkMessage"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping" />
