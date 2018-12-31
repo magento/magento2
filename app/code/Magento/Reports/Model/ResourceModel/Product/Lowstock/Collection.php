@@ -5,8 +5,6 @@
  */
 
 /**
- * Product Low Stock Report Collection
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
@@ -17,6 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
+ * Product Low Stock Report Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2

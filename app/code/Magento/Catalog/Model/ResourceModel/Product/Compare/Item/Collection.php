@@ -416,6 +416,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Retrieve is flat enabled flag
+     *
      * Overwrite disable flat for compared item if required EAV resource
      *
      * @return bool

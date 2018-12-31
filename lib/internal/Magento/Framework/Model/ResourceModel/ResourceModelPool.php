@@ -18,11 +18,17 @@ class ResourceModelPool implements ResourceModelPoolInterface
      */
     private $objectManager;
 
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
     public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function get(string $resourceClassName): AbstractResource
     {
         return $this->objectManager->get($resourceClassName);

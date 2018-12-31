@@ -5,8 +5,6 @@
  */
 
 /**
- * Reports Product Index Abstract Product Resource Collection
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
@@ -16,6 +14,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
+ * Reports Product Index Abstract Product Resource Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -194,7 +194,8 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
     }
 
     /**
-     * Set customer id, that will be used in 'whereCondition'
+     * Set customer id, that will be used in 'whereCondition'.
+     *
      * @codeCoverageIgnore
      *
      * @param int $id

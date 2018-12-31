@@ -12,6 +12,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
+ * Associated products collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection

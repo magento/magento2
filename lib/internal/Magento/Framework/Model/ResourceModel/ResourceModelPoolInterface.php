@@ -14,7 +14,10 @@ namespace Magento\Framework\Model\ResourceModel;
 interface ResourceModelPoolInterface
 {
     /**
-     * Return instance for given class name from pool
+     * Return instance for given class name from pool.
+     *
+     * @param string $resourceClassName
+     * @return AbstractResource
      */
     public function get(string $resourceClassName): AbstractResource;
 }

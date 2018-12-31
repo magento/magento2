@@ -9,6 +9,7 @@ use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * Catalog EAV collection resource abstract model
+ *
  * Implement using different stores for retrieve attribute values
  *
  * @api
@@ -210,10 +211,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
-     * @param \Magento\Framework\DB\Select $select
-     * @param string $table
-     * @param string $type
-     * @return \Magento\Framework\DB\Select
+     * @inheritdoc
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {

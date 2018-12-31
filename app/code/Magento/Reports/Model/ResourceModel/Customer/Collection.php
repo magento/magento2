@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Customers Report collection
- */
 namespace Magento\Reports\Model\ResourceModel\Customer;
 
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
+ * Customers Report collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
