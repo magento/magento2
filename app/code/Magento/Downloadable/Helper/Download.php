@@ -185,26 +185,23 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getContentType()
+   public function getContentType()
     {
         $this->_getHandle();
-        if ($this->_linkType == self::LINK_TYPE_FILE) {
-            if (function_exists(
-                'mime_content_type'
-            ) && ($contentType = mime_content_type(
-                $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
-            ))
+        if ($this->_linkType === self::LINK_TYPE_FILE) {
+            if (function_exists('mime_content_type')
+                && ($contentType = mime_content_type(
+                    $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
+                ))
             ) {
                 return $contentType;
-            } else {
-                return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
-        } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            if (is_array($this->_handle->stat($this->_resourceFile)['type'])) {
-                return end($this->_handle->stat($this->_resourceFile)['type']);
-            } else {
-                return $this->_handle->stat($this->_resourceFile)['type'];
-            }
+            return $this->_downloadableFile->getFileType($this->_resourceFile);
+        }
+        if ($this->_linkType === self::LINK_TYPE_URL) {
+            return (is_array($this->_handle->stat($this->_resourceFile)['type'])
+                ? end($this->_handle->stat($this->_resourceFile)['type'])
+                : $this->_handle->stat($this->_resourceFile)['type']);
         }
         return $this->_contentType;
     }
