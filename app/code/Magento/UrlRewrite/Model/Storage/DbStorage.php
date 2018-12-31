@@ -87,7 +87,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindAllByData(array $data)
     {
@@ -95,7 +95,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindOneByData(array $data)
     {
@@ -299,7 +299,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByData(array $data)
     {
