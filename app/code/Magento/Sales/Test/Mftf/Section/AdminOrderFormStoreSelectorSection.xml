@@ -8,9 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontMessagesSection">
-        <element name="success" type="text" selector="div.message-success.success.message"/>
-        <element name="error" type="text" selector="div.message-error.error.message"/>
-        <element name="noticeMessage" type="text" selector="div.message-notice"/>
+    <section name="AdminOrderFormStoreSelectorSection">
+        <element name="storeSelectorContainer" type="input" selector="#order-store-selector"/>
+        <element name="defaultStoreViewButton" type="radio" selector="//*[contains(@class,'tree-store-scope')]//label[contains(text(),'Default Store View')]"/>
     </section>
 </sections>
