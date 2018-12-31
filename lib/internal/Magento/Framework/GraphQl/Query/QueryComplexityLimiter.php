@@ -11,6 +11,7 @@ use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * QueryComplexityLimiter
@@ -34,15 +35,24 @@ class QueryComplexityLimiter
     private $queryComplexity;
 
     /**
+     * @var IntrospectionConfiguration
+     */
+    private $introspectionConfig;
+
+    /**
      * @param int $queryDepth
      * @param int $queryComplexity
+     * @param IntrospectionConfiguration $introspectionConfig
      */
     public function __construct(
         int $queryDepth,
-        int $queryComplexity
+        int $queryComplexity,
+        IntrospectionConfiguration $introspectionConfig = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
+        $this->introspectionConfig = $introspectionConfig ?? ObjectManager::getInstance()
+                ->get(IntrospectionConfiguration::class);
     }
 
     /**
@@ -53,7 +63,7 @@ class QueryComplexityLimiter
     public function execute(): void
     {
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-        DocumentValidator::addRule(new DisableIntrospection());
+        DocumentValidator::addRule(new DisableIntrospection($this->introspectionConfig->disableIntrospection()));
         DocumentValidator::addRule(new QueryDepth($this->queryDepth));
     }
 }
