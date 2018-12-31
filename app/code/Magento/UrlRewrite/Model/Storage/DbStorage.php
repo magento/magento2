@@ -161,41 +161,51 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
+
+        $uniqueEntities = $this->prepareUniqueEntities($urls);
+        foreach ($uniqueEntities as $storeId => $entityTypes) {
+            foreach ($entityTypes as $entityType => $entities) {
+                $oldUrlsSelect->orWhere(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::STORE_ID
+                    ) . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_ID
+                    ) . ' IN (' . $this->connection->quote($entities, 'INTEGER') . ')' .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_TYPE
+                    ) . ' = ' . $this->connection->quote($entityType)
+                );
+            }
+        }
+
+        $this->connection->query(
+            $oldUrlsSelect->deleteFromSelect(
+                $this->resource->getTableName(self::TABLE_NAME)
+            )
+        );
+    }
+
+    /**
+     * Prepare array with unique entities
+     *
+     * @param UrlRewrite[] $urls
+     * @return array
+     */
+    private function prepareUniqueEntities(array $urls): array
+    {
+        $uniqueEntities = [];
         /** @var UrlRewrite $url */
         foreach ($urls as $url) {
-            $oldUrlsSelect->orWhere(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_TYPE
-                ) . ' = ?',
-                $url->getEntityType()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_ID
-                ) . ' = ?',
-                $url->getEntityId()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::STORE_ID
-                ) . ' = ?',
-                $url->getStoreId()
-            );
-        }
+            $entityIds = (!empty($uniqueEntities[$url->getStoreId()][$url->getEntityType()])) ?
+                $uniqueEntities[$url->getStoreId()][$url->getEntityType()] : [];
 
-        // prevent query locking in a case when nothing to delete
-        $checkOldUrlsSelect = clone $oldUrlsSelect;
-        $checkOldUrlsSelect->reset(Select::COLUMNS);
-        $checkOldUrlsSelect->columns('count(*)');
-        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
-
-        if ($hasOldUrls) {
-            $this->connection->query(
-                $oldUrlsSelect->deleteFromSelect(
-                    $this->resource->getTableName(self::TABLE_NAME)
-                )
-            );
+            if (!\in_array($url->getEntityId(), $entityIds)) {
+                $entityIds[] = $url->getEntityId();
+            }
+            $uniqueEntities[$url->getStoreId()][$url->getEntityType()] = $entityIds;
         }
+        return $uniqueEntities;
     }
 
     /**
