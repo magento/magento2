@@ -31,14 +31,16 @@ class Media extends AbstractDataType
     {
         if ($this->getData('config/uploaderConfig/url')) {
             $url = $this->getContext()->getUrl($this->getData('config/uploaderConfig/url'), ['_secure' => true]);
+            $updateConfig = [
+                'uploaderConfig' => ['url' => $url]
+            ];
+            if (!isset($this->getConfiguration()['dataScope'])) {
+                $updateConfig['dataScope'] = $this->getName();
+            }
             $data = array_replace_recursive(
                 $this->getData(),
                 [
-                    'config' => [
-                        'uploaderConfig' => [
-                            'url' => $url
-                        ],
-                    ],
+                    'config' => $updateConfig,
                 ]
             );
             $this->setData($data);
