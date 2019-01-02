@@ -112,7 +112,7 @@ define([
         /**
          * Adds complex list type - that is used to submit several list types at once
          * Only urlSubmit is possible for this list type
-         * expamle: addComplexListType(['wishlist', 'product_list'], 'http://magento...')
+         * example: addComplexListType(['wishlist', 'product_list'], 'http://magento...')
          *
          * @param type types as scope
          * @param urls obj can be
