@@ -33,7 +33,7 @@
         <!--requiredEntity type="extension_attribute">ExtensionAttributeSimple</requiredEntity-->
     </entity>
     <entity name="Simple_US_Customer" type="customer">
-        <data key="group_id">0</data>
+        <data key="group_id">1</data>
         <data key="default_billing">true</data>
         <data key="default_shipping">true</data>
         <data key="email" unique="prefix">John.Doe@example.com</data>
