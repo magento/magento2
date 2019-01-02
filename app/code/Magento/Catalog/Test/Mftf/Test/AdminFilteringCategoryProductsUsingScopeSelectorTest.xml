@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminFilteringCategoryProductsUsingScopeSelectorTest">
         <annotations>
             <features value="Catalog"/>
@@ -19,19 +19,19 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <!--Create website, Sore adn Store View-->
-            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateWebsite">
-                <argument name="newWebsiteName" value="secondWebsite"/>
-                <argument name="websiteCode" value="second_website"/>
+            <!--Create website, Sore and Store View-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{SecondWebsite.name}}"/>
+                <argument name="websiteCode" value="{{SecondWebsite.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateStore">
-                <argument name="website" value="secondWebsite"/>
-                <argument name="storeGroupName" value="Second Store"/>
-                <argument name="storeGroupCode" value="second_store"/>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{SecondWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="adminCreateStoreView">
-                <argument name="storeGroup" value="secondStoreGroup"/>
-                <argument name="customStore" value="secondStore"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="storeGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
 
             <!--Create Simple Product and Category -->
@@ -74,7 +74,7 @@
             <waitForPageLoad time="30" stepKey="waitForProductEditOpen1"/>
 
             <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectProductInWebsites">
-                <argument name="website" value="secondWebsite"/>
+                <argument name="website" value="{{SecondWebsite.name}}"/>
             </actionGroup>
             <uncheckOption selector="{{ProductInWebsitesSection.website('Main Website')}}" stepKey="uncheckWebsite1"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct1"/>
@@ -89,22 +89,27 @@
             <waitForPageLoad time="30" stepKey="waitForProductEditOpen2"/>
 
             <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectProductInWebsites1">
-                <argument name="website" value="secondWebsite"/>
+                <argument name="website" value="{{SecondWebsite.name}}"/>
             </actionGroup>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
             <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."
                  stepKey="seeSuccessMessage2"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
-                <argument name="websiteName" value="secondWebsite"/>
-            </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductFilters"/>
             <deleteData createDataKey="createProduct0" stepKey="deleteProduct"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct12" stepKey="deleteProduct3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{SecondWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearWebsitesFilters"/>
+            <!--Clear products filter-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsFilters"/>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Step 1-2: Open Category page and Set scope selector to All Store Views-->
@@ -156,7 +161,7 @@
         <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewDropdownToggle}}"
                stepKey="clickStoresList1"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad3"/>
-        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption(secondStore.name)}}"
+        <click selector="{{AdminCategoryMainActionsSection.categoryStoreViewOption(SecondStoreUnique.name)}}"
                stepKey="clickStoreView1"/>
         <waitForElementVisible selector="{{AdminCategoryMainActionsSection.categoryStoreViewModalAccept}}"
                stepKey="waitForPopup2"/>
