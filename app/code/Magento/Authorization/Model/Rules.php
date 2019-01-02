@@ -19,6 +19,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Rules setAssertId(int $value)
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
+ * @method setResources(array $resource)
  * @api
  * @since 100.0.2
  */
