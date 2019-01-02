@@ -179,11 +179,19 @@ class DbStorage extends AbstractStorage
             }
         }
 
-        $this->connection->query(
-            $oldUrlsSelect->deleteFromSelect(
-                $this->resource->getTableName(self::TABLE_NAME)
-            )
-        );
+        // prevent query locking in a case when nothing to delete
+        $checkOldUrlsSelect = clone $oldUrlsSelect;
+        $checkOldUrlsSelect->reset(Select::COLUMNS);
+        $checkOldUrlsSelect->columns('count(*)');
+ 	    $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+
+ 	    if ($hasOldUrls) {
+            $this->connection->query(
+                $oldUrlsSelect->deleteFromSelect(
+                    $this->resource->getTableName(self::TABLE_NAME)
+                )
+            );
+        }
     }
 
     /**
