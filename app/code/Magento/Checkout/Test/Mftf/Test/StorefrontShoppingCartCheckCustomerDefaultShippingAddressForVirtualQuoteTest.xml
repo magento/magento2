@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
-            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <createData entity="Customer_With_Different_Default_Billing_Shipping_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
             <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogout"/>
