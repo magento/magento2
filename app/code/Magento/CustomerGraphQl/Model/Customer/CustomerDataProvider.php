@@ -71,6 +71,25 @@ class CustomerDataProvider
     }
 
     /**
+     * Curate default shipping and default billing keys
+     *
+     * @param array $arrayAddress
+     * @return array
+     */
+    private function curateAddressData(array $arrayAddress) : array
+    {
+        foreach ($arrayAddress as $key => $address) {
+            if (!isset($address['default_shipping'])) {
+                $arrayAddress[$key]['default_shipping'] = false;
+            }
+            if (!isset($address['default_billing'])) {
+                $arrayAddress[$key]['default_billing'] = false;
+            }
+        }
+        return $arrayAddress;
+    }
+
+    /**
      * Transform single customer data from object to in array format
      *
      * @param CustomerInterface $customer
@@ -83,6 +102,7 @@ class CustomerDataProvider
             CustomerRepositoryInterface::class,
             'get'
         );
+        $customerData['addresses'] = $this->curateAddressData($customerData['addresses']);
         if (isset($customerData['extension_attributes'])) {
             $customerData = array_merge($customerData, $customerData['extension_attributes']);
         }
