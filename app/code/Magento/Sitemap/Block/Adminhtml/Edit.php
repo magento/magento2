@@ -78,7 +78,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @inheritdoc
      */
-    public function _prepareLayout()
+    protected function _prepareLayout()
     {
         $this->buttonList->update(
             'delete',
