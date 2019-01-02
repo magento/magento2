@@ -215,7 +215,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 
     /**
      * Retrieve JSON string of selected checkboxes
-     * 
+     *
      * @return string
      * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
