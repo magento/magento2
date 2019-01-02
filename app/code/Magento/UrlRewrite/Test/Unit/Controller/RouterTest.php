@@ -40,11 +40,15 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlFinder;
 
+    /** @var \Magento\UrlRewrite\Model\UrlFinderPool|\PHPUnit_Framework_MockObject_MockObject */
+    protected $urlFinderPool;
+
     /**
      * @return void
      */
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $this->actionFactory = $this->createMock(\Magento\Framework\App\ActionFactory::class);
         $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -55,18 +59,26 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $this->urlFinderPool = $objectManager->getObject(\Magento\UrlRewrite\Model\UrlFinderPool::class,
+            [
+                'urlFinders' => [
+                    ['object' => $this->urlFinder, 'sortOrder' => '1']
+                ]
+            ]
+        );
         $this->store = $this->getMockBuilder(
             \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->router = (new ObjectManager($this))->getObject(
+        $this->router = $objectManager->getObject(
             \Magento\UrlRewrite\Controller\Router::class,
             [
                 'actionFactory' => $this->actionFactory,
                 'url' => $this->url,
                 'storeManager' => $this->storeManager,
                 'response' => $this->response,
-                'urlFinder' => $this->urlFinder
+                'urlFinder' => $this->urlFinder,
+                'urlFinderPool' => $this->urlFinderPool
             ]
         );
     }

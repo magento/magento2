@@ -16,11 +16,6 @@
             <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
-        <arguments>
-            <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
-        </arguments>
-    </type>
 
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>

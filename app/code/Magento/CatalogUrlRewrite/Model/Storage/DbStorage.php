@@ -129,6 +129,7 @@ class DbStorage extends BaseDbStorage
         }
 
         if (!empty($remainingProducts)) {
+            $data[UrlRewrite::ENTITY_ID] = $remainingProducts;
             $rewrites = array_merge($rewrites, $this->findProductRewritesByFilter($data));
         }
 
@@ -224,7 +225,7 @@ class DbStorage extends BaseDbStorage
                         $categoryFromDb[UrlRewrite::REQUEST_PATH]
                     )
                     . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
-                $rewrites[] = $productsFromDb;
+                $rewrites[] = $productFromDb;
             }
         }
 

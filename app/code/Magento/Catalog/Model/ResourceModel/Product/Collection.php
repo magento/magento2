@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\App\ObjectManager;
@@ -21,7 +22,6 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\Indexer\DimensionFactory;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
 
 /**
  * Product collection
@@ -297,7 +297,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $emptyItem;
 
     /**
-     * @var UrlFinderInterface
+     * @var DbStorage
      */
     private $urlFinder;
 
@@ -328,7 +328,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
-     * @param UrlFinderInterface|null $urlFinder
+     * @param DbStorage|null $urlFinder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -357,7 +357,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        UrlFinderInterface $urlFinder = null
+        DbStorage $urlFinder = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -391,7 +391,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(UrlFinderInterface::class);
+        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(DbStorage::class);
     }
 
     /**
