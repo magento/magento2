@@ -219,7 +219,7 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * Get default billing address
-     * Return address string if address found and null of not
+     * Return address string if address found and null if not
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

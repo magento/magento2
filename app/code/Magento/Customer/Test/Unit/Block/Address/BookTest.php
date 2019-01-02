@@ -70,7 +70,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Address\Book::class,
             [
                 'countryFactory' => $this->countryFactory,
-                'addressesCollectionFactory' => $this->addressCollectionFactory,
+                'addressCollectionFactory' => $this->addressCollectionFactory,
                 'currentCustomer' => $this->currentCustomer,
                 'pageConfig' => $this->pageConfig
             ]
@@ -127,7 +127,6 @@ class BookTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->with([$customerId])
             ->willReturnSelf();
-        $addressCollection->expects($this->atLeastOnce())->method('load');
         $this->addressCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($addressCollection);
         $block->expects($this->atLeastOnce())->method('setCollection')->with($addressCollection)->willReturnSelf();
