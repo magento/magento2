@@ -183,9 +183,9 @@ class DbStorage extends AbstractStorage
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
         $checkOldUrlsSelect->columns('count(*)');
- 	    $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
 
- 	    if ($hasOldUrls) {
+        if ($hasOldUrls) {
             $this->connection->query(
                 $oldUrlsSelect->deleteFromSelect(
                     $this->resource->getTableName(self::TABLE_NAME)
