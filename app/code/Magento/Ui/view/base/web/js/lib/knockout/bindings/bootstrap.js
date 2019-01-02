@@ -26,7 +26,7 @@ define(function (require) {
         mageInit:       require('./mage-init'),
         keyboard:       require('./keyboard'),
         optgroup:       require('./optgroup'),
-        aferRender:     require('./after-render'),
+        afterRender:     require('./after-render'),
         autoselect:     require('./autoselect'),
         datepicker:     require('./datepicker'),
         outerClick:     require('./outer_click'),
