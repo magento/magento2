@@ -16,8 +16,6 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
