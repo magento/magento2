@@ -7,6 +7,8 @@ define([
     'mage/url',
     'Magento_Ui/js/block-loader'
 ], function(url, blockLoader) {
+    'use strict';
+    
     return function (config) {
         window.checkoutConfig = config.checkoutConfig;
         window.customerData = window.checkoutConfig.customerData;
