@@ -1,2 +1,5 @@
 Authorize.net,Authorize.net
 "API Endpoint URL","API Endpoint URL"
+"Invalid request type.","Invalid request type."
+"Something went wrong in the payment gateway.","Something went wrong in the payment gateway."
+"Invalid response type.","Invalid response type."
