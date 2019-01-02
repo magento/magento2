@@ -210,6 +210,13 @@ ErrorDocument 403 /errors/404.php
         deny from all
     </Files>
 
+###########################################
+## Deny access  to .user.ini
+    <Files .user.ini>
+        order allow,deny
+        deny from all
+    </Files>
+
 <IfModule mod_headers.c>
     ############################################
     ## Prevent clickjacking
