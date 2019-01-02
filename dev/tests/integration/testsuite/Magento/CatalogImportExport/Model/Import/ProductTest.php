@@ -36,6 +36,7 @@ use Psr\Log\LoggerInterface;
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -2349,6 +2350,41 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
+    }
+
+    /**
+     * Import file with non-existing images and skip-errors strategy.
+     *
+     * @return void
+     */
+    public function testImportWithSkipErrorsAndNonExistingImage()
+    {
+        $fileName = 'products_error_img.csv';
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/' . $fileName,
+                'directory' => $directory,
+            ]
+        );
+        $this->_model->getErrorAggregator()->initValidationStrategy('validation-skip-errors', 10);
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+        foreach ($this->_model->getErrorAggregator()->getAllErrors() as $error) {
+            $this->assertEquals('mediaUrlNotAvailable', $error->getErrorCode());
+        }
     }
 
     /**
