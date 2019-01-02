@@ -6,10 +6,10 @@
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Directory\Model\CountryFactory;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
 
 /**
  * Customer address book block
@@ -24,11 +24,6 @@ class Book extends \Magento\Framework\View\Element\Template
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
 
     /**
      * @var AddressRepositoryInterface
@@ -48,12 +43,12 @@ class Book extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory
      */
-    private $addressesCollectionFactory;
+    private $addressCollectionFactory;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Address\Collection
      */
-    private $addressesCollection;
+    private $addressCollection;
 
     /**
      * @var CountryFactory
@@ -62,58 +57,56 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param Mapper $addressMapper
      * @param array $data
-     * @param \Magento\Customer\Model\ResourceModel\Address\Collection $addressesCollection
+     * @param AddressCollectionFactory|null $addressCollectionFactory
      * @param CountryFactory|null $countryFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null,
         AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
         array $data = [],
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressesCollectionFactory = null,
+        AddressCollectionFactory $addressCollectionFactory = null,
         CountryFactory $countryFactory = null
     ) {
-        $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
         $this->addressMapper = $addressMapper;
-        $this->addressesCollectionFactory = $addressesCollectionFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class);
+        $this->addressCollectionFactory = $addressCollectionFactory ?: ObjectManager::getInstance()
+            ->get(AddressCollectionFactory::class);
         $this->countryFactory = $countryFactory ?: ObjectManager::getInstance()->get(CountryFactory::class);
 
         parent::__construct($context, $data);
     }
 
     /**
+     * Prepare the Address Book section layout
+     *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareLayout()
     {
         $this->pageConfig->getTitle()->set(__('Address Book'));
         parent::_prepareLayout();
-        $addresses = $this->getAddressesCollection();
-        if (null !== $addresses) {
-            $pager = $this->getLayout()->createBlock(
-                \Magento\Theme\Block\Html\Pager::class,
-                'customer.addresses.pager'
-            )->setCollection($this->getAddressesCollection());
-            $this->setChild('pager', $pager);
-            $this->getAddressesCollection()->load();
-        }
+        $this->preparePager();
         return $this;
     }
 
     /**
+     * Generate and return "New Address" URL
+     *
      * @return string
      */
     public function getAddAddressUrl()
@@ -122,6 +115,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Generate and return "Back" URL
+     *
      * @return string
      */
     public function getBackUrl()
@@ -133,6 +128,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Generate and return "Delete" URL
+     *
      * @return string
      */
     public function getDeleteUrl()
@@ -141,6 +138,9 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Generate and return "Edit Address" URL.
+     * Address ID passed in parameters
+     *
      * @param int $addressId
      * @return string
      */
@@ -150,7 +150,10 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Determines is the address primary (billing or shipping)
+     *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function hasPrimaryAddress()
     {
@@ -158,12 +161,16 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get current additional customer addresses
+     * Will return array of address interfaces if customer have additional addresses and false in other case.
+     *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAdditionalAddresses()
     {
         try {
-            $addresses = $this->getAddressesCollection();
+            $addresses = $this->getAddressCollection();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return false;
         }
@@ -181,6 +188,7 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
+     * @deprecated Not used anymore as addresses are showed as a grid
      */
     public function getAddressHtml(\Magento\Customer\Api\Data\AddressInterface $address = null)
     {
@@ -193,38 +201,57 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * Get current customer
+     * Check if customer is stored in current object and return it
+     * or get customer by current customer ID through repository
+     *
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
     {
         $customer = $this->getData('customer');
         if ($customer === null) {
-            try {
-                $customer = $this->customerRepository->getById($this->currentCustomer->getCustomerId());
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                return null;
-            }
+            $customer = $this->currentCustomer->getCustomer();
             $this->setData('customer', $customer);
         }
         return $customer;
     }
 
     /**
-     * @return int|null
+     * Get default billing address
+     * Return address string if address found and null of not
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDefaultBilling()
     {
         $customer = $this->getCustomer();
-        if ($customer === null) {
-            return null;
-        } else {
-            return $customer->getDefaultBilling();
-        }
+
+        return $customer->getDefaultBilling();
+    }
+
+
+    /**
+     * Get default shipping address
+     * Return address string if address found and null of not
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getDefaultShipping()
+    {
+        $customer = $this->getCustomer();
+
+        return $customer->getDefaultShipping();
     }
 
     /**
+     * Get customer address by ID
+     *
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressById($addressId)
     {
@@ -236,22 +263,9 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return int|null
-     */
-    public function getDefaultShipping()
-    {
-        $customer = $this->getCustomer();
-        if ($customer === null) {
-            return null;
-        } else {
-            return $customer->getDefaultShipping();
-        }
-    }
-
-    /**
      * Get one string street address from "two fields" array or just returns string if it was passed in parameters
      *
-     * @param $street
+     * @param string|array $street
      * @return string
      */
     public function getStreetAddress($street)
@@ -263,6 +277,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get pager section HTML code
+     *
      * @return string
      */
     public function getPagerHtml()
@@ -274,7 +290,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * Get country name by $countryId
      * Using \Magento\Directory\Model\Country to get country name by $countryId
      *
-     * @param $countryId
+     * @param string $countryId
      * @return string
      */
     public function getCountryById($countryId)
@@ -285,24 +301,39 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get pager layout
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function preparePager()
+    {
+        $addressCollection = $this->getAddressCollection();
+        if (null !== $addressCollection) {
+            $pager = $this->getLayout()->createBlock(
+                \Magento\Theme\Block\Html\Pager::class,
+                'customer.addresses.pager'
+            )->setCollection($addressCollection);
+            $this->setChild('pager', $pager);
+        }
+    }
+
+    /**
      * Get customer addresses collection.
      * Filters collection by customer id
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
-    private function getAddressesCollection()
+    private function getAddressCollection()
     {
-        if (null === $this->addressesCollection) {
+        if (null === $this->addressCollection) {
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
-            $collection = $this->addressesCollectionFactory->create();
-            $collection->setOrder(
-                'entity_id',
-                'desc'
-            );
-            $collection->setCustomerFilter([$this->currentCustomer->getCustomer()->getId()]);
-            $this->addressesCollection = $collection;
+            $collection = $this->addressCollectionFactory->create();
+            $collection->setOrder('entity_id', 'desc')
+                ->setCustomerFilter([$this->getCustomer()->getId()]);
+            $this->addressCollection = $collection;
         }
-
-        return $this->addressesCollection;
+        return $this->addressCollection;
     }
+
 }
