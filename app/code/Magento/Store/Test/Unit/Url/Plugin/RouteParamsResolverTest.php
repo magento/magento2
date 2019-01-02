@@ -80,7 +80,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
         $routeParamsResolverMock->expects($this->once())->method('setScope')->with($storeCode);
         $routeParamsResolverMock->expects($this->once())->method('getScope')->willReturn($storeCode);
 
-        $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam');
+        $this->queryParamsResolverMock->expects($this->any())->method('setQueryParam');
 
         $this->model->beforeSetRouteParams(
             $routeParamsResolverMock,
@@ -113,7 +113,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
         $routeParamsResolverMock->expects($this->once())->method('setScope')->with($storeCode);
         $routeParamsResolverMock->expects($this->once())->method('getScope')->willReturn($storeCode);
 
-        $this->queryParamsResolverMock->expects($this->once())->method('setQueryParam')->with('___store', $storeCode);
+        $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam')->with('___store', $storeCode);
 
         $this->model->beforeSetRouteParams(
             $routeParamsResolverMock,
@@ -178,7 +178,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
         $routeParamsResolverMock->expects($this->never())->method('setScope');
         $routeParamsResolverMock->expects($this->once())->method('getScope')->willReturn(false);
 
-        $this->queryParamsResolverMock->expects($this->once())->method('setQueryParam')->with('___store', $storeCode);
+        $this->queryParamsResolverMock->expects($this->never())->method('setQueryParam')->with('___store', $storeCode);
 
         $this->model->beforeSetRouteParams(
             $routeParamsResolverMock,
