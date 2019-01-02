@@ -91,8 +91,8 @@ define([
 
         /**
          * Add product list types as scope and their urls
-         * expamle: addListType('product_to_add', {urlFetch: 'http://magento...'})
-         * expamle: addListType('wishlist', {urlSubmit: 'http://magento...'})
+         * example: addListType('product_to_add', {urlFetch: 'http://magento...'})
+         * example: addListType('wishlist', {urlSubmit: 'http://magento...'})
          *
          * @param type types as scope
          * @param urls obj can be
