@@ -19,6 +19,14 @@
         <click selector="{{AdminProductFiltersSection.apply}}" stepKey="clickApplyFiltersButton"/>
     </actionGroup>
 
+    <actionGroup name="SearchForProductOnBackendByNameActionGroup" extends="SearchForProductOnBackendActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillSkuFieldOnFiltersSection"/>
+        <fillField userInput="{{productName}}" selector="{{AdminProductFiltersSection.nameInput}}" after="cleanFiltersIfTheySet" stepKey="fillNameFieldOnFiltersSection"/>
+    </actionGroup>
+
     <actionGroup name="ClearProductsFilterActionGroup">
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>

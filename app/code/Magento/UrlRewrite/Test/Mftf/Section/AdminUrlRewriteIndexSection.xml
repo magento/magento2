@@ -11,5 +11,6 @@
     <section name="AdminUrlRewriteIndexSection">
         <element name="requestPathFilter" type="input" selector="#urlrewriteGrid_filter_request_path"/>
         <element name="requestPathColumnValue" type="text" selector="//*[@id='urlrewriteGrid']//tbody//td[@data-column='request_path' and normalize-space(.)='{{columnValue}}']" parameterized="true"/>
+        <element name="targetPathColumnValue" type="text" selector="//*[@id='urlrewriteGrid']//tbody//td[@data-column='target_path' and normalize-space(.)='{{columnValue}}']" parameterized="true"/>
     </section>
 </sections>
