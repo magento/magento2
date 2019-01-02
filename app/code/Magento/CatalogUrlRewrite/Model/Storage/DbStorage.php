@@ -118,18 +118,18 @@ class DbStorage extends BaseDbStorage
         $rewrites = parent::doFindAllByData($data);
 
         $remainingProducts = [];
-        if(isset($data[UrlRewrite::ENTITY_ID]) and is_array($data[UrlRewrite::ENTITY_ID])) {
+        if (isset($data[UrlRewrite::ENTITY_ID]) and is_array($data[UrlRewrite::ENTITY_ID])) {
             $remainingProducts = array_fill_keys($data[UrlRewrite::ENTITY_ID], 1);
             foreach ($rewrites as $rewrite) {
                 $id = $rewrite[UrlRewrite::ENTITY_ID];
-                if(isset($remainingProducts[$id])){
+                if (isset($remainingProducts[$id])) {
                     unset($remainingProducts[$id]);
                 }
             }
         }
 
         if (!empty($remainingProducts)) {
-            $data[UrlRewrite::ENTITY_ID] = $remainingProducts;
+            $data[UrlRewrite::ENTITY_ID] = array_keys($remainingProducts);
             $rewrites = array_merge($rewrites, $this->findProductRewritesByFilter($data));
         }
 
@@ -203,7 +203,7 @@ class DbStorage extends BaseDbStorage
      */
     private function findProductRewritesByFilter(array $data)
     {
-        if(empty($data[UrlRewrite::ENTITY_TYPE]) || $data[UrlRewrite::ENTITY_TYPE] != 'product'){
+        if (empty($data[UrlRewrite::ENTITY_TYPE]) || $data[UrlRewrite::ENTITY_TYPE] != 'product') {
             return [];
         }
         $rewrites = [];
@@ -219,14 +219,17 @@ class DbStorage extends BaseDbStorage
             $data[UrlRewrite::ENTITY_TYPE] = 'category';
             $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
             foreach ($productsFromDb as $productFromDb) {
+                $productUrl = pathinfo($productFromDb[UrlRewrite::REQUEST_PATH], PATHINFO_BASENAME);
                 $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
-                        $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
-                        '',
-                        $categoryFromDb[UrlRewrite::REQUEST_PATH]
-                    )
-                    . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
+                    $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
+                    '',
+                    $categoryFromDb[UrlRewrite::REQUEST_PATH]
+                )
+                    . '/' . $productUrl;
                 $rewrites[] = $productFromDb;
             }
+        } else {
+            $rewrites = $productsFromDb;
         }
 
         return $rewrites;
