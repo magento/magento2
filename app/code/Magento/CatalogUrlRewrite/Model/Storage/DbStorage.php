@@ -95,35 +95,19 @@ class DbStorage extends BaseDbStorage
      */
     protected function doFindOneByData(array $data)
     {
-        if (isset($data[UrlRewrite::ENTITY_TYPE]) && $data[UrlRewrite::ENTITY_TYPE] == 'product') {
-            $metadata = $data[UrlRewrite::METADATA];
-            unset($data[UrlRewrite::METADATA]);
-            $productFromDb = $this->connection->fetchRow($this->prepareSelect($data));
-
-            if (!empty($metadata['category_id'])) {
-                $categoryId = $metadata['category_id'];
-                $data[UrlRewrite::ENTITY_ID] = $categoryId;
-                $data[UrlRewrite::ENTITY_TYPE] = 'category';
-                $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
-                $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
-                        $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
-                        '',
-                        $categoryFromDb[UrlRewrite::REQUEST_PATH]
-                    )
-                    . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
-            }
-
-            return $productFromDb;
+        if (array_key_exists(UrlRewrite::REQUEST_PATH, $data)
+            && is_string($data[UrlRewrite::REQUEST_PATH])
+            && strpos($data[UrlRewrite::REQUEST_PATH], '/') > 0
+        ) {
+            return $this->findProductRewriteByRequestPath($data);
         }
 
-        if (!(array_key_exists(UrlRewrite::REQUEST_PATH, $data)
-            && is_string($data[UrlRewrite::REQUEST_PATH])
-            && strpos($data[UrlRewrite::REQUEST_PATH], '/') > 0 //exists and not start from
-        )) {
+        $filterResults = $this->findProductRewritesByFilter($data);
+        if (!empty($filterResults)) {
+            return reset($filterResults);
+        } else {
             return null;
         }
-
-        return $this->findProductRewriteByRequestPath($data);
     }
 
     /**
@@ -141,34 +125,11 @@ class DbStorage extends BaseDbStorage
                 if(isset($remainingProducts[$id])){
                     unset($remainingProducts[$id]);
                 }
-
             }
         }
 
-        if (isset($data[UrlRewrite::ENTITY_TYPE])
-            && $data[UrlRewrite::ENTITY_TYPE] == 'product'
-            && !empty($remainingProducts))
-        {
-            $data[UrlRewrite::ENTITY_ID] = $remainingProducts;
-            $metadata = $data[UrlRewrite::METADATA];
-            unset($data[UrlRewrite::METADATA]);
-            $productsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
-
-            if (!empty($metadata['category_id'])) {
-                $categoryId = $metadata['category_id'];
-                $data[UrlRewrite::ENTITY_ID] = $categoryId;
-                $data[UrlRewrite::ENTITY_TYPE] = 'category';
-                $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
-                foreach ($productsFromDb as $productFromDb) {
-                    $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
-                            $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
-                            '',
-                            $categoryFromDb[UrlRewrite::REQUEST_PATH]
-                        )
-                        . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
-                    $rewrites[] = $productsFromDb;
-                }
-            }
+        if (!empty($remainingProducts)) {
+            $rewrites = array_merge($rewrites, $this->findProductRewritesByFilter($data));
         }
 
         return $rewrites;
@@ -195,7 +156,7 @@ class DbStorage extends BaseDbStorage
      * @param array $data
      * @return array|null
      */
-    private function findProductRewriteByRequestPath($data)
+    private function findProductRewriteByRequestPath(array $data)
     {
         $requestPath = $data[UrlRewrite::REQUEST_PATH] ?? null;
 
@@ -231,5 +192,42 @@ class DbStorage extends BaseDbStorage
         }
 
         return $productFromDb;
+    }
+
+    /**
+     * Find product rewrites by filter array
+     *
+     * @param array $data
+     * @return array
+     */
+    private function findProductRewritesByFilter(array $data)
+    {
+        if(empty($data[UrlRewrite::ENTITY_TYPE]) || $data[UrlRewrite::ENTITY_TYPE] != 'product'){
+            return [];
+        }
+        $rewrites = [];
+        $metadata = $data[UrlRewrite::METADATA] ?? [];
+        if (isset($data[UrlRewrite::METADATA])) {
+            unset($data[UrlRewrite::METADATA]);
+        }
+        $productsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
+
+        if (!empty($metadata['category_id'])) {
+            $categoryId = $metadata['category_id'];
+            $data[UrlRewrite::ENTITY_ID] = $categoryId;
+            $data[UrlRewrite::ENTITY_TYPE] = 'category';
+            $categoryFromDb = $this->connection->fetchRow($this->prepareSelect($data));
+            foreach ($productsFromDb as $productFromDb) {
+                $productFromDb[UrlRewrite::REQUEST_PATH] = str_replace(
+                        $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]),
+                        '',
+                        $categoryFromDb[UrlRewrite::REQUEST_PATH]
+                    )
+                    . '/' . $productFromDb[UrlRewrite::REQUEST_PATH];
+                $rewrites[] = $productsFromDb;
+            }
+        }
+
+        return $rewrites;
     }
 }
