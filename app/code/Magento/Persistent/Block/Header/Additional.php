@@ -104,9 +104,9 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     public function getConfig(): string
     {
         return $this->jsonSerializer->serialize(
-                [
-                    'expirationLifetime' => $this->persistentHelper->getLifeTime(),
-                ]
-            );
+            [
+                'expirationLifetime' => $this->persistentHelper->getLifeTime(),
+            ]
+        );
     }
 }
