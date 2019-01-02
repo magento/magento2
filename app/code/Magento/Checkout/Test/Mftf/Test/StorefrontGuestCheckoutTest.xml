@@ -50,6 +50,7 @@
         <click selector="{{GuestCheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForElement selector="{{GuestCheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{GuestCheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="checkPaymentMethod"/>
         <waitForElement selector="{{GuestCheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <conditionalClick selector="{{GuestCheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{GuestCheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
         <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductInCart"/>
@@ -74,5 +75,24 @@
         <see selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
         <see selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="{{_defaultProduct.name}}" stepKey="seeAdminOrderProduct"/>
+    </test>
+    <test name="StorefrontGuestCheckoutWithSidebarDisabledTest" extends="StorefrontGuestCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Guest Checkout when Cart sidebar disabled"/>
+            <description value="Should be able to place an order as a Guest when Cart sidebar is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-97155"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/sidebar/display 0" stepKey="disableSidebar" />
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/sidebar/display 1" stepKey="enableSidebar" />
+        </after>
+        <remove keyForRemoval="addProductNavigateToCheckout" />
+        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity" />
     </test>
 </tests>
