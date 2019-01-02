@@ -80,6 +80,9 @@
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
 
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+
         <!-- Place Order -->
 
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
