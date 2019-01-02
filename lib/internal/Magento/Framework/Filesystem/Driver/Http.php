@@ -34,7 +34,7 @@ class Http extends File
         $status = $headers[0];
 
         /* Handling 301 or 302 redirection */
-        if (isset($headers[1]) && preg_match('/^30[12]/', $status)) {
+        if (isset($headers[1]) && preg_match('/30[12]/', $status)) {
             $status = $headers[1];
         }
 
