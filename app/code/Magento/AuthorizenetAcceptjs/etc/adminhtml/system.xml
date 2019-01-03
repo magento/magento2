@@ -64,10 +64,6 @@
                     <label>Credit Card Types</label>
                     <source_model>Magento\Authorizenet\Model\Source\Cctype</source_model>
                 </field>
-                <field id="useccv" translate="label" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Credit Card Verification</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>

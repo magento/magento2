@@ -6,5 +6,50 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
+    <virtualType name="AuthorizenetAcceptjsFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">authorizenet_acceptjs</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info\Cc</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <!--<virtualType name="AuthorizenetAcceptjsCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">-->
+        <!--<arguments>-->
+            <!--<argument name="commands" xsi:type="array">-->
+                <!--<item name="authorize" xsi:type="string">AuthorizenetAcceptjs</item>-->
+            <!--</argument>-->
+        <!--</arguments>-->
+    <!--</virtualType>-->
+    <virtualType name="AuthorizenetAcceptjsConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">authorizenet_acceptjs</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">AuthorizenetAcceptjsConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">AuthorizenetAcceptjsDefaultValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">AuthorizenetAcceptjsConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">AuthorizenetAcceptjsCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
