@@ -705,6 +705,20 @@
                             <attribute type="shared">1</attribute>
                         </field>
                     </group>
+                    <group id="features" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                        <label>Features</label>
+                        <field id="disable_funding_options" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Disable Funding Options</label>
+                            <comment>
+                                <![CDATA[PayPal will automatically display each enabled funding option to eligible buyers.
+                                For example, PayPal Credit is only shown to buyers in countries where Paybal Credit is
+                                offered and the currency offered by the merchant is USD.]]>
+                            </comment>
+                            <config_path>payment/paypal_express/disable_funding_options</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\DisableFundingOptions</source_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
+                    </group>
                 </group>
             </group>
         </group>
