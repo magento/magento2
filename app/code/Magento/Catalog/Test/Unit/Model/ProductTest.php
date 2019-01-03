@@ -180,7 +180,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $extensionAttrbutes;
+    private $extensionAttributes;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -218,7 +218,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Module\Manager::class,
             ['isEnabled']
         );
-        $this->extensionAttrbutes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+        $this->extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
             ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMock();
