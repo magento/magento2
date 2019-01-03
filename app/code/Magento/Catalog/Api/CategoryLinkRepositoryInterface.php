@@ -32,6 +32,7 @@ interface CategoryLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink);
 
@@ -44,6 +45,7 @@ interface CategoryLinkRepositoryInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function deleteByIds($categoryId, $sku);
 }
