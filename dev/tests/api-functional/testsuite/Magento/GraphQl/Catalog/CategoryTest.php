@@ -112,6 +112,21 @@ QUERY;
         );
     }
 
+    public function testNonExistentCategoryWithProductCount()
+    {
+        $query = <<<QUERY
+{
+  category(id: 99) {
+      product_count
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = ['category' => null];
+        $this->assertEquals($expectedResponse, $response);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

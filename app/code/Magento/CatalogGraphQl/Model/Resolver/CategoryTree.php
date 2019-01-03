@@ -72,7 +72,7 @@ class CategoryTree implements ResolverInterface
 
         $rootCategoryId = $this->getCategoryId($args);
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-        if (!empty($categoriesTree)) {
+        if (!empty($categoriesTree) && ($categoriesTree->count() > 0)) {
             $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
             return current($result);
         } else {
