@@ -25,7 +25,7 @@ class WeightUnit implements \Magento\Framework\Option\ArrayInterface
     const CODE_KGS = 'kgs';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {
