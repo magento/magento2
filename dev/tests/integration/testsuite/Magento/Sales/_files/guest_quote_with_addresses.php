@@ -10,9 +10,10 @@ require __DIR__ . '/address_list.php';
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Catalog\Model\Product $product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setName('Simple Product')
     ->setSku('simple-product-guest-quote')
     ->setPrice(10)
