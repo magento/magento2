@@ -130,8 +130,9 @@ class ExpressConfigProvider implements ConfigProviderInterface
                     'button' => [
                         self::IN_CONTEXT_BUTTON_ID
                     ],
-                    'allowedFunding' => ['CREDIT', 'ELV'],
-                    'disallowedFunding' => []
+                    'allowedFunding' => [],
+                    'disallowedFunding' => $this->getDisallowedFunding(),
+                    'styles' => $this->getButtonStyles()
                 ],
             ];
         }
@@ -180,5 +181,43 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $this->config->setMethod($code);
         return $this->paypalHelper->shouldAskToCreateBillingAgreement($this->config, $customerId)
             ? Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT : null;
+    }
+
+    /**
+     * Returns button styles based on configuration
+     *
+     * @return array
+     */
+    private function getButtonStyles()
+    {
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+
+        $styles = [
+            'layout' => 'vertical',
+            'size' => 'responsive',
+            'color' => 'gold',
+            'shape' => 'rect',
+            'label' => 'paypal'
+        ];
+        if ($this->config->getValue('checkout_page_button_customize') === '1') {
+            $styles['layout'] = $this->config->getValue('checkout_page_button_layout');
+            $styles['size'] = $this->config->getValue('checkout_page_button_size');
+            $styles['color'] = $this->config->getValue('checkout_page_button_color');
+            $styles['shape'] = $this->config->getValue('checkout_page_button_shape');
+            $styles['label'] = $this->config->getValue('checkout_page_button_label');
+        }
+        return $styles;
+    }
+
+    /**
+     * Returns disallowed funding from configuration
+     *
+     * @return array
+     */
+    private function getDisallowedFunding()
+    {
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+        $disallowedFunding = $this->config->getValue('disable_funding_options');
+        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
     }
 }

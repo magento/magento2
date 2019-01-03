@@ -11,22 +11,6 @@ define([
     'use strict';
 
     /**
-     * Returns styles object
-     *
-     * @param {Object} config
-     * @return Object
-     */
-    function processStyles(config) {
-        return {
-            layout: 'vertical',
-            size: 'responsive',
-            color: 'gold',
-            shape: 'rect',
-            label: 'paypal',
-        }
-    };
-
-    /**
      * Returns array of allowed funding
      *
      * @param {Object} config
@@ -43,16 +27,14 @@ define([
     return function (clientConfig, element) {
         paypal.Button.render({
 
-            // Configure environment
             env: clientConfig.environment,
             client: {[clientConfig.environment]:clientConfig.merchantId},
-            // Customize button (optional)
             locale: clientConfig.locale,
             funding: {
                 allowed: getFunding(clientConfig.allowedFunding),
                 disallowed: getFunding(clientConfig.disallowedFunding)
             },
-            style: processStyles(clientConfig.buttonStyles),
+            style: clientConfig.styles,
 
             // Enable Pay Now checkout flow (optional)
             commit: true,
