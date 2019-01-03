@@ -64,7 +64,7 @@ class DbStorage extends BaseDbStorage
     protected function prepareSelect(array $data)
     {
         $metadata = [];
-        if (array_key_exists(UrlRewrite::METADATA, $data)) {
+        if (isset($data[UrlRewrite::METADATA])) {
             $metadata = $data[UrlRewrite::METADATA];
             unset($data[UrlRewrite::METADATA]);
         }
@@ -95,10 +95,7 @@ class DbStorage extends BaseDbStorage
      */
     protected function doFindOneByData(array $data)
     {
-        if (array_key_exists(UrlRewrite::REQUEST_PATH, $data)
-            && is_string($data[UrlRewrite::REQUEST_PATH])
-            && strpos($data[UrlRewrite::REQUEST_PATH], '/') > 0
-        ) {
+        if (isset($data[UrlRewrite::REQUEST_PATH]) && is_string($data[UrlRewrite::REQUEST_PATH])) {
             return $this->findProductRewriteByRequestPath($data);
         }
 

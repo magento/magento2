@@ -59,12 +59,9 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
-        $this->urlFinderPool = $objectManager->getObject(\Magento\UrlRewrite\Model\UrlFinderPool::class,
-            [
-                'urlFinders' => [
-                    ['object' => $this->urlFinder, 'sortOrder' => '1']
-                ]
-            ]
+        $this->urlFinderPool = $objectManager->getObject(
+            \Magento\UrlRewrite\Model\UrlFinderPool::class,
+            ['urlFinders' => [['object' => $this->urlFinder, 'sortOrder' => '1']]]
         );
         $this->store = $this->getMockBuilder(
             \Magento\Store\Model\Store::class

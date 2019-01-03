@@ -51,6 +51,7 @@ class UrlFinderPool
      * @param array $first
      * @param array $second
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) used in callback
      */
     private function compareSortOrder(array $first, array $second) : int
     {
