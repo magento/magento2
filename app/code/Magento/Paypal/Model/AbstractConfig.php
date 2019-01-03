@@ -293,11 +293,13 @@ abstract class AbstractConfig implements ConfigInterface
                 break;
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
-                $isEnabled = $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPS_BML .'/active',
+                $disabledFunding = $this->_scopeConfig->getValue(
+                    'payment/paypal_express/disable_funding_options',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
-                )
+                );
+                $isExpressCreditEnabled = $disabledFunding ? !!strpos('CREDIT', $disabledFunding) : true;
+                $isEnabled = $isExpressCreditEnabled
                 || $this->_scopeConfig->isSetFlag(
                     'payment/' . Config::METHOD_WPP_BML .'/active',
                     ScopeInterface::SCOPE_STORE,

@@ -199,7 +199,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
             'shape' => 'rect',
             'label' => 'paypal'
         ];
-        if ($this->config->getValue('checkout_page_button_customize') === '1') {
+        if (!!$this->config->getValue('checkout_page_button_customize')) {
             $styles['layout'] = $this->config->getValue('checkout_page_button_layout');
             $styles['size'] = $this->config->getValue('checkout_page_button_size');
             $styles['color'] = $this->config->getValue('checkout_page_button_color');
