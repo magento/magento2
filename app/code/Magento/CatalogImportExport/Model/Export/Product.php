@@ -1161,6 +1161,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $isValid = false;
         }
 
+        if (is_array($value)) {
+            $isValid = false;
+        }
+
         return $isValid;
     }
 
