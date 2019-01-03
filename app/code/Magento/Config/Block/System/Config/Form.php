@@ -131,6 +131,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Config\Model\Config\Structure $configStructure
+     * @param \Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker $settingChecker
      * @param \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
      * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
      * @param array $data
@@ -141,6 +142,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker $settingChecker,
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
         array $data = []
@@ -150,6 +152,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_configStructure = $configStructure;
         $this->_fieldsetFactory = $fieldsetFactory;
         $this->_fieldFactory = $fieldFactory;
+        $this->settingChecker = $settingChecker;
 
         $this->_scopeLabels = [
             self::SCOPE_DEFAULT => __('[GLOBAL]'),
@@ -416,7 +419,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $data = $this->getAppConfigDataValue($path);
 
-        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+        $placeholderValue = $this->settingChecker->getPlaceholderValue(
             $path,
             $this->getScope(),
             $this->getStringScopeCode()
@@ -805,12 +808,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     private function getReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
-        $isReadOnly = $this->getSettingChecker()->isReadOnly(
+        $isReadOnly = $this->settingChecker->isReadOnly(
             $path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         if (!$isReadOnly) {
             $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
-                ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
+                ?: $this->settingChecker->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         }
         return $isReadOnly;
     }
