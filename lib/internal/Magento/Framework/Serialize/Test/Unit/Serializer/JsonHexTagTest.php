@@ -69,7 +69,8 @@ class JsonHexTagTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function unserializeDataProvider(): array {
+    public function unserializeDataProvider(): array
+    {
         return [
             ['""', ''],
             ['"string"', 'string'],
@@ -105,7 +106,8 @@ class JsonHexTagTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function unserializeExceptionDataProvider(): array {
+    public function unserializeExceptionDataProvider(): array
+    {
         return [
             [''],
             [false],
