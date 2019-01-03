@@ -50,6 +50,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param \Magento\Framework\Serialize\SerializerInterface $serializerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -71,7 +72,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getJsLayout()
     {
@@ -116,6 +117,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve serialized checkout config.
+     *
      * @return bool|string
      * @since 100.2.0
      */
