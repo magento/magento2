@@ -86,6 +86,9 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_block->getSortable());
     }
 
+    /**
+     * @return array
+     */
     public function getSortableDataProvider()
     {
         return ['zero' => ['0'], 'false' => [false], 'null' => [null]];
@@ -374,6 +377,9 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $block->isGrouped());
     }
 
+    /**
+     * @return array
+     */
     public function columnGroupedDataProvider()
     {
         return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];

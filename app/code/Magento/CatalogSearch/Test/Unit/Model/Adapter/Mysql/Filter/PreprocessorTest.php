@@ -15,6 +15,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class PreprocessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -314,6 +316,9 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
 
+    /**
+     * @return array
+     */
     public function testTermFilterDataProvider()
     {
         return [

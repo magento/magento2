@@ -74,6 +74,9 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
+    /**
+     * @return array
+     */
     public function beforeDispatchDataProvider()
     {
         return [

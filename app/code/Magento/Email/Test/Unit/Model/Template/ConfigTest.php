@@ -190,6 +190,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->model->parseTemplateIdParts($input), $expectedOutput);
     }
 
+    /**
+     * @return array
+     */
     public function parseTemplateCodePartsDataProvider()
     {
         return [
@@ -302,6 +305,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getterMethodUnknownTemplateDataProvider()
     {
         return [
@@ -349,6 +355,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getterMethodUnknownFieldDataProvider()
     {
         return [

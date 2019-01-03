@@ -122,7 +122,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @exceptedExceptionMessage 'Layout must be loaded only once.'
+     * @expectedExceptionMessage Layout must be loaded only once.
      */
     public function testLoadLayoutWhenLayoutAlreadyLoaded()
     {

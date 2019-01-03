@@ -156,6 +156,21 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
      */
     private function fetchAttributeValues($tableName)
     {
+        //filter store groups which have more than 1 store
+        $multipleStoresInWebsite = array_values(
+            array_reduce(
+                array_filter($this->getGroupedStoreViews(), function ($storeViews) {
+                    return is_array($storeViews) && count($storeViews) > 1;
+                }),
+                'array_merge',
+                []
+            )
+        );
+
+        if (count($multipleStoresInWebsite) < 1) {
+            return [];
+        }
+
         $connection = $this->moduleDataSetup->getConnection();
         $batchSelectIterator = $this->batchQueryGenerator->generate(
             'value_id',
@@ -184,9 +199,10 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
                     self::ATTRIBUTE_WEBSITE
                 )
                 ->where(
-                    'cpei.store_id <> ?',
-                    self::GLOBAL_STORE_VIEW_ID
-                )
+                    'cpei.store_id IN (?)',
+                    $multipleStoresInWebsite
+                ),
+            1000
         );
 
         foreach ($batchSelectIterator as $select) {

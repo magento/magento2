@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="captcha_log" resource="default" engine="innodb" comment="Count Login Attempts">
         <column xsi:type="varchar" name="type" nullable="false" length="32" comment="Type"/>
-        <column xsi:type="varchar" name="value" nullable="false" length="32" comment="Value"/>
+        <column xsi:type="varchar" name="value" nullable="false" length="255" comment="Value"/>
         <column xsi:type="int" name="count" padding="10" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Count"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Update Time"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="type"/>
             <column name="value"/>
         </constraint>

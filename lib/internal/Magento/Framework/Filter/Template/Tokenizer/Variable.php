@@ -313,6 +313,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
         if (!$this->isNumeric()) {
             $this->prev();
         }
-        return floatval($value);
+        return (float)$value;
     }
 }

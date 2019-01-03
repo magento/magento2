@@ -118,6 +118,9 @@ class FileTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function extractValueNoRequestScopeDataProvider()
     {
         return [
@@ -178,6 +181,9 @@ class FileTest extends AbstractFormTestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function extractValueWithRequestScopeDataProvider()
     {
         return [
@@ -228,6 +234,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertEquals($expected, $model->validateValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateValueNotToUploadDataProvider()
     {
         return [
@@ -285,6 +294,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertEquals($expected, $model->validateValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function validateValueToUploadDataProvider()
     {
         return [
@@ -429,6 +441,9 @@ class FileTest extends AbstractFormTestCase
         $this->assertSame('', $model->outputValue($format));
     }
 
+    /**
+     * @return array
+     */
     public function outputValueDataProvider()
     {
         return [

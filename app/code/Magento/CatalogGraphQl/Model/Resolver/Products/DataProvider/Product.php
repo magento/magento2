@@ -78,16 +78,20 @@ class Product
         $this->collectionProcessor->process($collection, $searchCriteria, $attributes);
 
         if (!$isChildSearch) {
-            $visibilityIds
-                = $isSearch ? $this->visibility->getVisibleInSearchIds() : $this->visibility->getVisibleInCatalogIds();
+            $visibilityIds = $isSearch
+                ? $this->visibility->getVisibleInSearchIds()
+                : $this->visibility->getVisibleInCatalogIds();
             $collection->setVisibility($visibilityIds);
         }
         $collection->load();
 
         // Methods that perform extra fetches post-load
-        $collection->addCategoryIds();
-        $collection->addMediaGalleryData();
-        $collection->addOptionsToResult();
+        if (in_array('media_gallery_entries', $attributes)) {
+            $collection->addMediaGalleryData();
+        }
+        if (in_array('options', $attributes)) {
+            $collection->addOptionsToResult();
+        }
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);

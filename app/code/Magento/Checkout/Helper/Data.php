@@ -59,6 +59,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $paymentFailures;
 
     /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -113,6 +115,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Format Price
+     *
      * @param float $price
      * @return string
      */
@@ -127,6 +131,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Convert Price
+     *
      * @param float $price
      * @param bool $format
      * @return float
@@ -145,9 +151,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'checkout/options/onepage_checkout_enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -164,7 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
@@ -184,6 +190,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Base Price Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -191,11 +199,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-        $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
+        $price = (float)$qty ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
         return $this->priceCurrency->round($price);
     }
 
     /**
+     * Get Base Subtotal Incl Tax
+     *
      * @param AbstractItem $item
      * @return float
      */
@@ -217,13 +227,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Quote\Model\Quote $checkout,
         string $message,
         string $checkoutType = 'onepage'
-    ): \Magento\Checkout\Helper\Data {
+    ): Data {
         $this->paymentFailures->handle((int)$checkout->getId(), $message, $checkoutType);
 
         return $this;
     }
 
     /**
+     * Get Emails
+     *
      * @param string $configPath
      * @param null|string|bool|int|Store $storeId
      * @return array|false
@@ -232,7 +244,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $data = $this->scopeConfig->getValue(
             $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!empty($data)) {
@@ -242,8 +254,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Check is allowed Guest Checkout
-     * Use config settings and observer
+     * Check is allowed Guest Checkout. Use config settings and observer
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param int|Store $store
@@ -256,7 +267,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $guestCheckout = $this->scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
 
@@ -295,13 +306,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Checks if display billing address on payment method is available, otherwise
-     * billing address should be display on payment page
+     * If display billing address on payment method is available, otherwise should be display on payment page
+     *
      * @return bool
      */
     public function isDisplayBillingOnPaymentMethodAvailable()

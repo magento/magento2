@@ -10,6 +10,7 @@
         <arguments>
             <argument name="wysiwygConfigPostProcessor" xsi:type="array">
                 <item name="testAdapter" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
+                <item name="Magento_TestModuleWysiwygConfig/wysiwyg/tinymce4TestAdapter" xsi:type="string">Magento\TestModuleWysiwygConfig\Model\Config</item>
             </argument>
             <argument name="variablePluginConfigProvider" xsi:type="array">
                 <item name="testAdapter" xsi:type="string">Magento\Variable\Model\Variable\ConfigProvider</item>
@@ -19,6 +20,16 @@
             </argument>
             <argument name="galleryConfigProvider" xsi:type="array">
                 <item name="testAdapter" xsi:type="string">Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
+        <arguments>
+            <argument name="adapterOptions" xsi:type="array">
+                <item name="testAdapter" xsi:type="array">
+                    <item name="value" xsi:type="string">Magento_TestModuleWysiwygConfig/wysiwyg/tinymce4TestAdapter</item>
+                    <item name="label" xsi:type="string" translatable="true">Test Adapter</item>
+                </item>
             </argument>
         </arguments>
     </type>

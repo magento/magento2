@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DownloadableProduct" type="product">
+        <data key="sku" unique="suffix">downloadableproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+    </entity>
+    <entity name="ApiDownloadableProduct" type="product">
+        <data key="sku" unique="suffix">api-downloadable-product</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Downloadable Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-downloadable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+        <requiredEntity type="downloadable_link">apiDownloadableLink</requiredEntity>
+    </entity>
+</entities>

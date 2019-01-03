@@ -18,14 +18,14 @@
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="text" name="description" nullable="true" comment="Page Meta Description"/>
         <column xsi:type="text" name="metadata" nullable="true" comment="Video meta data"/>
-        <constraint xsi:type="foreign" name="FK_6FDF205946906B0E653E60AA769899F8"
+        <constraint xsi:type="foreign" referenceId="FK_6FDF205946906B0E653E60AA769899F8"
                     table="catalog_product_entity_media_gallery_value_video" column="value_id"
                     referenceTable="catalog_product_entity_media_gallery" referenceColumn="value_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_STORE_ID_STORE_STORE_ID"
                     table="catalog_product_entity_media_gallery_value_video" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_VAL_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_VAL_ID_STORE_ID">
             <column name="value_id"/>
             <column name="store_id"/>
         </constraint>

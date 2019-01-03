@@ -89,6 +89,9 @@ class InternalTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function toDefinitionDataProvider()
     {
         return [

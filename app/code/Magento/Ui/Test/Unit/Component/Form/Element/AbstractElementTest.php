@@ -46,6 +46,9 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     abstract protected function getModelName();
 
+    /**
+     * @return mixed
+     */
     abstract public function testGetComponentName();
 
     /**

@@ -34,6 +34,7 @@ interface ParamOverriderInterface
      * Returns the overridden value to use.
      *
      * @return string|int|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getOverriddenValue();
 }

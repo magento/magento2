@@ -6,9 +6,6 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Customer\Test\Constraint\AssertChangingWebsiteChangeCountries;
-use Magento\Framework\App\ObjectManager;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
@@ -115,15 +112,15 @@ class CreateCustomerBackendEntityTest extends Injectable
      * Create customer on backend.
      *
      * @param Customer $customer
-     * @param string $customerAction
-     * @param Address $address
+     * @param null $customerAction
+     * @param Address|null $address
      * @param array $steps
      * @param array $beforeActionCallback
-     * @return void
+     * @throws \Exception
      */
     public function test(
         Customer $customer,
-        $customerAction,
+        $customerAction = null,
         Address $address = null,
         array $steps = [],
         array $beforeActionCallback = []
@@ -138,7 +135,12 @@ class CreateCustomerBackendEntityTest extends Injectable
 
         $this->pageCustomerIndex->open();
         $this->pageCustomerIndex->getPageActionsBlock()->addNew();
-        $this->pageCustomerIndexNew->getCustomerForm()->fillCustomer($customer, $address);
+        $this->pageCustomerIndexNew->getCustomerForm()->fillCustomer($customer);
+        if (null !== $address) {
+            $this->pageCustomerIndexNew->getPageActionsBlock()->saveAndContinue();
+            $this->pageCustomerIndexNew->getMessagesBlock()->waitSuccessMessage();
+            $this->pageCustomerIndexNew->getCustomerForm()->fillCustomerAddress($address);
+        }
         $this->address = $address;
         $this->customer = $customer;
 
@@ -147,8 +149,9 @@ class CreateCustomerBackendEntityTest extends Injectable
                 call_user_func([$this, $methodName]);
             }
         }
-
-        $this->pageCustomerIndexNew->getPageActionsBlock()->$customerAction();
+        if (null !== $customerAction) {
+            $this->pageCustomerIndexNew->getPageActionsBlock()->$customerAction();
+        }
     }
 
     /**

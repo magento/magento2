@@ -30,6 +30,9 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $validateFactoryMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -111,11 +114,11 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate()
     {
-        $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid']);
-        $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        //use actual zend class to test changed functionality
+        $validate = $this->objectManager->create(\Zend_Validate::class);
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($validateMock));
+            ->will($this->returnValue($validate));
         $this->assertTrue(
             $this->model->validate(
                 $this->getOptionValue(),

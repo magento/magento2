@@ -11,7 +11,9 @@ use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
+ *
  * This class provides access to all these connections.
+ *
  * @api
  */
 class ResourceConnection
@@ -53,7 +55,7 @@ class ResourceConnection
     protected $connectionFactory;
 
     /**
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -104,9 +106,21 @@ class ResourceConnection
      */
     public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
     {
-        $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
-        if (isset($this->connections[$processConnectionName])) {
-            $this->connections[$processConnectionName] = null;
+        if ($resourceName === null) {
+            foreach ($this->connections as $processConnection) {
+                if ($processConnection !== null) {
+                    $processConnection->closeConnection();
+                }
+            }
+            $this->connections = [];
+        } else {
+            $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
+            if (isset($this->connections[$processConnectionName])) {
+                if ($this->connections[$processConnectionName] !== null) {
+                    $this->connections[$processConnectionName]->closeConnection();
+                }
+                $this->connections[$processConnectionName] = null;
+            }
         }
     }
 

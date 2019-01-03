@@ -360,6 +360,9 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function itemDataProvider()
     {
         return [

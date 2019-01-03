@@ -93,17 +93,17 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 $this->filesystem,
                 $this->readFactory,
             ])
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
+            ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
     }
 
     /**
      * @dataProvider moveFileUrlDataProvider
      */
-    public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName)
+    public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
         $destDir = 'var/dest/dir';
-        $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $expectedFileName;
+        $expectedRelativeFilePath = $expectedFileName;
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
@@ -128,6 +128,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
             ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
+        $this->uploader->expects($this->exactly($checkAllowedExtension))
+            ->method('checkAllowedExtension')
+            ->willReturn(true);
 
         $this->uploader->setDestDir($destDir);
         $result = $this->uploader->move($fileUrl);
@@ -139,7 +142,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     {
         $destDir = 'var/dest/dir';
         $fileName = 'test_uploader_file';
-        $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $fileName;
+        $expectedRelativeFilePath = $fileName;
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
@@ -193,6 +196,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDriverPoolDataProvider()
     {
         return [
@@ -211,6 +217,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function moveFileUrlDataProvider()
     {
         return [
@@ -218,31 +227,37 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 '$fileUrl' => 'http://test_uploader_file',
                 '$expectedHost' => 'test_uploader_file',
                 '$expectedFileName' => 'test_uploader_file',
+                '$checkAllowedExtension' => 0
             ],
             [
                 '$fileUrl' => 'https://!:^&`;file',
                 '$expectedHost' => '!:^&`;file',
                 '$expectedFileName' => 'file',
+                '$checkAllowedExtension' => 0
             ],
             [
                 '$fileUrl' => 'https://www.google.com/image.jpg',
                 '$expectedHost' => 'www.google.com/image.jpg',
                 '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
             ],
             [
                 '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
                 '$expectedHost' => 'www.google.com/image.jpg?param=1',
                 '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
             ],
             [
                 '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
                 '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
                 '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
             ],
             [
                 '$fileUrl' => 'http://www.google.com/image.jpg?param=1&param=2',
                 '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
                 '$expectedFileName' => 'image.jpg',
+                '$checkAllowedExtension' => 1
             ],
         ];
     }

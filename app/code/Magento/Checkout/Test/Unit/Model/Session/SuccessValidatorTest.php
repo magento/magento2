@@ -90,6 +90,10 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @return object
+     */
     protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(

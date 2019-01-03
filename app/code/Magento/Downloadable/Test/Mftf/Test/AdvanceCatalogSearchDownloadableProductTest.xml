@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchDownloadableByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product name"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-142"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchDownloadableBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product sku"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-252"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchDownloadableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product description"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-243"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchDownloadableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product short description"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product short description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-245"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+    </test>
+    <test name="AdvanceCatalogSearchDownloadableByPriceTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product price"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-246"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+    </test>
+</tests>

@@ -10,7 +10,7 @@ namespace Magento\Framework\Bulk;
  * @api
  * @since 100.2.0
  */
-interface OperationInterface
+interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case

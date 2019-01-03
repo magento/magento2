@@ -10,7 +10,7 @@
         <referenceContainer name="sidebar.main">
             <block class="Magento\Framework\View\Element\Template" name="customer_account_navigation_block" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
-                    <argument name="block_title" translate="true" xsi:type="string">Account Dashboard</argument>
+                    <argument name="block_title" translate="true" xsi:type="string">My Account</argument>
                     <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
                 </arguments>
                 <block class="Magento\Customer\Block\Account\Navigation" name="customer_account_navigation" before="-">
@@ -19,7 +19,7 @@
                     </arguments>
                     <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-account-link">
                         <arguments>
-                            <argument name="label" xsi:type="string" translate="true">Account Dashboard</argument>
+                            <argument name="label" xsi:type="string" translate="true">My Account</argument>
                             <argument name="path" xsi:type="string">customer/account</argument>
                             <argument name="sortOrder" xsi:type="number">250</argument>
                         </arguments>
