@@ -39,5 +39,5 @@ class Json implements SerializerInterface
             throw new \InvalidArgumentException("Unable to unserialize value. Error: " . json_last_error_msg());
         }
         return $result;
-    }    
+    }
 }
