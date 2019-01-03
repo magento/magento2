@@ -92,7 +92,7 @@
                             <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->getStreetAddress($address->getStreet()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= /* @escapeNotVerified */ $address->getCity() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= /* @escapeNotVerified */ $block->getCountryById($address->getCountryId()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion()->getRegion() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= /* @escapeNotVerified */ $address->getPostcode() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= /* @escapeNotVerified */ $address->getTelephone() ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">

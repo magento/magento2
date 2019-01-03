@@ -177,7 +177,7 @@ class Book extends \Magento\Framework\View\Element\Template
         $primaryAddressIds = [$this->getDefaultBilling(), $this->getDefaultShipping()];
         foreach ($addresses as $address) {
             if (!in_array($address->getId(), $primaryAddressIds)) {
-                $additional[] = $address;
+                $additional[] = $address->getDataModel();
             }
         }
         return empty($additional) ? false : $additional;
