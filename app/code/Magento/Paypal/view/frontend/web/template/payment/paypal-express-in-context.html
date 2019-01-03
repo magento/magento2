@@ -30,15 +30,7 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div class="actions-toolbar">
-            <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="enable: (getCode() == isChecked()), attr: {id: getButtonId()}"
-                        disabled>
-                    <span data-bind="i18n: 'Continue to PayPal'"></span>
-                </button>
-            </div>
-        </div>
+
+        <div class="actions-toolbar" data-bind="attr: {id: getButtonId()}" afterRender="renderPayPalButtons"></div>
     </div>
 </div>

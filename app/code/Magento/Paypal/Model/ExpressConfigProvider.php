@@ -129,7 +129,9 @@ class ExpressConfigProvider implements ConfigProviderInterface
                     'locale' => $locale,
                     'button' => [
                         self::IN_CONTEXT_BUTTON_ID
-                    ]
+                    ],
+                    'allowedFunding' => ['CREDIT', 'ELV'],
+                    'disallowedFunding' => []
                 ],
             ];
         }
