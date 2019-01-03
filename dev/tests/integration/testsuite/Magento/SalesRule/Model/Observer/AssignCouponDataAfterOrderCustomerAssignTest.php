@@ -75,7 +75,6 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
      */
     private $customer;
 
-
     /**
      * @inheritdoc
      */
