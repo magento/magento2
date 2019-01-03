@@ -131,10 +131,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @param \Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker $settingChecker
      * @param \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
      * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
      * @param array $data
+     * @param SettingChecker|null $settingChecker
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -142,17 +142,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Config\Model\Config\Structure $configStructure,
-        \Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker $settingChecker,
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
-        array $data = []
+        array $data = [],
+        SettingChecker $settingChecker = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_configFactory = $configFactory;
         $this->_configStructure = $configStructure;
         $this->_fieldsetFactory = $fieldsetFactory;
         $this->_fieldFactory = $fieldFactory;
-        $this->settingChecker = $settingChecker;
+        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
 
         $this->_scopeLabels = [
             self::SCOPE_DEFAULT => __('[GLOBAL]'),
