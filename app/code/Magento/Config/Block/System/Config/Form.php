@@ -366,11 +366,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
-        $isReadOnly = $this->isDefaultFieldReadOnly($path);
-        if (!$isReadOnly) {
-            $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
-                ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
-        }
+        $isReadOnly = $this->getReadOnly($field, $path);
 
         $formField = $fieldset->addField(
             $elementId,
@@ -801,20 +797,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Check Default Path Readonly
-     *
+     * Check Path is Readonly
+     * 
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @param string $path
      * @return boolean
      */
-    private function isDefaultFieldReadOnly($path)
+    private function getReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
-        $scope = $this->getScope();
-        $isReadOnly = false;
-        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $isReadOnly = $this->getSettingChecker()->isReadOnly(
-                $path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            );
-        } 
+        $isReadOnly = $this->getSettingChecker()->isReadOnly(
+            $path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+        if (!$isReadOnly) {
+            $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
+                ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
+        }
         return $isReadOnly;
     }
 
