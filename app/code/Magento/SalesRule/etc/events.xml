@@ -24,4 +24,7 @@
     <event name="magento_salesrule_api_data_ruleinterface_load_after">
         <observer name="legacy_model_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="sales_order_customer_assign_after">
+        <observer name="sales_order_assign_customer_after" instance="Magento\SalesRule\Observer\AssignCouponDataAfterOrderCustomerAssignObserver" />
+    </event>
 </config>
