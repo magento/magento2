@@ -54,7 +54,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getPostValue'])
+            ->setMethods(['getPostValue', 'isPost'])
             ->getMockForAbstractClass();
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
@@ -95,6 +95,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->willReturn([]);
+        $this->requestMock->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('adminhtml/*/')
@@ -116,6 +119,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->willReturn($data);
+        $this->requestMock->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('sitemap_id')
