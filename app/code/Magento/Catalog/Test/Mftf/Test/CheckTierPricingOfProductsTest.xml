@@ -155,10 +155,9 @@
         <!--Create new order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="startToCreateNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="storeView" value="SecondStoreUnique"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormSelectWebsiteSection.website(SecondStoreUnique.name)}}" stepKey="selectStore"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
         <click  selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
         <waitForPageLoad stepKey="waitForProductsOpened"/>
         <!--TEST CASE #1-->
