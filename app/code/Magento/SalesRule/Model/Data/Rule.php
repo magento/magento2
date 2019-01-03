@@ -16,8 +16,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
  */
-class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\SalesRule\Api\Data\RuleInterface
+class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements RuleInterface
 {
     const KEY_RULE_ID = 'rule_id';
     const KEY_NAME = 'name';

@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\SalesRule\Model\DeltaPriceRound;
 use Magento\SalesRule\Model\Validator;
