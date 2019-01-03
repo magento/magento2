@@ -8,7 +8,8 @@
         "allure-framework/allure-phpunit": "~1.2.0",
         "doctrine/annotations": "1.4.*",
         "phpunit/phpunit": "~6.5.0",
-        "phpunit/phpunit-selenium": "~4.1.0"
+        "phpunit/phpunit-selenium": "~4.1.0",
+        "symfony/css-selector": "^4.1"
     },
     "suggest": {
         "netwing/selenium-server-standalone": "dev-master",

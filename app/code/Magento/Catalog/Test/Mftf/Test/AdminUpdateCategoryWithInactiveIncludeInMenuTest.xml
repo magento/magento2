@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCategoryWithInactiveIncludeInMenuTest">
+        <annotations>
+            <stories value="Update categories"/>
+            <title value="Update category, name description urlkey metatitle exclude from menu"/>
+            <description value="Login as admin and update category name, description, urlKey, metatitle and exclude from menu"/>
+            <testCaseId value="MC-6058"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Update Category and disable Include in Menu-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillCategoryName"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIncludeInMenu"/>
+        <!--Select Content and fill the options-->
+        <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
+        <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
+        <click selector="{{AdminCategoryContentSection.showHideEditor}}" stepKey="clickONShowHideButton"/>
+        <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
+        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="fillUpdatedUrlKey"/>
+        <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <!--Verify Updated Category in UrlRewrite Page-->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="fillUpdatedCategoryUrlKey"/>
+        <click selector="button[data-ui-id='widget-button-1']" stepKey="clickOnSearchButton"/>
+        <see selector="[data-column='request_path']" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="seeUpdatedCategoryUrlKey"/>
+        <!--Verify Updated Category UrlKey directs to category Store Front-->
+        <amOnPage url="{{SimpleRootSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeSubCategoryInStoreFrontPage"/>
+        <!--Verify Updated fields in Category Page-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCreatedCategory1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
+        <grabValueFrom selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}"  stepKey="getCategoryName"/>
+        <assertEquals stepKey="getUpdatedCategoryName">
+            <expectedResult type="string">{{SimpleRootSubCategory.name}}</expectedResult>
+            <actualResult type="variable">getCategoryName</actualResult>
+        </assertEquals>
+        <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent1"/>
+        <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent1"/>
+        <scrollTo selector="{{AdminCategoryContentSection.description}}" stepKey="scrollToDescription1"/>
+        <grabValueFrom selector="{{AdminCategoryContentSection.description}}"   stepKey="getUpdatedDescription"/>
+        <assertEquals stepKey="getDescription">
+            <expectedResult type="string">Updated category Description Fields</expectedResult>
+            <actualResult type="variable">getUpdatedDescription</actualResult>
+        </assertEquals>
+        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
+        <grabValueFrom selector="{{AdminCategorySEOSection.UrlKeyInput}}"   stepKey="getUrkKey"/>
+        <assertEquals stepKey="getUpdatedUrkKey">
+            <expectedResult type="string">{{SimpleRootSubCategory.urlKey}}</expectedResult>
+            <actualResult type="variable">getUrkKey</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminCategorySEOSection.MetaTitleInput}}"   stepKey="getMetaTitleInput"/>
+        <assertEquals stepKey="getUpdatedMetaTitleInput">
+            <expectedResult type="string">{{SimpleRootSubCategory.name}}</expectedResult>
+            <actualResult type="variable">getMetaTitleInput</actualResult>
+        </assertEquals>
+    </test>
+</tests>
