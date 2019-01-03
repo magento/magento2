@@ -7,8 +7,11 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
@@ -60,6 +63,9 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      *
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
+     * @param PriceTableResolver|null $priceTableResolver
+     * @param DimensionFactory|null $dimensionFactory
      * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +94,9 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
         ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -115,6 +124,9 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
             $connection,
             $productLimitationFactory,
             $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory,
             $resourceModelPool
         );
     }
