@@ -52,6 +52,7 @@ class Media extends \Magento\Framework\App\Action\Action implements \Magento\Fra
      * Get product media for specified configurable product variation
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
