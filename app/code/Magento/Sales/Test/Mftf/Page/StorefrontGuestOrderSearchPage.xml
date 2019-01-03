@@ -5,9 +5,10 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCartPriceRuleEditPage" area="admin" url="sales_rule/promo_quote/edit/id/{{salesRuleId}}" module="Magento_SalesRule" parameterized="true">
-        <section name="AdminCartPriceRulesFormSection"/>
+    <page name="StorefrontGuestOrderSearchPage" url="sales/guest/form/" module="Magento_Sales" area="storefront">
+        <section name="StorefrontGuestOrderSearchSection"/>
     </page>
 </pages>
