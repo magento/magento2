@@ -15,6 +15,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Webapi\Model\Config\Converter;
 
+/**
+ * Class for accessing to Webapi_Async configuration.
+ */
 class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
 {
     /**
@@ -55,7 +58,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getServices()
     {
@@ -73,7 +76,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTopicName($routeUrl, $httpMethod)
     {
@@ -93,6 +96,10 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
+     * Generate topic data for all defined services
+     *
+     * Topic data is indexed by a lookup key that is derived from route data
+     *
      * @return array
      */
     private function generateTopicsDataFromWebapiConfig()
