@@ -6,13 +6,13 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Model\AuthorizenetGateway;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
-use Magento\AuthorizenetAcceptjs\Model\AuthorizenetGateway\ApiClient;
-use Magento\AuthorizenetAcceptjs\Model\AuthorizenetGateway\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Client;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ApiClientTest extends \PHPUnit\Framework\TestCase
+class ClientTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanSendRequest()
     {
@@ -43,9 +43,9 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('<foo><bar>baz</bar></foo>');
 
         /**
-         * @var $apiClient ApiClient
+         * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(ApiClient::class, [
+        $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
             'payloadConverter' => $objectManager->getObject(PayloadConverter::class)
         ]);
@@ -92,9 +92,9 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('');
 
         /**
-         * @var $apiClient ApiClient
+         * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(ApiClient::class, [
+        $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
             'payloadConverter' => $objectManager->getObject(PayloadConverter::class)
         ]);
@@ -138,9 +138,9 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('bad');
 
         /**
-         * @var $apiClient ApiClient
+         * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(ApiClient::class, [
+        $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
             'payloadConverter' => $objectManager->getObject(PayloadConverter::class)
         ]);

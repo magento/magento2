@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Model\AuthorizenetGateway;
+namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * A client that can communicate with the Authorize.net API
  */
-class ApiClient
+class Client
 {
     const API_ENDPOINT_URL = 'https://api.authorize.net/xml/v1/request.api';
 
