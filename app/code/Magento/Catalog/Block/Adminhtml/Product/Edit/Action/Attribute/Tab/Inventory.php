@@ -104,17 +104,17 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     /**
      * Returns min_sale_qty configuration for the ALL Customer Group
      *
-     * @return int
+     * @return float
      */
     public function getDefaultMinSaleQty()
     {
         $default = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
         if (!is_numeric($default)) {
             $default = $this->serializer->unserialize($default);
-            $default = isset($default[GroupInterface::CUST_GROUP_ALL]) ? $default[GroupInterface::CUST_GROUP_ALL] : 1;
+            $default = $default[GroupInterface::CUST_GROUP_ALL] ?? 1;
         }
 
-        return (int) $default;
+        return (float) $default;
     }
 
     /**
