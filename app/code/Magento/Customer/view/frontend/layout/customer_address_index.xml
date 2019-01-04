@@ -13,6 +13,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\Customer\Block\Address\Book" name="address_book" template="Magento_Customer::address/book.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Address\Grid" name="address_grid" template="Magento_Customer::address/grid.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

@@ -11,9 +11,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 class BookTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Customer\Block\Address\Book
      */
-    private $layout;
+    protected $_block;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -32,8 +32,15 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Customer\Helper\Session\CurrentCustomer::class);
-        $this->layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
-        $this->layout->setBlock('head', $blockMock);
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
+        $layout->setBlock('head', $blockMock);
+        $this->_block = $layout
+            ->createBlock(
+                \Magento\Customer\Block\Address\Book::class,
+                '',
+                ['currentCustomer' => $this->currentCustomer]
+            );
     }
 
     protected function tearDown()
@@ -45,17 +52,11 @@ class BookTest extends \PHPUnit\Framework\TestCase
         $customerRegistry->remove(1);
     }
 
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoAppIsolation enabled
-     */
     public function testGetAddressEditUrl()
     {
-        $bookBlock = $this->createBlockForCustomer(1);
-
         $this->assertEquals(
             'http://localhost/index.php/customer/address/edit/id/1/',
-            $bookBlock->getAddressEditUrl(1)
+            $this->_block->getAddressEditUrl(1)
         );
     }
 
@@ -64,19 +65,19 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider hasPrimaryAddressDataProvider
-     * @param int $customerId
-     * @param bool $expected
      * @magentoAppIsolation enabled
      */
     public function testHasPrimaryAddress($customerId, $expected)
     {
-        $bookBlock = $this->createBlockForCustomer($customerId);
-        $this->assertEquals($expected, $bookBlock->hasPrimaryAddress());
+        if (!empty($customerId)) {
+            $this->currentCustomer->setCustomerId($customerId);
+        }
+        $this->assertEquals($expected, $this->_block->hasPrimaryAddress());
     }
 
     public function hasPrimaryAddressDataProvider()
     {
-        return ['1' => [1, true], '5' => [5, false]];
+        return ['0' => [0, false], '1' => [1, true], '5' => [5, false]];
     }
 
     /**
@@ -86,14 +87,14 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdditionalAddresses()
     {
-        $bookBlock = $this->createBlockForCustomer(1);
-        $this->assertNotNull($bookBlock->getAdditionalAddresses());
-        $this->assertCount(1, $bookBlock->getAdditionalAddresses());
+        $this->currentCustomer->setCustomerId(1);
+        $this->assertNotNull($this->_block->getAdditionalAddresses());
+        $this->assertCount(1, $this->_block->getAdditionalAddresses());
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\AddressInterface::class,
-            $bookBlock->getAdditionalAddresses()[0]
+            $this->_block->getAdditionalAddresses()[0]
         );
-        $this->assertEquals(2, $bookBlock->getAdditionalAddresses()[0]->getId());
+        $this->assertEquals(2, $this->_block->getAdditionalAddresses()[0]->getId());
     }
 
     /**
@@ -103,14 +104,15 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
-        $bookBlock = $this->createBlockForCustomer($customerId);
-        $this->currentCustomer->setCustomerId($customerId);
-        $this->assertEquals($expected, $bookBlock->getAdditionalAddresses());
+        if (!empty($customerId)) {
+            $this->currentCustomer->setCustomerId($customerId);
+        }
+        $this->assertEquals($expected, $this->_block->getAdditionalAddresses());
     }
 
     public function getAdditionalAddressesDataProvider()
     {
-        return ['5' => [5, false]];
+        return ['0' => [0, false], '5' => [5, false]];
     }
 
     /**
@@ -120,24 +122,18 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAddressHtml()
     {
-        $bookBlock = $this->createBlockForCustomer(1);
         $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />" .
             "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         $address = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AddressRepositoryInterface::class
         )->getById(1);
-        $html = $bookBlock->getAddressHtml($address);
+        $html = $this->_block->getAddressHtml($address);
         $this->assertEquals($expected, $html);
     }
 
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @magentoAppIsolation enabled
-     */
     public function testGetAddressHtmlWithoutAddress()
     {
-        $bookBlock = $this->createBlockForCustomer(5);
-        $this->assertEquals('', $bookBlock->getAddressHtml(null));
+        $this->assertEquals('', $this->_block->getAddressHtml(null));
     }
 
     /**
@@ -146,14 +142,20 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomer()
     {
-        $bookBlock = $this->createBlockForCustomer(1);
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $customer = $customerRepository->getById(1);
-        $object = $bookBlock->getCustomer();
+
+        $this->currentCustomer->setCustomerId(1);
+        $object = $this->_block->getCustomer();
         $this->assertEquals($customer, $object);
+    }
+
+    public function testGetCustomerMissingCustomer()
+    {
+        $this->assertNull($this->_block->getCustomer());
     }
 
     /**
@@ -165,13 +167,13 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultBilling($customerId, $expected)
     {
-        $bookBlock = $this->createBlockForCustomer($customerId);
-        $this->assertEquals($expected, $bookBlock->getDefaultBilling());
+        $this->currentCustomer->setCustomerId($customerId);
+        $this->assertEquals($expected, $this->_block->getDefaultBilling());
     }
 
     public function getDefaultBillingDataProvider()
     {
-        return ['1' => [1, 1], '5' => [5, null]];
+        return ['0' => [0, null], '1' => [1, 1], '5' => [5, null]];
     }
 
     /**
@@ -183,40 +185,24 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultShipping($customerId, $expected)
     {
-        $bookBlock = $this->createBlockForCustomer($customerId);
-        $this->currentCustomer->setCustomerId($customerId);
-        $this->assertEquals($expected, $bookBlock->getDefaultShipping());
+        if (!empty($customerId)) {
+            $this->currentCustomer->setCustomerId($customerId);
+        }
+        $this->assertEquals($expected, $this->_block->getDefaultShipping());
     }
 
     public function getDefaultShippingDataProvider()
     {
-        return ['1' => [1, 1], '5' => [5, null]];
+        return ['0' => [0, null], '1' => [1, 1], '5' => [5, null]];
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoAppIsolation enabled
      */
     public function testGetAddressById()
     {
-        $bookBlock = $this->createBlockForCustomer(1);
-        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $bookBlock->getAddressById(1));
-    }
-
-    /**
-     * Create address book block for customer
-     *
-     * @param int $customerId
-     * @return \Magento\Framework\View\Element\BlockInterface
-     */
-    private function createBlockForCustomer($customerId)
-    {
-        $this->currentCustomer->setCustomerId($customerId);
-        return $this->layout->createBlock(
-            \Magento\Customer\Block\Address\Book::class,
-            '',
-            ['currentCustomer' => $this->currentCustomer]
-        );
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $this->_block->getAddressById(1));
+        $this->assertNull($this->_block->getAddressById(5));
     }
 }
