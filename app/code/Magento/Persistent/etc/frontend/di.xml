@@ -35,4 +35,18 @@
     <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
         <plugin name="inject_guest_address_for_nologin" type="Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin" />
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="persistent" xsi:type="string">Magento\Persistent\CustomerData\Persistent</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\CustomerData">
+        <arguments>
+            <argument name="expirableSectionNames" xsi:type="array">
+                <item name="persistent" xsi:type="string">persistent</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
