@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -58,14 +59,13 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Prepare the Address Book section layout
      *
-     * @return $this
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _prepareLayout()
+    protected function _prepareLayout(): void
     {
         parent::_prepareLayout();
         $this->preparePager();
-        return $this;
     }
 
     /**
@@ -73,7 +73,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    public function getAddAddressUrl()
+    public function getAddAddressUrl(): string
     {
         return $this->getUrl('customer/address/new', ['_secure' => true]);
     }
@@ -83,7 +83,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    public function getDeleteUrl()
+    public function getDeleteUrl(): string
     {
         return $this->getUrl('customer/address/delete');
     }
@@ -96,7 +96,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @param int $addressId
      * @return string
      */
-    public function getAddressEditUrl($addressId)
+    public function getAddressEditUrl($addressId): string
     {
         return $this->getUrl('customer/address/edit', ['_secure' => true, 'id' => $addressId]);
     }
@@ -106,42 +106,35 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * Will return array of address interfaces if customer have additional addresses and false in other case.
      *
-     * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
+     * @return \Magento\Customer\Api\Data\AddressInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function getAdditionalAddresses()
+    public function getAdditionalAddresses(): array
     {
-        try {
-            $addresses = $this->getAddressCollection();
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            return false;
-        }
+        $additional = [];
+        $addresses = $this->getAddressCollection();
         $primaryAddressIds = [$this->getDefaultBilling(), $this->getDefaultShipping()];
         foreach ($addresses as $address) {
-            if (!in_array($address->getId(), $primaryAddressIds)) {
+            if (!in_array((int)$address->getId(), $primaryAddressIds, true)) {
                 $additional[] = $address->getDataModel();
             }
         }
-        return empty($additional) ? false : $additional;
+        return $additional;
     }
 
     /**
      * Get current customer
      *
-     * Check if customer is stored in current object and return it
-     * or get customer by current customer ID through repository
+     * Return stored customer or get it from session
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    public function getCustomer()
+    public function getCustomer(): \Magento\Customer\Api\Data\CustomerInterface
     {
         $customer = $this->getData('customer');
         if ($customer === null) {
-            try {
-                $customer = $this->currentCustomer->getCustomer();
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                return null;
-            }
+            $customer = $this->currentCustomer->getCustomer();
             $this->setData('customer', $customer);
         }
         return $customer;
@@ -153,7 +146,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @param string|array $street
      * @return string
      */
-    public function getStreetAddress($street)
+    public function getStreetAddress($street): string
     {
         if (is_array($street)) {
             $street = implode(', ', $street);
@@ -169,7 +162,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @param string $countryCode
      * @return string
      */
-    public function getCountryByCode($countryCode)
+    public function getCountryByCode($countryCode): string
     {
         /** @var \Magento\Directory\Model\Country $country */
         $country = $this->countryFactory->create();
@@ -181,14 +174,14 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Get default billing address
      * Return address string if address found and null of not
      *
-     * @return string
+     * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getDefaultBilling()
+    private function getDefaultBilling(): int
     {
         $customer = $this->getCustomer();
 
-        return $customer->getDefaultBilling();
+        return (int)$customer->getDefaultBilling();
     }
 
 
@@ -196,23 +189,23 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Get default shipping address
      * Return address string if address found and null of not
      *
-     * @return string
+     * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getDefaultShipping()
+    private function getDefaultShipping(): int
     {
         $customer = $this->getCustomer();
 
-        return $customer->getDefaultShipping();
+        return (int)$customer->getDefaultShipping();
     }
 
     /**
      * Get pager layout
      *
-     * @return void
+     * @return f
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function preparePager()
+    private function preparePager(): void
     {
         $addressCollection = $this->getAddressCollection();
         if (null !== $addressCollection) {
@@ -232,7 +225,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      * @throws NoSuchEntityException
      */
-    private function getAddressCollection()
+    private function getAddressCollection(): \Magento\Customer\Model\ResourceModel\Address\Collection
     {
         if (null === $this->addressCollection && $this->getCustomer()) {
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */

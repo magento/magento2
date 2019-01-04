@@ -93,7 +93,8 @@ class Book extends \Magento\Framework\View\Element\Template
      * Generate and return "New Address" URL
      *
      * @return string
-     * @deprecated not used in this block (new block for additional addresses: \Magento\Customer\Block\Address\Grid
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAddAddressUrl
      */
     public function getAddAddressUrl()
     {
@@ -117,7 +118,8 @@ class Book extends \Magento\Framework\View\Element\Template
      * Generate and return "Delete" URL
      *
      * @return string
-     * @deprecated not used in this block (new block for additional addresses: \Magento\Customer\Block\Address\Grid
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getDeleteUrl
      */
     public function getDeleteUrl()
     {
@@ -131,7 +133,8 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @param int $addressId
      * @return string
-     * @deprecated not used in this block (new block for additional addresses: \Magento\Customer\Block\Address\Grid
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAddressEditUrl
      */
     public function getAddressEditUrl($addressId)
     {
@@ -156,11 +159,16 @@ class Book extends \Magento\Framework\View\Element\Template
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated not used in this block (new block for additional addresses: \Magento\Customer\Block\Address\Grid
+     * @deprecated not used in this block
+     * @see \Magento\Customer\Block\Address\Grid::getAdditionalAddresses
      */
     public function getAdditionalAddresses()
     {
-        return $this->addressesGrid->getAdditionalAddresses();
+        try {
+            $addresses = $this->addressesGrid->getAdditionalAddresses();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        }
+        return empty($addresses) ? false : $addresses;
     }
 
     /**
@@ -182,14 +190,16 @@ class Book extends \Magento\Framework\View\Element\Template
     /**
      * Get current customer
      *
-     * Check if customer is stored in current object and return it
-     * or get customer by current customer ID through repository
-     *
      * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
     public function getCustomer()
     {
-        return $this->addressesGrid->getCustomer();
+        $customer = null;
+        try {
+            $customer = $this->currentCustomer->getCustomer();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        }
+        return $customer;
     }
 
     /**

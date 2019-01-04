@@ -94,7 +94,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function getAdditionalAddressesDataProvider()
     {
-        return ['5' => [5, false]];
+        return ['5' => [5, []]];
     }
 
     /**
@@ -121,43 +121,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $customer = $customerRepository->getById(1);
         $object = $gridBlock->getCustomer();
         $this->assertEquals($customer, $object);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getDefaultBillingDataProvider
-     * @magentoAppIsolation enabled
-     */
-    public function testGetDefaultBilling($customerId, $expected)
-    {
-        $gridBlock = $this->createBlockForCustomer($customerId);
-        $this->assertEquals($expected, $gridBlock->getDefaultBilling());
-    }
-
-    public function getDefaultBillingDataProvider()
-    {
-        return ['1' => [1, 1], '5' => [5, null]];
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getDefaultShippingDataProvider
-     * @magentoAppIsolation enabled
-     */
-    public function testGetDefaultShipping($customerId, $expected)
-    {
-        $gridBlock = $this->createBlockForCustomer($customerId);
-        $this->currentCustomer->setCustomerId($customerId);
-        $this->assertEquals($expected, $gridBlock->getDefaultShipping());
-    }
-
-    public function getDefaultShippingDataProvider()
-    {
-        return ['1' => [1, 1], '5' => [5, null]];
     }
 
     /**
