@@ -38,17 +38,17 @@ class Grid extends \Magento\Framework\View\Element\Template
     private $countryFactory;
 
     /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param AddressCollectionFactory $addressCollectionFactory
      * @param CountryFactory $countryFactory
-     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      */
     public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         AddressCollectionFactory $addressCollectionFactory,
         CountryFactory $countryFactory,
-        \Magento\Framework\View\Element\Template\Context $context,
         array $data = []
     ) {
         $this->currentCustomer = $currentCustomer;
