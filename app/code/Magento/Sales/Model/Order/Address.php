@@ -174,7 +174,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      *
      * @param array|string $key
      * @param array|string $value
-     * @return $this
+     *
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
@@ -251,7 +252,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function getStreetLine($number)
     {
         $lines = $this->getStreet();
-        return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
+        return $lines[$number - 1] ?? '';
     }
 
     //@codeCoverageIgnoreStart
@@ -721,6 +722,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
+     *
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes)
