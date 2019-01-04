@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Model\Plugin;
 
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Model\Metadata\AttributeMetadataCache;
 
 /**
@@ -19,15 +19,15 @@ use Magento\Customer\Model\Metadata\AttributeMetadataCache;
 class AttributeMetadataCacheByAdminRole
 {
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\Magento\Backend\Model\Auth\Session
+     * @var \Magento\Backend\Model\Auth\Session
      */
     private $session;
 
     /**
-     * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Magento\Backend\Model\Auth\Session $session
      */
     public function __construct(
-        SessionManagerInterface $session
+        Session $session
     ) {
         $this->session = $session;
     }
@@ -38,6 +38,7 @@ class AttributeMetadataCacheByAdminRole
      * @param string $suffix
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeLoad(AttributeMetadataCache $subject, $entityType, $suffix = '')
     {
@@ -56,6 +57,7 @@ class AttributeMetadataCacheByAdminRole
      * @param string $suffix
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(AttributeMetadataCache $subject, $entityType, array $attributes, $suffix = '')
     {

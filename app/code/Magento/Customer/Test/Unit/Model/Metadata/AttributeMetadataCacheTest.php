@@ -48,16 +48,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeMetadataCache;
 
-    /**
-     * @var SessionFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $backendAuthSessionFactoryMock;
-
-    /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $backendAuthSessionMock;
-
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -65,19 +55,13 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
         $this->stateMock = $this->createMock(StateInterface::class);
         $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeMetadataHydratorMock = $this->createMock(AttributeMetadataHydrator::class);
-        $this->backendAuthSessionFactoryMock = $this->createPartialMock(
-            SessionFactory::class,
-            ['create']
-        );
-        $this->backendAuthSessionMock = $this->createMock(Session::class);
         $this->attributeMetadataCache = $objectManager->getObject(
             AttributeMetadataCache::class,
             [
                 'cache' => $this->cacheMock,
                 'state' => $this->stateMock,
                 'serializer' => $this->serializerMock,
-                'attributeMetadataHydrator' => $this->attributeMetadataHydratorMock,
-                'backendSession' => $this->backendAuthSessionFactoryMock
+                'attributeMetadataHydrator' => $this->attributeMetadataHydratorMock
             ]
         );
     }
@@ -90,10 +74,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
-        $this->backendAuthSessionFactoryMock->expects($this->never())
-            ->method('create');
-        $this->backendAuthSessionMock->expects($this->never())
-            ->method('isLoggedIn');
         $this->cacheMock->expects($this->never())
             ->method('load');
         $this->assertFalse($this->attributeMetadataCache->load($entityType, $suffix));
@@ -110,12 +90,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
-        $this->backendAuthSessionFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->backendAuthSessionMock));
-        $this->backendAuthSessionMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($cacheKey)
@@ -138,12 +112,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
-        $this->backendAuthSessionFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->backendAuthSessionMock));
-        $this->backendAuthSessionMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($cacheKey)
@@ -182,10 +150,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
-        $this->backendAuthSessionFactoryMock->expects($this->never())
-            ->method('create');
-        $this->backendAuthSessionMock->expects($this->never())
-            ->method('isLoggedIn');
         $this->attributeMetadataCache->save($entityType, $attributes, $suffix);
         $this->assertEquals(
             $attributes,
@@ -207,13 +171,6 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
-
-        $this->backendAuthSessionFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->backendAuthSessionMock));
-        $this->backendAuthSessionMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(false);
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMetadataMock */
         $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
