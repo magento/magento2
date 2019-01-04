@@ -59,7 +59,7 @@ class SaveMultiple
         $bind = $this->getSqlBindData($sourceItems);
 
         $insertSql = sprintf(
-            'INSERT INTO %s (%s) VALUES %s %s',
+            'INSERT INTO `%s` (%s) VALUES %s %s',
             $tableName,
             $columnsSql,
             $valuesSql,
