@@ -53,7 +53,7 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new AuthenticationDataBuilder($this->subjectReaderMock,$this->configMock);
+        $this->builder = new AuthenticationDataBuilder($this->subjectReaderMock, $this->configMock);
     }
 
     /**

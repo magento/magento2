@@ -37,13 +37,15 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $httpClient->expects($this->once())
             ->method('setRawData')
-            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
+            ->with(
+                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
+                'text/xml'
+            )
             ->willReturn([]);
 
         $httpClient->expects($this->once())
             ->method('request')
             ->willReturn($httpResponse);
-
 
         $request = [
             PayloadConverter::PAYLOAD_TYPE => 'doSomeThing',
@@ -98,7 +100,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $httpClient->expects($this->once())
             ->method('setRawData')
-            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
+            ->with(
+                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
+                'text/xml'
+            )
             ->willReturn([]);
 
         $httpClient->expects($this->once())
@@ -154,7 +159,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $httpClient->expects($this->once())
             ->method('setRawData')
-            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
+            ->with(
+                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
+                'text/xml'
+            )
             ->willReturn([]);
 
         $httpClient->expects($this->once())

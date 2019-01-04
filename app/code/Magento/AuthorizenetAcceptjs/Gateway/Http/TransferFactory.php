@@ -10,6 +10,9 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Can create a transfer object
+ */
 class TransferFactory implements TransferFactoryInterface
 {
     /**

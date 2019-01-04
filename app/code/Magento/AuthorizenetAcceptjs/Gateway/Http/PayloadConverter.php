@@ -44,7 +44,9 @@ class PayloadConverter
             return $xml;
         };
 
-        return '<' . $requestType . ' xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">' . $convertFields($data) . '</' . $requestType . '>';
+        return '<' . $requestType . ' xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">'
+            . $convertFields($data)
+            . '</' . $requestType . '>';
     }
 
     /**
@@ -61,7 +63,7 @@ class PayloadConverter
         }
 
         try {
-            $xml = simplexml_load_string($xml,\SimpleXMLElement::class, \LIBXML_NOWARNING);
+            $xml = simplexml_load_string($xml, \SimpleXMLElement::class, \LIBXML_NOWARNING);
         } catch (\Exception $e) {
             throw new RuntimeException(__('Invalid payload type.'));
         }
@@ -74,8 +76,7 @@ class PayloadConverter
                     foreach ($node as $subnode) {
                         $out[$index][] = (is_object($subnode) ? $convertChildren($subnode) : $subnode);
                     }
-                }
-                else {
+                } else {
                     $out[$index] = (is_object($node)) ? $convertChildren($node) : $node;
                 }
             }

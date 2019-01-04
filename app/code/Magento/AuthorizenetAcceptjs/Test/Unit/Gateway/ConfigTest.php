@@ -31,10 +31,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            Config::class, [
-            'scopeConfig' => $this->scopeConfigMock,
-            'methodCode' => self::METHOD_CODE,
-        ]);
+            Config::class,
+            [
+                'scopeConfig' => $this->scopeConfigMock,
+                'methodCode' => self::METHOD_CODE,
+            ]
+        );
     }
 
     public function testGetApiUrl()
