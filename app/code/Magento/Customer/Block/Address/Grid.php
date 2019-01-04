@@ -227,14 +227,15 @@ class Grid extends \Magento\Framework\View\Element\Template
      */
     private function getAddressCollection(): \Magento\Customer\Model\ResourceModel\Address\Collection
     {
-        if (null === $this->addressCollection && $this->getCustomer()) {
+        if (null === $this->addressCollection) {
+            if (null === $this->getCustomer()) {
+                throw new NoSuchEntityException(__('Customer not logged in'));
+            }
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressCollectionFactory->create();
             $collection->setOrder('entity_id', 'desc')
                 ->setCustomerFilter([$this->getCustomer()->getId()]);
             $this->addressCollection = $collection;
-        } elseif (null === $this->getCustomer()) {
-            throw new NoSuchEntityException(__('Customer not logged in'));
         }
         return $this->addressCollection;
     }
