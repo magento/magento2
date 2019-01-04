@@ -203,6 +203,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer's default billing address
+     *
      * @return int|null
      */
     public function getDefaultBilling()
@@ -232,6 +234,8 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer's default shipping address
+     *
      * @return int|null
      */
     public function getDefaultShipping()

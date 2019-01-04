@@ -12,6 +12,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer address grid
+ *
+ * @api
  */
 class Grid extends \Magento\Framework\View\Element\Template
 {
@@ -169,9 +171,9 @@ class Grid extends \Magento\Framework\View\Element\Template
         return $country->loadByCode($countryCode)->getName();
     }
 
-
     /**
      * Get default billing address
+     *
      * Return address string if address found and null of not
      *
      * @return int
@@ -184,9 +186,9 @@ class Grid extends \Magento\Framework\View\Element\Template
         return (int)$customer->getDefaultBilling();
     }
 
-
     /**
      * Get default shipping address
+     *
      * Return address string if address found and null of not
      *
      * @return int
@@ -202,7 +204,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Get pager layout
      *
-     * @return f
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function preparePager(): void

@@ -9,6 +9,7 @@ use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 
 /**
  * Unit tests for \Magento\Customer\Block\Address\Grid class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GridTest extends \PHPUnit\Framework\TestCase
 {
