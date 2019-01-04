@@ -247,8 +247,8 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
         $emailArgs = ['email' => null];
 
         $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->exactly(2))->method('getId')->willReturn($quoteId);
+            ->method('getQuoteId')->willReturn($quoteId);
+        $this->quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setIsActive')->with(true)->willReturn($this->quoteMock);
@@ -288,18 +288,15 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
     public function testConvertCustomerCartToGuestWithEmptyQuote()
     {
         $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn(null);
+            ->method('getQuoteId')->willReturn(null);
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with(null)->willReturn(null);
-
         $this->model->convertCustomerCartToGuest();
     }
 
     public function testConvertCustomerCartToGuestWithEmptyQuoteId()
     {
         $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuote')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);
+            ->method('getQuoteId')->willReturn(1);
         $quoteWithNoId = $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteWithNoId->expects($this->once())->method('getId')->willReturn(null);
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
