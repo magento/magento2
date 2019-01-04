@@ -37,11 +37,7 @@ class NewRelicWrapper
     public function reportError($exception)
     {
         if (extension_loaded('newrelic')) {
-            if ($exception instanceof \Zend_Db_Statement_Exception || $exception instanceof \PDOException) {
-                newrelic_notice_error($exception->getMessage());
-            } else {
-                newrelic_notice_error($exception->getMessage(), $exception);
-            }
+            newrelic_notice_error($exception->getMessage(), $exception);
         }
     }
 

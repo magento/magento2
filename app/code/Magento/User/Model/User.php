@@ -7,7 +7,6 @@
 namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
-use Magento\Checkout\Exception;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
@@ -630,18 +629,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function login($username, $password)
     {
         if ($this->authenticate($username, $password)) {
-            try {
-                $this->getResource()->recordLogin($this);
-            } catch (\Exception $exception) {
-                if ($exception instanceof \Zend_Db_Statement_Exception
-                    || $exception instanceof \PDOException) {
-                    $this->_logger->critical($exception);
-
-                    throw new \Exception($exception->getMessage());
-                }
-            }
+            $this->getResource()->recordLogin($this);
         }
-
         return $this;
     }
 
