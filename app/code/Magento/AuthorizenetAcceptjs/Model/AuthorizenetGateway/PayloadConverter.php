@@ -44,7 +44,7 @@ class PayloadConverter
             return $xml;
         };
 
-        return '<' . $requestType . '>' . $convertFields($data) . '</' . $requestType . '>';
+        return '<' . $requestType . ' xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">' . $convertFields($data) . '</' . $requestType . '>';
     }
 
     /**
@@ -61,14 +61,23 @@ class PayloadConverter
         }
 
         try {
-            $xml = new \SimpleXMLElement($xml);
+            $xml = simplexml_load_string($xml,\SimpleXMLElement::class, \LIBXML_NOWARNING);
         } catch (\Exception $e) {
             throw new RuntimeException(__('Invalid payload type.'));
         }
 
         $convertChildren = function ($xmlObject, $out = []) use (&$convertChildren) {
-            foreach ((array) $xmlObject as $index => $node) {
-                $out[$index] = (is_object($node)) ? $convertChildren($node) : $node;
+            foreach ((array)$xmlObject as $index => $node) {
+                if (is_array($node)) {
+                    $out[$index] = [];
+
+                    foreach ($node as $subnode) {
+                        $out[$index][] = (is_object($subnode) ? $convertChildren($subnode) : $subnode);
+                    }
+                }
+                else {
+                    $out[$index] = (is_object($node)) ? $convertChildren($node) : $node;
+                }
             }
 
             return $out;

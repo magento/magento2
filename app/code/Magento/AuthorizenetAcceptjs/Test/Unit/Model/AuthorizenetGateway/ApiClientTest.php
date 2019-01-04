@@ -30,8 +30,8 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
         $httpClient->expects($this->once())
-            ->method('setParameterPost')
-            ->with('<doSomeThing><foobar>baz</foobar></doSomeThing>')
+            ->method('setRawData')
+            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
             ->willReturn([]);
 
         $httpClient->expects($this->once())
@@ -79,8 +79,8 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
         $httpClient->expects($this->once())
-            ->method('setParameterPost')
-            ->with('<doSomeThing><foobar>baz</foobar></doSomeThing>')
+            ->method('setRawData')
+            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
             ->willReturn([]);
 
         $httpClient->expects($this->once())
@@ -125,8 +125,8 @@ class ApiClientTest extends \PHPUnit\Framework\TestCase
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
         $httpClient->expects($this->once())
-            ->method('setParameterPost')
-            ->with('<doSomeThing><foobar>baz</foobar></doSomeThing>')
+            ->method('setRawData')
+            ->with('<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>', 'text/xml')
             ->willReturn([]);
 
         $httpClient->expects($this->once())

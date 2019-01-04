@@ -66,7 +66,7 @@ class ApiClient
         $client->setUri($url);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
 
-        $client->setParameterPost($this->payloadConverter->convertArrayToXml($request));
+        $client->setRawData($this->payloadConverter->convertArrayToXml($request), 'text/xml');
         $client->setMethod(\Zend_Http_Client::POST);
 
         try {
