@@ -15,8 +15,6 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\Model\Auth\SessionFactory;
-use Magento\Backend\Model\Auth\Session;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
