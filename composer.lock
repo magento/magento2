@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9603f6f68dc6d6cc1ca6b6be242da74",
+    "content-hash": "2fd90a780b9d54a8f73f0554a4b5df98",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -5972,16 +5972,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.3.6",
+            "version": "2.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "57021e12ded213a0031c4d4f6293e06ce6f144ce"
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/57021e12ded213a0031c4d4f6293e06ce6f144ce",
-                "reference": "57021e12ded213a0031c4d4f6293e06ce6f144ce",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/3ca1bd74228a61bd05520bed1ef88b5a19764d92",
+                "reference": "3ca1bd74228a61bd05520bed1ef88b5a19764d92",
                 "shasum": ""
             },
             "require": {
@@ -6039,7 +6039,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-09-05T15:17:20+00:00"
+            "time": "2018-11-13T18:22:25+00:00"
         },
         {
             "name": "moontoast/math",

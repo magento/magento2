@@ -10,5 +10,7 @@
     <page name="ProductAttributePage" url="catalog/product_attribute/new/" area="admin" module="Magento_Catalog">
         <section name="AttributePropertiesSection"/>
         <section name="StorefrontPropertiesSection"/>
+        <section name="AdvancedAttributePropertiesSection"/>
+        <section name="AdminAttributeOptionsSection"/>
     </page>
 </pages>

@@ -123,7 +123,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             [
                 'header' => __('Orders'),
                 'index' => 'orders_count',
-                'total' => 'sum',
                 'type' => 'number',
                 'sortable' => false,
                 'header_css_class' => 'col-qty',

@@ -7,8 +7,13 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontPanelHeaderSection">
         <element name="createAnAccountLink" type="select" selector=".panel.header li:nth-child(3)"/>
+        <element name="customerWelcome" type="text" selector=".panel.header .customer-welcome"/>
+        <element name="customerWelcomeMenu" type="text" selector=".panel.header .customer-welcome .customer-menu"/>
+        <element name="customerLogoutLink" type="text" selector=".panel.header .customer-welcome .customer-menu .authorization-link a" timeout="30"/>
+        <element name="welcomeMessage" type="text" selector=".greet.welcome span"/>
+        <element name="notYouLink" type="button" selector=".greet.welcome span a"/>
     </section>
 </sections>

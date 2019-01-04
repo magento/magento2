@@ -667,10 +667,9 @@ define([
         /**
          * Load media gallery using ajax or json config.
          *
-         * @param {String|undefined} eventName
          * @private
          */
-        _loadMedia: function (eventName) {
+        _loadMedia: function () {
             var $main = this.inProductList ?
                     this.element.parents('.product-item-info') :
                     this.element.parents('.column.main'),
@@ -685,8 +684,19 @@ define([
                     images = this.options.mediaGalleryInitial;
                 }
 
-                this.updateBaseImage(images, $main, !this.inProductList, eventName);
+                this.updateBaseImage(this._sortImages(images), $main, !this.inProductList);
             }
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -974,19 +984,63 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this;
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct, optionPrices, basePrice, optionFinalPrice;
 
             if (_.isEmpty(newPrices)) {
-                newPrices = $widget.options.jsonConfig.prices;
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
+                optionPrices = this.options.jsonConfig.optionPrices;
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
+
+                if (!_.isEmpty(allowedProduct)) {
+                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                    optionPriceDiff = optionFinalPrice - basePrice;
+                }
+
+                if (optionPriceDiff !== 0) {
+                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+                } else {
+                    newPrices = $widget.options.jsonConfig.prices;
+                }
             }
 
             _.each(displayPrices, function (price, code) {
+
                 if (newPrices[code]) {
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
 
             return displayPrices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.jsonConfig.optionPrices,
+                product = {},
+                optionFinalPrice, optionMinPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product)) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+
+                if (optionFinalPrice < optionMinPrice) {
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**
@@ -1208,9 +1262,6 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
-                gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

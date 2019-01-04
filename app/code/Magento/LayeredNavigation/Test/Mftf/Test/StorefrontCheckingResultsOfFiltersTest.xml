@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckingResultsOfFiltersTest">
+        <annotations>
+            <features value="LayerNavigation"/>
+            <group value="layernavigation"/>
+            <stories value="MAGETWO-85162: Results of filters with color and other filters are not showing product results"/>
+            <title value="Checking results of filters: color and other filters"/>
+            <description value="Checking results of filters: color and other filters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96032"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete attribute color options-->
+            <actionGroup ref="navigateToProductAttributeByCode" stepKey="navigateToProductAttributeByNameColor">
+                <argument name="attributeCode" value="color"/>
+            </actionGroup>
+
+            <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('Red')}}" stepKey="deleteOption1"/>
+            <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('Green')}}" stepKey="deleteOption2"/>
+            <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('Blue')}}" stepKey="deleteOption3"/>
+            <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('White')}}" stepKey="deleteOption4"/>
+            <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('Black')}}" stepKey="deleteOption5"/>
+
+            <!--Save attribute-->
+            <actionGroup ref="SaveProductAttribute" stepKey="clickSaveColorAttribute"/>
+
+            <!--Delete Category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete all created products (including virtual) -->
+            <actionGroup ref="DeleteAllProductsOnProductsGridPageFilteredByName" stepKey="deleteAllCreatedProducts">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+
+            <!-- Delete created product attribute -->
+            <actionGroup ref="DeleteProductAttribute" stepKey="deleteCreatedProductAttribute">
+                <argument name="productAttribute" value="ProductAttributeFrontendLabel"/>
+            </actionGroup>
+
+            <!-- Delete the new attribute set -->
+            <actionGroup ref="DeleteAttributeSetActionGroup" stepKey="deleteAttributeSet">
+                <argument name="name" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Go to the edit page for the "color" attribute-->
+        <actionGroup ref="navigateToProductAttributeByCode" stepKey="navigateToProductAttributeByName">
+            <argument name="attributeCode" value="color"/>
+        </actionGroup>
+
+        <!--Add option 1 to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption1"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('1')}}" time="30" stepKey="waitForOptionRow1"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('0')}}" userInput="{{colorProductAttribute1.name}}" stepKey="fillAdminLabel1"/>
+        <!--Add option 2 to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('2')}}" time="30" stepKey="waitForOptionRow2"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('1')}}" userInput="{{colorProductAttribute2.name}}" stepKey="fillAdminLabel2"/>
+        <!--Add option 3 to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption3"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('3')}}" time="30" stepKey="waitForOptionRow3"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('2')}}" userInput="{{colorProductAttribute3.name}}" stepKey="fillAdminLabel3"/>
+        <!--Add option 4 to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption4"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('4')}}" time="30" stepKey="waitForOptionRow4"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('3')}}" userInput="{{ColorProductAttribute4.name}}" stepKey="fillAdminLabel4"/>
+        <!--Add option 5 to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption5"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('5')}}" time="30" stepKey="waitForOptionRow5"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('4')}}" userInput="{{ColorProductAttribute5.name}}" stepKey="fillAdminLabel5"/>
+        <!--Save attribute-->
+        <actionGroup ref="SaveProductAttribute" stepKey="clickSaveAttribute"/>
+
+        <!--Create 'material' attribute:-->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.defaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="multiselect" stepKey="selectInputType"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="waitForElementVisible"/>
+
+        <!--Add 'cotton' option to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption6"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('1')}}" time="30" stepKey="waitForOptionRow6"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('0')}}" userInput="cotton" stepKey="fillAdminLabel6"/>
+        <!--Add 'fabric' option to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption7"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('2')}}" time="30" stepKey="waitForOptionRow7"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('1')}}" userInput="fabric" stepKey="fillAdminLabel7"/>
+        <!--Add 'jeans' option to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption8"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('3')}}" time="30" stepKey="waitForOptionRow8"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('2')}}" userInput="jeans" stepKey="fillAdminLabel8"/>
+        <!--Add 'synthetic' option to attribute-->
+        <click selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="clickAddOption9"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('4')}}" time="30" stepKey="waitForOptionRow9"/>
+        <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('3')}}" userInput="synthetic" stepKey="fillAdminLabel9"/>
+
+        <!-- Set scope -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.scope}}" userInput="1" stepKey="selectGlobalScope"/>
+
+        <!-- Set Use In Layered Navigation -->
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <click selector="{{StorefrontPropertiesSection.storefrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+
+        <!--Save attribute-->
+        <actionGroup ref="SaveProductAttribute" stepKey="clickSaveNewAttribute"/>
+        <click selector="{{AdminUserGridSection.resetButton}}" stepKey="clickResetButton"/>
+
+        <!--Create attribute set-->
+        <actionGroup ref="CreateAttributeSet" stepKey="attribute">
+            <argument name="attributeSetName" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+
+        <!-- Assign attribute to a group -->
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroupColor">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="ColorAttributeFrontandLabel.label"/>
+        </actionGroup>
+
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="ProductAttributeFrontendLabel.label"/>
+        </actionGroup>
+
+        <!-- Save attribute set -->
+        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+
+        <!--Create First Configurable product-->
+        <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct1">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
+            <argument name="customAttributeOptionNameFrom" value="cotton"/>
+            <argument name="customAttributeOptionNameTill" value="synthetic"/>
+            <argument name="excludedOption" value="ColorProductAttribute5"/>
+            <argument name="configurableAttributeCode" value="color"/>
+            <argument name="configurationsPrice" value="34"/>
+            <argument name="configurationsQty" value="100"/>
+        </actionGroup>
+
+        <!--Create Second Configurable product-->
+        <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct2">
+            <argument name="product" value="SimpleProduct2"/>
+            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
+            <argument name="customAttributeOptionNameFrom" value="cotton"/>
+            <argument name="customAttributeOptionNameTill" value="jeans"/>
+            <argument name="excludedOption" value="ColorProductAttribute5"/>
+            <argument name="configurableAttributeCode" value="color"/>
+            <argument name="configurationsPrice" value="43"/>
+            <argument name="configurationsQty" value="1111"/>
+        </actionGroup>
+
+        <!--Edit Third Configurable product-->
+        <actionGroup ref="AdminCreateConfigurableProductExcludeOptionActionGroup" stepKey="createConfigurableProduct3">
+            <argument name="product" value="SimpleProduct3"/>
+            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="attributeSet" value="ProductAttributeFrontendLabel"/>
+            <argument name="customAttributeOptionNameFrom" value="fabric"/>
+            <argument name="customAttributeOptionNameTill" value="synthetic"/>
+            <argument name="excludedOption" value="ColorProductAttribute5"/>
+            <argument name="configurableAttributeCode" value="color"/>
+            <argument name="configurationsPrice" value="55"/>
+            <argument name="configurationsQty" value="222"/>
+        </actionGroup>
+
+        <!--Open Simple Product-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!--Apply Attribute Set for product-->
+        <actionGroup ref="AssignProductToAttributeSet" stepKey="assignProductToAttributeSet4">
+            <argument name="attributeSetName" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(ProductAttributeFrontendLabel.label)}}" stepKey="selectAttrSetProdSimple"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedProductForProductSimple"/>
+        <waitForPageLoad stepKey="waitForFirstProductSavedSimple"/>
+        <selectOption userInput="cotton" selector="{{AdminNewAttributePanelSection.attributeSelect(ProductAttributeFrontendLabel.label)}}" stepKey="selectMaterialSimple"/>
+        <dragAndDrop selector1="{{AdminNewAttributePanelSection.attributeName('cotton')}}" selector2="{{AdminNewAttributePanelSection.attributeName('fabric')}}" stepKey="selectMaterialsSimple"/>
+
+        <!-- Save the product -->
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+
+        <!--Clear caches-->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!--Open a category on storefront-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+
+        <!--Choose COLOR filter - green. Make sure that Products with green color are shown.-->
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('Color')}}" stepKey="expandAttribute"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterByName(ColorProductAttribute4.name)}}" stepKey="clickGreenToFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFiltering"/>
+        <see userInput="{{_defaultProduct.name}}" stepKey="seeFirstProduct"/>
+        <see userInput="{{SimpleProduct2.name}}" stepKey="seeSecondProduct"/>
+        <see userInput="{{SimpleProduct3.name}}" stepKey="seeThirdProduct"/>
+        <dontSee userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProduct"/>
+
+        <!--Add cotton filter. Make sure Products are shown and filtered correctly. Only product2 and product3 are shown-->
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandCreatedAttribute"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterByName('cotton')}}" stepKey="waitForAttributeElementVisible"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterByName('cotton')}}" stepKey="filterByCotton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFilteringByCotton"/>
+        <see userInput="{{_defaultProduct.name}}" stepKey="seeFirstProductCotton"/>
+        <see userInput="{{SimpleProduct2.name}}" stepKey="seeSecondProductCotton"/>
+        <dontSee userInput="{{SimpleProduct3.name}}" stepKey="dontSeeThirdProductCotton"/>
+        <dontSee userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProductCotton"/>
+    </test>
+</tests>

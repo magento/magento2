@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminInvoiceItemsSection">
+        <element name="itemQty" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-qty .qty-table" parameterized="true"/>
+        <element name="itemQtyToInvoice" type="input" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-qty-invoice .qty-input" parameterized="true"/>
+        <element name="updateQty" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button']"/>
+        <element name="updateQtyEnabled" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button'][class='action-default scalable update-button']"/>
+        <element name="productColumn" type="text" selector="//*[contains(@class,'order-invoice-tables')]//td[@class = 'col-product']//div[contains(text(),'{{productName}}')]" parameterized="true"/>
+    </section>
+</sections>
