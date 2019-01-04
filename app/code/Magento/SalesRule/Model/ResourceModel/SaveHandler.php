@@ -36,11 +36,14 @@ class SaveHandler implements AttributeInterface
     }
 
     /**
+     * Save handler
+     *
      * @param string $entityType
      * @param array $entityData
      * @param array $arguments
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {

@@ -49,6 +49,8 @@ class CartFixed extends AbstractDiscount
     }
 
     /**
+     * Fixed discount for cart calculation
+     *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty

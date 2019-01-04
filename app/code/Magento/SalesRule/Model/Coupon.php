@@ -190,6 +190,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set Times Used
+     *
      * @param int $timesUsed
      * @return $this
      */
@@ -273,6 +275,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set type
+     *
      * @param int $type
      * @return $this
      */

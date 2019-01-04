@@ -270,6 +270,8 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     }
 
     /**
+     * Set Is Advanced
+     *
      * @param bool $isAdvanced
      * @return $this
      */
@@ -373,6 +375,8 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     }
 
     /**
+     * Set Sort Order
+     *
      * @param int $sortOrder
      * @return $this
      */
@@ -616,7 +620,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
      */
@@ -626,7 +630,7 @@ class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements Ru
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this

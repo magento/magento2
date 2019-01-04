@@ -12,6 +12,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class PrepareRuleModelSerializedData
+ *
  * @package Magento\SalesRule\Setup\Patch
  */
 class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersionInterface
@@ -32,7 +33,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -58,7 +59,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -66,7 +67,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -74,7 +75,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

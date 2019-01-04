@@ -74,6 +74,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getConfigDataJson()
     {

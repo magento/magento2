@@ -366,6 +366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @inheritdoc
+     *
      * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
      */
     public function isShippingLabelsAvailable()
@@ -1167,6 +1168,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Return USPS county name by country ISO 3166-1-alpha-2 code
+     *
      * Return false for unknown countries
      *
      * @param string $countryId

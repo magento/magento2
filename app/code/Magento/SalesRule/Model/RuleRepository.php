@@ -106,7 +106,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule)
     {
@@ -118,7 +118,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -135,7 +135,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
