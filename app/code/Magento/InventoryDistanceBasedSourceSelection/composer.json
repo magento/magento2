@@ -6,7 +6,10 @@
         "magento/framework": "*",
         "magento/module-inventory-distance-based-source-selection-api": "*",
         "magento/module-inventory-source-selection-api": "*",
-        "magento/module-inventory-api": "*"
+        "magento/module-inventory-source-selection": "*",
+        "magento/module-inventory-api": "*",
+        "magento/module-config": "*",
+        "magento/module-sales": "*"
     },
     "type": "magento2-module",
     "license": [
