@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
+
 namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,6 +14,9 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
+/**
+ * Implementation of the lock manager on the basis of MySQL.
+ */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /** @var ResourceConnection */
@@ -53,6 +56,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @return bool
      * @throws InputException
      * @throws AlreadyExistsException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function lock(string $name, int $timeout = -1): bool
     {
@@ -69,7 +73,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if ($this->currentLock) {
             throw new AlreadyExistsException(
                 new Phrase(
-                    'Current connection is already holding lock for $1, only single lock allowed',
+                    'Current connection is already holding lock for %1, only single lock allowed',
                     [$this->currentLock]
                 )
             );
@@ -93,6 +97,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function unlock(string $name): bool
     {
@@ -119,6 +124,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      * @throws InputException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function isLocked(string $name): bool
     {

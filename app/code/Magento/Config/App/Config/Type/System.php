@@ -210,30 +210,38 @@ class System implements ConfigTypeInterface
      * Make lock on data load.
      *
      * @param callable $dataLoader
+     * @param bool $flush
      * @return array
      */
-    private function lockedLoadData(callable $dataLoader): array
+    private function lockedLoadData(callable $dataLoader, bool $flush = false): array
     {
         $cachedData = $dataLoader(); //optimistic read
 
         while ($cachedData === false && $this->locker->isLocked(self::$lockName)) {
-            usleep(200);
+            usleep(200000);
             $cachedData = $dataLoader();
         }
 
         while ($cachedData === false) {
             try {
-                if ($this->locker->lock(self::$lockName, 8)) {
-                    $data = $this->readData();
-                    $this->cacheData($data);
-                    return $data;
+                if ($this->locker->lock(self::$lockName, 60)) {
+                    if (!$flush) {
+                        $data = $this->readData();
+                        $this->cacheData($data);
+                        $cachedData = $data;
+                    } else {
+                        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+                        $cachedData = [];
+                    }
                 }
             } finally {
                 $this->locker->unlock(self::$lockName);
             }
 
-            usleep(200);
-            $cachedData = $dataLoader() ?: [];
+            if ($cachedData === false) {
+                usleep(200000);
+                $cachedData = $dataLoader();
+            }
         }
 
         return $cachedData;
@@ -386,8 +394,11 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
-        $this->lockedLoadData(function () {
-            return false;
-        });
+        $this->lockedLoadData(
+            function () {
+                return false;
+            },
+            true
+        );
     }
 }
