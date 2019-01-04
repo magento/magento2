@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Model\AuthorizenetGateway;
+namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\Framework\Exception\RuntimeException;
 

@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Model\AuthorizenetGateway;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
-use Magento\AuthorizenetAcceptjs\Model\AuthorizenetGateway\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
 
 class PayloadConverterTest extends \PHPUnit\Framework\TestCase
 {
