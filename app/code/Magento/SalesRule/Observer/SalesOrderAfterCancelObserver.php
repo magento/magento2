@@ -137,7 +137,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
             $this->couponRepository->save($coupon);
 
             $couponId = $coupon->getCouponId();
-            $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $couponId, -1);
+            $this->couponUsage->decrementCustomerCouponTimesUsed($customerId, $couponId);
 
             /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
             $ruleCustomer = $this->customerFactory->create();

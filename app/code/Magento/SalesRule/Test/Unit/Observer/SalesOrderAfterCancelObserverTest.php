@@ -151,7 +151,7 @@ class SalesOrderAfterCancelObserverTest extends \PHPUnit\Framework\TestCase
                 'getId',
                 'setTimesUsed',
                 'getTimesUsed',
-                'updateCustomerCouponTimesUsed',
+                'decrementCustomerCouponTimesUsed',
 
             ]
         );
@@ -258,7 +258,7 @@ class SalesOrderAfterCancelObserverTest extends \PHPUnit\Framework\TestCase
                 'getTimesUsed',
                 'getRuleId',
                 'loadByCode',
-                'updateCustomerCouponTimesUsed'
+                'decrementCustomerCouponTimesUsed'
             ]
         );
         $this->couponRepository = $this->createMock(CouponRepository::class);
