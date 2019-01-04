@@ -41,15 +41,18 @@ define([
 
             // Set up a payment
             payment: function (data, actions) {
-                return new paypal.Promise(function (resolve, reject) {
-                    var customConfig = {
-                        'quote_id': clientConfig.quoteId,
-                        'customer_id': clientConfig.customerId,
-                        'button': clientConfig.button
-                    };
-                    $.post(clientConfig.startUrl, customConfig, function (data) {
-                        resolve(data.token);
-                    });
+                var params = {
+                    quote_id: clientConfig.quoteId,
+                    customer_id: clientConfig.customerId || "",
+                    button: clientConfig.button,
+                    form_key: clientConfig.formKey
+                }
+                return paypal.request.post(clientConfig.startUrl, params)
+                    .then(function (res) {
+                        //add logic to process negative cases
+                        // 3. Return res.id from the response
+                        return res.token;
+
                 });
             },
             // Execute the payment
