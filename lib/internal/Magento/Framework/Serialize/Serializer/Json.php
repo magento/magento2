@@ -16,7 +16,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Json implements SerializerInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * @since 100.2.0
      */
     public function serialize($data)
@@ -29,7 +29,7 @@ class Json implements SerializerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * @since 100.2.0
      */
     public function unserialize($string)
