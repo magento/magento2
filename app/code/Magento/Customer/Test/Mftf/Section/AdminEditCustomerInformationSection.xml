@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditCustomerInformationSection">
         <element name="orders" type="button" selector="#tab_orders_content" timeout="30"/>
+        <element name="addresses" type="button" selector="//a[@id='tab_address']" timeout="30"/>
     </section>
 </sections>
