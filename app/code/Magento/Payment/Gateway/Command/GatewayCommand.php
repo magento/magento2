@@ -89,7 +89,7 @@ class GatewayCommand implements CommandInterface
 
     /**
      * Executes command basing on business object
-     *
+     *““
      * @param array $commandSubject
      * @return void
      * @throws CommandException
