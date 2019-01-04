@@ -150,8 +150,8 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
      * self::TOPIC_PREFIX + Magento\Catalog\Api\ProductRepositoryInterface + save + POST
      *   => async.magento.catalog.api.productrepositoryinterface.save.POST
      *
-     * @param string $serviceMethod
      * @param string $serviceInterface
+     * @param string $serviceMethod
      * @param string $httpMethod
      * @return string
      */

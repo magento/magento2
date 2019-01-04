@@ -128,7 +128,10 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         }
         $this->clearProducts();
 
-        $result = $this->massSchedule->publishMass('async.magento.catalog.api.productrepositoryinterface.save.post', $products);
+        $result = $this->massSchedule->publishMass(
+            'async.magento.catalog.api.productrepositoryinterface.save.post',
+            $products
+        );
 
         //assert bulk accepted with no errors
         $this->assertFalse($result->isErrors());

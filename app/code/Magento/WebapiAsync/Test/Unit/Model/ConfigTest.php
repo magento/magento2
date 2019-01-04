@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 '/V1/products' => [
                     'POST' => [
                         'service' => [
-                            'class' => 'Magento\Catalog\Api\ProductRepositoryInterface',
+                            'class' => \Magento\Catalog\Api\ProductRepositoryInterface::class,
                             'method' => 'save',
                         ]
                     ]
@@ -87,4 +87,5 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $lookupKey = 'async.V1.products.POST';
         $this->assertArrayHasKey($lookupKey, $result);
         $this->assertEquals($result[$lookupKey]['topic'], $expectedTopic);
-    }}
+    }
+}
