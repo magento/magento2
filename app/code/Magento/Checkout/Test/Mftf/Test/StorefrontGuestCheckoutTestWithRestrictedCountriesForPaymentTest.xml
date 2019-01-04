@@ -23,14 +23,14 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="setAllowSpecificCountiesValue" />
-            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="setSpecificCountryValue" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific" arguments="1" stepKey="setAllowSpecificCountiesValue" />
+            <magentoCLI command="config:set payment/checkmo/specificcountry" arguments="GB" stepKey="setSpecificCountryValue" />
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="unsetAllowSpecificCountiesValue"/>
-            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="unsetSpecificCountryValue" />
+            <magentoCLI command="config:set payment/checkmo/allowspecific" arguments="0" stepKey="unsetAllowSpecificCountiesValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry" arguments="''" stepKey="unsetSpecificCountryValue" />
         </after>
 
         <!-- Add product to cart -->
@@ -62,7 +62,7 @@
             <argument name="shippingMethod" value="Flat Rate" type="string"/>
         </actionGroup>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
-        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="questPlaceOrder">
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
