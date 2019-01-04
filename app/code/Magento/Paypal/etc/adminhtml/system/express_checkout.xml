@@ -158,7 +158,20 @@
                 </depends>
                 <validate>required-entry</validate>
             </field>
-            <field id="express_checkout_bml_sort_order" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="0" showInWebsite="0">
+                <label>Enable PayPal Credit</label>
+                <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
+                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
+                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                </comment>
+                <config_path>payment/paypal_express_bml/active</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\BmlApi</frontend_model>
+                <requires>
+                    <field id="enable_express_checkout"/>
+                </requires>
+            </field>
+            <field id="express_checkout_bml_sort_order" translate="label" type="text" sortOrder="25" showInDefault="0" showInWebsite="0" showInStore="0">
                 <label>Sort Order PayPal Credit</label>
                 <config_path>payment/paypal_express_bml/sort_order</config_path>
                 <frontend_class>validate-number</frontend_class>

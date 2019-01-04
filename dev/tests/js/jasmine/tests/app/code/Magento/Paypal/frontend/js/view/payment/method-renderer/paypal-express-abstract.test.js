@@ -65,7 +65,7 @@ define([
                         name: 'test',
                         index: 'test',
                         item: {
-                            method: 'paypal_express_bml'
+                            method: 'payflow_express_bml'
                         }
                     });
 

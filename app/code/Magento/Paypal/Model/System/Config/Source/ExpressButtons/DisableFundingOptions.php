@@ -15,9 +15,18 @@ class DisableFundingOptions
     public function toOptionArray(): array
     {
         return [
-            ['value' => 'paypal.FUNDING.CREDIT', 'label' => 'PayPal Credit'],
-            ['value' => 'paypal.FUNDING.CARD', 'label' => 'PayPal Guest Checkout Credit Card Icons'],
-            ['value' => 'paypal.FUNDING.ELV', 'label' => 'Elektronisches Lastschriftverfahren - German ELV']
+            [
+                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT,
+                'label' => 'PayPal Credit'
+            ],
+            [
+                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CARD,
+                'label' => 'PayPal Guest Checkout Credit Card Icons'
+            ],
+            [
+                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_ELV,
+                'label' => 'Elektronisches Lastschriftverfahren - German ELV'
+            ]
         ];
     }
 }

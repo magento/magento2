@@ -50,6 +50,14 @@ class Checkout
     const PAYMENT_INFO_BUTTON = 'button';
 
     /**
+     * When multiple funding sources are available to the buyer, PayPal automatically determines which additional
+     * buttons are appropriate to display. It is available opt of displaying specific funding sources
+     */
+    const PAYPAL_FUNDING_CREDIT = 'CREDIT';
+    const PAYPAL_FUNDING_CARD = 'CARD';
+    const PAYPAL_FUNDING_ELV = 'ELV';
+
+    /**
      * @var \Magento\Quote\Model\Quote
      */
     protected $_quote;
