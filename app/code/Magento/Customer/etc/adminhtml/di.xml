@@ -23,9 +23,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Model\Metadata\AttributeMetadataCache">
+    <type name="Magento\Customer\Model\Plugin\AttributeMetadataCacheByAdminRole">
         <arguments>
-            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Auth\SessionFactory</argument>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Auth\Session</argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Metadata\AttributeMetadataCache">
+        <plugin name="backend_attribute_metadatacache_by_admin_roleid"
+                type="Magento\Customer\Model\Plugin\AttributeMetadataCacheByAdminRole" sortOrder="1" />
     </type>
 </config>
