@@ -10,6 +10,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Plugin;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryDistanceBasedSourceSelection\Model\DistanceProvider\GetLatLngFromSource;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetLatLngFromSourceInterface;
 
 /**
@@ -18,18 +19,18 @@ use Magento\InventoryDistanceBasedSourceSelectionApi\Model\GetLatLngFromSourceIn
 class FillSourceLatitudeAndLongitude
 {
     /**
-     * @var GetLatLngFromSourceInterface
+     * @var GetLatLngFromSource
      */
     private $getLatLngFromSource;
 
     /**
      * ComputeSourceLatitudeAndLongitude constructor.
      *
-     * @param GetLatLngFromSourceInterface $getLatLngFromSource
+     * @param GetLatLngFromSource $getLatLngFromSource
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
-        GetLatLngFromSourceInterface $getLatLngFromSource
+        GetLatLngFromSource $getLatLngFromSource
     ) {
         $this->getLatLngFromSource = $getLatLngFromSource;
     }
