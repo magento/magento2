@@ -16,5 +16,5 @@ define([
 
         blockLoader(config.loaderFile);
         url.setBaseUrl(config.baseUrl);
-    }
+    };
 });
