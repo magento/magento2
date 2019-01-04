@@ -79,8 +79,12 @@
 
         <!--Verify New addresses in Customer's Address Book-->
         <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToCustomerAddressBook"/>
-        <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
-             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddresses"/>
+        <see userInput="{{UK_Not_Default_Address.street[0]}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesStreet"/>
+        <see userInput="{{UK_Not_Default_Address.city}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesCity"/>
+        <see userInput="{{UK_Not_Default_Address.postcode}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesPostcode"/>
         <!--Order review page has address that was created during checkout-->
         <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
