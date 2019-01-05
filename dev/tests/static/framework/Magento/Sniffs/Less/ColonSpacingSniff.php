@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * Ensure that single quotes are used
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-colon-indents
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#properties-colon-indents
  */
 class ColonSpacingSniff implements Sniff
 {
@@ -27,7 +26,7 @@ class ColonSpacingSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -35,7 +34,7 @@ class ColonSpacingSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
