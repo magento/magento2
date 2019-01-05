@@ -32,6 +32,22 @@ abstract class AbstractSource implements
     protected $_options = null;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAllOptions()
+    {
+        if (empty($this->_options)) {
+            $this->_options = $this->loadOptions();
+        }
+        return $this->_options;
+    }
+
+    protected function loadOptions(): array
+    {
+        return [];
+    }
+
+    /**
      * Set attribute instance
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
