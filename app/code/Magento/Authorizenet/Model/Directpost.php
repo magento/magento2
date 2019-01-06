@@ -832,6 +832,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                       ->void($response);
             }
             $order->registerCancellation($message)->save();
+            $this->_eventManager->dispatch('order_cancel_after', ['order' => $order ]);
         } catch (\Exception $e) {
             //quiet decline
             $this->getPsrLogger()->critical($e);

@@ -26,6 +26,7 @@
 
         <!-- Actions sub-form -->
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
+        <element name="actionsHeaderOpen" type="button" selector="div[data-index='actions'] div[data-state-collapsible='open']" timeout="30"/>
         <element name="apply" type="select" selector="select[name='simple_action']"/>
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
@@ -37,6 +38,8 @@
         <element name="operator" type="select" selector="select[name*='[operator]']"/>
         <element name="childAttribute" type="select" selector="select[name*='new_child']"/>
         <element name="optionInput" type="input" selector="ul[class*='rule-param-children'] input[name*='[value]']"/>
+        <element name="actionValue" type="input" selector=".rule-param-edit input"/>
+        <element name="actionOperator" type="select" selector=".rule-param-edit select"/>
 
         <!-- Manage Coupon Codes sub-form -->
         <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>
