@@ -369,7 +369,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
-        $isReadOnly = $this->getReadOnly($field, $path);
+        $isReadOnly = $this->isReadOnly($field, $path);
 
         $formField = $fieldset->addField(
             $elementId,
@@ -806,7 +806,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $path
      * @return boolean
      */
-    private function getReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    private function isReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
         $isReadOnly = $this->settingChecker->isReadOnly(
             $path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
