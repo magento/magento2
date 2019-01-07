@@ -41,6 +41,14 @@
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
+    <?php else: ?>
+        <script>
+            require(['jquery'], function ($) {
+                $('a.action.showcart').click(function() {
+                    $(document.body).trigger('processStart');
+                });
+            });
+        </script>
     <?php endif ?>
     <script>
         window.checkout = <?= /* @escapeNotVerified */ $block->getSerializedConfig() ?>;

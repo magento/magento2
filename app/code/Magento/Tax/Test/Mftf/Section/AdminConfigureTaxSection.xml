@@ -57,5 +57,10 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
         <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+
+        <element name="taxClassesCondition" type="block" selector="//a[@id='tax_classes-head' and @class='open']" timeout="30"/>
+        <element name="useSystemValue" type="checkbox" selector="#tax_classes_default_product_tax_class_inherit"/>
+        <element name="productTaxClass" type="select" selector="#tax_classes_default_product_tax_class"/>
+        <element name="save" type="button" selector="#save"/>
     </section>
 </sections>

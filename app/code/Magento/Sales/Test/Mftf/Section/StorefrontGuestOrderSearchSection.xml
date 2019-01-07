@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontGuestOrderSearchSection">
+        <element name="orderId" type="input" selector="#oar-order-id"/>
+        <element name="billingLastName" type="input" selector="#oar-billing-lastname"/>
+        <element name="findOrderBy" type="select" selector="#quick-search-type-id"/>
+        <element name="email" type="input" selector="#oar_email"/>
+        <element name="continue" type="button" selector="//*/span[contains(text(), 'Continue')]"/>
+    </section>
+</sections>
