@@ -245,6 +245,56 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store catalog/seo/generate_rewrites_on_save 0
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGenerateUrlRewritesWithoutGenerateProductRewrites()
+    {
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        $category->load(3);
+        $category->setData('save_rewrites_history', false);
+        $category->setUrlKey('new-url');
+        $category->save();
+
+        $categoryFilter = [
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [3, 4, 5]
+        ];
+        $actualResults = $this->getActualResults($categoryFilter);
+        $categoryExpectedResult = [
+            ['new-url.html', 'catalog/category/view/id/3', 1, 0],
+            ['new-url/category-1-1.html', 'catalog/category/view/id/4', 1, 0],
+            ['new-url/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1, 0],
+        ];
+
+        $this->assertResults($categoryExpectedResult, $actualResults);
+
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [$productForTest]
+        ];
+        $actualResults = $this->getActualResults($productFilter);
+        $productExpectedResult = [
+            [
+                'simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest,
+                1,
+                0
+            ]
+        ];
+
+        $this->assertResults($productExpectedResult, $actualResults);
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
