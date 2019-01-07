@@ -26,7 +26,7 @@ use Magento\Catalog\Test\Fixture\Category;
  *
  * @ZephyrId MAGETWO-67570
  */
-class CreateFlatCatalogProduct extends Injectable
+class CreateFlatCatalogProductTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
