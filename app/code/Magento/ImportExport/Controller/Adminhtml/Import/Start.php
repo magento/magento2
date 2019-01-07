@@ -93,6 +93,20 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 $this->addErrorMessages($resultBlock, $errorAggregator);
             } else {
                 $this->importModel->invalidateIndex();
+
+                $noticeHtml = $this->historyModel->getSummary();
+
+                if ($this->historyModel->getErrorFile()) {
+                    $noticeHtml .=  '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
+                                    . '<a href="'
+                                    . $this->createDownloadUrlImportHistoryFile($this->historyModel->getErrorFile())
+                                    . '">' . __('Download full report') . '</a></div>';
+                }
+
+                $resultBlock->addNotice(
+                    $noticeHtml
+                );
+
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
             }

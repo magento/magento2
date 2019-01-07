@@ -233,7 +233,6 @@ Products,Products
 "This attribute set no longer exists.","This attribute set no longer exists."
 "You saved the attribute set.","You saved the attribute set."
 "Something went wrong while saving the attribute set.","Something went wrong while saving the attribute set."
-"You added product %1 to the comparison list.","You added product %1 to the comparison list."
 "You cleared the comparison list.","You cleared the comparison list."
 "Something went wrong  clearing the comparison list.","Something went wrong  clearing the comparison list."
 "You removed product %1 from the comparison list.","You removed product %1 from the comparison list."
@@ -809,3 +808,4 @@ Details,Details
 "Start typing to find products", "Start typing to find products"
 "Product with ID: (%1) doesn't exist", "Product with ID: (%1) doesn't exist"
 "Category with ID: (%1) doesn't exist", "Category with ID: (%1) doesn't exist"
+"You added product %1 to the <a href=""%2"">comparison list</a>.","You added product %1 to the <a href=""%2"">comparison list</a>."

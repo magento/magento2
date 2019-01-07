@@ -6,6 +6,7 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Customer register form block
@@ -86,6 +87,8 @@ class Register extends \Magento\Directory\Block\Data
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -177,11 +180,13 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function isNewsletterEnabled()
     {
-        return $this->_moduleManager->isOutputEnabled('Magento_Newsletter');
+        return $this->_moduleManager->isOutputEnabled('Magento_Newsletter')
+            && $this->getConfig(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE);
     }
 
     /**
      * Restore entity data from session
+     *
      * Entity and form code must be defined for the form
      *
      * @param \Magento\Customer\Model\Metadata\Form $form
