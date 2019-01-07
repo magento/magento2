@@ -11,5 +11,6 @@
     <section name="StorefrontCheckoutPaymentMethodSection">
         <element name="billingAddress" type="text" selector=".checkout-billing-address"/>
         <element name="checkPaymentMethodByName" type="radio" selector="//div[@id='checkout-payment-method-load']//div[@class='payment-method']//label//span[contains(., '{{methodName}}')]/../..//input" parameterized="true"/>
+        <element name="billingAddressSameAsShipping" type="checkbox" selector=".payment-method._active [name='billing-address-same-as-shipping']"/>
     </section>
 </sections>

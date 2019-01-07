@@ -684,9 +684,19 @@ define([
                 if (!images) {
                     images = this.options.mediaGalleryInitial;
                 }
-
-                this.updateBaseImage(images, $main, !this.inProductList);
+                this.updateBaseImage(this._sortImages(images), $main, !this.inProductList);
             }
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -1233,9 +1243,6 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
-                gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
