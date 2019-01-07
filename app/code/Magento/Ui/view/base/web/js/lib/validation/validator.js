@@ -48,7 +48,7 @@ define([
                 params :
                 [params];
 
-            if (typeof message === "function") {
+            if (typeof message === 'function') {
                 message = message.call(rule);
             }
 
