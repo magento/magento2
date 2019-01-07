@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Client;
-use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
@@ -48,7 +48,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn($httpResponse);
 
         $request = [
-            PayloadConverter::PAYLOAD_TYPE => 'doSomeThing',
+            Converter::PAYLOAD_TYPE => 'doSomeThing',
             'foobar' => 'baz'
         ];
         $response = '<foo><bar>baz</bar></foo>';
@@ -66,13 +66,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(PayloadConverter::class),
+            'payloadConverter' => $objectManager->getObject(Converter::class),
             'logger' => $loggerMock
         ]);
 
         $result = $apiClient->placeRequest($this->getTransferObjectMock($request));
 
-        $this->assertSame('foo', $result[PayloadConverter::PAYLOAD_TYPE]);
+        $this->assertSame('foo', $result[Converter::PAYLOAD_TYPE]);
         $this->assertSame('baz', $result['bar']);
     }
 
@@ -115,7 +115,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('');
 
         $request = [
-            PayloadConverter::PAYLOAD_TYPE => 'doSomeThing',
+            Converter::PAYLOAD_TYPE => 'doSomeThing',
             'foobar' => 'baz'
         ];
 
@@ -128,7 +128,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(PayloadConverter::class),
+            'payloadConverter' => $objectManager->getObject(Converter::class),
             'logger' => $loggerMock
         ]);
 
@@ -174,7 +174,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('bad');
 
         $request = [
-            PayloadConverter::PAYLOAD_TYPE => 'doSomeThing',
+            Converter::PAYLOAD_TYPE => 'doSomeThing',
             'foobar' => 'baz'
         ];
 
@@ -187,7 +187,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(PayloadConverter::class),
+            'payloadConverter' => $objectManager->getObject(Converter::class),
             'logger' => $loggerMock
         ]);
 

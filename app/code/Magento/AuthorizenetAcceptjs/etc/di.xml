@@ -24,6 +24,7 @@
     <virtualType name="AuthorizenetAcceptjsCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
+                <item name="validate_credentials" xsi:type="string">AuthorizenetAcceptjsTestCredentialsCommand</item>
                 <item name="authorize" xsi:type="string">AuthorizenetAcceptjsAuthorizeCommand</item>
             </argument>
         </arguments>
@@ -69,12 +70,26 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="AuthorizenetAcceptjsRemoveStoreConfigFilter" type="Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="0" xsi:type="string">store_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsDefaultTransferFactory" type="Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="payloadFilters" xsi:type="array">
+                <item name="store_config" xsi:type="object">AuthorizenetAcceptjsRemoveStoreConfigFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsTestCredentialsCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsTestCredentialsRequest</argument>
-            <argument name="transferFactory" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory</argument>
-            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client\TransactionSale</argument>
-            <argument name="handler" xsi:type="object">     !!!!    AuthorizenetAcceptjsAuthorizationHandler    !!!!!    </argument>
+            <argument name="transferFactory" xsi:type="object">AuthorizenetAcceptjsDefaultTransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client</argument>
+            <!--<argument name="handler" xsi:type="object">AuthorizenetAcceptjsTestCredntialsHandler</argument>-->
             <argument name="validator" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
         </arguments>

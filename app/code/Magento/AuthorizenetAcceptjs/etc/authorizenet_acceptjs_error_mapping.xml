@@ -7,7 +7,7 @@
 -->
 <mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
     <message_list>
-        <message code="E00003" translate="true">Invalid payload type.</message>
+        <message code="E00003" translate="true">Invalid request to gateway.</message>
         <message code="E00007" translate="true">Invalid gateway credentials.</message>
     </message_list>
 </mapping>

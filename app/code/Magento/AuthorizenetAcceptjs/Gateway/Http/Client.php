@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -37,7 +38,7 @@ class Client implements ClientInterface
     private $config;
 
     /**
-     * @var PayloadConverter
+     * @var Converter
      */
     private $payloadConverter;
 
@@ -45,13 +46,13 @@ class Client implements ClientInterface
      * @param Logger $logger
      * @param ZendClientFactory $httpClientFactory
      * @param Config $config
-     * @param PayloadConverter $payloadConverter
+     * @param Converter $payloadConverter
      */
     public function __construct(
         Logger $logger,
         ZendClientFactory $httpClientFactory,
         Config $config,
-        PayloadConverter $payloadConverter
+        Converter $payloadConverter
     ) {
         $this->httpClientFactory = $httpClientFactory;
         $this->payloadConverter = $payloadConverter;
@@ -78,7 +79,6 @@ class Client implements ClientInterface
         try {
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-
             $client->setRawData($this->payloadConverter->convertArrayToXml($request), 'text/xml');
             $client->setMethod(\Zend_Http_Client::POST);
 

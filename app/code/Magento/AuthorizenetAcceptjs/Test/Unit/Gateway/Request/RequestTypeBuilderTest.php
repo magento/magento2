@@ -6,7 +6,7 @@
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 use Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder;
 
@@ -28,7 +28,7 @@ class RequestTypeBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $expected = [
-            PayloadConverter::PAYLOAD_TYPE => 'foo'
+            Converter::PAYLOAD_TYPE => 'foo'
         ];
 
         $buildSubject = [];

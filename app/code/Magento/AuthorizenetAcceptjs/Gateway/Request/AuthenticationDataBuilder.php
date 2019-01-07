@@ -51,8 +51,8 @@ class AuthenticationDataBuilder implements BuilderInterface
 
         return [
             'merchantAuthentication' => [
-                'login' => $this->config->getLoginId($storeId),
-                'transaction_key' => $this->config->getTransactionKey($storeId)
+                'name' => $this->config->getLoginId($storeId),
+                'transactionKey' => $this->config->getTransactionKey($storeId)
             ]
         ];
     }

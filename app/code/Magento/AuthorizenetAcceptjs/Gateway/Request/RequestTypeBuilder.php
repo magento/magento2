@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -34,11 +34,13 @@ class RequestTypeBuilder implements BuilderInterface
      *
      * @param array $buildSubject
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function build(array $buildSubject)
     {
-        $buildSubject[PayloadConverter::PAYLOAD_TYPE] = $this->type;
-
-        return $buildSubject;
+        return [
+            Converter::PAYLOAD_TYPE => $this->type
+        ];
     }
 }

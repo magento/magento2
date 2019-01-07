@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
+namespace Magento\AuthorizenetAcceptjs\Gateway\Http\Payload;
 
 use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Helper for converting payloads to and from authorize.net xml
  */
-class PayloadConverter
+class Converter
 {
     /**
      * The key that will be used to determine the root level type in the xml body
@@ -38,7 +38,12 @@ class PayloadConverter
         $convertFields = function ($data) use (&$convertFields) {
             $xml = '';
             foreach ($data as $fieldName => $fieldValue) {
-                $value = (is_array($fieldValue) ? $convertFields($fieldValue) : htmlspecialchars($fieldValue));
+                // Skip objects that can't be converted to a string
+                if (is_object($fieldValue) && !method_exists($fieldValue, '__toString')) {
+                    continue;
+                }
+
+                $value = (is_array($fieldValue) ? $convertFields($fieldValue) : htmlspecialchars((string)$fieldValue));
                 $xml .= '<' . $fieldName . '>' . $value  . '</' . $fieldName . '>';
             }
             return $xml;

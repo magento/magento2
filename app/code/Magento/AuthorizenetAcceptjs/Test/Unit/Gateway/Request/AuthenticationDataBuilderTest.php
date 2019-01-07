@@ -70,8 +70,8 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $expected = [
             'merchantAuthentication' => [
-                'login' => 'myloginid',
-                'transaction_key' => 'mytransactionkey'
+                'name' => 'myloginid',
+                'transactionKey' => 'mytransactionkey'
             ]
         ];
 

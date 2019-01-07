@@ -23,6 +23,11 @@ class GeneralResponseValidator extends AbstractValidator
     const RESULT_CODE_SUCCESS = 'Ok';
 
     /**
+     * The result code that authorize.net returns for a unsuccessful Api call
+     */
+    const RESULT_CODE_ERROR = 'Error';
+
+    /**
      * @var SubjectReader
      */
     private $subjectReader;
@@ -51,15 +56,20 @@ class GeneralResponseValidator extends AbstractValidator
     public function validate(array $validationSubject)
     {
         $response = $this->subjectReader->readResponse($validationSubject);
-        $isValid = (isset($response['messages']['result_code'])
+        $isValid = (isset($response['messages']['resultCode'])
             && $response['messages']['resultCode'] === self::RESULT_CODE_SUCCESS);
         $errorCodes = [];
         $errorMessages = [];
 
         if (!$isValid) {
-            foreach ($response['messages']['message'] as $message) {
-                $errorCodes[] = $message['code'];
-                $errorMessages[] = $message['text'];
+            if (isset($response['messages']['message']['code'])) {
+                $errorCodes[] = $response['messages']['message']['code'];
+                $errorMessages[] = $response['messages']['message']['text'];
+            } else {
+                foreach ($response['messages']['message'] as $message) {
+                    $errorCodes[] = $message['code'];
+                    $errorMessages[] = $message['text'];
+                }
             }
         }
 
