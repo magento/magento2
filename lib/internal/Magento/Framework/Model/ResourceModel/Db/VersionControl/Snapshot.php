@@ -65,7 +65,7 @@ class Snapshot
             return true;
         }
         foreach ($this->snapshotData[$entityClass][$entity->getId()] as $field => $value) {
-            if ($entity->getDataByKey($field) != $value) {
+            if ($entity->getDataByKey($field) !== $value) {
                 return true;
             }
         }
