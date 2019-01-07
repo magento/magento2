@@ -7,9 +7,8 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -64,6 +63,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adapter = $this->createAdapter();
+
+        $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**
@@ -81,8 +84,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get(MutableScopeConfigInterface::class)
-            ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
 
@@ -138,7 +140,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testMatchQuery()
     {
@@ -152,7 +154,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/products_multi_option.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testMatchOrderedQuery()
     {
@@ -169,7 +171,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testAggregationsQuery()
     {
@@ -186,7 +188,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testMatchQueryFilters()
     {
@@ -203,12 +205,12 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testRangeFilterWithAllFields()
     {
         $this->requestBuilder->bind('range_filter_from', 11);
-        $this->requestBuilder->bind('range_filter_to', 16);
+        $this->requestBuilder->bind('range_filter_to', 17);
         $this->requestBuilder->setRequestName('range_filter');
 
         $queryResponse = $this->executeQuery();
@@ -218,7 +220,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testRangeFilterWithoutFromField()
     {
@@ -232,7 +234,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testRangeFilterWithoutToField()
     {
@@ -246,7 +248,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Term filter test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testTermFilter()
     {
@@ -261,11 +263,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Term filter test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testTermFilterArray()
     {
-        $this->requestBuilder->bind('request.price', [16, 18]);
+        $this->requestBuilder->bind('request.price', [17, 18]);
         $this->requestBuilder->setRequestName('term_filter');
 
         $queryResponse = $this->executeQuery();
@@ -275,7 +277,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Term filter test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testWildcardFilter()
     {
@@ -291,7 +293,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Request limits test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testSearchLimit()
     {
@@ -307,18 +309,18 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Bool filter test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testBoolFilter()
     {
         $expectedIds = [2, 3];
-        $this->requestBuilder->bind('must_range_filter1_from', 12);
+        $this->requestBuilder->bind('must_range_filter1_from', 13);
         $this->requestBuilder->bind('must_range_filter1_to', 22);
-        $this->requestBuilder->bind('should_term_filter1', 12);
-        $this->requestBuilder->bind('should_term_filter2', 14);
-        $this->requestBuilder->bind('should_term_filter3', 16);
+        $this->requestBuilder->bind('should_term_filter1', 13);
+        $this->requestBuilder->bind('should_term_filter2', 15);
+        $this->requestBuilder->bind('should_term_filter3', 17);
         $this->requestBuilder->bind('should_term_filter4', 18);
-        $this->requestBuilder->bind('not_term_filter1', 12);
+        $this->requestBuilder->bind('not_term_filter1', 13);
         $this->requestBuilder->bind('not_term_filter2', 18);
         $this->requestBuilder->setRequestName('bool_filter');
 
@@ -330,14 +332,14 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Test bool filter with nested negative bool filter
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testBoolFilterWithNestedNegativeBoolFilter()
     {
         $expectedIds = [1];
         $this->requestBuilder->bind('not_range_filter_from', 14);
         $this->requestBuilder->bind('not_range_filter_to', 20);
-        $this->requestBuilder->bind('nested_not_term_filter', 12);
+        $this->requestBuilder->bind('nested_not_term_filter', 13);
         $this->requestBuilder->setRequestName('bool_filter_with_nested_bool_filter');
 
         $queryResponse = $this->executeQuery();
@@ -348,7 +350,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Test range inside nested negative bool filter
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testBoolFilterWithNestedRangeInNegativeBoolFilter()
     {
@@ -365,7 +367,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Sample Advanced search request test
      *
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider advancedSearchDataProvider
      * @param string $nameQuery
      * @param string $descriptionQuery
@@ -406,7 +408,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testCustomFilterableAttribute()
     {
@@ -469,7 +471,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Test filtering by two attributes.
      *
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider filterByAttributeValuesDataProvider
      * @param string $requestName
      * @param array $additionalData
@@ -506,7 +508,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param $rangeFilter
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider dateDataProvider
      */
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
@@ -521,11 +523,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
-        $this->markTestSkipped('MAGETWO-71445: configurable product created incorrectly - children not linked').
         /** @var Attribute $attribute */
         $attribute = $this->objectManager->get(Attribute::class)
             ->loadByCode(Product::ENTITY, 'test_configurable');
@@ -534,9 +535,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
+        $visibility = [
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+        ];
+
         $firstOption = $selectOptions->getFirstItem();
         $firstOptionId = $firstOption->getId();
         $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
@@ -545,6 +552,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
         $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->bind('visibility', $visibility);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
@@ -553,7 +561,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
@@ -587,7 +595,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * and affects search results.
      *
      * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testSearchQueryBoost()
     {

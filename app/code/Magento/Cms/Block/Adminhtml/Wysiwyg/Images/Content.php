@@ -78,7 +78,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'insert_files',
-            ['class' => 'save no-display primary', 'label' => __('Add Selected'), 'type' => 'button'],
+            ['class' => 'save no-display action-primary', 'label' => __('Add Selected'), 'type' => 'button'],
             0,
             0,
             'header'
@@ -92,7 +92,9 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getContentsUrl()
     {
-        return $this->getUrl('cms/*/contents', ['type' => $this->getRequest()->getParam('type')]);
+        return $this->getUrl('cms/*/contents', [
+            'type' => $this->getRequest()->getParam('type'),
+        ]);
     }
 
     /**

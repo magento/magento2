@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -259,7 +260,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cycle found. Query filtered_query already used in request hierarchy
+     * @expectedExceptionMessage A cycle was found. The "filtered_query" query is already used in the request hierarchy.
      */
     public function testCleanQueryCycle()
     {
@@ -338,7 +339,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Search\Request\EmptyRequestDataException
-     * @expectedExceptionMessage Request query and filters are not set
+     * @expectedExceptionMessage The request query and filters aren't set. Verify the query and filters and try again.
      */
     public function testCleanEmptyQueryAndFilter()
     {

@@ -197,5 +197,7 @@ return [
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super',
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations',
     ],
-    ['Magento\BraintreeTwo', 'Magento\Braintree']
+    ['Magento\BraintreeTwo', 'Magento\Braintree'],
+    ['Magento\MysqlMq\Model\Resource', 'Magento\MysqlMq\Model\ResourceModel'],
+    ['Magento\BulkOperations', 'Magento\AsynchronousOperations'],
 ];

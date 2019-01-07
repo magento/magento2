@@ -48,7 +48,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     /**
      * Returns connection
      *
-     * @todo: make method protected
      * @return AdapterInterface
      */
     public function getConnection()
@@ -104,6 +103,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
 
         $row = $this->getConnection()->fetchRow($select);
 
-        return isset($row['updated_at']) ? $row['updated_at'] : $default;
+        return $row['updated_at'] ?? $default;
     }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Controller\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -162,6 +163,9 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
      */
     private $customerAddressMapper;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->prepareContext();
@@ -230,7 +234,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function prepareContext()
+    /**
+     * Prepares context
+     */
+    protected function prepareContext(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
@@ -284,7 +291,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->messageManager);
     }
 
-    protected function prepareAddress()
+    /**
+     * Prepare address
+     */
+    protected function prepareAddress(): void
     {
         $this->addressRepository = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -303,7 +313,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->addressData);
     }
 
-    protected function prepareRegion()
+    /**
+     * Prepare region
+     */
+    protected function prepareRegion(): void
     {
         $this->region = $this->getMockBuilder(\Magento\Directory\Model\Region::class)
             ->disableOriginalConstructor()
@@ -335,7 +348,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->regionData);
     }
 
-    protected function prepareForm()
+    /**
+     * Prepare form
+     */
+    protected function prepareForm(): void
     {
         $this->form = $this->getMockBuilder(\Magento\Customer\Model\Metadata\Form::class)
             ->disableOriginalConstructor()
@@ -346,7 +362,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    public function testExecuteNoFormKey()
+    /**
+     * Test form without formKey
+     */
+    public function testExecuteNoFormKey(): void
     {
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
@@ -361,7 +380,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
-    public function testExecuteNoPostData()
+    /**
+     * Test executing without post data
+     */
+    public function testExecuteNoPostData(): void
     {
         $postValue = 'post_value';
         $url = 'url';
@@ -409,10 +431,11 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests executing
+     *
      * @param int $addressId
      * @param int $countryId
      * @param int $customerId
-     * @param bool $isRegionRequired
      * @param int $regionId
      * @param string $region
      * @param string $regionCode
@@ -433,7 +456,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $newRegionId,
         $newRegion,
         $newRegionCode
-    ) {
+    ): void {
         $existingAddressData = [
             'country_id' => $countryId,
             'region_id' => $regionId,
@@ -517,7 +540,8 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([
                 [
                     $this->regionData,
-                    $regionData, \Magento\Customer\Api\Data\RegionInterface::class,
+                    $regionData,
+                    \Magento\Customer\Api\Data\RegionInterface::class,
                     $this->dataObjectHelper,
                 ],
                 [
@@ -549,7 +573,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the address.'))
             ->willReturnSelf();
 
@@ -578,7 +602,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
-    public function dataProviderTestExecute()
+    /**
+     * @return array
+     */
+    public function dataProviderTestExecute(): array
     {
         return [
             [1, 1, 1, null, '', null, '', null, ''],
@@ -609,7 +636,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testExecuteInputException()
+    /**
+     * Tests input exception
+     */
+    public function testExecuteInputException(): void
     {
         $addressId = 1;
         $postValue = 'post_value';
@@ -637,7 +667,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new InputException(__('InputException')));
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('InputException')
             ->willReturnSelf();
 
@@ -671,7 +701,10 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
-    public function testExecuteException()
+    /**
+     * Tests exception
+     */
+    public function testExecuteException(): void
     {
         $addressId = 1;
         $postValue = 'post_value';
@@ -700,7 +733,7 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('We can\'t save the address.'))
             ->willReturnSelf();
 

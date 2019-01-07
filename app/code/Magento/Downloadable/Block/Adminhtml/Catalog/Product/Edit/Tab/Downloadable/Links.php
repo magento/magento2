@@ -30,7 +30,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/links.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/links.phtml';
 
     /**
      * Downloadable file

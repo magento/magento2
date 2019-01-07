@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksInitializer;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -137,7 +138,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 $linkTypesToId[$entity->getLinkType()]
             );
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }
@@ -170,7 +171,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                     foreach ($item['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
                         $value = $option['value'];
-                        $setterName = 'set'.ucfirst($name);
+                        $setterName = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($name);
                         // Check if setter exists
                         if (method_exists($productLinkExtension, $setterName)) {
                             call_user_func([$productLinkExtension, $setterName], $value);
@@ -212,7 +213,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         try {
             $this->getLinkResource()->deleteProductLink($linkId);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
+            throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return true;
     }

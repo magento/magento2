@@ -46,7 +46,7 @@ class AssertProductNotVisibleInCategory extends AbstractConstraint
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
             $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $isProductVisible,
             'Product exists on category page.'
         );

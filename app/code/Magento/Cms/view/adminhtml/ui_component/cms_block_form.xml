@@ -15,9 +15,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="save_and_continue" class="Magento\Cms\Block\Adminhtml\Block\Edit\SaveAndContinueButton"/>
             <button name="save" class="Magento\Cms\Block\Adminhtml\Block\Edit\SaveButton"/>
-            <button name="reset" class="Magento\Cms\Block\Adminhtml\Block\Edit\ResetButton"/>
             <button name="delete" class="Magento\Cms\Block\Adminhtml\Block\Edit\DeleteButton"/>
             <button name="back" class="Magento\Cms\Block\Adminhtml\Block\Edit\BackButton"/>
         </buttons>

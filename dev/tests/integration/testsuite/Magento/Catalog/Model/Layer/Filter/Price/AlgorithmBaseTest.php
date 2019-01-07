@@ -11,6 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_base.php
+ * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
@@ -35,9 +36,9 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     protected $priceResource;
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
      * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
@@ -111,7 +112,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         $items = $model->calculateSeparators($interval);
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
-        for ($i = 0; $i < count($intervalItems); ++$i) {
+        for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
             $this->assertInternalType('array', $items[$i]);
             $this->assertEquals($intervalItems[$i]['from'], $items[$i]['from']);
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);

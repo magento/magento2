@@ -38,10 +38,12 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
      */
     public function getIds($mainTableName, $gridTableName)
     {
+        $mainTableName = $this->resourceConnection->getTableName($mainTableName);
+        $gridTableName = $this->resourceConnection->getTableName($gridTableName);
         $select = $this->getConnection()->select()
-            ->from($this->getConnection()->getTableName($mainTableName), [$mainTableName . '.entity_id'])
+            ->from($mainTableName, [$mainTableName . '.entity_id'])
             ->joinLeft(
-                [$gridTableName => $this->getConnection()->getTableName($gridTableName)],
+                [$gridTableName => $gridTableName],
                 sprintf(
                     '%s.%s = %s.%s',
                     $mainTableName,

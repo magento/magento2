@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\Cache
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Backend\Controller\Adminhtml\Cache implements HttpGetActionInterface
 {
     /**
      * Display cache management grid

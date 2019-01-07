@@ -52,7 +52,7 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
 
         $refundedPrices = $order->getPrice()['refund'];
         foreach ($refundedPrices as $key => $refundedPrice) {
-            \PHPUnit_Framework_Assert::assertRegExp(
+            \PHPUnit\Framework\Assert::assertRegExp(
                 sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice['grand_creditmemo_total']),
                 $comments[$key]['comment'],
                 'Incorrect refunded amount value for the order #' . $orderId

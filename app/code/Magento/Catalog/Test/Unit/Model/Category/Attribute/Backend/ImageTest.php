@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -27,6 +29,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     private $logger;
 
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -59,6 +69,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ImageUploader::class,
             ['moveFileFromTmp']
         );
+
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -88,7 +101,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('', $object->getTestAttribute());
+        $this->assertEquals(null, $object->getTestAttribute());
     }
 
     /**
@@ -128,6 +141,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $object->getTestAttribute());
     }
 
+    /**
+     * Test beforeSaveAttributeFileName.
+     */
     public function testBeforeSaveAttributeFileName()
     {
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
@@ -144,6 +160,44 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test123.jpg', $object->getTestAttribute());
     }
 
+    /**
+     * Test beforeSaveAttributeFileNameOutsideOfCategoryDir.
+     */
+    public function testBeforeSaveAttributeFileNameOutsideOfCategoryDir()
+    {
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
+            'filesystem' => $this->filesystem
+        ]);
+
+        $model->setAttribute($this->attribute);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getUri')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn('pub/media');
+
+        $object = new \Magento\Framework\DataObject([
+            'test_attribute' => [
+                [
+                    'name' => '/test123.jpg',
+                    'url' => '/pub/media/wysiwyg/test123.jpg',
+                ]
+            ]
+        ]);
+
+        $model->beforeSave($object);
+
+        $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
+        $this->assertEquals(
+            [['name' => '/pub/media/wysiwyg/test123.jpg', 'url' => '/pub/media/wysiwyg/test123.jpg']],
+            $object->getData('_additional_data_test_attribute')
+        );
+    }
+
+    /**
+     * Test beforeSaveTemporaryAttribute.
+     */
     public function testBeforeSaveTemporaryAttribute()
     {
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
@@ -162,6 +216,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         ], $object->getData('_additional_data_test_attribute'));
     }
 
+    /**
+     * Test beforeSaveAttributeStringValue.
+     */
     public function testBeforeSaveAttributeStringValue()
     {
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
@@ -205,6 +262,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         return $model->setAttribute($this->attribute);
     }
 
+    /**
+     * @return array
+     */
     public function attributeValueDataProvider()
     {
         return [
@@ -259,6 +319,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model->afterSave($object);
     }
 
+    /**
+     * Test afterSaveWithExceptions.
+     */
     public function testAfterSaveWithExceptions()
     {
         $model = $this->setUpModelForAfterSave();

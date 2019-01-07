@@ -34,7 +34,6 @@ class Edit extends \Magento\Backend\App\Action
      * Edit constructor.
      *
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
@@ -66,7 +65,7 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($groupId && (!$synGroup->getGroupId())) {
-                $this->messageManager->addError(__('This synonyms group no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This synonyms group no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');

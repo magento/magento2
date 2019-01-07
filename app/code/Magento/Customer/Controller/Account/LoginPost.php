@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Customer\Controller\AbstractAccount;
+use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends \Magento\Customer\Controller\AbstractAccount
+class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -131,6 +139,30 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('*/*/');
+
+        return new InvalidRequestException(
+            $resultRedirect,
+            [new Phrase('Invalid Form Key. Please refresh the page.')]
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return null;
+    }
+
+    /**
      * Login post action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -171,27 +203,28 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     );
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'You did not sign in correctly or your account is temporarily disabled.'
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
                     );
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
-                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
+                    $message = __(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    );
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
-                    $this->messageManager->addError($message);
-                    $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
+                } finally {
+                    if (isset($message)) {
+                        $this->messageManager->addError($message);
+                        $this->session->setUsername($login['username']);
+                    }
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));

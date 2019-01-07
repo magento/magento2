@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssignProductAttributeToAttributeSetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/Update attribute set"/>
+            <title value="Admin should be able to assign attributes to an attribute set"/>
+            <description value="Admin should be able to assign attributes to an attribute set"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-168"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="productDropDownAttribute" stepKey="attribute"/>
+
+            <createData entity="productAttributeOption1" stepKey="option1">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="option2">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to default attribute set edit page -->
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <!-- Assert created attribute in unassigned section -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+        <!-- Assign attribute to a group -->
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <!-- Assert attribute in a group -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <!-- Save attribute set -->
+        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <!-- Go to create new product page -->
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Assert attribute can be used in product creation -->
+        <seeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
+    </test>
+</tests>

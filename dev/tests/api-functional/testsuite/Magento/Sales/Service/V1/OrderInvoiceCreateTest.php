@@ -90,4 +90,96 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
             'Failed asserting that Order status was changed'
         );
     }
+
+    /**
+     * Tests that MAGETWO-95346 was fixed for bundled products
+     *
+     * @expectedException \Exception
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
+     * @codingStandardsIgnoreEnd
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_bundle.php
+     */
+    public function testOrderWithBundleInvoicedWithInvalidQuantitiesReturnsError()
+    {
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/invoice',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'execute',
+            ],
+        ];
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+            'notify' => true,
+            'appendComment' => true,
+            'items' => [
+                [
+                    'order_item_id' => -1,
+                    'qty' => 1
+                ]
+            ],
+            'comment' => [
+                'comment' => 'Test offline',
+                'isVisibleOnFront' => 1,
+            ],
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Tests that MAGETWO-95346 was fixed for configurable products
+     *
+     * @expectedException \Exception
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
+     * @codingStandardsIgnoreEnd
+     * @magentoApiDataFixture Magento/Sales/_files/order_configurable_product.php
+     */
+    public function testOrderWithConfigurableProductInvoicedWithInvalidQuantitiesReturnsError()
+    {
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/invoice',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'execute',
+            ],
+        ];
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+            'notify' => true,
+            'appendComment' => true,
+            'items' => [
+                [
+                    'order_item_id' => -1,
+                    'qty' => 1
+                ]
+            ],
+            'comment' => [
+                'comment' => 'Test offline',
+                'isVisibleOnFront' => 1,
+            ],
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
 }

@@ -6,6 +6,9 @@
 
 namespace Magento\Checkout\CustomerData;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+
 /**
  * Default item
  */
@@ -37,11 +40,23 @@ class DefaultItem extends AbstractItem
     protected $checkoutHelper;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
+     * @var ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Msrp\Helper\Data $msrpHelper
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Framework\Escaper|null $escaper
+     * @param ItemResolverInterface|null $itemResolver
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -49,13 +64,17 @@ class DefaultItem extends AbstractItem
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
-        \Magento\Checkout\Helper\Data $checkoutHelper
+        \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Framework\Escaper $escaper = null,
+        ItemResolverInterface $itemResolver = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->imageHelper = $imageHelper;
         $this->msrpHelper = $msrpHelper;
         $this->urlBuilder = $urlBuilder;
         $this->checkoutHelper = $checkoutHelper;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -64,6 +83,8 @@ class DefaultItem extends AbstractItem
     protected function doGetItemData()
     {
         $imageHelper = $this->imageHelper->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail');
+        $productName = $this->escaper->escapeHtml($this->item->getProduct()->getName());
+
         return [
             'options' => $this->getOptionList(),
             'qty' => $this->item->getQty() * 1,
@@ -71,7 +92,7 @@ class DefaultItem extends AbstractItem
             'configure_url' => $this->getConfigureUrl(),
             'is_visible_in_site_visibility' => $this->item->getProduct()->isVisibleInSiteVisibility(),
             'product_id' => $this->item->getProduct()->getId(),
-            'product_name' => $this->item->getProduct()->getName(),
+            'product_name' => $productName,
             'product_sku' => $this->item->getProduct()->getSku(),
             'product_url' => $this->getProductUrl(),
             'product_has_url' => $this->hasProductUrl(),
@@ -105,7 +126,7 @@ class DefaultItem extends AbstractItem
      */
     protected function getProductForThumbnail()
     {
-        return $this->getProduct();
+        return $this->itemResolver->getFinalProduct($this->item);
     }
 
     /**

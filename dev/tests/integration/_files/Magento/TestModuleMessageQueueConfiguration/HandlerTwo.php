@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\TestModuleMessageQueueConfiguration;
+
+/**
+ * Class for testing queue handlers.
+ */
+class HandlerTwo
+{
+    /**
+     * Return true.
+     *
+     * @return bool
+     */
+    public function handlerMethodOne()
+    {
+        return true;
+    }
+
+    /**
+     * Return true.
+     *
+     * @return bool
+     */
+    public function handlerMethodTwo()
+    {
+        return true;
+    }
+
+    /**
+     * Return true.
+     *
+     * @return bool
+     */
+    public function handlerMethodThree()
+    {
+        return true;
+    }
+}

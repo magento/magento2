@@ -10,7 +10,7 @@ use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert sales rule delte message.
+ * Assert sales rule delete message.
  */
 class AssertCartPriceRuleSuccessDeleteMessage extends AbstractConstraint
 {
@@ -29,7 +29,7 @@ class AssertCartPriceRuleSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(PromoQuoteIndex $promoQuoteIndex)
     {
         $actualMessage = $promoQuoteIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

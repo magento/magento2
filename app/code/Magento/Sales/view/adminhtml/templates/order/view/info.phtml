@@ -24,6 +24,8 @@ $orderStoreDate = $block->formatDate(
     true,
     $block->getTimezoneForStore($order->getStore())
 );
+
+$customerUrl = $block->getCustomerViewUrl();
 ?>
 
 <section class="admin__page-section order-view-account-information">
@@ -114,8 +116,8 @@ $orderStoreDate = $block->formatDate(
             <div class="admin__page-section-item-title">
                 <span class="title"><?= $block->escapeHtml(__('Account Information')) ?></span>
                 <div class="actions">
-                    <?php if ($customerUrl = $block->getCustomerViewUrl()) : ?>
-                        <a href="<?= /* @noEscape */ $block->getCustomerViewUrl() ?>" target="_blank">
+                    <?php if ($customerUrl) : ?>
+                        <a href="<?= /* @noEscape */ $customerUrl ?>" target="_blank">
                             <?= $block->escapeHtml(__('Edit Customer')) ?>
                         </a>
                     <?php endif; ?>
@@ -126,7 +128,7 @@ $orderStoreDate = $block->formatDate(
                     <tr>
                         <th><?= $block->escapeHtml(__('Customer Name')) ?></th>
                         <td>
-                            <?php if ($customerUrl = $block->getCustomerViewUrl()): ?>
+                            <?php if ($customerUrl): ?>
                                 <a href="<?= $block->escapeUrl($customerUrl) ?>" target="_blank">
                                     <span><?= $block->escapeHtml($order->getCustomerName()) ?></span>
                                 </a>

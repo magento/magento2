@@ -156,6 +156,11 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             ->setCode($groupModel->getCode())
             ->setTaxClassId($groupModel->getTaxClassId())
             ->setTaxClassName($groupModel->getTaxClassName());
+
+        if ($group->getExtensionAttributes()) {
+            $groupDataObject->setExtensionAttributes($group->getExtensionAttributes());
+        }
+
         return $groupDataObject;
     }
 
@@ -305,7 +310,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         $exception = new InputException();
         if (!\Zend_Validate::is($group->getCode(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
 
         if ($exception->wasErrorAdded()) {

@@ -93,7 +93,7 @@ Reset,Reset
 "A token with consumer ID 0 does not exist","A token with consumer ID 0 does not exist"
 "The integration you selected asks you to approve access to the following:","The integration you selected asks you to approve access to the following:"
 "No permissions requested","No permissions requested"
-"Are you sure ?","Are you sure ?"
+"Are you sure?","Are you sure?"
 "Are you sure you want to delete this integration? You can't undo this action.","Are you sure you want to delete this integration? You can't undo this action."
 "Please setup or sign in into your 3rd party account to complete setup of this integration.","Please setup or sign in into your 3rd party account to complete setup of this integration."
 "Available APIs","Available APIs"

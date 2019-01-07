@@ -61,6 +61,31 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetTablePrefixWithInjectedPrefix()
+    {
+        /** @var ResourceConnection $resourceConnection */
+        $resourceConnection = $this->objectManager->getObject(
+            ResourceConnection::class,
+            [
+                'deploymentConfig' => $this->deploymentConfigMock,
+                'connectionFactory' => $this->connectionFactoryMock,
+                'config' => $this->configMock,
+                'tablePrefix' => 'some_prefix'
+            ]
+        );
+
+        self::assertEquals($resourceConnection->getTablePrefix(), 'some_prefix');
+    }
+
+    public function testGetTablePrefix()
+    {
+        $this->deploymentConfigMock->expects(self::once())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
+            ->willReturn('pref_');
+        self::assertEquals('pref_', $this->unit->getTablePrefix());
+    }
+
     public function testGetConnectionByName()
     {
         $this->deploymentConfigMock->expects(self::once())->method('get')

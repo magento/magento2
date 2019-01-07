@@ -114,6 +114,47 @@ class CategoriesTest extends AbstractModifierTest
         $this->assertArrayHasKey($groupCode, $this->getModel()->modifyMeta($meta));
     }
 
+    /**
+     * @param bool $locked
+     * @dataProvider modifyMetaLockedDataProvider
+     */
+    public function testModifyMetaLocked($locked)
+    {
+        $groupCode = 'test_group_code';
+        $meta = [
+            $groupCode => [
+                'children' => [
+                    'category_ids' => [
+                        'sortOrder' => 10,
+                    ],
+                ],
+            ],
+        ];
+
+        $this->arrayManagerMock->expects($this->any())
+            ->method('findPath')
+            ->willReturn('path');
+
+        $this->productMock->expects($this->any())
+            ->method('isLockedAttribute')
+            ->willReturn($locked);
+
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(2);
+
+        $modifyMeta = $this->createModel()->modifyMeta($meta);
+        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+    }
+
+    /**
+     * @return array
+     */
+    public function modifyMetaLockedDataProvider()
+    {
+        return [[true], [false]];
+    }
+
     public function testModifyMetaWithCaching()
     {
         $this->arrayManagerMock->expects($this->exactly(2))

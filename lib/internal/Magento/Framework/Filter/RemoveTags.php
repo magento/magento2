@@ -34,7 +34,8 @@ class RemoveTags implements \Zend_Filter_Interface
             [$this, '_convertEntities'],
             $value
         );
-        $value = strip_tags($value);
-        return htmlspecialchars_decode($value);
+        $value = htmlspecialchars_decode($value);
+        
+        return strip_tags($value);
     }
 }

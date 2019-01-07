@@ -37,7 +37,7 @@ class AssertRefundedGrandTotalOnFrontend extends AbstractAssertOrderOnFrontend
         $orderHistory->getOrderHistoryBlock()->openOrderById($order->getId());
         $customerOrderView->getOrderViewBlock()->openLinkByName('Refunds');
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 number_format($order->getPrice()['refund'][$key]['grand_creditmemo_total'], 2),
                 $creditMemoView->getCreditMemoBlock()->getItemBlock($creditMemoId)->getGrandTotal()
             );

@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\ResourceModel\Grid;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -16,25 +15,17 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
-
-    /** @var IndexerRegistry */
-    private $indexerRegistry;
-
-    /** @var \Magento\Customer\Model\ResourceModel\Grid\Collection */
-    private $targetObject;
-
-    /** @var CustomerRepositoryInterface */
-    private $customerRepository;
-
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->indexerRegistry = $this->objectManager->create(IndexerRegistry::class);
-        $this->targetObject = $this->objectManager
-            ->create(\Magento\Customer\Model\ResourceModel\Grid\Collection::class);
-        $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
     }
 
     /**
@@ -46,23 +37,41 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer_grid_indexer_enabled_update_on_schedule.php
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGetItemByIdForUpdateOnSchedule()
     {
+        $targetObject = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\ResourceModel\Grid\Collection::class
+        );
+        $customerRepository = Bootstrap::getObjectManager()->create(
+            CustomerRepositoryInterface::class
+        );
         /** Verify after first save */
+
         /** @var CustomerInterface $newCustomer */
-        $newCustomer = $this->customerRepository->get('customer@example.com');
+        $newCustomer = $customerRepository->get('customer@example.com');
         /** @var CustomerInterface $item */
-        $item = $this->targetObject->getItemById($newCustomer->getId());
+        $item = $targetObject->getItemById($newCustomer->getId());
         $this->assertNotEmpty($item);
         $this->assertSame($newCustomer->getEmail(), $item->getEmail());
         $this->assertSame('test street test city Armed Forces Middle East 01001', $item->getBillingFull());
 
         /** Verify after update */
+
         $newCustomer->setEmail('customer_updated@example.com');
-        $this->customerRepository->save($newCustomer);
-        $this->targetObject->clear();
-        $item = $this->targetObject->getItemById($newCustomer->getId());
+        $customerRepository->save($newCustomer);
+        $targetObject->clear();
+        $item = $targetObject->getItemById($newCustomer->getId());
         $this->assertSame($newCustomer->getEmail(), $item->getEmail());
+    }
+
+    /**
+     * teardown
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 }

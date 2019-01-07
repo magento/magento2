@@ -268,6 +268,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
     }
 
+    /**
+     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
+     */
     protected function getGrid()
     {
         /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid  $grid */

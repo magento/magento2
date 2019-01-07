@@ -5,7 +5,10 @@
  */
 namespace Magento\MediaStorage\Test\Unit\App;
 
+use Magento\Catalog\Model\View\Asset\Placeholder;
+use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class MediaTest
@@ -91,20 +94,30 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::MEDIA)
+            ->with(DirectoryList::PUB)
             ->will($this->returnValue($this->directoryMock));
 
         $this->responseMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Response::class);
 
-        $this->model = new \Magento\MediaStorage\App\Media(
-            $this->configFactoryMock,
-            $this->syncFactoryMock,
-            $this->responseMock,
-            $this->closure,
-            self::MEDIA_DIRECTORY,
-            self::CACHE_FILE_PATH,
-            self::RELATIVE_FILE_PATH,
-            $this->filesystemMock
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            \Magento\MediaStorage\App\Media::class,
+            [
+                'configFactory' => $this->configFactoryMock,
+                'syncFactory' => $this->syncFactoryMock,
+                'response' => $this->responseMock,
+                'isAllowed' => $this->closure,
+                'mediaDirectory' => false,
+                'configCacheFile' => self::CACHE_FILE_PATH,
+                'relativeFileName' => self::RELATIVE_FILE_PATH,
+                'filesystem' => $this->filesystemMock,
+                'placeholderFactory' => $this->createConfiguredMock(
+                    PlaceholderFactory::class,
+                    [
+                        'create' => $this->createMock(Placeholder::class)
+                    ]
+                ),
+            ]
         );
     }
 
@@ -115,15 +128,19 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessRequestCreatesConfigFileMediaDirectoryIsNotProvided()
     {
-        $this->model = new \Magento\MediaStorage\App\Media(
-            $this->configFactoryMock,
-            $this->syncFactoryMock,
-            $this->responseMock,
-            $this->closure,
-            false,
-            self::CACHE_FILE_PATH,
-            self::RELATIVE_FILE_PATH,
-            $this->filesystemMock
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            \Magento\MediaStorage\App\Media::class,
+            [
+                'configFactory' => $this->configFactoryMock,
+                'syncFactory' => $this->syncFactoryMock,
+                'response' => $this->responseMock,
+                'isAllowed' => $this->closure,
+                'mediaDirectory' => false,
+                'configCacheFile' => self::CACHE_FILE_PATH,
+                'relativeFileName' => self::RELATIVE_FILE_PATH,
+                'filesystem' => $this->filesystemMock
+            ]
         );
         $filePath = '/absolute/path/to/test/file.png';
         $this->directoryMock->expects($this->any())
@@ -141,33 +158,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(self::RELATIVE_FILE_PATH)
             ->will($this->returnValue(true));
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
-        $this->model->launch();
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The specified path is not allowed.
-     */
-    public function testProcessRequestReturnsNotFoundResponseIfResourceIsNotAllowed()
-    {
-        $this->closure = function () {
-            return false;
-        };
-        $this->model = new \Magento\MediaStorage\App\Media(
-            $this->configFactoryMock,
-            $this->syncFactoryMock,
-            $this->responseMock,
-            $this->closure,
-            false,
-            self::CACHE_FILE_PATH,
-            self::RELATIVE_FILE_PATH,
-            $this->filesystemMock
-        );
-        $this->directoryMock->expects($this->once())
-            ->method('getAbsolutePath')
-            ->with()
-            ->will($this->returnValue(self::MEDIA_DIRECTORY));
-        $this->configMock->expects($this->once())->method('getAllowedResources')->will($this->returnValue(false));
         $this->model->launch();
     }
 
@@ -202,7 +192,6 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->will($this->returnValue(false));
-        $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(404);
         $this->assertSame($this->responseMock, $this->model->launch());
     }
 
@@ -229,6 +218,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->model->catchException($bootstrap, $exception);
     }
 
+    /**
+     * @return array
+     */
     public function catchExceptionDataProvider()
     {
         return [

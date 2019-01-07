@@ -12,6 +12,7 @@ use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Deploy\Model\Filesystem;
 use Magento\Deploy\Model\Mode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
@@ -124,7 +125,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             $this->filesystemMock,
             $this->configProvider,
             $this->processorFacadeFactory,
-            $this->emulatedAreaProcessor
+            $this->emulatedAreaProcessor,
+            new MaintenanceModeEnabler($this->maintenanceMock)
         );
     }
 
@@ -226,7 +228,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigs')
             ->with('developer', 'production')
             ->willReturn([
-                'dev/debug/debug_logging' => 0
+                'dev/debug/debug_logging' => 0,
             ]);
         $this->emulatedAreaProcessor->expects($this->once())
             ->method('process')
@@ -239,7 +241,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->processorFacade);
         $this->processorFacade
             ->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->with(
                 'dev/debug/debug_logging',
                 0,

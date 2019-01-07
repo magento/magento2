@@ -31,7 +31,7 @@ class AssertProductReviewsQtyByCustomer extends AbstractConstraint
     ) {
         $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
         $customerReportReview->open();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $reviewsCount,
             $customerReportReview->getGridBlock()->getQtyReview($customerName),
             'Wrong qty review in Customer Reviews Report grid.'

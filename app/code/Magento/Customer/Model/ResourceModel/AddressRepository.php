@@ -7,6 +7,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
@@ -16,6 +17,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 
 /**
+ * Address repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
@@ -92,7 +95,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->addressFactory = $addressFactory;
         $this->addressRegistry = $addressRegistry;
         $this->customerRegistry = $customerRegistry;
-        $this->addressResource = $addressResourceModel;
+        $this->addressResourceModel = $addressResourceModel;
         $this->directoryData = $directoryData;
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
@@ -123,6 +126,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         } else {
             $addressModel->updateData($address);
         }
+        $addressModel->setStoreId($customerModel->getStoreId());
 
         $errors = $addressModel->validate();
         if ($errors !== true) {
@@ -143,6 +147,8 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     }
 
     /**
+     * Update address collection.
+     *
      * @param Customer $customer
      * @param Address $address
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -236,7 +242,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->clear();
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }
@@ -254,7 +260,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
         $customerModel->getAddressesCollection()->removeItemByKey($addressId);
-        $this->addressResource->delete($address);
+        $this->addressResourceModel->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
     }

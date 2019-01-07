@@ -952,7 +952,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($string);
+        return $this->_escaper->escapeUrl((string)$string);
     }
 
     /**
@@ -1074,7 +1074,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $cacheLifetime = $this->getData('cache_lifetime');
         if (false === $cacheLifetime || null === $cacheLifetime) {
-            return $cacheLifetime;
+            return null;
         }
 
         return (int)$cacheLifetime;
@@ -1156,6 +1156,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
     /**
      * Determine if the block scope is private or public.
+     *
      * Returns true if scope is private, false otherwise
      *
      * @return bool

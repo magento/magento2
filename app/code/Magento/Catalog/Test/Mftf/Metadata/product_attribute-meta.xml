@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductAttribute" dataType="ProductAttribute" type="create" auth="adminOauth" url="/V1/products/attributes" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="ProductAttribute" key="attribute">
+            <field key="attribute_code">string</field>
+            <field key="default_value">string</field>
+            <field key="frontend_input">string</field>
+            <field key="entity_type_id">string</field>
+            <field key="backend_type">string</field>
+            <field key="backend_model">string</field>
+            <field key="source_model">string</field>
+            <field key="frontend_class">string</field>
+            <field key="default_frontend_label">string</field>
+            <field key="note">string</field>
+            <field key="scope">string</field>
+            <field key="is_unique">boolean</field>
+            <field key="is_searchable">boolean</field>
+            <field key="is_visible_in_advanced_search">boolean</field>
+            <field key="is_comparable">boolean</field>
+            <field key="is_used_for_promo_rules">boolean</field>
+            <field key="is_visible_on_front">boolean</field>
+            <field key="used_in_product_listing">boolean</field>
+            <field key="is_wysiwyg_enabled">boolean</field>
+            <field key="is_html_allowed_on_front">boolean</field>
+            <field key="used_for_sort_by">boolean</field>
+            <field key="is_filterable">boolean</field>
+            <field key="is_filterable_in_search">boolean</field>
+            <field key="is_used_in_grid">boolean</field>
+            <field key="is_visible_in_grid">boolean</field>
+            <field key="is_filterable_in_grid">boolean</field>
+            <field key="is_visible">boolean</field>
+            <field key="is_required">boolean</field>
+            <field key="is_user_defined">boolean</field>
+            <field key="extension_attributes">empty_extension_attribute-meta</field>
+            <array key="apply_to">
+                <value>string</value>
+            </array>
+            <array key="options">
+                <value>ProductAttributeOption</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute_array</value>
+            </array>
+            <array key="validation_rules">
+                <value>validation_rule</value>
+            </array>
+            <array key="frontend_labels">
+                <value>FrontendLabel</value>
+            </array>
+        </object>
+    </operation>
+    <operation name="UpdateProductAttribute" dataType="ProductAttribute" type="update" auth="adminOauth" url="/V1/products/attributes/{attribute_code}" method="PUT">
+        <contentType>application/json</contentType>
+        <object dataType="ProductAttribute" key="attribute">
+            <field key="attribute_code">string</field>
+            <field key="attribute_id">string</field>
+            <field key="default_value">string</field>
+            <field key="frontend_input">string</field>
+            <field key="entity_type_id">string</field>
+            <field key="backend_type">string</field>
+            <field key="backend_model">string</field>
+            <field key="source_model">string</field>
+            <field key="frontend_class">string</field>
+            <field key="default_frontend_label">string</field>
+            <field key="note">string</field>
+            <field key="scope">string</field>
+            <field key="is_unique">boolean</field>
+            <field key="is_searchable">boolean</field>
+            <field key="is_visible_in_advanced_search">boolean</field>
+            <field key="is_comparable">boolean</field>
+            <field key="is_used_for_promo_rules">boolean</field>
+            <field key="is_visible_on_front">boolean</field>
+            <field key="used_in_product_listing">boolean</field>
+            <field key="is_wysiwyg_enabled">boolean</field>
+            <field key="is_html_allowed_on_front">boolean</field>
+            <field key="used_for_sort_by">boolean</field>
+            <field key="is_filterable">boolean</field>
+            <field key="is_filterable_in_search">boolean</field>
+            <field key="is_used_in_grid">boolean</field>
+            <field key="is_visible_in_grid">boolean</field>
+            <field key="is_filterable_in_grid">boolean</field>
+            <field key="is_visible">boolean</field>
+            <field key="is_required">boolean</field>
+            <field key="is_user_defined">boolean</field>
+            <field key="extension_attributes">empty_extension_attribute-meta</field>
+            <array key="apply_to">
+                <value>string</value>
+            </array>
+            <array key="options">
+                <value>ProductAttributeOption</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute_array</value>
+            </array>
+            <array key="validation_rules">
+                <value>validation_rule</value>
+            </array>
+            <array key="frontend_labels">
+                <value>FrontendLabel</value>
+            </array>
+        </object>
+    </operation>
+    <operation name="DeleteProductAttribute" dataType="ProductAttribute" type="delete" auth="adminOauth" url="/V1/products/attributes/{attribute_code}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

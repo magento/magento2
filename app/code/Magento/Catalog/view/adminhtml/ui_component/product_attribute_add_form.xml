@@ -71,6 +71,9 @@
         <field name="frontend_input" sortOrder="20" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="hints" xsi:type="array">
+                        <item name="texteditor" xsi:type="string" translate="true">Text Editor input type requires WYSIWYG to be enabled in Stores > Configuration > Content Management.</item>
+                    </item>
                     <item name="source" xsi:type="string">product_attribute</item>
                 </item>
             </argument>
@@ -78,6 +81,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Catalog Input Type for Store Owner</label>
                 <dataScope>frontend_input</dataScope>
+                <elementTmpl>Magento_Catalog/form/element/frontend-input-select</elementTmpl>
             </settings>
             <formElements>
                 <select>
@@ -95,6 +99,7 @@
                     <item name="valuesForOptions" xsi:type="array">
                         <item name="text" xsi:type="string">text</item>
                         <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
@@ -147,7 +152,6 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">container</item>
-                        <item name="positionProvider" xsi:type="string">attribute_options.position</item>
                     </item>
                 </argument>
                 <field name="is_default" component="Magento_Catalog/js/form/element/checkbox" sortOrder="0" formElement="checkbox">
@@ -184,12 +188,8 @@
                         </item>
                     </argument>
                     <settings>
-                        <additionalClasses>
-                            <class name="_hidden">true</class>
-                        </additionalClasses>
                         <dataType>text</dataType>
                         <visible>false</visible>
-                        <dataScope>position</dataScope>
                     </settings>
                 </field>
             </container>
@@ -285,6 +285,7 @@
                     <item name="valuesForOptions" xsi:type="array">
                         <item name="text" xsi:type="string">text</item>
                         <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
@@ -409,6 +410,7 @@
                     <item name="valuesForOptions" xsi:type="array">
                         <item name="text" xsi:type="string">text</item>
                         <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
@@ -619,32 +621,6 @@
                 <dataType>boolean</dataType>
                 <label translate="true">Allow HTML Tags on Storefront</label>
                 <dataScope>is_html_allowed_on_front</dataScope>
-            </settings>
-            <formElements>
-                <checkbox>
-                    <settings>
-                        <valueMap>
-                            <map name="false" xsi:type="number">0</map>
-                            <map name="true" xsi:type="number">1</map>
-                        </valueMap>
-                        <prefer>toggle</prefer>
-                    </settings>
-                </checkbox>
-            </formElements>
-        </field>
-        <field name="is_wysiwyg_enabled" component="Magento_Catalog/js/components/visible-on-option/yesno" sortOrder="90" formElement="checkbox">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="valuesForOptions" xsi:type="array">
-                        <item name="textarea" xsi:type="string">textarea</item>
-                    </item>
-                    <item name="default" xsi:type="number">0</item>
-                </item>
-            </argument>
-            <settings>
-                <dataType>boolean</dataType>
-                <label translate="true">Enable WYSIWYG</label>
-                <dataScope>is_wysiwyg_enabled</dataScope>
             </settings>
             <formElements>
                 <checkbox>

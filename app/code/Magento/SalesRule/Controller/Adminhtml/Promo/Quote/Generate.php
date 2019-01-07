@@ -1,15 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\SalesRule\Model\CouponGenerator;
 
-class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+/**
+ * Generate promo quote
+ */
+class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
 {
     /**
      * @var CouponGenerator
@@ -64,7 +66,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 
                 $couponCodes = $this->couponGenerator->generateCodes($data);
                 $generated = count($couponCodes);
-                $this->messageManager->addSuccess(__('%1 coupon(s) have been generated.', $generated));
+                $this->messageManager->addSuccessMessage(__('%1 coupon(s) have been generated.', $generated));
                 $this->_view->getLayout()->initMessages();
                 $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
             } catch (\Magento\Framework\Exception\InputException $inputException) {

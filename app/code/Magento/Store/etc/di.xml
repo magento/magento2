@@ -25,6 +25,14 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
+    <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
+    <type name="Magento\Framework\App\Http\Context">
+        <arguments>
+            <argument name="default" xsi:type="array">
+                <item name="website" xsi:type="string">0</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
@@ -57,7 +65,7 @@
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
+        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" />
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>
@@ -94,9 +102,13 @@
     </type>
     <type name="Magento\Store\Model\StoreResolver">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoresData">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
@@ -414,6 +426,15 @@
         <arguments>
             <argument name="interpreters" xsi:type="array">
                 <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="cleanTargetUrl" xsi:type="object">Magento\Store\Model\StoreSwitcher\CleanTargetUrl</item>
+                <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
+                <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
             </argument>
         </arguments>
     </type>

@@ -15,6 +15,10 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
+if (!defined('INTEGRATION_TESTS_DIR')) {
+    define('INTEGRATION_TESTS_DIR', $testsBaseDir);
+}
+
 $testFrameworkDir = __DIR__;
 require_once 'deployTestModules.php';
 
@@ -74,7 +78,7 @@ try {
         $application->cleanup();
     }
     if (!$application->isInstalled()) {
-        $application->install();
+        $application->install($settings->getAsBoolean('TESTS_CLEANUP'));
     }
     $application->initialize([]);
 

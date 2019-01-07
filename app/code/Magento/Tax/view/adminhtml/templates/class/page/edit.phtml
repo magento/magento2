@@ -11,10 +11,10 @@
     <?= $block->getSaveButtonHtml() ?>
 </div>
 <?= $block->getRenameFormHtml() ?>
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>').mage('form').mage('validation');
-
-});
+<script type="text/x-magento-init">
+    {
+        "#<?= /* @escapeNotVerified */ $block->getRenameFormId() ?>": {
+            "Magento_Tax/js/page/validate": {}
+        }
+    }
 </script>

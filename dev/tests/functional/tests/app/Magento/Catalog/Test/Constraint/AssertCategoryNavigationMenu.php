@@ -39,7 +39,7 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
         $cmsIndex->open();
 
         foreach (array_reverse($categoriesNames) as $category) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $cmsIndex->getTopmenu()->isCategoryVisible($category),
                 'Category ' . $category . ' is not visible in top menu.'
             );

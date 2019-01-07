@@ -11,7 +11,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class SecureToken
@@ -59,6 +58,7 @@ class SecureToken
      */
     public function requestToken(Quote $quote)
     {
+        $this->transparent->setStore($quote->getStoreId());
         $request = $this->transparent->buildBasicRequest();
 
         $request->setTrxtype(Payflowpro::TRXTYPE_AUTH_ONLY);

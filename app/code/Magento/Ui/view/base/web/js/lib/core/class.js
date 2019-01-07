@@ -27,7 +27,7 @@ define([
      * Creates constructor function which allows
      * initialization without usage of a 'new' operator.
      *
-     * @param {Object} protoProps - Prototypal propeties of a new constructor.
+     * @param {Object} protoProps - Prototypal properties of a new constructor.
      * @param {Function} constructor
      * @returns {Function} Created constructor.
      */

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBasicBundleProductAttributesTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to set/edit all the basic product attributes when creating/editing a bundle product"/>
+            <description value="Admin should be able to set/edit all the basic product attributes when creating/editing a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-222"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Create attribute set-->
+        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createDefaultAttributeSet">
+            <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+
+        <!--Go to product creation page-->
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreationPage"/>
+
+        <!--Enable/Disable Toggle-->
+        <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggle"/>
+
+        <!--Fill out product attributes-->
+        <actionGroup ref="SetBundleProductAttributes" stepKey="fillOutAllAttributes">
+            <!--primarily uses default values-->
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="bundleProductName" value="{{BundleProduct.name}}"/>
+            <argument name="bundleProductSku" value="{{BundleProduct.sku}}"/>
+            <argument name="visibilty" value="catalog"/>
+        </actionGroup>
+
+        <!--Verify form was filled out correctly-->
+
+        <!--Enable/Disable Toggle check-->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="seeToggleIsOff"/>
+
+        <!--Apply Attribute Set-->
+        <seeOptionIsSelected selector="{{AdminProductFormSection.attributeSet}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeSet"/>
+
+        <!--Product name and SKU-->
+        <seeInField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="seeProductSku"/>
+
+        <!--Dynamic SKU Toggle-->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="seeDynamicSkuToggleOff"/>
+
+        <!--Dynamic Price Toggle-->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormBundleSection.dynamicPriceToggle}}" stepKey="seeDynamicPriceToggleOff"/>
+
+        <!--Tax Class-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.taxClassDropDown}}" userInput="Taxable Goods" stepKey="seeCorrectTaxClass"/>
+
+        <!--Fill out price-->
+        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="10" stepKey="seePrice"/>
+
+        <!--Stock status-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="In Stock" stepKey="seeStockStatus"/>
+
+        <!--Dynamic weight-->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormBundleSection.dynamicWeightToggle}}" stepKey="seeDynamicWeightOff"/>
+
+        <!--Weight-->
+        <seeInField selector="{{AdminProductFormBundleSection.weightField}}" userInput="10" stepKey="seeWeight"/>
+
+        <!--Visibilty-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Catalog" stepKey="seeVisibility"/>
+
+        <!--Categories-->
+        <seeElement selector="{{AdminProductFormBundleSection.defaultCategory}}" stepKey="seeDefaultCategory"/>
+
+        <!--New from - to-->
+        <seeInField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="10/10/2018" stepKey="seeFirstDate"/>
+        <seeInField selector="{{AdminProductFormBundleSection.toDate}}" userInput="10/10/2018" stepKey="seeSecondDate"/>
+
+        <!--Country of manufacture-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="Italy" stepKey="seeCountryOfManufacture"/>
+
+        <!--Create second attribute set for edit-->
+        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createSecondAttributeSet">
+            <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
+        </actionGroup>
+
+        <!--Filter catalog-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <!--Edit fields-->
+
+        <!--Enable/Disable Toggle-->
+        <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggleAgain"/>
+
+        <!--Apply Attribute Set-->
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(ProductAttributeFrontendLabelTwo.label)}}" stepKey="selectAttrSet"/>
+
+        <!--Product name and SKU-->
+        <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku2}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminProductFormBundleSection.productName}}" stepKey="clickUnselectField"/>
+
+        <!--Dynamic SKU Toggle-->
+        <checkOption selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="clickOnToggle"/>
+        <click selector="{{AdminProductFormBundleSection.productName}}" stepKey="clickUnselectFieldAgain"/>
+
+        <!--Fill out price-->
+        <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="20" stepKey="fillOutPrice"/>
+
+        <!--Stock status-->
+        <selectOption selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="Out of Stock" stepKey="stockStatus"/>
+
+        <!--Dynamic weight-->
+        <checkOption selector="{{AdminProductFormBundleSection.dynamicWeightToggle}}" stepKey="dynamicWeight"/>
+
+        <!--Visibilty-->
+        <selectOption selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Not Visible Individually" stepKey="openVisibility"/>
+
+        <!--New from - to-->
+        <fillField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="10/20/2018" stepKey="fillInFirstDate"/>
+        <fillField selector="{{AdminProductFormBundleSection.toDate}}" userInput="10/20/2018" stepKey="fillInSecondDate"/>
+
+        <!--Country of manufacture-->
+        <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="France" stepKey="countryOfManufactureDropDown"/>
+
+        <!--Save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Verify form was filled out correctly after edit-->
+
+        <!--Enable/Disable Toggle-->
+        <seeElement selector="{{AdminProductFormBundleSection.enableDisableToggleOn}}" stepKey="seeToggleIsOn2"/>
+
+        <!--Attribute Set-->
+        <seeOptionIsSelected selector="{{AdminProductFormSection.attributeSet}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="seeAttributeSet2"/>
+
+        <!--Product name and SKU-->
+        <seeInField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="seeProductName2"/>
+        <seeInField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku2}}" stepKey="seeProductSku2"/>
+
+        <!--Dynamic SKU Toggle-->
+        <seeElement selector="{{AdminProductFormBundleSection.dynamicSkuToggleOn}}" stepKey="seeDynamicSkuToggleOn2"/>
+
+        <!--Tax Class-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.taxClassDropDown}}" userInput="Taxable Goods" stepKey="seeCorrectTaxClass2"/>
+
+        <!--Price-->
+        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="20" stepKey="seePrice2"/>
+
+        <!--Stock status-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="Out of Stock" stepKey="seeStockStatus2"/>
+
+        <!--Dynamic weight-->
+        <seeElement selector="{{AdminProductFormBundleSection.dynamicWeightToggleOn}}" stepKey="seeDynamicWeightOn2"/>
+
+        <!--Visibilty-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Not Visible Individually" stepKey="seeVisibility2"/>
+
+        <!--Categories-->
+        <seeElement selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="seeDefaultCategory2"/>
+
+        <!--New from - to-->
+        <seeInField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="10/20/2018" stepKey="seeFirstDate2"/>
+        <seeInField selector="{{AdminProductFormBundleSection.toDate}}" userInput="10/20/2018" stepKey="seeSecondDate2"/>
+
+        <!--Country of manufacture-->
+        <seeOptionIsSelected selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="France" stepKey="seeCountryOfManufacture2"/>
+    </test>
+</tests>

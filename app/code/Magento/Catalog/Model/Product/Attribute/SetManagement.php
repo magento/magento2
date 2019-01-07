@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\StateException;
@@ -65,12 +66,12 @@ class SetManagement implements \Magento\Catalog\Api\AttributeSetManagementInterf
             $productEntityId = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
             if ($skeletonSet->getEntityTypeId() != $productEntityId) {
                 throw new StateException(
-                    __('Can not create attribute set based on non product attribute set.')
+                    __("The attribute set couldn't be created because it's based on a non-product attribute set.")
                 );
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
             throw new StateException(
-                __('Can not create attribute set based on not existing attribute set')
+                __("The attribute set couldn't be created because it's based on a non-existing attribute set.")
             );
         }
     }

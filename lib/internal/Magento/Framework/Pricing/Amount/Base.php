@@ -105,9 +105,7 @@ class Base implements AmountInterface
      */
     public function getAdjustmentAmount($adjustmentCode)
     {
-        return isset($this->adjustmentAmounts[$adjustmentCode])
-            ? $this->adjustmentAmounts[$adjustmentCode]
-            : false;
+        return $this->adjustmentAmounts[$adjustmentCode] ?? false;
     }
 
     /**

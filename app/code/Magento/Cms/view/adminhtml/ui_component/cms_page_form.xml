@@ -15,9 +15,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="save_and_continue" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton"/>
             <button name="save" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton"/>
-            <button name="reset" class="Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton"/>
             <button name="delete" class="Magento\Cms\Block\Adminhtml\Page\Edit\DeleteButton"/>
             <button name="back" class="Magento\Cms\Block\Adminhtml\Page\Edit\BackButton"/>
         </buttons>
@@ -141,7 +139,7 @@
     <fieldset name="search_engine_optimisation" sortOrder="20">
         <settings>
             <collapsible>true</collapsible>
-            <label translate="true">Search Engine Optimisation</label>
+            <label translate="true">Search Engine Optimization</label>
         </settings>
         <field name="identifier" formElement="input">
             <argument name="data" xsi:type="array">
@@ -226,7 +224,7 @@
             <collapsible>true</collapsible>
             <label translate="true">Design</label>
         </settings>
-        <field name="page_layout" formElement="select">
+        <field name="page_layout" formElement="select" class="Magento\Cms\Ui\Component\Form\Field\PageLayout">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>

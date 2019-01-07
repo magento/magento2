@@ -17,12 +17,10 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
     /**
      * @var string
      */
-    protected $_template = 'product/composite/fieldset/options/type/multi.phtml';
+    protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/multi.phtml';
 
     /**
-     * @param  string $elementId
-     * @param  string $containerId
-     * @return string
+     * @inheritdoc
      */
     public function setValidationContainer($elementId, $containerId)
     {
@@ -33,5 +31,16 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
             $containerId .
             '\';
             </script>';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSelectionPrice($selection)
+    {
+        $price = parent::getSelectionPrice($selection);
+        $qty = $selection->getSelectionQty();
+
+        return $price * $qty;
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">failed_operation_modal_listing.failed_operation_modal_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>failed_operation_modal_listing_columns</spinner>
+        <deps>
+            <dep>failed_operation_modal_listing.failed_operation_modal_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="failed_operation_modal_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Logging::system_magento_logging_bulk_operations</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="failed_operation_modal_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <paging name="listing_paging"/>
+        <exportButton name="export_button">
+            <settings>
+                <additionalParams>
+                    <param xsi:type="string" name="uuid">${ $.provider}:params.uuid</param>
+                </additionalParams>
+            </settings>
+        </exportButton>
+    </listingToolbar>
+    <columns name="failed_operation_modal_listing_columns">
+        <settings>
+            <dndConfig>
+                <param name="enabled" xsi:type="boolean">false</param>
+            </dndConfig>
+        </settings>
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>id</indexField>
+                <visible>false</visible>
+            </settings>
+        </selectionsColumn>
+        <column name="id" component="Magento_Ui/js/grid/columns/link" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="meta_information" sortOrder="20">
+            <settings>
+                <label translate="true">Meta Information</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="result_message" sortOrder="30">
+            <settings>
+                <label translate="true">Error</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

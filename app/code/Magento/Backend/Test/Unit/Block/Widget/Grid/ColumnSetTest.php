@@ -117,7 +117,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRowUrlIfUrlPathNotSet()
     {
-        $this->assertEquals('#', $this->_block->getRowUrl(new \StdClass()));
+        $this->assertEquals('#', $this->_block->getRowUrl(new \stdClass()));
     }
 
     public function testGetRowUrl()

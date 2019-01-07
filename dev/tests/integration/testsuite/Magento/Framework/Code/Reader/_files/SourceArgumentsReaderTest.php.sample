@@ -6,7 +6,7 @@
 namespace Some\Testing\Name\Space;
 
 use Imported\Name\Space\One as FirstImport;
-use Imported\Name\Space\Object;
+use Imported\Name\Space\ClassName;
 use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest ;
 
 class AnotherSimpleClass
@@ -16,9 +16,12 @@ class AnotherSimpleClass
         FirstImport $itemTwo,
         AnotherTest\Extended $itemThree,
         Testing $itemFour,
-        Object\Under\Test $itemFive,
-        Object $itemSix,
+        ClassName\Under\Test $itemFive,
+        ClassName $itemSix,
         Test $itemSeven,
+        ?\Exception $optionalException,
+        $defaultString = '$default),value;',
+        ?ClassName $optionalWithDefaultValue = null,
         array $itemEight = [],
         $itemNine = 'test'
     ) {

@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserFailedLoginByPermissionMessage extends AbstractConstraint
 {
-    const FAILED_LOGIN_MESSAGE = 'You need more permissions to access this.';
+    const FAILED_LOGIN_MESSAGE = 'More permissions are needed to access this.';
 
     /**
      * Verify incorrect credentials message while login to admin.
@@ -30,7 +30,7 @@ class AssertUserFailedLoginByPermissionMessage extends AbstractConstraint
         $adminAuth->getLoginBlock()->fill($customAdmin);
         $adminAuth->getLoginBlock()->submit();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::FAILED_LOGIN_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'

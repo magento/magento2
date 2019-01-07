@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
@@ -104,11 +108,23 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param array $args
      *
      * @return object
-     *
+     * @throws RuntimeException
      */
     protected function createObject($type, $args)
     {
-        return new $type(...array_values($args));
+        try {
+            return new $type(...array_values($args));
+        } catch (\TypeError $exception) {
+            /** @var LoggerInterface $logger */
+            $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+            $logger->critical(
+                sprintf('Type Error occurred when creating object: %s, %s', $type, $exception->getMessage())
+            );
+
+            throw new RuntimeException(
+                new Phrase('Type Error occurred when creating object: %type', ['type' => $type])
+            );
+        }
     }
 
     /**
@@ -127,12 +143,12 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function resolveArgument(&$argument, $paramType, $paramDefault, $paramName, $requestedType)
     {
         if ($paramType && $argument !== $paramDefault && !is_object($argument)) {
-            $argumentType = $argument['instance'];
             if (!isset($argument['instance']) || $argument !== (array)$argument) {
                 throw new \UnexpectedValueException(
                     'Invalid parameter configuration provided for $' . $paramName . ' argument of ' . $requestedType
                 );
             }
+            $argumentType = $argument['instance'];
 
             if (isset($argument['shared'])) {
                 $isShared = $argument['shared'];

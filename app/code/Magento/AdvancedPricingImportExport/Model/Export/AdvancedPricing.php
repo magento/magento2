@@ -5,6 +5,7 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
+use Magento\ImportExport\Model\Export;
 use Magento\Store\Model\Store;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
@@ -80,6 +81,11 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ];
 
     /**
+     * @var string[]
+     */
+    private $websiteCodesMap = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -98,7 +104,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,6 +192,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Export process
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
@@ -255,28 +261,121 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected function getExportData()
     {
+        if ($this->_passTierPrice) {
+            return [];
+        }
+
         $exportData = [];
         try {
-            $rawData = $this->collectRawData();
-            $productIds = array_keys($rawData);
-            if (isset($productIds)) {
-                if (!$this->_passTierPrice) {
-                    $exportData = array_merge(
-                        $exportData,
-                        $this->getTierPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
-                    );
+            $productsByStores = $this->loadCollection();
+            if (!empty($productsByStores)) {
+                $linkField = $this->getProductEntityLinkField();
+                $productLinkIds = [];
+
+                foreach ($productsByStores as $product) {
+                    $productLinkIds[array_pop($product)[$linkField]] = true;
+                }
+                $productLinkIds = array_keys($productLinkIds);
+                $tierPricesData = $this->fetchTierPrices($productLinkIds);
+                $exportData = $this->prepareExportData(
+                    $productsByStores,
+                    $tierPricesData
+                );
+                if (!empty($exportData)) {
+                    asort($exportData);
                 }
             }
-            if ($exportData) {
-                $exportData = $this->correctExportData($exportData);
-            }
-            if (isset($exportData)) {
-                asort($exportData);
-            }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
+
         return $exportData;
+    }
+
+    /**
+     * Creating export-formatted row from tier price.
+     *
+     * @param array $tierPriceData Tier price information.
+     *
+     * @return array Formatted for export tier price information.
+     */
+    private function createExportRow(array $tierPriceData): array
+    {
+        //List of columns to display in export row.
+        $exportRow = $this->templateExportData;
+
+        foreach (array_keys($exportRow) as $keyTemplate) {
+            if (array_key_exists($keyTemplate, $tierPriceData)) {
+                if (in_array($keyTemplate, $this->_priceWebsite)) {
+                    //If it's website column then getting website code.
+                    $exportRow[$keyTemplate] = $this->_getWebsiteCode(
+                        $tierPriceData[$keyTemplate]
+                    );
+                } elseif (in_array($keyTemplate, $this->_priceCustomerGroup)) {
+                    //If it's customer group column then getting customer
+                    //group name by ID.
+                    $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
+                        $tierPriceData[$keyTemplate],
+                        $tierPriceData[ImportAdvancedPricing::VALUE_ALL_GROUPS]
+                    );
+                    unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
+                } elseif ($keyTemplate
+                    === ImportAdvancedPricing::COL_TIER_PRICE
+                ) {
+                    //If it's price column then getting value and type
+                    //of tier price.
+                    $exportRow[$keyTemplate]
+                        = $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                        ? $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                        : $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE];
+                    $exportRow[ImportAdvancedPricing::COL_TIER_PRICE_TYPE]
+                        = $this->tierPriceTypeValue($tierPriceData);
+                } else {
+                    //Any other column just goes as is.
+                    $exportRow[$keyTemplate] = $tierPriceData[$keyTemplate];
+                }
+            }
+        }
+
+        return $exportRow;
+    }
+
+    /**
+     * Prepare data for export.
+     *
+     * @param array $productsData Products to export.
+     * @param array $tierPricesData Their tier prices.
+     *
+     * @return array Export rows to display.
+     */
+    private function prepareExportData(
+        array $productsData,
+        array $tierPricesData
+    ): array {
+        //Assigning SKUs to tier prices data.
+        $productLinkIdToSkuMap = [];
+        foreach ($productsData as $productData) {
+            $productLinkIdToSkuMap[$productData[Store::DEFAULT_STORE_ID][$this->getProductEntityLinkField()]]
+                = $productData[Store::DEFAULT_STORE_ID]['sku'];
+        }
+
+        //Adding products' SKUs to tier price data.
+        $linkedTierPricesData = [];
+        foreach ($tierPricesData as $tierPriceData) {
+            $sku = $productLinkIdToSkuMap[$tierPriceData['product_link_id']];
+            $linkedTierPricesData[] = array_merge(
+                $tierPriceData,
+                [ImportAdvancedPricing::COL_SKU => $sku]
+            );
+        }
+
+        //Formatting data for export.
+        $customExportData = [];
+        foreach ($linkedTierPricesData as $row) {
+            $customExportData[] = $this->createExportRow($row);
+        }
+
+        return $customExportData;
     }
 
     /**
@@ -285,6 +384,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param array $exportData
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @deprecated
+     * @see prepareExportData
      */
     protected function correctExportData($exportData)
     {
@@ -327,14 +428,81 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Check type for tier price.
      *
-     * @param string $tierPricePercentage
+     * @param array $tierPriceData
      * @return string
      */
-    private function tierPriceTypeValue($tierPricePercentage)
+    private function tierPriceTypeValue(array $tierPriceData): string
     {
-        return $tierPricePercentage
+        return $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
             ? ImportAdvancedPricing::TIER_PRICE_TYPE_PERCENT
             : ImportAdvancedPricing::TIER_PRICE_TYPE_FIXED;
+    }
+
+    /**
+     * Load tier prices for given products.
+     *
+     * @param string[] $productIds Link IDs of products to find tier prices for.
+     *
+     * @return array Tier prices data.
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function fetchTierPrices(array $productIds): array
+    {
+        if (empty($productIds)) {
+            throw new \InvalidArgumentException(
+                'Can only load tier prices for specific products'
+            );
+        }
+
+        $pricesTable = ImportAdvancedPricing::TABLE_TIER_PRICE;
+        $exportFilter = null;
+        $priceFromFilter = null;
+        $priceToFilter = null;
+        if (isset($this->_parameters[Export::FILTER_ELEMENT_GROUP])) {
+            $exportFilter = $this->_parameters[Export::FILTER_ELEMENT_GROUP];
+        }
+        $productEntityLinkField = $this->getProductEntityLinkField();
+        $selectFields = [
+            ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => 'ap.website_id',
+            ImportAdvancedPricing::VALUE_ALL_GROUPS => 'ap.all_groups',
+            ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'ap.customer_group_id',
+            ImportAdvancedPricing::COL_TIER_PRICE_QTY => 'ap.qty',
+            ImportAdvancedPricing::COL_TIER_PRICE => 'ap.value',
+            ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE => 'ap.percentage_value',
+            'product_link_id' => 'ap.' .$productEntityLinkField,
+        ];
+        if ($exportFilter && array_key_exists('tier_price', $exportFilter)) {
+            if (!empty($exportFilter['tier_price'][0])) {
+                $priceFromFilter = $exportFilter['tier_price'][0];
+            }
+            if (!empty($exportFilter['tier_price'][1])) {
+                $priceToFilter = $exportFilter['tier_price'][1];
+            }
+        }
+
+        $select = $this->_connection->select()
+            ->from(
+                ['ap' => $this->_resource->getTableName($pricesTable)],
+                $selectFields
+            )
+            ->where(
+                'ap.'.$productEntityLinkField.' IN (?)',
+                $productIds
+            );
+
+        if ($priceFromFilter !== null) {
+            $select->where('ap.value >= ?', $priceFromFilter);
+        }
+        if ($priceToFilter !== null) {
+            $select->where('ap.value <= ?', $priceToFilter);
+        }
+        if ($priceFromFilter || $priceToFilter) {
+            $select->orWhere('ap.percentage_value IS NOT NULL');
+        }
+
+        return $this->_connection->fetchAll($select);
     }
 
     /**
@@ -345,6 +513,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @return array|bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated
+     * @see fetchTierPrices
      */
     protected function getTierPrices(array $listSku, $table)
     {
@@ -413,41 +583,52 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     }
 
     /**
-     * Get Website code
+     * Get Website code.
      *
      * @param int $websiteId
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getWebsiteCode($websiteId)
+    protected function _getWebsiteCode(int $websiteId): string
     {
-        $storeName = ($websiteId == 0)
-            ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
-            : $this->_storeManager->getWebsite($websiteId)->getCode();
-        $currencyCode = '';
-        if ($websiteId == 0) {
-            $currencyCode = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
+        if (!array_key_exists($websiteId, $this->websiteCodesMap)) {
+            $storeName = ($websiteId == 0)
+                ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
+                : $this->_storeManager->getWebsite($websiteId)->getCode();
+            $currencyCode = '';
+            if ($websiteId == 0) {
+                $currencyCode = $this->_storeManager->getWebsite($websiteId)
+                    ->getBaseCurrencyCode();
+            }
+
+            if ($storeName && $currencyCode) {
+                $code = $storeName.' ['.$currencyCode.']';
+            } else {
+                $code = $storeName;
+            }
+            $this->websiteCodesMap[$websiteId] = $code;
         }
-        if ($storeName && $currencyCode) {
-            return $storeName . ' [' . $currencyCode . ']';
-        } else {
-            return $storeName;
-        }
+
+        return $this->websiteCodesMap[$websiteId];
     }
 
     /**
-     * Get Customer Group By Id
+     * Get Customer Group By Id.
      *
-     * @param int $customerGroupId
-     * @param null $allGroups
+     * @param int $groupId
+     * @param int $allGroups
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function _getCustomerGroupById($customerGroupId, $allGroups = null)
-    {
-        if ($allGroups) {
+    protected function _getCustomerGroupById(
+        int $groupId,
+        int $allGroups = 0
+    ): string {
+        if ($allGroups !== 0) {
             return ImportAdvancedPricing::VALUE_ALL_GROUPS;
-        } else {
-            return $this->_groupRepository->getById($customerGroupId)->getCode();
         }
+        return $this->_groupRepository->getById($groupId)->getCode();
     }
 
     /**

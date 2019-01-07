@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\App\ObjectManager;
@@ -538,7 +539,7 @@ class Adapter implements MethodInterface
         }
 
         if ($this->commandPool === null) {
-            throw new \DomainException('Command pool is not configured for use.');
+            throw new \DomainException("The command pool isn't configured for use.");
         }
 
         $command = $this->commandPool->get($commandCode);

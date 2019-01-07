@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -60,14 +61,16 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         // Check requires option to have some value
         if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         }
 
         // Check maximal length limit
         $maxCharacters = $option->getMaxCharacters();
         if ($maxCharacters > 0 && $this->string->strlen($value) > $maxCharacters) {
             $this->setIsValid(false);
-            throw new LocalizedException(__('The text is too long.'));
+            throw new LocalizedException(__('The text is too long. Shorten the text and try again.'));
         }
 
         $this->setUserValue($value);
@@ -81,7 +84,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function prepareForCart()
     {
-        if ($this->getIsValid() && strlen($this->getUserValue()) > 0) {
+        if ($this->getIsValid() && ($this->getUserValue() !== '')) {
             return $this->getUserValue();
         } else {
             return null;

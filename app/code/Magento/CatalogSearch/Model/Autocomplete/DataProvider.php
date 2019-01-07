@@ -10,9 +10,19 @@ use Magento\Search\Model\ResourceModel\Query\Collection;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 use Magento\Search\Model\Autocomplete\ItemFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
+use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Catalog search auto-complete data provider.
+ */
 class DataProvider implements DataProviderInterface
 {
+    /**
+     * Autocomplete limit
+     */
+    const CONFIG_AUTOCOMPLETE_LIMIT = 'catalog/search/autocomplete_limit';
+
     /**
      * Query factory
      *
@@ -28,19 +38,33 @@ class DataProvider implements DataProviderInterface
     protected $itemFactory;
 
     /**
+     * Limit
+     *
+     * @var int
+     */
+    protected $limit;
+
+    /**
      * @param QueryFactory $queryFactory
      * @param ItemFactory $itemFactory
+     * @param ScopeConfig $scopeConfig
      */
     public function __construct(
         QueryFactory $queryFactory,
-        ItemFactory $itemFactory
+        ItemFactory $itemFactory,
+        ScopeConfig $scopeConfig
     ) {
         $this->queryFactory = $queryFactory;
         $this->itemFactory = $itemFactory;
+
+        $this->limit = (int) $scopeConfig->getValue(
+            self::CONFIG_AUTOCOMPLETE_LIMIT,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {
@@ -58,7 +82,7 @@ class DataProvider implements DataProviderInterface
                 $result[] = $resultItem;
             }
         }
-        return $result;
+        return ($this->limit) ? array_splice($result, 0, $this->limit) : $result;
     }
 
     /**

@@ -9,7 +9,7 @@
 <?php
 /** @var $block \Magento\Framework\View\Element\Template */
 /** @var $helper \Magento\Search\Helper\Data */
-$helper = $this->helper('Magento\Search\Helper\Data');
+$helper = $this->helper(\Magento\Search\Helper\Data::class);
 ?>
 <div class="block block-search">
     <div class="block block-title"><strong><?= /* @escapeNotVerified */ __('Search') ?></strong></div>
@@ -23,7 +23,7 @@ $helper = $this->helper('Magento\Search\Helper\Data');
                     <input id="search"
                            data-mage-init='{"quickSearch":{
                                 "formSelector":"#search_mini_form",
-                                "url":"<?= /* @escapeNotVerified */ $block->getUrl('search/ajax/suggest', ['_secure' => $block->getRequest()->isSecure()]) ?>",
+                                "url":"<?= /* @escapeNotVerified */ $helper->getSuggestUrl()?>",
                                 "destinationSelector":"#search_autocomplete"}
                            }'
                            type="text"

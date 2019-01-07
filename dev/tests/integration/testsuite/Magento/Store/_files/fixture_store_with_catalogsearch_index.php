@@ -21,11 +21,4 @@ if (!$store->load($storeCode)->getId()) {
         ->setSortOrder(10)
         ->setIsActive(1);
     $store->save();
-
-    Bootstrap::getObjectManager()
-        ->get(\Magento\Framework\Event\ManagerInterface::class)
-        ->dispatch('store_add', ['store' => $store]);
-
-    /* Refresh stores memory cache */
-    Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 }

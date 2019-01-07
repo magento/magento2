@@ -36,7 +36,7 @@ class AssertIntegrationSuccessSaveMessage extends AbstractConstraint
             : $integration->getName();
         $expectedMessage = sprintf(self::SUCCESS_SAVE_MESSAGE, $name);
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

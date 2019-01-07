@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Build select for rule relation with product.
  */
@@ -32,29 +36,38 @@ class RuleProductsSelectBuilder
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var ActiveTableSwitcher
      */
     private $activeTableSwitcher;
+
+    /**
+     * @var TableSwapper
+     */
+    private $tableSwapper;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param TableSwapper|null $tableSwapper
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher
+        ActiveTableSwitcher $activeTableSwitcher,
+        TableSwapper $tableSwapper = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
+        $this->tableSwapper = $tableSwapper ??
+            ObjectManager::getInstance()->get(TableSwapper::class);
     }
 
     /**
@@ -74,7 +87,7 @@ class RuleProductsSelectBuilder
         $indexTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->activeTableSwitcher->getAdditionalTableName('catalogrule_product')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product')
             );
         }
 

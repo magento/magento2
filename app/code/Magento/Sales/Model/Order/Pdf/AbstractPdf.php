@@ -158,8 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
-     * Returns the total width in points of the string using the specified font and
-     * size.
+     * Returns the total width in points of the string using the specified font and size.
      *
      * This is not the most efficient way to perform this calculation. I'm
      * concentrating optimization efforts on the upcoming layout manager class.
@@ -230,7 +229,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert logo to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -285,7 +284,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Insert address to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      */
     protected function insertAddress(&$page, $store = null)
@@ -362,6 +361,38 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
         }
         return $y;
+    }
+
+    /**
+     * Detect an input string is Arabic
+     *
+     * @param string $subject
+     * @return bool
+     */
+    private function isArabic(string $subject): bool
+    {
+        return (preg_match('/\p{Arabic}/u', $subject) > 0);
+    }
+
+    /**
+     * Reverse text with Arabic characters
+     *
+     * @param string $string
+     * @return string
+     */
+    private function reverseArabicText($string)
+    {
+        $splitText = explode(' ', $string);
+        for ($i = 0; $i < count($splitText); $i++) {
+            if ($this->isArabic($splitText[$i])) {
+                for ($j = $i + 1; $j < count($splitText); $j++) {
+                    $tmp = $this->string->strrev($splitText[$j]);
+                    $splitText[$j] = $this->string->strrev($splitText[$i]);
+                    $splitText[$i] = $tmp;
+                }
+            }
+        }
+        return implode(' ', $splitText);
     }
 
     /**
@@ -475,7 +506,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $text[] = $_value;
+                    $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                 }
                 foreach ($text as $part) {
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
@@ -492,7 +523,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 if ($value !== '') {
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
-                        $text[] = $_value;
+                        $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                     }
                     foreach ($text as $part) {
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
@@ -641,11 +672,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             return 0;
         }
 
-        if ($a['sort_order'] == $b['sort_order']) {
-            return 0;
-        }
-
-        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
+        return $a['sort_order'] <=> $b['sort_order'];
     }
 
     /**
@@ -861,7 +888,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerif.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -877,7 +904,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifBold.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -893,7 +920,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifItalic.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -958,7 +985,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * font         string; font style, optional: bold, italic, regular
      * font_file    string; path to font file (optional for use your custom font)
      * font_size    int; font size (default 7)
-     * align        string; text align (also see feed parametr), optional left, right
+     * align        string; text align (also see feed parameter), optional left, right
      * height       int;line spacing (default 10)
      *
      * @param  \Zend_Pdf_Page $page

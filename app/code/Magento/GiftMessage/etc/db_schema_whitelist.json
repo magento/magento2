@@ -1,0 +1,45 @@
+{
+    "gift_message": {
+        "column": {
+            "gift_message_id": true,
+            "customer_id": true,
+            "sender": true,
+            "recipient": true,
+            "message": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "quote": {
+        "column": {
+            "gift_message_id": true
+        }
+    },
+    "quote_address": {
+        "column": {
+            "gift_message_id": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "gift_message_id": true
+        }
+    },
+    "quote_address_item": {
+        "column": {
+            "gift_message_id": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "gift_message_id": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "gift_message_id": true,
+            "gift_message_available": true
+        }
+    }
+}

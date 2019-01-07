@@ -31,7 +31,7 @@ $numColumns = sizeof($block->getColumns());
                                        type="text"
                                        id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>"
                                        name="report_from"
-                                       value="<?= /* @escapeNotVerified */ $block->getFilter('report_from') ?>">
+                                       value="<?= $block->escapeHtml($block->getFilter('report_from')) ?>">
                                 <span id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from_advice') ?>"></span>
                             </span>
 
@@ -44,7 +44,7 @@ $numColumns = sizeof($block->getColumns());
                                        type="text"
                                        id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>"
                                        name="report_to"
-                                       value="<?= /* @escapeNotVerified */ $block->getFilter('report_to') ?>"/>
+                                       value="<?= $block->escapeHtml($block->getFilter('report_to')) ?>"/>
                                 <span id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to_advice') ?>"></span>
                             </span>
 

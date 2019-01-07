@@ -17,4 +17,8 @@
         <step name="createProduct" module="Magento_Catalog" next="updateChildProduct" />
         <step name="updateChildProduct" module="Magento_ConfigurableProduct" />
     </scenario>
+    <scenario name="VerifyConfigurableProductLayeredNavigationTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" next="updateChildProduct" />
+        <step name="updateChildProduct" module="Magento_ConfigurableProduct" />
+    </scenario>
 </config>

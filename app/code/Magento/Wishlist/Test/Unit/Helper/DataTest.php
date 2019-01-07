@@ -248,6 +248,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'item' => $wishlistItemId,
             'qty' => $wishlistItemQty,
+            ActionInterface::PARAM_NAME_URL_ENCODED => '',
         ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
@@ -333,7 +334,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, ['item' => $wishlistItemId])
+            ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => ''])
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getRemoveParams($this->wishlistItem));
@@ -402,13 +403,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('wishlist/shared/cart')
             ->willReturn($url);
 
-        $exptected = [
+        $expected = [
             'item' => $wishlistItemId,
             'qty' => $wishlistItemQty,
         ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, $exptected)
+            ->with($url, $expected)
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));

@@ -60,7 +60,7 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage We can't find the role for the user you wanted.
+     * @expectedExceptionMessage The role wasn't found for the user. Verify the role and try again.
      */
     public function testGetAllowedResourcesByUserRoleNotFound()
     {
@@ -78,6 +78,9 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return AclRetriever
+     */
     protected function createAclRetriever()
     {
         $this->roleMock = $this->createPartialMock(\Magento\Authorization\Model\Role::class, ['getId', '__wakeup']);

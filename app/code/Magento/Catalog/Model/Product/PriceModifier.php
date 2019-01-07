@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Product form price modifier
+ */
 class PriceModifier
 {
     /**
@@ -26,6 +29,8 @@ class PriceModifier
     }
 
     /**
+     * Remove tier price
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|string $customerGroupId
      * @param int $qty
@@ -40,17 +45,17 @@ class PriceModifier
         $prices = $product->getData('tier_price');
         // verify if price exist
         if ($prices === null) {
-            throw new NoSuchEntityException(__('This product doesn\'t have tier price'));
+            throw new NoSuchEntityException(__('Tier price is unavailable for this product.'));
         }
         $tierPricesQty = count($prices);
 
         foreach ($prices as $key => $tierPrice) {
             if ($customerGroupId == 'all' && $tierPrice['price_qty'] == $qty
-                && $tierPrice['all_groups'] == 1 && intval($tierPrice['website_id']) === intval($websiteId)
+                && $tierPrice['all_groups'] == 1 && (int) $tierPrice['website_id'] === (int) $websiteId
             ) {
                 unset($prices[$key]);
             } elseif ($tierPrice['price_qty'] == $qty && $tierPrice['cust_group'] == $customerGroupId
-                && intval($tierPrice['website_id']) === intval($websiteId)
+                && (int) $tierPrice['website_id'] === (int) $websiteId
             ) {
                 unset($prices[$key]);
             }
@@ -69,7 +74,7 @@ class PriceModifier
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for tier_price'));
+            throw new CouldNotSaveException(__('The tier_price data is invalid. Verify the data and try again.'));
         }
     }
 }

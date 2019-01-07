@@ -54,6 +54,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function inputFilter($value)
     {
+        if (!$value) {
+            return $value;
+        }
+
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
             ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
@@ -74,6 +78,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function outputFilter($value)
     {
+        if (!$value) {
+            return $value;
+        }
+
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
             ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );

@@ -163,7 +163,6 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($valueMap);
         $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
-        $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')

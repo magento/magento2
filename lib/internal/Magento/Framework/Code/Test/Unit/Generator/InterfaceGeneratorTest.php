@@ -75,7 +75,8 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {
-            $this->expectException($expectedException, $expectedExceptionMessage);
+            $this->expectException($expectedException);
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
         $methodsData = array_merge_recursive($this->methodsData, $additionalMethodsData);
         $this->interfaceGenerator->setClassDocBlock($this->interfaceDocBlock)
@@ -113,6 +114,9 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
+    /**
+     * @return array
+     */
     public function generateDataProvider()
     {
         return [

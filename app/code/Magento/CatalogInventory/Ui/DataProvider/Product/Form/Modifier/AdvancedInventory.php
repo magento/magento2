@@ -210,7 +210,6 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                 ]
             );
-
             $container['arguments']['data']['config'] = [
                 'formElement' => 'container',
                 'componentType' => 'container',
@@ -224,9 +223,11 @@ class AdvancedInventory extends AbstractModifier
                     $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
                     $this->meta
                 ) - 1,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
             $qty['arguments']['data']['config'] = [
                 'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                'group' => 'quantity_and_stock_status_qty',
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',

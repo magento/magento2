@@ -37,7 +37,7 @@ class AssertWidgetAbsentOnFrontendHome extends AbstractConstraint
         }
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget is present on Home page.'
         );

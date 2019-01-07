@@ -12,13 +12,13 @@ use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that created widget displayed on frontent on Home page and on Advanced Search and
+ * Check that created widget displayed on frontend on Home page and on Advanced Search and
  * after click on widget link on frontend system redirects you to cms page.
  */
 class AssertWidgetCmsPageLink extends AbstractConstraint
 {
     /**
-     * Assert that created widget displayed on frontent on Home page and on Advanced Search and
+     * Assert that created widget displayed on frontend on Home page and on Advanced Search and
      * after click on widget link on frontend system redirects you to cms page.
      *
      * @param CmsIndex $cmsIndex
@@ -36,7 +36,7 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
 
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type CmsPageLink is absent on Home page.'
         );
@@ -46,14 +46,14 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
             $widget->getParameters()['entities'][0]->getContentHeading();
         $cmsIndex->getWidgetView()->clickToWidget($widget, $widgetText);
         $pageTitle = $cmsIndex->getCmsPageBlock()->getPageTitle();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $title,
             $pageTitle,
             'Wrong page title on Cms page.'
         );
 
         $cmsIndex->getFooterBlock()->openAdvancedSearch();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type CmsPageLink is absent on Advanced Search page.'
         );

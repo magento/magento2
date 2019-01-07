@@ -100,6 +100,18 @@ class StoreGrid extends Grid
     }
 
     /**
+     * Search and open appropriate Website by name.
+     *
+     * @param string $websiteName
+     * @return void
+     */
+    public function searchAndOpenWebsiteByName($websiteName)
+    {
+        $this->search(['website_title' => $websiteName]);
+        $this->_rootElement->find(sprintf($this->storeName, $websiteName), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
      * Search and open appropriate Store View.
      *
      * @param Store $store

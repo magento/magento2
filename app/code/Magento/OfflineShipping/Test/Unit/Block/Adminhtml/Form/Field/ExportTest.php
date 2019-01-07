@@ -37,7 +37,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
 
-        $mockData = $this->createPartialMock(\StdClass::class, ['toHtml']);
+        $mockData = $this->createPartialMock(\stdClass::class, ['toHtml']);
         $mockData->expects($this->once())->method('toHtml')->will($this->returnValue($expected));
 
         $blockMock->expects($this->once())->method('getRequest')->will($this->returnValue($requestMock));

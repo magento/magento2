@@ -1,4 +1,4 @@
-Copyright © 2013-2017 Magento, Inc.
+Copyright © 2013-present Magento, Inc.
 
 Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license
 

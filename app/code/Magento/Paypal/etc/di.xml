@@ -67,6 +67,12 @@
     <type name="Magento\Payment\Model\Checks\Composite">
         <plugin name="paypal_specification" type="Magento\Paypal\Model\Method\Checks\SpecificationPlugin"/>
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="express_order_invoice" type="Magento\Paypal\Plugin\OrderCanInvoice"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Validation\CanInvoice">
+        <plugin name="express_order_invoice" type="Magento\Paypal\Plugin\ValidatorCanInvoice"/>
+    </type>
     <virtualType name="Magento\Paypal\Block\Payflow\Bml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut">
         <arguments>
             <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>

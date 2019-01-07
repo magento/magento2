@@ -277,6 +277,18 @@ abstract class AbstractEntity
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
                         $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
                     }
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {
+                    if (is_array($exportFilter[$attrCode])) {
+                        array_filter($exportFilter[$attrCode]);
+                        if (!empty($exportFilter[$attrCode])) {
+                            foreach ($exportFilter[$attrCode] as $val) {
+                                $collection->addAttributeToFilter(
+                                    $attrCode,
+                                    ['finset' => $val]
+                                );
+                            }
+                        }
+                    }
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT == $attrFilterType) {
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
                         $collection->addAttributeToFilter($attrCode, ['like' => "%{$exportFilter[$attrCode]}%"]);

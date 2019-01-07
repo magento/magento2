@@ -42,8 +42,29 @@
             }
     ">
         <div class="admin__action-multiselect-text"
-             data-role="selected-option"
-             data-bind="text: setCaption()">
+         data-role="selected-option"
+         ifnot="validationLoading"
+         data-bind="
+         css: {warning: warn().length},
+         text: setCaption()
+    ">
+    </div>
+        <button if="isRemoveSelectedIcon && hasData() || !validationLoading"
+                class="action-close"
+                type="button"
+                data-action="remove-selected-item"
+                tabindex="-1"
+                click="clear"
+        >
+            <span class="action-close-text" translate="'Close'"></span>
+        </button>
+        <div data-role="spinner"
+             class="admin__data-grid-loading-mask"
+             visible="validationLoading"
+             if="validationLoading">
+            <div class="spinner">
+                <span repeat="8"/>
+            </div>
         </div>
     </div>
     <!-- /ko -->
@@ -80,9 +101,15 @@
         <!-- /ko -->
     </div>
     <!-- /ko -->
-    <div class="action-menu"
-         data-bind="css: { _active: listVisible }
-    ">
+    <div class="action-menu" css="{ _active: listVisible}">
+        <div data-role="spinner"
+           class="admin__data-grid-loading-mask"
+           visible="loading"
+           if="loading">
+        <div class="spinner">
+            <span repeat="8"/>
+        </div>
+    </div>
         <!-- ko if: filterOptions -->
         <div class="admin__action-multiselect-search-wrap">
             <input
@@ -93,7 +120,10 @@
                 event: {
                     keydown: filterOptionsKeydown
                 },
-                attr: {id: uid+2},
+                attr: {
+                    id: uid+2,
+                    placeholder: filterPlaceholder
+                },
                 valueUpdate: 'afterkeydown',
                 value: filterInputValue,
                 hasFocus: filterOptionsFocus
@@ -109,11 +139,16 @@
                  class="admin__action-multiselect-search-count">
             </div>
         </div>
+        <div ifnot="options().length"
+             class="admin__action-multiselect-empty-area">
+            <ul data-bind="html: emptyOptionsHtml"/>
+        </div>
         <!-- /ko -->
         <ul class="admin__action-multiselect-menu-inner _root"
             data-bind="
                 event: {
-                    mousemove: function(data, event){onMousemove($data, $index(), event)}
+                    mousemove: function(data, event){onMousemove($data, $index(), event)},
+                    scroll: function(data, event){onScrollDown(data, event)}
                 }
             ">
             <!-- ko foreach: { data: options, as: 'option'}  -->
@@ -123,7 +158,7 @@
                 <div class="action-menu-item"
                      data-bind="
                         css: {
-                            _selected: $parent.isSelected(option.value),
+                            _selected: $parent.isSelectedValue(option),
                             _hover: $parent.isHovered(option, $element),
                             _expended: $parent.getLevelVisibility($data),
                             _unclickable: $parent.isLabelDecoration($data),

@@ -66,8 +66,8 @@ class ReportConcurrentAdmins implements ObserverInterface
                 $user = $this->backendAuthSession->getUser();
                 $jsonData = [
                     'id' => $user->getId(),
-                    'username' => $user->getUsername(),
-                    'name' => $user->getFirstname() . ' ' . $user->getLastname(),
+                    'username' => $user->getUserName(),
+                    'name' => $user->getFirstName() . ' ' . $user->getLastName(),
                 ];
 
                 $modelData = [

@@ -242,6 +242,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         return $validatorFactory;
     }
 
+    /**
+     * @return \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected function prepareCustomerFactory()
     {
         $this->customerFactory = $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
@@ -264,16 +267,26 @@ class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Addr
 {
     protected $attributeLoader;
 
+    /**
+     * @param null $object
+     * @return \Magento\Customer\Model\ResourceModel\Address|\Magento\Eav\Model\Entity\AbstractEntity
+     */
     public function loadAllAttributes($object = null)
     {
         return $this->getAttributeLoader()->loadAllAttributes($this, $object);
     }
 
+    /**
+     * @param $attributeLoader
+     */
     public function setAttributeLoader($attributeLoader)
     {
         $this->attributeLoader = $attributeLoader;
     }
 
+    /**
+     * @return \Magento\Eav\Model\Entity\AttributeLoaderInterface
+     */
     protected function getAttributeLoader()
     {
         return $this->attributeLoader;

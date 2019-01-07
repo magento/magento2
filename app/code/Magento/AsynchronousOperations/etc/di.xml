@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" type="Magento\AsynchronousOperations\Model\BulkSummary" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationInterface" type="Magento\AsynchronousOperations\Model\Operation" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationListInterface" type="Magento\AsynchronousOperations\Model\OperationList" />
+    <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
+    <preference for="Magento\AsynchronousOperations\Api\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkOperationsStatus" />
+    <preference for="Magento\Framework\Bulk\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
+    <preference for="Magento\Framework\Bulk\OperationManagementInterface" type="Magento\AsynchronousOperations\Model\OperationManagement" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\SummaryOperationStatusInterface" type="Magento\AsynchronousOperations\Model\OperationStatus" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Detailed" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Short" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\AsynchronousOperations\Api\OperationRepositoryInterface" type="Magento\AsynchronousOperations\Model\OperationRepository" />
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\AsynchronousOperations\Api\Data\OperationInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">magento_operation</item>
+                    <item name="identifierField" xsi:type="string">id</item>
+                </item>
+                <item name="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">magento_bulk</item>
+                    <item name="identifierField" xsi:type="string">uuid</item>
+                </item>
+                <item name="Magento\AsynchronousOperations\Api\Data\OperationListInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">magento_operation</item>
+                    <item name="identifierField" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\Mapper">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" xsi:type="array">
+                    <item name="uuid" xsi:type="string">bulk_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="bulkSummaryMapper" type="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="identifierMapper" xsi:type="object">Magento\AsynchronousOperations\Model\Entity\BulkSummaryMapper</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\EntityManager\MapperPool">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" xsi:type="string">bulkSummaryMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="bulk_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\SearchResult</item>
+                <item name="failed_operation_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Failed\SearchResult</item>
+                <item name="retriable_operation_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult</item>
+                <item name="failed_operation_modal_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Failed\SearchResult</item>
+                <item name="retriable_operation_modal_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\OperationPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="Magento\AsynchronousOperations\Api\Data\OperationListInterface" xsi:type="array">
+                    <item name="checkIfExists" xsi:type="string">Magento\AsynchronousOperations\Model\ResourceModel\Operation\CheckIfExists</item>
+                    <item name="create" xsi:type="string">Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType
+            name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
+            type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                    <item name="db" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\BulkManagement" type="Magento\AsynchronousOperations\Model\BulkManagement">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\PublisherPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <arguments>
+            <argument name="bulkManagement" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\BulkManagement</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface" type="Magento\AsynchronousOperations\Model\AsyncResponse" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\ItemStatusInterface" type="Magento\AsynchronousOperations\Model\ItemStatus" />
+</config>

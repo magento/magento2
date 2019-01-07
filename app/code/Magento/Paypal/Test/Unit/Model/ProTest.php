@@ -119,6 +119,9 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->method('getOrder')
             ->willReturn($orderMock);
 
+        $paymentMock->method('isCaptureFinal')
+            ->willReturn(true);
+
         $this->apiMock->expects(static::once())
             ->method('getTransactionId')
             ->willReturn(45);
@@ -236,16 +239,14 @@ class ProTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction'
+                'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
             ])
             ->getMock();
         $parentTransactionId = 43;
         $paymentMock->expects(static::once())
             ->method('getParentTransactionId')
             ->willReturn($parentTransactionId);
-        $paymentMock->expects(static::once())
-            ->method('getShouldCloseParentTransaction')
-            ->willReturn(true);
+
         return $paymentMock;
     }
 

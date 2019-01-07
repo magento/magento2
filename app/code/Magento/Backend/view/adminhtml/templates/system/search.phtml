@@ -28,21 +28,21 @@
     <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="search-global-menu">
         <li class="item">
-            <a id="searchPreviewProducts" href="<?= /* @escapeNotVerified */ $block->getURL('catalog/product/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
+            <a id="searchPreviewProducts" href="<?= /* @escapeNotVerified */ $block->getUrl('catalog/product/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
         </li>
         <li class="item">
-            <a id="searchPreviewOrders" href="<?= /* @escapeNotVerified */ $block->getURL('sales/order/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
+            <a id="searchPreviewOrders" href="<?= /* @escapeNotVerified */ $block->getUrl('sales/order/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
         </li>
         <li class="item">
-            <a id="searchPreviewCustomers" href="<?= /* @escapeNotVerified */ $block->getURL('customer/index/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
+            <a id="searchPreviewCustomers" href="<?= /* @escapeNotVerified */ $block->getUrl('customer/index/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
         </li>
         <li class="item">
-            <a id="searchPreviewPages" href="<?= /* @escapeNotVerified */ $block->getURL('cms/page/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
+            <a id="searchPreviewPages" href="<?= /* @escapeNotVerified */ $block->getUrl('cms/page/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
         </li>
             <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
-                <%- data.optionData(value) %>
+                <%= data.optionData(value) %>
                 >
                 <a href="<%- value.url %>" class="title"><%- value.name %></a>
                 <span class="type"><%- value.type %></span>

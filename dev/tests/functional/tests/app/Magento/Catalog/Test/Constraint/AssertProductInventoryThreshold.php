@@ -44,13 +44,13 @@ class AssertProductInventoryThreshold extends AbstractConstraint
             $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
             $isThresholdMessageDisplayed = $catalogProductView->getViewBlock()
                 ->isThresholdMessageDisplayed($browser, $product);
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $isThresholdMessageDisplayed,
                 $thresholdItem['is_message_displayed'],
                 'Product inventory threshold message display is not correct.'
             );
             if ($thresholdItem['is_message_displayed']) {
-                \PHPUnit_Framework_Assert::assertEquals(
+                \PHPUnit\Framework\Assert::assertEquals(
                     sprintf(self::SUCCESS_MESSAGE, $thresholdItem['expected']),
                     $catalogProductView->getViewBlock()->getThresholdMessage(),
                     'Product inventory success message is not displayed.'

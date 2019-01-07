@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="argumentType" abstract="true" mixed="true">
+        <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="argumentsType">
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="1" maxOccurs="unbounded">
+                <xs:key name="argumentItemName">
+                    <xs:selector xpath="item"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="array" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="item" type="argumentType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:key name="itemName">
+                            <xs:selector xpath="item"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="number">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="boolean">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="string">
+        <xs:complexContent>
+            <xs:extension base="argumentType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="exchangeConfigType" name="exchange" maxOccurs="unbounded" minOccurs="0">
+                    <xs:unique name="unique-binding-id">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Binding id must be unique
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="binding"/>
+                        <xs:field xpath="@id"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="unique-exchange-name-connection">
+            <xs:annotation>
+                <xs:documentation>
+                    Exchange name must be unique
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="exchange"/>
+            <xs:field xpath="@name"/>
+            <xs:field xpath="@connection"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="bindingType" mixed="true">
+        <xs:sequence>
+            <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="destinationType" name="destinationType" use="optional"/>
+        <xs:attribute type="xs:string" name="destination" use="optional"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+        <xs:attribute type="xs:string" name="topic" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="exchangeConfigType">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element type="bindingType" name="binding" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="exchangeType" name="type" use="optional"/>
+        <xs:attribute name="connection" type="xs:string" use="required" />
+        <xs:attribute type="xs:boolean" name="durable" use="optional"/>
+        <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
+        <xs:attribute type="xs:boolean" name="internal" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="exchangeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="topic" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="destinationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="queue" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

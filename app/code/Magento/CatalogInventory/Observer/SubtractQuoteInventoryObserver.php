@@ -74,8 +74,9 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
             $items,
             $quote->getStore()->getWebsiteId()
         );
-        $this->itemsForReindex->setItems($itemsForReindex);
-
+        if (count($itemsForReindex)) {
+            $this->itemsForReindex->setItems($itemsForReindex);
+        }
         $quote->setInventoryProcessed(true);
         return $this;
     }

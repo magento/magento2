@@ -35,6 +35,6 @@ class AssertCmsPageFormSingleStoreMode extends AssertCmsPageForm
         $cmsFormData = $cmsPageNew->getPageForm()->getData($cms);
         $cmsFixtureData = $cms->getData();
         $errors = $this->verifyData($cmsFixtureData, $cmsFormData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 }

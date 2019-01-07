@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -13,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Category
+class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -126,8 +128,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $data['general'] = $this->getRequest()->getPostValue();
-        $categoryPostData = $data['general'];
+        $categoryPostData = $this->getRequest()->getPostValue();
 
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
@@ -139,6 +140,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
         if ($categoryPostData) {
             $category->addData($categoryPostData);
+            if ($parentId) {
+                $category->setParentId($parentId);
+            }
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -202,7 +206,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                         if ($error === true) {
                             $attribute = $categoryResource->getAttribute($code)->getFrontend()->getLabel();
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('Attribute "%1" is required.', $attribute)
+                                __('The "%1" attribute is required. Enter and try again.', $attribute)
                             );
                         } else {
                             throw new \Exception($error);
@@ -277,7 +281,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 continue;
             }
 
-            $data[$attributeCode] = false;
+            $data[$attributeCode] = '';
         }
 
         return $data;

@@ -9,6 +9,7 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\TestFramework\TestCase\HttpClient\CurlClient;
 use Magento\TestFramework\Helper\JsonSerializer;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Curl client for GraphQL
@@ -28,8 +29,6 @@ class Client
     private $json;
 
     /**
-     * CurlClient constructor.
-     *
      * @param CurlClient|null $curlClient
      * @param JsonSerializer|null $json
      */
@@ -66,25 +65,55 @@ class Client
         $responseBody = $this->curlClient->post($url, $postData, $headers);
         $responseBodyArray = $this->json->jsonDecode($responseBody);
 
+        if (!is_array($responseBodyArray)) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        }
+
+        $this->processErrors($responseBodyArray);
+
+        if (!isset($responseBodyArray['data'])) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        } else {
+            return $responseBodyArray['data'];
+        }
+    }
+
+    /**
+     * Process errors
+     *
+     * @param array $responseBodyArray
+     * @throws \Exception
+     */
+    private function processErrors($responseBodyArray)
+    {
         if (isset($responseBodyArray['errors'])) {
             $errorMessage = '';
             if (is_array($responseBodyArray['errors'])) {
                 foreach ($responseBodyArray['errors'] as $error) {
                     if (isset($error['message'])) {
                         $errorMessage .= $error['message'] . PHP_EOL;
+                        if (isset($error['debugMessage'])) {
+                            $errorMessage .= $error['debugMessage'] . PHP_EOL;
+                        }
+                    }
+                    if (isset($error['trace'])) {
+                        $traceString = $error['trace'];
+                        TestCase::assertNotEmpty($traceString, "trace is empty");
                     }
                 }
-                throw new \Exception('GraphQL response contains errors: ' . $errorMessage);
-            }
-            throw new \Exception('GraphQL responded with an unknown error: ' . $responseBody);
-        } elseif (!isset($responseBodyArray['data'])) {
-            throw new \Exception('Unknown GraphQL response body: ' . $responseBody);
-        }
 
-        return $responseBodyArray['data'];
+                throw new ResponseContainsErrorsException(
+                    'GraphQL response contains errors: ' . $errorMessage,
+                    $responseBodyArray
+                );
+            }
+            throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
+        }
     }
 
     /**
+     * Get endpoint url
+     *
      * @return string resource URL
      * @throws \Exception
      */

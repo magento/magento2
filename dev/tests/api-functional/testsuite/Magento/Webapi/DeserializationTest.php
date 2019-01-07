@@ -38,7 +38,8 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
-        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"item"}}';
+        $expectedMessage =
+            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"item"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
@@ -64,7 +65,8 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"entityItem"}}';
+        $expectedMessage =
+            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"entityItem"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {

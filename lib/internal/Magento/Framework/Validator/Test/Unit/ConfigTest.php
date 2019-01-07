@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected function _initConfig(array $files = null)
     {
         if (null === $files) {
-            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml');
+            $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);
         }
         $configFiles = [];
         foreach ($files as $path) {
@@ -117,8 +117,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateValidatorInvalidConstraintClass()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Constraint class "stdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );
         $this->_initConfig([__DIR__ . '/_files/validation/negative/invalid_constraint.xml']);

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="PersistentConfigDefault" type="persistent_config_state">
+        <requiredEntity type="persistent_options_enabled">persistentDefaultState</requiredEntity>
+    </entity>
+    <entity name="persistentDefaultState" type="persistent_options_enabled">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="PersistentConfigEnabled" type="persistent_config_state">
+        <requiredEntity type="persistent_options_enabled">persistentEnabledState</requiredEntity>
+    </entity>
+    <entity name="persistentEnabledState" type="persistent_options_enabled">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="PersistentLogoutClearEnabled" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">PersistentEnabledLogoutClear</requiredEntity>
+    </entity>
+    <entity name="PersistentEnabledLogoutClear" type="logout_clear">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="PersistentLogoutClearDisable" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">PersistentDisableLogoutClear</requiredEntity>
+    </entity>
+    <entity name="PersistentDisableLogoutClear" type="logout_clear">
+        <data key="value">0</data>
+    </entity>
+</entities>

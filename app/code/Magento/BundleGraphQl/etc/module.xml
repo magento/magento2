@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magento_BundleGraphQl" >
+        <sequence>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_BundleProduct"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_GraphQl"/>
+            <module name="Magento_CatalogGraphQl"/>
+        </sequence>
+    </module>
+</config>

@@ -5,18 +5,12 @@
 
 var config = {
     shim: {
-        'tinymceDeprecated': {
-            'exports': 'tinymce'
-        },
-        'tinymce4': {
-            'exports': 'tinymce'
+        'tiny_mce_4/tinymce.min': {
+            exports: 'tinyMCE'
         }
     },
     paths: {
-        'ui/template': 'Magento_Ui/templates',
-        'tinymceDeprecated': 'Magento_Tinymce3/tiny_mce/tiny_mce_src',
-        'tinymce4': 'tiny_mce_4/tinymce.min',
-        'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
+        'ui/template': 'Magento_Ui/templates'
     },
     map: {
         '*': {
@@ -28,7 +22,9 @@ var config = {
             uiRegistry:     'Magento_Ui/js/lib/registry/registry',
             consoleLogger:  'Magento_Ui/js/lib/logger/console-logger',
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
-            buttonAdapter:  'Magento_Ui/js/form/button-adapter'
+            buttonAdapter:  'Magento_Ui/js/form/button-adapter',
+            tinymce4:       'tiny_mce_4/tinymce.min',
+            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
         }
     }
 };

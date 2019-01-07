@@ -72,8 +72,9 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
-        $this->request->expects($this->any())->method('getParam')->with('filename')->willReturn('filename');
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->reportHelper = $this->createPartialMock(
             \Magento\ImportExport\Helper\Report::class,
             ['importFileExists', 'getReportSize', 'getReportOutput']
@@ -126,13 +127,35 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test execute()
+     * Tests download controller with different file names in request.
+     *
+     * @param string $requestFilename
+     * @param string $processedFilename
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute($requestFilename, $processedFilename)
     {
-        $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(true);
+        $this->request->method('getParam')
+            ->with('filename')
+            ->willReturn($requestFilename);
+
+        $this->reportHelper->method('importFileExists')
+            ->with($processedFilename)
+            ->willReturn(true);
         $this->resultRaw->expects($this->once())->method('setContents');
         $this->downloadController->execute();
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            'Normal file name' => ['filename.csv', 'filename.csv'],
+            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd'],
+            'Empty file name' => ['', ''],
+        ];
     }
 
     /**
@@ -140,7 +163,8 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteFileNotFound()
     {
-        $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(false);
+        $this->request->method('getParam')->with('filename')->willReturn('filename');
+        $this->reportHelper->method('importFileExists')->willReturn(false);
         $this->resultRaw->expects($this->never())->method('setContents');
         $this->downloadController->execute();
     }

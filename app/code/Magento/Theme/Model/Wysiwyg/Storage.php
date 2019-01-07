@@ -11,6 +11,11 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class Storage
+ *
+ * @package Magento\Theme\Model\Wysiwyg
+ */
 class Storage
 {
     /**
@@ -126,14 +131,6 @@ class Storage
         }
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
-
-        $result['cookie'] = [
-            'name' => $this->_helper->getSession()->getName(),
-            'value' => $this->_helper->getSession()->getSessionId(),
-            'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
-            'path' => $this->_helper->getSession()->getCookiePath(),
-            'domain' => $this->_helper->getSession()->getCookieDomain()
-        ];
 
         return $result;
     }

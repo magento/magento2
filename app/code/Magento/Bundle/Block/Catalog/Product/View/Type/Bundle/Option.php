@@ -167,7 +167,9 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
     {
-        if ($selectionId && $option->getSelectionById($selectionId)) {
+        if (is_array($selectionId)) {
+            $this->_selectedOptions = $selectionId;
+        } else if ($selectionId && $option->getSelectionById($selectionId)) {
             $this->_selectedOptions = $selectionId;
         } elseif (!$option->getRequired()) {
             $this->_selectedOptions = 'None';
@@ -189,9 +191,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
-        } else {
-            return $selection->getIsDefault() && $selection->isSaleable();
         }
+        return $selection->getIsDefault() && $selection->isSaleable();
     }
 
     /**
@@ -229,6 +230,8 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     }
 
     /**
+     * Get bundle option price title.
+     *
      * @param \Magento\Catalog\Model\Product $selection
      * @param bool $includeContainer
      * @return string

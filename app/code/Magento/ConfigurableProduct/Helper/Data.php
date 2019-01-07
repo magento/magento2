@@ -6,7 +6,11 @@
 
 namespace Magento\ConfigurableProduct\Helper;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Image;
 
 /**
  * Class Data
@@ -17,50 +21,48 @@ use Magento\Catalog\Model\Product;
 class Data
 {
     /**
-     * Catalog Image Helper
-     *
-     * @var \Magento\Catalog\Helper\Image
+     * @var ImageHelper
      */
     protected $imageHelper;
 
     /**
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var UrlBuilder
      */
-    public function __construct(\Magento\Catalog\Helper\Image $imageHelper)
+    private $imageUrlBuilder;
+
+    /**
+     * @param ImageHelper $imageHelper
+     * @param UrlBuilder $urlBuilder
+     */
+    public function __construct(ImageHelper $imageHelper, UrlBuilder $urlBuilder = null)
     {
         $this->imageHelper = $imageHelper;
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
     }
 
     /**
      * Retrieve collection of gallery images
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Catalog\Model\Product\Image[]|null
+     * @param ProductInterface $product
+     * @return Image[]|null
      */
-    public function getGalleryImages(\Magento\Catalog\Api\Data\ProductInterface $product)
+    public function getGalleryImages(ProductInterface $product)
     {
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
+            /** @var $image Image */
             foreach ($images as $image) {
-                /** @var $image \Magento\Catalog\Model\Product\Image */
-                $image->setData(
-                    'small_image_url',
-                    $this->imageHelper->init($product, 'product_page_image_small')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'medium_image_url',
-                    $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'large_image_url',
-                    $this->imageHelper->init($product, 'product_page_image_large_no_frame')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
+                $smallImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_small');
+                $image->setData('small_image_url', $smallImageUrl);
+
+                $mediumImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_medium');
+                $image->setData('medium_image_url', $mediumImageUrl);
+
+                $largeImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_large');
+                $image->setData('large_image_url', $largeImageUrl);
             }
         }
 

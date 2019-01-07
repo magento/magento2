@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurationPermissionTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Advanced Reporting configuration permission"/>
+            <title value="Advanced Reporting configuration permission"/>
+            <description value="An admin user without Analytics permissions should not be able to see the Advanced Reporting configuration page."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-82648"/>
+            <group value="analytics"/>
+        </annotations>
+        <before>
+            <createData entity="adminNoReportRole" stepKey="noReportUserRole"/>
+            <createData entity="adminNoReport" stepKey="noReportUser"/>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameSearch"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad time="10" stepKey="wait1"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="$$noReportUser.username$$" stepKey="seeFoundUsername"/>
+        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="clickFoundUsername"/>
+        <waitForPageLoad time="30" stepKey="wait2"/>
+        <seeInField selector="{{AdminEditUserSection.usernameTextField}}" userInput="$$noReportUser.username$$" stepKey="seeUsernameInField"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
+        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>
+
+        <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="$$noReportUserRole.rolename$$" stepKey="fillRoleNameSearch"/>
+        <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearchButtonUserRole"/>
+        <waitForPageLoad time="10" stepKey="wait3"/>
+        <see selector="{{AdminEditUserSection.roleNameInFirstRow}}" userInput="$$noReportUserRole.rolename$$" stepKey="seeFoundRoleName"/>
+        <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="clickFoundRoleName"/>
+        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad time="10" stepKey="wait4"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the user." stepKey="seeSuccess"/>
+
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="amOnAdminConfig"/>
+        <conditionalClick selector="{{AdminConfigSection.generalTab}}" dependentSelector="{{AdminConfigSection.generalTabOpened}}" visible="false" stepKey="openGeneralTabIfClosed"/>
+        <scrollTo selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="scrollToMenuItem"/>
+        <!--<see stepKey="seeAdvancedReportingConfigMenuItem" selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>-->
+        <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
+        <actionGroup ref="logout" stepKey="logoutOfAdmin2"/>
+
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameNoReport"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="$$noReportUser.password$$" stepKey="fillPasswordNoReport"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn2"/>
+        <waitForPageLoad time="10" stepKey="wait5"/>
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="amOnAdminConfig2"/>
+        <conditionalClick selector="{{AdminConfigSection.generalTab}}" dependentSelector="{{AdminConfigSection.generalTabOpened}}" visible="false" stepKey="openGeneralTabIfClosed2"/>
+        <dontSeeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="dontSeeAdvancedReportingConfigMenuItem"/>
+    </test>
+</tests>

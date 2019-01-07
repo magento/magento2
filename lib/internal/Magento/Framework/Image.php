@@ -49,7 +49,7 @@ class Image
         $this->_adapter->checkDependencies();
 
         if (!file_exists($this->_fileName)) {
-            throw new \Exception("File '{$this->_fileName}' does not exists.");
+            throw new \Exception("File '{$this->_fileName}' does not exist.");
         }
 
         $this->_adapter->open($this->_fileName);
@@ -262,7 +262,7 @@ class Image
     public function setImageBackgroundColor($color)
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->_adapter->imageBackgroundColor = intval($color);
+        $this->_adapter->imageBackgroundColor = (int)$color;
     }
 
     /**

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 /**
@@ -83,7 +84,6 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
@@ -99,6 +99,10 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
+
+        $this->expectExceptionMessage(
+            'A server error stopped your order from being placed. Please try to place your order again.'
+        );
     }
 
     public function testSavePaymentInformationAndPlaceOrderIfBillingAddressNotExist()
@@ -168,9 +172,11 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressId = 1;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteBillingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $shippingRate = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Rate::class, []);
+        $shippingRate->setCarrier('flatrate');
         $quoteShippingAddress = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['setLimitCarrier', 'getShippingMethod']
+            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
         );
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($quoteBillingAddress);
@@ -179,6 +185,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())->method('removeAddress')->with($billingAddressId);
         $quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddressMock);
         $quoteMock->expects($this->once())->method('setDataChanges')->willReturnSelf();
+        $quoteShippingAddress->expects($this->any())->method('getShippingRateByCode')->willReturn($shippingRate);
         $quoteShippingAddress->expects($this->any())->method('getShippingMethod')->willReturn('flatrate_flatrate');
         $quoteShippingAddress->expects($this->once())->method('setLimitCarrier')->with('flatrate')->willReturnSelf();
     }

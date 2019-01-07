@@ -40,7 +40,7 @@ class AssertProductReviewIsAvailableForProduct extends AbstractConstraint
         unset($assertProductReviewInGrid->filter['visible_in']);
         $filter = $assertProductReviewInGrid->prepareFilter($product, $review->getData(), '');
         $reviewIndex->getReviewGrid()->resetFilter();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $reviewIndex->getReviewGrid()->isRowVisible($filter, false),
             'Review for ' . $product->getName() . ' product is not visible in reports grid.'
         );

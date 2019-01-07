@@ -55,7 +55,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * Retrieve formated price
+     * Retrieve formatted price
      *
      * @param float $price
      * @return string

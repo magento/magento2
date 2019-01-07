@@ -82,6 +82,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($value, $this->config->{$getter}());
     }
 
+    /**
+     * @return array
+     */
     public function optionsProvider()
     {
         return [
@@ -177,10 +180,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testWrongMethodCall()
     {
         $this->getModel($this->validatorMock);
-        $this->expectException(
-            '\BadMethodCallException',
-            'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
-        );
+        $this->expectException('\BadMethodCallException');
+        $this->expectExceptionMessage('Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config');
         $this->config->methodThatNotExist();
     }
 
@@ -343,6 +344,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->config->getOptions());
     }
 
+    /**
+     * @return array
+     */
     public function constructorDataProvider()
     {
         return [
@@ -350,33 +354,36 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 true,
                 true,
                 [
-                    'session.cache_limiter' => 'files',
+                    'session.cache_limiter' => 'private_no_expire',
                     'session.cookie_lifetime' => 7200,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
+                    'session.save_handler' => 'files'
                 ],
             ],
             'all invalid' => [
                 true,
                 false,
                 [
-                    'session.cache_limiter' => 'files',
+                    'session.cache_limiter' => 'private_no_expire',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
+                    'session.save_handler' => 'files'
                 ],
             ],
             'invalid_valid' => [
                 false,
                 true,
                 [
-                    'session.cache_limiter' => 'files',
+                    'session.cache_limiter' => 'private_no_expire',
                     'session.cookie_lifetime' => 3600,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
+                    'session.save_handler' => 'files'
                 ],
             ],
         ];
@@ -429,14 +436,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($dirMock));
 
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $deploymentConfigMock->expects($this->at(0))
+        $deploymentConfigMock
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_PATH)
-            ->will($this->returnValue(null));
-        $deploymentConfigMock->expects($this->at(1))
-            ->method('get')
-            ->with(Config::PARAM_SESSION_CACHE_LIMITER)
-            ->will($this->returnValue('files'));
+            ->willReturnCallback(function ($configPath) {
+                switch ($configPath) {
+                    case Config::PARAM_SESSION_SAVE_METHOD:
+                        return 'files';
+                    case Config::PARAM_SESSION_CACHE_LIMITER:
+                        return 'private_no_expire';
+                    default:
+                        return null;
+                }
+            });
 
         $this->config = $this->helper->getObject(
             \Magento\Framework\Session\Config::class,

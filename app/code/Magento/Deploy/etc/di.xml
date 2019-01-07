@@ -31,6 +31,7 @@
                 <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
                 <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
                 <item name="configImportCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
+                <item name="configStatusCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigStatusCommand</item>
             </argument>
         </arguments>
     </type>
@@ -76,6 +77,9 @@
                 <item name="developer" xsi:type="array">
                     <item name="production" xsi:type="array">
                         <item name="dev/debug/debug_logging" xsi:type="string">0</item>
+                    </item>
+                    <item name="developer" xsi:type="array">
+                        <item name="dev/debug/debug_logging" xsi:type="null" />
                     </item>
                 </item>
             </argument>

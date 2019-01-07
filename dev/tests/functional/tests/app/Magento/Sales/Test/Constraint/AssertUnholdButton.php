@@ -32,7 +32,7 @@ class AssertUnholdButton extends AbstractConstraint
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $salesOrderView->getPageActions()->isActionButtonVisible('Unhold'),
             'Button "Unhold" is absent on order page.'
         );

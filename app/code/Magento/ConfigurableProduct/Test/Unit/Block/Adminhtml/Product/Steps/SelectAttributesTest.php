@@ -114,6 +114,9 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->selectAttributes->getAddNewAttributeButton());
     }
 
+    /**
+     * @return array
+     */
     public function attributesDataProvider()
     {
         return [

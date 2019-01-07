@@ -152,8 +152,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
 
         $expectedResult = [
-            'not_empty',
-            'cookie' => ['name' => null, 'value' => null, 'lifetime' => null, 'path' => null, 'domain' => null],
+            'not_empty'
         ];
 
         $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
@@ -165,13 +164,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadInvalidFile()
     {
-        $uplaoder = $this->_prepareUploader();
+        $uploader = $this->_prepareUploader();
 
-        $uplaoder->expects($this->once())->method('save')->will($this->returnValue(null));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
 
         $this->_storageModel->uploadFile($this->_storageRoot);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function _prepareUploader()
     {
         $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
@@ -538,6 +540,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_storageModel->deleteDirectory($directoryPath);
     }
 
+    /**
+     * @return array
+     */
     public function booleanCasesDataProvider()
     {
         return [[true], [false]];

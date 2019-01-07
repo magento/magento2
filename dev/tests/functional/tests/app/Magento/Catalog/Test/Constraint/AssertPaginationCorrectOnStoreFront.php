@@ -36,18 +36,18 @@ class AssertPaginationCorrectOnStoreFront extends AbstractConstraint
         $productsCount
     ) {
         $browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             true,
             $catalogCategoryView->getBottomToolbar()->isVisible(),
             'Pagination is not visible'
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $catalogCategoryView->getBottomToolbar()->getLimitedValueByIndex(0),
             $catalogCategoryView->getListProductBlock()->getProductsCount(),
             'Count of products on 1 page does not equivalent with declared in pagination (default value)'
         );
         $catalogCategoryView->getBottomToolbar()->nextPage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $this->calculateExpectedProductsCountOnPage(
                 $catalogCategoryView->getBottomToolbar()->getLimitedValueByIndex(0),
                 2,
@@ -58,13 +58,13 @@ class AssertPaginationCorrectOnStoreFront extends AbstractConstraint
         );
         $catalogCategoryView->getBottomToolbar()->firstPage();
         $catalogCategoryView->getBottomToolbar()->setLimiterValueByIndex(1);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $catalogCategoryView->getBottomToolbar()->getLimitedValueByIndex(1),
             $catalogCategoryView->getListProductBlock()->getProductsCount(),
             'Count of products on 1 page does not equivalent with declared in pagination(custom value)'
         );
         $catalogCategoryView->getBottomToolbar()->nextPage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $this->calculateExpectedProductsCountOnPage(
                 $catalogCategoryView->getBottomToolbar()->getLimitedValueByIndex(1),
                 2,

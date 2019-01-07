@@ -25,6 +25,12 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
+    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $store;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
@@ -33,6 +39,9 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
         $this->corePostDataHelper = $this->createMock(\Magento\Framework\Data\Helper\PostHelper::class);
+        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->switcher = (new ObjectManager($this))->getObject(
             \Magento\Store\Block\Switcher::class,
             [
@@ -42,6 +51,9 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetTargetStorePostData()
     {
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -50,20 +62,30 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         $store->expects($this->any())
             ->method('getCode')
             ->willReturn('new-store');
-        $storeSwitchUrl = 'http://domain.com/stores/store/switch';
+        $storeSwitchUrl = 'http://domain.com/stores/store/redirect';
         $store->expects($this->atLeastOnce())
             ->method('getCurrentUrl')
             ->with(false)
             ->willReturn($storeSwitchUrl);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->once())
+            ->method('getCode')
+            ->willReturn('old-store');
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn($storeSwitchUrl);
         $this->corePostDataHelper->expects($this->any())
             ->method('getPostData')
-            ->with($storeSwitchUrl, ['___store' => 'new-store']);
+            ->with($storeSwitchUrl, ['___store' => 'new-store', 'uenc' => null, '___from_store' => 'old-store']);
 
         $this->switcher->getTargetStorePostData($store);
     }
 
     /**
      * @dataProvider isStoreInUrlDataProvider
+     * @param bool $isUseStoreInUrl
      */
     public function testIsStoreInUrl($isUseStoreInUrl)
     {

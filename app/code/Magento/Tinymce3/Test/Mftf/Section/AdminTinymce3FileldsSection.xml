@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ProductWYSIWYGSection">
+        <element name="Tinymce3MSG" type="button" selector=".admin__field-error"/>
+    </section>
+    <section name="TinyMCESection">
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
+        <element name="InsertImageBtnTinyMCE3" type="button" selector="#cms_page_form_content_image"/>
+    </section>
+    <section name="NewsletterWYSIWYGSection">
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
+    </section>
+</sections>

@@ -49,7 +49,8 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorException(array $alternativeExtensions)
     {
-        $this->expectException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage("\$alternativeExtensions must be an array with format:"
             . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
 
         $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);

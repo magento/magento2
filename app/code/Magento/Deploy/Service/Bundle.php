@@ -23,7 +23,7 @@ use Magento\Framework\View\Asset\RepositoryMap;
 class Bundle
 {
     /**
-     * Path to package subdirectory wher bundle files are located
+     * Path to package subdirectory where bundle files are located
      */
     const BUNDLE_JS_DIR = 'js/bundle';
 

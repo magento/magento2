@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
@@ -94,7 +95,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->processorFacadeMock);
         $this->processorFacadeMock->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')

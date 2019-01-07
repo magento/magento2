@@ -131,5 +131,43 @@ define([
             model.deleteRecord(1, 1);
             expect(model.recordData()).toEqual([]);
         });
+
+        it('"initHeader" sortOrder', function () {
+            var labels = [{
+                    name: 'Name 1',
+                    config: {
+                        label: 'Label 1',
+                        validation: false,
+                        columnsHeaderClasses: '',
+                        sortOrder: 10
+                    }
+                }, {
+                    name: 'Name 2',
+                    config: {
+                        label: 'Label 2',
+                        validation: false,
+                        columnsHeaderClasses: '',
+                        sortOrder: 5
+                    }
+                }],
+                result = [{
+                    label: 'Label 2',
+                    name: 'Name 2',
+                    required: false,
+                    columnsHeaderClasses: '',
+                    sortOrder: 5
+                }, {
+                    label: 'Label 1',
+                    name: 'Name 1',
+                    required: false,
+                    columnsHeaderClasses: '',
+                    sortOrder: 10
+                }];
+
+            model.childTemplate = {
+                children: labels
+            };
+            expect(JSON.stringify(model.labels())).toEqual(JSON.stringify(result));
+        });
     });
 });

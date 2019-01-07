@@ -90,9 +90,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'parent_id' => 'Parent Track Id can not be empty',
-                    'order_id' => 'Order Id is a required field',
+                    'order_id' => '"Order Id" is required. Enter and try again.',
                     'track_number' => 'Number can not be empty',
-                    'carrier_code' => 'Carrier Code is a required field'
+                    'carrier_code' => '"Carrier Code" is required. Enter and try again.'
                 ]
             ]
         ];

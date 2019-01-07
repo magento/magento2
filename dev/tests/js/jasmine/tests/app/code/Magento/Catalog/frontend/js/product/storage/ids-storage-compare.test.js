@@ -28,6 +28,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Catalog/js/product/storage/ids-storage-compare', function () {
         describe('"providerDataHandler" method', function () {
             it('check calls "prepareData" and "add" method', function () {

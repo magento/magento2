@@ -5,9 +5,9 @@
  */
 
 /**
- * Pre-commit hook installation:
- * vendor/bin/static-review.php hook:install dev/tools/Magento/Tools/StaticReview/pre-commit .git/hooks/pre-commit
+ * PHP Coding Standards fixer configuration
  */
+
 $finder = PhpCsFixer\Finder::create()
     ->name('*.phtml')
     ->exclude('dev/tests/functional/generated')

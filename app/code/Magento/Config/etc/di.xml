@@ -296,10 +296,21 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
-                <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+                <item name="lock-env" xsi:type="string">Magento\Config\Console\Command\ConfigSet\VirtualLockEnvProcessor</item>
+                <item name="lock-config" xsi:type="string">Magento\Config\Console\Command\ConfigSet\VirtualLockConfigProcessor</item>
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Config\Console\Command\ConfigSet\VirtualLockEnvProcessor" type="Magento\Config\Console\Command\ConfigSet\LockProcessor">
+        <arguments>
+            <argument name="target" xsi:type="string">app_env</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Config\Console\Command\ConfigSet\VirtualLockConfigProcessor" type="Magento\Config\Console\Command\ConfigSet\LockProcessor">
+        <arguments>
+            <argument name="target" xsi:type="string">app_config</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
         <arguments>
             <argument name="importers" xsi:type="array">

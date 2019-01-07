@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Controller\Paypal;
 
 use Magento\Checkout\Model\Session;
@@ -11,11 +12,12 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Review
  */
-class Review extends AbstractAction
+class Review extends AbstractAction implements HttpPostActionInterface
 {
     /**
      * @var QuoteUpdater
@@ -59,14 +61,14 @@ class Review extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            if ($this->validateRequestData($requestData)) {
+            if ($requestData && $this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
                     $requestData['details'],
                     $quote
                 );
             } elseif (!$quote->getPayment()->getAdditionalInformation(self::$paymentMethodNonce)) {
-                throw new LocalizedException(__('We can\'t initialize checkout.'));
+                throw new LocalizedException(__('Checkout failed to initialize. Verify and try again.'));
             }
 
             /** @var \Magento\Framework\View\Result\Page $resultPage */
@@ -90,6 +92,8 @@ class Review extends AbstractAction
     }
 
     /**
+     * Validate request data
+     *
      * @param array $requestData
      * @return boolean
      */

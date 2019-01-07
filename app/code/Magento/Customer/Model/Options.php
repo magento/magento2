@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Config\Model\Config\Source\Nooptreq as NooptreqSource;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
 
@@ -42,7 +43,10 @@ class Options
      */
     public function getNamePrefixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions($this->addressHelper->getConfig('prefix_options', $store));
+        return $this->prepareNamePrefixSuffixOptions(
+            $this->addressHelper->getConfig('prefix_options', $store),
+            $this->addressHelper->getConfig('prefix_show', $store) == NooptreqSource::VALUE_OPTIONAL
+        );
     }
 
     /**
@@ -53,16 +57,34 @@ class Options
      */
     public function getNameSuffixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions($this->addressHelper->getConfig('suffix_options', $store));
+        return $this->prepareNamePrefixSuffixOptions(
+            $this->addressHelper->getConfig('suffix_options', $store),
+            $this->addressHelper->getConfig('suffix_show', $store) == NooptreqSource::VALUE_OPTIONAL
+        );
+    }
+
+    /**
+     * @param $options
+     * @param bool $isOptional
+     * @return array|bool
+     *
+     * @deprecated
+     * @see prepareNamePrefixSuffixOptions()
+     */
+    protected function _prepareNamePrefixSuffixOptions($options, $isOptional = false)
+    {
+        return $this->prepareNamePrefixSuffixOptions($options, $isOptional);
     }
 
     /**
      * Unserialize and clear name prefix or suffix options
+     * If field is optional, add an empty first option.
      *
      * @param string $options
+     * @param bool $isOptional
      * @return array|bool
      */
-    protected function _prepareNamePrefixSuffixOptions($options)
+    private function prepareNamePrefixSuffixOptions($options, $isOptional = false)
     {
         $options = trim($options);
         if (empty($options)) {
@@ -74,6 +96,10 @@ class Options
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;
         }
+        if ($isOptional && trim(current($options))) {
+            $result = array_merge([' ' => ' '], $result);
+        }
+
         return $result;
     }
 }

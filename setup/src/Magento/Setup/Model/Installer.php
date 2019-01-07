@@ -11,31 +11,35 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\PatchApplierInterface;
+use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplierFactory;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
-use Magento\Setup\Module\Setup;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
@@ -52,8 +56,8 @@ class Installer
     /**#@+
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable_modules';
-    const DISABLE_MODULES = 'disable_modules';
+    const ENABLE_MODULES = 'enable-modules';
+    const DISABLE_MODULES = 'disable-modules';
     /**#@- */
 
     /**#@+
@@ -225,6 +229,21 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var DeclarationInstaller
+     */
+    private $declarationInstaller;
+
+    /**
+     * @var SchemaPersistor
+     */
+    private $schemaPersistor;
+
+    /**
+     * @var PatchApplierFactory
+     */
+    private $patchApplierFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -248,7 +267,7 @@ class Installer
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
-     *
+     * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -296,6 +315,7 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
     /**
@@ -314,10 +334,10 @@ class Installer
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
-        $script[] = ['Installing database schema:', 'installSchema', []];
+        $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        $script[] = ['Installing data...', 'installDataFixtures', []];
+        $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
@@ -325,24 +345,28 @@ class Installer
                 [$request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX]],
             ];
         }
-        $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
-        $script[] = ['Caches clearing:', 'cleanCaches', []];
+        if ($this->isAdminDataSet($request)) {
+            $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
+        }
+
+        if (!$this->isDryRun($request)) {
+            $script[] = ['Caches clearing:', 'cleanCaches', [$request]];
+        }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
-
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
 
-        while (list(, list($message, $method, $params)) = each($script)) {
+        foreach ($script as $item) {
+            list($message, $method, $params) = $item;
             $this->log->log($message);
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
-
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
             'Magento Admin URI: /'
@@ -355,6 +379,21 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
+    }
+
+    /**
+     * Get declaration installer. For upgrade process it must be created after deployment config update.
+     *
+     * @return DeclarationInstaller
+     */
+    private function getDeclarationInstaller()
+    {
+        if (!$this->declarationInstaller) {
+            $this->declarationInstaller = $this->objectManagerProvider->get()->get(
+                DeclarationInstaller::class
+            );
+        }
+        return $this->declarationInstaller;
     }
 
     /**
@@ -372,7 +411,7 @@ class Installer
     }
 
     /**
-     * Creates modules deployment configuration segment
+     * Create modules deployment configuration segment
      *
      * @param \ArrayObject|array $request
      * @param bool $dryRun
@@ -385,8 +424,8 @@ class Installer
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
             ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
-        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
-        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
+        $enable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_ENABLE_MODULES);
+        $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
             if ((isset($currentModules[$module]) && !$currentModules[$module])) {
@@ -565,7 +604,6 @@ class Installer
     {
         /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
         $connection = $setup->getConnection();
-
         $setup->startSetup();
 
         $this->setupSessionTable($setup, $connection);
@@ -760,35 +798,82 @@ class Installer
     }
 
     /**
-     * Installs DB schema
+     * Install Magento if declaration mode was enabled.
      *
+     * @param array $request
      * @return void
      */
-    public function installSchema()
+    public function declarativeInstallSchema(array $request)
     {
+        $this->getDeclarationInstaller()->installSchema($request);
+    }
+
+    /**
+     * Installs DB schema
+     *
+     * @param array $request
+     * @return void
+     */
+    public function installSchema(array $request)
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
-        $this->handleDBSchemaData($setup, 'schema');
+        $this->declarativeInstallSchema($request);
+        $this->handleDBSchemaData($setup, 'schema', $request);
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
+
+        if ($this->convertationOfOldScriptsIsAllowed($request)) {
+            $schemaListener->setResource('default');
+            $this->schemaPersistor->persist($schemaListener);
+        }
+
+        $registry->unregister('setup-mode-enabled');
+    }
+
+    /**
+     * Check whether all scripts will converted or not
+     *
+     * @param array $request
+     * @return bool
+     */
+    private function convertationOfOldScriptsIsAllowed(array $request)
+    {
+        return isset($request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY]) &&
+            $request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY];
     }
 
     /**
      * Installs data fixtures
      *
+     * @param array $request
      * @return void
-     * @throws \Exception
      */
-    public function installDataFixtures()
+    public function installDataFixtures(array $request = [])
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        //For backward compatibility in install and upgrade scripts with enabled parallelization.
+        $registry->register('setup-mode-enabled', true);
+
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->handleDBSchemaData($setup, 'data');
+        $this->handleDBSchemaData($setup, 'data', $request);
+
+        $registry->unregister('setup-mode-enabled');
     }
 
     /**
@@ -820,17 +905,19 @@ class Installer
     }
 
     /**
-     * Handles database schema and data (install/upgrade/backup/uninstall etc)
+     * Handle database schema and data (install/upgrade/backup/uninstall etc)
      *
-     * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
+     * @param SchemaSetupInterface|ModuleDataSetupInterface $setup
      * @param string $type
+     * @param array $request
      * @return void
-     * @throws \Exception
-     *
+     * @throws \Magento\Framework\Setup\Exception
+     * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function handleDBSchemaData($setup, $type)
+    private function handleDBSchemaData($setup, $type, array $request)
     {
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
@@ -841,7 +928,32 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
+        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(
+            PatchApplierFactory::class,
+            [
+                'objectManager' => $this->objectManagerProvider->get()
+            ]
+        );
+        /** @var PatchApplier $patchApplier */
+        if ($type === 'schema') {
+            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
+        } elseif ($type === 'data') {
+            $patchApplier = $this->patchApplierFactory->create([
+                'moduleDataSetup' => $setup,
+                'objectManager' => $this->objectManagerProvider->get()
+            ]);
+        }
+
         foreach ($moduleNames as $moduleName) {
+            if ($this->isDryRun($request)) {
+                $this->log->log("Module '{$moduleName}':");
+                $this->logProgress();
+                continue;
+            }
+            $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -853,11 +965,11 @@ class Installer
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                    }
-                    if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer);
-                    } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer);
+                        if ($type === 'schema') {
+                            $resource->setDbVersion($moduleName, $configVer);
+                        } elseif ($type === 'data') {
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
                     }
                 }
             } elseif ($configVer) {
@@ -871,12 +983,25 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
+            }
+
+            if ($configVer) {
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
                 } elseif ($type === 'data') {
                     $resource->setDataVersion($moduleName, $configVer);
                 }
             }
+
+            /**
+             * Applying data patches after old upgrade data scripts
+             */
+            if ($type === 'schema') {
+                $patchApplier->applySchemaPatch($moduleName);
+            } elseif ($type === 'data') {
+                $patchApplier->applyDataPatch($moduleName);
+            }
+
             $this->logProgress();
         }
 
@@ -888,6 +1013,11 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
+            if ($this->isDryRun($request)) {
+                $this->log->log("Module '{$moduleName}':");
+                $this->logProgress();
+                continue;
+            }
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
@@ -899,6 +1029,8 @@ class Installer
     }
 
     /**
+     * Assert DbConfigExists
+     *
      * @return void
      * @throws \Magento\Setup\Exception
      */
@@ -913,6 +1045,18 @@ class Installer
     }
 
     /**
+     * Check whether Magento setup is run in dry-run mode
+     *
+     * @param array $request
+     * @return bool
+     */
+    private function isDryRun(array $request)
+    {
+        return isset($request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE]) &&
+            $request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE];
+    }
+
+    /**
      * Installs user configuration
      *
      * @param \ArrayObject|array $data
@@ -920,6 +1064,9 @@ class Installer
      */
     public function installUserConfig($data)
     {
+        if ($this->isDryRun($data)) {
+            return;
+        }
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);
@@ -939,7 +1086,8 @@ class Installer
     }
 
     /**
-     * Creates data handler
+     * Create data handler
+     *
      * @param string $className
      * @param string $interfaceName
      * @return mixed|null
@@ -958,7 +1106,7 @@ class Installer
     }
 
     /**
-     * Creates store order increment prefix configuration
+     * Create store order increment prefix configuration
      *
      * @param string $orderIncrementPrefix Value to use for order increment prefix
      * @return void
@@ -1002,17 +1150,26 @@ class Installer
     }
 
     /**
-     * Creates admin account
+     * Create admin account
      *
      * @param \ArrayObject|array $data
      * @return void
      */
     public function installAdminUser($data)
     {
-        $this->assertDbConfigExists();
-        $setup = $this->setupFactory->create($this->context->getResources());
-        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
-        $adminAccount->save();
+        if ($this->isDryRun($data)) {
+            return;
+        }
+
+        $adminUserModuleIsInstalled = (bool)$this->deploymentConfig->get('modules/Magento_User');
+        //Admin user data is not system data, so we need to install it only if schema for admin user was installed
+        if ($adminUserModuleIsInstalled) {
+            $this->assertDbConfigExists();
+            $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
+            $setup = $this->setupFactory->create($this->context->getResources());
+            $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
+            $adminAccount->save();
+        }
     }
 
     /**
@@ -1136,8 +1293,10 @@ class Installer
      */
     public function cleanupDb()
     {
-        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
-        if ($config) {
+        $cleanedUpDatabases = [];
+        $connections = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS, []);
+        //Do database cleanup for all shards
+        foreach ($connections as $config) {
             try {
                 $connection = $this->connectionFactory->create($config);
                 if (!$connection) {
@@ -1147,11 +1306,18 @@ class Installer
                 $this->log->log($e->getMessage() . ' - skipping database cleanup');
                 return;
             }
+
             $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-            $this->log->log("Cleaning up database {$dbName}");
-            $connection->query("DROP DATABASE IF EXISTS {$dbName}");
-            $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
-        } else {
+            //If for different shards one database was specified - no need to clean it few times
+            if (!in_array($dbName, $cleanedUpDatabases)) {
+                $this->log->log("Cleaning up database {$dbName}");
+                $connection->query("DROP DATABASE IF EXISTS {$dbName}");
+                $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+                $cleanedUpDatabases[] = $dbName;
+            }
+        }
+
+        if (empty($config)) {
             $this->log->log('No database connection defined - skipping database cleanup');
         }
     }
@@ -1309,5 +1475,29 @@ class Installer
         foreach ($messages as $message) {
             $this->log->log($message);
         }
+    }
+
+    /**
+     * Checks that admin data is not empty in request array
+     *
+     * @param \ArrayObject|array $request
+     * @return bool
+     */
+    private function isAdminDataSet($request)
+    {
+        $adminData = array_filter($request, function ($value, $key) {
+            return in_array(
+                $key,
+                [
+                    AdminAccount::KEY_EMAIL,
+                    AdminAccount::KEY_FIRST_NAME,
+                    AdminAccount::KEY_LAST_NAME,
+                    AdminAccount::KEY_USER,
+                    AdminAccount::KEY_PASSWORD,
+                ]
+            ) && $value !== null;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return !empty($adminData);
     }
 }

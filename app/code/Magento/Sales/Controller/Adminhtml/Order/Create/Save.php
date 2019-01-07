@@ -3,23 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\PaymentException;
 
-class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements HttpPostActionInterface
 {
     /**
      * Saving quote and create order
      *
-     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $path = 'sales/*/';
+        $pathParams = [];
+
         try {
             // check if the creation of a new customer is allowed
             if (!$this->_authorization->isAllowed('Magento_Customer::manage')
@@ -49,29 +52,30 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 ->createOrder();
 
             $this->_getSession()->clearStorage();
-            $this->messageManager->addSuccess(__('You created the order.'));
+            $this->messageManager->addSuccessMessage(__('You created the order.'));
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-                $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
+                $pathParams = ['order_id' => $order->getId()];
+                $path = 'sales/order/view';
             } else {
-                $resultRedirect->setPath('sales/order/index');
+                $path = 'sales/order/index';
             }
         } catch (PaymentException $e) {
             $this->_getOrderCreateModel()->saveQuote();
             $message = $e->getMessage();
             if (!empty($message)) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
-            $resultRedirect->setPath('sales/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            // customer can be created before place order flow is completed and should be stored in current session
+            $this->_getSession()->setCustomerId((int)$this->_getSession()->getQuote()->getCustomerId());
             $message = $e->getMessage();
             if (!empty($message)) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
-            $resultRedirect->setPath('sales/*/');
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Order saving error: %1', $e->getMessage()));
-            $resultRedirect->setPath('sales/*/');
+            $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
         }
-        return $resultRedirect;
+
+        return $this->resultRedirectFactory->create()->setPath($path, $pathParams);
     }
 }

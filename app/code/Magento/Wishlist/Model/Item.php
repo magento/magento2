@@ -473,7 +473,7 @@ class Item extends AbstractModel implements ItemInterface
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $initialData = $option ? $this->serializer->unserialize($option->getValue()) : null;
+        $initialData = $option ? $this->serializer->unserialize($option->getValue()) : [];
 
         if ($initialData instanceof \Magento\Framework\DataObject) {
             $initialData = $initialData->getData();

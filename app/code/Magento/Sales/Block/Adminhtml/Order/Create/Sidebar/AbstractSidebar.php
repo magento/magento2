@@ -71,7 +71,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply item qty availablity
+     * Retrieve display item qty availability
      *
      * @return false
      */
@@ -196,7 +196,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply price availablity
+     * Retrieve display price availability
      *
      * @return true
      */

@@ -54,14 +54,14 @@
                 <collapsible>true</collapsible>
                 <label translate="true">HTML Head</label>
             </settings>
-            <field name="head_shortcut_icon" formElement="fileUploader">
+            <field name="head_shortcut_icon" formElement="imageUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!</notice>
+                    <notice translate="true">Not all browsers support all these formats!</notice>
                     <label translate="true">Favicon Icon</label>
-                    <componentType>fileUploader</componentType>
+                    <componentType>imageUploader</componentType>
                 </settings>
                 <formElements>
-                    <fileUploader>
+                    <imageUploader>
                         <settings>
                             <allowedExtensions>jpg jpeg gif png ico apng</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
@@ -69,7 +69,7 @@
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                             </uploaderConfig>
                         </settings>
-                    </fileUploader>
+                    </imageUploader>
                 </formElements>
             </field>
             <field name="head_default_title" formElement="input">
@@ -151,14 +151,13 @@
                 <collapsible>true</collapsible>
                 <label translate="true">Header</label>
             </settings>
-            <field name="header_logo_src" formElement="fileUploader">
+            <field name="header_logo_src" formElement="imageUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg.</notice>
                     <label translate="true">Logo Image</label>
-                    <componentType>fileUploader</componentType>
+                    <componentType>imageUploader</componentType>
                 </settings>
                 <formElements>
-                    <fileUploader>
+                    <imageUploader>
                         <settings>
                             <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
@@ -166,7 +165,7 @@
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                             </uploaderConfig>
                         </settings>
-                    </fileUploader>
+                    </imageUploader>
                 </formElements>
             </field>
             <field name="header_logo_width" formElement="input">
@@ -233,6 +232,20 @@
                     <label translate="true">Copyright</label>
                     <dataScope>footer_copyright</dataScope>
                 </settings>
+            </field>
+            <field name="footer_report_bugs" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Display Report Bugs Link</label>
+                    <dataScope>footer_report_bugs</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        </settings>
+                    </select>
+                </formElements>
             </field>
         </fieldset>
         <fieldset name="search_engine_robots" sortOrder="120">

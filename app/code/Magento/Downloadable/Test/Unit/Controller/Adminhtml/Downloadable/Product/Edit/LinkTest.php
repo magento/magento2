@@ -22,7 +22,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $response;
 
@@ -109,6 +109,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteFile($fileType)
     {
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
             ->will($this->returnValue(1));
         $this->request->expects($this->at(1))->method('getParam')->with('type', 0)
@@ -117,7 +119,20 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->response->expects($this->once())->method('clearBody')
             ->will($this->returnSelf());
-        $this->response->expects($this->any())->method('setHeader')
+        $this->response
+            ->expects($this->any())
+            ->method('setHeader')
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                [
+                    'Cache-Control',
+                    'must-revalidate, post-check=0, pre-check=0',
+                    true,
+                ],
+                ['Content-type', 'text/html'],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', 'attachment; filename=' . $fileName]
+            )
             ->will($this->returnSelf());
         $this->response->expects($this->once())->method('sendHeaders')
             ->will($this->returnSelf());
@@ -132,13 +147,13 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->downloadHelper->expects($this->once())->method('setResource')
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue('link.jpg'));
+            ->will($this->returnValue($fileName));
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->will($this->returnSelf('file'));
+            ->willReturn('text/html');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue($fileSize));
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue('inline'));
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());
         $this->linkModel->expects($this->once())->method('load')

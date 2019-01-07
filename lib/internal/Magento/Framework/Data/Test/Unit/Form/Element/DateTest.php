@@ -54,8 +54,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetElementHtmlException()
     {
-        $this->expectException(
-            'Exception',
+        $this->expectException('Exception');
+        $this->expectExceptionMessage(
             'Output format is not specified. Please specify "format" key in constructor, or set it using setFormat().'
         );
         $formMock = $this->getFormMock('never');
@@ -80,6 +80,9 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->model->getElementHtml();
     }
 
+    /**
+     * @return array
+     */
     public function providerGetElementHtmlDateFormat()
     {
         return [
@@ -88,6 +91,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @param $exactly
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getFormMock($exactly)
     {
         $functions = ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'];

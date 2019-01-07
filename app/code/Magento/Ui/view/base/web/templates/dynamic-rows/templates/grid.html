@@ -8,14 +8,14 @@
 <div class="admin__field"
      visible="visible"
      disable="disabled"
-     css="element.setClasses(element)"
+     css="$data.setClasses($data)"
      attr="'data-index': index">
-    <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span translate="element.label"/>
+    <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
+        <span translate="$data.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
-        <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
+        <div class="admin__control-table-pagination" visible="!!$data.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                 <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <table class="admin__dynamic-rows data-grid" data-role="grid">
-                <thead if="element.columnsHeader">
+                <thead if="$data.columnsHeader">
                 <tr>
                     <th if="dndConfig.enabled"
                         class="data-grid-draggable-row-cell"/>
@@ -69,7 +69,7 @@
             </table>
         </div>
 
-        <div class="admin__control-table-action" if="element.addButton">
+        <div class="admin__control-table-action" if="$data.addButton">
             <button attr="{disabled: disabled}"
                     type="button"
                     click="addChild.bind($data, false, false)">

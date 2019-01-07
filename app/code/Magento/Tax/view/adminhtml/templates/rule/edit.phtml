@@ -111,6 +111,7 @@ require([
 
         TaxRateEditableMultiselect.prototype.init = function () {
             var options = {
+                mselectContainer: '#tax_rate + section.mselect-list',
                 toggleAddButton:false,
                 addText: '<?= /* @escapeNotVerified */ __('Add New Tax Rate') ?>',
                 parse: null,

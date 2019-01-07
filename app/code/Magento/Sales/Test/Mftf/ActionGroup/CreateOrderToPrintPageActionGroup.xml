@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateOrderToPrintPageActionGroup">
+        <arguments>
+            <argument name="Category"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+        <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
+    </actionGroup>
+    <actionGroup name="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
+    </actionGroup>
+</actionGroups>

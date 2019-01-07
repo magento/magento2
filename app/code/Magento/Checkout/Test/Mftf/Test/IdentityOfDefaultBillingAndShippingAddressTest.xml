@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="IdentityOfDefaultBillingAndShippingAddressTest">
+        <annotations>
+            <features value="Customer"/>
+            <title value="Checking assignment of default billing address after placing an orde"/>
+            <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94108"/>
+            <stories value="MAGETWO-62891: New address is not marked as 'Default Billing'"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <!--Create product-->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+
+        <!--Go to Storefront-->
+        <amOnPage url="" stepKey="DoToStorefront"/>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <!--Proceed to shipment-->
+        <amOnPage url="{{CheckoutPage.url}}/" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForShippingSection"/>
+
+        <!--Fill shipment form-->
+        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
+            <argument name="customerVar" value="Simple_US_Customer_NY" />
+            <argument name="customerAddressVar" value="US_Address_NY" />
+        </actionGroup>
+
+        <!--Fill cart data-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <!--Go To My Account-->
+        <amOnPage stepKey="goToMyAccountPage" url="/customer/account/"/>
+
+        <!--Assert That Shipping And Billing Address are the same-->
+        <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
+
+        <after>
+            <!--Delete created Product-->
+            <deleteData stepKey="deleteProduct" createDataKey="product"/>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+        </after>
+    </test>
+</tests>

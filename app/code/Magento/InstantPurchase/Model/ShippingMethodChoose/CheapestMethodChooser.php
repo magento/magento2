@@ -6,7 +6,6 @@
 namespace Magento\InstantPurchase\Model\ShippingMethodChoose;
 
 use Magento\Customer\Model\Address;
-use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 
 /**
@@ -20,21 +19,21 @@ class CheapestMethodChooser implements ShippingMethodChooserInterface
     private $shippingMethodFactory;
 
     /**
-     * @var ShippingRateFinder
+     * @var CarrierFinder
      */
-    private $shippingRateFinder;
+    private $carrierFinder;
 
     /**
      * CheapestMethodChooser constructor.
      * @param ShippingMethodInterfaceFactory $shippingMethodFactory
-     * @param ShippingRateFinder $shippingRateFinder
+     * @param CarrierFinder $carrierFinder
      */
     public function __construct(
         ShippingMethodInterfaceFactory $shippingMethodFactory,
-        ShippingRateFinder $shippingRateFinder
+        CarrierFinder $carrierFinder
     ) {
         $this->shippingMethodFactory = $shippingMethodFactory;
-        $this->shippingRateFinder = $shippingRateFinder;
+        $this->carrierFinder = $carrierFinder;
     }
 
     /**
@@ -58,7 +57,7 @@ class CheapestMethodChooser implements ShippingMethodChooserInterface
      */
     private function areShippingMethodsAvailable(Address $address): bool
     {
-        $shippingRatesForAddress = $this->shippingRateFinder->getRatesForCustomerAddress($address);
-        return !empty($shippingRatesForAddress);
+        $carriersForAddress = $this->carrierFinder->getCarriersForCustomerAddress($address);
+        return !empty($carriersForAddress);
     }
 }

@@ -176,7 +176,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->model->_clearUserRoles($this->userMock);
     }
 
-    public function testDeleteSucess()
+    public function testDeleteSuccess()
     {
         $uid = 123;
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
@@ -330,7 +330,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $roleId = 44;
         $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
-        $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
+        $methodUserMock->expects($this->atLeastOnce())->method('getRoleId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
         $this->assertInstanceOf(

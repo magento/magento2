@@ -246,4 +246,49 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expectedLifetime);
         $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
     }
+
+    public function testGetSentinelServers()
+    {
+        $expected = 'server-1,server-2';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_SERVERS)
+            ->willReturn($expected);
+        $this->assertEquals($expected, $this->config->getSentinelServers());
+    }
+
+    public function testGetSentinelMaster()
+    {
+        $expected = 'master';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelMaster(), $expected);
+    }
+
+    public function testGetSentinelVerifyMaster()
+    {
+        $expected = '1';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_VERIFY_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelVerifyMaster(), $expected);
+    }
+
+    public function testGetSentinelConnectRetries()
+    {
+        $expected = '10';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->willReturn(Config::PARAM_SENTINEL_CONNECT_RETRIES)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelConnectRetries(), $expected);
+    }
+
+    public function testGetFailAfter()
+    {
+        $this->assertEquals($this->config->getFailAfter(), Config::DEFAULT_FAIL_AFTER);
+    }
 }

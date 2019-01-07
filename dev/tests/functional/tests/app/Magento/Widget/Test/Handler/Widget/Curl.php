@@ -244,14 +244,22 @@ class Curl extends AbstractCurl
      */
     protected function getThemeId($title)
     {
-        $filter = base64_encode('theme_title=' . $title);
-        $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'design_theme_listing',
+            'filters' => [
+                'placeholder' => true,
+                'theme_title' => $title
+            ],
+            'isAjax' => true
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write($url, [], CurlInterface::GET);
+
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
         $curl->close();
 
-        preg_match('/<tr data-role="row" title="[^"]+system_design_theme\/edit\/id\/([\d]+)\/"/', $response, $match);
+        preg_match('/design_theme_listing_data_source.+items.+"theme_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 }

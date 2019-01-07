@@ -408,6 +408,9 @@ label.mage-error {
             width: 16px;
             z-index: 1;
 
+            /**
+             * @codingStandardsIgnoreStart
+             */
             &:before {
                 &:extend(.admin__control-checkbox + label:before);
                 left: 0;
@@ -434,6 +437,7 @@ label.mage-error {
                 &:before {
                     &:extend(.admin__control-checkbox:checked + label:before);
                 }
+                //  @codingStandardsIgnoreEnd
             }
 
             &._indeterminate {
@@ -470,6 +474,7 @@ label.mage-error {
 
         .action-select-multiselect {
             -webkit-appearance: menulist-button;
+            appearance: menulist-button;
             height: 38px;
             left: -1rem;
             min-width: 0;

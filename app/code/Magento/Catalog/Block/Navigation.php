@@ -195,7 +195,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Checkin activity of category
+     * Check activity of category
      *
      * @param   \Magento\Framework\DataObject $category
      * @return  bool

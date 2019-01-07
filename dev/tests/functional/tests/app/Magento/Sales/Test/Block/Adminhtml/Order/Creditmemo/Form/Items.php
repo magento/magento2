@@ -51,6 +51,9 @@ class Items extends Block
      */
     public function clickUpdateQty()
     {
-        $this->_rootElement->find($this->updateQty)->click();
+        $button = $this->_rootElement->find($this->updateQty);
+        if (!$button->isDisabled()) {
+            $button->click();
+        }
     }
 }

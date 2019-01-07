@@ -40,7 +40,7 @@ class DiRule implements RuleInterface
     {
         if ($this->pattern === null) {
             $this->pattern = '~\b(?<class>(?<module>('
-                . implode('_|', Files::init()->getNamespaces())
+                . implode('[_\\\\]|', Files::init()->getNamespaces())
                 . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
         }
 

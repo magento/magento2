@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeSetRepository;
@@ -132,7 +133,6 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage There was an error saving attribute set.
      */
     public function testSaveThrowsExceptionIfGivenEntityCannotBeSaved()
     {
@@ -141,6 +141,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
             new \Exception('Some internal exception message.')
         );
         $this->model->save($attributeSetMock);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be saved due to an error. Verify your information and try again. "
+            . "If the error persists, please try again later."
+        );
     }
 
     /**
@@ -156,7 +161,6 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage There was an error deleting attribute set.
      */
     public function testDeleteThrowsExceptionIfGivenEntityCannotBeDeleted()
     {
@@ -165,12 +169,17 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
             new \Magento\Framework\Exception\CouldNotDeleteException(__('Some internal exception message.'))
         );
         $this->model->delete($attributeSetMock);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be deleted due to an error. "
+            . "Try again — if the error persists, please try again later."
+        );
     }
 
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Default attribute set can not be deleted
+     * @expectedExceptionMessage The default attribute set can't be deleted.
      */
     public function testDeleteThrowsExceptionIfGivenAttributeSetIsDefault()
     {

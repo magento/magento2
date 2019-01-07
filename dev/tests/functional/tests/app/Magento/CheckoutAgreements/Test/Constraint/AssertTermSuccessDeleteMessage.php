@@ -28,7 +28,7 @@ class AssertTermSuccessDeleteMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutAgreementIndex $agreementIndex)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $agreementIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success delete message is displayed.'

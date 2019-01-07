@@ -24,7 +24,7 @@
                 <div class="field">
                     <label for="coupon_code" class="label"><span><?= /* @escapeNotVerified */ __('Enter discount code') ?></span></label>
                     <div class="control">
-                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?= $block->escapeHtml($block->getCouponCode()) ?>" placeholder="<?= $block->escapeHtml(__('Enter discount code')) ?>" />
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?= $block->escapeHtml($block->getCouponCode()) ?>" placeholder="<?= $block->escapeHtml(__('Enter discount code')) ?>" <?php if (strlen($block->getCouponCode())): ?> disabled="disabled" <?php endif; ?> />
                     </div>
                 </div>
                 <div class="actions-toolbar">

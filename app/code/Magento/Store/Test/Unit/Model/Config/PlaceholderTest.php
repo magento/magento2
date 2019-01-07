@@ -23,7 +23,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_requestMock->expects(
-            $this->any()
+            $this->once()
         )->method(
             'getDistroBaseUrl'
         )->will(

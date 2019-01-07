@@ -130,22 +130,22 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                '<b>Email content for adminhtml/Magento/default theme</b>',
+                '<strong>Email content for adminhtml/Magento/default theme</strong>',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                '<b>Custom Email content for frontend/Magento/default theme</b>',
+                '<strong>Custom Email content for frontend/Magento/default theme</strong>',
             ],
         ];
         return $result;
@@ -352,9 +352,9 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 false,
                 true,
             ],
-            'Production mode - File with compilation error results in unmodified markup' => [
+            'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [

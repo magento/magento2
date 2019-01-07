@@ -89,7 +89,7 @@
                             showLoader: true,
                             context: $form
                         })
-                            .success(function (data) {
+                            .done(function (data) {
                                 if (!data.error) {
                                     setAttributeSetId(data.id);
                                     closeDialogAndProcessForm($form);

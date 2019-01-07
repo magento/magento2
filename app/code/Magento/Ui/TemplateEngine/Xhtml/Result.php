@@ -80,7 +80,9 @@ class Result implements ResultInterface
      */
     public function appendLayoutConfiguration()
     {
-        $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
+        $layoutConfiguration = $this->wrapContent(
+            json_encode($this->structure->generate($this->component), JSON_HEX_TAG)
+        );
         $this->template->append($layoutConfiguration);
     }
 

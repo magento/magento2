@@ -70,7 +70,7 @@
     }
 
     .form-address-edit {
-        #region_id {
+        .region_id {
             display: none;
         }
 
@@ -91,6 +91,21 @@
                 .field {
                     float: none;
                 }
+            }
+        }
+        .fieldset.create.account {
+            .lib-form-hasrequired(bottom);
+            &:after {
+                margin-top: 35px;
+            }
+        }
+    }
+
+    .form.password.forget {
+        .fieldset {
+            .lib-form-hasrequired(bottom);
+            &:after {
+                margin-top: 35px;
             }
         }
     }
@@ -209,7 +224,7 @@
                 .column.main & {
                 }
             }
-
+            display: block;
             margin-bottom: @indent__s;
         }
 
@@ -536,7 +551,7 @@
 
     .account {
         .page.messages {
-            margin-bottom: @indent__xl;
+            margin-bottom: @indent__base;
         }
 
         .column.main {

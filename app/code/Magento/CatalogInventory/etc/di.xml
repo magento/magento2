@@ -35,7 +35,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
-    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
+    <type name="Magento\Catalog\Model\FilterProductCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
                 <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
@@ -78,6 +78,9 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="ReindexUpdatedProducts" type="Magento\CatalogInventory\Model\Plugin\ReindexUpdatedProducts"/>
+    </type>
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>
             <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>
@@ -114,5 +117,22 @@
                 <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="inventoryProductPriceIndexFilter" xsi:type="object">Magento\CatalogInventory\Model\Indexer\ProductPriceIndexFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
     </type>
 </config>

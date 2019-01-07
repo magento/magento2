@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\App\Config\Type\System;
@@ -10,6 +11,7 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,6 +36,8 @@ class ConfigSetCommand extends Command
     const OPTION_SCOPE = 'scope';
     const OPTION_SCOPE_CODE = 'scope-code';
     const OPTION_LOCK = 'lock';
+    const OPTION_LOCK_ENV = 'lock-env';
+    const OPTION_LOCK_CONFIG = 'lock-config';
     /**#@-*/
 
     /**#@-*/
@@ -109,10 +113,23 @@ class ConfigSetCommand extends Command
                     'Scope code (required only if scope is not \'default\')'
                 ),
                 new InputOption(
+                    static::OPTION_LOCK_ENV,
+                    'le',
+                    InputOption::VALUE_NONE,
+                    'Lock value which prevents modification in the Admin (will be saved in app/etc/env.php)'
+                ),
+                new InputOption(
+                    static::OPTION_LOCK_CONFIG,
+                    'lc',
+                    InputOption::VALUE_NONE,
+                    'Lock and share value with other installations, prevents modification in the Admin '
+                    . '(will be saved in app/etc/config.php)'
+                ),
+                new InputOption(
                     static::OPTION_LOCK,
                     'l',
                     InputOption::VALUE_NONE,
-                    'Lock value which prevents modification in the Admin'
+                    'Deprecated, use the --' . static::OPTION_LOCK_ENV . ' option instead.'
                 ),
             ]);
 
@@ -146,12 +163,23 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-                return $this->processorFacadeFactory->create()->process(
+
+                $lock = $input->getOption(static::OPTION_LOCK_ENV)
+                    || $input->getOption(static::OPTION_LOCK_CONFIG)
+                    || $input->getOption(static::OPTION_LOCK);
+
+                $lockTargetPath = ConfigFilePool::APP_ENV;
+                if ($input->getOption(static::OPTION_LOCK_CONFIG)) {
+                    $lockTargetPath = ConfigFilePool::APP_CONFIG;
+                }
+
+                return $this->processorFacadeFactory->create()->processWithLockTarget(
                     $input->getArgument(static::ARG_PATH),
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
                     $input->getOption(static::OPTION_SCOPE_CODE),
-                    $input->getOption(static::OPTION_LOCK)
+                    $lock,
+                    $lockTargetPath
                 );
             });
 

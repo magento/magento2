@@ -36,12 +36,12 @@ class AssertProductIsNotVisibleInComparePage extends AbstractConstraint
         $compareBlock = $comparePage->getCompareProductsBlock();
 
         if ($countProducts > 1) {
-            \PHPUnit_Framework_Assert::assertFalse(
+            \PHPUnit\Framework\Assert::assertFalse(
                 $compareBlock->isProductVisibleInCompareBlock($product->getName()),
                 'The product displays on Compare Products page.'
             );
         } else {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 self::SUCCESS_MESSAGE,
                 $compareBlock->getEmptyMessage(),
                 'The product displays on Compare Products page.'

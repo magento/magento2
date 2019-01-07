@@ -124,13 +124,13 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
         if ($isEmptyValues || $isWrongRange) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Make sure all required information is valid.')
+                __('The required information is invalid. Verify the information and try again.')
             );
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('The Rate Percent should be a positive number.')
+                __('The Rate Percent is invalid. Enter a positive number and try again.')
             );
         }
 
@@ -139,12 +139,17 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $zipTo = $this->getZipTo();
 
             if (strlen($zipFrom) > 9 || strlen($zipTo) > 9) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Maximum zip code length is 9.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __(
+                        'The ZIP Code length is invalid. '
+                        . 'Verify that the length is nine characters or fewer and try again.'
+                    )
+                );
             }
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Use digits only for the zip code.')
+                    __('The ZIP Code is invalid. Use numbers only.')
                 );
             }
 
@@ -199,7 +204,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         if ($this->_isInRule()) {
             throw new CouldNotDeleteException(
-                __('The tax rate cannot be removed. It exists in a tax rule.')
+                __("The tax rate can't be removed because it exists in a tax rule.")
             );
         }
         return parent::beforeDelete();

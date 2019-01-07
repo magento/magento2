@@ -17,7 +17,7 @@ class AssertCustomerBackendDuplicateErrorMessage extends AbstractConstraint
     /**
      * Error save message text.
      */
-    const ERROR_SAVE_MESSAGE = 'A customer with the same email already exists in an associated website.';
+    const ERROR_SAVE_MESSAGE = 'A customer with the same email address already exists in an associated website.';
 
     /**
      * Asserts that error message is displayed while creating customer with the same email.
@@ -28,7 +28,7 @@ class AssertCustomerBackendDuplicateErrorMessage extends AbstractConstraint
     public function processAssert(CustomerIndex $customerIndexPage)
     {
         $actualMessage = $customerIndexPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_SAVE_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'

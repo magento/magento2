@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -13,7 +14,12 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Magento\Customer\Controller\Adminhtml\Index
+/**
+ * Save customer action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
      * @var EmailNotificationInterface
@@ -104,6 +110,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Saves default_billing and default_shipping flags for customer address
      *
+     * @deprecated must be removed because addresses are save separately for now
      * @param array $addressIdList
      * @param array $extractedCustomerData
      * @return array
@@ -146,6 +153,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Reformat customer addresses data to be compatible with customer service interface
      *
+     * @deprecated addresses are saved separately for now
      * @param array $extractedCustomerData
      * @return array
      */
@@ -184,7 +192,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             try {
                 // optional fields might be set in request for future processing by observers in other modules
                 $customerData = $this->_extractCustomerData();
-                $addressesData = $this->_extractCustomerAddressData($customerData);
 
                 if ($customerId) {
                     $currentCustomer = $this->_customerRepository->getById($customerId);
@@ -202,28 +209,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerData,
                     \Magento\Customer\Api\Data\CustomerInterface::class
                 );
-                $addresses = [];
-                foreach ($addressesData as $addressData) {
-                    $region = isset($addressData['region']) ? $addressData['region'] : null;
-                    $regionId = isset($addressData['region_id']) ? $addressData['region_id'] : null;
-                    $addressData['region'] = [
-                        'region' => $region,
-                        'region_id' => $regionId,
-                    ];
-                    $addressDataObject = $this->addressDataFactory->create();
-                    $this->dataObjectHelper->populateWithArray(
-                        $addressDataObject,
-                        $addressData,
-                        \Magento\Customer\Api\Data\AddressInterface::class
-                    );
-                    $addresses[] = $addressDataObject;
-                }
 
                 $this->_eventManager->dispatch(
                     'adminhtml_customer_prepare_save',
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
-                $customer->setAddresses($addresses);
+
                 if (isset($customerData['sendemail_store_id'])) {
                     $customer->setStoreId($customerData['sendemail_store_id']);
                 }
@@ -264,6 +255,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $messages = $exception->getMessages();
                 if (empty($messages)) {
                     $messages = $exception->getMessage();
+                }
+                $this->_addSessionErrorMessages($messages);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
+                $returnToEdit = true;
+            } catch (\Magento\Framework\Exception\AbstractAggregateException $exception) {
+                $errors = $exception->getErrors();
+                $messages = [];
+                foreach ($errors as $error) {
+                    $messages[] = $error->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerFormData($originalRequestData);

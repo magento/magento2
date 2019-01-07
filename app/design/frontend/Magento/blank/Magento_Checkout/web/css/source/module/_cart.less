@@ -80,6 +80,10 @@
             margin-bottom: 0;
             overflow: inherit;
         }
+
+        .discount.coupon {
+            display: none;
+        }
     }
 
     //  Products table
@@ -301,7 +305,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;

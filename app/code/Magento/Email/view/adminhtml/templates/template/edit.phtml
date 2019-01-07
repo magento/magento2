@@ -61,7 +61,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 <script>
 require([
     "jquery",
-    "tinymceDeprecated",
+    "wysiwygAdapter",
     "Magento_Ui/js/modal/alert",
     "mage/mage",
     "Magento_Email/js/variables",
@@ -150,10 +150,10 @@ require([
             } else {
                 $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
             }
-            if (typeof tinyMCE == 'undefined' || !tinyMCE.getInstanceById('template_text')) {
+            if (typeof tinyMCE == 'undefined' || !tinyMCE.get('template_text')) {
                 $('preview_text').value = $('template_text').value;
             } else {
-                $('preview_text').value = tinyMCE.getInstanceById('template_text').getHTML();
+                $('preview_text').value = tinyMCE.get('template_text').getHTML();
             }
 
             if ($('template_styles') != undefined) {

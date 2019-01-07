@@ -77,9 +77,8 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
         $messageCount = count($this->_messages->getUnread());
         if ($messageCount > 1) {
             return __('You have %1 new system messages', $messageCount);
-        } else {
-            return __('You have %1 new system message', $messageCount);
         }
+        return __('You have %1 new system message', $messageCount);
     }
 
     /**

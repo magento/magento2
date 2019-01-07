@@ -77,5 +77,6 @@ class I18nCollectPhrasesCommand extends Command
             $input->getOption(self::INPUT_KEY_MAGENTO)
         );
         $output->writeln('<info>Dictionary successfully processed.</info>');
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

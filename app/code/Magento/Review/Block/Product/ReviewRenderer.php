@@ -9,7 +9,11 @@ namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Review\Observer\PredispatchReviewObserver;
 
+/**
+ * Class ReviewRenderer
+ */
 class ReviewRenderer extends \Magento\Framework\View\Element\Template implements ReviewRendererInterface
 {
     /**
@@ -18,8 +22,8 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @var array
      */
     protected $_availableTemplates = [
-        self::FULL_VIEW => 'helper/summary.phtml',
-        self::SHORT_VIEW => 'helper/summary_short.phtml',
+        self::FULL_VIEW => 'Magento_Review::helper/summary.phtml',
+        self::SHORT_VIEW => 'Magento_Review::helper/summary_short.phtml',
     ];
 
     /**
@@ -41,6 +45,19 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     ) {
         $this->_reviewFactory = $reviewFactory;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Review module availability
+     *
+     * @return string
+     */
+    public function isReviewEnabled() : string
+    {
+        return $this->_scopeConfig->getValue(
+            PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

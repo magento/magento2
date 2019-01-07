@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Search\Test\Unit\Helper;
 
 /**
@@ -43,6 +44,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlBuilderMock;
+
     protected function setUp()
     {
         $this->stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
@@ -53,9 +59,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->setMethods(['getUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->model = new \Magento\Search\Helper\Data(
             $this->contextMock,
@@ -116,6 +127,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getEscapedQueryText());
     }
 
+    /**
+     * @return array
+     */
     public function queryTextDataProvider()
     {
         return [
@@ -124,6 +138,41 @@ class DataTest extends \PHPUnit\Framework\TestCase
             [['test'], 100, ''],
             ['test', 100, 'test'],
             ['testtest', 7, 'testtes'],
+        ];
+    }
+
+    /**
+     * Test getSuggestUrl() take into consideration type of request(secure, non-secure).
+     *
+     * @dataProvider getSuggestUrlDataProvider
+     * @param bool $isSecure
+     * @return void
+     */
+    public function testGetSuggestUrl(bool $isSecure)
+    {
+        $this->requestMock->expects(self::once())
+            ->method('isSecure')
+            ->willReturn($isSecure);
+        $this->urlBuilderMock->expects(self::once())
+            ->method('getUrl')
+            ->with(self::identicalTo('search/ajax/suggest'), self::identicalTo(['_secure' => $isSecure]));
+        $this->model->getSuggestUrl();
+    }
+
+    /**
+     * Provide test data for testGetSuggestUrl() test.
+     *
+     * @return array
+     */
+    public function getSuggestUrlDataProvider()
+    {
+        return [
+            'non-secure' => [
+                'isSecure' => false,
+            ],
+            'secure' => [
+                'secure' => true,
+            ],
         ];
     }
 }

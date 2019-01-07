@@ -32,7 +32,7 @@ class AssertOrderTotalPaid extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             number_format($prices['totalPaid'], 2, '.', ','),
             $salesOrderView->getOrderTotalsBlock()->getTotalPaid(),
             'Total Paid price does not equal to price from data set.'

@@ -6,7 +6,12 @@
  */
 namespace Magento\Integration\Controller\Token;
 
-class Request extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
+class Request extends Action implements CsrfAwareActionInterface
 {
     /**
      * @var  \Magento\Framework\Oauth\OauthInterface
@@ -31,6 +36,23 @@ class Request extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
         $this->oauthService = $oauthService;
         $this->helper = $helper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 
     /**

@@ -16,7 +16,6 @@
     <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexerHandler</item>
             </argument>
@@ -24,7 +23,6 @@
     </type>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="mysql" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher</item>
             </argument>
@@ -32,7 +30,6 @@
     </type>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="structures" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexStructure</item>
             </argument>
@@ -105,20 +102,16 @@
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="intervals" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval</item>
             </argument>
-            <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="dataProviders" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider</item>
             </argument>
-            <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
@@ -218,6 +211,8 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
+            <!-- @deprecated parameter customerSession has been deprecated and not in used now -->
+            <argument name="customerSession" xsi:type="null"/>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
@@ -239,12 +234,6 @@
             <argument name="engines" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Engine</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\AdapterFactory">
-        <arguments>
-            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
-            <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Search\Model\Autocomplete">
@@ -309,5 +298,46 @@
         <arguments>
             <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
+        <arguments>
+            <!-- @deprecated parameter storeManager has been deprecated and not in used now -->
+            <argument name="storeManager" xsi:type="null"/>
+            <!-- @deprecated parameter resourceConnection has been deprecated and not in used now -->
+            <argument name="resourceConnection" xsi:type="null"/>
+            <!-- @deprecated parameter scopeConfig has been deprecated and not in used now -->
+            <argument name="scopeConfig" xsi:type="null"/>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <arguments>
+            <argument name="dimensionProvider" xsi:type="object" shared="false">
+                Magento\Store\Model\StoreDimensionProvider
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
+        <arguments>
+            <argument name="priceTableResolver" xsi:type="object">
+                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider">
+        <arguments>
+            <argument name="priceTableResolver" xsi:type="object">
+                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder">
+        <arguments>
+            <argument name="priceTableResolver" xsi:type="object">
+                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config">
+        <plugin name="config_enable_eav_indexer" type="Magento\CatalogSearch\Plugin\EnableEavIndexer" />
     </type>
 </config>

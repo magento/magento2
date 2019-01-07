@@ -30,7 +30,7 @@ class AssertOrderStatusNotAssigned extends AbstractConstraint
     public function processAssert(OrderStatus $orderStatus, OrderStatusIndex $orderStatusIndex)
     {
         $statusLabel = $orderStatus->getLabel();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $orderStatusIndex->open()->getOrderStatusGrid()->isRowVisible(
                 ['label' => $statusLabel, 'state' => $orderStatus->getState()]
             ),

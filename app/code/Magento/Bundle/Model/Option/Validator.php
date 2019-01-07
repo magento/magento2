@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Model\Option;
 
 use Magento\Framework\Validator\NotEmpty;
@@ -51,7 +52,8 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         ];
         foreach ($requiredFields as $requiredField => $requiredValue) {
             if (!$this->notEmpty->isValid(trim($requiredValue))) {
-                $messages[$requiredField] = __('%fieldName is a required field.', ['fieldName' => $requiredField]);
+                $messages[$requiredField] =
+                    __('"%fieldName" is required. Enter and try again.', ['fieldName' => $requiredField]);
             }
         }
         $this->_addMessages($messages);

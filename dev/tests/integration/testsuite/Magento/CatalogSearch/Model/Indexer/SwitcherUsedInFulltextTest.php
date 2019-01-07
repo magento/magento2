@@ -6,8 +6,6 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -32,11 +30,6 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
-     */
-    protected $resourceFulltext;
 
     /**
      * @var \Magento\CatalogSearch\Model\Fulltext
@@ -102,10 +95,6 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
 
         $this->engine = $objectManager->get(
             \Magento\CatalogSearch\Model\ResourceModel\Engine::class
-        );
-
-        $this->resourceFulltext = $objectManager->get(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class
         );
 
         $this->queryFactory = $objectManager->get(
@@ -178,7 +167,6 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
      */
     protected function search($text)
     {
-        $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
         $query->unsetData();
         $query->setQueryText($text);

@@ -11,8 +11,6 @@
 <?php
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 
-$productId = $block->getSaleableItem()->getId();
-
 /** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');

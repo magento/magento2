@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
@@ -132,6 +131,14 @@ class Config implements ConfigInterface
         }
         if ($savePath) {
             $this->setSavePath($savePath);
+        }
+
+        /**
+        * Session save handler - memcache, files, etc
+        */
+        $saveHandler = $deploymentConfig->get(self::PARAM_SESSION_SAVE_METHOD);
+        if ($saveHandler) {
+            $this->setOption('session.save_handler', $saveHandler);
         }
 
         /**

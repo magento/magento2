@@ -10,9 +10,7 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,7 +69,6 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => 0777,
         'file_name_prefix' => 'mage',
     ];
 
@@ -148,15 +145,17 @@ class Factory
         $result = $this->_objectManager->create(
             \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
-                'frontend' => \Zend_Cache::factory(
-                    $frontend['type'],
-                    $backend['type'],
-                    $frontend,
-                    $backend['options'],
-                    true,
-                    true,
-                    true
-                )
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return \Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                }
             ]
         );
         $result = $this->_applyDecorators($result);
@@ -265,6 +264,15 @@ class Factory
             case 'database':
                 $backendType = \Magento\Framework\Cache\Backend\Database::class;
                 $options = $this->_getDbAdapterOptions();
+                break;
+            case 'remote_synchronized_cache':
+                $backendType = \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class;
+                $options['remote_backend'] = \Magento\Framework\Cache\Backend\Database::class;
+                $options['remote_backend_options'] = $this->_getDbAdapterOptions();
+                $options['local_backend'] = \Cm_Cache_Backend_File::class;
+                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                $options['local_backend_options']['cache_dir'] = $cacheDir->getAbsolutePath();
+                $cacheDir->create();
                 break;
             default:
                 if ($type != $this->_defaultBackend) {
