@@ -288,17 +288,6 @@ class ServiceMetadata
     }
 
     /**
-     * Set Routes Config Cache ID
-     *
-     * @param string $routesConfigCacheId
-     */
-    public function setRoutesConfigCacheId($routesConfigCacheId){
-
-        $this->routesConfigCacheId = $routesConfigCacheId;
-
-    }
-
-    /**
      * Collect the list of services with routes and request types for use in REST.
      *
      * @return array
