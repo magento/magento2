@@ -36,6 +36,7 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
@@ -50,6 +51,8 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon"/>

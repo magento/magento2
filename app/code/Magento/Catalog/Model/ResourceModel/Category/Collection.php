@@ -323,9 +323,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                         'main_table.category_id=e.entity_id',
                         []
                     )->where(
-                        'e.entity_id = :entity_id'
-                    )->orWhere(
-                        'e.path LIKE :c_path'
+                        '(e.entity_id = :entity_id OR e.path LIKE :c_path)'
                     );
                     if ($websiteId) {
                         $select->join(
