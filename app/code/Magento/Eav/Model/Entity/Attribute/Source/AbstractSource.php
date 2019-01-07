@@ -36,7 +36,7 @@ abstract class AbstractSource implements
      */
     public function getAllOptions()
     {
-        if (empty($this->_options)) {
+        if (null === $this->_options) {
             $this->_options = $this->loadOptions();
         }
         return $this->_options;
