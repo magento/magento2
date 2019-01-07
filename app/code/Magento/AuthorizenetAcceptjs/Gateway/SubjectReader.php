@@ -37,6 +37,17 @@ class SubjectReader
     }
 
     /**
+     * Reads amount from subject
+     *
+     * @param array $subject
+     * @return mixed
+     */
+    public function readAmount(array $subject)
+    {
+        return Helper\SubjectReader::readAmount($subject);
+    }
+
+    /**
      * Reads response from subject
      *
      * @param array $subject
