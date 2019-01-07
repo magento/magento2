@@ -157,9 +157,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     protected function getRewrite($requestPath, $storeId)
     {
-        $urlFinders = $this->urlFinderPool->getUrlFinders();
-
-        foreach ($urlFinders as $urlFinder) {
+        foreach ($this->urlFinderPool as $urlFinder) {
             $rewrite = $urlFinder->findOneByData([
                 UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
                 UrlRewrite::STORE_ID => $storeId,

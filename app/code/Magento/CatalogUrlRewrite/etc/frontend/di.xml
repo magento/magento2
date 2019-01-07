@@ -10,7 +10,7 @@
         <arguments>
             <argument name="urlFinders" xsi:type="array">
                 <item name="catalog" xsi:type="array">
-                    <item name="object" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
+                    <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>

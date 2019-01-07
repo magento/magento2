@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Class UrlFinderPool
  */
-class UrlFinderPool
+class UrlFinderPool implements \Iterator
 {
     private const SORT_KEY = 'sortOrder';
 
@@ -20,41 +22,81 @@ class UrlFinderPool
     private $urlFinders;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param array $urlFinders
      */
-    public function __construct(array $urlFinders)
+    public function __construct(array $urlFinders, ObjectManagerInterface $objectManager)
     {
-        foreach ($urlFinders as $urlFinder) {
-            if (!$urlFinder['object'] instanceof UrlFinderInterface) {
-                throw new \InvalidArgumentException('Must be instance of ' . UrlFinderInterface::class);
-            }
-        }
+        $this->objectManager = $objectManager;
+        $this->setUrlFinders($urlFinders);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function current()
+    {
+        $current = current($this->urlFinders);
+        return $this->objectManager->create($current['class']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function next()
+    {
+        return next($this->urlFinders);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rewind()
+    {
+        return reset($this->urlFinders);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function valid()
+    {
+        return (bool)current($this->urlFinders);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function key()
+    {
+        return key($this->urlFinders);
+    }
+
+    /**
+     * Set and sort the urlFinders
+     *
+     * @param array $urlFinders
+     * @return void
+     */
+    public function setUrlFinders(array $urlFinders)
+    {
         $this->urlFinders = $urlFinders;
-        uasort($this->urlFinders, [$this, 'compareSortOrder']);
+        $this->sortFinders();
     }
 
     /**
-     * Get list of UrlFinders
+     * Sort UrlFinders by sortOrder
      *
-     * @return array
+     * @return void
      */
-    public function getUrlFinders(): array
+    private function sortFinders()
     {
-        return array_map(function ($u) {
-            return $u['object'];
-        }, $this->urlFinders);
-    }
-
-    /**
-     * Compare sort order for two items
-     *
-     * @param array $first
-     * @param array $second
-     * @return int
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) used in callback
-     */
-    private function compareSortOrder(array $first, array $second) : int
-    {
-        return (int)$first[self::SORT_KEY] <=> (int)$second[self::SORT_KEY];
+        uasort($this->urlFinders, function ($first, $second) {
+            return (int)$first[self::SORT_KEY] <=> (int)$second[self::SORT_KEY];
+        });
     }
 }

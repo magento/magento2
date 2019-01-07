@@ -71,11 +71,6 @@ class ProductScopeRewriteGenerator
     private $categoryRepository;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $config;
-
-    /**
      * @param StoreViewService $storeViewService
      * @param StoreManagerInterface $storeManager
      * @param ObjectRegistryFactory $objectRegistryFactory
@@ -85,8 +80,6 @@ class ProductScopeRewriteGenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
-     * @param ScopeConfigInterface|null $config
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -97,8 +90,7 @@ class ProductScopeRewriteGenerator
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
         MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryRepositoryInterface $categoryRepository = null,
-        ScopeConfigInterface $config = null
+        CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -113,7 +105,6 @@ class ProductScopeRewriteGenerator
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
         $this->categoryRepository = $categoryRepository ?:
             ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
-        $this->config = $config ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -260,7 +251,8 @@ class ProductScopeRewriteGenerator
      */
     private function isCategoryProductRewritesEnabled($storeId)
     {
-        return (bool)$this->config->getValue(
+        $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        return (bool)$scopeConfig->getValue(
             'catalog/seo/generate_rewrites_on_save',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId

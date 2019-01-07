@@ -21,7 +21,7 @@
         <arguments>
             <argument name="urlFinders" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="object" xsi:type="object">Magento\UrlRewrite\Model\Storage\DbStorage</item>
+                    <item name="class" xsi:type="string">Magento\UrlRewrite\Model\Storage\DbStorage</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
