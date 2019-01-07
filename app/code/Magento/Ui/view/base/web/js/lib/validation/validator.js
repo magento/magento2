@@ -48,6 +48,10 @@ define([
                 params :
                 [params];
 
+            if (typeof message === 'function') {
+                message = message.call(rule);
+            }
+
             message = params.reduce(function (msg, param, idx) {
                 return msg.replace(new RegExp('\\{' + idx + '\\}', 'g'), param);
             }, message);
