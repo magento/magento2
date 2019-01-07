@@ -21,7 +21,7 @@
         <element name="resetGridColumns" type="button" selector="//div[contains(@class, '_active')]//div[contains(@class, 'admin__data-grid-action-columns-menu')]//button[text()='Reset']"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
-        <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']"/>
+        <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="nameFilter" type="input" selector="input.admin__control-text[name='name']"/>
         <element name="skuFilter" type="input" selector="input.admin__control-text[name='sku']"/>
         <element name="priceFilterFrom" type="input" selector="input.admin__control-text[name='price[from]']"/>
@@ -31,5 +31,6 @@
         <element name="newFromDateFilter" type="input" selector="input.admin__control-text[name='news_from_date[from]']"/>
         <element name="keywordSearch" type="input" selector="input#fulltext"/>
         <element name="keywordSearchButton" type="button" selector=".data-grid-search-control-wrap button.action-submit" timeout="30"/>
+        <element name="nthRow" type="block" selector=".data-row:nth-of-type(1)"/>
     </section>
 </sections>

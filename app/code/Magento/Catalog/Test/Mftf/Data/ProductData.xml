@@ -477,4 +477,72 @@
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="virtualProductWithRequiredFields" type="product">
+        <data key="name" unique="suffix">virtualProduct</data>
+        <data key="sku" unique="suffix">virtualsku</data>
+        <data key="price">10</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtualproduct</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductBigQty" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">100</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductGeneralGroup" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">100.00</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductCustomImportOptions" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">9,000.00</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductWithoutManageStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">100.00</data>
+        <data key="quantity">999</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="special_price">90.00</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductOutOfStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">9,000.00</data>
+        <data key="quantity">999</data>
+        <data key="status">Out of Stock</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="storefrontStatus">OUT OF STOCK</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="virtualProductAssignToCategory" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">10.00</data>
+        <data key="quantity">999</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
 </entities>
