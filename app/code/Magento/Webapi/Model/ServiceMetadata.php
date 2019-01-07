@@ -80,11 +80,6 @@ class ServiceMetadata
     private $serializer;
 
     /**
-     * @var string
-     */
-    private $routesConfigCacheId;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Config $config
@@ -105,7 +100,6 @@ class ServiceMetadata
         $this->classReflector = $classReflector;
         $this->typeProcessor = $typeProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-        $this->routesConfigCacheId = self::ROUTES_CONFIG_CACHE_ID;
     }
 
     /**
@@ -273,7 +267,7 @@ class ServiceMetadata
     public function getRoutesConfig()
     {
         if (null === $this->routes) {
-            $routesConfig = $this->cache->load($this->routesConfigCacheId);
+            $routesConfig = $this->cache->load(self::ROUTES_CONFIG_CACHE_ID);
             $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
             if ($routesConfig && is_string($routesConfig) && $typesData && is_string($typesData)) {
                 $this->routes = $this->serializer->unserialize($routesConfig);
@@ -282,7 +276,7 @@ class ServiceMetadata
                 $this->routes = $this->initRoutesMetadata();
                 $this->cache->save(
                     $this->serializer->serialize($this->routes),
-                    $this->routesConfigCacheId
+                    self::ROUTES_CONFIG_CACHE_ID
                 );
                 $this->cache->save(
                     $this->serializer->serialize($this->typeProcessor->getTypesData()),

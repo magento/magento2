@@ -15,9 +15,6 @@ use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 
 class ServiceMetadata
 {
-
-    const ASYNC_ROUTES_CONFIG_CACHE_ID = 'async-routes-services-config';
-
     /**
      * @var \Magento\Webapi\Model\Config
      */
@@ -274,18 +271,5 @@ class ServiceMetadata
         }
 
         return $this->responseDefinitionReplacement;
-    }
-
-    /**
-     * Plugin to change config cache id for Asynchronous operations
-     *
-     * @return null
-     */
-    public function beforeGetRoutesConfig(\Magento\Webapi\Model\ServiceMetadata $subject)
-    {
-        if ($this->asynchronousSchemaRequestProcessor->canProcess($this->request)) {
-            $subject->setRoutesConfigCacheId(self::ASYNC_ROUTES_CONFIG_CACHE_ID);
-        }
-        return null;
     }
 }
