@@ -130,10 +130,10 @@ class DataObject implements \ArrayAccess
 
         if ($index !== null) {
             if ($data === (array)$data) {
-                $data = isset($data[$index]) ? $data[$index] : null;
+                $data = $data[$index] ?? null;
             } elseif (is_string($data)) {
                 $data = explode(PHP_EOL, $data);
-                $data = isset($data[$index]) ? $data[$index] : null;
+                $data = $data[$index] ?? null;
             } elseif ($data instanceof \Magento\Framework\DataObject) {
                 $data = $data->getData($index);
             } else {
@@ -381,11 +381,11 @@ class DataObject implements \ArrayAccess
         switch (substr($method, 0, 3)) {
             case 'get':
                 $key = $this->_underscore(substr($method, 3));
-                $index = isset($args[0]) ? $args[0] : null;
+                $index = $args[0] ?? null;
                 return $this->getData($key, $index);
             case 'set':
                 $key = $this->_underscore(substr($method, 3));
-                $value = isset($args[0]) ? $args[0] : null;
+                $value = $args[0] ?? null;
                 return $this->setData($key, $value);
             case 'uns':
                 $key = $this->_underscore(substr($method, 3));

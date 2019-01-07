@@ -29,7 +29,7 @@ class Form extends \Magento\Mtf\Block\Form
         unset($data['import_file']);
         $data['import_file'] = $importFile;
 
-        $fields = isset($data['fields']) ? $data['fields'] : $data;
+        $fields = $data['fields'] ?? $data;
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping, $element);
 

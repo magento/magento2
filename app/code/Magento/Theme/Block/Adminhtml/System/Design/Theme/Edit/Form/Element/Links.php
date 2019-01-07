@@ -77,7 +77,7 @@ class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
             '<a %s>%s</a>%s',
             join(' ', $attributes),
             $this->_escape($option['label']),
-            isset($option['delimiter']) ? $option['delimiter'] : ''
+            $option['delimiter'] ?? ''
         );
 
         return $html;

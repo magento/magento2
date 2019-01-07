@@ -346,7 +346,7 @@ class Input implements \Zend_Filter_Interface
             if (!is_a($filterClassName, \Zend_Filter_Interface::class, true)) {
                 throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
             }
-            $filterClassOptions = isset($filterData['args']) ? $filterData['args'] : [];
+            $filterClassOptions = $filterData['args'] ?? [];
             $filter = new $filterClassName(...array_values($filterClassOptions));
         }
 

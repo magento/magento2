@@ -44,14 +44,14 @@ class ArgumentFactory
             Argument::class,
             [
                 'name' => $argumentData['name'],
-                'type' => isset($argumentData['itemType']) ? $argumentData['itemType'] : $argumentData['type'],
-                'baseType' => isset($argumentData['baseType']) ? $argumentData['baseType'] : '',
-                'description' => isset($argumentData['description']) ? $argumentData['description'] : '',
-                'required' => isset($argumentData['required']) ? $argumentData['required'] : false,
+                'type' => $argumentData['itemType'] ?? $argumentData['type'],
+                'baseType' => $argumentData['baseType'] ?? '',
+                'description' => $argumentData['description'] ?? '',
+                'required' => $argumentData['required'] ?? false,
                 'isList' => isset($argumentData['itemType']),
-                'itemType' => isset($argumentData['itemType']) ? $argumentData['itemType'] : '',
-                'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false,
-                'defaultValue' => isset($argumentData['defaultValue']) ? $argumentData['defaultValue'] : null
+                'itemType' => $argumentData['itemType'] ?? '',
+                'itemsRequired' => $argumentData['itemsRequired'] ?? false,
+                'defaultValue' => $argumentData['defaultValue'] ?? null
             ]
         );
     }

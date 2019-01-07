@@ -68,7 +68,7 @@ class Item extends \Magento\Backend\Block\Widget
      */
     protected function _createFromConfig(array $config)
     {
-        $type = isset($config['type']) ? $config['type'] : 'default';
+        $type = $config['type'] ?? 'default';
         switch ($type) {
             default:
                 $blockClass = \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\DefaultAdditional::class;

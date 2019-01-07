@@ -629,7 +629,7 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getConfigurableSkuPattern($config, $attributeSetName)
     {
-        $sku = isset($config['sku']) ? $config['sku'] : null;
+        $sku = $config['sku'] ?? null;
         if (!$sku) {
             $sku = 'Configurable Product ' . $attributeSetName . ' %s';
         }

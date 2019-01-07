@@ -123,9 +123,9 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function prepareItemData(array $websiteScope = [], array $groupScope = [], array $storeScope = [])
     {
         $result = [
-            'store_website_id' => isset($websiteScope['scope_id']) ? $websiteScope['scope_id'] : null,
-            'store_group_id' => isset($groupScope['scope_id']) ? $groupScope['scope_id'] : null,
-            'store_id' => isset($storeScope['scope_id']) ? $storeScope['scope_id'] : null,
+            'store_website_id' => $websiteScope['scope_id'] ?? null,
+            'store_group_id' => $groupScope['scope_id'] ?? null,
+            'store_id' => $storeScope['scope_id'] ?? null,
         ];
 
         $result = array_merge($result, $this->getScopeData($websiteScope, $groupScope, $storeScope));

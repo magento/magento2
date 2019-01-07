@@ -399,7 +399,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $module = $dependency['module'];
         $nsModule = str_replace('_', '\\', $module);
-        $type = isset($dependency['type']) ? $dependency['type'] : self::TYPE_HARD;
+        $type = $dependency['type'] ?? self::TYPE_HARD;
 
         $soft = $this->_getDependencies($currentModule, self::TYPE_SOFT, self::MAP_TYPE_DECLARED);
         $hard = $this->_getDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);

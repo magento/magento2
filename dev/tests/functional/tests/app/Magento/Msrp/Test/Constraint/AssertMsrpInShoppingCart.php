@@ -52,7 +52,7 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $checkoutCart->open();
 
         $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
-        $productPrice = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
+        $productPrice = $priceData['category_price'] ?? $product->getPrice();
         $unitPrice = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
         \PHPUnit\Framework\Assert::assertEquals($productPrice, $unitPrice, 'Incorrect unit price is displayed in Cart');
     }

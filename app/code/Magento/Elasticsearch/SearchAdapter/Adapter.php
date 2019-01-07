@@ -80,7 +80,7 @@ class Adapter implements AdapterInterface
         $aggregationBuilder->setQuery($this->queryContainerFactory->create(['query' => $query]));
         $rawResponse = $client->query($query);
 
-        $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
+        $rawDocuments = $rawResponse['hits']['hits'] ?? [];
 
         $queryResponse = $this->responseFactory->create(
             [

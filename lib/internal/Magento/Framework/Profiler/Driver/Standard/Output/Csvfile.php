@@ -39,8 +39,8 @@ class Csvfile extends AbstractOutput
     {
         parent::__construct($config);
         $this->_filePath = $this->_parseFilePath($config);
-        $this->_delimiter = isset($config['delimiter']) ? $config['delimiter'] : ',';
-        $this->_enclosure = isset($config['enclosure']) ? $config['enclosure'] : '"';
+        $this->_delimiter = $config['delimiter'] ?? ',';
+        $this->_enclosure = $config['enclosure'] ?? '"';
     }
 
     /**
@@ -51,7 +51,7 @@ class Csvfile extends AbstractOutput
      */
     protected function _parseFilePath(array $config = null)
     {
-        $result = isset($config['filePath']) ? $config['filePath'] : self::DEFAULT_FILEPATH;
+        $result = $config['filePath'] ?? self::DEFAULT_FILEPATH;
         if (isset($config['baseDir'])) {
             $result = rtrim($config['baseDir'], '/') . '/' . ltrim($result, '/');
         }

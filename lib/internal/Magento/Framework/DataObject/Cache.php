@@ -398,9 +398,9 @@ class Cache
         $debug = [];
         foreach ($bt as $i => $step) {
             $debug[$i] = [
-                'file' => isset($step['file']) ? $step['file'] : null,
-                'line' => isset($step['line']) ? $step['line'] : null,
-                'function' => isset($step['function']) ? $step['function'] : null,
+                'file' => $step['file'] ?? null,
+                'line' => $step['line'] ?? null,
+                'function' => $step['function'] ?? null,
             ];
         }
         $this->_debug[$idx] = $debug;

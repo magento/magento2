@@ -47,7 +47,7 @@ class FieldMapperResolver implements FieldMapperInterface
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        $entityType = $context['entityType'] ?? Config::ELASTICSEARCH_TYPE_DEFAULT;
         return $this->getEntity($entityType)->getFieldName($attributeCode, $context);
     }
 
@@ -56,7 +56,7 @@ class FieldMapperResolver implements FieldMapperInterface
      */
     public function getAllAttributesTypes($context = [])
     {
-        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        $entityType = $context['entityType'] ?? Config::ELASTICSEARCH_TYPE_DEFAULT;
         return $this->getEntity($entityType)->getAllAttributesTypes($context);
     }
 

@@ -92,7 +92,7 @@ class ModuleRegistryUninstaller
         $existingModules = $this->loader->load($modules);
         $newModules = [];
         foreach (array_keys($existingModules) as $module) {
-            $newModules[$module] = isset($configuredModules[$module]) ? $configuredModules[$module] : 0;
+            $newModules[$module] = $configuredModules[$module] ?? 0;
         }
         $this->writer->saveConfig(
             [

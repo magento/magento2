@@ -76,7 +76,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
             }
         } else {
             foreach ($hostConfig as $host) {
-                $port = isset($host['port']) ? $host['port'] : Server::DEFAULT_PORT;
+                $port = $host['port'] ?? Server::DEFAULT_PORT;
                 $uris[] = UriFactory::factory('')->setHost($host['host'])->setPort($port);
             }
         }

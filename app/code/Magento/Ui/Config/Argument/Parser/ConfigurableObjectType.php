@@ -31,7 +31,7 @@ class ConfigurableObjectType implements ParserInterface
      */
     public function parse(array $data, \DOMNode $node)
     {
-        $arguments = isset($data['argument']) ? $data['argument'] : [];
+        $arguments = $data['argument'] ?? [];
         if (!is_array($arguments)) {
             throw new \InvalidArgumentException('Array arguments are expected.');
         }

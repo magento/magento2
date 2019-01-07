@@ -771,7 +771,7 @@ class EavSetup
         if (isset($array[$key]) && is_bool($array[$key])) {
             $array[$key] = (int)$array[$key];
         }
-        return isset($array[$key]) ? $array[$key] : $default;
+        return $array[$key] ?? $default;
     }
 
     /**
@@ -785,7 +785,7 @@ class EavSetup
     {
         $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
         $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
+        $attributeCode = $data['attribute_code'] ?? '';
 
         $isAllowedLength = \Zend_Validate::is(
             trim($attributeCode),
@@ -827,7 +827,7 @@ class EavSetup
 
         $this->_validateAttributeData($data);
 
-        $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
+        $sortOrder = $attr['sort_order'] ?? null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
         if ($attributeId) {
             $this->updateAttribute($entityTypeId, $attributeId, $data, null, $sortOrder);
@@ -900,13 +900,13 @@ class EavSetup
                 if (!$intOptionId) {
                     $data = [
                         'attribute_id' => $option['attribute_id'],
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
+                        'sort_order' => $option['order'][$optionId] ?? 0,
                     ];
                     $this->setup->getConnection()->insert($optionTable, $data);
                     $intOptionId = $this->setup->getConnection()->lastInsertId($optionTable);
                 } else {
                     $data = [
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
+                        'sort_order' => $option['order'][$optionId] ?? 0,
                     ];
                     $this->setup->getConnection()->update(
                         $optionTable,
@@ -1161,7 +1161,7 @@ class EavSetup
 
         $row = $setupCache->get($mainTable, $entityTypeId, $id);
         if ($field !== null) {
-            return isset($row[$field]) ? $row[$field] : false;
+            return $row[$field] ?? false;
         }
 
         return $row;
@@ -1424,9 +1424,9 @@ class EavSetup
         foreach ($entities as $entityName => $entity) {
             $this->addEntityType($entityName, $entity);
 
-            $frontendPrefix = isset($entity['frontend_prefix']) ? $entity['frontend_prefix'] : '';
-            $backendPrefix = isset($entity['backend_prefix']) ? $entity['backend_prefix'] : '';
-            $sourcePrefix = isset($entity['source_prefix']) ? $entity['source_prefix'] : '';
+            $frontendPrefix = $entity['frontend_prefix'] ?? '';
+            $backendPrefix = $entity['backend_prefix'] ?? '';
+            $sourcePrefix = $entity['source_prefix'] ?? '';
 
             if (is_array($entity['attributes']) && !empty($entity['attributes'])) {
                 foreach ($entity['attributes'] as $attrCode => $attr) {

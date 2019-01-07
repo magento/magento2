@@ -172,7 +172,7 @@ class Configuration implements StockConfigurationInterface
         if (null === $this->isQtyTypeIds) {
             $this->isQtyTypeIds = [];
             foreach ($this->config->getAll() as $typeId => $typeConfig) {
-                $this->isQtyTypeIds[$typeId] = isset($typeConfig['is_qty']) ? $typeConfig['is_qty'] : false;
+                $this->isQtyTypeIds[$typeId] = $typeConfig['is_qty'] ?? false;
             }
         }
         $result = $this->isQtyTypeIds;
@@ -195,7 +195,7 @@ class Configuration implements StockConfigurationInterface
     public function isQty($productTypeId)
     {
         $result = $this->getIsQtyTypeIds();
-        return isset($result[$productTypeId]) ? $result[$productTypeId] : false;
+        return $result[$productTypeId] ?? false;
     }
 
     /**

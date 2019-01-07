@@ -34,7 +34,7 @@ class NamedParams implements InterpreterInterface
      */
     public function evaluate(array $data)
     {
-        $params = isset($data['param']) ? $data['param'] : [];
+        $params = $data['param'] ?? [];
         if (!is_array($params)) {
             throw new \InvalidArgumentException('Layout argument parameters are expected to be an array.');
         }

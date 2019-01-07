@@ -151,7 +151,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
             $this->assertEquals(
                 $value,
-                isset($actual[$key]) ? $actual[$key] : null,
+                $actual[$key] ?? null,
                 'Assert value at key - ' . $key . ' failed'
             );
         }
@@ -342,7 +342,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
                         array_filter($origProductData[$attribute]) :
                         $origProductData[$attribute];
                     if (!empty($expected)) {
-                        $actual = isset($newProductData[$attribute]) ? $newProductData[$attribute] : null;
+                        $actual = $newProductData[$attribute] ?? null;
                         $actual = is_array($actual) ? array_filter($actual) : $actual;
                         $this->assertNotEquals($expected, $actual, $attribute . ' is expected to be changed');
                     }

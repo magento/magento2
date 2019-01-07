@@ -127,7 +127,7 @@ class PackagesAuth
         try {
             $authJson = $this->getAuthJson();
             $serviceUrl = $this->getCredentialBaseUrl();
-            $authJsonData = isset($authJson['http-basic'][$serviceUrl]) ? $authJson['http-basic'][$serviceUrl] : false;
+            $authJsonData = $authJson['http-basic'][$serviceUrl] ?? false;
         } catch (\Exception $e) {
             $authJsonData = false;
         }

@@ -139,7 +139,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                         'name' => $id,
                         'label' => $info['label'],
                         'title' => $info['label'],
-                        'value' => isset($info['value']) ? $info['value'] : $model->getData($id)
+                        'value' => $info['value'] ?? $model->getData($id)
                     ]
                 );
             }

@@ -58,7 +58,7 @@ class QueryText extends DataSource
             if (!empty($productData) && count($productData) > 1) {
                 $product = $this->createProduct($fixtureFactory, $productData);
 
-                $searchValue = isset($productData[2]) ? $productData[2] : $productData[1];
+                $searchValue = $productData[2] ?? $productData[1];
                 if ($this->data === null) {
                     if ($product->hasData($searchValue)) {
                         $getProperty = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $searchValue)));

@@ -63,7 +63,7 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
         }
 
         preg_match("`group_id\/(\d*?)\/`", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['group_id' => $id];
     }

@@ -255,18 +255,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if (!isset($arguments['zone'])) {
             $arguments['zone'] = $renderZone;
         }
-        $arguments['zone'] = isset($arguments['zone'])
-            ? $arguments['zone']
-            : $renderZone;
-        $arguments['price_id'] = isset($arguments['price_id'])
-            ? $arguments['price_id']
-            : 'old-price-' . $product->getId() . '-' . $priceType;
-        $arguments['include_container'] = isset($arguments['include_container'])
-            ? $arguments['include_container']
-            : true;
-        $arguments['display_minimal_price'] = isset($arguments['display_minimal_price'])
-            ? $arguments['display_minimal_price']
-            : true;
+        $arguments['zone'] = $arguments['zone']
+            ?? $renderZone;
+        $arguments['price_id'] = $arguments['price_id']
+            ?? 'old-price-' . $product->getId() . '-' . $priceType;
+        $arguments['include_container'] = $arguments['include_container']
+            ?? true;
+        $arguments['display_minimal_price'] = $arguments['display_minimal_price']
+            ?? true;
 
             /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');

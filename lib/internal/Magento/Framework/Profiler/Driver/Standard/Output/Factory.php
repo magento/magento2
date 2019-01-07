@@ -48,7 +48,7 @@ class Factory
      */
     public function create(array $config)
     {
-        $type = isset($config['type']) ? $config['type'] : $this->_defaultOutputType;
+        $type = $config['type'] ?? $this->_defaultOutputType;
         if (class_exists($type)) {
             $class = $type;
         } else {

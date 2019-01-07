@@ -94,9 +94,8 @@ class AttributeProvider implements FieldsetInterface
                         'dataType' => $attribute->getBackendType(),
                         'filters' => [],
                         'entity' => static::ENTITY,
-                        'bind' => isset($fieldset['references']['customer']['to'])
-                            ? $fieldset['references']['customer']['to']
-                            : null,
+                        'bind' => $fieldset['references']['customer']['to']
+                            ?? null,
                     ];
                 }
             } else {

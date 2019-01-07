@@ -54,6 +54,6 @@ class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
                 "Any entities in the import data that already exist in the database are deleted from the database."
             ),
         ]];
-        return isset($messages[$entityCode]) ? $messages[$entityCode] : [];
+        return $messages[$entityCode] ?? [];
     }
 }

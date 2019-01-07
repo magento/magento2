@@ -120,7 +120,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
                     $this->itemDataBuilder->addItemData(
                         $this->tagFilter->filter($option['label']),
                         $option['value'],
-                        isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0
+                        $optionsCount[$option['value']] ?? 0
                     );
                 }
             }

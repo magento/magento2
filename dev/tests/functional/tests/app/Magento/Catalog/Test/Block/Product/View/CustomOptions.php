@@ -225,7 +225,7 @@ class CustomOptions extends Form
         $maxCharacters = null;
         if ($maxCharactersElement->isVisible()) {
             preg_match('/\s([0-9]+)\s/', $maxCharactersElement->getText(), $match);
-            $maxCharacters = isset($match[1]) ? $match[1] : $maxCharactersElement->getText();
+            $maxCharacters = $match[1] ?? $maxCharactersElement->getText();
         }
 
         return [

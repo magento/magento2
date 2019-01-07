@@ -450,7 +450,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $productIds = [];
         foreach ($bunch as $rowData) {
             $sku = strtolower($rowData[ImportProduct::COL_SKU]);
-            $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
+            $productData = $newSku[$sku] ?? $oldSku[$sku];
             $productIds[] = $productData[$this->getProductEntityLinkField()];
         }
 
@@ -588,7 +588,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $position = 0;
                 $additionalRow['_super_products_sku'] = strtolower($fieldAndValuePairs['sku']);
                 unset($fieldAndValuePairs['sku']);
-                $additionalRow['display'] = isset($fieldAndValuePairs['display']) ? $fieldAndValuePairs['display'] : 1;
+                $additionalRow['display'] = $fieldAndValuePairs['display'] ?? 1;
                 unset($fieldAndValuePairs['display']);
                 foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
                     $additionalRow['_super_attribute_code'] = $attrCode;
@@ -814,9 +814,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             'product_super_attribute_id' => $productSuperAttrId,
             'position' => $data['_super_attribute_position'],
         ];
-        $label = isset($variationLabels[$data['_super_attribute_code']])
-                ? $variationLabels[$data['_super_attribute_code']]
-                : $attrParams['frontend_label'];
+        $label = $variationLabels[$data['_super_attribute_code']]
+                ?? $attrParams['frontend_label'];
         $this->_superAttributesData['labels'][$productSuperAttrId] = [
             'product_super_attribute_id' => $productSuperAttrId,
             'store_id' => 0,
@@ -868,7 +867,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (ImportProduct::SCOPE_DEFAULT == $scope &&
                     !empty($rowData[ImportProduct::COL_SKU])) {
                     $sku = strtolower($rowData[ImportProduct::COL_SKU]);
-                    $this->_productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
+                    $this->_productData = $newSku[$sku] ?? $oldSku[$sku];
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;

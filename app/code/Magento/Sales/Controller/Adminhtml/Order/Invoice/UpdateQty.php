@@ -78,7 +78,7 @@ class UpdateQty extends AbstractView implements HttpPostActionInterface
         try {
             $orderId = $this->getRequest()->getParam('order_id');
             $invoiceData = $this->getRequest()->getParam('invoice', []);
-            $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+            $invoiceItems = $invoiceData['items'] ?? [];
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
             if (!$order->getId()) {

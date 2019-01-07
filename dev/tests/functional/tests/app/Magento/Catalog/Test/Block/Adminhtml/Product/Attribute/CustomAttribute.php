@@ -67,7 +67,7 @@ class CustomAttribute extends SimpleElement
     public function setValue($data)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $code = isset($data['code']) ? $data['code'] : $this->getAttributeCode($this->getAbsoluteSelector());
+        $code = $data['code'] ?? $this->getAttributeCode($this->getAbsoluteSelector());
         $element = $this->getElementByClass($this->getElementClass($code));
         $value = is_array($data) ? $data['value'] : $data;
         if ($value !== null) {

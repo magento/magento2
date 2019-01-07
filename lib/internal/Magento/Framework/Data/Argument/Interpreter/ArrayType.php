@@ -34,7 +34,7 @@ class ArrayType implements InterpreterInterface
      */
     public function evaluate(array $data)
     {
-        $items = isset($data['item']) ? $data['item'] : [];
+        $items = $data['item'] ?? [];
         if (!is_array($items)) {
             throw new \InvalidArgumentException('Array items are expected.');
         }

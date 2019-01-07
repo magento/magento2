@@ -125,7 +125,7 @@ class AssertProductInCart extends AbstractConstraint
     {
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
-        $checkoutCartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
+        $checkoutCartItem = $checkoutData['cartItem'] ?? [];
         if (isset($checkoutCartItem['price'])) {
             $this->fixturePrice = $checkoutCartItem['price'];
         }
@@ -143,9 +143,8 @@ class AssertProductInCart extends AbstractConstraint
         /** @var CatalogProductSimple $product */
         $customOptions = $product->getCustomOptions();
         $checkoutData = $product->getCheckoutData();
-        $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
-            ? $checkoutData['options']['custom_options']
-            : [];
+        $checkoutCustomOptions = $checkoutData['options']['custom_options']
+            ?? [];
         foreach ($checkoutCustomOptions as $checkoutOption) {
             $attributeKey = str_replace('attribute_key_', '', $checkoutOption['title']);
             $optionKey = str_replace('option_key_', '', $checkoutOption['value']);

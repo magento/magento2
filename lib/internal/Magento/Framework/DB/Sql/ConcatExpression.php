@@ -58,7 +58,7 @@ class ConcatExpression extends Expression
             } else {
                 $column = $this->adapter->quoteIdentifier(
                     (isset($part['tableAlias']) ? $part['tableAlias'] . '.' : '')
-                    . (isset($part['columnName']) ? $part['columnName'] : $key)
+                    . ($part['columnName'] ?? $key)
                 );
             }
             $columns[] = $this->adapter->getCheckSql($column . " <> ''", $column, 'NULL');

@@ -52,7 +52,7 @@ class Curl extends AbstractCurl implements TaxRuleInterface
         }
 
         preg_match("~Location: [^\s]*\/rule\/(\d+)~", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['id' => $id];
     }

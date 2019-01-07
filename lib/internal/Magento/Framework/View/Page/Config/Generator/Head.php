@@ -124,7 +124,7 @@ class Head implements Layout\GeneratorInterface
 
                 $this->pageConfig->addRemotePageAsset(
                     $data['src'],
-                    isset($data['content_type']) ? $data['content_type'] : self::VIRTUAL_CONTENT_TYPE_LINK,
+                    $data['content_type'] ?? self::VIRTUAL_CONTENT_TYPE_LINK,
                     $this->getAssetProperties($data),
                     $name
                 );

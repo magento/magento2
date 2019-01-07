@@ -72,10 +72,10 @@ class Http extends File
             'ctime' => 0,
             'blksize' => 0,
             'blocks' => 0,
-            'size' => isset($headers['content-length']) ? $headers['content-length'] : 0,
-            'type' => isset($headers['content-type']) ? $headers['content-type'] : '',
-            'mtime' => isset($headers['last-modified']) ? $headers['last-modified'] : 0,
-            'disposition' => isset($headers['content-disposition']) ? $headers['content-disposition'] : null,
+            'size' => $headers['content-length'] ?? 0,
+            'type' => $headers['content-type'] ?? '',
+            'mtime' => $headers['last-modified'] ?? 0,
+            'disposition' => $headers['content-disposition'] ?? null,
         ];
         return $result;
     }

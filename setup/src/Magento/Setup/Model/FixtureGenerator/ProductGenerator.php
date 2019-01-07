@@ -238,7 +238,7 @@ class ProductGenerator
      */
     private function getFixtureValue($fixtureKey, $productId, $entityNumber, $fixtureMap)
     {
-        $fixtureValue = isset($fixtureMap[$fixtureKey]) ? $fixtureMap[$fixtureKey] : null;
+        $fixtureValue = $fixtureMap[$fixtureKey] ?? null;
         return $fixtureValue ? $this->getBindValue($fixtureValue, $productId, $entityNumber) : '';
     }
 

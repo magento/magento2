@@ -79,7 +79,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         }
 
         if (isset($typeData['parameters']) && is_array($typeData['parameters'])) {
-            $callInfo = isset($typeData['callInfo']) ? $typeData['callInfo'] : $parentCallInfo;
+            $callInfo = $typeData['callInfo'] ?? $parentCallInfo;
             $sequence = $this->_processParameters($typeData['parameters'], $callInfo);
             $complexType->appendChild($sequence);
         }
@@ -103,7 +103,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
             $element = $this->_getDom()->createElement(Wsdl::XSD_NS . ':element');
             $element->setAttribute('name', $parameterName);
             $isRequired = isset($parameterData['required']) && $parameterData['required'];
-            $default = isset($parameterData['default']) ? $parameterData['default'] : null;
+            $default = $parameterData['default'] ?? null;
             $this->_revertRequiredCallInfo($isRequired, $callInfo);
 
             if ($this->_typeProcessor->isArrayType($parameterType)) {

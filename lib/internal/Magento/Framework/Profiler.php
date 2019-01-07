@@ -363,9 +363,9 @@ class Profiler
             $config = array_merge($config, $profilerConfig);
         }
 
-        $driverConfigs = (array)(isset($config['drivers']) ? $config['drivers'] : []);
-        $driverFactory = isset($config['driverFactory']) ? $config['driverFactory'] : new Factory();
-        $tagFilters = (array)(isset($config['tagFilters']) ? $config['tagFilters'] : []);
+        $driverConfigs = (array)($config['drivers'] ?? []);
+        $driverFactory = $config['driverFactory'] ?? new Factory();
+        $tagFilters = (array)($config['tagFilters'] ?? []);
 
         $result = [
             'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),

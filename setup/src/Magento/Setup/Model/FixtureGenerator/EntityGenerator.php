@@ -477,7 +477,7 @@ class EntityGenerator
      */
     private function getFixtureValue($fixtureField, $entityId, $entityNumber, array $fixtureMap)
     {
-        $fixture = isset($fixtureMap[$fixtureField]) ? $fixtureMap[$fixtureField] : null;
+        $fixture = $fixtureMap[$fixtureField] ?? null;
         return $fixture ? $this->getBindValue($fixture, $entityId, $entityNumber) : '';
     }
 

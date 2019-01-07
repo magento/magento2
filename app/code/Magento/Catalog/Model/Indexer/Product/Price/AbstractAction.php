@@ -272,9 +272,7 @@ abstract class AbstractAction
             $this->_indexers = [];
             $types = $this->_catalogProductType->getTypesByPriority();
             foreach ($types as $typeId => $typeInfo) {
-                $modelName = isset(
-                    $typeInfo['price_indexer']
-                ) ? $typeInfo['price_indexer'] : get_class($this->_defaultIndexerResource);
+                $modelName = $typeInfo['price_indexer'] ?? get_class($this->_defaultIndexerResource);
 
                 $indexer = $this->_indexerPriceFactory->create(
                     $modelName,

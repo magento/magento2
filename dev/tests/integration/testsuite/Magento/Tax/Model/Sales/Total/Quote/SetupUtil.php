@@ -643,9 +643,9 @@ class SetupUtil
         foreach ($itemsData as $itemData) {
             $sku = $itemData['sku'];
             $price = $itemData['price'];
-            $qty = isset($itemData['qty']) ? $itemData['qty'] : 1;
+            $qty = $itemData['qty'] ?? 1;
             $taxClassName =
-                isset($itemData['tax_class_name']) ? $itemData['tax_class_name'] : self::PRODUCT_TAX_CLASS_1;
+                $itemData['tax_class_name'] ?? self::PRODUCT_TAX_CLASS_1;
             $taxClassId = $this->productTaxClasses[$taxClassName];
             $product = $this->createSimpleProduct($sku, $price, $taxClassId);
             $quote->addProduct($product, $qty);

@@ -93,17 +93,17 @@ class Fallback implements PostProcessorInterface
             $this->websiteData = $this->scopes->get('websites');
         }
 
-        $defaultConfig = isset($data['default']) ? $data['default'] : [];
+        $defaultConfig = $data['default'] ?? [];
         $result = [
             'default' => $defaultConfig,
             'websites' => [],
             'stores' => []
         ];
 
-        $websitesConfig = isset($data['websites']) ? $data['websites'] : [];
+        $websitesConfig = $data['websites'] ?? [];
         $result['websites'] = $this->prepareWebsitesConfig($defaultConfig, $websitesConfig);
 
-        $storesConfig = isset($data['stores']) ? $data['stores'] : [];
+        $storesConfig = $data['stores'] ?? [];
         $result['stores'] = $this->prepareStoresConfig($defaultConfig, $websitesConfig, $storesConfig);
 
         return $result;
@@ -124,7 +124,7 @@ class Fallback implements PostProcessorInterface
         foreach ((array)$this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
-            $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
+            $websiteConfig = $websitesConfig[$code] ?? [];
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig);
             $result[$id] = $result[$code];
         }
@@ -153,7 +153,7 @@ class Fallback implements PostProcessorInterface
             if (isset($store['website_id'])) {
                 $websiteConfig = $this->getWebsiteConfig($websitesConfig, $store['website_id']);
             }
-            $storeConfig = isset($storesConfig[$code]) ? $storesConfig[$code] : [];
+            $storeConfig = $storesConfig[$code] ?? [];
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig, $storeConfig);
             $result[$id] = $result[$code];
         }
@@ -172,7 +172,7 @@ class Fallback implements PostProcessorInterface
         foreach ((array)$this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['code'];
-                return isset($websites[$code]) ? $websites[$code] : [];
+                return $websites[$code] ?? [];
             }
         }
         return [];

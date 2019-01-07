@@ -80,7 +80,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 if ($this->_type != $rowData[Product::COL_TYPE]) {
                     continue;
                 }
-                $associatedSkusQty = isset($rowData['associated_skus']) ? $rowData['associated_skus'] : null;
+                $associatedSkusQty = $rowData['associated_skus'] ?? null;
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSkusQty)) {
                     continue;
                 }

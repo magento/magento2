@@ -25,7 +25,7 @@ class Application
      */
     public function bootstrap(array $configuration)
     {
-        $managerConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+        $managerConfig = $configuration['service_manager'] ?? [];
         $managerConfig = new ServiceManagerConfig($managerConfig);
 
         $serviceManager = new ServiceManager();
@@ -76,9 +76,9 @@ class Application
      */
     private function getListeners(ServiceManager $serviceManager, array $configuration)
     {
-        $appConfigListeners = isset($configuration['listeners']) ? $configuration['listeners'] : [];
+        $appConfigListeners = $configuration['listeners'] ?? [];
         $config = $serviceManager->get('config');
-        $serviceConfigListeners = isset($config['listeners']) ? $config['listeners'] : [];
+        $serviceConfigListeners = $config['listeners'] ?? [];
 
         return array_unique(array_merge($serviceConfigListeners, $appConfigListeners));
     }

@@ -84,9 +84,8 @@ class Config extends Section
             ? $fields['configurable_attributes_data']['value']
             : [];
 
-        $attributeSource = isset($fields['configurable_attributes_data']['source'])
-            ? $fields['configurable_attributes_data']['source']
-            : null;
+        $attributeSource = $fields['configurable_attributes_data']['source']
+            ?? null;
         $attributesValue = $attributeSource !== null ? $attributeSource->getAttributesData() : [];
 
         foreach ($attributesValue as $key => $value) {

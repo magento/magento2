@@ -27,7 +27,7 @@ $_item = $block->getItem();
                 </dd>
             <?php else: ?>
                 <dd>
-                    <?= nl2br($block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?>
+                    <?= nl2br($block->escapeHtml(($_option['print_value'] ?? $_option['value']))) ?>
                 </dd>
             <?php endif; ?>
         <?php endforeach; ?>

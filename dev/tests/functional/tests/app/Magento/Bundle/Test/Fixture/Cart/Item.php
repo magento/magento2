@@ -25,9 +25,8 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         parent::getData($key);
         $bundleSelection = $this->product->getBundleSelections();
         $checkoutData = $this->product->getCheckoutData();
-        $checkoutBundleOptions = isset($checkoutData['options']['bundle_options'])
-            ? $checkoutData['options']['bundle_options']
-            : [];
+        $checkoutBundleOptions = $checkoutData['options']['bundle_options']
+            ?? [];
 
         $productSku = [$this->product->getSku()];
         foreach ($checkoutBundleOptions as $checkoutOptionKey => $checkoutOption) {

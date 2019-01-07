@@ -248,7 +248,7 @@ class Block implements Layout\GeneratorInterface
         $block = $this->getBlockInstance($block, $arguments);
         $block->setType(get_class($block));
         $block->setNameInLayout($name);
-        $block->addData(isset($arguments['data']) ? $arguments['data'] : []);
+        $block->addData($arguments['data'] ?? []);
         return $block;
     }
 

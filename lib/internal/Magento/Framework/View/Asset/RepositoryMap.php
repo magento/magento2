@@ -77,7 +77,7 @@ class RepositoryMap
     {
         $area = $params['area'];
         $locale =  $params['locale'];
-        $themePath = isset($params['theme']) ? $params['theme'] : $this->design->getThemePath($params['themeModel']);
+        $themePath = $params['theme'] ?? $this->design->getThemePath($params['themeModel']);
 
         $path = "$area/$themePath/$locale/" . self::MAP_NAME;
         if (!isset($this->maps[$path])) {

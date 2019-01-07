@@ -259,15 +259,12 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
             $childCondition = $this->convertCondition($condition, "{$prefix}{$indent}--", 1);
             $result[] = array_filter([
                 'condition_type' => $condition[$key]['type'],
-                'aggregator_type' => isset($condition[$key]['aggregator'])
-                    ? $condition[$key]['aggregator']
-                    : null,
-                'attribute_name' => isset($condition[$key]['attribute'])
-                    ? $condition[$key]['attribute']
-                    : null,
-                'operator' => isset($condition[$key]['operator'])
-                    ? $condition[$key]['operator']
-                    : null,
+                'aggregator_type' => $condition[$key]['aggregator']
+                    ?? null,
+                'attribute_name' => $condition[$key]['attribute']
+                    ?? null,
+                'operator' => $condition[$key]['operator']
+                    ?? null,
                 'value' => $condition[$key]['value'],
                 'conditions' => empty($childCondition) ? null : $childCondition
             ], [$this, 'filterCondition']);

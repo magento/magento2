@@ -76,7 +76,7 @@ class Curl extends AbstractCurl implements StoreInterface
             'store_type' => 'store',
         ];
         $data['store']['group_id'] = $fixture->getDataFieldConfig('group_id')['source']->getStoreGroup()->getGroupId();
-        $data['store']['store_id'] = isset($data['store']['store_id']) ? $data['store']['store_id'] : '';
+        $data['store']['store_id'] = $data['store']['store_id'] ?? '';
 
         return $data;
     }

@@ -129,10 +129,10 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
 
         parent::__construct($context, $data);
 
-        $this->setEmptyText(isset($data['empty_text']) ? $data['empty_text'] : __('We couldn\'t find any records.'));
+        $this->setEmptyText($data['empty_text'] ?? __('We couldn\'t find any records.'));
 
         $this->setEmptyCellLabel(
-            isset($data['empty_cell_label']) ? $data['empty_cell_label'] : __('We couldn\'t find any records.')
+            $data['empty_cell_label'] ?? __('We couldn\'t find any records.')
         );
 
         $this->setCountSubTotals(isset($data['count_subtotals']) ? (bool)$data['count_subtotals'] : false);

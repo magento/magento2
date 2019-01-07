@@ -167,7 +167,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         }
 
         $theme = null;
-        $store = isset($params['store']) ? $params['store'] : null;
+        $store = $params['store'] ?? null;
 
         if ($this->_isThemePerStoreView($area)) {
             if ($this->_storeManager->isSingleStoreMode()) {

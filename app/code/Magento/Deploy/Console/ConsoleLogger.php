@@ -164,7 +164,7 @@ class ConsoleLogger extends AbstractLogger
      */
     private function registerProcess(array $context)
     {
-        $name = isset($context['process']) ? $context['process'] : 'main';
+        $name = $context['process'] ?? 'main';
         if (!isset($this->processes[$name])) {
             $context['start'] = time();
             $context['elapsed'] = 0;

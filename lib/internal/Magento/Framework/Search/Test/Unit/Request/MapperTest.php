@@ -111,7 +111,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'matches' => $query['match'],
                     ]
                 )
@@ -162,7 +162,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'matches' => $query['match'],
                     ]
                 )
@@ -242,7 +242,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(
                     [
                         'name' => $query['name'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'reference' => $this->queryMatch,
                         'referenceType' => Filter::REFERENCE_QUERY,
                     ]
@@ -317,7 +317,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(
                     [
                         'name' => $query['name'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'someClause' => ['someQueryMatch' => $this->queryMatch],
                     ]
                 )

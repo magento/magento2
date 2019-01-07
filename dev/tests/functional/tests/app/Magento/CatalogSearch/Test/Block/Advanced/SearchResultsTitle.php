@@ -31,7 +31,7 @@ class SearchResultsTitle extends Block
         $searchQueryResult = $this->_rootElement->find(sprintf($this->searchResultsFor), Locator::SELECTOR_CSS)
             ->getText();
         preg_match("~Search results for: \'(.*)\'~", $searchQueryResult, $matches);
-        $query = isset($matches[1]) ? $matches[1] : null;
+        $query = $matches[1] ?? null;
         return $query;
     }
 }

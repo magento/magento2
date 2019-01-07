@@ -518,9 +518,8 @@ class Info
             'duplicate' => __('Buyer claims that a possible duplicate payment was made to the merchant.'),
             'merchandise' => __('Buyer claims that the received merchandise is unsatisfactory, defective, or damaged.'),
         ];
-        return isset($comments[$code])
-            ? $comments[$code]
-            : __('Unknown reason. Please contact PayPal customer service.');
+        return $comments[$code]
+            ?? __('Unknown reason. Please contact PayPal customer service.');
     }
 
     /**
@@ -542,7 +541,7 @@ class Info
             'chargeback_reimbursement' => false,
             'chargeback_settlement' => false,
         ];
-        return isset($listOfDisputeCodes[$code]) ? $listOfDisputeCodes[$code] : false;
+        return $listOfDisputeCodes[$code] ?? false;
     }
 
     /**
@@ -629,7 +628,7 @@ class Info
             'complaint' => __('Complaint'),
             'dispute' => __('Dispute'),
         ];
-        $value = isset($labels[$key]) ? $labels[$key] : '';
+        $value = $labels[$key] ?? '';
         return $value;
     }
 

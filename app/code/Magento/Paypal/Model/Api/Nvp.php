@@ -1278,8 +1278,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $exceptionLogMessage = sprintf(
             'PayPal NVP gateway errors: %s Correlation ID: %s. Version: %s.',
             $errorMessages,
-            isset($response['CORRELATIONID']) ? $response['CORRELATIONID'] : '',
-            isset($response['VERSION']) ? $response['VERSION'] : ''
+            $response['CORRELATIONID'] ?? '',
+            $response['VERSION'] ?? ''
         );
         $this->_logger->critical($exceptionLogMessage);
 
@@ -1356,7 +1356,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             $errorMessage = $this->_formatErrorMessage(
                 $errorCode,
                 $response["L_SHORTMESSAGE{$i}"],
-                isset($response["L_LONGMESSAGE{$i}"]) ? $response["L_LONGMESSAGE{$i}"] : null
+                $response["L_LONGMESSAGE{$i}"] ?? null
             );
             $errors[] = [
                 'code' => $errorCode,

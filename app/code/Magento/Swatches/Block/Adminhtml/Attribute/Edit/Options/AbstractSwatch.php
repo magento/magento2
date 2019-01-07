@@ -89,9 +89,9 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     {
         $value = [];
         $storeValues = $this->getStoreOptionValues($storeId);
-        $swatchStoreValue = isset($storeValues['swatch']) ? $storeValues['swatch'] : null;
-        $value['store' . $storeId] = isset($storeValues[$optionId]) ? $storeValues[$optionId] : '';
-        $value['swatch' . $storeId] = isset($swatchStoreValue[$optionId]) ? $swatchStoreValue[$optionId] : '';
+        $swatchStoreValue = $storeValues['swatch'] ?? null;
+        $value['store' . $storeId] = $storeValues[$optionId] ?? '';
+        $value['swatch' . $storeId] = $swatchStoreValue[$optionId] ?? '';
 
         return $value;
     }

@@ -125,9 +125,8 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     {
         /** @var \Magento\Bundle\Test\Fixture\BundleProduct $product */
         $checkoutData = $product->getCheckoutData();
-        $bundleCheckoutData = isset($checkoutData['options']['bundle_options'])
-            ? $checkoutData['options']['bundle_options']
-            : [];
+        $bundleCheckoutData = $checkoutData['options']['bundle_options']
+            ?? [];
 
         if (!$this->getBundleBlock()->isVisible()) {
             $this->clickCustomize();

@@ -181,14 +181,14 @@ class Copy
     protected function _getFieldsetFieldValue($source, $code)
     {
         if (is_array($source)) {
-            $value = isset($source[$code]) ? $source[$code] : null;
+            $value = $source[$code] ?? null;
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
         } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
             $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
-            $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+            $value = $sourceArray[$code] ?? null;
         } else {
             throw new \InvalidArgumentException(
                 'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'

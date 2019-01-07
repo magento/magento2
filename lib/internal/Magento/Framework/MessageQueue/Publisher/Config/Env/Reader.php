@@ -89,7 +89,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
                 $connectionName = $this->publisherNameToConnectionMap[$publisherName];
                 $config['name'] = $config['connection'];
                 unset($config['connection']);
-                $disabled = isset($config['disabled']) ? $config['disabled'] : false;
+                $disabled = $config['disabled'] ?? false;
                 $config['disabled'] = $disabled;
                 $configData[$topicName]['connections'][$connectionName] = $config;
             }

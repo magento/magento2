@@ -49,7 +49,7 @@ abstract class AbstractConfigureBlock extends Form
     public function fillOptions(FixtureInterface $product)
     {
         $dataConfig = $product->getDataConfig();
-        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        $typeId = $dataConfig['type_id'] ?? null;
         $checkoutData = null;
 
         /** @var CatalogProductSimple $product */
@@ -59,9 +59,8 @@ abstract class AbstractConfigureBlock extends Form
 
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
-        $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
-            ? $checkoutData['options']['custom_options']
-            : [];
+        $checkoutCustomOptions = $checkoutData['options']['custom_options']
+            ?? [];
         $customOptions = $product->hasData('custom_options')
             ? $product->getDataFieldConfig('custom_options')['source']->getCustomOptions()
             : [];
@@ -96,12 +95,10 @@ abstract class AbstractConfigureBlock extends Form
             if (isset($options[$attribute])) {
                 $result[] = [
                     'type' => $options[$attribute]['type'],
-                    'title' => isset($options[$attribute]['title'])
-                            ? $options[$attribute]['title']
-                            : $attribute,
-                    'value' => isset($options[$attribute]['options'][$option]['title'])
-                            ? $options[$attribute]['options'][$option]['title']
-                            : $option,
+                    'title' => $options[$attribute]['title']
+                            ?? $attribute,
+                    'value' => $options[$attribute]['options'][$option]['title']
+                            ?? $option,
                 ];
             }
         }

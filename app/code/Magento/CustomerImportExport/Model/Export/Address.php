@@ -155,17 +155,11 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
             $data
         );
 
-        $this->_customerCollection = isset(
-            $data['customer_collection']
-        ) ? $data['customer_collection'] : $customerColFactory->create();
+        $this->_customerCollection = $data['customer_collection'] ?? $customerColFactory->create();
 
-        $this->_customerEntity = isset(
-            $data['customer_entity']
-        ) ? $data['customer_entity'] : $eavCustomerFactory->create();
+        $this->_customerEntity = $data['customer_entity'] ?? $eavCustomerFactory->create();
 
-        $this->_addressCollection = isset(
-            $data['address_collection']
-        ) ? $data['address_collection'] : $addressColFactory->create();
+        $this->_addressCollection = $data['address_collection'] ?? $addressColFactory->create();
 
         $this->_initAttributeValues()->_initAttributeTypes()->_initWebsites(true);
         $this->setFileName($this->getEntityTypeCode());

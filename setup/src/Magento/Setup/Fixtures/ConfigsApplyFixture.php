@@ -28,9 +28,7 @@ class ConfigsApplyFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         foreach ($configs['config'] as $config) {
-            $backendModel = isset($config['backend_model'])
-                ?
-                $config['backend_model'] : \Magento\Framework\App\Config\Value::class;
+            $backendModel = $config['backend_model'] ?? \Magento\Framework\App\Config\Value::class;
             /**
              * @var \Magento\Framework\App\Config\ValueInterface $configData
              */

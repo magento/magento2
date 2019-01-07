@@ -101,14 +101,14 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if ($isValid) {
             $this->setUserValue(
                 [
-                    'date' => isset($value['date']) ? $value['date'] : '',
+                    'date' => $value['date'] ?? '',
                     'year' => isset($value['year']) ? (int) $value['year'] : 0,
                     'month' => isset($value['month']) ? (int) $value['month'] : 0,
                     'day' => isset($value['day']) ? (int) $value['day'] : 0,
                     'hour' => isset($value['hour']) ? (int) $value['hour'] : 0,
                     'minute' => isset($value['minute']) ? (int) $value['minute'] : 0,
-                    'day_part' => isset($value['day_part']) ? $value['day_part'] : '',
-                    'date_internal' => isset($value['date_internal']) ? $value['date_internal'] : '',
+                    'day_part' => $value['day_part'] ?? '',
+                    'date_internal' => $value['date_internal'] ?? '',
                 ]
             );
         } elseif (!$isValid && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {

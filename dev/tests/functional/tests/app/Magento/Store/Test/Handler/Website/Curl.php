@@ -135,7 +135,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
             'store_action' => 'add',
             'store_type' => 'website',
         ];
-        $data['website']['website_id'] = isset($data['website']['website_id']) ? $data['website']['website_id'] : '';
+        $data['website']['website_id'] = $data['website']['website_id'] ?? '';
 
         return $data;
     }

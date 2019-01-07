@@ -55,7 +55,7 @@ class TypeFactory implements ConfigElementFactoryInterface
     public function createFromConfigData(array $data): ConfigElementInterface
     {
         $fields = [];
-        $data['fields'] = isset($data['fields']) ? $data['fields'] : [];
+        $data['fields'] = $data['fields'] ?? [];
         foreach ($data['fields'] as $field) {
             $arguments = [];
             foreach ($field['arguments'] as $argument) {
@@ -91,8 +91,8 @@ class TypeFactory implements ConfigElementFactoryInterface
             [
                 'name' => $typeData['name'],
                 'fields' => $fields,
-                'interfaces' => isset($typeData['implements']) ? $typeData['implements'] : [],
-                'description' => isset($typeData['description']) ? $typeData['description'] : ''
+                'interfaces' => $typeData['implements'] ?? [],
+                'description' => $typeData['description'] ?? ''
             ]
         );
     }

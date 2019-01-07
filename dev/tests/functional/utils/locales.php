@@ -5,7 +5,7 @@
  */
 
 if (isset($_GET['type']) && $_GET['type'] == 'deployed') {
-    $themePath = isset($_GET['theme_path']) ? $_GET['theme_path'] : 'adminhtml/Magento/backend';
+    $themePath = $_GET['theme_path'] ?? 'adminhtml/Magento/backend';
     $directory = __DIR__ . '/../../../../pub/static/' . $themePath;
     $locales = array_diff(scandir($directory), ['..', '.']);
 } else {

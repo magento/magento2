@@ -96,7 +96,7 @@ class DeleteSavedCreditCardTest extends Injectable
             if ($key >= 2) { // if this order will be placed via stored credit card
                 $this->useSavedCreditCard($payment['vault']);
             } else {
-                $arguments = isset($payment['arguments']) ? $payment['arguments'] : [];
+                $arguments = $payment['arguments'] ?? [];
                 $this->selectPaymentMethod($payment, $payment['creditCard'], $arguments);
                 $this->saveCreditCard($payment, $creditCardSave);
             }

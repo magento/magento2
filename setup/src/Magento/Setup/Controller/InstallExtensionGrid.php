@@ -50,7 +50,7 @@ class InstallExtensionGrid extends AbstractActionController
     public function extensionsAction()
     {
         $extensions = $this->packagesData->getPackagesForInstall();
-        $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
+        $packages = $extensions['packages'] ?? [];
         $packages = $this->formatPackageList($packages);
 
         return new JsonModel(

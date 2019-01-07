@@ -111,7 +111,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
         $configData = $this->getConfigData();
         $path = 'sales/order_statuses/status_' . $id;
         //TODO: move as property of form
-        $data = isset($configData[$path]) ? $configData[$path] : [];
+        $data = $configData[$path] ?? [];
 
         $e = $this->_getDummyElement();
 
@@ -121,10 +121,10 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
             [
                 'name' => 'groups[order_statuses][fields][status_' . $id . '][value]',
                 'label' => $status,
-                'value' => isset($data['value']) ? $data['value'] : $status,
-                'default_value' => isset($data['default_value']) ? $data['default_value'] : '',
-                'old_value' => isset($data['old_value']) ? $data['old_value'] : '',
-                'inherit' => isset($data['inherit']) ? $data['inherit'] : '',
+                'value' => $data['value'] ?? $status,
+                'default_value' => $data['default_value'] ?? '',
+                'old_value' => $data['old_value'] ?? '',
+                'inherit' => $data['inherit'] ?? '',
                 'can_use_default_value' => $this->getForm()->canUseDefaultValue($e),
                 'can_use_website_value' => $this->getForm()->canUseWebsiteValue($e)
             ]

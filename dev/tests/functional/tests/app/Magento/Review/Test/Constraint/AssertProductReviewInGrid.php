@@ -86,13 +86,13 @@ class AssertProductReviewInGrid extends AbstractConstraint
                     $value = isset($review[$param]) ? $review[$param][0] : null;
                     break;
                 case 'status_id':
-                    $value = $gridStatus != '' ? $gridStatus : (isset($review[$param]) ? $review[$param] : null);
+                    $value = $gridStatus != '' ? $gridStatus : ($review[$param] ?? null);
                     break;
                 case 'type':
-                    $value = isset($review[$param]) ? $review[$param] : 'Administrator';
+                    $value = $review[$param] ?? 'Administrator';
                     break;
                 default:
-                    $value = isset($review[$param]) ? $review[$param] : null;
+                    $value = $review[$param] ?? null;
                     break;
             }
             if ($value !== null) {

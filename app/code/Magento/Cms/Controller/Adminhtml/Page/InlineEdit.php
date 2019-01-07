@@ -113,10 +113,9 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function filterPost($postData = [])
     {
         $pageData = $this->dataProcessor->filter($postData);
-        $pageData['custom_theme'] = isset($pageData['custom_theme']) ? $pageData['custom_theme'] : null;
-        $pageData['custom_root_template'] = isset($pageData['custom_root_template'])
-            ? $pageData['custom_root_template']
-            : null;
+        $pageData['custom_theme'] = $pageData['custom_theme'] ?? null;
+        $pageData['custom_root_template'] = $pageData['custom_root_template']
+            ?? null;
         return $pageData;
     }
 

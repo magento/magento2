@@ -216,7 +216,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         if (is_string($status)) {
             $statuses = array_flip($this->_reviewData->getReviewStatuses());
-            $status = isset($statuses[$status]) ? $statuses[$status] : 0;
+            $status = $statuses[$status] ?? 0;
         }
         if (is_numeric($status)) {
             $this->addFilter('status', $this->getConnection()->quoteInto('main_table.status_id=?', $status), 'string');

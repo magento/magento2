@@ -59,7 +59,7 @@ class Curl extends AbstractCurl implements CheckoutAgreementInterface
             throw new \Exception("Checkout agreement creating by curl handler was not successful! Response: $response");
         }
         preg_match('~id\/(\d*?)\/~', $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['agreement_id' => $id];
     }

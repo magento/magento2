@@ -64,7 +64,7 @@ class Webapi extends SimpleProductWebapi implements GroupedProductInterface
                 'link_type' => 'associated',
                 'linked_product_sku' => $product->getSku(),
                 'linked_product_type' => $productConfig['type_id'],
-                'position' => isset($associatedProductData['position']) ? $associatedProductData['position'] : 0,
+                'position' => $associatedProductData['position'] ?? 0,
                 'extension_attributes' => [
                     'qty' => $associatedProductData['qty']
                 ],

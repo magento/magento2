@@ -117,7 +117,7 @@ abstract class AbstractParser implements I18n\ParserInterface
      */
     protected function _getFiles($options)
     {
-        $fileMask = isset($options['fileMask']) ? $options['fileMask'] : '';
+        $fileMask = $options['fileMask'] ?? '';
 
         return $this->_filesCollector->getFiles($options['paths'], $fileMask);
     }

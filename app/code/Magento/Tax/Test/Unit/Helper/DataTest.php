@@ -160,11 +160,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $itemMocks = [];
         foreach ($inputArray['items'] as $orderTaxDetailsItemData) {
-            $itemId = isset($orderTaxDetailsItemData['item_id']) ? $orderTaxDetailsItemData['item_id'] : null;
-            $associatedItemId = isset($orderTaxDetailsItemData['associated_item_id'])
-                ? $orderTaxDetailsItemData['associated_item_id']
-                : null;
-            $itemType = isset($orderTaxDetailsItemData['type']) ? $orderTaxDetailsItemData['type'] : null;
+            $itemId = $orderTaxDetailsItemData['item_id'] ?? null;
+            $associatedItemId = $orderTaxDetailsItemData['associated_item_id']
+                ?? null;
+            $itemType = $orderTaxDetailsItemData['type'] ?? null;
             $appliedTaxesData = $orderTaxDetailsItemData['applied_taxes'];
             $appliedTaxesMocks = [];
             foreach ($appliedTaxesData as $appliedTaxData) {
@@ -218,7 +217,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetCalculatedTaxesForOrderItems($orderData, $invoiceData, $expectedResults)
     {
         $orderId = $orderData['order_id'];
-        $orderShippingTaxAmount = isset($orderData['shipping_tax_amount']) ? $orderData['shipping_tax_amount'] : 0;
+        $orderShippingTaxAmount = $orderData['shipping_tax_amount'] ?? 0;
         $orderTaxDetails = $orderData['order_tax_details'];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
@@ -239,7 +238,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($orderTaxDetailsMock));
 
         $invoiceShippingTaxAmount =
-            isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
+            $invoiceData['shipping_tax_amount'] ?? 0;
         $invoiceItems = $invoiceData['invoice_items'];
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice $source */
         $source = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)

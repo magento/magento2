@@ -122,7 +122,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $queryResult = $this->client->query($searchQuery);
-        return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+        return $queryResult['hits']['hits'] ?? [];
     }
 
     /**

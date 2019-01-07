@@ -99,7 +99,7 @@ class ProductForm extends FormSections
     {
         $this->waitPageToLoad();
         $dataConfig = $product->getDataConfig();
-        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        $typeId = $dataConfig['type_id'] ?? null;
 
         if ($this->hasRender($typeId)) {
             $renderArguments = [

@@ -133,7 +133,7 @@ class OrderService implements OrderManagementInterface
         $order = $this->orderRepository->get($id);
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
-        $notify = isset($statusHistory['is_customer_notified']) ? $statusHistory['is_customer_notified'] : false;
+        $notify = $statusHistory['is_customer_notified'] ?? false;
         $comment = trim(strip_tags($statusHistory->getComment()));
         $this->orderCommentSender->send($order, $notify, $comment);
         return true;

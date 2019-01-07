@@ -78,10 +78,10 @@ class Logger
 
         return $this->logFactory->create(
             [
-                'customerId' => isset($data['customer_id']) ? $data['customer_id'] : null,
-                'lastLoginAt' => isset($data['last_login_at']) ? $data['last_login_at'] : null,
-                'lastLogoutAt' => isset($data['last_logout_at']) ? $data['last_logout_at'] : null,
-                'lastVisitAt' => isset($data['last_visit_at']) ? $data['last_visit_at'] : null
+                'customerId' => $data['customer_id'] ?? null,
+                'lastLoginAt' => $data['last_login_at'] ?? null,
+                'lastLogoutAt' => $data['last_logout_at'] ?? null,
+                'lastVisitAt' => $data['last_visit_at'] ?? null
             ]
         );
     }

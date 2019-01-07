@@ -140,7 +140,7 @@ class CreateInvoiceStep implements TestStepInterface
         return [
             'ids' => [
                 'invoiceIds' => $invoiceIds,
-                'shipmentIds' => isset($shipmentIds) ? $shipmentIds : null,
+                'shipmentIds' => $shipmentIds ?? null,
             ]
         ];
     }

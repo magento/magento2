@@ -204,10 +204,9 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     private function assertResponseFields($actualResponse, $assertionMap)
     {
         foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            $expectedValue = $assertionData['expected_value']
+                ?? $assertionData;
+            $responseField = $assertionData['response_field'] ?? $key;
             $this->assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"

@@ -89,7 +89,7 @@ class TierPriceFactory
     public function create(array $rawPrice, $sku)
     {
         $price = $this->tierPriceFactory->create();
-        $price->setPrice(isset($rawPrice['percentage_value']) ? $rawPrice['percentage_value'] : $rawPrice['value']);
+        $price->setPrice($rawPrice['percentage_value'] ?? $rawPrice['value']);
         $price->setPriceType(
             isset($rawPrice['percentage_value'])
             ? TierPriceInterface::PRICE_TYPE_DISCOUNT

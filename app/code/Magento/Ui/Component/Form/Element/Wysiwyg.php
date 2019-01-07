@@ -50,7 +50,7 @@ class Wysiwyg extends AbstractElement
         array $data = [],
         array $config = []
     ) {
-        $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
+        $wysiwygConfigData = $config['wysiwygConfigData'] ?? [];
         $this->form = $formFactory->create();
         $wysiwygId = $context->getNamespace() . '_' . $data['name'];
         $this->editor = $this->form->addField(
@@ -58,10 +58,10 @@ class Wysiwyg extends AbstractElement
             \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
-                'rows' => isset($config['rows']) ? $config['rows'] : 20,
+                'rows' => $config['rows'] ?? 20,
                 'name' => $data['name'],
                 'config' => $wysiwygConfig->getConfig($wysiwygConfigData),
-                'wysiwyg' => isset($config['wysiwyg']) ? $config['wysiwyg'] : null,
+                'wysiwyg' => $config['wysiwyg'] ?? null,
             ]
         );
         $data['config']['content'] = $this->editor->getElementHtml();

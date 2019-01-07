@@ -22,6 +22,6 @@ abstract class PropertyMapperAbstract implements PropertyMapperInterface
         if (isset($array[$key]) && is_bool($array[$key])) {
             $array[$key] = (int)$array[$key];
         }
-        return isset($array[$key]) ? $array[$key] : $default;
+        return $array[$key] ?? $default;
     }
 }

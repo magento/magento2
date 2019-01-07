@@ -54,7 +54,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected function _isPaymentEnabled($element)
     {
         $groupConfig = $element->getGroup();
-        $activityPaths = isset($groupConfig['activity_path']) ? $groupConfig['activity_path'] : [];
+        $activityPaths = $groupConfig['activity_path'] ?? [];
 
         if (!is_array($activityPaths)) {
             $activityPaths = [$activityPaths];

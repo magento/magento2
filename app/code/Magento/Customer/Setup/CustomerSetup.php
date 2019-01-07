@@ -76,8 +76,8 @@ class CustomerSetup extends EavSetup
         $attributes = $entities['customer']['attributes'];
         foreach ($attributes as $attributeCode => $attribute) {
             $attributeId = $attributeIds[$customer][$attributeCode];
-            $attribute['system'] = isset($attribute['system']) ? $attribute['system'] : true;
-            $attribute['visible'] = isset($attribute['visible']) ? $attribute['visible'] : true;
+            $attribute['system'] = $attribute['system'] ?? true;
+            $attribute['visible'] = $attribute['visible'] ?? true;
             if ($attribute['system'] != true || $attribute['visible'] != false) {
                 $usedInForms = ['customer_account_create', 'customer_account_edit', 'checkout_register'];
                 if (!empty($attribute['adminhtml_only'])) {
@@ -97,8 +97,8 @@ class CustomerSetup extends EavSetup
         $attributes = $entities['customer_address']['attributes'];
         foreach ($attributes as $attributeCode => $attribute) {
             $attributeId = $attributeIds[$customerAddress][$attributeCode];
-            $attribute['system'] = isset($attribute['system']) ? $attribute['system'] : true;
-            $attribute['visible'] = isset($attribute['visible']) ? $attribute['visible'] : true;
+            $attribute['system'] = $attribute['system'] ?? true;
+            $attribute['visible'] = $attribute['visible'] ?? true;
             if (false === ($attribute['system'] == true && $attribute['visible'] == false)) {
                 $usedInForms = [
                     'adminhtml_customer_address',

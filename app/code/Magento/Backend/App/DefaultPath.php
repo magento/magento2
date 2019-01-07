@@ -27,10 +27,10 @@ class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
         $pathParts = explode('/', $config->getValue('web/default/admin'));
 
         $this->_parts = [
-            'area' => isset($pathParts[0]) ? $pathParts[0] : '',
-            'module' => isset($pathParts[1]) ? $pathParts[1] : 'admin',
-            'controller' => isset($pathParts[2]) ? $pathParts[2] : 'index',
-            'action' => isset($pathParts[3]) ? $pathParts[3] : 'index',
+            'area' => $pathParts[0] ?? '',
+            'module' => $pathParts[1] ?? 'admin',
+            'controller' => $pathParts[2] ?? 'index',
+            'action' => $pathParts[3] ?? 'index',
         ];
     }
 

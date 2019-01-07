@@ -290,7 +290,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLabelHtml(array $initialData, $expectedValue)
     {
-        $idSuffix = isset($initialData['id_suffix']) ? $initialData['id_suffix'] : null;
+        $idSuffix = $initialData['id_suffix'] ?? null;
         $this->_model->setData($initialData);
         $this->_model->setForm(
             $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)

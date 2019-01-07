@@ -63,7 +63,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->any())
             ->method('getConfig')
             ->willReturnCallback(function ($path) use ($mockData) {
-                return isset($mockData[$path]) ? $mockData[$path] : null;
+                return $mockData[$path] ?? null;
             });
 
         $this->renderer = $this->getMockBuilder(\Magento\Store\Model\Address\Renderer::class)

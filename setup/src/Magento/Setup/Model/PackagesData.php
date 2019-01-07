@@ -252,8 +252,7 @@ class PackagesData
             }
             $packagesData = json_decode($jsonData, true);
 
-            $this->packagesJson = isset($packagesData['packages']) ?
-                $packagesData['packages'] :
+            $this->packagesJson = $packagesData['packages'] ??
                 [];
 
             return $this->packagesJson;
@@ -308,8 +307,7 @@ class PackagesData
     {
         $packagesJson = $this->getPackagesJson();
 
-        return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
-            $packagesJson[$packageName][$packageVersion]['extra'] : [];
+        return $packagesJson[$packageName][$packageVersion]['extra'] ?? [];
     }
 
     /**
@@ -322,12 +320,10 @@ class PackagesData
     {
         $extraInfo = $this->getPackageExtraInfo($package['name'], $package['version']);
 
-        $package['package_title'] =  isset($extraInfo['x-magento-ext-title']) ?
-            $extraInfo['x-magento-ext-title'] : $package['name'];
-        $package['package_type'] = isset($extraInfo['x-magento-ext-type']) ? $extraInfo['x-magento-ext-type'] :
+        $package['package_title'] =  $extraInfo['x-magento-ext-title'] ?? $package['name'];
+        $package['package_type'] = $extraInfo['x-magento-ext-type'] ??
             $this->typeMapper->map($package['type']);
-        $package['package_link'] = isset($extraInfo['x-magento-ext-package-link']) ?
-            $extraInfo['x-magento-ext-package-link'] : '';
+        $package['package_link'] = $extraInfo['x-magento-ext-package-link'] ?? '';
 
         return $package;
     }
@@ -384,7 +380,7 @@ class PackagesData
             $metaPackageByPackage = $this->getMetaPackageForPackage($installPackages);
             foreach ($installPackages as $package) {
                 $package['metapackage'] =
-                    isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
+                    $metaPackageByPackage[$package['name']] ?? '';
                 $actualInstallPackages[$package['name']] = $package;
                 $actualInstallPackages[$package['name']]['version'] = $package['versions'][0];
             }

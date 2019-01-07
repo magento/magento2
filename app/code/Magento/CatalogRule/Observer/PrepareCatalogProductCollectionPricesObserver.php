@@ -124,7 +124,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
                 $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $productId]);
                 $this->rulePricesStorage->setRulePrice(
                     $key,
-                    isset($rulePrices[$productId]) ? $rulePrices[$productId] : false
+                    $rulePrices[$productId] ?? false
                 );
             }
         }

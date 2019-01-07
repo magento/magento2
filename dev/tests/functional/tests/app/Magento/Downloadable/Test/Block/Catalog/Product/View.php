@@ -70,18 +70,16 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     {
         /** @var DownloadableProduct $product */
         $productData = $product->getData();
-        $downloadableLinks = isset($productData['downloadable_links']['downloadable']['link'])
-            ? $productData['downloadable_links']['downloadable']['link']
-            : [];
+        $downloadableLinks = $productData['downloadable_links']['downloadable']['link']
+            ?? [];
         $checkoutData = $product->getCheckoutData();
         if (isset($checkoutData['options'])) {
             // Replace link key to label
             foreach ($checkoutData['options']['links'] as $key => $linkData) {
                 $linkKey = str_replace('link_', '', $linkData['label']);
 
-                $linkData['label'] = isset($downloadableLinks[$linkKey]['title'])
-                    ? $downloadableLinks[$linkKey]['title']
-                    : $linkData['label'];
+                $linkData['label'] = $downloadableLinks[$linkKey]['title']
+                    ?? $linkData['label'];
 
                 $checkoutData['options']['links'][$key] = $linkData;
             }

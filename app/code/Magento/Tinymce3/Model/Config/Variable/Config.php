@@ -44,7 +44,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {
         $settings = $this->defaultVariableConfig->getWysiwygPluginSettings($config);
-        $pluginConfig = isset($settings['plugins']) ? $settings['plugins'] : [];
+        $pluginConfig = $settings['plugins'] ?? [];
         $pluginData = [];
         if (!empty($pluginConfig)) {
             $pluginData = array_shift($pluginConfig);

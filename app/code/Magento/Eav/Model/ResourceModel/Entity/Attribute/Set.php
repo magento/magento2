@@ -177,7 +177,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $setInfo = [];
         foreach ($attributeIds as $attributeId) {
-            $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
+            $setInfo[$attributeId] = $setInfoData[$attributeId] ?? [];
         }
 
         return $setInfo;

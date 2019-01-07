@@ -63,7 +63,7 @@ class Timestamp implements FactoryInterface
      */
     public function create(array $data)
     {
-        $data['onUpdate'] = isset($data['on_update']) ? $data['on_update'] : null;
+        $data['onUpdate'] = $data['on_update'] ?? null;
         //OnUpdate is boolean as there is only one possible value for onUpdate statement.
         if ($data['onUpdate'] && $data['onUpdate'] !== 'CURRENT_TIMESTAMP') {
             if ($this->booleanUtils->toBoolean($data['onUpdate'])) {

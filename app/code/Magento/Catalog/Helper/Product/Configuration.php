@@ -172,8 +172,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         if (!$params) {
             $params = [];
         }
-        $maxLength = isset($params['max_length']) ? $params['max_length'] : null;
-        $cutReplacer = isset($params['cut_replacer']) ? $params['cut_replacer'] : '...';
+        $maxLength = $params['max_length'] ?? null;
+        $cutReplacer = $params['cut_replacer'] ?? '...';
 
         // Proceed with option
         $optionInfo = [];

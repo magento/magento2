@@ -137,7 +137,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function loadArray($arr)
     {
         parent::loadArray($arr);
-        $this->setAttributeScope(isset($arr['attribute_scope']) ? $arr['attribute_scope'] : null);
+        $this->setAttributeScope($arr['attribute_scope'] ?? null);
         return $this;
     }
 

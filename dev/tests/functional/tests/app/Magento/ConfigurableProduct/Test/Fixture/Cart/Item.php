@@ -27,11 +27,10 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         parent::getData($key);
         $productData = $this->product->getData();
         $checkoutData = $this->product->getCheckoutData();
-        $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
+        $cartItem = $checkoutData['cartItem'] ?? [];
         $attributesData = $this->product->getConfigurableAttributesData()['attributes_data'];
-        $checkoutConfigurableOptions = isset($checkoutData['options']['configurable_options'])
-            ? $checkoutData['options']['configurable_options']
-            : [];
+        $checkoutConfigurableOptions = $checkoutData['options']['configurable_options']
+            ?? [];
 
         $attributeKey = [];
         foreach ($checkoutConfigurableOptions as $key => $checkoutConfigurableOption) {
@@ -39,12 +38,10 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             $option = $checkoutConfigurableOption['value'];
             $attributeKey[] = "$attribute:$option";
             $checkoutConfigurableOptions[$key] = [
-                'title' => isset($attributesData[$attribute]['label'])
-                    ? $attributesData[$attribute]['label']
-                    : $attribute,
-                'value' => isset($attributesData[$attribute]['options'][$option]['label'])
-                    ? $attributesData[$attribute]['options'][$option]['label']
-                    : $option,
+                'title' => $attributesData[$attribute]['label']
+                    ?? $attribute,
+                'value' => $attributesData[$attribute]['options'][$option]['label']
+                    ?? $option,
             ];
         }
         $attributeKey = implode(' ', $attributeKey);

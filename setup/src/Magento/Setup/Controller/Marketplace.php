@@ -59,8 +59,8 @@ class Marketplace extends AbstractActionController
             $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         }
         try {
-            $userName = isset($params['username']) ? $params['username'] : '';
-            $password = isset($params['password']) ? $params['password'] : '';
+            $userName = $params['username'] ?? '';
+            $password = $params['password'] ?? '';
             $isValid = $this->packagesAuth->checkCredentials($userName, $password);
             $isValid = json_decode($isValid, true);
             if ($isValid['success'] === true && $this->packagesAuth->saveAuthJson($userName, $password)) {

@@ -114,7 +114,7 @@ class AttributeMerger
     public function merge($elements, $providerName, $dataScopePrefix, array $fields = [])
     {
         foreach ($elements as $attributeCode => $attributeConfig) {
-            $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
+            $additionalConfig = $fields[$attributeCode] ?? [];
             if (!$this->isFieldVisible($attributeCode, $attributeConfig, $additionalConfig)) {
                 continue;
             }
@@ -167,7 +167,7 @@ class AttributeMerger
             : 'ui/form/element/' . $attributeConfig['formElement'];
 
         $element = [
-            'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
+            'component' => $additionalConfig['component'] ?? $uiComponent,
             'config' => $this->mergeConfigurationNode(
                 'config',
                 $additionalConfig,
@@ -184,14 +184,13 @@ class AttributeMerger
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
-            'sortOrder' => isset($additionalConfig['sortOrder'])
-                ? $additionalConfig['sortOrder']
-                : $attributeConfig['sortOrder'],
+            'sortOrder' => $additionalConfig['sortOrder']
+                ?? $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
             'options' => $this->getFieldOptions($attributeCode, $attributeConfig),
-            'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
-            'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
-            'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
+            'filterBy' => $additionalConfig['filterBy'] ?? null,
+            'customEntry' => $additionalConfig['customEntry'] ?? null,
+            'visible' => $additionalConfig['visible'] ?? true,
         ];
 
         if ($attributeCode === 'region_id' || $attributeCode === 'country_id') {
@@ -226,8 +225,8 @@ class AttributeMerger
      */
     protected function mergeConfigurationNode($nodeName, array $mainSource, array $additionalSource)
     {
-        $mainData = isset($mainSource[$nodeName]) ? $mainSource[$nodeName] : [];
-        $additionalData = isset($additionalSource[$nodeName]) ? $additionalSource[$nodeName] : [];
+        $mainData = $mainSource[$nodeName] ?? [];
+        $additionalData = $additionalSource[$nodeName] ?? [];
         return array_replace_recursive($additionalData, $mainData);
     }
 
@@ -370,7 +369,7 @@ class AttributeMerger
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
-        return isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return $attributeConfig['options'] ?? [];
     }
 
     /**

@@ -213,7 +213,7 @@ class Repository
         }
 
         $isSecure = isset($params['_secure']) ? (bool) $params['_secure'] : null;
-        $themePath = isset($params['theme']) ? $params['theme'] : $this->design->getThemePath($params['themeModel']);
+        $themePath = $params['theme'] ?? $this->design->getThemePath($params['themeModel']);
         $context = $this->getFallbackContext(
             UrlInterface::URL_TYPE_STATIC,
             $isSecure,

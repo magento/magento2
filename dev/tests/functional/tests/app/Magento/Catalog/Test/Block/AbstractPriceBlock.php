@@ -46,7 +46,7 @@ abstract class AbstractPriceBlock extends Block
         $mapTypePrice = $this->mapTypePrices[$type];
         return $this->_rootElement->find(
             $mapTypePrice['selector'],
-            isset($mapTypePrice['strategy']) ? $mapTypePrice['strategy'] : Locator::SELECTOR_CSS
+            $mapTypePrice['strategy'] ?? Locator::SELECTOR_CSS
         );
     }
 

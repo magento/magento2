@@ -76,7 +76,7 @@ class Menu extends Block
     {
         $menuChain = array_map('trim', explode('>', $menuItem));
         $mainMenu = $menuChain[0];
-        $subMenu = isset($menuChain[1]) ? $menuChain[1] : null;
+        $subMenu = $menuChain[1] ?? null;
 
         // Click on element in main menu
         $mainMenuElement = $this->_rootElement->find(sprintf($this->mainMenu, $mainMenu), Locator::SELECTOR_XPATH);
@@ -114,7 +114,7 @@ class Menu extends Block
     {
         $menuChain = array_map('trim', explode('>', $menuItem));
         $mainMenu = $menuChain[0];
-        $subMenu = isset($menuChain[1]) ? $menuChain[1] : null;
+        $subMenu = $menuChain[1] ?? null;
 
         $mainMenuElement = $this->_rootElement->find(sprintf($this->mainMenu, $mainMenu), Locator::SELECTOR_XPATH);
         if (!$mainMenuElement->isVisible()) {

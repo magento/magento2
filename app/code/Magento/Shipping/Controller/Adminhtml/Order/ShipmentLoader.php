@@ -185,7 +185,7 @@ class ShipmentLoader extends DataObject
     private function getShipmentItems(array $shipmentData)
     {
         $shipmentItems = [];
-        $itemQty = isset($shipmentData['items']) ? $shipmentData['items'] : [];
+        $itemQty = $shipmentData['items'] ?? [];
         foreach ($itemQty as $itemId => $quantity) {
             /** @var ShipmentItemCreationInterface $item */
             $item = $this->itemFactory->create();

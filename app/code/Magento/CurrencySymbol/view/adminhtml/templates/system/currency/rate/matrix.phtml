@@ -41,7 +41,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                 <td>
                                     <input type="text"
                                            name="rate[<?= /* @escapeNotVerified */ $_currencyCode ?>][<?= /* @escapeNotVerified */ $_rate ?>]"
-                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : ($_oldRates[$_currencyCode][$_rate] ?? '')) ?>"
                                            class="admin__control-text"
                                             <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates) && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
@@ -52,7 +52,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                 <td>
                                     <input type="text"
                                            name="rate[<?= /* @escapeNotVerified */ $_currencyCode ?>][<?= /* @escapeNotVerified */ $_rate ?>]"
-                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : ($_oldRates[$_currencyCode][$_rate] ?? '')) ?>"
                                            class="admin__control-text"
                                            <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates)  && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>

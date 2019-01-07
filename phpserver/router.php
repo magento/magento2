@@ -47,7 +47,7 @@ if (php_sapi_name() === 'cli-server') {
     $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
     $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
     $pathinfo = pathinfo($route);
-    $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
+    $ext = $pathinfo['extension'] ?? '';
 
     if ($path["basename"] == 'favicon.ico') {
         return false;

@@ -65,8 +65,8 @@ class File
         $pathInfo = pathinfo($filePath);
 
         $this->_filePath = $filePath;
-        $this->_fileLocation = isset($pathInfo['dirname']) ? $pathInfo['dirname'] : '';
-        $this->_fileName = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
+        $this->_fileLocation = $pathInfo['dirname'] ?? '';
+        $this->_fileName = $pathInfo['basename'] ?? '';
     }
 
     /**

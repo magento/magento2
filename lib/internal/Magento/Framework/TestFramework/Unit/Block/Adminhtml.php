@@ -207,7 +207,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
         $return = null,
         $expects = null
     ) {
-        $expects = isset($expects) ? $expects : $this->any();
+        $expects = $expects ?? $this->any();
         $return = isset($return) ? $this->returnValue($return) : $this->returnSelf();
 
         return $object->expects($expects)->method($stubName)->will($return);

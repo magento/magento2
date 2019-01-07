@@ -156,7 +156,7 @@ class Helper
         unset($productData['custom_attributes'], $productData['extension_attributes']);
 
         if ($productData) {
-            $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
+            $stockData = $productData['stock_data'] ?? [];
             $productData['stock_data'] = $this->stockFilter->filter($stockData);
         }
 
@@ -199,7 +199,7 @@ class Helper
         } else {
             $productOptions = [];
         }
-        $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
+        $productData['tier_price'] = $productData['tier_price'] ?? [];
 
         $useDefaults = (array)$this->request->getPost('use_default', []);
         $productData = $this->attributeFilter->prepareProductAttributes($product, $productData, $useDefaults);

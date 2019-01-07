@@ -386,7 +386,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if (is_array($field)) {
             $conditions = [];
             foreach ($field as $key => $value) {
-                $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
+                $conditions[] = $this->_translateCondition($value, $condition[$key] ?? null);
             }
 
             $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';

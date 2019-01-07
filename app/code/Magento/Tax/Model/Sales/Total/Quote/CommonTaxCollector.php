@@ -253,7 +253,7 @@ class CommonTaxCollector extends AbstractTotal
 
         foreach ($extraTaxables as $extraTaxable) {
             $extraTaxableIncludesTax =
-                isset($extraTaxable['price_includes_tax']) ? $extraTaxable['price_includes_tax'] : $priceIncludesTax;
+                $extraTaxable['price_includes_tax'] ?? $priceIncludesTax;
 
             if ($useBaseCurrency) {
                 $unitPrice = $extraTaxable[self::KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE];

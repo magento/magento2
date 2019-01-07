@@ -135,7 +135,7 @@ abstract class Integration extends Action
     {
         $restoredFormData = $this->_getSession()->getIntegrationData();
         if ($restoredFormData) {
-            $resource = isset($restoredFormData['resource']) ? $restoredFormData['resource'] : [];
+            $resource = $restoredFormData['resource'] ?? [];
             $this->_registry->register(
                 self::REGISTRY_KEY_CURRENT_RESOURCE,
                 ['all_resources' => $restoredFormData['all_resources'], 'resource' => $resource]

@@ -197,9 +197,8 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
     {
         $result = [];
         $checkoutData = $product->getCheckoutData();
-        $bundleOptions = isset($checkoutData['options']['bundle_options'])
-            ? $checkoutData['options']['bundle_options']
-            : [];
+        $bundleOptions = $checkoutData['options']['bundle_options']
+            ?? [];
         $bundleSelections = $product->getBundleSelections();
         $bundleSelectionsData = [];
         $result['qty'] = $checkoutData['qty'];
@@ -279,7 +278,7 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
                     'group_id' => $customerGroupId,
                     'email' => $this->customer->getEmail(),
                 ],
-                'shipping_method' => isset($data['shipping_method']) ? $data['shipping_method'] : '',
+                'shipping_method' => $data['shipping_method'] ?? '',
             ],
             'item' => $this->prepareOrderProductsData($data['entity_id']),
             'billing_address' => $this->prepareBillingAddress($data['billing_address_id']),
@@ -369,6 +368,6 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
         }
         preg_match("~<h1 class=\"page-title\">#(.*)</h1>~", $response, $matches);
 
-        return isset($matches[1]) ? $matches[1] : null;
+        return $matches[1] ?? null;
     }
 }

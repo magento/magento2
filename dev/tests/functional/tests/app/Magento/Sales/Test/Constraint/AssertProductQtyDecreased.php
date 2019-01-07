@@ -85,7 +85,7 @@ class AssertProductQtyDecreased extends AbstractConstraint
     {
         $product = $order->getEntityId()['products'][$index];
         $productData = $product->getData();
-        $checkoutDataQty = isset($productData['checkout_data']['qty']) ? $productData['checkout_data']['qty'] : 1;
+        $checkoutDataQty = $productData['checkout_data']['qty'] ?? 1;
         $productData['quantity_and_stock_status']['qty'] -= $checkoutDataQty;
 
         $productData = array_diff_key($productData, array_flip($this->skipFields));

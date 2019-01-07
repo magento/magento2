@@ -165,7 +165,7 @@ class ConfigurableAttributesData extends DataSource
         }
 
         $this->attributesData = array_replace_recursive(
-            isset($data['attributes_data']) ? $data['attributes_data'] : [],
+            $data['attributes_data'] ?? [],
             $this->attributesData
         );
     }
@@ -477,12 +477,11 @@ class ConfigurableAttributesData extends DataSource
 
         foreach ($this->attributesData as $attributeKey => $attribute) {
             foreach ($attribute['options'] as $optionKey => $option) {
-                $option['label'] = isset($option['view']) ? $option['view'] : $option['label'];
+                $option['label'] = $option['view'] ?? $option['label'];
                 $attribute['options'][$optionKey] = array_intersect_key($option, array_flip($optionFields));
             }
-            $attribute['label'] = isset($attribute['label'])
-                ? $attribute['label']
-                : (isset($attribute['frontend_label']) ? $attribute['frontend_label'] : null);
+            $attribute['label'] = $attribute['label']
+                ?? ($attribute['frontend_label'] ?? null);
             $attribute = array_intersect_key($attribute, array_flip($attributeFields));
 
             $this->data['attributes_data'][$attributeKey] = $attribute;

@@ -78,7 +78,7 @@ class AssertProductVisibleInCategory extends AbstractConstraint
     protected function getStockStatus(FixtureInterface $product)
     {
         $quantityAndStockStatus = $product->getQuantityAndStockStatus();
-        return isset($quantityAndStockStatus['is_in_stock']) ? $quantityAndStockStatus['is_in_stock'] : null;
+        return $quantityAndStockStatus['is_in_stock'] ?? null;
     }
 
     /**

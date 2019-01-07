@@ -94,8 +94,8 @@ class PageActions extends Column
                     $item[$name]['preview'] = [
                         'href' => $this->actionUrlBuilder->getUrl(
                             $item['identifier'],
-                            isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
-                            isset($item['store_code']) ? $item['store_code'] : null
+                            $item['_first_store_id'] ?? null,
+                            $item['store_code'] ?? null
                         ),
                         'label' => __('View')
                     ];

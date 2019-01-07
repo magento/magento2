@@ -36,9 +36,9 @@ class DatabaseCheck extends AbstractActionController
     {
         try {
             $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-            $password = isset($params['password']) ? $params['password'] : '';
+            $password = $params['password'] ?? '';
             $this->dbValidator->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
-            $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';
+            $tablePrefix = $params['tablePrefix'] ?? '';
             $this->dbValidator->checkDatabaseTablePrefix($tablePrefix);
             return new JsonModel(['success' => true]);
         } catch (\Exception $e) {

@@ -59,7 +59,7 @@ class Label implements ResolverInterface
         $result = function () use ($value) {
             $productData = $this->product->getProductBySku($value['sku']);
             /** @var \Magento\Catalog\Model\Product $productModel */
-            $productModel = isset($productData['model']) ? $productData['model'] : null;
+            $productModel = $productData['model'] ?? null;
             return $productModel ? $productModel->getName() : null;
         };
 

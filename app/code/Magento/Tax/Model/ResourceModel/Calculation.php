@@ -141,7 +141,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $countedRates = count($rates);
         for ($i = 0; $i < $countedRates; $i++) {
             $rate = $rates[$i];
-            $value = (isset($rate['value']) ? $rate['value'] : $rate['percent']) * 1;
+            $value = ($rate['value'] ?? $rate['percent']) * 1;
 
             $oneRate = [
                 'code' => $rate['code'],

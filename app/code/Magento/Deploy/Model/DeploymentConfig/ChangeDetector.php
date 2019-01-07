@@ -71,7 +71,7 @@ class ChangeDetector
             if (null === $config) {
                 continue;
             }
-            $savedHash = isset($hashes[$section]) ? $hashes[$section] : null;
+            $savedHash = $hashes[$section] ?? null;
             $generatedHash = empty($config) && !$savedHash ? null : $this->hashGenerator->generate($config);
             if ($generatedHash !== $savedHash) {
                 return true;

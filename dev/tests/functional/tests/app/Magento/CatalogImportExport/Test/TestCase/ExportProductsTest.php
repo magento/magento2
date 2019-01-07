@@ -104,7 +104,7 @@ class ExportProductsTest extends Injectable
     {
         $createdProducts = [];
         foreach ($products as $product) {
-            $data = isset($product['data']) ? $product['data'] : [];
+            $data = $product['data'] ?? [];
             if (isset($product['store'])) {
                 $store = $this->fixtureFactory->createByCode('store', ['dataset' => $product['store']]);
                 $store->persist();

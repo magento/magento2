@@ -258,7 +258,7 @@ class CreateHandler implements ExtensionInterface
                 }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
-                $data['label'] = isset($image['label']) ? $image['label'] : '';
+                $data['label'] = $image['label'] ?? '';
                 $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
                 $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
                 $data['store_id'] = (int)$product->getStoreId();
@@ -318,7 +318,7 @@ class CreateHandler implements ExtensionInterface
 
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
+            $mediaGalleryData['duplicate'] ?? [],
             $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );

@@ -42,7 +42,7 @@ class Container extends \Magento\Framework\View\Element\AbstractBlock
 
         if ($item && $context && $context->canRender($item)) {
             $data = $item->getData();
-            $blockClassName = isset($data['class_name']) ? $data['class_name'] : null;
+            $blockClassName = $data['class_name'] ?? null;
             $buttonName = $this->getContext()->getNameInLayout() . '-' . $item->getId() . '-button';
             $block = $this->createButton($buttonName, $blockClassName);
             $block->setData($data);

@@ -141,7 +141,7 @@ class QuoteSetup extends EavSetup
     protected function _getAttributeColumnDefinition($code, $data)
     {
         // Convert attribute type to column info
-        $data['type'] = isset($data['type']) ? $data['type'] : 'varchar';
+        $data['type'] = $data['type'] ?? 'varchar';
         $type = null;
         $length = null;
         switch ($data['type']) {
@@ -174,7 +174,7 @@ class QuoteSetup extends EavSetup
         }
 
         $data['nullable'] = isset($data['required']) ? !$data['required'] : true;
-        $data['comment'] = isset($data['comment']) ? $data['comment'] : ucwords(str_replace('_', ' ', $code));
+        $data['comment'] = $data['comment'] ?? ucwords(str_replace('_', ' ', $code));
         return $data;
     }
 

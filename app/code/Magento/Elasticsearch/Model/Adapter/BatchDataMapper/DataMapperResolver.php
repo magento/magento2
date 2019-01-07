@@ -38,7 +38,7 @@ class DataMapperResolver implements BatchDataMapperInterface
      */
     public function map(array $documentData, $storeId, array $context = [])
     {
-        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        $entityType = $context['entityType'] ?? Config::ELASTICSEARCH_TYPE_DEFAULT;
         return $this->getDataMapper($entityType)->map($documentData, $storeId, $context);
     }
 

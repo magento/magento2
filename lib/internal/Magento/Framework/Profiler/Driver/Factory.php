@@ -48,7 +48,7 @@ class Factory
      */
     public function create(array $config = null)
     {
-        $type = isset($config['type']) ? $config['type'] : $this->_defaultDriverType;
+        $type = $config['type'] ?? $this->_defaultDriverType;
         if (class_exists($type)) {
             $class = $type;
         } else {

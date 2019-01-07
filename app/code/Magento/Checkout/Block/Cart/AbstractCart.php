@@ -94,7 +94,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
             throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
         $overriddenTemplates = $this->getOverriddenTemplates() ?: [];
-        $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
+        $template = $overriddenTemplates[$type] ?? $this->getRendererTemplate();
         return $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
     }
 

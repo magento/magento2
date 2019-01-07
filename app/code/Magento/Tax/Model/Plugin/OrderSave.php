@@ -140,10 +140,10 @@ class OrderSave
                             }
                             $baseRealAmount = $row['base_amount'] / $row['percent'] * $tax['percent'];
                         }
-                        $hidden = isset($row['hidden']) ? $row['hidden'] : 0;
-                        $priority = isset($tax['priority']) ? $tax['priority'] : 0;
-                        $position = isset($tax['position']) ? $tax['position'] : 0;
-                        $process = isset($row['process']) ? $row['process'] : 0;
+                        $hidden = $row['hidden'] ?? 0;
+                        $priority = $tax['priority'] ?? 0;
+                        $position = $tax['position'] ?? 0;
+                        $process = $row['process'] ?? 0;
                         $data = [
                             'order_id' => $order->getEntityId(),
                             'code' => $tax['code'],

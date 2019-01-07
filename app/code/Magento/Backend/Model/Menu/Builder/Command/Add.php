@@ -43,7 +43,7 @@ class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
     protected function _execute(array $itemParams)
     {
         foreach ($this->_data as $key => $value) {
-            $itemParams[$key] = isset($itemParams[$key]) ? $itemParams[$key] : $value;
+            $itemParams[$key] = $itemParams[$key] ?? $value;
         }
         return $itemParams;
     }

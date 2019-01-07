@@ -256,7 +256,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function parseResponse($response)
     {
         preg_match('~Location: [^\s]*\/id\/(\d+)~', $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
         return ['id' => $id];
     }
 
@@ -268,7 +268,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function getUrl(array $config)
     {
-        $requestParams = isset($config['create_url_params']) ? $config['create_url_params'] : [];
+        $requestParams = $config['create_url_params'] ?? [];
         $params = '';
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';

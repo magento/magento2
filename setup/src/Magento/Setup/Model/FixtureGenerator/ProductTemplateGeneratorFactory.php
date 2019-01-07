@@ -45,7 +45,7 @@ class ProductTemplateGeneratorFactory
      */
     public function create(array $fixture)
     {
-        $type = isset($fixture['type_id']) ? $fixture['type_id'] : Type::TYPE_SIMPLE;
+        $type = $fixture['type_id'] ?? Type::TYPE_SIMPLE;
         if (!isset($this->templateEntityMap[$type])) {
             throw new \InvalidArgumentException(sprintf(
                 'Cannot instantiate product template generator. Wrong type_id "%s" passed',

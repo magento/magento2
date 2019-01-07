@@ -32,11 +32,11 @@ class ProcessingErrorTest extends \PHPUnit\Framework\TestCase
      */
     public function testInit($initData)
     {
-        $errorLevel = isset($initData['errorLevel']) ? $initData['errorLevel'] : null;
-        $rowNumber = isset($initData['rowNumber']) ? $initData['rowNumber'] : null;
-        $columnName = isset($initData['columnName']) ? $initData['columnName'] : null;
-        $errorMessage = isset($initData['errorMessage']) ? $initData['errorMessage'] : null;
-        $errorDescription = isset($initData['errorDescription']) ? $initData['errorDescription'] : null;
+        $errorLevel = $initData['errorLevel'] ?? null;
+        $rowNumber = $initData['rowNumber'] ?? null;
+        $columnName = $initData['columnName'] ?? null;
+        $errorMessage = $initData['errorMessage'] ?? null;
+        $errorDescription = $initData['errorDescription'] ?? null;
 
         $result = $this->model->init(
             $initData['errorCode'],

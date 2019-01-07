@@ -90,7 +90,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
         $shipment = $this->shipmentFactory->create(
             $invoice->getOrder(),
-            isset($invoiceData['items']) ? $invoiceData['items'] : [],
+            $invoiceData['items'] ?? [],
             $this->getRequest()->getPost('tracking')
         );
 
@@ -133,7 +133,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
         try {
             $invoiceData = $this->getRequest()->getParam('invoice', []);
-            $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+            $invoiceItems = $invoiceData['items'] ?? [];
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
             if (!$order->getId()) {

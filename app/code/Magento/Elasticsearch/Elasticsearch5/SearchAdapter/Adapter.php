@@ -120,7 +120,7 @@ class Adapter implements AdapterInterface
             $rawResponse = self::$emptyRawResponse;
         }
 
-        $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
+        $rawDocuments = $rawResponse['hits']['hits'] ?? [];
         $queryResponse = $this->responseFactory->create(
             [
                 'documents' => $rawDocuments,

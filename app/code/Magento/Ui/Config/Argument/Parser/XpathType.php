@@ -19,7 +19,7 @@ class XpathType implements ParserInterface
     public function parse(array $data, \DOMNode $node)
     {
         $result = null;
-        $type = isset($data['type']) ? $data['type'] : null;
+        $type = $data['type'] ?? null;
         if (!$type) {
             throw new \InvalidArgumentException('Type attribute are expected.');
         }

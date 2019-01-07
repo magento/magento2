@@ -197,8 +197,8 @@ class Authentication
     {
         $outputValue = true;
         $postLogin = $request->getPost('login');
-        $username = isset($postLogin['username']) ? $postLogin['username'] : '';
-        $password = isset($postLogin['password']) ? $postLogin['password'] : '';
+        $username = $postLogin['username'] ?? '';
+        $password = $postLogin['password'] ?? '';
         $request->setPostValue('login', null);
 
         try {

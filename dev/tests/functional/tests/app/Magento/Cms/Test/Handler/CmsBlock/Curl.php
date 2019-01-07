@@ -64,7 +64,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
         }
 
         preg_match("`block_id\/(\d*?)\/`", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['block_id' => $id];
     }

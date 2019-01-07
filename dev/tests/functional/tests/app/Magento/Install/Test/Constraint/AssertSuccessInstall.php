@@ -59,10 +59,10 @@ class AssertSuccessInstall extends AbstractConstraint
         $allData = array_merge($user->getData(), $installConfig->getData());
 
         foreach ($installConfig->getData() as $key => $value) {
-            $allData[$key] = isset($value['value']) ? $value['value'] : $value;
+            $allData[$key] = $value['value'] ?? $value;
         }
 
-        $allData['baseUrl'] = (isset($allData['https']) ? $allData['https'] : $allData['baseUrl']);
+        $allData['baseUrl'] = ($allData['https'] ?? $allData['baseUrl']);
         $allData['admin'] = $allData['baseUrl'] . $allData['admin'] . '/';
 
         $this->checkInstallData($allData, $adminData, $dbData);

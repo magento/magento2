@@ -39,9 +39,9 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
             $noRoute = [];
         }
 
-        $moduleName = isset($noRoute[0]) ? $noRoute[0] : 'core';
-        $actionPath = isset($noRoute[1]) ? $noRoute[1] : 'index';
-        $actionName = isset($noRoute[2]) ? $noRoute[2] : 'index';
+        $moduleName = $noRoute[0] ?? 'core';
+        $actionPath = $noRoute[1] ?? 'index';
+        $actionName = $noRoute[2] ?? 'index';
 
         $request->setModuleName($moduleName)->setControllerName($actionPath)->setActionName($actionName);
 

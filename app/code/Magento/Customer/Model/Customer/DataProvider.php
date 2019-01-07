@@ -243,7 +243,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $data = $this->getSession()->getCustomerFormData();
         if (!empty($data)) {
-            $customerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            $customerId = $data['customer']['entity_id'] ?? null;
             $this->loadedData[$customerId] = $data;
             $this->getSession()->unsCustomerFormData();
         }

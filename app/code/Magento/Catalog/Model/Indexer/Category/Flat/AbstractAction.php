@@ -149,7 +149,7 @@ class AbstractAction
                     'nullable' => $fieldProp['nullable'],
                     'unsigned' => $fieldProp['unsigned'],
                     'default' => $default,
-                    'primary' => isset($fieldProp['primary']) ? $fieldProp['primary'] : false
+                    'primary' => $fieldProp['primary'] ?? false
                 ],
                 $fieldProp['comment'] != '' ? $fieldProp['comment'] : ucwords(str_replace('_', ' ', $fieldName))
             );

@@ -309,7 +309,7 @@ class Elasticsearch implements ClientInterface
         if (strcmp($this->getServerVersion(), '5') < 0) {
             if ($fieldInfo['type'] == 'keyword') {
                 $fieldInfo['type'] = 'string';
-                $fieldInfo['index'] = isset($fieldInfo['index']) ? $fieldInfo['index'] : 'not_analyzed';
+                $fieldInfo['index'] = $fieldInfo['index'] ?? 'not_analyzed';
             }
 
             if ($fieldInfo['type'] == 'text') {

@@ -215,9 +215,8 @@ class File extends DataSource
                     }
                     if (isset($entityData['code'])) {
                         $placeholders['entity_' . $key][$entityKey][$entityData['code']]
-                            = isset($entityData[$entityData['code']])
-                            ? $entityData[$entityData['code']]
-                            : 'Main Website';
+                            = $entityData[$entityData['code']]
+                            ?? 'Main Website';
                     }
                 }
             }

@@ -218,9 +218,8 @@ class PhpRule implements RuleInterface
     private function isPluginDependency($dependent, $dependency)
     {
         $pluginMap = $this->loadPluginMap();
-        $subject = isset($pluginMap[$dependent])
-            ? $pluginMap[$dependent]
-            : null;
+        $subject = $pluginMap[$dependent]
+            ?? null;
         if ($subject === $dependency) {
             return true;
         } elseif ($subject) {
@@ -292,7 +291,7 @@ class PhpRule implements RuleInterface
                 continue;
             }
             $check = $this->_checkDependencyLayoutBlock($currentModule, $area, $match['block']);
-            $module = isset($check['module']) ? $check['module'] : null;
+            $module = $check['module'] ?? null;
             if ($module) {
                 $result[$module] = [
                     'type' => RuleInterface::TYPE_HARD,

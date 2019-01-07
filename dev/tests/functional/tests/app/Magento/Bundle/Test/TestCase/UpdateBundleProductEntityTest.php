@@ -112,7 +112,7 @@ class UpdateBundleProductEntityTest extends Injectable
         return [
             'category' => $category,
             'stores' => isset($store) ? [$store] : [],
-            'optionTitles' => isset($optionTitle) ? $optionTitle : []
+            'optionTitles' => $optionTitle ?? []
         ];
     }
 

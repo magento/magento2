@@ -43,32 +43,28 @@ class Item extends DataSource
     public function getData($key = null)
     {
         $checkoutData = $this->product->getCheckoutData();
-        $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
+        $cartItem = $checkoutData['cartItem'] ?? [];
         $customOptions = $this->product->hasData('custom_options') ? $this->product->getCustomOptions() : [];
-        $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
-            ? $checkoutData['options']['custom_options']
-            : [];
+        $checkoutCustomOptions = $checkoutData['options']['custom_options']
+            ?? [];
 
         foreach ($checkoutCustomOptions as $key => $checkoutCustomOption) {
             $attribute = str_replace('attribute_key_', '', $checkoutCustomOption['title']);
             $option = str_replace('option_key_', '', $checkoutCustomOption['value']);
 
             $checkoutCustomOptions[$key] = [
-                'title' => isset($customOptions[$attribute]['title'])
-                    ? $customOptions[$attribute]['title']
-                    : $attribute,
-                'value' => isset($customOptions[$attribute]['options'][$option]['title'])
-                    ? $customOptions[$attribute]['options'][$option]['title']
-                    : $option,
+                'title' => $customOptions[$attribute]['title']
+                    ?? $attribute,
+                'value' => $customOptions[$attribute]['options'][$option]['title']
+                    ?? $option,
             ];
         }
 
         $cartItem['options'] = isset($cartItem['options'])
             ? $cartItem['options'] + $checkoutCustomOptions
             : $checkoutCustomOptions;
-        $cartItem['qty'] = isset($checkoutData['qty'])
-            ? $checkoutData['qty']
-            : 1;
+        $cartItem['qty'] = $checkoutData['qty']
+            ?? 1;
         $cartItem['sku'] = $this->product->getSku();
         $cartItem['name'] = $this->product->getName();
         $this->data = $cartItem;

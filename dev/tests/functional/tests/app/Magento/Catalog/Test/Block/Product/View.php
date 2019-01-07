@@ -253,7 +253,7 @@ class View extends AbstractConfigureBlock
 
         if ($product) {
             $dataConfig = $product->getDataConfig();
-            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+            $typeId = $dataConfig['type_id'] ?? null;
         }
 
         if ($this->hasRender($typeId)) {
@@ -449,7 +449,7 @@ class View extends AbstractConfigureBlock
     {
         /** @var CatalogProductSimple $product */
         $dataConfig = $product->getDataConfig();
-        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        $typeId = $dataConfig['type_id'] ?? null;
 
         return $this->hasRender($typeId) ? $this->callRender(
             $typeId,

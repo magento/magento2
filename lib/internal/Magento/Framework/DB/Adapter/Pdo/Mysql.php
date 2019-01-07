@@ -1249,7 +1249,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     'SCHEMA_NAME'       => $schemaName,
                     'TABLE_NAME'        => $tableName,
                     'COLUMN_NAME'       => $match[2],
-                    'REF_SHEMA_NAME'    => isset($match[4]) ? $match[4] : $schemaName,
+                    'REF_SHEMA_NAME'    => $match[4] ?? $schemaName,
                     'REF_TABLE_NAME'    => $match[5],
                     'REF_COLUMN_NAME'   => $match[6],
                     'ON_DELETE'         => isset($match[7]) ? $match[8] : ''

@@ -30,7 +30,7 @@
                     <?php endif; ?>
                 </dd>
             <?php else: ?>
-                <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                <dd><?= $block->escapeHtml(($_option['print_value'] ?? $_option['value'])) ?></dd>
             <?php endif; ?>
         <?php endforeach; ?>
         </dl>

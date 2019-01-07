@@ -134,7 +134,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
             if (in_array($key, $this->skippedFields, true)) {
                 continue;
             }
-            $formValue = isset($formData[$key]) ? $formData[$key] : null;
+            $formValue = $formData[$key] ?? null;
             $errors = $this->verifyDataForErrors($formValue, $key, $errors, $value);
         }
         return $this->prepareErrorsForOutput($fixtureData, $formData, $isStrict, $isPrepareError, $errors);

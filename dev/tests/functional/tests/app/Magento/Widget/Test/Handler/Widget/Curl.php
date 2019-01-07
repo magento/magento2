@@ -195,14 +195,12 @@ class Curl extends AbstractCurl
      */
     protected function prepareAllPagesGroup(array $widgetInstancePageGroup)
     {
-        $widgetInstance['layout_handle'] = isset($widgetInstancePageGroup['layout_handle'])
-            ? $widgetInstancePageGroup['layout_handle']
-            : 'default';
+        $widgetInstance['layout_handle'] = $widgetInstancePageGroup['layout_handle']
+            ?? 'default';
         $widgetInstance['for'] = 'all';
         $widgetInstance['block'] = $widgetInstancePageGroup['block'];
-        $widgetInstance['template'] = isset($widgetInstancePageGroup['template'])
-            ? $widgetInstancePageGroup['template']
-            : $this->widgetInstanceTemplate;
+        $widgetInstance['template'] = $widgetInstancePageGroup['template']
+            ?? $this->widgetInstanceTemplate;
 
         return $widgetInstance;
     }

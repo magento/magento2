@@ -82,7 +82,7 @@ class InterfaceFactory implements ConfigElementFactoryInterface
                 'name' => $interfaceData['name'],
                 'typeResolver' => $interfaceData['typeResolver'],
                 'fields' => $fields,
-                'description' => isset($interfaceData['description']) ? $interfaceData['description'] : ''
+                'description' => $interfaceData['description'] ?? ''
             ]
         );
     }

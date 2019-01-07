@@ -76,7 +76,7 @@ class JoinAssembler implements AssemblerInterface
             $joinAlias = $this->nameResolver->getAlias($join);
 
             $joins[$joinAlias]  = [
-                'link-type' => isset($join['link-type']) ? $join['link-type'] : 'left',
+                'link-type' => $join['link-type'] ?? 'left',
                 'table' => [
                     $joinAlias => $this->resourceConnection
                         ->getTableName($this->nameResolver->getName($join)),

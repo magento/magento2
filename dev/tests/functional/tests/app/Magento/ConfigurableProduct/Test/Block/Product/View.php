@@ -76,9 +76,8 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         }
         $attributesData = array_values($attributesData);
 
-        $configurableCheckoutData = isset($checkoutData['options']['configurable_options'])
-            ? $checkoutData['options']['configurable_options']
-            : [];
+        $configurableCheckoutData = $checkoutData['options']['configurable_options']
+            ?? [];
         $checkoutOptionsData = $this->prepareCheckoutData($attributesData, $configurableCheckoutData);
         $this->getCustomOptionsBlock()->fillCustomOptions($checkoutOptionsData);
 

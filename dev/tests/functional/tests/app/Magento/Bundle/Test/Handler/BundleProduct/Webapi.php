@@ -92,15 +92,12 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                 'sku' => $product->getSku(),
                 'qty' => $productLink['data']['selection_qty'],
                 'is_default' => false,
-                'price' => isset($productLink['data']['selection_price_value'])
-                    ? $productLink['data']['selection_price_value']
-                    : null,
-                'price_type' => isset($productLink['data']['selection_price_type'])
-                    ? $productLink['data']['selection_price_type']
-                    : null,
-                'can_change_quantity' => isset($productLink['data']['user_defined'])
-                    ? $productLink['data']['user_defined']
-                    : 0,
+                'price' => $productLink['data']['selection_price_value']
+                    ?? null,
+                'price_type' => $productLink['data']['selection_price_type']
+                    ?? null,
+                'can_change_quantity' => $productLink['data']['user_defined']
+                    ?? 0,
                 'position' => $linkKey,
             ];
         }

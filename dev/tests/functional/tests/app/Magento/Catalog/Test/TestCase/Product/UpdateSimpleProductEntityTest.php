@@ -127,7 +127,7 @@ class UpdateSimpleProductEntityTest extends Injectable
         return [
             'category' => $category,
             'stores' => isset($store) ? [$store] : [],
-            'productNames' => isset($productName) ? $productName : [],
+            'productNames' => $productName ?? [],
         ];
     }
 

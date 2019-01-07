@@ -120,8 +120,8 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanReturnItemToStock($canReturnToStock, $itemConfig, $result)
     {
-        $productId = isset($itemConfig['product_id']) ? $itemConfig['product_id'] : null;
-        $manageStock = isset($itemConfig['manage_stock']) ? $itemConfig['manage_stock'] : null;
+        $productId = $itemConfig['product_id'] ?? null;
+        $manageStock = $itemConfig['manage_stock'] ?? null;
         $item = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
             ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup']

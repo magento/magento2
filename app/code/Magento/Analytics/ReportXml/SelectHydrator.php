@@ -126,7 +126,7 @@ class SelectHydrator
                 if (is_array($column) && !empty($column['class'])) {
                     $expression = $this->objectManager->create(
                         $column['class'],
-                        isset($column['arguments']) ? $column['arguments'] : []
+                        $column['arguments'] ?? []
                     );
                     $part[] = [$correlationName, $expression, $alias];
                 } else {

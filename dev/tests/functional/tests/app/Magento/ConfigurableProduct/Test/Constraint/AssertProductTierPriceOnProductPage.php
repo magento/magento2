@@ -28,7 +28,7 @@ class AssertProductTierPriceOnProductPage extends AssertProductPage
         $products = ($this->product->getDataFieldConfig('configurable_attributes_data')['source'])->getProducts();
         foreach ($products as $key => $product) {
             $configuredTierPrice = [];
-            $actualTierPrices = isset($formTierPrices[$key]['tierPrices']) ? $formTierPrices[$key]['tierPrices'] : [];
+            $actualTierPrices = $formTierPrices[$key]['tierPrices'] ?? [];
             $tierPrices = $product->getTierPrice() ?: [];
             foreach ($tierPrices as $tierPrice) {
                 $configuredTierPrice[] = [

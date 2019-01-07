@@ -163,7 +163,7 @@ abstract class AbstractMapper implements MapperInterface
         if (is_array($field)) {
             $conditions = [];
             foreach ($field as $key => $value) {
-                $conditions[] = $this->translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
+                $conditions[] = $this->translateCondition($value, $condition[$key] ?? null);
             }
 
             $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';

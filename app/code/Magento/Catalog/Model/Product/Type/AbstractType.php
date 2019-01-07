@@ -487,10 +487,10 @@ abstract class AbstractType
             if (isset($queueOptions['operation']) && ($operation = $queueOptions['operation'])) {
                 switch ($operation) {
                     case 'receive_uploaded_file':
-                        $src = isset($queueOptions['src_name']) ? $queueOptions['src_name'] : '';
-                        $dst = isset($queueOptions['dst_name']) ? $queueOptions['dst_name'] : '';
+                        $src = $queueOptions['src_name'] ?? '';
+                        $dst = $queueOptions['dst_name'] ?? '';
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
-                        $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
+                        $uploader = $queueOptions['uploader'] ?? null;
 
                         $path = dirname($dst);
 

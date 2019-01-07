@@ -87,9 +87,8 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
         foreach ($rawPrices as $rawPrice) {
             /** @var \Magento\Catalog\Api\Data\SpecialPriceInterface $price */
             $price = $this->specialPriceFactory->create();
-            $sku = isset($rawPrice['sku'])
-                ? $rawPrice['sku']
-                : $this->retrieveSkuById($rawPrice[$this->specialPriceResource->getEntityLinkField()], $skus);
+            $sku = $rawPrice['sku']
+                ?? $this->retrieveSkuById($rawPrice[$this->specialPriceResource->getEntityLinkField()], $skus);
             $price->setSku($sku);
             $price->setPrice($rawPrice['value']);
             $price->setStoreId($rawPrice['store_id']);

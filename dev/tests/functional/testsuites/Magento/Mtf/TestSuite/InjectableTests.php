@@ -83,7 +83,7 @@ class InjectableTests extends \PHPUnit\Framework\TestSuite
         if (!isset($this->objectManager)) {
             $objectManagerFactory = new ObjectManagerFactory();
 
-            $configFileName = isset($_ENV['testsuite_rule']) ? $_ENV['testsuite_rule'] : 'basic';
+            $configFileName = $_ENV['testsuite_rule'] ?? 'basic';
             $configFilePath = realpath(MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']);
 
             /** @var \Magento\Mtf\Config\DataInterface $configData */

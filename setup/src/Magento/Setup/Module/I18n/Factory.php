@@ -64,9 +64,9 @@ class Factory
         return new Dictionary\Phrase(
             $data['phrase'],
             $data['translation'],
-            isset($data['context_type']) ? $data['context_type'] : null,
-            isset($data['context_value']) ? $data['context_value'] : null,
-            isset($data['quote']) ? $data['quote'] : null
+            $data['context_type'] ?? null,
+            $data['context_value'] ?? null,
+            $data['quote'] ?? null
         );
     }
 }

@@ -31,13 +31,13 @@ class Request extends \Magento\Framework\DataObject
         switch (substr($method, 0, 3)) {
             case 'get':
                 //\Magento\Framework\Profiler::start('GETTER: '.get_class($this).'::'.$method);
-                $data = $this->getData($key, isset($args[0]) ? $args[0] : null);
+                $data = $this->getData($key, $args[0] ?? null);
                 //\Magento\Framework\Profiler::stop('GETTER: '.get_class($this).'::'.$method);
                 return $data;
 
             case 'set':
                 //\Magento\Framework\Profiler::start('SETTER: '.get_class($this).'::'.$method);
-                $result = $this->setData($key, isset($args[0]) ? $args[0] : null);
+                $result = $this->setData($key, $args[0] ?? null);
                 //\Magento\Framework\Profiler::stop('SETTER: '.get_class($this).'::'.$method);
                 return $result;
 

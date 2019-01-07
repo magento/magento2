@@ -18,7 +18,7 @@ class SubscriptionFactory extends AbstractFactory
      */
     public function create(array $data = [])
     {
-        $instanceName = isset($data['subscriptionModel']) ? $data['subscriptionModel'] : self::INSTANCE_NAME;
+        $instanceName = $data['subscriptionModel'] ?? self::INSTANCE_NAME;
         unset($data['subscriptionModel']);
         return $this->objectManager->create($instanceName, $data);
     }

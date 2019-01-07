@@ -30,7 +30,7 @@ if (!validateInput($options, $requiredOptions)) {
     exit(1);
 }
 
-$fileExtensions = explode(',', isset($options['file-extensions']) ? $options['file-extensions'] : 'php');
+$fileExtensions = explode(',', $options['file-extensions'] ?? 'php');
 
 include_once __DIR__ . '/framework/autoload.php';
 

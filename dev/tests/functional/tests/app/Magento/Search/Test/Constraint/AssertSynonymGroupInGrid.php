@@ -64,12 +64,10 @@ class AssertSynonymGroupInGrid extends AbstractConstraint
         $data = $synonymGroup->getData();
         $this->filter = [
             'synonyms' => $data['synonyms'],
-            'website_id' => isset($synonymFilter['data']['website'])
-                ? $synonymFilter['data']['website']
-                : '',
-            'group_id' => isset($synonymFilter['data']['id'])
-                ? $synonymFilter['data']['id']
-                : '',
+            'website_id' => $synonymFilter['data']['website']
+                ?? '',
+            'group_id' => $synonymFilter['data']['id']
+                ?? '',
         ];
     }
 

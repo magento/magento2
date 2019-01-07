@@ -85,7 +85,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         $object = $this->_objectFactory->create(['data' => $this->getRequest()->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
-            $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
+            $formData[$attributeCode] = $requestData[$attributeCode] ?? false;
         }
 
         // Unset unused attributes
@@ -362,9 +362,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     {
         $originalRequestData = $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerId = isset($originalRequestData['entity_id'])
-            ? $originalRequestData['entity_id']
-            : null;
+        $customerId = $originalRequestData['entity_id']
+            ?? null;
 
         return $customerId;
     }

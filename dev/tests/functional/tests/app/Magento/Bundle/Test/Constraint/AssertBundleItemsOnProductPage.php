@@ -55,7 +55,7 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
     protected function prepareBundleOptions(BundleProduct $product)
     {
         $bundleSelections = $product->getBundleSelections();
-        $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
+        $bundleOptions = $bundleSelections['bundle_options'] ?? [];
         $result = [];
 
         foreach ($bundleOptions as $optionKey => $bundleOption) {
@@ -68,9 +68,8 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
             $key = 0;
             foreach ($bundleOption['assigned_products'] as $productKey => $assignedProduct) {
                 if ($this->isInStock($product, $key++)) {
-                    $price = isset($assignedProduct['data']['selection_price_value'])
-                        ? $assignedProduct['data']['selection_price_value']
-                        : $bundleSelections['products'][$optionKey][$productKey]->getPrice();
+                    $price = $assignedProduct['data']['selection_price_value']
+                        ?? $bundleSelections['products'][$optionKey][$productKey]->getPrice();
 
                     $optionData['options'][$productKey] = [
                         'title' => $assignedProduct['search_data']['name'],

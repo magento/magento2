@@ -50,13 +50,13 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
         array $data = []
     ) {
         parent::__construct($context);
-        $this->_currentStore = isset($data['current_store']) ? $data['current_store'] : $storeManager->getStore();
+        $this->_currentStore = $data['current_store'] ?? $storeManager->getStore();
 
         if (!$this->_currentStore instanceof \Magento\Store\Model\Store) {
             throw new \InvalidArgumentException('Required store object is invalid');
         }
 
-        $this->_website = isset($data['website']) ? $data['website'] : $storeManager->getWebsite();
+        $this->_website = $data['website'] ?? $storeManager->getWebsite();
 
         if (!$this->_website instanceof \Magento\Store\Model\Website) {
             throw new \InvalidArgumentException('Required website object is invalid');

@@ -1069,7 +1069,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             function ($match) {
                 if ($this->useSessionIdForUrl($match[2] == 'S' ? true : false)) {
                     return $match[1] . $this->_sidResolver->getSessionIdQueryParam($this->_session) . '='
-                        . $this->_session->getSessionId() . (isset($match[3]) ? $match[3] : '');
+                        . $this->_session->getSessionId() . ($match[3] ?? '');
                 } else {
                     if ($match[1] == '?') {
                         return isset($match[3]) ? '?' : '';
@@ -1144,7 +1144,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         $httpHostWithPort = $this->_request->getHttpHost(false);
         $httpHostWithPort = explode(':', $httpHostWithPort);
-        $httpHost = isset($httpHostWithPort[0]) ? $httpHostWithPort[0] : '';
+        $httpHost = $httpHostWithPort[0] ?? '';
         $port = '';
         if (isset($httpHostWithPort[1])) {
             $defaultPorts = [

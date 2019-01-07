@@ -177,9 +177,8 @@ class ObjectManagerFactory
 
         $generatorParams = $diConfig->getArguments(\Magento\Framework\Code\Generator::class);
         /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
-        $generatedEntities = isset($generatorParams['generatedEntities']['_v_'])
-            ? $generatorParams['generatedEntities']['_v_']
-            : (isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []);
+        $generatedEntities = $generatorParams['generatedEntities']['_v_']
+            ?? ($generatorParams['generatedEntities'] ?? []);
         $definitionFactory->getCodeGenerator()
             ->setObjectManager($objectManager)
             ->setGeneratedEntities($generatedEntities);

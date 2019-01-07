@@ -143,9 +143,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             $paramName = $param[MethodsMap::METHOD_META_NAME];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
-                $paramValue = isset($inputArray[$paramName])
-                    ? $inputArray[$paramName]
-                    : $inputArray[$snakeCaseParamName];
+                $paramValue = $inputArray[$paramName]
+                    ?? $inputArray[$snakeCaseParamName];
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
