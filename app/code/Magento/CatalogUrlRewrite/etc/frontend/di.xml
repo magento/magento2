@@ -6,5 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\CatalogUrlRewrite\Model\Storage\DbStorage"/>
+    <type name="Magento\UrlRewrite\Model\UrlFinderPool">
+        <arguments>
+            <argument name="urlFinders" xsi:type="array">
+                <item name="catalog" xsi:type="array">
+                    <item name="object" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

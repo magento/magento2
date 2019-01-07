@@ -5,9 +5,11 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Model\UrlFinderPool;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
@@ -43,9 +45,15 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected $response;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @deprecated @see urlFinderPool
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
+
+    /**
+     * @var UrlFinderPool
+     */
+    private $urlFinderPool;
 
     /**
      * @param \Magento\Framework\App\ActionFactory $actionFactory
@@ -53,26 +61,28 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param UrlFinderInterface $urlFinder
+     * @param UrlFinderPool $urlFinderPool
      */
     public function __construct(
         \Magento\Framework\App\ActionFactory $actionFactory,
         UrlInterface $url,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResponseInterface $response,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        UrlFinderPool $urlFinderPool = null
     ) {
         $this->actionFactory = $actionFactory;
         $this->url = $url;
         $this->storeManager = $storeManager;
         $this->response = $response;
         $this->urlFinder = $urlFinder;
+        $this->urlFinderPool = $urlFinderPool ?? ObjectManager::getInstance()->get(UrlFinderPool::class);
     }
 
     /**
      * Match corresponding URL Rewrite and modify request.
      *
      * @param RequestInterface|HttpRequest $request
-     *
      * @return ActionInterface|null
      */
     public function match(RequestInterface $request)
@@ -104,6 +114,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Process redirect
+     *
      * @param RequestInterface $request
      * @param UrlRewrite $rewrite
      *
@@ -121,6 +133,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Redirect to target URL
+     *
      * @param RequestInterface|HttpRequest $request
      * @param string $url
      * @param int $code
@@ -135,15 +149,26 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
+     * Find rewrite based on request data
+     *
      * @param string $requestPath
      * @param int $storeId
      * @return UrlRewrite|null
      */
     protected function getRewrite($requestPath, $storeId)
     {
-        return $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
-            UrlRewrite::STORE_ID => $storeId,
-        ]);
+        $urlFinders = $this->urlFinderPool->getUrlFinders();
+
+        foreach ($urlFinders as $urlFinder) {
+            $rewrite = $urlFinder->findOneByData([
+                UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
+                UrlRewrite::STORE_ID => $storeId,
+            ]);
+            if ($rewrite) {
+                return $rewrite;
+            }
+        }
+
+        return null;
     }
 }
