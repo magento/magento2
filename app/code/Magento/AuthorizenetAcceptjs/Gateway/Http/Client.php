@@ -9,8 +9,6 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -62,14 +60,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * Post request to gateway and return response
-     *
-     * @param array $request
-     * @return array
-     * @throws LocalizedException
-     * @throws RuntimeException
-     */
-    /**
      * Places request to gateway. Returns result as ENV array
      *
      * @param \Magento\Payment\Gateway\Http\TransferInterface $transferObject
@@ -94,7 +84,8 @@ class Client implements ClientInterface
 
             $responseBody = $client->request()->getBody();
             $log['response'] = $responseBody;
-            $response = $this->payloadConverter->convertXmlToArray($responseBody);
+
+            return $this->payloadConverter->convertXmlToArray($responseBody);
         } catch (\Exception $e) {
             throw new ClientException(
                 __('Something went wrong in the payment gateway.')
@@ -102,7 +93,5 @@ class Client implements ClientInterface
         } finally {
             $this->logger->debug($log);
         }
-
-        return $response;
     }
 }

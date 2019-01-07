@@ -69,6 +69,16 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="AuthorizenetAcceptjsTestCredentialsCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsTestCredentialsRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">     !!!!    AuthorizenetAcceptjsAuthorizationHandler    !!!!!    </argument>
+            <argument name="validator" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsAuthorizeRequest</argument>
@@ -79,12 +89,42 @@
             <argument name="errorMessageMapper" xsi:type="object">     !!!!    Magento\AuthorizenetAcceptjs\Gateway\ErrorMapper\VirtualErrorMessageMapper     !!!!    </argument>
         </arguments>
     </virtualType>
+    <virtualType name="AuthorizenetAcceptjsTestCredentialsRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
+                <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTestCredentialsRequestTypeBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsTestCredentialsRequestTypeBuilder" type="Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder">
+        <arguments>
+            <argument name="type" xsi:type="string">authenticateTestRequest</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
             </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsErrorMappingConfigReader" type="Magento\Payment\Gateway\ErrorMapper\VirtualConfigReader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">authorizenet_acceptjs_error_mapping.xml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsErrorMappingData" type="Magento\Payment\Gateway\ErrorMapper\MappingData">
+        <arguments>
+            <argument name="reader" xsi:type="object">AuthorizenetAcceptjsErrorMappingConfigReader</argument>
+            <argument name="cacheId" xsi:type="string">authorizenet_acceptjs_error_mapper</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsVirtualErrorMessageMapper" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper">
+        <arguments>
+            <argument name="messageMapping" xsi:type="object">AuthorizenetAcceptjsErrorMappingData</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Config\Model\Config\TypePool">

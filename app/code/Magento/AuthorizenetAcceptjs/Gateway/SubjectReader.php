@@ -35,4 +35,15 @@ class SubjectReader
     {
         return $subject['store_id'] ?? null;
     }
+
+    /**
+     * Reads response from subject
+     *
+     * @param array $subject
+     * @return array
+     */
+    public function readResponse(array $subject)
+    {
+        return Helper\SubjectReader::readResponse($subject);
+    }
 }

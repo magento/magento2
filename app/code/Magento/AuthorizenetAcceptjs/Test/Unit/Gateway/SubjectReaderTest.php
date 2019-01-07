@@ -47,6 +47,22 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
         $this->subjectReader->readPayment([]);
     }
 
+    public function testReadResponse(): void
+    {
+        $expected = ['foo' => 'bar'];
+
+        $this->assertSame($expected, $this->subjectReader->readResponse(['response' => $expected]));
+    }
+
+    public function testReadResponseThrowsExceptionWhenNotAvailable(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Response does not exist');
+
+        $this->subjectReader->readResponse([]);
+        $this->subjectReader->readResponse(['response' => 123]);
+    }
+
     public function testReadStoreId(): void
     {
         $this->assertEquals('abc', $this->subjectReader->readStoreId(['store_id' => 'abc']));
