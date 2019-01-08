@@ -26,6 +26,8 @@
             <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
         </before>
         <after>
+            <!--Clear filter in orders grid-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="ordersGridClearFilters"/>
             <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
@@ -89,10 +91,9 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
-        <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
         <!-- Create invoice -->
