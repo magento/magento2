@@ -30,7 +30,7 @@ class ExpressCheckoutFromShoppingCartTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
-    const TO_MAINTAIN = 'yes';
+//    const TO_MAINTAIN = 'yes';
     const SEVERITY = 'S0';
     /* end tags */
 
