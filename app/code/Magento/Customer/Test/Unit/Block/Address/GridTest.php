@@ -28,7 +28,6 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     private $currentCustomer;
 
-
     /**
      * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
