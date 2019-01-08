@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Directory\Model\Config\Source;
 
 /**
@@ -14,10 +15,23 @@ namespace Magento\Directory\Model\Config\Source;
 class WeightUnit implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @var string
+     */
+    const CODE_LBS = 'lbs';
+
+    /**
+     * @var string
+     */
+    const CODE_KGS = 'kgs';
+
+    /**
+     * @inheritdoc
      */
     public function toOptionArray()
     {
-        return [['value' => 'lbs', 'label' => __('lbs')], ['value' => 'kgs', 'label' => __('kgs')]];
+        return [
+            ['value' => self::CODE_LBS, 'label' => __('lbs')],
+            ['value' => self::CODE_KGS, 'label' => __('kgs')]
+        ];
     }
 }

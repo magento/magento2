@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Translation;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Make sure that constants are not used as the first argument of translation function.
@@ -21,7 +21,7 @@ class ConstantUsageSniff implements Sniff
     protected $previousLineContent = '';
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -31,7 +31,11 @@ class ConstantUsageSniff implements Sniff
     /**
      * Copied from \Generic_Sniffs_Files_LineLengthSniff, minor changes made
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile
+     * @param int $stackPtr
+     * @return void|int
      */
     public function process(File $phpcsFile, $stackPtr)
     {
