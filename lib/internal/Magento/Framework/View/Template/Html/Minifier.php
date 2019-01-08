@@ -74,7 +74,7 @@ class Minifier implements MinifierInterface
         Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TMP_MATERIALIZATION_DIR);
+        $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::GENERATED_MINIFIEDPHTML);
         $this->readFactory = $readFactory;
     }
 
