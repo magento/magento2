@@ -92,7 +92,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $toStore = $storeRepository->get($toStoreCode);
 
-        $redirectUrl = $expectedUrl = "http://localhost/index.php/page-c";
+        $redirectUrl = $expectedUrl = "http://localhost/index.php/page-c/";
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
