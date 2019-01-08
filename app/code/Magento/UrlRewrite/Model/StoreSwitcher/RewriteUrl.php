@@ -75,7 +75,7 @@ class RewriteUrl implements StoreSwitcherInterface
             ]);
 
             if ($currentRewrite) {
-                $targetUrl = $targetStore->getUrl($currentRewrite->getRequestPath());
+                $targetUrl .= $currentRewrite->getRequestPath();
             }
         }
 
