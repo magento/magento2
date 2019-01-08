@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-63898"/>
             <group value="analytics"/>
-            <skip>
-                <issueId value="MAGETWO-96223"/>
-            </skip>
         </annotations>
 
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>

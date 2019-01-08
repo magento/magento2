@@ -9,8 +9,12 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
 /**
+ * Related product edit tab
+ *
  * @api
  * @since 100.0.2
+ * @deprecated Not used since related products grid moved to UI components.
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Related\RelatedDataProvider
  */
 class Related extends Extended
 {
