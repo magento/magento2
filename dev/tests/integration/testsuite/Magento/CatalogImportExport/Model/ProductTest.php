@@ -11,6 +11,14 @@ namespace Magento\CatalogImportExport\Model;
 class ProductTest extends AbstractProductExportImportTestCase
 {
     /**
+     * Set up
+     */
+    protected function setUp()
+    {
+        $this->markTestSkipped('MAGETWO-97378');
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function exportImportDataProvider()
