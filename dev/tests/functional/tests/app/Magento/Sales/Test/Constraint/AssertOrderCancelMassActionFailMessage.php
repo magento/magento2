@@ -11,10 +11,10 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderCancelAndSuccessMassActionFailMessage
+ * Class AssertOrderCancelMassActionFailMessage
  * Assert cancel fail message is displayed on order index page
  */
-class AssertOrderCancelMassActionPartialFailMessage extends AbstractConstraint
+class AssertOrderCancelMassActionFailMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked

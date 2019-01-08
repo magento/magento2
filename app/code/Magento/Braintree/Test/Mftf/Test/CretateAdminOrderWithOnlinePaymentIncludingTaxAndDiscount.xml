@@ -11,7 +11,7 @@
     <test name="CreateAdminOrderPayedWithOnlinePaymentIncludingTaxAndDiscount">
         <annotations>
             <features value="Braintree"/>
-            <stories value="Get access to a New Credit Memo Page from Invocie for Order payed with online payment via Admin"/>
+            <stories value="Get access to a New Credit Memo Page from Invoice for Order payed with online payment via Admin"/>
             <title value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <description value="Admin should be able to open a New Credit Memo Page from Invoice Page for Order with tax and discount and payed using online payment method"/>
             <severity value="CRITICAL"/>
@@ -72,9 +72,9 @@
 
         <!-- Create a cart price rule with 10% discount for whole cart -->
         <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
-        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
+        <waitForPageLoad stepKey="waitForMarketing"/>
         <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
-        <waitForPageLoad stepKey="waitForCartPriceRules" time="3"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -83,7 +83,7 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCartRuleLoad" time="3"/>
+        <waitForPageLoad stepKey="waitForCartRuleLoad"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!--Set Taxable Goods for Shipping Tax Class-->
@@ -112,7 +112,7 @@
 
         <!--Submit Order-->
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
-        <waitForPageLoad stepKey="waitForSubmitOrder" time="5"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeOrderSuccessMessage" after="waitForSubmitOrder"/>
 
         <!-- Create New invoice-->
@@ -120,7 +120,7 @@
 
         <!--Get access to Credit Memo page from Invoice page-->
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>
-        <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage" time="5"/>
+        <waitForPageLoad stepKey="waitForLoadNewCreditMemoPage"/>
         <see selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeNewCreditMemo"/>
     </test>
 </tests>

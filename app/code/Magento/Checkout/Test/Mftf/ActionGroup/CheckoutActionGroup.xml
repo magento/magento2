@@ -21,6 +21,15 @@
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
     </actionGroup>
 
+    <!-- Go to checkout from cart -->
+    <actionGroup name="GoToCheckoutFromCartActionGroup">
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+    </actionGroup>
+
     <!-- Guest checkout filling shipping section -->
     <actionGroup name="GuestCheckoutFillingShippingSectionActionGroup">
         <arguments>
@@ -43,6 +52,11 @@
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <actionGroup name="GuestCheckoutFillShippingNoWaitForPaymentActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <remove keyForRemoval="waitForPaymentSectionLoaded"/>
+        <remove keyForRemoval="assertCheckoutPaymentUrl"/>
     </actionGroup>
 
     <!-- Guest checkout filling shipping section without region -->
@@ -90,6 +104,13 @@
         <see userInput="No Payment method available." stepKey="checkMessage"/>
     </actionGroup>
 
+    <actionGroup name="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" extends="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup">
+        <arguments>
+            <argument name="paymentMethod" type="string"/>
+        </arguments>
+        <remove keyForRemoval="checkMessage"/>
+        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" parametrized="true" stepKey="paymentMethodDoesNotAvailable"/>
+    </actionGroup>
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
         <arguments>
