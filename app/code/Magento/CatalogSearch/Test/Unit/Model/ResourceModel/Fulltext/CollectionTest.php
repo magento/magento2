@@ -43,7 +43,7 @@ class CollectionTest extends BaseCollection
     /**
      * @var MockObject
      */
-    private $universalFactory;
+    private $resourceModelPool;
 
     /**
      * @var MockObject
@@ -72,7 +72,7 @@ class CollectionTest extends BaseCollection
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
-        $this->universalFactory = $this->getUniversalFactory();
+        $this->resourceModelPool = $this->getResourceModelPool();
         $this->scopeConfig = $this->getScopeConfig();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
@@ -102,7 +102,7 @@ class CollectionTest extends BaseCollection
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
                 'storeManager' => $this->storeManager,
-                'universalFactory' => $this->universalFactory,
+                'resourceModelPool' => $this->resourceModelPool,
                 'scopeConfig' => $this->scopeConfig,
                 'temporaryStorageFactory' => $temporaryStorageFactory,
                 'productLimitationFactory' => $productLimitationFactoryMock,

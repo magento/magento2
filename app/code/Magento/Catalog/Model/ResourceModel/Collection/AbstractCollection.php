@@ -5,8 +5,11 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
 
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
+
 /**
  * Catalog EAV collection resource abstract model
+ *
  * Implement using different stores for retrieve attribute values
  *
  * @api
@@ -43,6 +46,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -56,7 +60,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -69,7 +74,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
-            $connection
+            $connection,
+            $resourceModelPool
         );
     }
 
@@ -205,10 +211,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
-     * @param \Magento\Framework\DB\Select $select
-     * @param string $table
-     * @param string $type
-     * @return \Magento\Framework\DB\Select
+     * @inheritdoc
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
