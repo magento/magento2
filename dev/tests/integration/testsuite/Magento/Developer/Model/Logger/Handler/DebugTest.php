@@ -7,7 +7,6 @@ namespace Magento\Developer\Model\Logger\Handler;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Config;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -33,6 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *  - Try to log message into debug file
  *  - Assert that log file is exists
  *  - Assert that log file contain logged message
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DebugTest extends \PHPUnit\Framework\TestCase
 {
@@ -71,6 +71,10 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      */
     private $appConfig;
 
+    /**
+     * @inheritdoc
+     * @throws \Exception
+     */
     public function setUp()
     {
         /** @var Filesystem $filesystem */
@@ -90,67 +94,39 @@ class DebugTest extends \PHPUnit\Framework\TestCase
                 'output' => $this->outputMock
             ]
         );
-        $this->configSetCommand = Bootstrap::getObjectManager()->create(ConfigSetCommand::class);
-        $this->appConfig = Bootstrap::getObjectManager()->create(Config::class);
-
-        // Preconditions
-        $this->mode->enableDeveloperMode();
-        $this->enableDebugging();
-        if (file_exists($this->getDebuggerLogPath())) {
-            unlink($this->getDebuggerLogPath());
-        }
     }
 
+    /**
+     * @inheritdoc
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
     public function tearDown()
     {
         $this->etcDirectory->delete('env.php');
         $this->etcDirectory->renameFile('env.base.php', 'env.php');
     }
 
-    private function enableDebugging()
-    {
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $this->inputMock->expects($this->exactly(4))
-            ->method('getOption')
-            ->withConsecutive(
-                [ConfigSetCommand::OPTION_LOCK_ENV],
-                [ConfigSetCommand::OPTION_LOCK_CONFIG],
-                [ConfigSetCommand::OPTION_SCOPE],
-                [ConfigSetCommand::OPTION_SCOPE_CODE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                false,
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                null
-            );
-        $this->inputMock->expects($this->exactly(2))
-            ->method('getArgument')
-            ->withConsecutive([ConfigSetCommand::ARG_PATH], [ConfigSetCommand::ARG_VALUE])
-            ->willReturnOnConsecutiveCalls('dev/debug/debug_logging', 1);
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
-        $this->assertFalse((bool)$this->configSetCommand->run($this->inputMock, $this->outputMock));
-    }
-
+    /**
+     * @throws \Exception
+     */
     public function testDebugInProductionMode()
     {
         $message = 'test message';
 
-        $this->mode->enableProductionModeMinimal();
-        $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
-        $this->assertFalse((bool)$this->appConfig->getValue('dev/debug/debug_logging'));
+        $this->mode->enableDeveloperMode();
+        if (file_exists($this->getDebuggerLogPath())) {
+            unlink($this->getDebuggerLogPath());
+        }
 
-        $this->enableDebugging();
         $this->logger->debug($message);
-
         $this->assertFileExists($this->getDebuggerLogPath());
         $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+
+        unlink($this->getDebuggerLogPath());
+        $this->mode->enableProductionModeMinimal();
+
+        $this->logger->debug($message);
+        $this->assertFileNotExists($this->getDebuggerLogPath());
     }
 
     /**
