@@ -101,12 +101,10 @@ class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
         $this->configMockForProcessTest($path, $scope, $scopeCode);
 
         $config = $this->createMock(Config::class);
-        $this->configFactory->expects($this->once())
-            ->method('create')
+        $this->configFactory->method('create')
             ->with(['scope' => $scope, 'scope_code' => $scopeCode])
             ->willReturn($config);
-        $config->expects($this->once())
-            ->method('setDataByPath')
+        $config->method('setDataByPath')
             ->with($path, $value);
         $config->expects($this->once())
             ->method('save')
