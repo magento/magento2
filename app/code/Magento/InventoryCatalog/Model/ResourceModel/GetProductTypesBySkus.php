@@ -17,6 +17,11 @@ use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 class GetProductTypesBySkus implements GetProductTypesBySkusInterface
 {
     /**
+     * @var array
+     */
+    private $productTypesBySkus = [];
+
+    /**
      * @var ResourceConnection
      */
     private $resource;
@@ -35,24 +40,28 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
      */
     public function execute(array $skus): array
     {
-        $connection = $this->resource->getConnection();
-        $productTable = $this->resource->getTableName('catalog_product_entity');
+        $cacheKey = hash('md5', implode(',', $skus));
 
-        $select = $connection->select()
-            ->from(
-                $productTable,
-                [ProductInterface::SKU, ProductInterface::TYPE_ID]
-            )->where(
-                ProductInterface::SKU . ' IN (?)',
-                $skus
-            );
+        if (!isset($this->productTypesBySkus[$cacheKey])) {
+            $this->productTypesBySkus[$cacheKey] = [];
+            $connection = $this->resource->getConnection();
+            $productTable = $this->resource->getTableName('catalog_product_entity');
 
-        $result = [];
-        foreach ($connection->fetchPairs($select) as $sku => $productType) {
-            $result[$this->getResultKey((string)$sku, $skus)] = (string)$productType;
+            $select = $connection->select()
+                ->from(
+                    $productTable,
+                    [ProductInterface::SKU, ProductInterface::TYPE_ID]
+                )->where(
+                    ProductInterface::SKU . ' IN (?)',
+                    $skus
+                );
+
+            foreach ($connection->fetchPairs($select) as $sku => $productType) {
+                $this->productTypesBySkus[$cacheKey][$this->getResultKey((string)$sku, $skus)] = (string)$productType;
+            }
         }
 
-        return $result;
+        return $this->productTypesBySkus[$cacheKey];
     }
 
     /**
