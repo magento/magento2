@@ -11,6 +11,6 @@
     <section name="AdminMainActionsSection">
         <element name="storeSwitcher" type="text" selector=".store-switcher"/>
         <element name="storeViewDropdown" type="button" selector="#store-change-button"/>
-        <element name="storeViewByName" type="button" selector="//*[@class='store-switcher-store-view  ']/a[contains(text(), '{{storeViewName}}')]" timeout="30" parameterized="true"/>
+        <element name="storeViewByName" type="button" selector="//*[contains(@class,'store-switcher-store-view')]/*[contains(text(), '{{storeViewName}}')]" timeout="30" parameterized="true"/>
     </section>
 </sections>
