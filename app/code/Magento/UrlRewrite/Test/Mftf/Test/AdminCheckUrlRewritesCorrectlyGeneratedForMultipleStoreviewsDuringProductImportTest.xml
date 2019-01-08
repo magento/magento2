@@ -10,12 +10,12 @@
     <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTest">
         <annotations>
             <features value="Url Rewrite"/>
-            <stories value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import"/>
+            <stories value="Url Rewrites for Multiple Storeviews"/>
             <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import"/>
             <description value="Check Url Rewrites Correctly Generated for Multiple Storeviews During Product Import."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-68980"/>
-            <group value="urlRewrite123"/>
+            <group value="urlRewrite"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -24,7 +24,7 @@
                 <argument name="customStore" value="customStoreENNotUnique"/>
             </actionGroup>
             <!-- Create Store View NL -->
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFr">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <createData entity="ApiCategory" stepKey="createCategory">
@@ -38,7 +38,13 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
@@ -93,17 +99,17 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreViewdfdf"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton3"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue('catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-english/productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreViewdfdefef"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-english/productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView2"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton4"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
 
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-dutch/productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreViewdfefdefef"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="category-dutch/productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView3"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton5"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue('category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.targetPathColumnValue(catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
