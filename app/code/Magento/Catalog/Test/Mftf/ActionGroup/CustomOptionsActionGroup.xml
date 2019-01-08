@@ -15,7 +15,6 @@
             <argument name="productOption"/>
             <argument name="productOption2"/>
         </arguments>
-
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
 
@@ -27,12 +26,9 @@
 
         <!-- Add three radio options based on the parameter -->
         <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
-
         <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption.title}}"/>
         <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption.price}}"/>
-
         <click stepKey="clickAddValue2" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
-
         <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}"/>
         <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}"/>
     </actionGroup>
@@ -49,9 +45,5 @@
         <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPrice}}" stepKey="waitForElements"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice}}" userInput="{{option.price}}" stepKey="fillPrice"/>
-        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensions}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
     </actionGroup>
-
 </actionGroups>
