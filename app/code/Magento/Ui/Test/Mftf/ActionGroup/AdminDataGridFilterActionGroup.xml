@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Search grid with keyword search-->
     <actionGroup name="searchAdminDataGridByKeyword">
         <arguments>
@@ -30,6 +30,19 @@
     <!--Clear all filters in grid-->
     <actionGroup name="clearFiltersAdminDataGrid">
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+    </actionGroup>
+
+    <actionGroup name="AdminGridFilterSearchResultsByInput">
+        <arguments>
+            <argument name="inputName" type="string" defaultValue="name"/>
+            <argument name="value" type="string"/>
+        </arguments>
+        <!--Clear all filters in grid if they present-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{value}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('inputName')}}" stepKey="fillCodeField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOnApplyFilters"/>
     </actionGroup>
 </actionGroups>

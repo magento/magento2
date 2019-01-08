@@ -11,6 +11,8 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\Serialize\Serializer\Sensitive as SensitiveSerializer;
+use Magento\Framework\Serialize\Serializer\SensitiveFactory as SensitiveSerializerFactory;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -44,7 +46,7 @@ class System implements ConfigTypeInterface
     private $cache;
 
     /**
-     * @var SerializerInterface
+     * @var SensitiveSerializer
      */
     private $serializer;
 
@@ -79,7 +81,9 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
+     * @param SensitiveSerializerFactory|null $sensitiveFactory
      *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -91,13 +95,21 @@ class System implements ConfigTypeInterface
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null
+        Reader $reader = null,
+        SensitiveSerializerFactory $sensitiveFactory = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
-        $this->serializer = $serializer;
         $this->configType = $configType;
-        $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
+        $this->reader = $reader ?: ObjectManager::getInstance()
+            ->get(Reader::class);
+        $sensitiveFactory = $sensitiveFactory ?? ObjectManager::getInstance()
+                ->get(SensitiveSerializerFactory::class);
+        //Using sensitive serializer because any kind of information may
+        //be stored in configs.
+        $this->serializer = $sensitiveFactory->create(
+            ['serializer' => $serializer]
+        );
     }
 
     /**

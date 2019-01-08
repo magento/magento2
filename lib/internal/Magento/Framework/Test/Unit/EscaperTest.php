@@ -72,9 +72,9 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
         // Exceptions to escaping ranges
         $immune = [',', '.', '_'];
         for ($chr = 0; $chr < 0xFF; $chr++) {
-            if ($chr >= 0x30 && $chr <= 0x39
-                || $chr >= 0x41 && $chr <= 0x5A
-                || $chr >= 0x61 && $chr <= 0x7A
+            if (($chr >= 0x30 && $chr <= 0x39)
+                || ($chr >= 0x41 && $chr <= 0x5A)
+                || ($chr >= 0x61 && $chr <= 0x7A)
             ) {
                 $literal = $this->codepointToUtf8($chr);
                 $this->assertEquals($literal, $this->escaper->escapeJs($literal));
@@ -173,6 +173,11 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
             'text with special characters' => [
                 'data' => '&<>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
                 'expected' => '&amp;&lt;&gt;&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;'
+            ],
+            'text with special characters and allowed tag' => [
+                'data' => '&<br/>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
+                'expected' => '&amp;<br>&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;',
+                'allowedTags' => ['br'],
             ],
             'text with multiple allowed tags, includes self closing tag' => [
                 'data' => '<span>some text in tags<br /></span>',

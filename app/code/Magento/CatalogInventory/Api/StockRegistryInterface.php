@@ -72,7 +72,7 @@ interface StockRegistryInterface
      * @param float $qty
      * @param int $currentPage
      * @param int $pageSize
-     * @return \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface
+     * @return \Magento\CatalogInventory\Api\Data\StockItemCollectionInterface
      */
     public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0);
 

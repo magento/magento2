@@ -54,23 +54,23 @@
         <!--  Step 3: Go to Shopping Cart -->
         <actionGroup ref="StorefrontViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
-        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
-        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
+        <conditionalClick  selector="{{StorefrontCheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{StorefrontCheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
+        <click selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-CA-*-Rate 1 (8.25%)" stepKey="checkRateCA" />
         <!--  Step 5: Change Data -->
-        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
-        <selectOption selector="{{CheckoutCartSummarySection.region}}" userInput="Aargau" stepKey="selectAargauRegion"/>
-        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="Switzerland" stepKey="selectSwitzerlandCountry"/>
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="Aargau" stepKey="selectAargauRegion"/>
+        <fillField selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="1234" stepKey="inputPostCode"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmount" />
         <!--  Step 6: Change Data -->
-        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
-        <selectOption selector="{{CheckoutCartSummarySection.region}}" userInput="New York" stepKey="selectNewYorkRegion"/>
-        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
-        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary2" />
-        <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary2"/>
-        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.35" stepKey="checkTaxAmountNY" />
-        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUnitedStatesCountry"/>
+        <selectOption selector="{{StorefrontCheckoutCartSummarySection.region}}" userInput="New York" stepKey="selectNewYorkRegion"/>
+        <fillField selector="{{StorefrontCheckoutCartSummarySection.postcode}}" userInput="12345" stepKey="inputPostCode2"/>
+        <scrollTo selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary2" />
+        <click selector="{{StorefrontCheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary2"/>
+        <see selector="{{StorefrontCheckoutCartSummarySection.taxAmount}}" userInput="$3.35" stepKey="checkTaxAmountNY" />
+        <see selector="{{StorefrontCheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />
     </test>
 </tests>

@@ -203,11 +203,12 @@ class TotalsCollector
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
     {
+        $quoteItems = $quote->getAllVisibleItems();
         $quote->setItemsCount(0);
         $quote->setItemsQty(0);
         $quote->setVirtualItemsQty(0);
 
-        foreach ($quote->getAllVisibleItems() as $item) {
+        foreach ($quoteItems as $item) {
             if ($item->getParentItem()) {
                 continue;
             }

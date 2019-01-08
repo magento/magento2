@@ -18,7 +18,7 @@ define([
     return Abstract.extend({
         defaults: {
             elementSelector: 'textarea',
-            value: '',
+            suffixRegExpPattern: '\\${ \\$.wysiwygUniqueSuffix }',
             $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
@@ -50,6 +50,25 @@ define([
             }.bind(this));
 
             return this;
+        },
+
+        /** @inheritdoc */
+        initConfig: function (config) {
+            var pattern = config.suffixRegExpPattern || this.constructor.defaults.suffixRegExpPattern;
+
+            config.content = config.content.replace(new RegExp(pattern, 'g'), this.getUniqueSuffix(config));
+            this._super();
+
+            return this;
+        },
+
+        /**
+         * Build unique id based on name, underscore separated.
+         *
+         * @param {Object} config
+         */
+        getUniqueSuffix: function (config) {
+            return config.name.replace(/(\.|-)/g, '_');
         },
 
         /**

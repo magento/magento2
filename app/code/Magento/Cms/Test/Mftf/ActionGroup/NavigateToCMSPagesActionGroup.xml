@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToCreatedCMSBlockPage">
+        <arguments>
+            <argument name="cmsBlock"/>
+        </arguments>
+        <amOnPage url="{{AdminCmsBlockGridPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickToResetFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{cmsBlock.identifier}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('identifier')}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminDataGridTableSection.rowActionSelect}}" stepKey="clickSelectCreatedCMSBlock" />
+        <click selector="{{AdminDataGridTableSection.rowEditAction}}" stepKey="navigateToCreatedCMSBlock" />
+    </actionGroup>
+</actionGroups>

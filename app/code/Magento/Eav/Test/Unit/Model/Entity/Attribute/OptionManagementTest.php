@@ -58,13 +58,13 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
-                'new_option' => [
+                'id_new_option' => [
                     0 => 'optionLabel',
                     42 => 'labelLabel',
                 ],
             ],
             'order' => [
-                'new_option' => 'optionSortOrder',
+                'id_new_option' => 'optionSortOrder',
             ],
             ];
 
@@ -77,7 +77,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(42);
         $labelMock->expects($this->once())->method('getLabel')->willReturn('labelLabel');
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
-        $attributeMock->expects($this->once())->method('setDefault')->with(['new_option']);
+        $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
         $this->assertTrue($this->model->add($entityType, $attributeCode, $optionMock));
@@ -166,13 +166,13 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
-                'new_option' => [
+                'id_new_option' => [
                     0 => 'optionLabel',
                     42 => 'labelLabel',
                 ],
             ],
                 'order' => [
-                    'new_option' => 'optionSortOrder',
+                    'id_new_option' => 'optionSortOrder',
                 ],
             ];
 
@@ -185,7 +185,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(42);
         $labelMock->expects($this->once())->method('getLabel')->willReturn('labelLabel');
         $optionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
-        $attributeMock->expects($this->once())->method('setDefault')->with(['new_option']);
+        $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock)
             ->willThrowException(new \Exception());
