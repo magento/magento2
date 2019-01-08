@@ -24,7 +24,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.6
  * @see \Magento\Payment\Model\Method\Adapter
- * @see http://devdocs.magento.com/guides/v2.1/payments-integrations/payment-gateway/payment-gateway-intro.html
+ * @see https://devdocs.magento.com/guides/v2.1/payments-integrations/payment-gateway/payment-gateway-intro.html
  * @since 100.0.2
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -258,7 +258,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      * @deprecated 100.2.0
      */
     public function setStore($storeId)
@@ -267,7 +267,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      * @deprecated 100.2.0
      */
     public function getStore()
@@ -360,7 +360,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * Check void availability
+     * Check void availability.
+     *
      * @return bool
      * @internal param \Magento\Framework\DataObject $payment
      * @api
@@ -372,8 +373,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * Using internal pages for input payment data
-     * Can be used in admin
+     * Using internal pages for input payment data.
+     *
+     * Can be used in admin.
      *
      * @return bool
      * @deprecated 100.2.0
@@ -715,7 +717,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * Whether this method can accept or deny payment
+     * Whether this method can accept or deny payment.
+     *
      * @return bool
      * @api
      * @deprecated 100.2.0
@@ -867,8 +870,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * Method that will be executed instead of authorize or capture
-     * if flag isInitializeNeeded set to true
+     * Method that will be executed instead of authorize or capture if flag isInitializeNeeded set to true.
      *
      * @param string $paymentAction
      * @param object $stateObject
@@ -884,8 +886,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * Get config payment action url
-     * Used to universalize payment actions when processing payment place
+     * Get config payment action url.
+     *
+     * Used to universalize payment actions when processing payment place.
      *
      * @return string
      * @api
