@@ -95,8 +95,9 @@ class OnAuthorization
     }
 
     /**
+     * Place order or redirect on Paypal review page
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -106,16 +107,13 @@ class OnAuthorization
         $payerId = $params['payerId'];
         $tokenId = $params['paymentToken'];
         $customerId = $params['customerId'];
-        /** @var \Magento\Quote\Api\Data\CartInterface $quote */
-        //@todo add logic  or separate controller to load quote for quest
         try {
+            $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
 
-        $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
-
-        $responseContent = [
-            'success' => true,
-            'error_message' => '',
-        ];
+            $responseContent = [
+                'success' => true,
+                'error_message' => '',
+            ];
 
             //populate checkout object with new data
             $this->_initCheckout($quote);
