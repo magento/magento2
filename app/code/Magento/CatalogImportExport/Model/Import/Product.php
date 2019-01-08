@@ -8,11 +8,11 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -1658,7 +1658,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!empty($rowData[self::URL_KEY])) {
                     // If url_key column and its value were in the CSV file
                     $rowData[self::URL_KEY] = $urlKey;
-                } else if ($this->isNeedToChangeUrlKey($rowData)) {
+                } elseif ($this->isNeedToChangeUrlKey($rowData)) {
                     // If url_key column was empty or even not declared in the CSV file but by the rules it is need to
                     // be setteed. In case when url_key is generating from name column we have to ensure that the bunch
                     // of products will pass for the event with url_key column.
@@ -1670,7 +1670,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (null === $rowSku) {
                     $this->getErrorAggregator()->addRowToSkip($rowNum);
                     continue;
-                } elseif (self::SCOPE_STORE == $rowScope) {
+                }
+
+                if (self::SCOPE_STORE == $rowScope) {
                     // set necessary data from SCOPE_DEFAULT row
                     $rowData[self::COL_TYPE] = $this->skuProcessor->getNewSku($rowSku)['type_id'];
                     $rowData['attribute_set_id'] = $this->skuProcessor->getNewSku($rowSku)['attr_set_id'];
@@ -2495,12 +2497,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         } else {
             // validate new product type and attribute set
-            if (!isset($rowData[self::COL_TYPE]) || !isset($this->_productTypeModels[$rowData[self::COL_TYPE]])) {
-                $this->addRowError(ValidatorInterface::ERROR_INVALID_TYPE, $rowNum);
-            } elseif (!isset($rowData[self::COL_ATTR_SET])
-                || !isset($this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]])
+            if (!isset($rowData[self::COL_TYPE], $this->_productTypeModels[$rowData[self::COL_TYPE]])) {
+                $this->addRowError(
+                    ValidatorInterface::ERROR_INVALID_TYPE,
+                    $rowNum,
+                    null,
+                    null,
+                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                );
+                $this->getErrorAggregator()->addRowToSkip($rowNum);
+            } elseif (!isset($rowData[self::COL_ATTR_SET], $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]])
             ) {
-                $this->addRowError(ValidatorInterface::ERROR_INVALID_ATTR_SET, $rowNum);
+                $this->addRowError(
+                    ValidatorInterface::ERROR_INVALID_ATTR_SET,
+                    $rowNum,
+                    null,
+                    null,
+                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                );
+                $this->getErrorAggregator()->addRowToSkip($rowNum);
             } elseif ($this->skuProcessor->getNewSku($sku) === null) {
                 $this->skuProcessor->addNewSku(
                     $sku,
