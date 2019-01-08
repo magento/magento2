@@ -25,7 +25,7 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="checkout-agreements-block">
+        <div class="checkout-agreements-block" data-bind="attr: {id: getAgreementId()}">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->

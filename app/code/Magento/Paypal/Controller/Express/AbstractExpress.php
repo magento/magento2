@@ -135,9 +135,9 @@ abstract class AbstractExpress extends AppAction implements
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _initCheckout()
+    protected function _initCheckout(\Magento\Quote\Model\Quote $quoteObject = null)
     {
-        $quote = $this->_getQuote();
+        $quote = $quoteObject ? $quoteObject : $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Express Checkout.'));

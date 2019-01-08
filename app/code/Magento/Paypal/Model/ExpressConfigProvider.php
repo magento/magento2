@@ -133,7 +133,8 @@ class ExpressConfigProvider implements ConfigProviderInterface
                     'allowedFunding' => [],
                     'disallowedFunding' => $this->getDisallowedFunding(),
                     'styles' => $this->getButtonStyles(),
-                    'startUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData')
+                    'startUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
+                    'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization')
                 ],
             ];
         }

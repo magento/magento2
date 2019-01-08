@@ -654,8 +654,6 @@ class Config extends AbstractConfig
                 }
                 break;
             case self::METHOD_WPP_BML:
-                //add logic with disallowed funding
-
             case self::METHOD_WPS_BML:
                 // check for express payments dependence
                 if (!$this->isMethodActive(self::METHOD_WPP_EXPRESS)

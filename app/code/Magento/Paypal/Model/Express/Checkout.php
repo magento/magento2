@@ -617,7 +617,7 @@ class Checkout
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function returnFromPaypal($token)
+    public function returnFromPaypal($token, $payerData = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -693,7 +693,8 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
-        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $this->_getApi()->getPayerId())
+        $payerId = $payerData ? $payerData : $this->_getApi()->getPayerId();
+        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);
         $quote->collectTotals();
         $this->quoteRepository->save($quote);

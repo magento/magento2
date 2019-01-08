@@ -5,7 +5,6 @@
 define(
     [
         'underscore',
-        'jquery',
         'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
         'Magento_Paypal/js/action/set-payment-method',
         'Magento_Checkout/js/model/payment/additional-validators',
@@ -16,7 +15,6 @@ define(
     ],
     function (
         _,
-        $,
         Component,
         setPaymentMethodAction,
         additionalValidators,
@@ -48,6 +46,8 @@ define(
                 this.clientConfig.customerId = window.customerData.id;
                 this.clientConfig.button = 0;
                 this.clientConfig.merchantId = this.merchantId;
+                this.clientConfig.validator = additionalValidators;
+                this.clientConfig.rendererComponent = this;
                 checkoutSmartButtons(this.clientConfig, '#' + this.getButtonId());
             },
 
@@ -56,7 +56,32 @@ define(
              */
             getButtonId: function () {
                 return this.inContextId;
-            }
+            },
+
+            /**
+             * @returns {String}
+             */
+            getAgreementId: function () {
+                return this.inContextId + '-agreement';
+            },
+
+            /** Redirect to paypal */
+            continueToPayPal: function () {
+                //update payment method information if additional data was changed
+                if (additionalValidators.validate()) {
+                    this.selectPaymentMethod();
+                    setPaymentMethodAction(this.messageContainer).done(
+                        function () {
+                            customerData.invalidate(['cart']);
+                            return true;
+                        }
+                    );
+
+                    return false;
+                }
+            },
+
+
         });
     }
 );
