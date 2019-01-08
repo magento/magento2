@@ -51,6 +51,7 @@ class Webapi
      * @param \Magento\Webapi\Model\Cache\Type\Webapi $subject
      * @param string $identifier
      * @return null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeLoad(\Magento\Webapi\Model\Cache\Type\Webapi $subject, $identifier)
     {
@@ -65,14 +66,20 @@ class Webapi
      * Change identifier in case if Async request before cache save
      *
      * @param \Magento\Webapi\Model\Cache\Type\Webapi $subject
-     * @param $data
+     * @param string $data
      * @param string $identifier
      * @param array $tags
-     * @param null $lifeTime
+     * @param int|bool|null $lifeTime
      * @return array|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(\Magento\Webapi\Model\Cache\Type\Webapi $subject, $data, $identifier, array $tags = [], $lifeTime = null)
-    {
+    public function beforeSave(
+        \Magento\Webapi\Model\Cache\Type\Webapi $subject,
+        $data,
+        $identifier,
+        array $tags = [],
+        $lifeTime = null
+    ) {
         if ($this->asynchronousSchemaRequestProcessor->canProcess($this->request)
             && $identifier === \Magento\Webapi\Model\ServiceMetadata::ROUTES_CONFIG_CACHE_ID) {
             return [$data, self::ASYNC_ROUTES_CONFIG_CACHE_ID, $tags, $lifeTime];
@@ -86,6 +93,7 @@ class Webapi
      * @param \Magento\Webapi\Model\Cache\Type\Webapi $subject
      * @param string $identifier
      * @return null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeRemove(\Magento\Webapi\Model\Cache\Type\Webapi $subject, $identifier)
     {
