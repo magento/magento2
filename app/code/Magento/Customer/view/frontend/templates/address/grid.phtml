@@ -36,7 +36,7 @@ $customerAddressView = $block->getData('customer_address');
                         <tr>
                             <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= $block->escapeHtml($address->getFirstname()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= $block->escapeHtml($address->getLastname()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->escapeHtml($block->getStreetAddress($address->getStreet())) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->escapeHtml($block->getStreetAddress($address)) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= $block->escapeHtml($address->getCity()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= /* @escapeNotVerified */ $block->getCountryByCode($address->getCountryId()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion()->getRegion() ?></td>

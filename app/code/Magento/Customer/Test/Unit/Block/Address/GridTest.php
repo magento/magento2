@@ -173,7 +173,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $street = ['Line 1', 'Line 2'];
         $expectedAddress = 'Line 1, Line 2';
-        $this->assertEquals($expectedAddress, $this->gridBlock->getStreetAddress($street));
+        $address = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address->expects($this->atLeastOnce())->method('getStreet')->willReturn($street);
+        $this->assertEquals($expectedAddress, $this->gridBlock->getStreetAddress($address));
     }
 
     /**

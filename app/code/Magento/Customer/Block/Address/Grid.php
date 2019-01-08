@@ -106,7 +106,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Get current additional customer addresses
      *
-     * Will return array of address interfaces if customer have additional addresses and false in other case.
+     * Return array of address interfaces if customer has additional addresses and false in other cases
      *
      * @return \Magento\Customer\Api\Data\AddressInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -145,11 +145,12 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Get one string street address from "two fields" array or just returns string if it was passed in parameters
      *
-     * @param string|array $street
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
      */
-    public function getStreetAddress($street): string
+    public function getStreetAddress(\Magento\Customer\Api\Data\AddressInterface $address): string
     {
+        $street = $address->getStreet();
         if (is_array($street)) {
             $street = implode(', ', $street);
         }
@@ -174,7 +175,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Get default billing address
      *
-     * Return address string if address found and null of not
+     * Return address string if address found and null if not
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -189,7 +190,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     /**
      * Get default shipping address
      *
-     * Return address string if address found and null of not
+     * Return address string if address found and null if not
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
