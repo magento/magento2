@@ -15,9 +15,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Update account information
+ * Update customer data
  */
-class UpdateAccountInformation
+class UpdateCustomerData
 {
     /**
      * @var CustomerRepositoryInterface
