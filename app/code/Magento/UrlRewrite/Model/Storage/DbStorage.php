@@ -87,7 +87,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindAllByData(array $data)
     {
@@ -95,7 +95,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindOneByData(array $data)
     {
@@ -161,26 +161,22 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
-        /** @var UrlRewrite $url */
-        foreach ($urls as $url) {
-            $oldUrlsSelect->orWhere(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_TYPE
-                ) . ' = ?',
-                $url->getEntityType()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::ENTITY_ID
-                ) . ' = ?',
-                $url->getEntityId()
-            );
-            $oldUrlsSelect->where(
-                $this->connection->quoteIdentifier(
-                    UrlRewrite::STORE_ID
-                ) . ' = ?',
-                $url->getStoreId()
-            );
+
+        $uniqueEntities = $this->prepareUniqueEntities($urls);
+        foreach ($uniqueEntities as $storeId => $entityTypes) {
+            foreach ($entityTypes as $entityType => $entities) {
+                $oldUrlsSelect->orWhere(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::STORE_ID
+                    ) . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_ID
+                    ) . ' IN (' . $this->connection->quote($entities, 'INTEGER') . ')' .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_TYPE
+                    ) . ' = ' . $this->connection->quote($entityType)
+                );
+            }
         }
 
         // prevent query locking in a case when nothing to delete
@@ -196,6 +192,28 @@ class DbStorage extends AbstractStorage
                 )
             );
         }
+    }
+
+    /**
+     * Prepare array with unique entities
+     *
+     * @param UrlRewrite[] $urls
+     * @return array
+     */
+    private function prepareUniqueEntities(array $urls): array
+    {
+        $uniqueEntities = [];
+        /** @var UrlRewrite $url */
+        foreach ($urls as $url) {
+            $entityIds = (!empty($uniqueEntities[$url->getStoreId()][$url->getEntityType()])) ?
+                $uniqueEntities[$url->getStoreId()][$url->getEntityType()] : [];
+
+            if (!\in_array($url->getEntityId(), $entityIds)) {
+                $entityIds[] = $url->getEntityId();
+            }
+            $uniqueEntities[$url->getStoreId()][$url->getEntityType()] = $entityIds;
+        }
+        return $uniqueEntities;
     }
 
     /**
@@ -289,7 +307,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByData(array $data)
     {
