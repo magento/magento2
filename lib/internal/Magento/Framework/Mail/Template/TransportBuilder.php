@@ -17,6 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
+ * TransportBuilder
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -175,13 +177,30 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address for the first store only.
+     * new function setFromByStore introduced to allow setting of from address
+     * based on store.
+     * @see setFromByStore()
+     *
      * @param string|array $from
      * @return $this
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        return $this->setFromByStore($from, null);
+    }
+
+    /**
+     * Set mail from address by store
+     *
+     * @param string|array $from
+     * @param string|int $store
+     * @return $this
+     */
+    public function setFromByStore($from, $store = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $store);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
