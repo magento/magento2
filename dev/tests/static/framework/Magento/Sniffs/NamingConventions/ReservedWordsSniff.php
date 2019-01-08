@@ -8,6 +8,9 @@ namespace Magento\Sniffs\NamingConventions;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
+/**
+ * Validates that class name is not reserved word.
+ */
 class ReservedWordsSniff implements Sniff
 {
     /**
@@ -35,7 +38,7 @@ class ReservedWordsSniff implements Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -94,7 +97,7 @@ class ReservedWordsSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $sourceFile, $stackPtr)
     {
