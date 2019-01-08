@@ -108,7 +108,8 @@ class Engine implements EngineInterface
         ) {
             $result = $value;
         } elseif ($this->isTermFilterableAttribute($attribute)
-            || ($attribute->getIsSearchable() && in_array($attribute->getFrontendInput(), ['select', 'multiselect']))
+                  || ($attribute->getIsSearchable()
+                      && in_array($attribute->getFrontendInput(), ['select', 'multiselect']))
         ) {
             $result = '';
         }
