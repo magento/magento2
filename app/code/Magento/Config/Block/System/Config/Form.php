@@ -162,18 +162,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated 100.1.2
-     * @return SettingChecker
-     */
-    private function getSettingChecker()
-    {
-        if ($this->settingChecker === null) {
-            $this->settingChecker = ObjectManager::getInstance()->get(SettingChecker::class);
-        }
-        return $this->settingChecker;
-    }
-
-    /**
      * Initialize objects required to render config form
      *
      * @return $this
@@ -543,7 +531,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Form|\Magento\Framework\View\Element\AbstractBlock
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
@@ -720,6 +708,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSectionCode()
     {
@@ -731,6 +720,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getWebsiteCode()
     {
@@ -742,6 +732,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getStoreCode()
     {
@@ -801,7 +792,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Check Path is Readonly
-     * 
+     *
      * @param \Magento\Config\Model\Config\Structure\Element\Field $field
      * @param string $path
      * @return boolean
@@ -809,7 +800,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private function isReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
     {
         $isReadOnly = $this->settingChecker->isReadOnly(
-            $path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            $path,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         if (!$isReadOnly) {
             $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
