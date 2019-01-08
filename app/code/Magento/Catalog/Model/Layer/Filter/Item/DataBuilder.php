@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Model\Layer\Filter\Item;
+
 /**
  * Item Data Builder
  */
-namespace Magento\Catalog\Model\Layer\Filter\Item;
-
 class DataBuilder
 {
     /**
