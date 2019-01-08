@@ -80,10 +80,11 @@ class Mime
      * Get mime type of a file
      *
      * @param string $file
+     * @param string $default
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getMimeType($file)
+    public function getMimeType($file, $default = 'application/octet-stream')
     {
         if (!file_exists($file)) {
             throw new \InvalidArgumentException("File '$file' doesn't exist");
@@ -99,7 +100,7 @@ class Mime
         if (null === $result && isset($this->mimeTypes[$extension])) {
             $result = $this->mimeTypes[$extension];
         } elseif (null === $result) {
-            $result = 'application/octet-stream';
+            $result = $default;
         }
 
         return $result;
