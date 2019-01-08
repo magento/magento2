@@ -218,7 +218,7 @@ class System implements ConfigTypeInterface
         $cachedData = $dataLoader(); //optimistic read
 
         while ($cachedData === false && $this->locker->isLocked(self::$lockName)) {
-            usleep(200000);
+            usleep(100000);
             $cachedData = $dataLoader();
         }
 
@@ -239,7 +239,7 @@ class System implements ConfigTypeInterface
             }
 
             if ($cachedData === false) {
-                usleep(200000);
+                usleep(100000);
                 $cachedData = $dataLoader();
             }
         }

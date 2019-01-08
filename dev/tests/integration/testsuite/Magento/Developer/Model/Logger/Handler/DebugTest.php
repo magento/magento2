@@ -5,8 +5,6 @@
  */
 namespace Magento\Developer\Model\Logger\Handler;
 
-use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -57,19 +55,9 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     private $outputMock;
 
     /**
-     * @var ConfigSetCommand
-     */
-    private $configSetCommand;
-
-    /**
      * @var WriteInterface
      */
     private $etcDirectory;
-
-    /**
-     * @var Config
-     */
-    private $appConfig;
 
     /**
      * @inheritdoc
