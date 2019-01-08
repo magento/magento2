@@ -77,8 +77,6 @@
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <!--Select default store view (in multi-store website)-->
-        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeForOrder(_defaultStore.name)}}" visible="true" stepKey="chooseStoreView" />
         <!--Add product to order-->
         <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>

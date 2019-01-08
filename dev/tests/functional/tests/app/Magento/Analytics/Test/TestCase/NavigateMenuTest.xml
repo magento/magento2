@@ -10,7 +10,7 @@
         <variation name="NavigateMenuTestBIEssentials" summary="Navigate through BI Essentials admin menu to Sign Up page" ticketId="MAGETWO-63700">
             <data name="menuItem" xsi:type="string">Reports > BI Essentials</data>
             <data name="waitMenuItemNotVisible" xsi:type="boolean">false</data>
-            <data name="businessIntelligenceLink" xsi:type="string">https://dashboard.rjmetrics.com/v2/magento/signup</data>
+            <data name="businessIntelligenceLink" xsi:type="string">https://account.magento.com/onboarding/steps/view/step/gmv/</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertBIEssentialsLink" />
         </variation>
         <variation name="NavigateMenuTestAdvancedReporting" summary="Navigate through Advanced Reporting admin menu to BI Reports page" ticketId="MAGETWO-65748">
