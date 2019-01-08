@@ -8,23 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Controller\Express;
 
-use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Framework\Controller\ResultFactory;
 
 class OnAuthorization
     extends \Magento\Paypal\Controller\Express\AbstractExpress
     implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
-    /**
-     * @var \Magento\Checkout\Api\AgreementsValidatorInterface
-     */
-    protected $agreementsValidator;
-
-    /**
-     * @var \Magento\Sales\Api\PaymentFailuresInterface
-     */
-    private $paymentFailures;
-
     /**
      * Config mode type
      *
@@ -47,19 +36,9 @@ class OnAuthorization
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 
     /**
-     * @var \Magento\Checkout\Api\PaymentInformationManagementInterface
-     */
-    private $paymentInformationService;
-
-    /**
      * @var \Magento\Quote\Model\Quote\PaymentFactory
      */
     protected $cartRepository;
-
-    /**
-     * @var \Magento\Quote\Api\CartManagementInterface
-     */
-    private $quoteManagement;
 
     /**
      * Url Builder
@@ -67,6 +46,11 @@ class OnAuthorization
      * @var \Magento\Framework\UrlInterface
      */
     private $urlBuilder;
+
+    /**
+     * @var \Magento\Quote\Api\GuestCartRepositoryInterface
+     */
+    private $guestCartRepository;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -91,11 +75,9 @@ class OnAuthorization
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null,
-        \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationService,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
-        \Magento\Framework\UrlInterface $urlBuilder
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
     ) {
         parent::__construct(
             $context,
@@ -107,15 +89,9 @@ class OnAuthorization
             $urlHelper,
             $customerUrl
         );
-
-        $this->agreementsValidator = $agreementValidator;
-        $this->paymentFailures = $paymentFailures ? : $this->_objectManager->get(
-            \Magento\Sales\Api\PaymentFailuresInterface::class
-        );
-        $this->paymentInformationService = $paymentInformationService;
         $this->cartRepository = $cartRepository;
-        $this->quoteManagement = $quoteManagement;
         $this->urlBuilder = $urlBuilder;
+        $this->guestCartRepository = $guestCartRepository;
     }
 
     /**
@@ -129,30 +105,30 @@ class OnAuthorization
         $quoteId = $params['quoteId'];
         $payerId = $params['payerId'];
         $tokenId = $params['paymentToken'];
+        $customerId = $params['customerId'];
         /** @var \Magento\Quote\Api\Data\CartInterface $quote */
         //@todo add logic  or separate controller to load quote for quest
-        $quote = $this->cartRepository->get($quoteId);
+        try {
+
+        $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
 
         $responseContent = [
             'success' => true,
             'error_message' => '',
         ];
 
-        try {
             //populate checkout object with new data
             $this->_initCheckout($quote);
+            /**  Populate quote  with information about billing and shipping addresses*/
             $this->_checkout->returnFromPaypal($tokenId, $payerId);
             if ($this->_checkout->canSkipOrderReviewStep()) {
-                //$this->_checkout->place($tokenId);
-                /**  Populate quote  with information about billing and shipping addresses*/
-                $this->_checkout->returnFromPaypal($tokenId);
-                /** we are using quoteManagement::submit here to prevent billing address/shipping validation if we return from PayPal  */
-                $order = $this->quoteManagement->submit($quote);
+                $this->_checkout->place($tokenId);
+                $order = $this->_checkout->getOrder();
                 // prepare session to success or cancellation page
                 $this->_getCheckoutSession()->clearHelperData();
 
                 // "last successful quote"
-                $this->_getCheckoutSession()->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
+                $this->_getCheckoutSession()->setLastQuoteId($quote->getId())->setLastSuccessQuoteId($quote->getId());
 
                 if ($order) {
                     $this->_getCheckoutSession()->setLastOrderId($order->getId())
@@ -171,7 +147,7 @@ class OnAuthorization
 
             } else {
                 $responseContent['redirectUrl'] = $this->urlBuilder->getUrl('paypal/express/review');
-                $this->_checkoutSession->setQuoteId($quoteId);
+                $this->_checkoutSession->setQuoteId($quote->getId());
 
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -184,6 +160,5 @@ class OnAuthorization
         }
 
         return $controllerResult->setData($responseContent);
-
     }
 }

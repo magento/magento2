@@ -108,7 +108,7 @@ define([
                         payerId: data.payerID,
                         quoteId: clientConfig.quoteId,
                         method: clientConfig.payment.method,
-                        customerId: clientConfig.customerId,
+                        customerId: clientConfig.customerId || '',
                         form_key: clientConfig.formKey
                         // add email for guest customer
                         /*email:*/
