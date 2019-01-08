@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -322,7 +321,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      * @since 100.0.7
      */
     public function afterDelete()
