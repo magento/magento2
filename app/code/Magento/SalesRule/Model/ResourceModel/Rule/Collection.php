@@ -209,11 +209,16 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $orWhereCondition = implode(' OR ', $orWhereConditions);
                 $andWhereCondition = implode(' AND ', $andWhereConditions);
 
+                $selectClone = clone $select;
+
                 $select->where(
-                    $noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')',
+                    //$noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')',
+                    '(' . $orWhereCondition . ') AND ' . $andWhereCondition,
                     null,
                     Select::TYPE_CONDITION
                 );
+                $selectClone->where($noCouponWhereCondition, null, Select::TYPE_CONDITION);
+                $select = $this->getConnection()->select()->union([$select, $selectClone]);
             } else {
                 $this->addFieldToFilter(
                     'main_table.coupon_type',
