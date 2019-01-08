@@ -9,7 +9,6 @@ namespace Magento\EavGraphQl\Model\Resolver\Query;
 
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
@@ -37,7 +36,7 @@ class Type
     /**
      * @param CustomAttributeTypeLocatorInterface $typeLocator
      * @param TypeProcessor $typeProcessor
-     * @param $customTypes
+     * @param array $customTypes
      */
     public function __construct(
         CustomAttributeTypeLocatorInterface $typeLocator,
@@ -71,12 +70,7 @@ class Type
             try {
                 $type = $this->typeProcessor->translateTypeName($type);
             } catch (\InvalidArgumentException $exception) {
-                throw new GraphQlInputException(
-                    __('Type %1 has no internal representation declared.', [$type]),
-                    null,
-                    0,
-                    false
-                );
+                throw new GraphQlInputException(__('Cannot resolve EAV type'));
             }
         } else {
             $type = $type === 'double' ? 'float' : $type;

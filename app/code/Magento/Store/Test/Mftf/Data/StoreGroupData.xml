@@ -23,7 +23,7 @@
     </entity>
     <entity name="staticStoreGroup" type="group">
         <data key="name">NewStore</data>
-        <data key="code">Base12</data>
+        <data key="code" unique="suffix">Base12</data>
         <data key="root_category_id">2</data>
         <data key="website_id">1</data>
     </entity>
