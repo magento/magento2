@@ -83,10 +83,15 @@ define([
 
                 return paypal.request.post(clientConfig.startUrl, params)
                     .then(function (res) {
-                        //add logic to process negative cases
-                        // 3. Return res.id from the response
-                        return res.token;
-
+                        if (res.success) {
+                            //add logic to process negative cases
+                            // 3. Return res.id from the response
+                            return res.token;
+                        } else {
+                            messageList.addErrorMessage({
+                                message: res.error_message
+                            });
+                        }
                     })
                     .catch(function (err) {
                         throw err;

@@ -4,24 +4,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Controller\Express;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Webapi\Exception;
 use Magento\Paypal\Model\Express\Checkout;
-use Magento\Framework\App\ObjectManager;
 
-class GetTokenData extends GetToken
+class GetTokenData extends AbstractExpress implements HttpGetActionInterface
 {
+    /**
+     * Config mode type
+     *
+     * @var string
+     */
+    protected $_configType = \Magento\Paypal\Model\Config::class;
+
+    /**
+     * Config method type
+     *
+     * @var string
+     */
+    protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
+
+    /**
+     * Checkout mode type
+     *
+     * @var string
+     */
+    protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
     private $quoteRepository;
+
+    /**
+     * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
+     */
     private $customerRepository;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     */
     private $quoteIdMaskFactory;
+
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
@@ -31,7 +66,10 @@ class GetTokenData extends GetToken
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository
+     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -42,15 +80,12 @@ class GetTokenData extends GetToken
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
-        \Psr\Log\LoggerInterface $logger = null,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository = null,
-        \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository = null,
-        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory = null
-    ) {
-        $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        $this->quoteRepository = $quoteRepository ?: ObjectManager::getInstance()->get(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()->get(\Magento\Customer\Model\ResourceModel\CustomerRepository::class);
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory ?: ObjectManager::getInstance()->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+    )
+    {
         parent::__construct(
             $context,
             $customerSession,
@@ -61,129 +96,95 @@ class GetTokenData extends GetToken
             $urlHelper,
             $customerUrl
         );
+
+        $this->logger = $logger;
+        $this->quoteRepository = $quoteRepository;
+        $this->customerRepository = $customerRepository;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
+
     /**
      * @return \Magento\Framework\App\ResponseInterface|ResultInterface
      */
     public function execute()
     {
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $responseContent = [
+            'success' => true,
+            'error_message' => '',
+        ];
+
         try {
             $token = $this->getToken();
             if ($token === null) {
                 $token = false;
             }
             $this->_initToken($token);
-            $controllerResult->setData(['token' => $token]);
+
+            $responseContent['token'] = $token;
         } catch (LocalizedException $exception) {
             $this->logger->critical($exception);
-            $controllerResult->setData([
-                'message' => [
-                    'text' => $exception->getMessage(),
-                    'type' => 'error'
-                ]
-            ]);
+
+            $responseContent['success'] = false;
+            $responseContent['error_message'] = $exception->getMessage();
         } catch (\Exception $exception) {
-            $this->messageManager->addExceptionMessage(
-                $exception,
-                __('We can\'t start Express Checkout.')
-            );
-            return $this->getErrorResponse($controllerResult);
+            $this->logger->critical($exception);
+
+            $responseContent['success'] = false;
+            $responseContent['error_message'] = __('Sorry, but something went wrong');
         }
-        return $controllerResult;
+
+        return $controllerResult->setData($responseContent);
     }
+
     /**
+     * Get paypal token
+     *
      * @return string|null
      * @throws LocalizedException
      */
-//    protected function getToken()
-//    {
-//        $quoteId = $this->getRequest()->getParam('quote_id');
-//        $customerId = $this->getRequest()->getParam('customer_id');
-//        $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON) == 1;
-//
-//        if(!$customerId) {
-//            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'masked_id');
-//            $quoteId = $quoteIdMask->getQuoteId();
-//        }
-//        $quote = $this->quoteRepository->get((int)$quoteId);
-//        $this->initCheckout($quote);
-//
-//        if ($quote->getIsMultiShipping()) {
-//            $quote->setIsMultiShipping(false);
-//            $quote->removeAllAddresses();
-//        }
-//
-//        if ($customerId) {
-//            $customerData = $this->customerRepository->getById((int)$customerId);
-//
-//            $this->_checkout->setCustomerWithAddressChange(
-//                $customerData,
-//                $quote->getBillingAddress(),
-//                $quote->getShippingAddress()
-//            );
-//
-//            // billing agreement
-//            $isBaRequested = (bool)$this->getRequest()
-//                ->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
-//            $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
-//        }
-//
-//        // Bill Me Later
-//        $this->_checkout->setIsBml((bool)$this->getRequest()->getParam('bml'));
-//
-//        // giropay
-//        $this->_checkout->prepareGiropayUrls(
-//            $this->_url->getUrl('checkout/onepage/success'),
-//            $this->_url->getUrl('paypal/express/cancel'),
-//            $this->_url->getUrl('checkout/onepage/success')
-//        );
-//        return $this->_checkout->start(
-//            $this->_url->getUrl('*/*/return'),
-//            $this->_url->getUrl('*/*/cancel'),
-//            $hasButton
-//        );
-//    }
-    /**
-     * Instantiate quote and checkout
-     *
-     * @param $quote
-     * @throws LocalizedException
-     */
-//    private function initCheckout($quote)
-//    {
-//        if (!$quote->hasItems() || $quote->getHasError()) {
-//            $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
-//            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Express Checkout.'));
-//        }
-//        if (!(float)$quote->getGrandTotal()) {
-//            throw new \Magento\Framework\Exception\LocalizedException(
-//                __(
-//                    'PayPal can\'t process orders with a zero balance due. '
-//                    . 'To finish your purchase, please go through the standard checkout process.'
-//                )
-//            );
-//        }
-//        if (!isset($this->_checkoutTypes[$this->_checkoutType])) {
-//            $parameters = [
-//                'params' => [
-//                    'quote' => $quote,
-//                    'config' => $this->_config,
-//                ],
-//            ];
-//            $this->_checkoutTypes[$this->_checkoutType] = $this->_checkoutFactory
-//                ->create($this->_checkoutType, $parameters);
-//        }
-//        $this->_checkout = $this->_checkoutTypes[$this->_checkoutType];
-//    }
-    /**
-     * @param ResultInterface $controllerResult
-     * @return ResultInterface
-     */
-    private function getErrorResponse(ResultInterface $controllerResult)
+    protected function getToken()
     {
-        $controllerResult->setHttpResponseCode(Exception::HTTP_BAD_REQUEST);
-        $controllerResult->setData(['message' => __('Sorry, but something went wrong')]);
-        return $controllerResult;
+        $quoteId = $this->getRequest()->getParam('quote_id');
+        $customerId = $this->getRequest()->getParam('customer_id');
+        $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
+        $isBaRequested = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
+
+        if (!$customerId) {
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'masked_id');
+            $quoteId = $quoteIdMask->getQuoteId();
+        }
+        $quote = $this->quoteRepository->get((int)$quoteId);
+        $this->_initCheckout($quote);
+
+        if ($quote->getIsMultiShipping()) {
+            $quote->setIsMultiShipping(false);
+            $quote->removeAllAddresses();
+        }
+
+        if ($customerId) {
+            $customerData = $this->customerRepository->getById((int)$customerId);
+
+            $this->_checkout->setCustomerWithAddressChange(
+                $customerData,
+                $quote->getBillingAddress(),
+                $quote->getShippingAddress()
+            );
+
+            $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
+        }
+
+        // giropay urls
+        $this->_checkout->prepareGiropayUrls(
+            $this->_url->getUrl('checkout/onepage/success'),
+            $this->_url->getUrl('paypal/express/cancel'),
+            $this->_url->getUrl('checkout/onepage/success')
+        );
+
+        return $this->_checkout->start(
+            $this->_url->getUrl('*/*/return'),
+            $this->_url->getUrl('*/*/cancel'),
+            $hasButton
+        );
     }
 }
