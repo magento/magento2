@@ -552,7 +552,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Saving customer subscription status
+     * Saving customer subscription status.
      *
      * @param int $customerId
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
@@ -588,7 +588,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
-                $status = self::STATUS_UNCONFIRMED;
+                if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
+                    // if a customer was already subscribed then keep the subscribed
+                    $status = self::STATUS_SUBSCRIBED;
+                } else {
+                    $status = self::STATUS_UNCONFIRMED;
+                }
             } elseif ($isConfirmNeed) {
                 if ($this->getStatus() != self::STATUS_SUBSCRIBED) {
                     $status = self::STATUS_NOT_ACTIVE;
