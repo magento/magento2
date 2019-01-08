@@ -291,6 +291,8 @@ define([
             images = this.options.spConfig.images[this.simpleProduct];
 
             if (images) {
+                images = this._sortImages(images);
+
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
@@ -309,7 +311,17 @@ define([
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
-            galleryObject.first();
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -477,7 +489,9 @@ define([
         _getPrices: function () {
             var prices = {},
                 elements = _.toArray(this.options.settings),
-                hasProductPrice = false;
+                hasProductPrice = false,
+                optionPriceDiff = 0,
+                allowedProduct, optionPrices, basePrice, optionFinalPrice;
 
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
@@ -485,14 +499,78 @@ define([
                     priceValue = {};
 
                 if (config && config.allowedProducts.length === 1 && !hasProductPrice) {
+                    prices = {};
                     priceValue = this._calculatePrice(config);
                     hasProductPrice = true;
+                } else if (element.value) {
+                    allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
+                    optionPrices = this.options.spConfig.optionPrices;
+                    basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount);
+
+                    if (!_.isEmpty(allowedProduct)) {
+                        optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                        optionPriceDiff = optionFinalPrice - basePrice;
+                    }
+
+                    if (optionPriceDiff !== 0) {
+                        prices = {};
+                        priceValue = this._calculatePriceDifference(allowedProduct);
+                    }
                 }
 
                 prices[element.attributeId] = priceValue;
             }, this);
 
             return prices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.spConfig.optionPrices,
+                product = {},
+                optionMinPrice, optionFinalPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product)) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+
+                if (optionFinalPrice < optionMinPrice) {
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
+        },
+
+        /**
+         * Calculate price difference for allowed product
+         *
+         * @param {*} allowedProduct - Product
+         * @returns {*}
+         * @private
+         */
+        _calculatePriceDifference: function (allowedProduct) {
+            var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
+                newPrices = this.options.spConfig.optionPrices[allowedProduct];
+
+            _.each(displayPrices, function (price, code) {
+
+                if (newPrices[code]) {
+                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
+                }
+            });
+
+            return displayPrices;
         },
 
         /**
