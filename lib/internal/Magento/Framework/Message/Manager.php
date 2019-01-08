@@ -9,6 +9,7 @@ use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Debug;
+use Zend\Http\PhpEnvironment\Request as Environment;
 
 /**
  * Message manager model
@@ -62,6 +63,11 @@ class Manager implements ManagerInterface
     private $exceptionMessageFactory;
 
     /**
+     * @var Environment
+     */
+    private $env;
+
+    /**
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
@@ -69,6 +75,7 @@ class Manager implements ManagerInterface
      * @param LoggerInterface $logger
      * @param string $defaultGroup
      * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory
+     * @param Environment|null $env
      */
     public function __construct(
         Session $session,
@@ -77,7 +84,8 @@ class Manager implements ManagerInterface
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP,
-        ExceptionMessageFactoryInterface $exceptionMessageFactory = null
+        ExceptionMessageFactoryInterface $exceptionMessageFactory = null,
+        ?Environment $env = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -87,6 +95,7 @@ class Manager implements ManagerInterface
         $this->defaultGroup = $defaultGroup;
         $this->exceptionMessageFactory = $exceptionMessageFactory ?: ObjectManager::getInstance()
             ->get(ExceptionMessageLookupFactory::class);
+        $this->env = $env ?: ObjectManager::getInstance()->create(Environment::class);
     }
 
     /**
@@ -253,7 +262,7 @@ class Manager implements ManagerInterface
                 $exception->getTrace(),
                 true,
                 true,
-                false
+                boolval($this->env->getEnv('DEBUG_SHOW_ARGS', true))
             )
         );
 

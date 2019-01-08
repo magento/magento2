@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Debug;
+use Zend\Http\PhpEnvironment\Request as Environment;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -75,6 +76,11 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $logger;
 
     /**
+     * @var Environment
+     */
+    private $env;
+
+    /**
      * @param State $state
      * @param Response\FileInterface $response
      * @param Request\Http $request
@@ -84,6 +90,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigLoaderInterface $configLoader
      * @param DeploymentConfig|null $deploymentConfig
+     * @param Environment|null $env
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         State $state,
@@ -94,7 +102,8 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         ConfigLoaderInterface $configLoader,
-        DeploymentConfig $deploymentConfig = null
+        DeploymentConfig $deploymentConfig = null,
+        ?Environment $env = null
     ) {
         $this->state = $state;
         $this->response = $response;
@@ -105,6 +114,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->env = $env ?: ObjectManager::getInstance()->create(Environment::class);
     }
 
     /**
@@ -153,7 +163,7 @@ class StaticResource implements \Magento\Framework\AppInterface
                     $exception->getTrace(),
                     true,
                     true,
-                    false
+                    boolval($this->env->getEnv('DEBUG_SHOW_ARGS', true))
                 )
             );
             $this->response->sendResponse();
