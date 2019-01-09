@@ -9,11 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Fill order information fields and click continue-->
-    <actionGroup name="StorefrontFillOrderInformationActionGroup">
+    <actionGroup name="StorefrontSearchGuestOrderActionGroup">
         <arguments>
             <argument name="orderId" type="string"/>
-            <argument name="orderLastName"/>
-            <argument name="orderEmail"/>
+            <argument name="orderLastName" type="string"/>
+            <argument name="orderEmail" type="string"/>
         </arguments>
         <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="navigateToOrderAndReturnPage"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.orderId}}" userInput="{{orderId}}" stepKey="fillOrderId"/>
