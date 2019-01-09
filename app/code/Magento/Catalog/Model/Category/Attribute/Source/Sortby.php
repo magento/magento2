@@ -39,20 +39,15 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         return $this->_catalogConfig;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if ($this->_options === null) {
-            $this->_options = [['label' => __('Position'), 'value' => 'position']];
-            foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
-                $this->_options[] = [
-                    'label' => __($attribute['frontend_label']),
-                    'value' => $attribute['attribute_code'],
-                ];
-            }
+        $options = [['label' => __('Position'), 'value' => 'position']];
+        foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
+            $options[] = [
+                'label' => __($attribute['frontend_label']),
+                'value' => $attribute['attribute_code'],
+            ];
         }
-        return $this->_options;
+        return $options;
     }
 }

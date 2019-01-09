@@ -62,7 +62,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      *
      * @return string[]
      */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
         $result = [];
 

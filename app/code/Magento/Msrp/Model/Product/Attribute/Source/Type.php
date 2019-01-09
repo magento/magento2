@@ -25,20 +25,12 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     const TYPE_BEFORE_ORDER_CONFIRM = 3;
 
-    /**
-     * Get all options
-     *
-     * @return array
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if (!$this->_options) {
-            $this->_options = [
-                ['label' => __('On Gesture'), 'value' => self::TYPE_ON_GESTURE],
-                ['label' => __('In Cart'), 'value' => self::TYPE_IN_CART],
-                ['label' => __('Before Order Confirmation'), 'value' => self::TYPE_BEFORE_ORDER_CONFIRM],
-            ];
-        }
-        return $this->_options;
+        return [
+            ['label' => __('On Gesture'), 'value' => self::TYPE_ON_GESTURE],
+            ['label' => __('In Cart'), 'value' => self::TYPE_IN_CART],
+            ['label' => __('Before Order Confirmation'), 'value' => self::TYPE_BEFORE_ORDER_CONFIRM],
+        ];
     }
 }

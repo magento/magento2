@@ -6,7 +6,6 @@
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
-use Magento\Framework\Exception\StateException;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModel;
 
@@ -48,29 +47,24 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * Retrieve all customer tax classes as an options array.
-     *
      * @return array
-     * @throws StateException
+     * @throws \Magento\Framework\Exception\InputException
      */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if (empty($this->_options)) {
-            $options = [];
-            $filter = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
-                ->setValue(TaxClassManagementInterface::TYPE_CUSTOMER)
-                ->create();
-            $searchCriteria = $this->searchCriteriaBuilder->addFilters([$filter])->create();
-            $searchResults = $this->taxClassRepository->getList($searchCriteria);
-            foreach ($searchResults->getItems() as $taxClass) {
-                $options[] = [
-                    'value' => $taxClass->getClassId(),
-                    'label' => $taxClass->getClassName(),
-                ];
-            }
-            $this->_options = $options;
+        $options = [];
+        $filter = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
+            ->setValue(TaxClassManagementInterface::TYPE_CUSTOMER)
+            ->create();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters([$filter])->create();
+        $searchResults = $this->taxClassRepository->getList($searchCriteria);
+        foreach ($searchResults->getItems() as $taxClass) {
+            $options[] = [
+                'value' => $taxClass->getClassId(),
+                'label' => $taxClass->getClassName(),
+            ];
         }
 
-        return $this->_options;
+        return $options;
     }
 }

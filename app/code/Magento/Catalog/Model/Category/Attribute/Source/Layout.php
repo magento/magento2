@@ -34,12 +34,10 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @inheritdoc
      */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
         $options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
         array_unshift($options, ['value' => '', 'label' => __('No layout updates')]);
-        $this->_options = $options;
-
         return $options;
     }
 }

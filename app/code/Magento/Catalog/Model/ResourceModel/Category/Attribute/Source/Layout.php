@@ -32,12 +32,11 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getAllOptions()
     {
-        if (!$this->_options) {
-            foreach ($this->_cmsLayouts as $layoutName => $layoutConfig) {
-                $this->_options[] = ['value' => $layoutName, 'label' => $layoutConfig];
-            }
-            array_unshift($this->_options, ['value' => '', 'label' => __('No layout updates')]);
+        $options = [];
+        foreach ($this->_cmsLayouts as $layoutName => $layoutConfig) {
+            $options[] = ['value' => $layoutName, 'label' => $layoutConfig];
         }
-        return $this->_options;
+        array_unshift($options, ['value' => '', 'label' => __('No layout updates')]);
+        return $options;
     }
 }

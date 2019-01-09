@@ -29,20 +29,12 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->optionFactory = $optionFactory;
     }
 
-    /**
-     * Get all options
-     *
-     * @return array
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if (null === $this->_options) {
-            $this->_options = [
-                ['label' => __('Price Range'), 'value' => 0],
-                ['label' => __('As Low as'), 'value' => 1],
-            ];
-        }
-        return $this->_options;
+        return [
+            ['label' => __('Price Range'), 'value' => 0],
+            ['label' => __('As Low as'), 'value' => 1],
+        ];
     }
 
     /**

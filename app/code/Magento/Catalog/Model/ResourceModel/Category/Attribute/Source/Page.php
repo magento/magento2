@@ -29,17 +29,10 @@ class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->_blockCollectionFactory = $blockCollectionFactory;
     }
 
-    /**
-     * Return all block options
-     *
-     * @return array
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if (!$this->_options) {
-            $this->_options = $this->_blockCollectionFactory->create()->load()->toOptionArray();
-            array_unshift($this->_options, ['value' => '', 'label' => __('Please select a static block.')]);
-        }
-        return $this->_options;
+        $options = $this->_blockCollectionFactory->create()->load()->toOptionArray();
+        array_unshift($options, ['value' => '', 'label' => __('Please select a static block.')]);
+        return $options;
     }
 }

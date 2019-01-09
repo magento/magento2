@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 class MultiselectSourceMock extends AbstractSource
 {
 
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
         return [
             ['value' => 1, 'label' => 'Option 1'],

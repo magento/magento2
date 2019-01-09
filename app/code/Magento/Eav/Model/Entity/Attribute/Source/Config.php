@@ -29,24 +29,20 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * Retrieve all options for the source from configuration
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if ($this->_options === null) {
-            $this->_options = [];
+        $options = [];
 
-            if (empty($this->_optionsData)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('No options found.'));
-            }
-            foreach ($this->_optionsData as $option) {
-                $this->_options[] = ['value' => $option['value'], 'label' => __($option['label'])];
-            }
+        if (empty($this->_optionsData)) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('No options found.'));
+        }
+        foreach ($this->_optionsData as $option) {
+            $options[] = ['value' => $option['value'], 'label' => __($option['label'])];
         }
 
-        return $this->_options;
+        return $options;
     }
 }

@@ -33,20 +33,12 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->_eavAttrEntity = $eavAttrEntity;
     }
 
-    /**
-     * Retrieve all options array
-     *
-     * @return array
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if ($this->_options === null) {
-            $this->_options = [
-                ['label' => __('Yes'), 'value' => self::VALUE_YES],
-                ['label' => __('No'), 'value' => self::VALUE_NO],
-            ];
-        }
-        return $this->_options;
+        return [
+            ['label' => __('Yes'), 'value' => self::VALUE_YES],
+            ['label' => __('No'), 'value' => self::VALUE_NO],
+        ];
     }
 
     /**

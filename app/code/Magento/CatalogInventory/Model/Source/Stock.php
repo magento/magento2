@@ -18,12 +18,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
  */
 class Stock extends AbstractSource
 {
-    /**
-     * Retrieve option array
-     *
-     * @return array
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
         return [
             ['value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK, 'label' => __('In Stock')],

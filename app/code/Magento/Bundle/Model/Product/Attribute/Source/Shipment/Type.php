@@ -12,19 +12,12 @@ namespace Magento\Bundle\Model\Product\Attribute\Source\Shipment;
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
-    /**
-     * {@inheritdoc}
-     * @since 100.1.0
-     */
-    public function getAllOptions()
+    protected function loadOptions(): array
     {
-        if (null === $this->_options) {
-            $this->_options = [
-                ['label' => __('Together'), 'value' => 0],
-                ['label' => __('Separately'), 'value' => 1],
-            ];
-        }
-        return $this->_options;
+        return [
+            ['label' => __('Together'), 'value' => 0],
+            ['label' => __('Separately'), 'value' => 1],
+        ];
     }
 
     /**

@@ -42,6 +42,9 @@ abstract class AbstractSource implements
         return $this->_options;
     }
 
+    /**
+     * @return array
+     */
     protected function loadOptions(): array
     {
         return [];
