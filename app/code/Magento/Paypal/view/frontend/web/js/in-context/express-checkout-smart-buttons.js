@@ -26,21 +26,38 @@ define([
 
     return function (clientConfig, element) {
 
-        /** track chackbox status change*/
+        /**
+         *
+         * @param handler
+         */
         function onChangeValidateStatus(handler) {
             _.each(jQuery('#' + clientConfig.rendererComponent.getAgreementId()).find('input'), function (element) {
                 element.addEventListener('change', handler);
             }, this);
         }
 
+        /**
+         *
+         * @return {Boolean}
+         */
         function isValid() {
-            //todo refactor this. add  of validators insead of hardcode
-            var count = jQuery('#' + clientConfig.rendererComponent.getAgreementId()).find('input').length;
-            return count >= 0 && jQuery('#' + clientConfig.rendererComponent.getAgreementId()).find('input:checkbox:checked').length == count;
+            return clientConfig.validator.validate();
+
         }
 
+        /**
+         *
+         * @param actions
+         */
         function toggleButtons(actions) {
-            isValid() ? actions.enable() : actions.disable();
+            var id = '#agreement[1]-error';
+            if (isValid()) {
+                actions.enable()
+            } else {
+                actions.disable();
+                //hide error message
+                jQuery(id).hide();
+            }
         }
 
         paypal.Button.render({
@@ -66,14 +83,21 @@ define([
                 });
             },
 
-            onClick: function() {
-                if(clientConfig.validator.validate()) {
-                    clientConfig.rendererComponent.continueToPayPal();
+            /**
+             * Execute logic on Paypal button click
+             */
+            onClick: function () {
+                if (typeof clientConfig.onClick === "function") {
+                    clientConfig.onClick();
                 }
             },
 
-            // Set up a payment
-            payment: function (data, actions) {
+            /**
+             * Set up a payment
+             *
+             * @return {*}
+             */
+            payment: function () {
                 var params = {
                     quote_id: clientConfig.quoteId,
                     customer_id: clientConfig.customerId || "",
@@ -81,27 +105,57 @@ define([
                     form_key: clientConfig.formKey
                 };
 
-                return paypal.request.post(clientConfig.startUrl, params)
-                    .then(function (res) {
-                        if (res.success) {
-                            //add logic to process negative cases
-                            // 3. Return res.id from the response
-                            return res.token;
-                        } else {
-                            messageList.addErrorMessage({
-                                message: res.error_message
-                            });
-                        }
-                    })
-                    .catch(function (err) {
-                        throw err;
+                if (clientConfig.button) {
+                    return new paypal.Promise(function (resolve, reject) {
+                        clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
+                                paypal.request.post(clientConfig.startUrl, params)
+                                    .then(function (res) {
+                                        if (res.success) {
+                                            return resolve(res.token);
+                                        } else {
+                                            return reject(new Error(res.error_message));
+                                        }
+                                    })
+                            }
+                        ).fail(
+                            function (response) {
+                                var error;
+                                try {
+                                    error = JSON.parse(response.responseText);
+                                } catch (exception) {
+                                    error = $t('Something went wrong with your request. Please try again later.');
+                                }
+                                return reject(new Error(error));
+                            }
+                        );
                     });
-            },
-            // Execute the payment
-            onAuthorize: function (data, actions) {
-                if (clientConfig.button === 0) {
-                    //add logic to set payment method
+                } else {
+                    return paypal.request.post(clientConfig.startUrl, params)
+                        .then(function (res) {
+                            if (res.success) {
+                                //add logic to process negative cases
+                                // 3. Return res.id from the response
+                                return res.token;
+                            } else {
+                                messageList.addErrorMessage({
+                                    message: res.error_message
+                                });
+                            }
+                        })
+                        .catch(function (err) {
+                            throw err;
+                        });
                 }
+            },
+
+            /**
+             * Execute the payment
+             *
+             * @param data
+             * @param actions
+             * @return {*}
+             */
+            onAuthorize: function (data, actions) {
                 var params =
                     {
                         paymentToken: data.paymentToken,
@@ -110,9 +164,6 @@ define([
                         method: clientConfig.payment.method,
                         customerId: clientConfig.customerId || '',
                         form_key: clientConfig.formKey
-                        // add email for guest customer
-                        /*email:*/
-
                     };
                 return paypal.request.post(clientConfig.onAuthorizeUrl, params)
                     .then(function (res) {
@@ -128,14 +179,23 @@ define([
                     });
 
             },
+
+            /**
+             * Process cancel action
+             *
+             * @param data
+             * @param actions
+             */
             onCancel: function (data, actions) {
                 actions.redirect(window, clientConfig.onCancelUrl);
             },
 
+            /**
+             * Process errors
+             *
+             * @param {Object} err
+             */
             onError: function (err) {
-                messageList.addErrorMessage({
-                    message: err
-                });
             }
         }, element);
     };

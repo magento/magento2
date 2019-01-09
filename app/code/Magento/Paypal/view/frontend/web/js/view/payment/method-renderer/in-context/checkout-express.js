@@ -37,7 +37,7 @@ define(
             /**
              * Render PayPal buttons using checkout.js
              */
-            renderPayPalButtons: function() {
+            renderPayPalButtons: function () {
                 this.clientConfig.payment = {
                     'method': this.item.method
                 };
@@ -47,7 +47,18 @@ define(
                 this.clientConfig.button = 0;
                 this.clientConfig.merchantId = this.merchantId;
                 this.clientConfig.validator = additionalValidators;
+                    this.clientConfig.onClick = function () {
+                        additionalValidators.validate();
+                        this.selectPaymentMethod();
+                };
+                this.clientConfig.additionalAction = setPaymentMethodAction;
                 this.clientConfig.rendererComponent = this;
+                this.clientConfig.messageContainer = this.messageContainer;
+                _.each(this.clientConfig, function (fn, name) {
+                    if (typeof fn === 'function') {
+                        this.clientConfig[name] = fn.bind(this);
+                    }
+                }, this);
                 checkoutSmartButtons(this.clientConfig, '#' + this.getButtonId());
             },
 
@@ -64,24 +75,6 @@ define(
             getAgreementId: function () {
                 return this.inContextId + '-agreement';
             },
-
-            /** Redirect to paypal */
-            continueToPayPal: function () {
-                //update payment method information if additional data was changed
-                if (additionalValidators.validate()) {
-                    this.selectPaymentMethod();
-                    setPaymentMethodAction(this.messageContainer).done(
-                        function () {
-                            customerData.invalidate(['cart']);
-                            return true;
-                        }
-                    );
-
-                    return false;
-                }
-            },
-
-
         });
     }
 );
