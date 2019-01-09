@@ -14,7 +14,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
-class AddressesTest extends GraphQlAbstract
+class GetAddressesTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -25,20 +25,9 @@ class AddressesTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-  customer 
-  {
-    created_at
-    group_id
-    prefix
-    firstname
-    middlename
-    lastname
-    suffix
-    email
-    default_billing
-    default_shipping
+  customer {
     id
-      addresses{
+    addresses {
       id
       customer_id
       region_id
@@ -71,35 +60,8 @@ QUERY;
             is_array([$response['customer']['addresses']]),
             " Addresses field must be of an array type."
         );
-        $this->assertCustomerFields($customer, $response['customer']);
+        self::assertEquals($customer->getId(), $response['customer']['id']);
         $this->assertCustomerAddressesFields($customer, $response);
-    }
-
-    /**
-     * Verify the all the whitelisted fields for a Customer Object
-     *
-     * @param CustomerInterface $customer
-     * @param $actualResponse
-     */
-    public function assertCustomerFields($customer, $actualResponse)
-    {
-        // ['customer_object_field_name', 'expected_value']
-        $assertionMap = [
-            ['response_field' => 'id', 'expected_value' => $customer->getId()],
-            ['response_field' => 'created_at', 'expected_value' => $customer->getCreatedAt()],
-            ['response_field' => 'group_id', 'expected_value' => $customer->getGroupId()],
-            ['response_field' => 'prefix', 'expected_value' => $customer->getPrefix()],
-            ['response_field' => 'firstname', 'expected_value' => $customer->getFirstname()],
-            ['response_field' => 'middlename', 'expected_value' => $customer->getMiddlename()],
-            ['response_field' => 'lastname', 'expected_value' => $customer->getLastname()],
-            ['response_field' => 'suffix', 'expected_value' => $customer->getSuffix()],
-            ['response_field' => 'email', 'expected_value' => $customer->getEmail()],
-            ['response_field' => 'default_shipping', 'expected_value' => (bool)$customer->getDefaultShipping()],
-            ['response_field' => 'default_billing', 'expected_value' => (bool)$customer->getDefaultBilling()],
-            ['response_field' => 'id', 'expected_value' => $customer->getId()]
-        ];
-
-        $this->assertResponseFields($actualResponse, $assertionMap);
     }
 
     /**
