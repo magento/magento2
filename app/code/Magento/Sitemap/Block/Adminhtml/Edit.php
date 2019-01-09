@@ -5,6 +5,9 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Helper\PostHelper;
+
 /**
  * Sitemap edit form container
  *
@@ -20,17 +23,25 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * @var PostHelper
+     */
+    private $postHelper;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param PostHelper|null $postHelper
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        PostHelper $postHelper = null
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->postHelper = $postHelper ?: ObjectManager::getInstance()->create(PostHelper::class);
     }
 
     /**
@@ -62,6 +73,30 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'class' => 'add'
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        $this->buttonList->update(
+            'delete',
+            '',
+            [
+                'label' => __('Delete'),
+                'class' => 'delete',
+                'onclick' => 'deleteConfirm(\'Are you sure you want to do this?\', \'' .
+                    $this->getDeleteUrl() . '\','.$this->postHelper->getPostData($this->getDeleteUrl()).')',
+                'id' => 'delete',
+                'button_key' => 'delete_button',
+                'region' => 'toolbar',
+                'level' => 0,
+                'sort_order' => 10
+            ]
+        );
+
+        parent::_prepareLayout();
     }
 
     /**
