@@ -65,6 +65,13 @@ class Navigation extends Block
     private $productQty = '/following-sibling::span[contains(text(), "%s")]';
 
     /**
+     * Selector for child element with product quantity.
+     *
+     * @var string
+     */
+    private $productQtyInCategory = '/span[contains(text(), "%s")]';
+
+    /**
      * Remove all applied filters.
      *
      * @return void
@@ -124,10 +131,19 @@ class Navigation extends Block
      */
     public function isCategoryVisible(Category $category, $qty)
     {
-        return $this->_rootElement->find(
-            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
-            Locator::SELECTOR_XPATH
-        )->isVisible();
+        $link = $this->_rootElement->find(sprintf($this->optionTitle, 'Category'), Locator::SELECTOR_XPATH);
+        if ($link->isVisible()) {
+            $link->click();
+            return $this->_rootElement->find(
+                sprintf($this->categoryName, $category->getName()) . sprintf($this->productQtyInCategory, $qty),
+                Locator::SELECTOR_XPATH
+            )->isVisible();
+        } else {
+            return $this->_rootElement->find(
+                sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+                Locator::SELECTOR_XPATH
+            )->isVisible();
+        }
     }
 
     /**
