@@ -69,6 +69,11 @@ class Authentication
     protected $formKeyValidator;
 
     /**
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
@@ -78,6 +83,7 @@ class Authentication
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param array $data
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -88,7 +94,8 @@ class Authentication
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\BackendAppList $backendAppList,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        array $data = []
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
@@ -99,6 +106,7 @@ class Authentication
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->backendAppList = $backendAppList;
         $this->formKeyValidator = $formKeyValidator;
+        $this->data = $data;
     }
 
     /**
