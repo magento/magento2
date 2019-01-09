@@ -10,7 +10,8 @@
  * @param string $token
  * @return bool
  */
-function authenticate($token) {
+function authenticate($token)
+{
     require_once __DIR__ . '/../../../../app/bootstrap.php';
 
     $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
