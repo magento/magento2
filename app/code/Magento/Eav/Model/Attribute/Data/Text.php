@@ -72,7 +72,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return true;
         }
 
-        if (empty($value) && $value !== '0') {
+        if (empty($value) && $value !== '0' && $attribute->getDefaultValue() == NULL) {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
