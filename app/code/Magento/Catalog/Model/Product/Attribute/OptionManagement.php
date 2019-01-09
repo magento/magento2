@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Option management model for product attribute.
+ */
 class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
 {
     /**
@@ -25,7 +28,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems($attributeCode)
     {
@@ -36,7 +39,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add($attributeCode, $option)
     {
@@ -47,7 +50,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
                 /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $attributeOption */
                     $attributeOption = $attributeOption->getLabel();
             });
-            if (in_array($option->getLabel(), $currentOptions)) {
+            if (in_array($option->getLabel(), $currentOptions, true)) {
                 return false;
             }
         }
@@ -59,7 +62,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($attributeCode, $optionId)
     {
