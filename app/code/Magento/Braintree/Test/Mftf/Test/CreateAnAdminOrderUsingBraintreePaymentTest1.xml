@@ -17,19 +17,23 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93677"/>
             <group value="braintree"/>
-            <skip>
-                <issueId value="MQE-1187" />
-            </skip>
         </annotations>
+
 
         <before>
             <!--Login As Admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
             <!--CreateNewProduct-->
-            <actionGroup ref="CreateNewProductActionGroup" stepKey="CreateNewProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
             <!--Create New Customer-->
-            <actionGroup ref="CreateCustomerActionGroup" stepKey="CreateCustomer"/>
+            <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
         </before>
+
 
         <!--Configure Braintree-->
         <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
@@ -45,42 +49,63 @@
             <argument name="role" value="adminRole"/>
         </actionGroup>
 
-        <!--Log out-->
-        <actionGroup ref="SignOut" stepKey="SignOut"/>
+        <!--SignOut-->
+        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
+
         <!--Log in as new user-->
         <actionGroup ref="LoginAsAnyUser" stepKey="LoginActionGroup">
             <argument name="uname" value="{{newAdmin.username}}"/>
             <argument name="passwd" value="{{newAdmin.password}}"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
-        <actionGroup ref="CreateNewOrderActionGroup" stepKey="createNewOrder"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+
+        <waitForPageLoad stepKey="waitForShippingToFinish"/>
+
+        <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
+
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig" time="5"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="1"/>
 
         <after>
+            <!-- Disable BrainTree -->
+            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
-            <actionGroup ref="DeleteProductActionGroup" stepKey="DeleteAllProducts">
-                <argument name="productName" value="NewProductData.ProductName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete Customer-->
-            <actionGroup ref="DeleteCustomerActionGroup" stepKey="DeleteCustomer">
-                <argument name="lastName" value="NewCustomerData.LastName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete created user-->
-            <actionGroup ref="DeleteCreatedUserActionGroup" stepKey="AdminDeleteUserActionGroup">
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup">
                 <argument name="user" value="adminRole"/>
             </actionGroup>
+
             <!--Delete created role-->
             <actionGroup ref="AdminDeleteCreatedRoleActionGroup" stepKey="AdminDeleteRoleActionGroup">
                 <argument name="role" value="adminRole"/>
             </actionGroup>
-            <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logOut2"/>
         </after>
     </test>
 </tests>
