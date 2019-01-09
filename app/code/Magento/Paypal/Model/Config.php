@@ -1647,6 +1647,30 @@ class Config extends AbstractConfig
             case 'paypal_payflowcolor':
                 return "paypal/style/{$fieldName}";
             default:
+                return $this->_mapButtonStyleFieldset($fieldName);
+        }
+    }
+
+    /**
+     * Map PayPal button style config fields
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    protected function _mapButtonStyleFieldset($fieldName)
+    {
+        $name = str_replace('checkout_page_button_','',$fieldName);
+
+        switch ($name) {
+            case 'customize':
+            case 'layout':
+            case 'size':
+            case 'color':
+            case 'shape':
+            case 'label':
+            case 'disable_funding_options':
+                return "payment/{$this->_methodCode}/{$fieldName}";
+            default:
                 return null;
         }
     }
