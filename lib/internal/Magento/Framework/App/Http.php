@@ -14,7 +14,6 @@ use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
-use Zend\Http\PhpEnvironment\Request as Environment;
 
 /**
  * HTTP web application. Called from webroot index.php to serve web requests.
@@ -74,11 +73,6 @@ class Http implements \Magento\Framework\AppInterface
     private $logger;
 
     /**
-     * @var Environment
-     */
-    private $env;
-
-    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Event\Manager $eventManager
      * @param AreaList $areaList
@@ -88,8 +82,6 @@ class Http implements \Magento\Framework\AppInterface
      * @param State $state
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Registry $registry
-     * @param Environment|null $env
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -100,8 +92,7 @@ class Http implements \Magento\Framework\AppInterface
         ConfigLoaderInterface $configLoader,
         State $state,
         Filesystem $filesystem,
-        \Magento\Framework\Registry $registry,
-        ?Environment $env = null
+        \Magento\Framework\Registry $registry
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -112,7 +103,6 @@ class Http implements \Magento\Framework\AppInterface
         $this->_state = $state;
         $this->_filesystem = $filesystem;
         $this->registry = $registry;
-        $this->env = $env ?: ObjectManager::getInstance()->create(Environment::class);
     }
 
     /**
@@ -230,7 +220,7 @@ class Http implements \Magento\Framework\AppInterface
                     $exception->getTrace(),
                     true,
                     true,
-                    boolval($this->env->getEnv('DEBUG_SHOW_ARGS', true))
+                    boolval(getenv('DEBUG_SHOW_ARGS'))
                 )
             );
         }
@@ -335,7 +325,7 @@ class Http implements \Magento\Framework\AppInterface
                 $exception->getTrace(),
                 true,
                 true,
-                (bool)DEBUG_BACKTRACE_IGNORE_ARGS
+                boolval(getenv('DEBUG_SHOW_ARGS'))
             )
         ];
         $params = $bootstrap->getParams();
