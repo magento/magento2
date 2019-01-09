@@ -52,7 +52,7 @@ class ExecutableRegExSniff implements Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -60,7 +60,7 @@ class ExecutableRegExSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
