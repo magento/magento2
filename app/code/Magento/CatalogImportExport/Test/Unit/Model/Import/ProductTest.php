@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ProductTest
@@ -117,10 +119,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_localeDate;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
     protected $indexerRegistry;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_logger;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject */
@@ -153,10 +155,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected $errorAggregator;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\Product\Url|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Catalog\Model\Product\Url|\PHPUnit_Framework_MockObject_MockObject */
     protected $productUrl;
 
     /** @var  ImageTypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
@@ -719,7 +721,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBehavior', 'getRowScope', 'addRowError'])
+            ->setMethods(['getBehavior', 'getRowScope', 'addRowError', 'getErrorAggregator'])
             ->getMock();
 
         $importProduct->expects($this->exactly(2))->method('getBehavior')
@@ -727,6 +729,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->expects($this->once())->method('getRowScope')
             ->willReturn(\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT);
         $importProduct->expects($this->once())->method('addRowError');
+        $importProduct->method('getErrorAggregator')
+            ->willReturn(
+                $this->getErrorAggregatorObject(['addRowToSkip'])
+            );
         $rowData = [
             \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'sku',
         ];
@@ -856,7 +862,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testValidateRowCheckSpecifiedSku($sku, $expectedError)
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
-            [ 'addRowError', 'getOptionEntity', 'getRowScope'],
+            ['addRowError', 'getOptionEntity', 'getRowScope'],
             ['isRowInvalid' => true]
         );
 
@@ -899,7 +905,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testValidateRowValidateExistingProductTypeAddNewSku()
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
-            [ 'addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity'],
             ['isRowInvalid' => true]
         );
 
@@ -929,7 +935,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
 
         $expectedData = [
-            'entity_id' =>  $oldSku[$sku]['entity_id'], //entity_id_val
+            'entity_id' => $oldSku[$sku]['entity_id'], //entity_id_val
             'type_id' => $oldSku[$sku]['type_id'],// type_id_val
             'attr_set_id' => $oldSku[$sku]['attr_set_id'], //attr_set_id_val
             'attr_set_code' => $_attrSetIdToName[$oldSku[$sku]['attr_set_id']],//attr_set_id_val
@@ -979,7 +985,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $colAttrSet,
         $attrSetNameToIdColAttrSet,
         $error
-    ) {
+    )
+    {
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
@@ -1036,11 +1043,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'entity_id' => null,
             'type_id' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE],//value
             //attr_set_id_val
-            'attr_set_id' => $_attrSetNameToId[
-                $rowData[
-                    \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET
-                ]
-            ],
+            'attr_set_id' => $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
             'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
             'row_id' => null
         ];
