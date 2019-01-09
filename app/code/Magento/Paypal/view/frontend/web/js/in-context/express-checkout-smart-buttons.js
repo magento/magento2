@@ -129,14 +129,13 @@ define([
 
             },
             onCancel: function (data, actions) {
-                window.alert('Transaction is cancelled.');
+                actions.redirect(window, clientConfig.onCancelUrl);
             },
 
             onError: function (err) {
                 messageList.addErrorMessage({
                     message: err
                 });
-
             }
         }, element);
     };
