@@ -866,7 +866,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             \Magento\CatalogImportExport\Model\Import\Product::COL_STORE => '',
         ];
 
-        $this->storeResolver->expects($this->any())->method('getStoreCodeToId')->willReturn(null);
+        $this->storeResolver->method('getStoreCodeToId')->willReturn(null);
         $this->setPropertyValue($importProduct, 'storeResolver', $this->storeResolver);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
 

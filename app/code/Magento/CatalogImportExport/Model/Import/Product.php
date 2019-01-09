@@ -3100,7 +3100,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Add row as skipped
      *
-     * @param @param int $rowNumber
+     * @param int $rowNum
      * @param string $errorCode Error code or simply column name
      * @param string $errorLevel
      * @param string $colName OPTIONAL Column name.
@@ -3112,8 +3112,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $errorLevel = ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
         $colName = null
     ): self {
-        $this->addRowError($errorCode, $rowNum, $colName, null, $errorLevel)
-            ->getErrorAggregator()
+        $this->addRowError($errorCode, $rowNum, $colName, null, $errorLevel);
+        $this->getErrorAggregator()
             ->addRowToSkip($rowNum);
         return $this;
     }
