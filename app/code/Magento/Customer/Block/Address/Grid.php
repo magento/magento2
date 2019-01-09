@@ -143,7 +143,7 @@ class Grid extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get one string street address from "two fields" array or just returns string if it was passed in parameters
+     * Get one string street address from the Address DTO passed in parameters
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
