@@ -147,9 +147,9 @@
         <!--Create new order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="storeView" value="customStoreView"/>
         </actionGroup>
-        <click selector="{{OrdersGridSection.website('secondStoreView')}}" stepKey="ClickToSelectStore"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
+
         <click  selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct"/>
         <waitForPageLoad stepKey="waitForProductsOpened"/>
         <!--TEST CASE #1-->
