@@ -165,7 +165,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @param string $countryCode
      * @return string
      */
-    public function getCountryByCode($countryCode): string
+    public function getCountryByCode(string $countryCode): string
     {
         /** @var \Magento\Directory\Model\Country $country */
         $country = $this->countryFactory->create();
