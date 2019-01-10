@@ -31,5 +31,8 @@
         <element name="blockStatus" type="select" selector="//select[@name='chooser_is_active']"/>
         <element name="searchedBlock" type="button" selector="//*[@class='magento-message']//tbody/tr/td[1]"/>
         <element name="saveWidget" type="select" selector="#save"/>
+        <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
+        <element name="restrictTypes" type="select" selector="select[id*='types']"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
     </section>
 </sections>
