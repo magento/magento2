@@ -208,6 +208,11 @@ class ExpressConfigProvider implements ConfigProviderInterface
             $styles['color'] = $this->config->getValue('checkout_page_button_color');
             $styles['shape'] = $this->config->getValue('checkout_page_button_shape');
             $styles['label'] = $this->config->getValue('checkout_page_button_label');
+
+            if ($styles['label'] === 'credit') {
+                $styles['color'] = 'darkblue';
+                $styles['layout'] = 'horizontal';
+            }
         }
         return $styles;
     }

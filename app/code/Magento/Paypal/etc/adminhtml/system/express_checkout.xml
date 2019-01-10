@@ -674,6 +674,7 @@
                             <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Layout::getCheckoutLayout</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
+                                <field id="checkout_page_button_label" negative="1">credit</field>
                             </depends>
                             <attribute type="shared">1</attribute>
                         </field>
@@ -701,6 +702,7 @@
                             <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Color::getCheckoutColor</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
+                                <field id="checkout_page_button_label" negative="1">credit</field>
                             </depends>
                             <attribute type="shared">1</attribute>
                         </field>
