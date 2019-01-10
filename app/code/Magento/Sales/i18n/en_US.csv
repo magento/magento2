@@ -795,3 +795,5 @@ Created,Created
 "PDF Shipments","PDF Shipments"
 "PDF Creditmemos","PDF Creditmemos"
 Refunds,Refunds
+"Allow Zero GrandTotal for Creditmemo","Allow Zero GrandTotal for Creditmemo"
+"Allow Zero GrandTotal","Allow Zero GrandTotal"
