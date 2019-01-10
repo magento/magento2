@@ -153,7 +153,7 @@ class StaticResource implements \Magento\Framework\AppInterface
                     $exception->getTrace(),
                     true,
                     true,
-                    boolval(getenv('DEBUG_SHOW_ARGS'))
+                    (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
                 )
             );
             $this->response->sendResponse();

@@ -30,7 +30,7 @@
 ############################################
 ## default index file
 ## Specifies option, to use methods arguments in backtrace or not
-    SetEnv DEBUG_SHOW_ARGS 0
+    SetEnv MAGE_DEBUG_SHOW_ARGS 1
 
     DirectoryIndex index.php
 
