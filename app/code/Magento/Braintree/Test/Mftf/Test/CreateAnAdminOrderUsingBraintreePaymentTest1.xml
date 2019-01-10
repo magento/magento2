@@ -39,24 +39,20 @@
         <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="AdminCreateRoleActionGroup" stepKey="adminCreateRole">
-            <argument name="restrictedRole" value="Sales"/>
-            <argument name="User" value="adminRole"/>
-        </actionGroup>
+        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
+        <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
+        <actionGroup ref="AdminCreateNewRole" stepKey="AdminCreateNewRole"/>
 
         <!--Create new admin user-->
-        <actionGroup ref="AdminCreateUserActionGroup" stepKey="adminCreateUser">
-            <argument name="role" value="adminRole"/>
-        </actionGroup>
+        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <waitForPageLoad stepKey="waitForUsers" time="15"/>
+        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
 
         <!--SignOut-->
         <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
 
         <!--Log in as new user-->
-        <actionGroup ref="LoginAsAnyUser" stepKey="LoginActionGroup">
-            <argument name="uname" value="{{newAdmin.username}}"/>
-            <argument name="passwd" value="{{newAdmin.password}}"/>
-        </actionGroup>
+        <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
@@ -97,15 +93,13 @@
             <!--Delete Customer-->
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
-            <!--Delete created user-->
-            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup">
-                <argument name="user" value="adminRole"/>
-            </actionGroup>
+            <!--Delete User -->
+            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
 
-            <!--Delete created role-->
-            <actionGroup ref="AdminDeleteCreatedRoleActionGroup" stepKey="AdminDeleteRoleActionGroup">
-                <argument name="role" value="adminRole"/>
-            </actionGroup>
+            <!--Delete Role-->
+            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
         </after>
     </test>
 </tests>
