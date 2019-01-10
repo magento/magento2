@@ -1659,15 +1659,13 @@ class Config extends AbstractConfig
      */
     protected function _mapButtonStyleFieldset($fieldName)
     {
-        $name = str_replace('checkout_page_button_','',$fieldName);
-
-        switch ($name) {
-            case 'customize':
-            case 'layout':
-            case 'size':
-            case 'color':
-            case 'shape':
-            case 'label':
+        switch ($fieldName) {
+            case 'checkout_page_button_customize':
+            case 'checkout_page_button_layout':
+            case 'checkout_page_button_size':
+            case 'checkout_page_button_color':
+            case 'checkout_page_button_shape':
+            case 'checkout_page_button_label':
             case 'disable_funding_options':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:

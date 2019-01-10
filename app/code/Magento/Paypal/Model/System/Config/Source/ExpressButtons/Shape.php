@@ -18,7 +18,7 @@ class Shape
     {
         return [
             'pill' => __('Pill'),
-            'rect' => __('Rect')
+            'rect' => __('Rectangle')
         ];
     }
 }

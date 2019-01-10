@@ -20,8 +20,8 @@ class Label
             'checkout' => __('Checkout'),
             'credit' => __('Credit'),
             'pay' => __('Pay'),
-            'buynow' => __('Buynow'),
-            'paypal' => __('Paypal'),
+            'buynow' => __('Buy Now'),
+            'paypal' => __('PayPal'),
             'installment' => __('Installment')
         ];
     }
