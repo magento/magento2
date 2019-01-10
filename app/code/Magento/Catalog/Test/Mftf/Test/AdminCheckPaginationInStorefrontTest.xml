@@ -16,43 +16,34 @@
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
             <group value="Catalog"/>
-            <group value="banana"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1 "/>
+            <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 1 "/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct1" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct2" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct3" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct4" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct5" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct6" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct7" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct8" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct9" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct10" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct11" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct12" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct13" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct14" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct15" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct16" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct17" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct18" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct19" />
-            <createData entity="defaultSimpleProduct" stepKey="simpleProduct20" />
+            <createData entity="PaginationProduct" stepKey="simpleProduct1"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct2"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct3"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct4"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct5"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct6"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct7"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct8"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct9"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct10"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct11"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct12"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct13"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct14"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct15"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct16"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct17"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct18"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct19"/>
+            <createData entity="PaginationProduct" stepKey="simpleProduct20"/>
         </before>
         <after>
-            <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="getCatalogEditPage1"/>
-            <waitForPageLoad stepKey="waitForPageToLoad"/>
-            <click selector="{{CatalogSection.storefront}}" stepKey="clickOnStoreFront2"/>
-            <scrollTo selector="{{CatalogSection.flatCatalogCategoryCheckBox}}" x="0" y="-80" stepKey="scrollToFlatCatalogCategory1"/>
-            <checkOption selector="{{CatalogSection.flatCatalogCategoryCheckBox}}" stepKey="checkTheflatCategoryCheckBox"/>
-            <selectOption selector="{{CatalogSection.flatCatalogProduct}}"  userInput="No" stepKey="selectFlatCatalogProduct1"/>
-            <scrollToTopOfPage stepKey="scrollToTopOfThePage3"/>
-            <click selector="{{CatalogSection.storefront}}" stepKey="clickOnStoreFront3"/>
-            <click selector="{{CatalogSection.save}}" stepKey="clickOnSaveButton2"/>
-            <see selector="{{CatalogSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessSaveMessage1"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
             <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
@@ -74,69 +65,67 @@
             <deleteData  createDataKey="simpleProduct18" stepKey="deleteSimpleProduct18"/>
             <deleteData  createDataKey="simpleProduct19" stepKey="deleteSimpleProduct19"/>
             <deleteData  createDataKey="simpleProduct20" stepKey="deleteSimpleProduct20"/>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0" />
+            <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0" />
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Select Catalog Configuration Page-->
-        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="getCatalogEditPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{CatalogSection.storefront}}" stepKey="clickOnStoreFront"/>
-        <scrollTo selector="{{CatalogSection.flatCatalogCategoryCheckBox}}" x="0" y="-80" stepKey="scrollToFlatCatalogCategory"/>
-        <uncheckOption selector="{{CatalogSection.flatCatalogCategoryCheckBox}}" stepKey="uncheckTheflatCategoryCheckBox"/>
-        <selectOption selector="{{CatalogSection.flatCatalogCategory}}"  userInput="Yes" stepKey="selectFlatCatalogCategory"/>
-        <selectOption selector="{{CatalogSection.flatCatalogProduct}}"  userInput="Yes" stepKey="selectFlatCatalogProduct"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
-        <click selector="{{CatalogSection.storefront}}" stepKey="clickOnStoreFront1"/>
-        <!--Save the updated catalog -->
-        <click selector="{{CatalogSection.save}}" stepKey="clickOnSaveButton"/>
-        <waitForPageLoad stepKey="waitForPageToSave"/>
-        <see selector="{{CatalogSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessSaveMessage"/>
-        <!-- Select Created Category-->
+        <!--Open Category Page and select created category-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForPageToLoad0"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
-        <!--Select Products in Category and save-->
+        <!--Select Products-->
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <waitForPageLoad stepKey="waitForProductsToLoad"/>
         <scrollTo selector="{{CatalogProductsSection.resetFilter}}" stepKey="scrollToResetFilter"/>
+        <waitForElementVisible selector="{{CatalogProductsSection.resetFilter}}" time="30" stepKey="waitForResetButtonToVisible"/>
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="20" stepKey="selectPagePerView"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitFroPageToLoad1"/>
+        <see selector="{{AdminProductGridFilterSection.productCount}}" userInput="20" stepKey="seeNumberOfProductsFound"/>
         <click selector="{{AdminCategoryProductsGridSection.productSelectAll}}" stepKey="selectSelectAll"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
-        <!--Go to the Store Front-->
+        <!--Open Category Store Front Page-->
         <amOnPage url="{{_defaultCategory.name}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <!--Select 9 items per page and verify number of products displayed in each page -->
         <conditionalClick selector="{{StorefrontCategoryTopToolbarSection.gridMode}}" visible="true" dependentSelector="{{StorefrontCategoryTopToolbarSection.gridMode}}" stepKey="seeProductGridIsActive"/>
-        <!--Verify products in First Page -->
+        <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="9" stepKey="selectPerPageOption"/>
+        <!--Verify number of products displayed in First Page -->
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInFirstPage"/>
-        <!--Verify products Second Page -->
+        <!--Verify number of products displayed in Second Page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInSecondPage"/>
-        <!--Verify products third  Page -->
+        <!--Verify number of products displayed in third  Page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton1"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="2" stepKey="seeNumberOfProductsInThirdPage"/>
-        <!--Verify products, use Previous Page selector-->
+        <!--Change Pages using Previous Page selector and verify number of products displayed in each page-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInSecondPage1"/>
-        <!--Verify Products, use Previous Page selector-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage1"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad6"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInFirstPage1"/>
-        <!--Select Pages by using page Number and verify products-->
+        <!--Select Pages by using page Number and verify number of products displayed-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToPreviousPage2"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('2')}}" stepKey="clickOnPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad7"/>
@@ -151,5 +140,19 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="clickOnFirstPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad9"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsFirstPage2"/>
+        <!--Select 15 items per page and verify number of products displayed in each page -->
+        <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="15" stepKey="selectPerPageOption1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad10"/>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="15" stepKey="seeNumberOfProductsInFirstPage3"/>
+        <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton2"/>
+        <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad11"/>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="5" stepKey="seeNumberOfProductsInSecondPage3"/>
+        <!--Select 30 items per page  and verify number of products displayed in each page -->
+        <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage4"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="30" stepKey="selectPerPageOption2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad12"/>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="20" stepKey="seeNumberOfProductsInFirstPage4"/>
     </test>
 </tests>
