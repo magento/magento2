@@ -5,13 +5,13 @@
  */
 
 /**
- * Wishlist block customer items
- *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer;
 
 /**
+ * Wishlist block customer items.
+ *
  * @api
  * @since 100.0.2
  */
@@ -86,6 +86,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Paginate Wishlist Product Items collection
      *
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     private function paginateCollection()
     {
@@ -252,6 +253,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * Get add all to cart params for POST request
+     *
      * @return string
      */
     public function getAddAllToCartParams()
@@ -263,7 +265,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function _toHtml()
     {
