@@ -24,4 +24,12 @@
         <data key="name" unique="suffix">Blue</data>
         <data key="price">3.00</data>
     </entity>
+    <entity name="ColorProductAttribute4" type="product_attribute">
+        <data key="name" unique="suffix">Green</data>
+        <data key="price">4.00</data>
+    </entity>
+    <entity name="ColorProductAttribute5" type="product_attribute">
+        <data key="name" unique="suffix">Black</data>
+        <data key="price">5.00</data>
+    </entity>
 </entities>

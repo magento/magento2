@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="ZeroSubtotalCheckoutPaymentMethodSetup" dataType="zero_subtotal_checkout_payment_method"
+               type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST"
+               successRegex="/messages-message-success/">
+        <object key="groups" dataType="zero_subtotal_checkout_payment_method">
+            <object key="free" dataType="zero_subtotal_checkout_payment_method">
+                <object key="fields" dataType="zero_subtotal_checkout_payment_method">
+                    <object key="active" dataType="active">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="order_status" dataType="order_status">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

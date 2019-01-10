@@ -40,7 +40,7 @@ $params = $block->getParams();
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t('An error occurred on the server. Please try to place the order again.')
+                        message: $t(<?= /* @escapeNotVerified */ json_encode($params['error_msg'])?>)
                     });
                 }
             );

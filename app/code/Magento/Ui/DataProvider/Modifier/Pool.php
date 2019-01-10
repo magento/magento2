@@ -85,14 +85,7 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
     protected function sort(array $data)
     {
         usort($data, function (array $a, array $b) {
-            $a['sortOrder'] = $this->getSortOrder($a);
-            $b['sortOrder'] = $this->getSortOrder($b);
-
-            if ($a['sortOrder'] == $b['sortOrder']) {
-                return 0;
-            }
-
-            return ($a['sortOrder'] < $b['sortOrder']) ? -1 : 1;
+            return $this->getSortOrder($a) <=> $this->getSortOrder($b);
         });
 
         return $data;

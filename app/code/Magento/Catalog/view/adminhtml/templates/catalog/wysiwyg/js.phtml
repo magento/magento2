@@ -43,6 +43,7 @@ var catalogWysiwygEditor = {
 
         if (this.modal) {
             this.modal.html(jQuery(data).html());
+            this.modal.modal('option', 'firedElementId', elementId);
         } else {
             this.modal = jQuery(data).modal({
                 title: '<?= /* @escapeNotVerified */ __('WYSIWYG Editor') ?>',

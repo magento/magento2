@@ -66,6 +66,8 @@ class CategoryProcessor
     }
 
     /**
+     * Initialize categories to be processed
+     *
      * @return $this
      */
     protected function initCategories()
@@ -112,6 +114,9 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
+        
+        // Set StoreId to 0 to generate URL Keys global and prevent generating url rewrites just for default website
+        $category->setStoreId(0);
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($name);

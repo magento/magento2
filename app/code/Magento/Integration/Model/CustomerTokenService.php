@@ -14,6 +14,7 @@ use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Event\ManagerInterface;
 
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
@@ -49,23 +50,32 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     private $requestThrottler;
 
     /**
+     * @var Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
-        CredentialsValidator $validatorHelper
+        CredentialsValidator $validatorHelper,
+        ManagerInterface $eventManager = null
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ManagerInterface::class);
     }
 
     /**
@@ -83,6 +93,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                 __('You did not sign in correctly or your account is temporarily disabled.')
             );
         }
+        $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }

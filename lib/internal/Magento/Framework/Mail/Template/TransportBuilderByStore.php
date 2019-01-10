@@ -54,7 +54,6 @@ class TransportBuilderByStore
     public function setFromByStore($from, $store)
     {
         $result = $this->senderResolver->resolve($from, $store);
-        $this->message->clearFrom();
         $this->message->setFrom($result['email'], $result['name']);
 
         return $this;

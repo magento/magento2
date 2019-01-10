@@ -17,6 +17,8 @@
         <data key="name" unique="suffix">BundleProduct</data>
         <data key="sku" unique="suffix">BundleProduct</data>
         <data key="status">1</data>
+        <data key="set">4</data>
+        <data key="type">bundle</data>
         <data key="urlKey" unique="suffix">bundleproduct</data>
         <data key="visibility">4</data>
         <data key="option_title" unique="suffix">TestOption</data>

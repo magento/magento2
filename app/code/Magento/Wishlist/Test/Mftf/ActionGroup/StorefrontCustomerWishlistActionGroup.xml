@@ -87,4 +87,21 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="submitUpdateWishlist"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
     </actionGroup>
+
+    <actionGroup name="StorefrontCustomerEditProductInWishlistMakeQuantityValidationError">
+        <arguments>
+            <argument name="product"/>
+            <argument name="description" type="string"/>
+            <argument name="quantity" type="string"/>
+            <argument name="errorNum" type="string"/>
+        </arguments>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="mouseOverOnProduct" />
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.productDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.productQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="clickAddToWishlistButton"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="wishlistMoveMouseOverProduct" />
+        <!--Check error message-->
+        <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{errorNum}}." stepKey="checkQtyError"/>
+    </actionGroup>
 </actionGroups>

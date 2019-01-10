@@ -184,14 +184,7 @@ class ImporterPool
     private function sort(array $data)
     {
         uasort($data, function (array $a, array $b) {
-            $a['sort_order'] = $this->getSortOrder($a);
-            $b['sort_order'] = $this->getSortOrder($b);
-
-            if ($a['sort_order'] == $b['sort_order']) {
-                return 0;
-            }
-
-            return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+            return $this->getSortOrder($a) <=> $this->getSortOrder($b);
         });
 
         return $data;

@@ -985,7 +985,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return (float)$this->getData('qty');
     }
 
     /**
