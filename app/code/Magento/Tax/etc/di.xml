@@ -37,8 +37,8 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Tax\Api\Data\TaxRateSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Tax\Api\Data\TaxClassSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxRateSearchResultsInterface" type="Magento\Tax\Model\TaxRateSearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxClassSearchResultsInterface" type="Magento\Tax\Model\TaxClassSearchResults" />
     <preference for="Magento\Tax\Api\OrderTaxManagementInterface" type="Magento\Tax\Model\Sales\Order\TaxManagement" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
@@ -47,7 +47,7 @@
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
     <preference for="Magento\Tax\Api\Data\TaxRuleInterface" type="Magento\Tax\Model\Calculation\Rule" />
-    <preference for="Magento\Tax\Api\Data\TaxRuleSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Tax\Api\Data\TaxRuleSearchResultsInterface" type="Magento\Tax\Model\TaxRuleSearchResults" />
     <preference for="Magento\Tax\Api\TaxRateManagementInterface" type="Magento\Tax\Model\TaxRateManagement" />
     <preference for="Magento\Tax\Api\TaxRateRepositoryInterface" type="Magento\Tax\Model\Calculation\RateRepository" />
     <preference for="Magento\Tax\Api\Data\TaxRateTitleInterface" type="Magento\Tax\Model\Calculation\Rate\Title" />
