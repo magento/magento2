@@ -92,7 +92,7 @@
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <clearField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" stepKey="clearField"/>
-        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" userInput="2" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$simpleProduct1.name$$)}}" stepKey="updateQtyInMiniCart"/>
         <!--End Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup-->
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
@@ -116,7 +116,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
-        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 12" stepKey="orderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 10" stepKey="orderedQuantity"/>
 
         <!--Admin Area Check source quantity and salable quantity-->
         <comment userInput="Admin - Check Source quantity and salable quantity after order placed" stepKey="AdminCheckQuantityAfterOrderPlaced"/>
@@ -126,7 +126,7 @@
             <argument name="value" value="$$simpleProduct1.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="988" stepKey="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="990" stepKey="checkSalableQtyAfterPlaceOrder"/>
 
         <!--Admin Area Process Shipping-->
         <comment userInput="Admin - Ship order" stepKey="AdminShipOrder"/>
