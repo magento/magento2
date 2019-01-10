@@ -199,6 +199,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         'SiteID', 'Password'
     ];
 
+    protected $productMetadata;
+
     /**
      * Xml response validator
      *
@@ -261,7 +263,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = [],
-        \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator = null
+        \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator = null,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
         $this->readFactory = $readFactory;
         $this->_carrierHelper = $carrierHelper;
@@ -272,6 +275,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $this->mathDivision = $mathDivision;
         $this->_dateTime = $dateTime;
         $this->_httpClientFactory = $httpClientFactory;
+        $this->productMetadata = $productMetadata;
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
@@ -929,6 +933,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $date = date(self::REQUEST_DATE_FORMAT, strtotime($this->_getShipDate() . " +{$offset} days"));
                 $this->_setQuotesRequestXmlDate($requestXml, $date);
 
+
                 $request = $requestXml->asXML();
                 $debugPoint['request'] = $this->filterDebugData($request);
                 $responseBody = $this->_getCachedQuotes($request);
@@ -983,18 +988,26 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _buildQuotesRequestXml()
     {
         $rawRequest = $this->_rawRequest;
-        $xmlStr = '<?xml version = "1.0" encoding = "UTF-8"?>' .
-            '<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" ' .
-            'xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" ' .
+
+        $xmlStr = '<?xml version="1.0" encoding = "UTF-8"?>' .
+            '<req:DCTRequest schemaVersion="2.0" ' .
+            'xmlns:req="http://www.dhl.com" ' .
             'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' .
-            'xsi:schemaLocation="http://www.dhl.com DCT-req.xsd "/>';
+            'xsi:schemaLocation="http://www.dhl.com DCT-req_global-2.0.xsd"/>';
+
         $xml = $this->_xmlElFactory->create(['data' => $xmlStr]);
         $nodeGetQuote = $xml->addChild('GetQuote', '', '');
         $nodeRequest = $nodeGetQuote->addChild('Request');
 
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
-        $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
-        $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
+        $nodeServiceHeader->addChild('MessageTime', date('Y-m-d\TH:i:sP'));
+        $nodeServiceHeader->addChild('MessageReference', uniqid('magento_quotereq_'));
+        $nodeServiceHeader->addChild('SiteID', (string) $this->getConfigData('id'));
+        $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
+
+        $nodeMetaData = $nodeRequest->addChild('MetaData');
+        $nodeMetaData->addChild('SoftwareName', $this->productMetadata->getName());
+        $nodeMetaData->addChild('SoftwareVersion', $this->productMetadata->getVersion());
 
         $nodeFrom = $nodeGetQuote->addChild('From');
         $nodeFrom->addChild('CountryCode', $rawRequest->getOrigCountryId());

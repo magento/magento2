@@ -56,6 +56,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var Error|MockObject
+     * @var Error|MockObject
      */
     private $error;
 
@@ -124,6 +125,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $configReader = $this->getConfigReader();
         $readFactory = $this->getReadFactory();
         $storeManager = $this->getStoreManager();
+        $productMetadata = $this->getProductMetadata();
 
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
@@ -160,6 +162,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'carrierHelper' => $carrierHelper,
                 'data' => ['id' => 'dhl', 'store' => '1'],
                 'xmlValidator' => $this->xmlValidator,
+                'productMetadata' => $productMetadata
             ]
         );
     }
@@ -183,7 +186,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
             'carriers/dhl/showmethod' => 1,
-            'carriers/dhl/title' => 'dhl Title',
+            'carriers/dhl/title' => 'DHL Title',
             'carriers/dhl/specificerrmsg' => 'dhl error message',
             'carriers/dhl/unit_of_measure' => 'K',
             'carriers/dhl/size' => '1',
@@ -191,7 +194,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/width' => '1.6',
             'carriers/dhl/depth' => '1.6',
             'carriers/dhl/debug' => 1,
-            'shipping/origin/country_id' => 'GB',
+            'shipping/origin/country_id' => 'GB'
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -247,8 +250,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return $method->invoke($model, $xml);
     }
 
+    /**
+     * Tests that valid rates are returned when sending a quotes request.
+     */
     public function testCollectRates()
     {
+        $requestData = require __DIR__ . '/_files/dhl_quote_request_data.php';
+        $responseXml = file_get_contents(__DIR__ . '/_files/dhl_quote_response.xml');
+
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
@@ -256,13 +265,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->httpResponse->method('getBody')
-            ->willReturn(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'));
+            ->willReturn($responseXml);
 
-        /** @var RateRequest $request */
-        $request = $this->objectManager->getObject(
-            RateRequest::class,
-            require __DIR__ . '/_files/rates_request_data_dhl.php'
-        );
+        $request = $this->objectManager->getObject(RateRequest::class, $requestData);
 
         $reflectionClass = new \ReflectionObject($this->httpClient);
         $rawPostData = $reflectionClass->getProperty('raw_post_data');
@@ -272,13 +277,27 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->method('debug')
             ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
 
-        self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
-        self::assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
+        $expectedRates = require __DIR__ . '/_files/dhl_quote_response_rates.php';
+        $actualRates = $this->model->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
+
+        $requestXml = $rawPostData->getValue($this->httpClient);
+        self::assertContains('<Weight>18.223</Weight>', $requestXml);
+        self::assertContains('<Height>0.630</Height>', $requestXml);
+        self::assertContains('<Width>0.630</Width>', $requestXml);
+        self::assertContains('<Depth>0.630</Depth>', $requestXml);
     }
 
+    /**
+     * Tests that an error is returned when attempting to collect rates for an inactive shipping method.
+     */
     public function testCollectRatesErrorMessage()
     {
         $this->scope->method('getValue')
@@ -294,16 +313,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->error, $this->model->collectRates($request));
-    }
-
-    public function testCollectRatesFail()
-    {
-        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
-
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
-
-        $this->assertFalse(false, $this->model->collectRates($request));
     }
 
     /**
@@ -595,14 +604,18 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $rateMethod = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setPrice'])
-            ->getMock();
-        $rateMethod->method('setPrice')
-            ->willReturnSelf();
+
         $rateMethodFactory->method('create')
-            ->willReturn($rateMethod);
+            ->willReturnCallback(function () {
+                $rateMethod = $this->getMockBuilder(Method::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['setPrice'])
+                    ->getMock();
+                $rateMethod->method('setPrice')
+                    ->willReturnSelf();
+
+                return $rateMethod;
+            });
 
         return $rateMethodFactory;
     }
@@ -699,5 +712,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->httpClient);
 
         return $httpClientFactory;
+    }
+
+    private function getProductMetadata(): MockObject
+    {
+        $productMetadata = $this->createMock(\Magento\Framework\App\ProductMetadata::class);
+        $productMetadata->method('getName')->willReturn('Magento');
+        $productMetadata->method('getVersion')->willReturn('2.3.1');
+
+        return $productMetadata;
     }
 }
