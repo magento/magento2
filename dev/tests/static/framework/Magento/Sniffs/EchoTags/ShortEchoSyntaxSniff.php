@@ -9,10 +9,13 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
+/**
+ * Validate short echo syntax is used.
+ */
 class ShortEchoSyntaxSniff implements Sniff
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -20,7 +23,7 @@ class ShortEchoSyntaxSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
