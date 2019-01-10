@@ -48,6 +48,7 @@
         <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
         <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
     </actionGroup>
+
     <actionGroup name="AdminCreateCartPriceRuleWithConditions" extends="AdminCreateCartPriceRuleActionGroup">
         <arguments>
             <argument name="condition1" type="string" defaultValue="Products subselection" />
@@ -77,5 +78,16 @@
         <click selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="openChooser" after="waitForForthRuleElement" />
         <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="waitForCategoryVisible" after="openChooser" />
         <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="checkCategoryName" after="waitForCategoryVisible" />
+    </actionGroup>
+
+    <actionGroup name="CreateCartPriceRuleSecondWebsiteActionGroup">
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Second Website" stepKey="selectWebsites"/>
     </actionGroup>
 </actionGroups>
