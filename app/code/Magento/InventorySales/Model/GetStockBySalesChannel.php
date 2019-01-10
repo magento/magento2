@@ -30,6 +30,11 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
     private $stockIdResolver;
 
     /**
+     * @var StockInterface[]
+     */
+    private $stockBySalesChannel = [];
+
+    /**
      * @param StockRepositoryInterface $stockRepositoryInterface
      * @param StockIdResolver $stockIdResolver
      */
@@ -46,6 +51,12 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
      */
     public function execute(SalesChannelInterface $salesChannel): StockInterface
     {
+        $cacheKey = $salesChannel->getCode() . '_'. $salesChannel->getType();
+
+        if (isset($this->stockBySalesChannel[$cacheKey])) {
+            return $this->stockBySalesChannel[$cacheKey];
+        }
+
         $stockId = $this->stockIdResolver->resolve(
             $salesChannel->getType(),
             $salesChannel->getCode()
@@ -54,6 +65,9 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
         if (null === $stockId) {
             throw new NoSuchEntityException(__('No linked stock found'));
         }
-        return $this->stockRepository->get($stockId);
+
+        $this->stockBySalesChannel[$cacheKey] = $this->stockRepository->get($stockId);
+
+        return $this->stockBySalesChannel[$cacheKey];
     }
 }
