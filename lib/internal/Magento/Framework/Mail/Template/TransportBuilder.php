@@ -49,13 +49,6 @@ class TransportBuilder
     protected $templateOptions;
 
     /**
-     * Mail from address
-     *
-     * @var string|array
-     */
-    private $from;
-
-    /**
      * Mail Transport
      *
      * @var TransportInterface
@@ -280,7 +273,6 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
-        $this->from = null;
         return $this;
     }
 
@@ -313,14 +305,6 @@ class TransportBuilder
         $this->message->setMessageType($types[$template->getType()])
             ->setBody($body)
             ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
-
-        if ($this->from) {
-            $from = $this->_senderResolver->resolve(
-                $this->from,
-                $template->getDesignConfig()->getStore()
-            );
-            $this->message->setFrom($from['email'], $from['name']);
-        }
 
         return $this;
     }
