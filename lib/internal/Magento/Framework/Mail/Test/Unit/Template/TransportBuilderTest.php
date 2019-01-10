@@ -173,7 +173,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $store)
             ->willReturn($sender);
         $this->messageMock->expects($this->once())
-            ->method('setFrom')
+            ->method('setFromAddress')
             ->with('from@example.com', 'name')
             ->willReturnSelf();
 
