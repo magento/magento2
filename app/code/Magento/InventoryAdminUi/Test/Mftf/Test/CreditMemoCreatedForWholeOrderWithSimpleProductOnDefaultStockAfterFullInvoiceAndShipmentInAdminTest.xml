@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreditMemoCreatedForWholeOrderWithSimpleProductOnDefaultStockAfterFullInvoiceAndShipmentInAdminTest">
+        <annotations>
+            <stories value="MSI Credit Memo"/>
+            <title value="Credit memo created for whole order with Simple product on Default stock after full invoice and shipment in Admin"/>
+            <description value="Credit memo created for whole order with Simple product on Default stock after full invoice and shipment in Admin"/>
+            <testCaseId value="MSI-1949"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
+            <createData entity="MsiCustomer1" stepKey="createCustomer1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="createStock1"/>
+                <requiredEntity createDataKey="createSource1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
+                <!--<requiredEntity createDataKey="simpleCategory1"/>-->
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <waitForPageLoad stepKey="waitForDashboardLoad"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createStock1" stepKey="deleteStock"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Admin - Assign Default Stock to Main Website-->
+        <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPageToAssignDefaultStockToMainWebsite"/>
+        <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+            <argument name="keyword" value="_defaultStock.name"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+        <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+
+        <comment userInput="Assign category to created simple product." stepKey="assignCategoryToProductComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditProduct"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySku">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductEditPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="1000" stepKey="fillSourceQtyField"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedSimpleProduct"/>
+
+        <!--Login To storefront as Customer-->
+        <comment userInput="Login to storefront as customer." stepKey="loginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer1$$"/>
+        </actionGroup>
+
+        <!--Purchase product once logged in-->
+        <comment userInput="Purchase 10 simple product" stepKey="purchaseSimpleProductComment"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <!--<actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">-->
+            <!--<argument name="product" value="$$simpleProduct1$$"/>-->
+            <!--<argument name="quantity" value="2"/>-->
+            <!--<argument name="checkQuantity" value="1"/>-->
+        <!--</actionGroup>-->
+        <!--Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup explicitly included-->
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$simpleProduct1.name$$)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$simpleProduct1.name$$)}}" stepKey="clickAddToCart" />
+        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
+        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$simpleProduct1.name$$)}}" time="30" stepKey="assertMessage"/>
+        <waitForText userInput="1" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <clearField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" stepKey="clearField"/>
+        <wait time="10" stepKey="WaitForClear"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" userInput="2" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$simpleProduct1.name$$)}}" stepKey="updateQtyInMiniCart"/>
+        <!--End Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup-->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
+        <click selector=".continue" stepKey="clickOnNext1"/>
+        <waitForPageLoad stepKey="waitForPageLoad19"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <!--Admin Area Check ordered quantity-->
+        <comment userInput="Admin - Check ordered quantity" stepKey="AdminCheckOrderedQuantity"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 12" stepKey="orderedQuantity"/>
+
+        <!--Admin Area Check source quantity and salable quantity-->
+        <comment userInput="Admin - Check Source quantity and salable quantity after order placed" stepKey="AdminCheckQuantityAfterOrderPlaced"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="988" stepKey="checkSalableQtyAfterPlaceOrder"/>
+
+        <!--Admin Area Process Shipping-->
+        <comment userInput="Admin - Ship order" stepKey="AdminShipOrder"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
+                   stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+
+        <!--Admin Area Process Full Invoice-->
+        <comment userInput="Admin - Process invoice for full order" stepKey="InvoiceFullOrder"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
+                   stepKey="searchOrderNumInvoice"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask1"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoad21"/>
+        <scrollToTopOfPage stepKey="scrollToTopMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoad22"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
+
+
+        <!--Admin Area Create Full Credit Memo-->
+        <comment userInput="Admin - Create credit memo for full order" stepKey="AdminCreateCreditMemoFullOrder"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateCreditMemo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskCreditMemo"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
+                   stepKey="searchOrderNumCreditMemo"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCreditMemo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskCreditMemo"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowCreditMemo"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmit"/>
+
+
+        <!--Admin Area Check quantities after Credit Memo-->
+        <comment userInput="Admin - Check Source quantity and salable quantity after credit memo" stepKey="AdminCheckQuantityAfterCreditMemo"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreditMemo"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterCreditMemo">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="1000" stepKey="checkSalableQtyAfterCreditMemo"/>
+
+    </test>
+</tests>
+
+
+
