@@ -57,4 +57,26 @@ class SubjectReader
     {
         return Helper\SubjectReader::readResponse($subject);
     }
+
+    /**
+     * Reads login id from subject
+     *
+     * @param array $subject
+     * @return string|null
+     */
+    public function readLoginId(array $subject): ?string
+    {
+        return $subject['merchantAuthentication']['name'] ?? null;
+    }
+
+    /**
+     * Reads transaction key from subject
+     *
+     * @param array $subject
+     * @return string|null
+     */
+    public function readTransactionKey(array $subject): ?string
+    {
+        return $subject['merchantAuthentication']['transactionKey'] ?? null;
+    }
 }

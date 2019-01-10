@@ -57,6 +57,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('abc', $this->model->getTransactionKey());
     }
 
+    public function testGetTransactionHash()
+    {
+        $this->scopeConfigMock->expects(static::any())
+            ->method('getValue')
+            ->with($this->getPath(Config::KEY_LEGACY_TRANSACTION_HASH), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn('myhash');
+        $this->assertEquals('myhash', $this->model->getLegacyTransactionHash());
+    }
+
     /**
      * Return config path
      *

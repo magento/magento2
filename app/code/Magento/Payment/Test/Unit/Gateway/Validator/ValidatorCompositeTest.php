@@ -54,6 +54,9 @@ class ValidatorCompositeTest extends \PHPUnit\Framework\TestCase
         $resultFail->expects(static::once())
             ->method('getFailsDescription')
             ->willReturn(['Fail']);
+        $resultFail->expects(static::once())
+            ->method('getErrorCodes')
+            ->willReturn(['abc123']);
 
         $validator1->expects(static::once())
             ->method('validate')
@@ -76,7 +79,7 @@ class ValidatorCompositeTest extends \PHPUnit\Framework\TestCase
                 [
                     'isValid' => false,
                     'failsDescription' => ['Fail'],
-                    'errorCodes' => []
+                    'errorCodes' => ['abc123']
                 ]
             )
             ->willReturn($compositeResult);

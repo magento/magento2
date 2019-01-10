@@ -90,8 +90,17 @@
             <argument name="transferFactory" xsi:type="object">AuthorizenetAcceptjsDefaultTransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client</argument>
             <!--<argument name="handler" xsi:type="object">AuthorizenetAcceptjsTestCredntialsHandler</argument>-->
-            <argument name="validator" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="general" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</item>
+                <item name="transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator</item>
+                <item name="transaction_hash" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator</item>
+            </argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">

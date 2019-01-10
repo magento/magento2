@@ -67,4 +67,18 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals('abc', $this->subjectReader->readStoreId(['store_id' => 'abc']));
     }
+
+    public function testReadLoginId(): void
+    {
+        $this->assertEquals('abc', $this->subjectReader->readLoginId([
+            'merchantAuthentication' => ['name' => 'abc']
+        ]));
+    }
+
+    public function testReadTransactionKey(): void
+    {
+        $this->assertEquals('abc', $this->subjectReader->readTransactionKey([
+            'merchantAuthentication' => ['transactionKey' => 'abc']
+        ]));
+    }
 }

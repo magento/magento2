@@ -9,5 +9,6 @@
     <message_list>
         <message code="E00003" translate="true">Invalid request to gateway.</message>
         <message code="E00007" translate="true">Invalid gateway credentials.</message>
+        <message code="ETHV" translate="true">The authenticity of the gateway response could not be verified.</message>
     </message_list>
 </mapping>

@@ -51,12 +51,12 @@ class CaptureDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        /** @var DataObject|\Magento\Payment\Model\InfoInterface $payment */
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
         $transactionData = [
             'transactionRequest' => []
         ];
 
+        // TODO use interface methods
         if ($payment->getData(Payment::PARENT_TXN_ID)) {
             $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
             $transactionData['transactionRequest']['refTransId'] = $this->getRealParentTransactionId($payment);
@@ -75,6 +75,7 @@ class CaptureDataBuilder implements BuilderInterface
      */
     private function getRealParentTransactionId($payment): string
     {
+        // TODO use interface methods
         $transaction = $this->transactionRepository->getByTransactionId(
             $payment->getData(Payment::PARENT_TXN_ID),
             $payment->getId(),

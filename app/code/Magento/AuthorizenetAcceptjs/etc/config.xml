@@ -23,9 +23,9 @@
                 <title>Credit Card (Authorize.net)</title>
                 <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <trans_signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
-                <create_order_before>1</create_order_before>
                 <date_delim>/</date_delim>
                 <api_url>https://api.authorize.net/xml/v1/request.api</api_url>
             </authorizenet_acceptjs>

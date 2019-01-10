@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
+use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Adds the basic payment information to the request
  */
-class AddressDataBuilder implements BuilderInterface
+class CustomerDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -22,12 +23,19 @@ class AddressDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @param SubjectReader $subjectReader
+     * @var Config
      */
-    public function __construct(SubjectReader $subjectReader)
-     {
-         $this->subjectReader = $subjectReader;
-     }
+    private $config;
+
+    /**
+     * @param SubjectReader $subjectReader
+     * @param Config $config
+     */
+    public function __construct(SubjectReader $subjectReader, Config $config)
+    {
+        $this->subjectReader = $subjectReader;
+        $this->config = $config;
+    }
 
     /**
      * @inheritdoc
@@ -37,37 +45,26 @@ class AddressDataBuilder implements BuilderInterface
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $order = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();
-        $shippingAddress = $order->getShippingAddress();
-        $result = [];
-
-        if ($billingAddress) {
-            $result['billTo'] = [
-                'firstName' => $billingAddress->getFirstname(),
-                'lastName' => $billingAddress->getLastname(),
-                'company' => $billingAddress->getCompany(),
-                'address' => $billingAddress->getStreetLine1(),
-                'city' => $billingAddress->getCity(),
-                'state' => $billingAddress->getRegionCode(),
-                'zip' => $billingAddress->getPostcode(),
-                'country' => $billingAddress->getCountryId()
-            ];
-        }
-
-        if ($shippingAddress) {
-            $result['shipTo'] = [
-                'firstName' => $shippingAddress->getFirstname(),
-                'lastName' => $shippingAddress->getLastname(),
-                'company' => $shippingAddress->getCompany(),
-                'address' => $shippingAddress->getStreetLine1(),
-                'city' => $shippingAddress->getCity(),
-                'state' => $shippingAddress->getRegionCode(),
-                'zip' => $shippingAddress->getPostcode(),
-                'country' => $shippingAddress->getCountryId()
-            ];
-        }
+        $result = [
+            'transactionRequest' => [
+                'customer' => [
+                    'id' => $order->getCustomerId(),
+                    'email' => $billingAddress->getEmail()
+                ]
+            ]
+        ];
 
         if ($order->getRemoteIp()) {
-            $result['customerIP'] = $order->getRemoteIp();
+            $result['transactionRequest']['customerIP'] = $order->getRemoteIp();
+        }
+
+        if ($this->config->shouldEmailCustomer($this->subjectReader->readStoreId($buildSubject))) {
+            $result['transactionRequest']['transactionSettings']['setting'] = [
+                [
+                    'settingName' => 'emailCustomer',
+                    'settingValue' => 'true'
+                ]
+            ];
         }
 
         return $result;

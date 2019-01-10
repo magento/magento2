@@ -25,9 +25,9 @@ class AddressDataBuilder implements BuilderInterface
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
-     {
-         $this->subjectReader = $subjectReader;
-     }
+    {
+        $this->subjectReader = $subjectReader;
+    }
 
     /**
      * @inheritdoc
@@ -64,10 +64,6 @@ class AddressDataBuilder implements BuilderInterface
                 'zip' => $shippingAddress->getPostcode(),
                 'country' => $shippingAddress->getCountryId()
             ];
-        }
-
-        if ($order->getRemoteIp()) {
-            $result['customerIP'] = $order->getRemoteIp();
         }
 
         return $result;

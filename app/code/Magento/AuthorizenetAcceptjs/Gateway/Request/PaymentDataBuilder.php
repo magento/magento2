@@ -28,18 +28,26 @@ class PaymentDataBuilder implements BuilderInterface
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
-     {
-         $this->subjectReader = $subjectReader;
-     }
+    {
+        $this->subjectReader = $subjectReader;
+    }
 
     /**
      * @inheritdoc
      */
     public function build(array $buildSubject)
     {
+        //$payment = $this->subjectReader->readPayment($buildSubject);
+
         return [
             'transactionRequest' => [
                 'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
+                // TODO Get the PO number, tax, shipping costs
+                //'poNumber' => $payment->getPayment()->getAdditionalInformation(),
+                //'tax' => $payment->getOrder()->to
+                //'shipping' => [
+                //    'amount' => $payment->getOrder()->g
+                //],
                 'payment' => [
                     'opaqueData' => [
                         // @TODO integrate the real payment values from accept.js
