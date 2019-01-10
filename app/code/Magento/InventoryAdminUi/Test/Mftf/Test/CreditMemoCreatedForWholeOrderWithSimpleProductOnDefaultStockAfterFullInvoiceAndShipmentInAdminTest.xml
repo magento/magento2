@@ -92,7 +92,6 @@
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <clearField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" stepKey="clearField"/>
-        <wait time="10" stepKey="WaitForClear"/>
         <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" userInput="2" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$simpleProduct1.name$$)}}" stepKey="updateQtyInMiniCart"/>
         <!--End Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup-->
