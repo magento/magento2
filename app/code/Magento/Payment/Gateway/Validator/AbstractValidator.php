@@ -33,7 +33,7 @@ abstract class AbstractValidator implements ValidatorInterface
      * @param bool $isValid
      * @param array $fails
      * @param array $errorCodes
-     * @return void
+     * @return \Magento\Payment\Gateway\Validator\ResultInterface
      */
     protected function createResult($isValid, array $fails = [], array $errorCodes = [])
     {

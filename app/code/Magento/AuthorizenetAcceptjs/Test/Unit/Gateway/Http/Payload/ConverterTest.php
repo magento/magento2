@@ -6,21 +6,21 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http\Payload;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Http\PayloadConverter;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 
-class PayloadConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConvertToXmlConvertsDataCorrectly()
     {
-        $converter = new PayloadConverter();
+        $converter = new Converter();
         $data = [
             'level1' => 'abc',
             'badchars' => '<>\'"&',
             'twolevels' => ['level2' => 'def'],
             'threelevels' => ['level2' => ['level3' => 'ghi']],
-            PayloadConverter::PAYLOAD_TYPE => 'foobar',
+            Converter::PAYLOAD_TYPE => 'foobar',
         ];
 
         $expected = '<foobar xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">'
@@ -39,13 +39,13 @@ class PayloadConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertToXmlThrowsExceptionWhenInvalid()
     {
-        $converter = new PayloadConverter();
+        $converter = new Converter();
         $converter->convertArrayToXml(['level1' => 'abc']);
     }
 
     public function testXmlToArrayConvertsDataCorrectly()
     {
-        $converter = new PayloadConverter();
+        $converter = new Converter();
 
         $xml = '<foobar>'
             . '<level1>abc</level1>'
@@ -65,7 +65,7 @@ class PayloadConverterTest extends \PHPUnit\Framework\TestCase
             'threelevels' => ['level2' => ['level3' => 'ghi']],
             'duplicates' => ['dupe' => ['abc','def']],
             'duplicates2' => ['dupe' => [['foo' => 'bar'],['baz' => 'bash']]],
-            PayloadConverter::PAYLOAD_TYPE => 'foobar',
+            Converter::PAYLOAD_TYPE => 'foobar',
         ];
         $this->assertSame($expected, $actual);
     }
@@ -76,7 +76,7 @@ class PayloadConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testXmlToArrayThrowsExceptionWhenInvalid()
     {
-        $converter = new PayloadConverter();
+        $converter = new Converter();
         $converter->convertXmlToArray('');
     }
 }

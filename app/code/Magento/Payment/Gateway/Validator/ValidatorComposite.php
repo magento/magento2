@@ -10,10 +10,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
- * Class ValidatorComposite
- * @package Magento\Payment\Gateway\Validator
- * @api
- * @since 100.0.2
+ * Compiles a result using the results of multiple validators
  */
 class ValidatorComposite extends AbstractValidator
 {
@@ -51,6 +48,7 @@ class ValidatorComposite extends AbstractValidator
     {
         $isValid = true;
         $failsDescriptionAggregate = [];
+        $errorCodesAggregate = [];
         foreach ($this->validators as $validator) {
             $result = $validator->validate($validationSubject);
             if (!$result->isValid()) {
@@ -59,9 +57,13 @@ class ValidatorComposite extends AbstractValidator
                     $failsDescriptionAggregate,
                     $result->getFailsDescription()
                 );
+                $errorCodesAggregate = array_merge(
+                    $errorCodesAggregate,
+                    $result->getErrorCodes()
+                );
             }
         }
 
-        return $this->createResult($isValid, $failsDescriptionAggregate);
+        return $this->createResult($isValid, $failsDescriptionAggregate, $errorCodesAggregate);
     }
 }

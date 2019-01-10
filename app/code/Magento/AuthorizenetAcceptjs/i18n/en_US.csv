@@ -2,3 +2,5 @@ Authorize.net,Authorize.net
 "API Endpoint URL","API Endpoint URL"
 "Invalid payload type.","Invalid payload type."
 "Something went wrong in the payment gateway.","Something went wrong in the payment gateway."
+"Merchant MD5 (deprecated","Merchant MD5 (deprecated"
+"Signature Key","Signature Key"
