@@ -253,7 +253,7 @@ class Manager implements ManagerInterface
                 $exception->getTrace(),
                 true,
                 true,
-                (bool)getenv('DEBUG_SHOW_ARGS')
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
             )
         );
 
