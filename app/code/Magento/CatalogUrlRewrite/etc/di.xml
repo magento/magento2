@@ -34,4 +34,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewrite\Model\CompositeUrlFinder">
+        <arguments>
+            <argument name="children" xsi:type="array">
+                <item name="catalog" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
