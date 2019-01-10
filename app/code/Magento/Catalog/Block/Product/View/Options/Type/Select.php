@@ -25,12 +25,12 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     /**
      * @var CheckableFactory
      */
-    protected $checkableFactory;
+    private $checkableFactory;
 
     /**
      * @var MultipleFactory
      */
-    protected $multipleFactory;
+    private $multipleFactory;
 
     /**
      * Select constructor.
