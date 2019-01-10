@@ -39,11 +39,6 @@ class GetLegacyStockItem
     private $getProductIdsBySkus;
 
     /**
-     * @var StockItemInterface[]
-     */
-    private $stockItemBySku = [];
-
-    /**
      * @param StockItemInterfaceFactory $stockItemFactory
      * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
      * @param StockItemRepositoryInterface $legacyStockItemRepository
@@ -68,10 +63,6 @@ class GetLegacyStockItem
      */
     public function execute(string $sku): StockItemInterface
     {
-        if (isset($this->stockItemBySku[$sku])) {
-            return $this->stockItemBySku[$sku];
-        }
-
         $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
 
         try {
@@ -95,8 +86,7 @@ class GetLegacyStockItem
         }
 
         $stockItems = $stockItemCollection->getItems();
-        $this->stockItemBySku[$sku] = reset($stockItems);
-
-        return $this->stockItemBySku[$sku];
+        $stockItem = reset($stockItems);
+        return $stockItem;
     }
 }
