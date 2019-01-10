@@ -105,7 +105,7 @@ define([
                     form_key: clientConfig.formKey
                 };
 
-                if (clientConfig.button) {
+                if (!clientConfig.button) {
                     return new paypal.Promise(function (resolve, reject) {
                         clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
                                 paypal.request.post(clientConfig.startUrl, params)
