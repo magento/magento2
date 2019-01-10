@@ -56,7 +56,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var Error|MockObject
-     * @var Error|MockObject
      */
     private $error;
 
