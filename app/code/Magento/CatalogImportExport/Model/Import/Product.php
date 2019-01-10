@@ -796,6 +796,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StockItemImporterInterface|null $stockItemImporter
      * @param DateTimeFactory $dateTimeFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -914,7 +916,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (!$this->validator->isAttributeValid($attrCode, $attrParams, $rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->skipRow($rowNum, $message, null, $attrCode);
+                $this->skipRow($rowNum, $message, ProcessingError::ERROR_LEVEL_NOT_CRITICAL, $attrCode);
             }
             return false;
         }
@@ -2462,7 +2464,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->skipRow($rowNum, $message, null, $this->validator->getInvalidAttribute());
+                $this->skipRow(
+                    $rowNum,
+                    $message,
+                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
+                    $this->validator->getInvalidAttribute()
+                );
             }
         }
 
