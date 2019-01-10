@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontPurchaseProductWithCustomOptions">
+    <test name="StorefrontPurchaseProductWithCustomOptionsTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Purchase a product with Custom Options of different types"/>
@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-61717"/>
             <group value="Catalog"/>
+            <!-- skip due to MAGETWO-97424 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -53,6 +55,10 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsMultiselect(ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.price)}}" stepKey="checkMultiSelectProductOption"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsData(ProductOptionDate.title, ProductOptionDate.price)}}" stepKey="checkDataProductOption"/>
 
+        <!--Generate year-->
+        <generateDate date="Now" format="Y" stepKey="year"/>
+        <generateDate date="Now" format="y" stepKey="shortYear"/>
+
         <!-- Adding items to the checkout -->
 
         <fillField userInput="OptionField" selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" stepKey="fillProductOptionInputField"/>
@@ -64,10 +70,10 @@
         <selectOption userInput="{{ProductOptionValueMultiSelect1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionMultiSelect.title)}}" stepKey="selectProductOptionMultiSelect"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataMonth(ProductOptionDate.title)}}" stepKey="selectProductOptionDate"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDataDay(ProductOptionDate.title)}}" stepKey="selectProductOptionDate1"/>
-        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.productOptionDataYear(ProductOptionDate.title)}}" stepKey="selectProductOptionDate2"/>
+        <selectOption userInput="$year" selector="{{StorefrontProductInfoMainSection.productOptionDataYear(ProductOptionDate.title)}}" stepKey="selectProductOptionDate2"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeMonth(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMonth"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeDay(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeDay"/>
-        <selectOption userInput="2018" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeYear(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeYear"/>
+        <selectOption userInput="$year" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeYear(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeYear"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeHour(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeHour"/>
         <selectOption userInput="00" selector="{{StorefrontProductInfoMainSection.productOptionDateAndTimeMinute(ProductOptionDateTime.title)}}" stepKey="selectProductOptionDateAndTimeMinute"/>
         <selectOption userInput="01" selector="{{StorefrontProductInfoMainSection.productOptionTimeHour(ProductOptionTime.title)}}" stepKey="selectProductOptionTimeHour"/>
@@ -100,8 +106,8 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeProductOptionValueRadioButtons1Input1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeProductOptionValueCheckboxInput1" />
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeproductAttributeOptionsMultiselect1Input1" />
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="Jan 1, 2018" stepKey="seeProductOptionDateAndTimeInput" />
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1/1/18, 1:00 AM" stepKey="seeProductOptionDataInput" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="Jan 1, $year" stepKey="seeProductOptionDateAndTimeInput" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeProductOptionDataInput" />
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
@@ -138,8 +144,8 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton1"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect1" />
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, 2018" stepKey="seeAdminOrderProductOptionDateAndTime" />
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/18, 1:00 AM" stepKey="seeAdminOrderProductOptionData" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, $year" stepKey="seeAdminOrderProductOptionDateAndTime" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeAdminOrderProductOptionData" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1:00 AM" stepKey="seeAdminOrderProductOptionTime" />
 
         <!-- Reorder and Checking the correctness of displayed custom options for user parameters on Order and correctness of displayed price Subtotal-->
@@ -156,8 +162,8 @@
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeAdminOrderProductOptionValueRadioButton11"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeAdminOrderProductOptionValueCheckbox1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeAdminOrderproductAttributeOptionsMultiselect11" />
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, 2018" stepKey="seeAdminOrderProductOptionDateAndTime1" />
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/18, 1:00 AM" stepKey="seeAdminOrderProductOptionData1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Jan 1, $year" stepKey="seeAdminOrderProductOptionDateAndTime1" />
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeAdminOrderProductOptionData1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="1:00 AM" stepKey="seeAdminOrderProductOptionTime1" />
 
         <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="{$finalProductPrice}" stepKey="seeOrderSubTotal"/>
@@ -174,8 +180,8 @@
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionRadiobutton.title, ProductOptionValueRadioButtons1.title)}}" userInput="{{ProductOptionValueRadioButtons1.title}}" stepKey="seeStorefontOrderProductOptionValueRadioButtons11"/>
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionCheckbox.title, ProductOptionValueCheckbox.title)}}" userInput="{{ProductOptionValueCheckbox.title}}" stepKey="seeStorefontOrderProductOptionValueCheckbox1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionMultiSelect.title, ProductOptionValueMultiSelect1.title)}}" userInput="{{ProductOptionValueMultiSelect1.title}}" stepKey="seeStorefontOrderproductAttributeOptionsMultiselect11" />
-        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDate.title, 'Jan 1, 2018')}}" userInput="Jan 1, 2018" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
-        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDateTime.title, '1/1/18, 1:00 AM')}}" userInput="1/1/18, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDate.title, 'Jan 1, $year')}}" userInput="Jan 1, $year" stepKey="seeStorefontOrderProductOptionDateAndTime1" />
+        <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionDateTime.title, '1/1/$shortYear, 1:00 AM')}}" userInput="1/1/$shortYear, 1:00 AM" stepKey="seeStorefontOrderProductOptionData1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($createProduct.name$, ProductOptionTime.title, '1:00 AM')}}" userInput="1:00 AM" stepKey="seeStorefontOrderProductOptionTime1" />
 
         <!-- Delete product and category -->
