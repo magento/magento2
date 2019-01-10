@@ -14,7 +14,7 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class CustomerChangePasswordTest extends GraphQlAbstract
+class ChangeCustomerPasswordTest extends GraphQlAbstract
 {
     /**
      * @var AccountManagementInterface
