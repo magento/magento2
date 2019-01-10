@@ -76,7 +76,6 @@ class LoginAfterJSMinificationTest extends Injectable
 
         // Steps
         $cli->setDeployModeToProduction();
-        //$this->adminDashboardPage->open();
         $this->stepFactory->create(LoginUserOnBackendStep::class)->run();
     }
 
