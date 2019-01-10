@@ -32,8 +32,18 @@ define([
                 }
             },
 
+            currentConfig: {
+                component: 'Magento_Ui/js/grid/paging/paging',
+                name: '${ $.name }_current',
+                storageConfig: {
+                    provider: '${ $.storageConfig.provider }',
+                    namespace: '${ $.storageConfig.namespace }'
+                }
+            },
+
             imports: {
                 pageSize: '${ $.sizesConfig.name }:value',
+                current: '${ $.currentConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords'
             },
@@ -52,9 +62,9 @@ define([
             },
 
             listens: {
-                'totalRecords': 'updateCounter',
                 'pages': 'updateCounter',
                 'pageSize': 'onPageSizeChange',
+                'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst'
             },
 
@@ -244,7 +254,7 @@ define([
 
             this.previousSize = size;
 
-            if (!isNaN(delta)) {
+            if (delta) {
                 this.setPage(cursor);
             }
 
