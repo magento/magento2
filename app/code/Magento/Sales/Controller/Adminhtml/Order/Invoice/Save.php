@@ -7,6 +7,7 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -19,7 +20,7 @@ use Magento\Sales\Model\Service\InvoiceService;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action
+class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

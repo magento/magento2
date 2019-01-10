@@ -13,7 +13,7 @@
                     <level>2</level>
                     <label translate="true">Swatch Image</label>
                 </settings>
-                <field name="watermark_swatch_image_image" formElement="fileUploader">
+                <field name="watermark_swatch_image_image" formElement="imageUploader">
                     <settings>
                         <label translate="true">Image</label>
                         <componentType>imageUploader</componentType>

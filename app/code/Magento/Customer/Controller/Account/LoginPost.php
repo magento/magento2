@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
@@ -27,7 +28,7 @@ use Magento\Framework\Phrase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends AbstractAccount implements CsrfAwareActionInterface
+class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface

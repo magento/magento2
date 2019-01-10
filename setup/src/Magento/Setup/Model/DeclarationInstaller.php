@@ -7,7 +7,6 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\RequestFactory;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
 
 /**
@@ -26,11 +25,6 @@ class DeclarationInstaller
     private $schemaDiff;
 
     /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
-
-    /**
      * @var SchemaConfigInterface
      */
     private $schemaConfig;
@@ -41,16 +35,13 @@ class DeclarationInstaller
      * @param SchemaConfigInterface $schemaConfig
      * @param SchemaDiff $schemaDiff
      * @param OperationsExecutor $operationsExecutor
-     * @param RequestFactory $requestFactory
      */
     public function __construct(
         SchemaConfigInterface $schemaConfig,
         SchemaDiff $schemaDiff,
-        OperationsExecutor $operationsExecutor,
-        RequestFactory $requestFactory
+        OperationsExecutor $operationsExecutor
     ) {
         $this->operationsExecutor = $operationsExecutor;
-        $this->requestFactory = $requestFactory;
         $this->schemaConfig = $schemaConfig;
         $this->schemaDiff = $schemaDiff;
     }

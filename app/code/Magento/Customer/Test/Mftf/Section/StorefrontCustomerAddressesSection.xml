@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerAddressesSection">
+        <element name="addressesList" type="text" selector=".block-addresses-list" />
+        <element name="deleteAdditionalAddress" type="button" selector="//ol[@class='items addresses']/li[@class='item'][{{var}}]//a[@class='action delete']" parameterized="true"/>
+    </section>
+</sections>

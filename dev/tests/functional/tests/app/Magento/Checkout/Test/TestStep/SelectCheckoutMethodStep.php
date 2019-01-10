@@ -60,12 +60,20 @@ class SelectCheckoutMethodStep implements TestStepInterface
     private $customerAccountCreatePage;
 
     /**
+     * Proceed to checkout from minicart step
+     *
+     * @var proceedToCheckoutFromMiniShoppingCartStep
+     */
+    private $proceedToCheckoutFromMiniShoppingCartStep;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param CustomerAccountCreate $customerAccountCreatePage
      * @param Customer $customer
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param ClickProceedToCheckoutStep $clickProceedToCheckoutStep
+     * @param ProceedToCheckoutFromMiniShoppingCartStep $proceedToCheckoutFromMiniShoppingCartStep
      * @param string $checkoutMethod
      */
     public function __construct(
@@ -74,6 +82,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
         Customer $customer,
         LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
         ClickProceedToCheckoutStep $clickProceedToCheckoutStep,
+        ProceedToCheckoutFromMiniShoppingCartStep $proceedToCheckoutFromMiniShoppingCartStep,
         $checkoutMethod
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
@@ -82,6 +91,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
         $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
         $this->clickProceedToCheckoutStep = $clickProceedToCheckoutStep;
         $this->checkoutMethod = $checkoutMethod;
+        $this->proceedToCheckoutFromMiniShoppingCartStep = $proceedToCheckoutFromMiniShoppingCartStep;
     }
 
     /**
@@ -129,6 +139,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
         if ($this->checkoutMethod === 'register_before_checkout') {
             $this->checkoutOnepage->getAuthenticationPopupBlock()->createAccount();
             $this->customerAccountCreatePage->getRegisterForm()->registerCustomer($this->customer);
+            $this->proceedToCheckoutFromMiniShoppingCartStep->run();
         }
     }
 

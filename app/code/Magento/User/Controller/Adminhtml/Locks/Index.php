@@ -6,10 +6,12 @@
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
 /**
  * Locks Index action
  */
-class Index extends \Magento\User\Controller\Adminhtml\Locks
+class Index extends \Magento\User\Controller\Adminhtml\Locks implements HttpGetActionInterface
 {
     /**
      * Render page with grid

@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
+/**
+ * Address rule condition data model.
+ */
 class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 {
     /**
@@ -61,6 +64,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             'base_subtotal' => __('Subtotal'),
             'total_qty' => __('Total Items Quantity'),
             'weight' => __('Total Weight'),
+            'payment_method' => __('Payment Method'),
             'shipping_method' => __('Shipping Method'),
             'postcode' => __('Shipping Postcode'),
             'region' => __('Shipping Region'),
