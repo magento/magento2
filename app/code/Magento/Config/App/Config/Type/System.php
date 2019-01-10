@@ -45,6 +45,24 @@ class System implements ConfigTypeInterface
     private static $lockName = 'SYSTEM_CONFIG';
 
     /**
+     * Timeout between retrieves to load the configuration from the cache.
+     *
+     * Value of the variable in microseconds.
+     *
+     * @var int
+     */
+    private static $delayTimeout = 50000;
+
+    /**
+     * Lifetime of the lock for write in cache.
+     *
+     * Value of the variable in seconds.
+     *
+     * @var int
+     */
+    private static $lockTimeout = 8;
+
+    /**
      * @var array
      */
     private $data = [];
@@ -218,13 +236,13 @@ class System implements ConfigTypeInterface
         $cachedData = $dataLoader(); //optimistic read
 
         while ($cachedData === false && $this->locker->isLocked(self::$lockName)) {
-            usleep(100000);
+            usleep(self::$delayTimeout);
             $cachedData = $dataLoader();
         }
 
         while ($cachedData === false) {
             try {
-                if ($this->locker->lock(self::$lockName, 60)) {
+                if ($this->locker->lock(self::$lockName, self::$lockTimeout)) {
                     if (!$flush) {
                         $data = $this->readData();
                         $this->cacheData($data);
@@ -239,7 +257,7 @@ class System implements ConfigTypeInterface
             }
 
             if ($cachedData === false) {
-                usleep(100000);
+                usleep(self::$delayTimeout);
                 $cachedData = $dataLoader();
             }
         }
