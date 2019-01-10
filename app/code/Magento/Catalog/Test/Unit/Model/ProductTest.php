@@ -200,7 +200,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $extensionAttributes;
+    private $productExtAttributes;
 
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -372,13 +372,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->mediaConfig = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
-        $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+        $this->productExtAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($this->extensionAttributes);
+            ->willReturn($this->productExtAttributes);
 
         $this->filterCustomAttribute = $this->createTestProxy(
             \Magento\Catalog\Model\FilterProductCustomAttribute::class
