@@ -13,7 +13,7 @@
         "magento/module-sales": "101.0.*",
         "magento/framework": "101.0.*",
         "magento/module-ui": "101.0.*",
-        "magento/module-captcha": "100.2.2"
+        "magento/module-captcha": "100.2.*"
     },
     "suggest": {
         "magento/module-configurable-product": "100.2.*",
