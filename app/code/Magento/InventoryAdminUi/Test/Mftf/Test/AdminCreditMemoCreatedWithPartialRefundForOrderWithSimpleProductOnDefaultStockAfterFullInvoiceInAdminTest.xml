@@ -29,9 +29,7 @@
                 <requiredEntity createDataKey="createSource1"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
-            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">
-                <!--<requiredEntity createDataKey="simpleCategory1"/>-->
-            </createData>
+            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
         </before>
@@ -78,15 +76,8 @@
         <!--Purchase product once logged in-->
         <comment userInput="Purchase 10 simple product" stepKey="purchaseSimpleProductComment"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <!--<actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">-->
-        <!--<argument name="product" value="$$simpleProduct1$$"/>-->
-        <!--<argument name="quantity" value="2"/>-->
-        <!--<argument name="checkQuantity" value="1"/>-->
-        <!--</actionGroup>-->
-        <!--Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup explicitly included-->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$simpleProduct1.name$$)}}" stepKey="moveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$simpleProduct1.name$$)}}" stepKey="clickAddToCart" />
-        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$simpleProduct1.name$$)}}" time="30" stepKey="assertMessage"/>
         <waitForText userInput="1" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
@@ -94,7 +85,6 @@
         <clearField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" stepKey="clearField"/>
         <fillField selector="{{StorefrontMinicartSection.itemQuantity($$simpleProduct1.name$$)}}" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$simpleProduct1.name$$)}}" stepKey="updateQtyInMiniCart"/>
-        <!--End Action Group StorefrontAddCategoryProductToCartWithQuantityActionGroup-->
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
         <click selector=".continue" stepKey="clickOnNext1"/>
