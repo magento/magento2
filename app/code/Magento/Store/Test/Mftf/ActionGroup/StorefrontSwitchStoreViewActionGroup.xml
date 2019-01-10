@@ -14,7 +14,7 @@
         </arguments>
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown"/>
-        <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.name)}}" stepKey="clickSelectStoreView"/>
+        <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.code)}}" stepKey="clickSelectStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
