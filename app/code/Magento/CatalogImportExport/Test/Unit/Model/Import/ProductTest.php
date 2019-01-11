@@ -10,6 +10,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ProductTest
@@ -28,122 +29,122 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     const ENTITY_ID = 13;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface| MockObject */
     protected $_connection;
 
-    /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\Helper\Data| MockObject */
     protected $jsonHelper;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data| MockObject */
     protected $_dataSourceModel;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection| MockObject */
     protected $resource;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Helper| MockObject */
     protected $_resourceHelper;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\StringUtils|MockObject */
     protected $string;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|MockObject */
     protected $_eventManager;
 
-    /** @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogInventory\Api\StockRegistryInterface|MockObject */
     protected $stockRegistry;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\OptionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Product\OptionFactory|MockObject */
     protected $optionFactory;
 
-    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface|MockObject */
     protected $stockConfiguration;
 
-    /** @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|MockObject */
     protected $stockStateProvider;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\Option|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject */
     protected $optionEntity;
 
-    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime|MockObject */
     protected $dateTime;
 
     /** @var array */
     protected $data;
 
-    /** @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Helper\Data|MockObject */
     protected $importExportData;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject */
     protected $importData;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|MockObject */
     protected $config;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\ResourceModel\Helper|MockObject */
     protected $resourceHelper;
 
-    /** @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Data|MockObject */
     protected $_catalogData;
 
-    /** @var \Magento\ImportExport\Model\Import\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ImportExport\Model\Import\Config|MockObject */
     protected $_importConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $_resourceFactory;
 
     // @codingStandardsIgnoreStart
-    /** @var  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject */
     protected $_setColFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|MockObject */
     protected $_productTypeFactory;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Product\LinkFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Product\LinkFactory|MockObject */
     protected $_linkFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory|MockObject */
     protected $_proxyProdFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\UploaderFactory|MockObject */
     protected $_uploaderFactory;
 
-    /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Filesystem|MockObject */
     protected $_filesystem;
 
-    /** @var  \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Filesystem\Directory\WriteInterface|MockObject */
     protected $_mediaDirectory;
 
-    /** @var  \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|MockObject */
     protected $_stockResItemFac;
 
-    /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|MockObject */
     protected $_localeDate;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|MockObject */
     protected $indexerRegistry;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|MockObject */
     protected $_logger;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|MockObject */
     protected $storeResolver;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor|MockObject */
     protected $skuProcessor;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|MockObject */
     protected $categoryProcessor;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Validator|MockObject */
     protected $validator;
 
-    /** @var  \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|MockObject */
     protected $objectRelationProcessor;
 
-    /** @var  \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface|MockObject */
     protected $transactionManager;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject */
     // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
@@ -155,13 +156,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected $errorAggregator;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\Product\Url|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Url|MockObject */
     protected $productUrl;
 
-    /** @var  ImageTypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ImageTypeProcessor|MockObject */
     protected $imageTypeProcessor;
 
     /**
@@ -1662,7 +1663,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * @see _setValidatorMockInImportProduct()
      * @param Product
      *  Param should go with rewritten getOptionEntity method.
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject
      */
     private function _suppressValidateRowOptionValidatorInvalidRows($importProduct)
     {
@@ -1679,7 +1680,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * Set validator mock in importProduct, return true for isValid method.
      *
      * @param Product
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Validator|MockObject
      */
     private function _setValidatorMockInImportProduct($importProduct)
     {
@@ -1695,7 +1696,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      *
      * @param Product
      *  Param should go with rewritten getOptionEntity method.
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject
      */
     private function _rewriteGetOptionEntityInImportProduct($importProduct)
     {
@@ -1710,7 +1711,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * @param array $methods
      * @param array $errorAggregatorMethods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function createModelMockWithErrorAggregator(array $methods = [], array $errorAggregatorMethods = [])
     {
