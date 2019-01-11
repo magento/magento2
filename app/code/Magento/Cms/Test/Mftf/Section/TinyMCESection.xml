@@ -57,6 +57,7 @@
         <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
         <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
+        <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
     </section>
     <section name="VariableSection">
         <element name="InsertWidget" type="button" selector="#insert_variable"/>
