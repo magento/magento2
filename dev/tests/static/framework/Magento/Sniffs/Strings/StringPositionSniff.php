@@ -106,7 +106,7 @@ class StringPositionSniff implements Sniff
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -114,7 +114,7 @@ class StringPositionSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {

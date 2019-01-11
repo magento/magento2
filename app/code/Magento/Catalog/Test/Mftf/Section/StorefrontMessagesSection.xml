@@ -11,5 +11,6 @@
     <section name="StorefrontMessagesSection">
         <element name="success" type="text" selector="div.message-success.success.message"/>
         <element name="error" type="text" selector="div.message-error.error.message"/>
+        <element name="noticeMessage" type="text" selector="div.message-notice"/>
     </section>
 </sections>
