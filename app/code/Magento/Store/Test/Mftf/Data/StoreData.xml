@@ -39,7 +39,7 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
-    <entity name="customStoreENNotUnique" type="store">
+    <entity name="CustomStoreENNotUnique" type="store">
         <data key="name">EN</data>
         <data key="code">en</data>
         <data key="is_active">1</data>
@@ -48,7 +48,7 @@
         <data key="store_type">store</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
-    <entity name="customStoreNLNotUnique" type="store">
+    <entity name="CustomStoreNLNotUnique" type="store">
         <data key="name">NL</data>
         <data key="code">nl</data>
         <data key="is_active">1</data>

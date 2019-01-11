@@ -21,11 +21,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
+                <argument name="customStore" value="CustomStoreENNotUnique"/>
             </actionGroup>
             <!-- Create Store View NL -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
+                <argument name="customStore" value="CustomStoreNLNotUnique"/>
             </actionGroup>
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
@@ -33,21 +33,19 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
+            <actionGroup ref="DeleteProductByName" stepKey="deleteImportedProduct">
                 <argument name="product" value="productformagetwo76287"/>
-                <argument name="name" value="productformagetwo76287"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
+                <argument name="customStore" value="CustomStoreENNotUnique"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
+                <argument name="customStore" value="CustomStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
-            <argument name="store" value="customStoreENNotUnique.name"/>
+            <argument name="store" value="CustomStoreENNotUnique.name"/>
             <argument name="catName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
@@ -57,7 +55,7 @@
             <argument name="value" value="category-english"/>
         </actionGroup>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewNl">
-            <argument name="store" value="customStoreNLNotUnique.name"/>
+            <argument name="store" value="CustomStoreNLNotUnique.name"/>
             <argument name="catName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
