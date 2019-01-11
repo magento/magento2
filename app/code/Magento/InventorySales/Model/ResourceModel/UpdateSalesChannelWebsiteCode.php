@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySales\Model\StockBySalesChannelCache;
 
 /**
  * This class handles website code change and should not be used directly, but only
@@ -23,12 +24,20 @@ class UpdateSalesChannelWebsiteCode
     private $resourceConnection;
 
     /**
+     * @var StockBySalesChannelCache
+     */
+    private $stockBySalesChannelCache;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param StockBySalesChannelCache $stockBySalesChannelCache
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        StockBySalesChannelCache $stockBySalesChannelCache
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->stockBySalesChannelCache = $stockBySalesChannelCache;
     }
 
     /**
@@ -53,5 +62,7 @@ class UpdateSalesChannelWebsiteCode
                 SalesChannelInterface::CODE . ' = ?' => $oldCode,
             ]
         );
+
+        $this->stockBySalesChannelCache->clean();
     }
 }

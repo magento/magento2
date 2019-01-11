@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySalesApi\Model\DeleteSalesChannelToStockLinkInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySales\Model\StockBySalesChannelCache;
 
 /**
  * Implementation of link deleting between Stock and Sales Channels for specific db layer
@@ -25,12 +26,20 @@ class DeleteSalesChannelToStockLink implements DeleteSalesChannelToStockLinkInte
     private $resourceConnection;
 
     /**
+     * @var StockBySalesChannelCache
+     */
+    private $stockBySalesChannelCache;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param StockBySalesChannelCache $stockBySalesChannelCache
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        StockBySalesChannelCache $stockBySalesChannelCache
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->stockBySalesChannelCache = $stockBySalesChannelCache;
     }
 
     /**
@@ -45,5 +54,7 @@ class DeleteSalesChannelToStockLink implements DeleteSalesChannelToStockLinkInte
             SalesChannelInterface::TYPE . ' = ?' => $type,
             SalesChannelInterface::CODE . ' = ?' => $code,
         ]);
+
+        $this->stockBySalesChannelCache->clean();
     }
 }
