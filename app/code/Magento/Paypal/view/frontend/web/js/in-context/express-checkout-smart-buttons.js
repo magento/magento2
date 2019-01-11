@@ -108,7 +108,7 @@ define([
                 if (!clientConfig.button) {
                     return new paypal.Promise(function (resolve, reject) {
                         clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
-                                paypal.request.post(clientConfig.startUrl, params)
+                                paypal.request.post(clientConfig.getTokenUrl, params)
                                     .then(function (res) {
                                         if (res.success) {
                                             return resolve(res.token);

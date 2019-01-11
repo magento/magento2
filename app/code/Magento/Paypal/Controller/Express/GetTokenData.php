@@ -13,6 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Express\Checkout;
+use Magento\Paypal\Model\Config;
 
 class GetTokenData extends AbstractExpress implements HttpGetActionInterface
 {
@@ -21,21 +22,21 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      *
      * @var string
      */
-    protected $_configType = \Magento\Paypal\Model\Config::class;
+    protected $_configType = Config::class;
 
     /**
      * Config method type
      *
      * @var string
      */
-    protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
+    protected $_configMethod = Config::METHOD_WPP_EXPRESS;
 
     /**
      * Checkout mode type
      *
      * @var string
      */
-    protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
+    protected $_checkoutType = Checkout::class;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -43,19 +44,19 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     private $logger;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
      * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
-    private $quoteIdMaskFactory;
+    private $cartRepository;
+
+    /**
+     * @var \Magento\Quote\Api\GuestCartRepositoryInterface
+     */
+    private $guestCartRepository;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -67,9 +68,9 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository
-     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
+     * @param \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -81,11 +82,10 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository,
-        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
-    )
-    {
+        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
+        \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+    ) {
         parent::__construct(
             $context,
             $customerSession,
@@ -98,15 +98,17 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
         );
 
         $this->logger = $logger;
-        $this->quoteRepository = $quoteRepository;
         $this->customerRepository = $customerRepository;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->cartRepository = $cartRepository;
+        $this->guestCartRepository = $guestCartRepository;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|ResultInterface
+     * Get token data
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $responseContent = [
@@ -143,18 +145,14 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      * @return string|null
      * @throws LocalizedException
      */
-    protected function getToken()
+    private function getToken(): ?string
     {
         $quoteId = $this->getRequest()->getParam('quote_id');
         $customerId = $this->getRequest()->getParam('customer_id');
         $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
         $isBaRequested = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
 
-        if (!$customerId) {
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'masked_id');
-            $quoteId = $quoteIdMask->getQuoteId();
-        }
-        $quote = $this->quoteRepository->get((int)$quoteId);
+        $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
         $this->_initCheckout($quote);
 
         if ($quote->getIsMultiShipping()) {
