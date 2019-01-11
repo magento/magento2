@@ -220,6 +220,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -311,10 +316,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getDataModel()
     {
         $customerData = $this->getData();
-        $addressesData = [];
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+        if (!isset($this->storedAddress[$customerData['entity_id']])) {
+            $addressesData = [];
+            /** @var \Magento\Customer\Model\Address $address */
+            foreach ($this->getAddresses() as $address) {
+                $addressesData[] = $address->getDataModel();
+            }
+            $this->storedAddress[$customerData['entity_id']] = $addressesData;
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -322,7 +330,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses($addressesData)
+        $customerDataObject->setAddresses($this->storedAddress[$customerData['entity_id']])
             ->setId($this->getId());
         return $customerDataObject;
     }
@@ -676,10 +684,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $ids = [];
         if ($this->getDefaultBilling()) {
-            $ids[] = $this->getDefaultBilling();
+            $ids['billing_address'] = $this->getDefaultBilling();
         }
         if ($this->getDefaultShipping()) {
-            $ids[] = $this->getDefaultShipping();
+            $ids['shipping_address'] = $this->getDefaultShipping();
         }
         return $ids;
     }
