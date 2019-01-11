@@ -1666,6 +1666,8 @@ class Config extends AbstractConfig
             case 'checkout_page_button_color':
             case 'checkout_page_button_shape':
             case 'checkout_page_button_label':
+            case 'checkout_page_button_mx_installment_period':
+            case 'checkout_page_button_br_installment_period':
             case 'disable_funding_options':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:

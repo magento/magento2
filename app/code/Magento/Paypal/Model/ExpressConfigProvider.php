@@ -132,7 +132,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
                     ],
                     'allowedFunding' => [],
                     'disallowedFunding' => $this->getDisallowedFunding(),
-                    'styles' => $this->getButtonStyles(),
+                    'styles' => $this->getButtonStyles($locale),
                     'startUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
                     'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization'),
                     'onCancelUrl' => $this->urlBuilder->getUrl('paypal/express/cancel')
@@ -189,9 +189,10 @@ class ExpressConfigProvider implements ConfigProviderInterface
     /**
      * Returns button styles based on configuration
      *
+     * @param string $locale
      * @return array
      */
-    private function getButtonStyles()
+    private function getButtonStyles($locale)
     {
         $this->config->setMethod(Config::METHOD_EXPRESS);
 
@@ -209,11 +210,44 @@ class ExpressConfigProvider implements ConfigProviderInterface
             $styles['shape'] = $this->config->getValue('checkout_page_button_shape');
             $styles['label'] = $this->config->getValue('checkout_page_button_label');
 
-            if ($styles['label'] === 'credit') {
-                $styles['color'] = 'darkblue';
-                $styles['layout'] = 'horizontal';
+            $styles = $this->updateStyles($styles, $locale);
+        }
+        return $styles;
+    }
+
+    /**
+     * Update styles based on locale and labels
+     *
+     * @param array $styles
+     * @param string $locale
+     * @return array
+     */
+    private function updateStyles($styles, $locale)
+    {
+        $installmentPeriodLocale = [
+            'en_MX' => 'mx',
+            'es_MX' => 'mx',
+            'en_BR' => 'br',
+            'pt_BR' => 'br'
+        ];
+
+        // Credit label cannot be used with any custom color option or vertical layout.
+        if ($styles['label'] === 'credit') {
+            $styles['color'] = 'darkblue';
+            $styles['layout'] = 'horizontal';
+        }
+
+        // Installment label is only available for specific locales
+        if ($styles['label'] === 'installment') {
+            if (array_key_exists($locale, $installmentPeriodLocale)) {
+                $styles['installmentperiod'] = (int)$this->config->getValue(
+                    "checkout_page_button_{$installmentPeriodLocale[$locale]}_installment_period"
+                );
+            } else {
+                $styles['label'] = 'paypal';
             }
         }
+
         return $styles;
     }
 
