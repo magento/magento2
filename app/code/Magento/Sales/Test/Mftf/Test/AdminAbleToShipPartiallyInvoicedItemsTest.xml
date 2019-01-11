@@ -70,7 +70,7 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
         <!--Change invoiced items count-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
-        <waitForElementChange selector="{{AdminInvoiceItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForEnabledQtyToBeInvoicedSubmitButton"/>
+        <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForEnabledQtyToBeInvoicedSubmitButton"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
@@ -112,11 +112,8 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
-        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="fillQtyOfItemsToRefund"/>
-        <waitForElementChange selector="{{AdminCreditMemoItemsSection.updateQty}}" function="function($el) {return $el->isEnabled();}" stepKey="waitForEnabledRefundQtySubmitButton"/>
-        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
+        <seeInField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="checkQtyOfItemsToRefund"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." after="submitRefundOffline" stepKey="seeCreditMemoSuccessMsg"/>
