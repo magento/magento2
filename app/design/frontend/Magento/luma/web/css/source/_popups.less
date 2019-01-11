@@ -79,7 +79,15 @@
 //
 //  Mobile
 //  _____________________________________________
-
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .modal-popup{
+        &.confirm {
+            .modal-inner-wrap{
+                width: calc(100% - 30px);
+            }
+        }
+    }
+}
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .popup-content {
         .fieldset {
