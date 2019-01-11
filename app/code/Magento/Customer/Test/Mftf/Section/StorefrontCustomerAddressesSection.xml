@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAddressesSection">
         <element name="addressesList" type="text" selector=".block-addresses-list" />
+        <element name="deleteAdditionalAddress" type="button" selector="//ol[@class='items addresses']/li[@class='item'][{{var}}]//a[@class='action delete']" parameterized="true"/>
     </section>
 </sections>

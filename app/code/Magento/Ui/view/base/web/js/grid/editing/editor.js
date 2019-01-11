@@ -164,7 +164,7 @@ define([
         },
 
         /**
-         * Adds listeners on a new recrod.
+         * Adds listeners on a new record.
          *
          * @param {Record} record
          * @returns {Editor} Chainable.
@@ -208,7 +208,7 @@ define([
         },
 
         /**
-         * Starts editing of a specfied record. If records'
+         * Starts editing of a specified record. If records'
          * instance doesn't exist, than it will be created.
          *
          * @param {(Number|String)} id - See 'getId' method.
@@ -401,7 +401,7 @@ define([
         },
 
         /**
-         * Disables editing of specfied fields.
+         * Disables editing of specified fields.
          *
          * @param {Array} fields - An array of fields indeces to be disabled.
          * @returns {Editor} Chainable.
