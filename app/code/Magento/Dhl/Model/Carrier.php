@@ -1986,7 +1986,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string|null $datetime
      * @return string
      */
-    protected function buildMessageTimestamp(string $datetime = null): string
+    private function buildMessageTimestamp(string $datetime = null): string
     {
         return $this->_coreDate->date(\DATE_RFC3339, $datetime);
     }
@@ -1998,7 +1998,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function buildMessageReference(string $servicePrefix): string
+    private function buildMessageReference(string $servicePrefix): string
     {
         $validPrefixes = [
             self::SERVICE_PREFIX_QUOTE,
