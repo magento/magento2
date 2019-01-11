@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Plugin\Model\ResourceModel\Category;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ImageUploader;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\RedundantCategoryImageChecker;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -55,11 +55,13 @@ class RemoveRedundantImagePlugin
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(CategoryResource $subject, CategoryResource $result, AbstractModel $category): CategoryResource
-    {
+    public function afterSave(
+        CategoryResource $subject,
+        CategoryResource $result,
+        AbstractModel $category
+    ): CategoryResource {
         $originalImage = $category->getOrigData('image');
-        if (
-            null !== $originalImage
+        if (null !== $originalImage
             && $originalImage !== $category->getImage()
             && $this->redundantCategoryImageChecker->execute($originalImage)
         ) {
