@@ -7,6 +7,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfig;
 
@@ -117,14 +118,30 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMethodAvailableForIsMethodActive($methodName, $expected)
     {
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->with('paypal/general/merchant_country')
-            ->will($this->returnValue('US'));
-        $this->scopeConfig->expects($this->exactly(2))
-            ->method('isSetFlag')
-            ->withAnyParameters()
-            ->will($this->returnValue(true));
+        if ($methodName == Config::METHOD_WPP_BML) {
+            $valueMap = [
+                ['paypal/general/merchant_country', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, 'US'],
+                ['paypal/general/merchant_country', ScopeInterface::SCOPE_STORE, null, 'US'],
+                ['payment/paypal_express/disable_funding_options', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, []],
+            ];
+            $this->scopeConfig
+                ->expects($this->any())
+                ->method('getValue')
+                ->will($this->returnValueMap($valueMap));
+            $this->scopeConfig->expects($this->exactly(1))
+                ->method('isSetFlag')
+                ->withAnyParameters()
+                ->will($this->returnValue(true));
+        } else {
+            $this->scopeConfig->expects($this->any())
+                ->method('getValue')
+                ->with('paypal/general/merchant_country')
+                ->will($this->returnValue('US'));
+            $this->scopeConfig->expects($this->exactly(2))
+                ->method('isSetFlag')
+                ->withAnyParameters()
+                ->will($this->returnValue(true));
+        }
 
         $this->model->setMethod($methodName);
         $this->assertEquals($expected, $this->model->isMethodAvailable($methodName));

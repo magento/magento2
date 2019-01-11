@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Paypal\Controller\Express;
 
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 class OnAuthorization
-    extends \Magento\Paypal\Controller\Express\AbstractExpress
-    implements \Magento\Framework\App\Action\HttpPostActionInterface
+    extends AbstractExpress
+    implements HttpPostActionInterface
 {
     /**
      * Config mode type
@@ -122,9 +122,6 @@ class OnAuthorization
             if ($this->_checkout->canSkipOrderReviewStep()) {
                 $this->_checkout->place($tokenId);
                 $order = $this->_checkout->getOrder();
-                // prepare session to success or cancellation page
-                $this->_getCheckoutSession()->clearHelperData();
-
                 // "last successful quote"
                 $this->_getCheckoutSession()->setLastQuoteId($quote->getId())->setLastSuccessQuoteId($quote->getId());
 
@@ -154,7 +151,7 @@ class OnAuthorization
 
         } catch (\Exception $e) {
             $responseContent['success'] = false;
-            $responseContent['error_message'] = 'We can\'t process Express Checkout approval.';
+            $responseContent['error_message'] = __('We can\'t process Express Checkout approval.');
         }
 
         return $controllerResult->setData($responseContent);

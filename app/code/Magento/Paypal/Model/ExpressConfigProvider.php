@@ -192,7 +192,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * @param string $locale
      * @return array
      */
-    private function getButtonStyles($locale)
+    private function getButtonStyles($locale) : array
     {
         $this->config->setMethod(Config::METHOD_EXPRESS);
 
@@ -222,7 +222,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * @param string $locale
      * @return array
      */
-    private function updateStyles($styles, $locale)
+    private function updateStyles($styles, $locale) : array
     {
         $installmentPeriodLocale = [
             'en_MX' => 'mx',
@@ -255,8 +255,9 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * Returns disallowed funding from configuration
      *
      * @return array
+     *
      */
-    private function getDisallowedFunding()
+    private function getDisallowedFunding() : array
     {
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $disallowedFunding = $this->config->getValue('disable_funding_options');

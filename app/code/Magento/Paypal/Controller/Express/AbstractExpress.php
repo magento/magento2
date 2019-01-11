@@ -9,6 +9,7 @@ use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Abstract Express Checkout Controller
@@ -132,10 +133,12 @@ abstract class AbstractExpress extends AppAction implements
     /**
      * Instantiate quote and checkout
      *
+     * @param CartInterface|null $quoteObject
+     *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _initCheckout(\Magento\Quote\Model\Quote $quoteObject = null)
+    protected function _initCheckout(CartInterface $quoteObject = null)
     {
         $quote = $quoteObject ? $quoteObject : $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
