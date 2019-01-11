@@ -116,6 +116,10 @@
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
+        <waitForElementVisible
+                selector="{{AdminMessagesSection.success}}"
+                time="20"
+                stepKey="waitForMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." after="submitRefundOffline" stepKey="seeCreditMemoSuccessMsg"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems2"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Refunded 5" stepKey="see5itemsRefunded"/>

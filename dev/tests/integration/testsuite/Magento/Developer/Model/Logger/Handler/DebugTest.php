@@ -101,7 +101,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      */
     private function enableDebugging(bool $flag)
     {
-        $result = $this->shell->execute(
+        $this->shell->execute(
             PHP_BINARY . ' -f %s setup:config:set -n --%s=%s --%s=%s',
             [
                 BP . '/bin/magento',
@@ -111,7 +111,6 @@ class DebugTest extends \PHPUnit\Framework\TestCase
                 urldecode(http_build_query(Bootstrap::getInstance()->getAppInitParams())),
             ]
         );
-        $this->assertEquals('You saved the new configuration.', $result);
         $this->deploymentConfig->resetData();
         $this->assertSame((int)$flag, $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
     }
