@@ -25,7 +25,7 @@
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Open category page and select created category-->
+        <!--Open category page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
@@ -55,7 +55,6 @@
         <!--Verify Category RedirectType-->
         <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn(1)}}" userInput="No" />
         <!--Verify Redirect Path -->
-        <!--ToDo Need to update and remove '2' from the userInput, url key value output has 2 added on it-->
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn(1)}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
         <!--Verify Category Target Path-->
         <see stepKey="verifyTheTargetPath" selector="{{AdminUrlRewriteIndexSection.targetPathColumn(1)}}" userInput="catalog/category/view/id/{$categoryId}"/>
@@ -73,23 +72,23 @@
         <!--Open Url Rewrite page  -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage1"/>
         <waitForPageLoad stepKey="waitForUrlRewritePage1"/>
-        <!--ToDo Need to update and remove '2' from the userInput, url key value output has 2 added on it-->
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton1"/>
-        <!--Verify new RedirectType after move -->
-        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn(1)}}" userInput="No" />
+        <waitForPageLoad stepKey="waitForPageToLoad4"/>
         <!--Verify new Redirect Path after move -->
-        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.requestPathColumn(2)}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.requestPathColumn(1)}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
         <!--Verify new Target Path after move -->
         <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.targetPathColumn(1)}}" userInput="catalog/category/view/id/{$categoryId}" />
+        <!--Verify new RedirectType after move -->
+        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn(1)}}" userInput="No" />
         <!--Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillCategoryUrlKey2"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad5"/>
         <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn(1)}}" userInput="Permanent (301)" />
-        <!--ToDo Need to update and remove '2' from the userInput, url key value output has 2 added on it-->
         <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.requestPathColumn(2)}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
         <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.targetPathColumn(1)}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
-        <!--Verify before move  Redirect Path directs to the category page-->
+        <!--Verify before move Redirect Path directs to the category page-->
         <amOnPage url="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
