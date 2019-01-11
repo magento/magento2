@@ -119,6 +119,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $storeLabels = ['test_attribute_store1'];
         $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
             ->setMethods(['getStoreLabelsByAttributeId'])
