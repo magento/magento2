@@ -31,12 +31,13 @@ class TranslatedLists implements ListsInterface
     /**
      * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $locale
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Locale\ConfigInterface $config,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $locale = null
     ) {
         $this->_config = $config;
