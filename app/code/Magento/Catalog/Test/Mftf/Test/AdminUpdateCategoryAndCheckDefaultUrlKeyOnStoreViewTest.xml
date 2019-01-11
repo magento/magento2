@@ -31,9 +31,10 @@
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Create Custom Store -->
+        <!--Open Store Page -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <!--Create Custom Store -->
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
@@ -58,18 +59,15 @@
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <!--<seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}" />-->
-        <grabValueFrom selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="getUrlKey"/>
-        <assertNotEmpty stepKey="verifyDefaultUrlKey">
-            <actualResult type="variable">getUrlKey</actualResult>
-        </assertNotEmpty>
-        <!--Verify Category UrlKey in Store View-->
+        <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="2{{SimpleRootSubCategory.name_lwr}}" />
+        <!--Open Category in Store Front  Page-->
         <amOnPage url="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="ClickSwitchStoreButtonOnDefaultStore"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="SelectSecondStoreToSwitchOn"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
+        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectSecondStoreToSwitchOn"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategoryOnStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <!--<seeInCurrentUrl stepKey="verifyUrlKey" url="{{_defaultCategory.name_lwr}}.html"/>-->
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(_defaultCategory.name)}}" stepKey="seeTheUpdatedCategoryTitle"/>
     </test>
 </tests>

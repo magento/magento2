@@ -25,9 +25,10 @@
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCreatedCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Update Category and make it inactive-->
+        <!--Open category page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <!--Update category and make category inactive-->
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>

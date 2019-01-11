@@ -31,9 +31,10 @@
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!--Create Custom Store -->
+        <!--Open store page -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <!--Create Custom Store -->
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
@@ -46,24 +47,28 @@
         </actionGroup>
         <!--Verify created SubCAtegory is present on Store Front -->
         <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="ClickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="SelectSecondStoreToSwitchOn"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>
-        <!--Update Category-->
+        <!--Open Category Page-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <!--Update Category-->
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTreeUnderRoot(SimpleRootSubCategory.name)}}" stepKey="clickOnSubcategoryIsUndeRootCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="updateCategoryName"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveUpdatedCategory"/>
         <waitForPageLoad stepKey="waitForCateforyToSave"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Verify the Category is not present in Store Front-->
         <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront1"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded2"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="dontSeeCatergoryInStoreFront"/>
         <!--Verify the Updated Category is present in Store Front-->
         <amOnPage url="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html" stepKey="seeTheUpdatedCategoryInStoreFront"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded3"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
     </test>
 </tests>
