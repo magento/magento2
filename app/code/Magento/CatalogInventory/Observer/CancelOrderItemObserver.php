@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -15,6 +16,11 @@ use Magento\Framework\Event\Observer as EventObserver;
  */
 class CancelOrderItemObserver implements ObserverInterface
 {
+    /**
+     * @var \Magento\CatalogInventory\Model\Configuration
+     */
+    protected $configuration;
+
     /**
      * @var StockManagementInterface
      */
@@ -30,9 +36,11 @@ class CancelOrderItemObserver implements ObserverInterface
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      */
     public function __construct(
+        Configuration $configuration,
         StockManagementInterface $stockManagement,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
     ) {
+        $this->configuration = $configuration;
         $this->stockManagement = $stockManagement;
         $this->priceIndexer = $priceIndexer;
     }
@@ -49,7 +57,8 @@ class CancelOrderItemObserver implements ObserverInterface
         $item = $observer->getEvent()->getItem();
         $children = $item->getChildrenItems();
         $qty = $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
-        if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
+        if ($item->getId() && $item->getProductId() && empty($children) && $qty && $this->configuration
+            ->getCanBackInStock()) {
             $this->stockManagement->backItemQty($item->getProductId(), $qty, $item->getStore()->getWebsiteId());
         }
         $this->priceIndexer->reindexRow($item->getProductId());
