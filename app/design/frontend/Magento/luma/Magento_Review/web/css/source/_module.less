@@ -393,6 +393,21 @@
     }
 }
 
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .product-reviews-summary{
+        .reviews-actions {
+            a{
+                display: block;
+            }
+        }
+        .rating-summary{
+            display: block;
+        }
+    }
+}
+
+
+
 //
 //  Desktop
 //  _____________________________________________
