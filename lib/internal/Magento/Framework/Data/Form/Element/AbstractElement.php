@@ -201,6 +201,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Set form.
+     *
      * @param AbstractForm $form
      * @return $this
      */
@@ -327,6 +329,8 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
+     * Get Ui Id.
+     *
      * @param null|string $suffix
      * @return string
      */
