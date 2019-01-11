@@ -267,10 +267,12 @@ define([
          * @param {Object} data - Response data.
          */
         onRequestComplete: function (params, data) {
-            this.updateData(data.items);
+            if (data) {
+                this.updateData(data.items);
 
-            if (this.cacheRequests) {
-                this.cacheRequest(data, params);
+                if (this.cacheRequests) {
+                    this.cacheRequest(data, params);
+                }
             }
         }
     });

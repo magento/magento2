@@ -89,10 +89,11 @@ define([
          * @returns {Provider} Chainable.
          */
         setData: function (data) {
-            data = this.processData(data);
+            if (data) {
+                data = this.processData(data);
 
-            this.set('data', data);
-
+                this.set('data', data);
+            }
             return this;
         },
 
