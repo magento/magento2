@@ -91,7 +91,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * Save shipment
      * We can save only new shipment. Existing shipments are not editable
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
