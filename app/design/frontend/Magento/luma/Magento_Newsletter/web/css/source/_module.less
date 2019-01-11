@@ -47,7 +47,6 @@
 
         input {
             padding-left: 35px;
-            font-size: 12px;
         }
 
         .title {
@@ -80,5 +79,26 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.newsletter {
         width: 34%;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .block{
+        &.newsletter {
+            input {
+                font-size: 12px;
+                padding-left: 30px;
+            }
+
+            .field {
+                .control:before{
+                    font-size: 13px;
+                }
+            }
+        }
     }
 }
