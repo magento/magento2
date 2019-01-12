@@ -14,6 +14,11 @@ use Magento\Framework\Locale\Bundle\RegionBundle;
 class TranslatedLists implements ListsInterface
 {
     /**
+     * @var TranslatedLists
+     */
+    public $selectedCurrencies;
+
+    /**
      * @var \Magento\Framework\Locale\ConfigInterface
      */
     protected $_config;
@@ -150,6 +155,23 @@ class TranslatedLists implements ListsInterface
         return $this->_sortOptionArray($options);
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function getSelectedCurrencies() {
+    	if (!$this->selectedCurrencies) {
+    		$this->selectedCurrencies = explode(
+            	',', $this->scopeConfig->getValue(
+                	'system/currency/installed',
+                	\Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            	)
+        	);
+    	}
+    	return $this->selectedCurrencies;
+    }
+
+
     /**
      * @inheritdoc
      */
@@ -158,17 +180,12 @@ class TranslatedLists implements ListsInterface
         $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'] ?: [];
         $options = [];
         $allowed = $this->_config->getAllowedCurrencies();
-        $selectedCurrencies = explode(
-            ',', $this->scopeConfig->getValue(
-                'system/currency/installed',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
+        $selected = $this->getSelectedCurrencies();
         foreach ($currencies as $code => $data) {
             if (!in_array($code, $allowed)) {
                 continue;
             }
-            if (!in_array($code, $selectedCurrencies)) {
+            if (!in_array($code, $selected)) {
                 continue;
             }
             
