@@ -83,9 +83,7 @@
     &:hover {
         border-color: @field-control__hover__border-color;
         cursor: pointer;
-    }
-
-    &:focus {
+   
         background-image+: url('../images/arrows-bg.svg');
         background-position+: ~'calc(100% - 12px)' 13px;
 
@@ -95,6 +93,10 @@
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
         background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
+    }
+    &:active {
+        background-image+: url('../images/arrows-bg.svg');
+        background-position+: ~'calc(100% - 12px)' -34px;
     }
 
     &::-ms-expand {
