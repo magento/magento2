@@ -187,11 +187,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $variables = $this->_variables->toOptionArray(true);
         $customVariables = $this->_variableFactory->create()->getVariablesOptionArray(true);
         if ($customVariables) {
-            $variables[] = $customVariables;
+            $variables = array_merge_recursive($variables, $customVariables);
         }
         $template = $this->getEmailTemplate();
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables[] = $templateVariables;
+            $variables = array_merge_recursive($variables, $templateVariables);
         }
         return $variables;
     }

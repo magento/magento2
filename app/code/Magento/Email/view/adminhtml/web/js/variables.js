@@ -53,12 +53,17 @@ define([
                 variables.each(function (variableGroup) {
                     if (variableGroup.label && variableGroup.value) {
                         this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
-                        variableGroup.value.each(function (variable) {
-                            if (variable.value && variable.label) {
-                                this.variablesContent += '<li>' +
-                                    this.prepareVariableRow(variable.value, variable.label) + '</li>';
-                            }
-                        }.bind(this));
+                        if (typeof variableGroup.value === 'object' && !!variableGroup.value) {
+                            variableGroup.value.each(function (variable) {
+                                if (variable.value && variable.label) {
+                                    this.variablesContent += '<li>' +
+                                        this.prepareVariableRow(variable.value, variable.label) + '</li>';
+                                }
+                            }.bind(this));
+                        } else {
+                            this.variablesContent += '<li>' +
+                                this.prepareVariableRow(variableGroup.value, variableGroup.label) + '</li>';
+                        }
                     }
                 }.bind(this));
                 this.variablesContent += '</ul>';
