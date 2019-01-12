@@ -22,6 +22,11 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
      * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface
      */
     protected $mockLocaleResolver;
+    
+    /**
+     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $mockScopeConfig;
 
     protected function setUp()
     {
@@ -31,13 +36,17 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
         $this->mockLocaleResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->mockScopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
             ->will($this->returnValue('en_US'));
 
         $this->listsModel = new \Magento\Framework\Locale\TranslatedLists(
             $this->mockConfig,
-            $this->mockLocaleResolver
+            $this->mockLocaleResolver,
+            $this->mockScopeConfig
         );
     }
 
@@ -64,12 +73,15 @@ class TranslatedListsTest extends \PHPUnit\Framework\TestCase
     public function testGetOptionCurrencies()
     {
         $allowedCurrencies = ['USD', 'EUR', 'GBP', 'UAH'];
-
+		$selectedCurrencies = ['USD', 'EUR'];
+                
         $this->mockConfig->expects($this->once())
             ->method('getAllowedCurrencies')
             ->will($this->returnValue($allowedCurrencies));
 
-        $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
+        $this->listsModel->selectedCurrencies = $selectedCurrencies;
+
+        $expectedResults = ['USD', 'EUR'];
 
         $currencyList = $this->listsModel->getOptionCurrencies();
         $currencyCodes = array_map(
