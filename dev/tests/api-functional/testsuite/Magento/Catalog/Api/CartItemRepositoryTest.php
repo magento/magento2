@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -58,11 +59,12 @@ class CartItemRepositoryTest extends WebapiAbstract
         $item = $quote->getAllItems()[0];
         $this->assertEquals(
             [
-                'item_id' => $item->getItemId(),
+                'item_id' => (int) $item->getItemId(),
                 'sku' => $item->getSku(),
                 'qty' => $item->getQty(),
                 'name' => $item->getName(),
-                
+                'price' => $item->getPrice(),
+
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
                 'product_option' => [
@@ -80,7 +82,7 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
