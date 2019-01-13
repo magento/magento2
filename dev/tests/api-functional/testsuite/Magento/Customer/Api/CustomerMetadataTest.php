@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class CustomerMetadataTest
@@ -18,6 +19,19 @@ class CustomerMetadataTest extends WebapiAbstract
     const SERVICE_NAME = "customerCustomerMetadataV1";
     const SERVICE_VERSION = "V1";
     const RESOURCE_PATH = "/V1/attributeMetadata/customer";
+
+    /**
+     * @var CustomerMetadataInterface
+     */
+    private $customerMetadata;
+
+    /**
+     * Execute per test initialization.
+     */
+    public function setUp()
+    {
+        $this->customerMetadata = Bootstrap::getObjectManager()->create(CustomerMetadataInterface::class);
+    }
 
     /**
      * Test retrieval of attribute metadata for the customer entity type.
@@ -200,8 +214,7 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        // There are no default custom attributes.
-        $this->assertCount(0, $attributeMetadata);
+        $this->assertCount(count($this->customerMetadata->getCustomAttributesMetadata()), $attributeMetadata);
     }
 
     /**

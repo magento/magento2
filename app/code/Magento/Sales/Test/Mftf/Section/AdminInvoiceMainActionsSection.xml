@@ -10,5 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminInvoiceMainActionsSection">
         <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary"/>
+        <element name="openNewCreditMemoFromInvoice" type="button" selector=".action-default.scalable.credit-memo"/>
+        <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button refund primary"/>
     </section>
 </sections>

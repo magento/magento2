@@ -9,10 +9,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SignUpNewUserFromStorefrontActionGroup">
         <arguments>
-            <argument name="Customer"/>
+            <argument name="Customer" defaultValue="CustomerEntityOne"/>
         </arguments>
-        <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
-        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
         <fillField  stepKey="fillLastName" userInput="{{Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
@@ -45,5 +44,10 @@
         <selectOption stepKey="selectCounty" selector="{{StorefrontCustomerAddressSection.country}}" userInput="{{Address.country_id}}"/>
         
         <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
+    </actionGroup>
+
+    <actionGroup name="SignUpNewCustomerStorefrontActionGroup" extends="SignUpNewUserFromStorefrontActionGroup">
+        <waitForPageLoad stepKey="waitForRegistered" after="clickCreateAccountButton"/>
+        <remove keyForRemoval="seeThankYouMessage" after="waitForRegistered"/>
     </actionGroup>
 </actionGroups>
