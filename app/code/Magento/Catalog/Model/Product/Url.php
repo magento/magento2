@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Model\Product\UrlConfig\UrlConfigInterface;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlFactory;
@@ -52,9 +52,9 @@ class Url extends \Magento\Framework\DataObject
     protected $urlFinder;
 
     /**
-     * @var ScopeConfigInterface
+     * @var UrlConfigInterface
      */
-    private $scopeConfig;
+    private $urlConfig;
 
     /**
      * @param UrlFactory            $urlFactory
@@ -63,7 +63,7 @@ class Url extends \Magento\Framework\DataObject
      * @param SidResolverInterface  $sidResolver
      * @param UrlFinderInterface    $urlFinder
      * @param array                 $data
-     * @param ScopeConfigInterface  $scopeConfig
+     * @param UrlConfigInterface    $urlConfig
      */
     public function __construct(
         UrlFactory $urlFactory,
@@ -72,7 +72,7 @@ class Url extends \Magento\Framework\DataObject
         SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
         array $data = [],
-        ScopeConfigInterface $scopeConfig = null
+        UrlConfigInterface $urlConfig = null
     ) {
         parent::__construct($data);
         $this->urlFactory = $urlFactory;
@@ -80,8 +80,8 @@ class Url extends \Magento\Framework\DataObject
         $this->filter = $filter;
         $this->sidResolver = $sidResolver;
         $this->urlFinder = $urlFinder;
-        $this->scopeConfig = $scopeConfig
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->urlConfig = $urlConfig
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(UrlConfigInterface::class);
     }
 
     /**
@@ -157,16 +157,10 @@ class Url extends \Magento\Framework\DataObject
 
         $categoryId = null;
 
-        $useCategoryInUrl = $this->scopeConfig->getValue(
-            \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY,
-            ScopeInterface::SCOPE_STORES,
-            $storeId
-        );
-
         if (!isset($params['_ignore_category'])
             && !$product->getDoNotUseCategoryId()
             && $product->getCategoryId()
-            && $useCategoryInUrl) {
+            && $this->urlConfig->useCategoryInUrl($storeId)) {
             $categoryId = $product->getCategoryId();
         }
 

@@ -40,9 +40,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $sidResolver;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\UrlConfig\UrlConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfig;
+    protected $urlConfig;
 
     protected function setUp()
     {
@@ -63,7 +63,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         )->getMock();
 
         $this->sidResolver = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->urlConfig = $this->createMock(\Magento\Catalog\Model\Product\UrlConfig\UrlConfigInterface::class);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -86,7 +86,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'urlFactory' => $urlFactory,
                 'sidResolver' => $this->sidResolver,
                 'urlFinder' => $this->urlFinder,
-                'scopeConfig' => $this->scopeConfig
+                'urlConfig' => $this->urlConfig
             ]
         );
     }
@@ -160,9 +160,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->with($routePath, $routeParamsUrl)
             ->will($this->returnValue($requestPathProduct));
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue(false));
-        $this->scopeConfig->expects($this->any())->method('getValue')->with(
-            'catalog/seo/product_use_categories',
-            'stores',
+        $this->urlConfig->expects($this->any())->method('useCategoryInUrl')->with(
             1
         )->will($this->returnValue($categoryInUrlAllowed ? 1 : 0));
 
