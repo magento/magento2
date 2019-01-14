@@ -127,7 +127,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
      *
      * @return MockObject
      */
-    private function getFormFactoryMock(): MockObject
+    private function getFormFactoryMock()
     {
         /** @var AttributeMetadataInterfaceFactory $attributeMetadataFactory */
         $attributeMetadataFactory = $this->objectManager->create(AttributeMetadataInterfaceFactory::class);
