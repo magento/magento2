@@ -60,17 +60,24 @@
     <actionGroup name="navigateToNewOrderPageExistingCustomer">
         <arguments>
             <argument name="customer"/>
+            <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewOrder"/>
         <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+        <!--Clear grid filters-->
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFilterReset"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailFilter}}" stepKey="filterEmail"/>
         <click selector="{{AdminOrderCustomersGridSection.searchButton}}" stepKey="applyFilter"/>
         <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
         <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
-        <waitForPageLoad stepKey="waitForCreateOrderPageLoad" />
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+        <!-- Select store view if appears -->
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
     </actionGroup>
     <!--Add a simple product to order-->
@@ -122,6 +129,35 @@
                       userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
+    </actionGroup>
+    <!--Add bundle product to order -->
+    <actionGroup name="addBundleProductToOrder">
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectBundleProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMask"/>
+        <waitForElementVisible selector="{{AdminOrderFormBundleProductSection.quantity}}" stepKey="waitForBundleOptionLoad"/>
+        <fillField selector="{{AdminOrderFormBundleProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+    <!--Add bundle product to order and check product price in the grid-->
+    <actionGroup name="addBundleProductToOrderAndCheckPriceInGrid" extends="addBundleProductToOrder">
+        <arguments>
+            <argument name="price" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
+        <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
+            <expectedResult type="string">{{price}}</expectedResult>
+            <actualResult type="variable">grabProductPriceFromGrid</actualResult>
+        </assertEquals>
     </actionGroup>
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
@@ -202,5 +238,11 @@
             <argument name="product"/>
         </arguments>
         <see selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="seeSkuInItemsOrdered"/>
+    </actionGroup>
+
+    <!--Select Check Money payment method-->
+    <actionGroup name="SelectCheckMoneyPaymentMethod">
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
     </actionGroup>
 </actionGroups>

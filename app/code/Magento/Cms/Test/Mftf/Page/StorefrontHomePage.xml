@@ -11,5 +11,6 @@
     <page name="StorefrontHomePage" url="/" module="Magento_Cms" area="storefront">
         <section name="StorefrontHeaderSection"/>
         <section name="StorefrontQuickSearchSection"/>
+        <section name="StorefrontHeaderCurrencySwitcherSection"/>
     </page>
 </pages>

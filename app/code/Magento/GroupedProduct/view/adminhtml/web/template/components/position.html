@@ -1,0 +1,15 @@
+<div class="position">
+    <a href="#" class="move-top icon-backward icon-rearrange-position"
+       data-bind="click: $parent.sendToTop.bind($parent)">
+        <span>Top</span>
+    </a>
+    <input type="text" class="position-widget-input"
+           data-bind="
+                value: $parent.getCalculatedPosition($record()),
+                event: {blur: $parent.updateGridPosition.bind($parent)}
+            "/>
+    <a href="#" class="move-bottom icon-forward icon-rearrange-position"
+       data-bind="click: $parent.sendToBottom.bind($parent)">
+        <span>Bottom</span>
+    </a>
+</div>

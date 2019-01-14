@@ -37,7 +37,7 @@
             <click selector="{{AdminProductAttributeSetGridSection.deleteOptionByName('Black')}}" stepKey="deleteOption5"/>
 
             <!--Save attribute-->
-            <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveColorAttribute"/>
+            <actionGroup ref="SaveProductAttribute" stepKey="clickSaveColorAttribute"/>
 
             <!--Delete Category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -87,7 +87,7 @@
         <waitForElementVisible selector="{{AdminNewAttributePanelSection.isDefault('5')}}" time="30" stepKey="waitForOptionRow5"/>
         <fillField selector="{{AdminNewAttributePanelSection.optionAdminValue('4')}}" userInput="{{ColorProductAttribute5.name}}" stepKey="fillAdminLabel5"/>
         <!--Save attribute-->
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveAttribute"/>
+        <actionGroup ref="SaveProductAttribute" stepKey="clickSaveAttribute"/>
 
         <!--Create 'material' attribute:-->
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
@@ -122,9 +122,7 @@
         <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
 
         <!--Save attribute-->
-        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveNewAttribute"/>
-        <waitForPageLoad stepKey="waitForSavingNewAttribute"/>
-        <see userInput="You saved the product attribute." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="SaveProductAttribute" stepKey="clickSaveNewAttribute"/>
         <click selector="{{AdminUserGridSection.resetButton}}" stepKey="clickResetButton"/>
 
         <!--Create attribute set-->
@@ -204,8 +202,7 @@
         <dragAndDrop selector1="{{AdminNewAttributePanelSection.attributeName('cotton')}}" selector2="{{AdminNewAttributePanelSection.attributeName('fabric')}}" stepKey="selectMaterialsSimple"/>
 
         <!-- Save the product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveSimpleProduct"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="assertSuccessSimpleProduct"/>
+        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
 
         <!--Clear caches-->
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
