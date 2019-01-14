@@ -10,9 +10,10 @@ namespace Magento\Paypal\Controller\Express;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class OnAuthorization
-    extends AbstractExpress
-    implements HttpPostActionInterface
+/**
+ * Processes data after returning from PayPal
+ */
+class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 {
     /**
      * Config mode type
@@ -53,6 +54,7 @@ class OnAuthorization
     private $guestCartRepository;
 
     /**
+     * OnAuthorization constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -62,7 +64,9 @@ class OnAuthorization
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
-     * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
+     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -139,16 +143,13 @@ class OnAuthorization
                     ]
                 );
                 $responseContent['redirectUrl'] = $this->urlBuilder->getUrl('checkout/onepage/success/');
-
             } else {
                 $responseContent['redirectUrl'] = $this->urlBuilder->getUrl('paypal/express/review');
                 $this->_checkoutSession->setQuoteId($quote->getId());
-
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent['success'] = false;
             $responseContent['error_message'] = $e->getMessage();
-
         } catch (\Exception $e) {
             $responseContent['success'] = false;
             $responseContent['error_message'] = __('We can\'t process Express Checkout approval.');

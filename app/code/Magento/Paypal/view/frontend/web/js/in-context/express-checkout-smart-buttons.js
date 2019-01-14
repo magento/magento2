@@ -10,6 +10,7 @@ define([
     'domReady!'
 ], function ($, paypal, messageList, _) {
     'use strict';
+
     /**
      * Returns array of allowed funding
      *
@@ -42,7 +43,6 @@ define([
          */
         function isValid() {
             return clientConfig.validator.validate();
-
         }
 
         /**
@@ -63,7 +63,9 @@ define([
         paypal.Button.render({
 
             env: clientConfig.environment,
-            client: {[clientConfig.environment]:clientConfig.merchantId},
+            client: {
+                [clientConfig.environment]: clientConfig.merchantId
+            },
             locale: clientConfig.locale,
             funding: {
                 allowed: getFunding(clientConfig.allowedFunding),

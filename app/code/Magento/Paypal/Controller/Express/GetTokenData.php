@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,6 +14,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Model\Config;
 
+/**
+ * Retrieve paypal token
+ */
 class GetTokenData extends AbstractExpress implements HttpGetActionInterface
 {
     /**

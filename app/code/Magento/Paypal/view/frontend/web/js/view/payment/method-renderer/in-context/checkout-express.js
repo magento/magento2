@@ -25,9 +25,6 @@ define(
     ) {
         'use strict';
 
-        // State of PayPal module initialization
-        var clientInit = false;
-
         return Component.extend({
 
             defaults: {
@@ -38,28 +35,7 @@ define(
              * Render PayPal buttons using checkout.js
              */
             renderPayPalButtons: function () {
-                this.clientConfig.payment = {
-                    'method': this.item.method
-                };
-                this.clientConfig.quoteId = window.checkoutConfig.quoteData.entity_id;
-                this.clientConfig.formKey = window.checkoutConfig.formKey;
-                this.clientConfig.customerId = window.customerData.id;
-                this.clientConfig.button = 0;
-                this.clientConfig.merchantId = this.merchantId;
-                this.clientConfig.validator = additionalValidators;
-                    this.clientConfig.onClick = function () {
-                        additionalValidators.validate();
-                        this.selectPaymentMethod();
-                };
-                this.clientConfig.additionalAction = setPaymentMethodAction;
-                this.clientConfig.rendererComponent = this;
-                this.clientConfig.messageContainer = this.messageContainer;
-                _.each(this.clientConfig, function (fn, name) {
-                    if (typeof fn === 'function') {
-                        this.clientConfig[name] = fn.bind(this);
-                    }
-                }, this);
-                checkoutSmartButtons(this.clientConfig, '#' + this.getButtonId());
+                checkoutSmartButtons(this.prepareClientConfig(), '#' + this.getButtonId());
             },
 
             /**
@@ -75,6 +51,39 @@ define(
             getAgreementId: function () {
                 return this.inContextId + '-agreement';
             },
+
+            /**
+             * Populate client config with all required data
+             *
+             * @return {Object}
+             */
+            prepareClientConfig: function () {
+                this.clientConfig.payment = {
+                    'method': this.item.method
+                };
+                this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
+                this.clientConfig.formKey = window.checkoutConfig.formKey;
+                this.clientConfig.customerId = window.customerData.id;
+                this.clientConfig.button = 0;
+                this.clientConfig.merchantId = this.merchantId;
+                this.clientConfig.validator = additionalValidators;
+
+                /** Add logic to be triggered onClick action for smart buttons component*/
+                this.clientConfig.onClick = function () {
+                    additionalValidators.validate();
+                    this.selectPaymentMethod();
+                };
+                this.clientConfig.additionalAction = setPaymentMethodAction;
+                this.clientConfig.rendererComponent = this;
+                this.clientConfig.messageContainer = this.messageContainer;
+                _.each(this.clientConfig, function (fn, name) {
+                    if (typeof fn === 'function') {
+                        this.clientConfig[name] = fn.bind(this);
+                    }
+                }, this);
+
+                return this.clientConfig;
+            }
         });
     }
 );

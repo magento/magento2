@@ -11,10 +11,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-
 /**
  * Class AddPaypalOrderStates
- * @package Magento\Paypal\Setup\Patch
  */
 class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterface
 {
@@ -34,7 +32,7 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -58,14 +56,13 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
                         'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT
                     ]
                 );
-
             }
         }
         $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -73,7 +70,7 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -81,7 +78,7 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

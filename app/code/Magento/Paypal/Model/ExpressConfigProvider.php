@@ -96,7 +96,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -152,6 +152,8 @@ class ExpressConfigProvider implements ConfigProviderInterface
     }
 
     /**
+     * Return setting value for in context checkout
+     *
      * @return bool
      */
     protected function isInContextCheckout()
@@ -255,7 +257,6 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * Returns disallowed funding from configuration
      *
      * @return array
-     *
      */
     private function getDisallowedFunding() : array
     {
