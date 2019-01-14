@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CONST" type="CONST">
+        <data key="Complete">Complete</data>
+        <data key="Closed">Closed</data>
+        <data key="Pending">Pending</data>
+        <data key="Processing">Processing</data>
+    </entity>
+</entities>
+
+
+
