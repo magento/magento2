@@ -75,13 +75,17 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
         }
 
         $productItem = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product);
-        $wishListProductRegularPrice = (float)$productItem->getRegularPrice();
+        $wishListProductRegularPrice = $product instanceof BundleProduct
+            ? (float)$productItem->getPrice()
+            : (float)$productItem->getRegularPrice();
 
-        \PHPUnit\Framework\Assert::assertEquals(
-            $this->regularPriceLabel,
-            $productItem->getPriceLabel(),
-            'Wrong product regular price is displayed.'
-        );
+        if (!$product instanceof BundleProduct) {
+            \PHPUnit\Framework\Assert::assertEquals(
+                $this->regularPriceLabel,
+                $productItem->getPriceLabel(),
+                'Wrong product regular price is displayed.'
+            );
+        }
 
         \PHPUnit\Framework\Assert::assertNotEmpty(
             $wishListProductRegularPrice,
