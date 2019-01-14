@@ -1434,7 +1434,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $delProductId[] = $productId;
 
                 foreach (array_keys($categories) as $categoryId) {
-                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 1];
+                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 0];
                 }
             }
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
@@ -1805,6 +1805,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($uploadedFile) {
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
+                                unset($rowData[$column]);
                                 $this->addRowError(
                                     ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                                     $rowNum,
