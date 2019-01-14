@@ -10,7 +10,6 @@ namespace Magento\InventorySales\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySales\Model\StockBySalesChannelCache;
 
 /**
  * Implementation of links replacement between Stock and Sales Channels for specific db layer
@@ -26,20 +25,12 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
     private $resourceConnection;
 
     /**
-     * @var StockBySalesChannelCache
-     */
-    private $stockBySalesChannelCache;
-
-    /**
      * @param ResourceConnection $resourceConnection
-     * @param StockBySalesChannelCache $stockBySalesChannelCache
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        StockBySalesChannelCache $stockBySalesChannelCache
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->stockBySalesChannelCache = $stockBySalesChannelCache;
     }
 
     /**
@@ -63,7 +54,5 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
             }
             $connection->insertOnDuplicate($tableName, $salesChannelsToInsert);
         }
-
-        $this->stockBySalesChannelCache->clean();
     }
 }

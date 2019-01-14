@@ -13,7 +13,6 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\GetStockBySalesChannelInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
-use Magento\InventorySales\Model\StockBySalesChannelCache;
 
 /**
  * @inheritdoc
@@ -31,23 +30,15 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
     private $stockIdResolver;
 
     /**
-     * @var \Magento\InventorySales\Model\StockBySalesChannelCache
-     */
-    private $stockBySalesChannelCache;
-
-    /**
      * @param StockRepositoryInterface $stockRepositoryInterface
      * @param StockIdResolver $stockIdResolver
-     * @param \Magento\InventorySales\Model\StockBySalesChannelCache $stockBySalesChannelCache
      */
     public function __construct(
         StockRepositoryInterface $stockRepositoryInterface,
-        StockIdResolver $stockIdResolver,
-        StockBySalesChannelCache $stockBySalesChannelCache
+        StockIdResolver $stockIdResolver
     ) {
         $this->stockRepository = $stockRepositoryInterface;
         $this->stockIdResolver = $stockIdResolver;
-        $this->stockBySalesChannelCache = $stockBySalesChannelCache;
     }
 
     /**
@@ -55,12 +46,6 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
      */
     public function execute(SalesChannelInterface $salesChannel): StockInterface
     {
-        $cachedStock = $this->stockBySalesChannelCache->get($salesChannel->getCode(), $salesChannel->getType());
-
-        if (null !== $cachedStock) {
-            return $cachedStock;
-        }
-
         $stockId = $this->stockIdResolver->resolve(
             $salesChannel->getType(),
             $salesChannel->getCode()
@@ -69,13 +54,6 @@ class GetStockBySalesChannel implements GetStockBySalesChannelInterface
         if (null === $stockId) {
             throw new NoSuchEntityException(__('No linked stock found'));
         }
-
-        $this->stockBySalesChannelCache->set(
-            $salesChannel->getCode(),
-            $salesChannel->getType(),
-            $this->stockRepository->get($stockId)
-        );
-
-        return $this->stockBySalesChannelCache->get($salesChannel->getCode(), $salesChannel->getType());
+        return $this->stockRepository->get($stockId);
     }
 }
