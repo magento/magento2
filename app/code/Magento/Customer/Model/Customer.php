@@ -318,13 +318,15 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getDataModel()
     {
         $customerData = $this->getData();
-        if (!isset($this->storedAddress[$customerData['entity_id']])) {
+        if (isset($customerData['entity_id']) && !isset($this->storedAddress[$customerData['entity_id']])) {
             $addressesData = [];
             /** @var \Magento\Customer\Model\Address $address */
             foreach ($this->getAddresses() as $address) {
                 $addressesData[] = $address->getDataModel();
             }
             $this->storedAddress[$customerData['entity_id']] = $addressesData;
+        } elseif (isset($customerData['entity_id'], $this->storedAddress[$customerData['entity_id']])) {
+            $customerData = $this->storedAddress[$customerData['entity_id']];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -332,7 +334,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses($this->storedAddress[$customerData['entity_id']])
+        $customerDataObject->setAddresses($customerData)
             ->setId($this->getId());
         return $customerDataObject;
     }
