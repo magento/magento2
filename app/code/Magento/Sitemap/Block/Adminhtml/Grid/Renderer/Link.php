@@ -3,17 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Sitemap grid link column renderer
- *
- */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Sitemap grid link column renderer
+ */
 class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -62,6 +60,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         /** @var $sitemap \Magento\Sitemap\Model\Sitemap */
         $sitemap = $this->_sitemapFactory->create();
+        $sitemap->setStoreId($row->getStoreId());
         $url = $this->escapeHtml($sitemap->getSitemapUrl($row->getSitemapPath(), $row->getSitemapFilename()));
 
         $fileName = preg_replace('/^\//', '', $row->getSitemapPath() . $row->getSitemapFilename());

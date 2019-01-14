@@ -12,11 +12,20 @@
     <body>
         <attribute name="class" value="sales-guest-view"/>
         <referenceContainer name="page.main.title">
-            <block class="Magento\Sales\Block\Order\PrintShipment" name="order.status" template="Magento_Sales::order/order_status.phtml" />
-            <block class="Magento\Sales\Block\Order\PrintShipment" name="order.date" template="Magento_Sales::order/order_date.phtml" />
+            <block class="Magento\Sales\Block\Order\PrintShipment"
+                   name="order.status"
+                   template="Magento_Sales::order/order_status.phtml"
+                   cacheable="false" />
+            <block class="Magento\Sales\Block\Order\PrintShipment"
+                   name="order.date"
+                   template="Magento_Sales::order/order_date.phtml"
+                   cacheable="false" />
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\PrintShipment" name="sales.order.print" template="Magento_Sales::order/view.phtml">
+            <block class="Magento\Sales\Block\Order\PrintShipment"
+                   name="sales.order.print"
+                   template="Magento_Sales::order/view.phtml"
+                   cacheable="false">
                 <block class="Magento\Sales\Block\Order\PrintShipment" name="order_items" template="Magento_Sales::order/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.renderers" as="renderer.list" />
                     <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Magento_Sales::order/totals.phtml">

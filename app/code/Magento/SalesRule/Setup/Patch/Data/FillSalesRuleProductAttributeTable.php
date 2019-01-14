@@ -6,13 +6,13 @@
 
 namespace Magento\SalesRule\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class FillSalesRuleProductAttributeTable
+ *
  * @package Magento\SalesRule\Setup\Patch
  */
 class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVersionInterface
@@ -65,7 +65,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -102,7 +102,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -112,7 +112,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -120,7 +120,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

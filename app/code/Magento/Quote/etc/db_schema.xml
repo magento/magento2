@@ -87,17 +87,17 @@
         <column xsi:type="smallint" name="trigger_recollect" padding="6" unsigned="false" nullable="false"
                 identity="false" default="0" comment="Trigger Recollect"/>
         <column xsi:type="text" name="ext_shipping_info" nullable="true" comment="Ext Shipping Info"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_STORE_ID_STORE_STORE_ID" table="quote" column="store_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_STORE_ID_STORE_STORE_ID" table="quote" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <index name="QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE" indexType="btree">
+        <index referenceId="QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE" indexType="btree">
             <column name="customer_id"/>
             <column name="store_id"/>
             <column name="is_active"/>
         </index>
-        <index name="QUOTE_STORE_ID" indexType="btree">
+        <index referenceId="QUOTE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -202,12 +202,12 @@
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_address"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_address"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ADDRESS_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
     </table>
@@ -289,25 +289,25 @@
                 nullable="true" comment="Discount Tax Compensation Amount"/>
         <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_PARENT_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_PARENT_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item"
                     column="parent_item_id" referenceTable="quote_item" referenceColumn="item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_item" column="quote_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_item" column="quote_id"
                     referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_STORE_ID_STORE_STORE_ID" table="quote_item" column="store_id"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_STORE_ID_STORE_STORE_ID" table="quote_item" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <index name="QUOTE_ITEM_PARENT_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_PARENT_ITEM_ID" indexType="btree">
             <column name="parent_item_id"/>
         </index>
-        <index name="QUOTE_ITEM_PRODUCT_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
-        <index name="QUOTE_ITEM_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
-        <index name="QUOTE_ITEM_STORE_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -382,25 +382,25 @@
                 nullable="true" comment="Discount Tax Compensation Amount"/>
         <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
                     table="quote_address_item" column="quote_address_id" referenceTable="quote_address"
                     referenceColumn="address_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDR_ITEM_PARENT_ITEM_ID_QUOTE_ADDR_ITEM_ADDR_ITEM_ID"
                     table="quote_address_item" column="parent_item_id" referenceTable="quote_address_item"
                     referenceColumn="address_item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID_QUOTE_ITEM_ITEM_ID"
                     table="quote_address_item" column="quote_item_id" referenceTable="quote_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID" indexType="btree">
             <column name="quote_address_id"/>
         </index>
-        <index name="QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_PARENT_ITEM_ID" indexType="btree">
             <column name="parent_item_id"/>
         </index>
-        <index name="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ADDRESS_ITEM_QUOTE_ITEM_ID" indexType="btree">
             <column name="quote_item_id"/>
         </index>
     </table>
@@ -413,12 +413,12 @@
                 comment="Product Id"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="option_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ITEM_OPTION_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item_option"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ITEM_OPTION_ITEM_ID_QUOTE_ITEM_ITEM_ID" table="quote_item_option"
                     column="item_id" referenceTable="quote_item" referenceColumn="item_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ITEM_OPTION_ITEM_ID" indexType="btree">
+        <index referenceId="QUOTE_ITEM_OPTION_ITEM_ID" indexType="btree">
             <column name="item_id"/>
         </index>
     </table>
@@ -449,12 +449,12 @@
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="varchar" name="cc_ss_issue" nullable="true" length="255" comment="Cc Ss Issue"/>
         <column xsi:type="text" name="additional_information" nullable="true" comment="Additional Information"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="payment_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_PAYMENT_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_payment"
+        <constraint xsi:type="foreign" referenceId="QUOTE_PAYMENT_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_payment"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_PAYMENT_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_PAYMENT_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
     </table>
@@ -476,13 +476,13 @@
                 comment="Price"/>
         <column xsi:type="text" name="error_message" nullable="true" comment="Error Message"/>
         <column xsi:type="text" name="method_title" nullable="true" comment="Method Title"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rate_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_SHIPPING_RATE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
+        <constraint xsi:type="foreign" referenceId="QUOTE_SHIPPING_RATE_ADDRESS_ID_QUOTE_ADDRESS_ADDRESS_ID"
                     table="quote_shipping_rate" column="address_id" referenceTable="quote_address"
                     referenceColumn="address_id" onDelete="CASCADE"/>
-        <index name="QUOTE_SHIPPING_RATE_ADDRESS_ID" indexType="btree">
+        <index referenceId="QUOTE_SHIPPING_RATE_ADDRESS_ID" indexType="btree">
             <column name="address_id"/>
         </index>
     </table>
@@ -492,16 +492,16 @@
         <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Quote ID"/>
         <column xsi:type="varchar" name="masked_id" nullable="true" length="32" comment="Masked ID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="quote_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="QUOTE_ID_MASK_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_id_mask"
+        <constraint xsi:type="foreign" referenceId="QUOTE_ID_MASK_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_id_mask"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="QUOTE_ID_MASK_QUOTE_ID" indexType="btree">
+        <index referenceId="QUOTE_ID_MASK_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
-        <index name="QUOTE_ID_MASK_MASKED_ID" indexType="btree">
+        <index referenceId="QUOTE_ID_MASK_MASKED_ID" indexType="btree">
             <column name="masked_id"/>
         </index>
     </table>

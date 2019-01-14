@@ -11,6 +11,7 @@ use Magento\Framework\App\RequestSafetyInterface;
 
 /**
  * Class Visitor
+ *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -86,6 +87,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
+     * @param RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -277,6 +279,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
      */
@@ -320,11 +323,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $configValue = intval(
-            $this->scopeConfig->getValue(
-                static::XML_PATH_ONLINE_INTERVAL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+        $configValue = (int)$this->scopeConfig->getValue(
+            static::XML_PATH_ONLINE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
