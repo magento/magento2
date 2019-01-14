@@ -57,6 +57,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     const CODE = 'dhl';
 
     /**
+     * DHL service prefixes used for message reference
+     */
+    private const SERVICE_PREFIX_QUOTE = 'QUOT';
+    private const SERVICE_PREFIX_SHIPVAL = 'SHIP';
+    private const SERVICE_PREFIX_TRACKING = 'TRCK';
+
+    /**
      * Rate request data
      *
      * @var RateRequest|null
@@ -1984,5 +1991,40 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
             || !$this->_isDomestic;
+    }
+
+    /**
+     * Builds a datetime string to be used as the MessageTime in accordance to the expected format.
+     *
+     * @param string|null $datetime
+     * @return string
+     */
+    private function buildMessageTimestamp(string $datetime = null): string
+    {
+        return $this->_coreDate->date(\DATE_RFC3339, $datetime);
+    }
+
+    /**
+     * Builds a string to be used as the MessageReference.
+     *
+     * @param string $servicePrefix
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function buildMessageReference(string $servicePrefix): string
+    {
+        $validPrefixes = [
+            self::SERVICE_PREFIX_QUOTE,
+            self::SERVICE_PREFIX_SHIPVAL,
+            self::SERVICE_PREFIX_TRACKING
+        ];
+
+        if (!in_array($servicePrefix, $validPrefixes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Invalid service prefix \"$servicePrefix\" provided while attempting to build MessageReference")
+            );
+        }
+
+        return str_replace('.', '', uniqid("MAGE_{$servicePrefix}_", true));
     }
 }

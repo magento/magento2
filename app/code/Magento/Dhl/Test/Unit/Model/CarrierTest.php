@@ -546,6 +546,37 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that the built message reference string is of the appropriate format.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid service prefix
+     * @throws \ReflectionException
+     */
+    public function testBuildMessageReference()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
+
+        $constPrefixQuote = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_QUOTE');
+        $constPrefixShipval = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_SHIPVAL');
+        $constPrefixTracking = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_TRACKING');
+
+        $msgRefQuote = $method->invoke($this->model, $constPrefixQuote->getValue());
+        self::assertGreaterThanOrEqual(28, strlen($msgRefQuote));
+        self::assertLessThanOrEqual(32, strlen($msgRefQuote));
+
+        $msgRefShip = $method->invoke($this->model, $constPrefixShipval->getValue());
+        self::assertGreaterThanOrEqual(28, strlen($msgRefShip));
+        self::assertLessThanOrEqual(32, strlen($msgRefShip));
+
+        $msgRefTrack = $method->invoke($this->model, $constPrefixTracking->getValue());
+        self::assertGreaterThanOrEqual(28, strlen($msgRefTrack));
+        self::assertLessThanOrEqual(32, strlen($msgRefTrack));
+
+        $method->invoke($this->model, 'TEST');
+    }
+
+    /**
      * Creates mock for XML factory.
      *
      * @return ElementFactory|MockObject
