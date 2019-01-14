@@ -256,8 +256,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
                 'mylabel',
                 'alphanumeric',
                 [
-                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
-                ]
+                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.',
+                ],
             ],
             ['abcqaz', 'mylabel', 'alphanumeric', true],
             ['abc qaz', 'mylabel', 'alphanum-with-spaces', true],

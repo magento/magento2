@@ -33,7 +33,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider validationRulesDataProvider
      */
-    public function testGetValidationRules($validationRule, $validationClass)
+    public function testGetValidationRules(string $validationRule, string $validationClass)
     {
         $expectsRules = [
             'required-entry' => true,
@@ -73,7 +73,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider()
+    public function validationRulesDataProvider(): array
     {
         return [
             ['alpha', 'validate-alpha'],

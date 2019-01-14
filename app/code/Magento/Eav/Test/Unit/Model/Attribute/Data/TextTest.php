@@ -42,6 +42,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test of string validation.
+     *
      * @return void
      */
     public function testValidateValueString()
@@ -53,6 +54,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test of integer validation.
+     *
      * @return void
      */
     public function testValidateValueInteger()
@@ -65,6 +67,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test without length validation.
+     *
      * @return void
      */
     public function testWithoutLengthValidation()
@@ -94,7 +97,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider alphanumDataProvider
      */
-    public function testAlphanumericValidation($value, $expectedResult)
+    public function testAlphanumericValidation(string $value, $expectedResult)
     {
         $defaultAttributeData = [
             'store_label' => 'Test',
@@ -116,7 +119,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function alphanumDataProvider()
+    public function alphanumDataProvider(): array
     {
         return [
             ['QazWsx', true],
@@ -144,7 +147,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider alphanumWithSpacesDataProvider
      */
-    public function testAlphanumericValidationWithSpaces($value, $expectedResult)
+    public function testAlphanumericValidationWithSpaces(string $value, $expectedResult)
     {
         $defaultAttributeData = [
             'store_label' => 'Test',
@@ -166,7 +169,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function alphanumWithSpacesDataProvider()
+    public function alphanumWithSpacesDataProvider(): array
     {
         return [
             ['QazWsx', true],

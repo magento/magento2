@@ -40,6 +40,9 @@ class AttributeMergerTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeMerger;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
 
@@ -87,7 +90,7 @@ class AttributeMergerTest extends \PHPUnit\Framework\TestCase
                 'field' =>
                     [
                         'validation' => ['length' => true],
-                    ]
+                    ],
             ]
         );
 
@@ -104,7 +107,7 @@ class AttributeMergerTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider()
+    public function validationRulesDataProvider(): array
     {
         return [
             ['alpha', 'validate-alpha'],

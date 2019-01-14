@@ -119,7 +119,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider validationRulesDataProvider
      */
-    public function testGetClass($validationRule, $expectedClass)
+    public function testGetClass(string $validationRule, string $expectedClass)
     {
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->createAttributeMock();
@@ -203,7 +203,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider()
+    public function validationRulesDataProvider(): array
     {
         return [
             ['alphanumeric', 'validate-alphanum'],
