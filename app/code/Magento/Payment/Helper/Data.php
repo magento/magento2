@@ -84,6 +84,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get config name of method model
+     *
      * @param string $code
      * @return string
      */
