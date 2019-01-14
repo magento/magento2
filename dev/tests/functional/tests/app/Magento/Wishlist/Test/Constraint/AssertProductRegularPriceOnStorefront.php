@@ -44,6 +44,13 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
         $cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
 
+        $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+            ->isVisible();
+        while (!$isProductVisible && $wishlistIndex->getTopToolbar()->nextPage()) {
+            $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+                ->isVisible();
+        }
+
         $productRegularPrice = 0;
         if ($product instanceof GroupedProduct) {
             $associatedProducts = $product->getAssociated();
