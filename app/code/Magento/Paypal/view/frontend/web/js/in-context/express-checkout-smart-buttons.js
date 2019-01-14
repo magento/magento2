@@ -136,7 +136,7 @@ define([
                         );
                     });
                 } else {
-                    return paypal.request.post(clientConfig.startUrl, params)
+                    return paypal.request.post(clientConfig.getTokenUrl, params)
                         .then(function (res) {
                             if (res.success) {
                                 //add logic to process negative cases
@@ -147,9 +147,6 @@ define([
                                     message: res.error_message
                                 });
                             }
-                        })
-                        .catch(function (err) {
-                            throw err;
                         });
                 }
             },
