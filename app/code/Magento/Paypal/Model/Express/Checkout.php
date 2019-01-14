@@ -614,11 +614,11 @@ class Checkout
      * export shipping address in case address absence
      *
      * @param string $token
-     * @param string|null $payerData
+     * @param string|null $payerIdentifier
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function returnFromPaypal($token, $payerData = null)
+    public function returnFromPaypal($token, $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -694,7 +694,7 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
-        $payerId = $payerData ? : $this->_getApi()->getPayerId();
+        $payerId = $payerIdentifier ? : $this->_getApi()->getPayerId();
         $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);
         $quote->collectTotals();

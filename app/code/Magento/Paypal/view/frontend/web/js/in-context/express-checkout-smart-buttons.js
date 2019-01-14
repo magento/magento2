@@ -22,11 +22,13 @@ define([
         _.each(config, function (name) {
             funding.push(paypal.FUNDING[name]);
         }, this);
+
         return funding;
     };
 
     return function (clientConfig, element) {
 
+        var environment = clientConfig.environment;
         /**
          *
          * @param handler
@@ -42,6 +44,7 @@ define([
          * @return {Boolean}
          */
         function isValid() {
+
             return clientConfig.validator.validate();
         }
 
@@ -64,7 +67,7 @@ define([
 
             env: clientConfig.environment,
             client: {
-                [clientConfig.environment]: clientConfig.merchantId
+                [environment]: clientConfig.merchantId
             },
             locale: clientConfig.locale,
             funding: {
@@ -113,11 +116,13 @@ define([
                                 paypal.request.post(clientConfig.getTokenUrl, params)
                                     .then(function (res) {
                                         if (res.success) {
+
                                             return resolve(res.token);
                                         } else {
                                             messageList.addErrorMessage({
                                                 message: res.error_message
                                             });
+
                                             return reject(new Error(res.error_message));
                                         }
                                     })
@@ -133,6 +138,7 @@ define([
                                 messageList.addErrorMessage({
                                     message: error
                                 });
+
                                 return reject(new Error(error));
                             }
                         );
@@ -141,8 +147,7 @@ define([
                     return paypal.request.post(clientConfig.getTokenUrl, params)
                         .then(function (res) {
                             if (res.success) {
-                                //add logic to process negative cases
-                                // 3. Return res.id from the response
+
                                 return res.token;
                             } else {
                                 messageList.addErrorMessage({
@@ -170,11 +175,11 @@ define([
                         customerId: clientConfig.customerId || '',
                         form_key: clientConfig.formKey
                     };
+
                 return paypal.request.post(clientConfig.onAuthorizeUrl, params)
                     .then(function (res) {
                         if(res.success) {
-                            //add logic to process negative cases
-                            // 3. Return res.id from the response
+
                             return actions.redirect(window, res.redirectUrl);
                         } else {
                             messageList.addErrorMessage({

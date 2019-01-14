@@ -9,32 +9,29 @@ namespace Magento\Paypal\Controller\Express;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Paypal\Model\Config as PayPalConfig;
+use Magento\Paypal\Model\Express\Checkout as PayPalCheckout;
 
 /**
  * Processes data after returning from PayPal
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 {
     /**
-     * Config mode type
-     *
-     * @var string
+     * @inheritdoc
      */
-    protected $_configType = \Magento\Paypal\Model\Config::class;
+    protected $_configType = PayPalConfig::class;
 
     /**
-     * Config method type
-     *
-     * @var string
+     * @inheritdoc
      */
-    protected $_configMethod = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
+    protected $_configMethod = PayPalConfig::METHOD_WPP_EXPRESS;
 
     /**
-     * Checkout mode type
-     *
-     * @var string
+     * @inheritdoc
      */
-    protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
+    protected $_checkoutType = PayPalCheckout::class;
 
     /**
      * @var \Magento\Quote\Model\Quote\PaymentFactory
@@ -101,16 +98,15 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     /**
      * Place order or redirect on Paypal review page
      *
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $params = $this->getRequest()->getParams();
-        $quoteId = $params['quoteId'];
-        $payerId = $params['payerId'];
-        $tokenId = $params['paymentToken'];
-        $customerId = $params['customerId'];
+        $quoteId = $this->getRequest()->getParam('quoteId');
+        $payerId = $this->getRequest()->getParam('payerId');
+        $tokenId = $this->getRequest()->getParam('paymentToken');
+        $customerId = $this->getRequest()->getParam('customerId');
         try {
             $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
 
@@ -119,21 +115,19 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
                 'error_message' => '',
             ];
 
-            //populate checkout object with new data
+            /** Populate checkout object with new data */
             $this->_initCheckout($quote);
             /**  Populate quote  with information about billing and shipping addresses*/
             $this->_checkout->returnFromPaypal($tokenId, $payerId);
             if ($this->_checkout->canSkipOrderReviewStep()) {
                 $this->_checkout->place($tokenId);
                 $order = $this->_checkout->getOrder();
-                // "last successful quote"
+                /** "last successful quote" */
                 $this->_getCheckoutSession()->setLastQuoteId($quote->getId())->setLastSuccessQuoteId($quote->getId());
 
-                if ($order) {
-                    $this->_getCheckoutSession()->setLastOrderId($order->getId())
-                        ->setLastRealOrderId($order->getIncrementId())
-                        ->setLastOrderStatus($order->getStatus());
-                }
+                $this->_getCheckoutSession()->setLastOrderId($order->getId())
+                    ->setLastRealOrderId($order->getIncrementId())
+                    ->setLastOrderStatus($order->getStatus());
 
                 $this->_eventManager->dispatch(
                     'paypal_express_place_order_success',
