@@ -43,6 +43,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test adding default attribute to product before save.
+     *
+     * @param array $rowData
+     * @param bool $withDefaultValue
+     * @param array $expectedAttributes
      * @dataProvider prepareAttributesWithDefaultValueForSaveDataProvider
      */
     public function testPrepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue, $expectedAttributes)
@@ -52,9 +57,15 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey($key, $actualAttributes);
             $this->assertEquals($value, $actualAttributes[$key]);
         }
+        
+        if (!empty($rowData['_store'])) {
+            $this->assertEquals($expectedAttributes, $actualAttributes, '', 0.0, 10, true);
+        }
     }
 
     /**
+     * Data provider for testPrepareAttributesWithDefaultValueForSave.
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -77,6 +88,17 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                 ],
                 false,
                 ['price' => 65, 'visibility' => 1, 'tax_class_id' => ''],
+            ],
+            'Updating existing product with attributes that do not have default values with store in dataRow' => [
+                [
+                    'sku' => 'simple_product_3',
+                    'price' => 75,
+                    '_attribute_set' => 'Default',
+                    'product_type' => 'simple',
+                    '_store' => 1
+                ],
+                true,
+                ['price' => 75],
             ],
             'Adding new product with attributes that do not have default values' => [
                 [
