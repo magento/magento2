@@ -27,7 +27,7 @@
                id="telephone"
                value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="input-text <?= $_validationClass ?: '' ?>"
+               class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('telephone')) ?>"
         >
     </div>
 </div>
