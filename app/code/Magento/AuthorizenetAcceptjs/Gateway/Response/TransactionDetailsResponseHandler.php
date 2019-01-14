@@ -15,9 +15,9 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Processes payment information from a response
+ * Adds the details to the transaction that should show when the transaction is viewed in the admin
  */
-class PaymentResponseHandler implements HandlerInterface
+class TransactionDetailsResponseHandler implements HandlerInterface
 {
     const REAL_TRANSACTION_ID = 'real_transaction_id';
 
@@ -46,28 +46,22 @@ class PaymentResponseHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
+        $storeId = $this->subjectReader->readStoreId($handlingSubject);
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
         $transactionResponse = $response['transactionResponse'];
 
         if ($payment instanceof Payment) {
-            if (!$payment->getParentTransactionId()
-                || $transactionResponse['transId'] != $payment->getParentTransactionId()
-            ) {
-                $payment->setTransactionId($transactionResponse['transId']);
+            // Add the keys that should show in the transaction details interface
+            $additionalInformationKeys = $this->config->getAdditionalInfoKeys($storeId);
+            $rawDetails = [];
+            foreach ($additionalInformationKeys as $paymentInfoKey) {
+                if (isset($transactionResponse[$paymentInfoKey])) {
+                    $rawDetails[$paymentInfoKey] = $transactionResponse[$paymentInfoKey];
+                }
             }
-            $payment
-                ->setTransactionAdditionalInfo(
-                    self::REAL_TRANSACTION_ID,
-                    $transactionResponse['transId']
-                );
-            $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
-            $payment->setIsTransactionClosed(false);
-
-            if ($transactionResponse['responseCode'] == TransactionResponseValidator::RESPONSE_CODE_HELD) {
-                $payment->setIsTransactionPending(true)
-                    ->setIsFraudDetected(true);
-            }
+            $payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $rawDetails);
         }
+
     }
 }

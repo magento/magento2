@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Processes payment information from a void transaction response
  */
-class VoidResponseHandler implements HandlerInterface
+class CloseTransactionHandlerHandler implements HandlerInterface
 {
 
     /**
@@ -25,18 +25,11 @@ class VoidResponseHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param Config $config
      */
-    public function __construct(SubjectReader $subjectReader, Config $config)
+    public function __construct(SubjectReader $subjectReader)
     {
         $this->subjectReader = $subjectReader;
-        $this->config = $config;
     }
 
     /**
@@ -46,12 +39,10 @@ class VoidResponseHandler implements HandlerInterface
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
-        $transactionId = $response['transactionResponse']['transId'];
 
         if ($payment instanceof Payment) {
             $payment->setIsTransactionClosed(true);
             $payment->setShouldCloseParentTransaction(true);
-            $payment->setTransactionAdditionalInfo(PaymentResponseHandler::REAL_TRANSACTION_ID, $transactionId);
         }
     }
 }

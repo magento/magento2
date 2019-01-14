@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Adds the meta transaction information to the request
  */
-class CaptureDataBuilder implements BuilderInterface
+class TransactionTypeDataBuilder implements BuilderInterface
 {
     const REQUEST_TYPE_CAPTURE_ONLY = 'captureOnlyTransaction';
 
@@ -56,12 +56,13 @@ class CaptureDataBuilder implements BuilderInterface
             'transactionRequest' => []
         ];
 
-        // TODO use interface methods
-        if ($payment->getData(Payment::PARENT_TXN_ID)) {
-            $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
-            $transactionData['transactionRequest']['refTransId'] = $this->getRealParentTransactionId($payment);
-        } else {
-            $transactionData['transactionRequest']['transactionType'] = self::REQUEST_AUTH_AND_CAPTURE;
+        if ($payment instanceof Payment) {
+            if ($payment->getData(Payment::PARENT_TXN_ID)) {
+                $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
+                $transactionData['transactionRequest']['refTransId'] = $this->getRealParentTransactionId($payment);
+            } else {
+                $transactionData['transactionRequest']['transactionType'] = self::REQUEST_AUTH_AND_CAPTURE;
+            }
         }
 
         return $transactionData;
