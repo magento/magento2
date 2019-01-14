@@ -220,6 +220,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * Caching property to store customer addresses by the customer ID.
+     *
      * @var array
      */
     private $storedAddress;
@@ -684,10 +686,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $ids = [];
         if ($this->getDefaultBilling()) {
-            $ids['billing_address'] = $this->getDefaultBilling();
+            $ids[] = $this->getDefaultBilling();
         }
         if ($this->getDefaultShipping()) {
-            $ids['shipping_address'] = $this->getDefaultShipping();
+            $ids[] = $this->getDefaultShipping();
         }
         return $ids;
     }
