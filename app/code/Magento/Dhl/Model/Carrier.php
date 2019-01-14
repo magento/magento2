@@ -59,9 +59,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**
      * DHL service prefixes used for message reference
      */
-    const SERVICE_PREFIX_QUOTE = 'QUOT';
-    const SERVICE_PREFIX_SHIPVAL = 'SHIP';
-    const SERVICE_PREFIX_TRACKING = 'TRCK';
+    private const SERVICE_PREFIX_QUOTE = 'QUOT';
+    private const SERVICE_PREFIX_SHIPVAL = 'SHIP';
+    private const SERVICE_PREFIX_TRACKING = 'TRCK';
 
     /**
      * Rate request data

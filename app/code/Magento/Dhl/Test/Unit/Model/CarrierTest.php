@@ -549,15 +549,19 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
 
-        $msgRefQuote = $method->invoke($this->model, Carrier::SERVICE_PREFIX_QUOTE);
+        $constPrefixQuote = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_QUOTE');
+        $constPrefixShipval = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_SHIPVAL');
+        $constPrefixTracking = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_TRACKING');
+
+        $msgRefQuote = $method->invoke($this->model, $constPrefixQuote->getValue());
         self::assertGreaterThanOrEqual(28, strlen($msgRefQuote));
         self::assertLessThanOrEqual(32, strlen($msgRefQuote));
 
-        $msgRefShip = $method->invoke($this->model, Carrier::SERVICE_PREFIX_SHIPVAL);
+        $msgRefShip = $method->invoke($this->model, $constPrefixShipval->getValue());
         self::assertGreaterThanOrEqual(28, strlen($msgRefShip));
         self::assertLessThanOrEqual(32, strlen($msgRefShip));
 
-        $msgRefTrack = $method->invoke($this->model, Carrier::SERVICE_PREFIX_TRACKING);
+        $msgRefTrack = $method->invoke($this->model, $constPrefixTracking->getValue());
         self::assertGreaterThanOrEqual(28, strlen($msgRefTrack));
         self::assertLessThanOrEqual(32, strlen($msgRefTrack));
 
