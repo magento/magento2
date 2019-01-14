@@ -117,15 +117,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $xmlElFactory = $this->getXmlFactory();
-        $rateFactory = $this->getRateFactory();
-        $rateMethodFactory = $this->getRateMethodFactory();
-        $httpClientFactory = $this->getHttpClientFactory();
-        $configReader = $this->getConfigReader();
-        $readFactory = $this->getReadFactory();
-        $storeManager = $this->getStoreManager();
-        $productMetadata = $this->getProductMetadata();
-
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
@@ -135,8 +126,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->errorFactory->method('create')
             ->willReturn($this->error);
-
-        $carrierHelper = $this->getCarrierHelper();
 
         $this->xmlValidator = $this->getMockBuilder(XmlValidator::class)
             ->disableOriginalConstructor()
@@ -148,20 +137,21 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             Carrier::class,
             [
                 'scopeConfig' => $this->scope,
-                'xmlSecurity' => new Security(),
-                'logger' => $this->logger,
-                'xmlElFactory' => $xmlElFactory,
-                'rateFactory' => $rateFactory,
                 'rateErrorFactory' => $this->errorFactory,
-                'rateMethodFactory' => $rateMethodFactory,
-                'httpClientFactory' => $httpClientFactory,
-                'readFactory' => $readFactory,
-                'storeManager' => $storeManager,
-                'configReader' => $configReader,
-                'carrierHelper' => $carrierHelper,
+                'logger' => $this->logger,
+                'xmlSecurity' => new Security(),
+                'xmlElFactory' => $this->getXmlFactory(),
+                'rateFactory' => $this->getRateFactory(),
+                'rateMethodFactory' => $this->getRateMethodFactory(),
+                'carrierHelper' => $this->getCarrierHelper(),
+                'coreDate' => $this->getCoreDate(),
+                'configReader' => $this->getConfigReader(),
+                'storeManager' => $this->getStoreManager(),
+                'readFactory' => $this->getReadFactory(),
+                'httpClientFactory' => $this->getHttpClientFactory(),
                 'data' => ['id' => 'dhl', 'store' => '1'],
                 'xmlValidator' => $this->xmlValidator,
-                'productMetadata' => $productMetadata
+                'productMetadata' => $this->getProductMetadata()
             ]
         );
     }
@@ -724,6 +714,21 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @return MockObject
      */
+    private function getCoreDate(): MockObject
+    {
+        $coreDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $coreDate->method('date')->willReturnCallback(function () {
+            return date(\DATE_RFC3339);
+        });
+
+        return $coreDate;
+    }
+
+    /**
+     * @return MockObject
+     */
     private function getHttpClientFactory(): MockObject
     {
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
@@ -744,6 +749,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return $httpClientFactory;
     }
 
+    /**
+     * @return MockObject
+     */
     private function getProductMetadata(): MockObject
     {
         $productMetadata = $this->createMock(\Magento\Framework\App\ProductMetadata::class);

@@ -16,6 +16,7 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
 use Magento\Dhl\Model\Validator\XmlValidator;
+use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * DHL International (API v1.4)
@@ -206,7 +207,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         'SiteID', 'Password'
     ];
 
-    protected $productMetadata;
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    private $productMetadata;
 
     /**
      * Xml response validator
@@ -242,6 +246,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      * @param \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -271,7 +276,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = [],
         \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator = null,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata = null
     ) {
         $this->readFactory = $readFactory;
         $this->_carrierHelper = $carrierHelper;
@@ -282,7 +287,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $this->mathDivision = $mathDivision;
         $this->_dateTime = $dateTime;
         $this->_httpClientFactory = $httpClientFactory;
-        $this->productMetadata = $productMetadata;
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
@@ -304,8 +308,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_DOC) {
             $this->_freeMethod = 'free_method_doc';
         }
-        $this->xmlValidator = $xmlValidator
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(XmlValidator::class);
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->xmlValidator = $xmlValidator ?: $objectManager->get(XmlValidator::class);
+        $this->productMetadata = $productMetadata ?: $objectManager->get(ProductMetadataInterface::class);
     }
 
     /**
@@ -1007,8 +1013,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeRequest = $nodeGetQuote->addChild('Request');
 
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
-        $nodeServiceHeader->addChild('MessageTime', date('Y-m-d\TH:i:sP'));
-        $nodeServiceHeader->addChild('MessageReference', uniqid('magento_quotereq_'));
+        $nodeServiceHeader->addChild('MessageTime', $this->buildMessageTimestamp());
+        $nodeServiceHeader->addChild(
+            'MessageReference',
+            $this->buildMessageReference(self::SERVICE_PREFIX_QUOTE)
+        );
         $nodeServiceHeader->addChild('SiteID', (string) $this->getConfigData('id'));
         $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
 
