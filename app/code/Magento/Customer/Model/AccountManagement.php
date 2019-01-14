@@ -524,6 +524,8 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customer->setConfirmation(null);
+        // No need to validate customer and customer address while activating customer
+        $this->setIgnoreValidationFlag($customer);
         $this->customerRepository->save($customer);
         $this->getEmailNotification()->newAccount(
             $customer,
@@ -683,8 +685,9 @@ class AccountManagement implements AccountManagementInterface
             $customer = $this->customerRepository->get($email);
         }
 
-        // No need to validate customer address while saving customer reset password token
+        // No need to validate customer and customer address while saving customer reset password token
         $this->disableAddressValidation($customer);
+        $this->setIgnoreValidationFlag($customer);
 
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
