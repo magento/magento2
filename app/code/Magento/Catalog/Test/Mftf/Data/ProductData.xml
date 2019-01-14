@@ -181,6 +181,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductUrlKey</requiredEntity>
     </entity>
+    <entity name="SetProductVisibilityHidden" type="product2">
+        <data key="visibility">1</data>
+    </entity>
     <entity name="ProductImage" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="price">1.00</data>
@@ -476,5 +479,31 @@
         <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="defaultSimpleProduct" type="product">
+        <data key="name" unique="suffix">Test </data>
+        <data key="sku" unique="suffix">testsku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">560.00</data>
+        <data key="urlKey" unique="suffix">testurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="ProductWithLongNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
+        <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
+    </entity>
+    <entity name="Magento3" type="image">
+        <data key="title" unique="suffix">Magento3</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento3.jpg</data>
+        <data key="filename">magento3</data>
+        <data key="file_extension">jpg</data>
     </entity>
 </entities>

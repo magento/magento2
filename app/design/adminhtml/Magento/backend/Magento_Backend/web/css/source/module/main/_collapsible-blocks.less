@@ -127,6 +127,21 @@
                 }
             }
         }
+
+        td.admin__collapsible-block-wrapper {
+            .admin__collapsible-title {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+            }
+            &._show {
+                .admin__collapsible-title {
+                    &:before {
+                        content: @icon-expand-close__content;
+                    } 
+                }
+            }
+        }
     }
 
     &.fieldset-wrapper {
@@ -146,6 +161,11 @@
 
     &.collapsible-block-wrapper-last {
         border-bottom: 0;
+    }
+    .admin__dynamic-rows.admin__control-collapsible {   
+        .admin__collapsible-block-wrapper {
+            border-bottom: none;
+        }
     }
 }
 
