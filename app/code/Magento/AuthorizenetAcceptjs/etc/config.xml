@@ -12,6 +12,8 @@
                 <active>0</active>
                 <cctypes>AE,VI,MC,DI,JCB,DN</cctypes>
                 <debug>0</debug>
+                <can_authorize>1</can_authorize>
+                <can_void>1</can_void>
                 <can_validate_credentials>1</can_validate_credentials>
                 <model>AuthorizenetAcceptjsFacade</model>
                 <email_customer>0</email_customer>
@@ -28,6 +30,7 @@
                 <currency>USD</currency>
                 <date_delim>/</date_delim>
                 <api_url>https://api.authorize.net/xml/v1/request.api</api_url>
+                <additional_info_keys>accountType,authCode,avsResultCode,cvvResultCode,cavvResultCode</additional_info_keys>
             </authorizenet_acceptjs>
         </payment>
     </default>

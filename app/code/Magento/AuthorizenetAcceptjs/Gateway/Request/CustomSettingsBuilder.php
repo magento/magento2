@@ -13,9 +13,9 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
- * Adds the basic payment information to the request
+ * Adds the custom settings to the request
  */
-class CustomerDataBuilder implements BuilderInterface
+class CustomSettingsBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -42,23 +42,17 @@ class CustomerDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = $this->subjectReader->readPayment($buildSubject);
-        $order = $paymentDO->getOrder();
-        $billingAddress = $order->getBillingAddress();
-        $result = [
-            'transactionRequest' => [
-                'customer' => [
-                    'id' => $order->getCustomerId(),
-                    'email' => $billingAddress->getEmail()
-                ]
-            ]
-        ];
+        $result = [];
 
         if ($this->config->shouldEmailCustomer($this->subjectReader->readStoreId($buildSubject))) {
-            $result['transactionRequest']['transactionSettings']['setting'] = [
-                [
-                    'settingName' => 'emailCustomer',
-                    'settingValue' => 'true'
+            $result['transactionRequest'] = [
+                'transactionSettings' => [
+                    'setting' => [
+                        [
+                            'settingName' => 'emailCustomer',
+                            'settingValue' => 'true'
+                        ]
+                    ]
                 ]
             ];
         }

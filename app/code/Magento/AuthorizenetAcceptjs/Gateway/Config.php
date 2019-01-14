@@ -22,6 +22,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_SIGNATURE_KEY = 'trans_sig_key';
     const KEY_PAYMENT_ACTION = 'payment_action';
     const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
+    const KEY_ADDITIONAL_INFO_KEYS = 'additional_info_keys';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -111,5 +112,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function shouldEmailCustomer($storeId = null)
     {
         return $this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
+    }
+
+    /**
+     * Returns the keys to be pulled from the transaction and displayed
+     *
+     * @param int|null $storeId
+     * @return string[]
+     */
+    public function getAdditionalInfoKeys($storeId = null)
+    {
+        return explode(',', $this->getValue(Config::KEY_ADDITIONAL_INFO_KEYS, $storeId));
     }
 }

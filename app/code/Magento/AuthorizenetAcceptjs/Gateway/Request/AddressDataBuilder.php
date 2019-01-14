@@ -38,10 +38,12 @@ class AddressDataBuilder implements BuilderInterface
         $order = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();
         $shippingAddress = $order->getShippingAddress();
-        $result = [];
+        $result = [
+            'transactionRequest' => []
+        ];
 
         if ($billingAddress) {
-            $result['billTo'] = [
+            $result['transactionRequest']['billTo'] = [
                 'firstName' => $billingAddress->getFirstname(),
                 'lastName' => $billingAddress->getLastname(),
                 'company' => $billingAddress->getCompany(),
@@ -54,7 +56,7 @@ class AddressDataBuilder implements BuilderInterface
         }
 
         if ($shippingAddress) {
-            $result['shipTo'] = [
+            $result['transactionRequest']['shipTo'] = [
                 'firstName' => $shippingAddress->getFirstname(),
                 'lastName' => $shippingAddress->getLastname(),
                 'company' => $shippingAddress->getCompany(),
@@ -64,6 +66,10 @@ class AddressDataBuilder implements BuilderInterface
                 'zip' => $shippingAddress->getPostcode(),
                 'country' => $shippingAddress->getCountryId()
             ];
+        }
+
+        if ($order->getRemoteIp()) {
+            $result['transactionRequest']['customerIP'] = $order->getRemoteIp();
         }
 
         return $result;

@@ -42,18 +42,24 @@ class PaymentDataBuilder implements BuilderInterface
         return [
             'transactionRequest' => [
                 'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
-                // TODO Get the PO number, tax, shipping costs
+                // TODO Get the PO number, tax, shipping costs,
+                // TODO these need to be separate builders to maintain correct order
                 //'poNumber' => $payment->getPayment()->getAdditionalInformation(),
                 //'tax' => $payment->getOrder()->to
                 //'shipping' => [
                 //    'amount' => $payment->getOrder()->g
                 //],
                 'payment' => [
-                    'opaqueData' => [
+                    'creditCard' => [
+                        'cardNumber' => '4111111111111111',
+                        'expirationDate' => '2019-12',
+                        'cardCode' => '123'
+                    ]
+                    /*'opaqueData' => [
                         // @TODO integrate the real payment values from accept.js
                         'dataDescriptor' => '???',
                         'dataValue' => '???'
-                    ]
+                    ]*/
                 ]
             ]
         ];

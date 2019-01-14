@@ -3,31 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Payment\Gateway\Validator;
 
-use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
-use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
- * Compiles a result using the results of multiple validators
+ * Compiles the of multiple validators with the option to break the chain when one fails
  */
-class ValidatorComposite extends AbstractValidator
+class ValidatorChain extends AbstractValidator
 {
     /**
-     * @var ValidatorInterface[] | TMap
+     * @var ValidatorInterface[]
      */
     private $validators;
+
+    /**
+     * @var array
+     */
+    private $chainBreakingValidators;
 
     /**
      * @param ResultInterfaceFactory $resultFactory
      * @param TMapFactory $tmapFactory
      * @param array $validators
+     * @param array $chainBreakingValidators
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
         TMapFactory $tmapFactory,
-        array $validators = []
+        array $validators = [],
+        array $chainBreakingValidators = []
     ) {
         $this->validators = $tmapFactory->create(
             [
@@ -36,31 +44,35 @@ class ValidatorComposite extends AbstractValidator
             ]
         );
         parent::__construct($resultFactory);
+        $this->chainBreakingValidators = $chainBreakingValidators;
     }
 
     /**
-     * Performs domain level validation for business object
-     *
-     * @param array $validationSubject
-     * @return ResultInterface
+     * @inheritdoc
      */
     public function validate(array $validationSubject)
     {
         $isValid = true;
         $failsDescriptionAggregate = [];
         $errorCodesAggregate = [];
-        foreach ($this->validators as $validator) {
+        foreach ($this->validators as $key => $validator) {
             $result = $validator->validate($validationSubject);
-            if (!$result->isValid()) {
-                $isValid = false;
-                $failsDescriptionAggregate = array_merge(
-                    $failsDescriptionAggregate,
-                    $result->getFailsDescription()
-                );
-                $errorCodesAggregate = array_merge(
-                    $errorCodesAggregate,
-                    $result->getErrorCodes()
-                );
+            if ($result->isValid()) {
+                continue;
+            }
+
+            $isValid = false;
+            $failsDescriptionAggregate = array_merge(
+                $failsDescriptionAggregate,
+                $result->getFailsDescription()
+            );
+            $errorCodesAggregate = array_merge(
+                $errorCodesAggregate,
+                $result->getErrorCodes()
+            );
+
+            if (!empty($this->chainBreakingValidators[$key])) {
+                break;
             }
         }
 

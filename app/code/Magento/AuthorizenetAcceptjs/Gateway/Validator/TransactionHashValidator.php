@@ -84,12 +84,21 @@ class TransactionHashValidator extends AbstractValidator
      */
     private function validateMd5Hash(array $validationSubject)
     {
+        $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
-        $storedHash = $this->config->getLegacyTransactionHash($this->subjectReader->readStoreId($validationSubject));
+        $storedHash = $this->config->getLegacyTransactionHash($storeId);
+
+        try {
+            $amount = $this->subjectReader->readAmount($validationSubject);
+        } catch (\InvalidArgumentException $e) {
+            // Void will not contain the amount and will use 0.00 for hashing
+            $amount = 0;
+        }
+
         $hash = $this->generateMd5Hash(
             $storedHash,
-            $this->subjectReader->readLoginId($validationSubject),
-            $this->subjectReader->readAmount($validationSubject),
+            $this->config->getLoginId($storeId),
+            sprintf('%.2F', $amount),
             $response['transactionResponse']['transId'] ?? ''
         );
 
@@ -114,12 +123,13 @@ class TransactionHashValidator extends AbstractValidator
      */
     private function validateSha512Hash(array $validationSubject)
     {
+        $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
-        $storedKey = $this->config->getTransactionSignatureKey($this->subjectReader->readStoreId($validationSubject));
+        $storedKey = $this->config->getTransactionSignatureKey($storeId);
 
         $hash = $this->generateSha512Hash(
             $storedKey,
-            $this->subjectReader->readLoginId($validationSubject),
+            $this->config->getLoginId($storeId),
             $this->subjectReader->readAmount($validationSubject),
             $response['transactionResponse']['transId'] ?? ''
         );

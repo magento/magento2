@@ -26,18 +26,21 @@
             <argument name="commands" xsi:type="array">
                 <item name="validate_credentials" xsi:type="string">AuthorizenetAcceptjsTestCredentialsCommand</item>
                 <item name="authorize" xsi:type="string">AuthorizenetAcceptjsAuthorizeCommand</item>
+                <item name="void" xsi:type="string">AuthorizenetAcceptjsVoidCommand</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+
+    <!-- Validators -->
+    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorChain">
         <arguments>
-            <argument name="configInterface" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="AuthorizenetAcceptjsValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">AuthorizenetAcceptjsDefaultValueHandler</item>
+            <argument name="chainBreakingValidators" xsi:type="array">
+                <item name="general" xsi:type="boolean">true</item>
+            </argument>
+            <argument name="validators" xsi:type="array">
+                <item name="general" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</item>
+                <item name="transaction_status" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator</item>
+                <item name="transaction_hash" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator</item>
             </argument>
         </arguments>
     </virtualType>
@@ -53,37 +56,9 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="AuthorizenetAcceptjsLogger" type="Magento\Payment\Model\Method\Logger">
-        <arguments>
-            <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
-        <arguments>
-            <argument name="executors" xsi:type="array">
-                <item name="authorizenet_acceptjs" xsi:type="string">AuthorizenetAcceptjsCommandManager</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="AuthorizenetAcceptjsRemoveStoreConfigFilter" type="Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="0" xsi:type="string">store_id</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="AuthorizenetAcceptjsDefaultTransferFactory" type="Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="payloadFilters" xsi:type="array">
-                <item name="store_config" xsi:type="object">AuthorizenetAcceptjsRemoveStoreConfigFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
+    <!-- End Validators -->
+
+    <!-- Gateway Commands -->
     <virtualType name="AuthorizenetAcceptjsTestCredentialsCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsTestCredentialsRequest</argument>
@@ -94,25 +69,46 @@
             <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="general" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator</item>
-                <item name="transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator</item>
-                <item name="transaction_hash" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="AuthorizenetAcceptjsAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsAuthorizeRequest</argument>
-            <argument name="transferFactory" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory</argument>
-            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client\TransactionSale</argument>
-            <argument name="handler" xsi:type="object">     !!!!    AuthorizenetAcceptjsAuthorizationHandler    !!!!!    </argument>
-            <argument name="validator" xsi:type="object">     !!!!    Magento\AuthorizenetAcceptjs\Gateway\Validator\ResponseValidator     !!!!    </argument>
-            <argument name="errorMessageMapper" xsi:type="object">     !!!!    Magento\AuthorizenetAcceptjs\Gateway\ErrorMapper\VirtualErrorMessageMapper     !!!!    </argument>
+            <argument name="transferFactory" xsi:type="object">AuthorizenetAcceptjsDefaultTransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsAuthorizationHandler</argument>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
+    <virtualType name="AuthorizenetAcceptjsVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsVoidRequest</argument>
+            <argument name="transferFactory" xsi:type="object">AuthorizenetAcceptjsDefaultTransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Http\Client</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsVoidHandler</argument>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+    <!-- End Gateway Commands -->
+
+    <!-- Handlers -->
+    <virtualType name="AuthorizenetAcceptjsAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsVoidHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="void" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\VoidResponseHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Handlers -->
+
+    <!-- Request Types -->
     <virtualType name="AuthorizenetAcceptjsTestCredentialsRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
@@ -122,19 +118,49 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="AuthorizenetAcceptjsAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <!-- Be advised that the order of the xml elements is important -->
+            <argument name="builders" xsi:type="array">
+                <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
+                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
+                <item name="capture" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CaptureDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder</item>
+                <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
+                <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
+                <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsVoidRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <!-- Be advised that the order of the xml elements is important -->
+            <argument name="builders" xsi:type="array">
+                <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
+                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
+                <item name="void" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- End Request Types -->
+
+    <!-- Request Payload Types -->
     <virtualType name="AuthorizenetAcceptjsTestCredentialsRequestTypeBuilder" type="Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder">
         <arguments>
             <argument name="type" xsi:type="string">authenticateTestRequest</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="AuthorizenetAcceptjsTransactionRequestTypeBuilder" type="Magento\AuthorizenetAcceptjs\Gateway\Request\RequestTypeBuilder">
         <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
-                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
-            </argument>
+            <argument name="type" xsi:type="string">createTransactionRequest</argument>
         </arguments>
     </virtualType>
+    <!-- End Request Payload Types -->
+
+    <!-- Error Mapping -->
     <virtualType name="AuthorizenetAcceptjsErrorMappingConfigReader" type="Magento\Payment\Gateway\ErrorMapper\VirtualConfigReader">
         <arguments>
             <argument name="fileName" xsi:type="string">authorizenet_acceptjs_error_mapping.xml</argument>
@@ -151,13 +177,22 @@
             <argument name="messageMapping" xsi:type="object">AuthorizenetAcceptjsErrorMappingData</argument>
         </arguments>
     </virtualType>
+    <!-- End Error Mapping -->
+
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="authorizenet_acceptjs" xsi:type="string">AuthorizenetAcceptjsCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
                 <item name="payment/authorizenet_acceptjs/login" xsi:type="string">1</item>
                 <item name="payment/authorizenet_acceptjs/trans_key" xsi:type="string">1</item>
+                <item name="payment/authorizenet_acceptjs/signature_key" xsi:type="string">1</item>
                 <item name="payment/authorizenet_acceptjs/trans_md5" xsi:type="string">1</item>
-                <item name="payment/authorizenet_acceptjs/merchant_email" xsi:type="string">1</item>
                 <item name="payment/authorizenet_acceptjs/api_url" xsi:type="string">1</item>
                 <item name="payment/authorizenet_acceptjs/email_customer" xsi:type="string">1</item>
             </argument>
@@ -167,4 +202,40 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="AuthorizenetAcceptjsDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">AuthorizenetAcceptjsDefaultValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsRemoveStoreConfigFilter" type="Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="0" xsi:type="string">store_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsDefaultTransferFactory" type="Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="payloadFilters" xsi:type="array">
+                <item name="store_config" xsi:type="object">AuthorizenetAcceptjsRemoveStoreConfigFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

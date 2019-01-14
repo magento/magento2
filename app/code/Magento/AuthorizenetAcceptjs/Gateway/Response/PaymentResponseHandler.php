@@ -10,6 +10,7 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Response;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
@@ -18,6 +19,7 @@ use Magento\Sales\Model\Order\Payment;
  */
 class PaymentResponseHandler implements HandlerInterface
 {
+    const REAL_TRANSACTION_ID = 'real_transaction_id';
 
     /**
      * @var SubjectReader
@@ -44,23 +46,42 @@ class PaymentResponseHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $action = $this->config->getPaymentAction($this->subjectReader->readStoreId($handlingSubject));
+        $storeId = $this->subjectReader->readStoreId($handlingSubject);
+        $action = $this->config->getPaymentAction($storeId);
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $paymentDO->getPayment()->setAdditionalInformation('payment_type', $action);
         $payment = $paymentDO->getPayment();
         $transactionResponse = $response['transactionResponse'];
 
-        // TODO use interface methods
-        if (!$payment->getData(Payment::PARENT_TXN_ID)
-            || $transactionResponse['transId'] != $payment->getParentTransactionId()
-        ) {
-            $payment->setTransactionId($transactionResponse['transId']);
+        if ($payment instanceof Payment) {
+            if (!$payment->getParentTransactionId()
+                || $transactionResponse['transId'] != $payment->getParentTransactionId()
+            ) {
+                $payment->setTransactionId($transactionResponse['transId']);
+            }
+            $payment
+                ->setTransactionAdditionalInfo(
+                    self::REAL_TRANSACTION_ID,
+                    $transactionResponse['transId']
+                );
+            $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
+            $payment->setIsTransactionClosed(false);
+
+            if ($transactionResponse['responseCode'] == TransactionResponseValidator::RESPONSE_CODE_HELD) {
+                $payment->setIsTransactionPending(true)
+                    ->setIsFraudDetected(true);
+            }
+
+            // TODO set any available cc info like last 4
         }
-        $payment
-            ->setTransactionAdditionalInfo(
-                'real_transaction_id',
-                $transactionResponse['transId']
-            );
-        $payment->setIsTransactionClosed(0);
+
+        $additionalInformationKeys = $this->config->getAdditionalInfoKeys($storeId);
+        $rawDetails = [];
+        foreach ($additionalInformationKeys as $paymentInfoKey) {
+            if (isset($transactionResponse[$paymentInfoKey])) {
+                $rawDetails[$paymentInfoKey] = $transactionResponse[$paymentInfoKey];
+            }
+        }
+        $payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $rawDetails);
     }
 }

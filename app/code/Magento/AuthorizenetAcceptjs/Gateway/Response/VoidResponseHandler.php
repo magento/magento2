@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Processes payment information from a response
  */
-class PaymentResponseHandler implements HandlerInterface
+class VoidResponseHandler implements HandlerInterface
 {
 
     /**
@@ -44,23 +44,12 @@ class PaymentResponseHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $action = $this->config->getPaymentAction($this->subjectReader->readStoreId($handlingSubject));
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
-        $paymentDO->getPayment()->setAdditionalInformation('payment_type', $action);
         $payment = $paymentDO->getPayment();
-        $transactionResponse = $response['transactionResponse'];
 
-        // TODO use interface methods
-        if (!$payment->getData(Payment::PARENT_TXN_ID)
-            || $transactionResponse['transId'] != $payment->getParentTransactionId()
-        ) {
-            $payment->setTransactionId($transactionResponse['transId']);
+        if ($payment instanceof Payment) {
+            $payment->setIsTransactionClosed(true);
+            $payment->setShouldCloseParentTransaction(true);
         }
-        $payment
-            ->setTransactionAdditionalInfo(
-                'real_transaction_id',
-                $transactionResponse['transId']
-            );
-        $payment->setIsTransactionClosed(0);
     }
 }

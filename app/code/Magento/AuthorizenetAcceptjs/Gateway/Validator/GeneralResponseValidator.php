@@ -70,6 +70,11 @@ class GeneralResponseValidator extends AbstractValidator
                     $errorCodes[] = $message['code'];
                     $errorMessages[] = $message['text'];
                 }
+            } elseif (isset($response['errors']['error'])) {
+                foreach ($response['errors']['error'] as $message) {
+                    $errorCodes[] = $message['errorCode'];
+                    $errorMessages[] = $message['errorText'];
+                }
             }
         }
 

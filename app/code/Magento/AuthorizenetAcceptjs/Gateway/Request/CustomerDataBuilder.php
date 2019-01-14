@@ -23,18 +23,11 @@ class CustomerDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param Config $config
      */
-    public function __construct(SubjectReader $subjectReader, Config $config)
+    public function __construct(SubjectReader $subjectReader)
     {
         $this->subjectReader = $subjectReader;
-        $this->config = $config;
     }
 
     /**
@@ -53,19 +46,6 @@ class CustomerDataBuilder implements BuilderInterface
                 ]
             ]
         ];
-
-        if ($order->getRemoteIp()) {
-            $result['transactionRequest']['customerIP'] = $order->getRemoteIp();
-        }
-
-        if ($this->config->shouldEmailCustomer($this->subjectReader->readStoreId($buildSubject))) {
-            $result['transactionRequest']['transactionSettings']['setting'] = [
-                [
-                    'settingName' => 'emailCustomer',
-                    'settingValue' => 'true'
-                ]
-            ];
-        }
 
         return $result;
     }
