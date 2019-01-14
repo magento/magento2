@@ -113,6 +113,9 @@ define([
                                         if (res.success) {
                                             return resolve(res.token);
                                         } else {
+                                            messageList.addErrorMessage({
+                                                message: res.error_message
+                                            });
                                             return reject(new Error(res.error_message));
                                         }
                                     })
@@ -125,6 +128,9 @@ define([
                                 } catch (exception) {
                                     error = $t('Something went wrong with your request. Please try again later.');
                                 }
+                                messageList.addErrorMessage({
+                                    message: error
+                                });
                                 return reject(new Error(error));
                             }
                         );
@@ -196,6 +202,7 @@ define([
              * @param {Object} err
              */
             onError: function (err) {
+                // Uncaught error isn't displayed in the console
             }
         }, element);
     };
