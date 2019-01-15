@@ -143,31 +143,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Config\Model\Config\Structure $configStructure,
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
-        array $data = []
+        array $data = [],
+        SettingChecker $settingChecker = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_configFactory = $configFactory;
         $this->_configStructure = $configStructure;
         $this->_fieldsetFactory = $fieldsetFactory;
         $this->_fieldFactory = $fieldFactory;
+        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
 
         $this->_scopeLabels = [
             self::SCOPE_DEFAULT => __('[GLOBAL]'),
             self::SCOPE_WEBSITES => __('[WEBSITE]'),
             self::SCOPE_STORES => __('[STORE VIEW]'),
         ];
-    }
-
-    /**
-     * @deprecated 100.1.2
-     * @return SettingChecker
-     */
-    private function getSettingChecker()
-    {
-        if ($this->settingChecker === null) {
-            $this->settingChecker = ObjectManager::getInstance()->get(SettingChecker::class);
-        }
-        return $this->settingChecker;
     }
 
     /**
@@ -366,9 +356,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
+        $isReadOnly = $this->isReadOnly($field, $path);
 
-        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
-            ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -417,7 +406,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $data = $this->getAppConfigDataValue($path);
 
-        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+        $placeholderValue = $this->settingChecker->getPlaceholderValue(
             $path,
             $this->getScope(),
             $this->getStringScopeCode()
@@ -795,6 +784,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $this->appConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
         }
         return $this->appConfig;
+    }
+
+    /**
+     * Check Path is Readonly
+     *
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param string $path
+     * @return boolean
+     */
+    private function isReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    {
+        $isReadOnly = $this->settingChecker->isReadOnly(
+            $path,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+        if (!$isReadOnly) {
+            $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
+                ?: $this->settingChecker->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
+        }
+        return $isReadOnly;
     }
 
     /**
