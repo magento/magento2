@@ -50,6 +50,6 @@ $productList = $block->getProductListHtml();
     </div>
 <?php endif; ?>
 <?php if ($block->getResultCount()): ?>
-    <div class="search results"><?= $productList ?></div>
+    <div class="search results"><?= /* @escapeNotVerified */ $productList ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

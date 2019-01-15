@@ -14,6 +14,8 @@ use Magento\Framework\Api\Search\SearchCriteria;
 interface SearchCriteriaResolverInterface
 {
     /**
+     * Resolve specific attribute.
+     *
      * @return SearchCriteria
      */
     public function resolve(): SearchCriteria;

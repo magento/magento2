@@ -8,7 +8,9 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -125,6 +127,18 @@ class CollectionTest extends BaseCollection
             ->method('create')
             ->willReturn($searchResultApplier);
 
+        $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMockForAbstractClass();
+        $totalRecordsResolverFactory = $this->getMockBuilder(TotalRecordsResolverFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $totalRecordsResolverFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($totalRecordsResolver);
+
         $this->model = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
@@ -134,7 +148,8 @@ class CollectionTest extends BaseCollection
                 'temporaryStorageFactory' => $temporaryStorageFactory,
                 'productLimitationFactory' => $productLimitationFactoryMock,
                 'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
-                'searchResultApplierFactory' => $searchResultApplierFactory
+                'searchResultApplierFactory' => $searchResultApplierFactory,
+                'totalRecordsResolverFactory' => $totalRecordsResolverFactory,
             ]
         );
 

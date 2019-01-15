@@ -90,7 +90,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -98,7 +98,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIndex()
     {
@@ -106,7 +106,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDimensions()
     {
@@ -114,7 +114,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregation()
     {
@@ -122,7 +122,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQuery()
     {
@@ -130,7 +130,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrom()
     {
@@ -138,7 +138,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSize()
     {
@@ -146,7 +146,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSort()
     {

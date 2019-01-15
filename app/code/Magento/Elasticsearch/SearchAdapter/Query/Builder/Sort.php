@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
@@ -87,10 +88,11 @@ class Sort
                 $fieldName = $this->map[$fieldName];
             }
             if ($attribute->isSortable() && !($attribute->isFloatType() || $attribute->isIntegerType())) {
-                $fieldName .= '.' . $this->fieldNameResolver->getFieldName(
-                        $attribute,
-                        ['type' => FieldMapperInterface::TYPE_SORT]
-                    );
+                $suffix = $this->fieldNameResolver->getFieldName(
+                    $attribute,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldName .= '.' . $suffix;
             }
             $sorts[] = [
                 $fieldName => [

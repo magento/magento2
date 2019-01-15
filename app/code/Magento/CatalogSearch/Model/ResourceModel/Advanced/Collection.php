@@ -6,8 +6,14 @@
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -16,7 +22,6 @@ use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -85,6 +90,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchResultApplierFactory;
 
     /**
+     * @var TotalRecordsResolverFactory
+     */
+    private $totalRecordsResolverFactory;
+
+    /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
+     * @var array
+     */
+    private $searchOrders;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -116,6 +136,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $searchRequestName
      * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
+     * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
+     * @param EngineResolverInterface|null $engineResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -147,7 +169,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         MetadataPool $metadataPool = null,
         $searchRequestName = 'advanced_search_container',
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
-        SearchResultApplierFactory $searchResultApplierFactory = null
+        SearchResultApplierFactory $searchResultApplierFactory = null,
+        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        EngineResolverInterface $engineResolver = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -161,6 +185,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->get(SearchCriteriaResolverFactory::class);
         $this->searchResultApplierFactory = $searchResultApplierFactory ?: ObjectManager::getInstance()
             ->get(SearchResultApplierFactory::class);
+        $this->totalRecordsResolverFactory = $totalRecordsResolverFactory ?: ObjectManager::getInstance()
+            ->get(TotalRecordsResolverFactory::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()
+            ->get(EngineResolverInterface::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -205,6 +233,73 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @inheritdoc
      */
+    public function setOrder($attribute, $dir = Select::SQL_DESC)
+    {
+        $this->setSearchOrder($attribute, $dir);
+        if ($this->isCurrentEngineMysql()) {
+            parent::setOrder($attribute, $dir);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
+    {
+        if ($this->isCurrentEngineMysql()) {
+            parent::addCategoryFilter($category);
+        } else {
+            $this->addFieldToFilter('category_ids', $category->getId());
+            $this->_productLimitationPrice();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setVisibility($visibility)
+    {
+        if ($this->isCurrentEngineMysql()) {
+            parent::setVisibility($visibility);
+        } else {
+            $this->addFieldToFilter('visibility', $visibility);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set sort order for search query.
+     *
+     * @param string $field
+     * @param string $direction
+     * @return void
+     */
+    private function setSearchOrder($field, $direction)
+    {
+        $field = (string)$this->_getMappedField($field);
+        $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
+
+        $this->searchOrders[$field] = $direction;
+    }
+
+    /**
+     * Check if current engine is MYSQL.
+     *
+     * @return bool
+     */
+    private function isCurrentEngineMysql()
+    {
+        return $this->engineResolver->getCurrentSearchEngine() === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function _renderFiltersBefore()
     {
         if ($this->isLoaded()) {
@@ -220,7 +315,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $searchCriteria = $this->getSearchCriteriaResolver()->resolve();
             try {
                 $this->searchResult = $this->getSearch()->search($searchCriteria);
-                $this->_totalRecords = $this->searchResult->getTotalCount();
+                $this->_totalRecords = $this->getTotalRecordsResolver($this->searchResult)->resolve();
             } catch (EmptyRequestDataException $e) {
                 /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
                 $this->searchResult = $this->searchResultFactory->create()->setItems([]);
@@ -236,36 +331,47 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Clean order data.
+     * Get total records resolver.
+     *
+     * @param SearchResultInterface $searchResult
+     * @return TotalRecordsResolverInterface
      */
-    public function cleanOrder()
+    private function getTotalRecordsResolver(SearchResultInterface $searchResult): TotalRecordsResolverInterface
     {
-        $this->_orders = [];
+        return $this->totalRecordsResolverFactory->create([
+            'searchResult' => $searchResult,
+        ]);
     }
 
     /**
-     * @return SearchCriteriaResolver
+     * Get search criteria resolver.
+     *
+     * @return SearchCriteriaResolverInterface
      */
-    private function getSearchCriteriaResolver()
+    private function getSearchCriteriaResolver(): SearchCriteriaResolverInterface
     {
         return $this->searchCriteriaResolverFactory->create([
             'builder' => $this->getSearchCriteriaBuilder(),
             'collection' => $this,
             'searchRequestName' => $this->searchRequestName,
+            'currentPage' => $this->_curPage,
             'size' => $this->getPageSize(),
-            'orders' => $this->_orders,
+            'orders' => $this->searchOrders,
         ]);
     }
 
     /**
+     * Get search result applier.
+     *
      * @param SearchResultInterface $searchResult
      * @return SearchResultApplierInterface
      */
-    private function getSearchResultApplier(SearchResultInterface $searchResult)
+    private function getSearchResultApplier(SearchResultInterface $searchResult): SearchResultApplierInterface
     {
         return $this->searchResultApplierFactory->create([
             'collection' => $this,
             'searchResult' => $searchResult,
+            'orders' => $this->_orders
         ]);
     }
 

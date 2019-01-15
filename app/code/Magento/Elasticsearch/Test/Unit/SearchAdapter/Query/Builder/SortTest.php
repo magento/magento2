@@ -59,6 +59,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @dataProvider getSortProvider
      * @param array $sortItems
      * @param $isSortable

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
-    as FieldNameResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -60,7 +58,7 @@ class StaticField implements FieldProviderInterface
     private $fieldIndexResolver;
 
     /**
-     * @var FieldNameResolver
+     * @var FieldName\ResolverInterface
      */
     private $fieldNameResolver;
 
@@ -71,7 +69,7 @@ class StaticField implements FieldProviderInterface
      * @param FieldTypeResolver $fieldTypeResolver
      * @param FieldIndexResolver $fieldIndexResolver
      * @param AttributeProvider $attributeAdapterProvider
-     * @param FieldNameResolver|null $fieldNameResolver
+     * @param FieldName\ResolverInterface|null $fieldNameResolver
      */
     public function __construct(
         Config $eavConfig,
@@ -80,7 +78,7 @@ class StaticField implements FieldProviderInterface
         FieldTypeResolver $fieldTypeResolver,
         FieldIndexResolver $fieldIndexResolver,
         AttributeProvider $attributeAdapterProvider,
-        FieldNameResolver $fieldNameResolver = null
+        FieldName\ResolverInterface $fieldNameResolver = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldTypeConverter = $fieldTypeConverter;
@@ -89,7 +87,7 @@ class StaticField implements FieldProviderInterface
         $this->fieldIndexResolver = $fieldIndexResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(FieldNameResolver::class);
+            ->get(FieldName\ResolverInterface::class);
     }
 
     /**
@@ -97,6 +95,7 @@ class StaticField implements FieldProviderInterface
      *
      * @param array $context
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFields(array $context = []): array
     {

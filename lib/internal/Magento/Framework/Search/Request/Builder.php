@@ -11,7 +11,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
 
 /**
+ * Search request builder.
+ *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Builder
 {
@@ -96,7 +99,9 @@ class Builder
     }
 
     /**
-     * @param $sort
+     * Set sort.
+     *
+     * @param \Magento\Framework\Api\SortOrder[] $sort
      * @return $this
      */
     public function setSort($sort)
@@ -229,6 +234,8 @@ class Builder
     }
 
     /**
+     * Build dimensions.
+     *
      * @param array $dimensionsData
      * @return array
      */

@@ -35,6 +35,8 @@ class ProductCollectionPrepareStrategyProvider
     }
 
     /**
+     * Get strategy provider for product collection prepare process.
+     *
      * @return ProductCollectionPrepareStrategyInterface
      */
     public function getStrategy(): ProductCollectionPrepareStrategyInterface

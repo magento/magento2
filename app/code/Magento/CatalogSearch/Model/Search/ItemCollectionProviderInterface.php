@@ -15,6 +15,8 @@ use Magento\Framework\Data\Collection;
 interface ItemCollectionProviderInterface
 {
     /**
+     * Get collection.
+     *
      * @return Collection
      */
     public function getCollection() : Collection;

@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
+use Magento\Framework\Search\EngineResolverInterface;
+
 class LayerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -22,14 +24,24 @@ class LayerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_stockHelperMock;
 
+    /**
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $engineResolver;
+
     protected function setUp()
     {
         $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_stockHelperMock = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
+        $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCurrentSearchEngine'])
+            ->getMockForAbstractClass();
 
         $this->_model = new \Magento\CatalogInventory\Model\Plugin\Layer(
             $this->_stockHelperMock,
-            $this->_scopeConfigMock
+            $this->_scopeConfigMock,
+            $this->engineResolver
         );
     }
 
@@ -38,6 +50,10 @@ class LayerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddStockStatusDisabledShow()
     {
+        $this->engineResolver->expects($this->any())
+            ->method('getCurrentSearchEngine')
+            ->willReturn('mysql');
+
         $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
@@ -60,6 +76,10 @@ class LayerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddStockStatusEnabledShow()
     {
+        $this->engineResolver->expects($this->any())
+            ->method('getCurrentSearchEngine')
+            ->willReturn('mysql');
+
         $this->_scopeConfigMock->expects(
             $this->once()
         )->method(

@@ -72,7 +72,7 @@ class SearchCriteriaResolver implements SearchCriteriaResolverInterface
     }
 
     /**
-     * @return SearchCriteria
+     * @inheritdoc
      */
     public function resolve(): SearchCriteria
     {

@@ -38,7 +38,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
     }
 
     /**
-     * @return Collection|\Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @inheritdoc
      */
     public function getCollection(): Collection
     {

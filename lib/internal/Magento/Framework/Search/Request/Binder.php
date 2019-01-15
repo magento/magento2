@@ -6,6 +6,8 @@
 namespace Magento\Framework\Search\Request;
 
 /**
+ * Data binder for search request.
+ *
  * @api
  */
 class Binder
@@ -51,6 +53,8 @@ class Binder
     }
 
     /**
+     * Dimensions process.
+     *
      * @param array $data
      * @param array $bindData
      * @return array

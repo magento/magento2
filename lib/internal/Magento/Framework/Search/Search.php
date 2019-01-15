@@ -10,6 +10,9 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
 
+/**
+ * Search API for all requests.
+ */
 class Search implements SearchInterface
 {
     /**
@@ -51,7 +54,7 @@ class Search implements SearchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {

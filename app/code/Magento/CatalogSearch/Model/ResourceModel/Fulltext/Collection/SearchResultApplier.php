@@ -32,22 +32,30 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $temporaryStorageFactory;
 
     /**
+     * @var array
+     */
+    private $orders;
+
+    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
      * @param TemporaryStorageFactory $temporaryStorageFactory
+     * @param array $orders
      */
     public function __construct(
         Collection $collection,
         SearchResultInterface $searchResult,
-        TemporaryStorageFactory $temporaryStorageFactory
+        TemporaryStorageFactory $temporaryStorageFactory,
+        array $orders
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
+        $this->orders = $orders;
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function apply()
     {
@@ -61,5 +69,11 @@ class SearchResultApplier implements SearchResultApplierInterface
             'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
             []
         );
+
+        if (isset($this->orders['relevance'])) {
+            $this->collection->getSelect()->order(
+                'search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->orders['relevance']
+            );
+        }
     }
 }

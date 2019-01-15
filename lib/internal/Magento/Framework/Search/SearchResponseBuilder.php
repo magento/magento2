@@ -9,6 +9,9 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\SearchResultFactory;
 
+/**
+ * Builder for search response.
+ */
 class SearchResponseBuilder
 {
     /**
@@ -35,6 +38,8 @@ class SearchResponseBuilder
     }
 
     /**
+     * Build search result by search response.
+     *
      * @param ResponseInterface $response
      * @return SearchResultInterface
      */

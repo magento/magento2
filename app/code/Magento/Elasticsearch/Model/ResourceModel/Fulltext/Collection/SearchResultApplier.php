@@ -38,7 +38,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function apply()
     {
@@ -51,10 +51,9 @@ class SearchResultApplier implements SearchResultApplierInterface
             $ids[] = (int)$item->getId();
         }
         $this->collection->setPageSize(null);
-        $this->collection->cleanOrder();
         $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
         $orderList = join(',', $ids);
         $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-        $this->collection->getSelect()->order("FIELD(e.entity_id,${orderList})");
+        $this->collection->getSelect()->order("FIELD(e.entity_id,$orderList)");
     }
 }

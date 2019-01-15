@@ -15,6 +15,8 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as Aggregation
 use Magento\Framework\App\ScopeResolverInterface;
 
 /**
+ * Query builder for search adapter.
+ *
  * @api
  * @since 100.1.0
  */

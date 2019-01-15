@@ -7,14 +7,15 @@
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 
 /**
- * Resolve specific attributes for search criteria.
+ * Resolve total records count.
  */
-interface SearchResultApplierInterface
+class TotalRecordsResolver implements TotalRecordsResolverInterface
 {
     /**
-     * Apply search results to collection.
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function apply();
+    public function resolve(): ?int
+    {
+        return null;
+    }
 }

@@ -10,6 +10,8 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**
+ * Query builder for search adapter.
+ *
  * @api
  * @since 100.1.0
  */

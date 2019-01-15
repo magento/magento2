@@ -7,6 +7,8 @@
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
 
 /**
  * Catalog inventory module plugin
@@ -17,18 +19,27 @@ class AddStockStatusToCollection
      * @var \Magento\CatalogInventory\Helper\Stock
      */
     protected $stockHelper;
-    
+
     /**
-     * @param \Magento\CatalogInventory\Model\Configuration $configuration
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
-        \Magento\CatalogInventory\Helper\Stock $stockHelper
+        \Magento\CatalogInventory\Helper\Stock $stockHelper,
+        EngineResolverInterface $engineResolver
     ) {
         $this->stockHelper = $stockHelper;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
+     * Add stock filter to collection.
+     *
      * @param Collection $productCollection
      * @param bool $printQuery
      * @param bool $logQuery
@@ -36,7 +47,9 @@ class AddStockStatusToCollection
      */
     public function beforeLoad(Collection $productCollection, $printQuery = false, $logQuery = false)
     {
-        $this->stockHelper->addIsInStockFilterToCollection($productCollection);
+        if ($this->engineResolver->getCurrentSearchEngine() === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE) {
+            $this->stockHelper->addIsInStockFilterToCollection($productCollection);
+        }
         return [$printQuery, $logQuery];
     }
 }

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Elasticsearch\Model\Layer\Search;
+namespace Magento\Elasticsearch\Model\Layer\Category;
 
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Framework\Search\EngineResolverInterface;
@@ -46,6 +46,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
             throw new \DomainException('Undefined factory ' . $this->engineResolver->getCurrentSearchEngine());
         }
         $collection = $this->factories[$this->engineResolver->getCurrentSearchEngine()]->create();
+        $collection->addCategoryFilter($category);
 
         return $collection;
     }

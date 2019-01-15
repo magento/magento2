@@ -68,8 +68,7 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * @param RequestInterface $request
-     * @return QueryResponse
+     * @inheritdoc
      */
     public function query(RequestInterface $request)
     {
