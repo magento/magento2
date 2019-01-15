@@ -58,6 +58,9 @@ class CreateHandler extends AbstractHandler
         );
 
         if (!empty($mediaCollection)) {
+            if ($product->getIsDuplicate() === true) {
+                $mediaCollection = $this->makeAllNewVideos($product->getId(), $mediaCollection);
+            }
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
 
@@ -281,5 +284,23 @@ class CreateHandler extends AbstractHandler
         return !isset($item['video_url_default'], $item['video_title_default'])
             || empty($item['video_url_default'])
             || empty($item['video_title_default']);
+    }
+
+    /**
+     *
+     * @param int $entityId
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function makeAllNewVideos($entityId, array $mediaCollection): array
+    {
+        foreach ($mediaCollection as $key => $video) {
+            if ($this->isVideoItem($video)) {
+                unset($video['video_url_default'], $video['video_title_default']);
+                $video['entity_id'] = $entityId;
+                $mediaCollection[$key] = $video;
+            }
+        }
+        return $mediaCollection;
     }
 }
