@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
+use function GuzzleHttp\Psr7\str;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
@@ -57,8 +58,9 @@ abstract class AbstractForm extends Form
         return $browser->waitUntil(
             function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
+                $class = $element->getAttribute('class');
 
-                return !$element->isDisabled() ? true : null;
+                return (!$element->isDisabled() && !strpos($class, 'disabled')) ? true : null;
             }
         );
     }
