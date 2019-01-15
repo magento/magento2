@@ -12,7 +12,7 @@ define([
 
         rendererList.push(
             {
-                type: 'authorizenet_acceptjs',
+                type: 'authorizenet_directpost',
                 component: 'Magento_AuthorizenetAcceptjs/js/view/payment/method-renderer/authorizenet-accept'
             }
         );

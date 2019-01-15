@@ -5,7 +5,6 @@
 
 define([
         'jquery',
-        'accept',
         'Magento_Payment/js/view/payment/cc-form',
         'mage/translate'
     ],
@@ -14,7 +13,7 @@ define([
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Authorizenet/payment/authorizenet-acceptjs',
+                template: 'Magento_AuthorizenetAcceptjs/payment/authorizenet-acceptjs',
                 timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
             },
             placeOrderHandler: null,
@@ -52,7 +51,7 @@ define([
              * @returns {String}
              */
             getCode: function () {
-                return 'authorizenet_acceptjs';
+                return 'authorizenet_directpost';
             },
 
             /**
