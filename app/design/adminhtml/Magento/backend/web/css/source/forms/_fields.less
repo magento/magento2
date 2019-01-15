@@ -120,7 +120,10 @@
         }
 
         > .admin__field-control {
-            #mix-grid .column(@field-control-grid__column, @field-grid__columns); 
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+            input[type="checkbox"] {
+                margin-top: 1.2rem;
+            }
         }
 
         > .admin__field-label {
@@ -147,9 +150,17 @@
                 }
             }
         }
+
+        &.field-currently_used_for {
+            > .admin__field-control {
+                .admin__field {
+                    margin-top: 8px;
+                }
+            } 
+        }
     }
     &.composite-bundle {
-        > .admin__field-control {
+        .admin__field-control {
             padding-top: 7px;
         }
         .admin__field-option {
@@ -296,6 +307,12 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
+        
+        &.field-import_file {
+            .input-file {
+                margin-top: 6px;
+            }
+        }
     }
 
     //  Hide group legend and show first field label instead
@@ -679,8 +696,10 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
-                text-align: left;
             }
+        }
+        & > .admin__field-label { 
+            text-align: left;
         }
 
         &:nth-child(n + 2) {

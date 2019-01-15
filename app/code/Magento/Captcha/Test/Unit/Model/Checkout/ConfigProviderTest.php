@@ -77,6 +77,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('https://magento.com/captcha'));
 
         $config = $this->model->getConfig();
+        unset($config['captcha'][$this->formId]['timestamp']);
         $this->assertEquals($config, $expectedConfig);
     }
 
