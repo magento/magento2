@@ -117,7 +117,7 @@ class File extends BackendFile
     }
 
     /**
-     * @return File
+     * @return $this
      *
      * @throws LocalizedException
      */
