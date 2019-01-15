@@ -197,7 +197,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * @return \Magento\Framework\Data\Form\FormKey
+     * @return \Magento\Framework\Code\NameBuilder
      */
     public function getNameBuilder()
     {

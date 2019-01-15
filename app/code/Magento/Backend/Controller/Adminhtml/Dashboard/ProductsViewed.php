@@ -11,7 +11,7 @@ class ProductsViewed extends AjaxBlock
     /**
      * Gets most viewed products list
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {

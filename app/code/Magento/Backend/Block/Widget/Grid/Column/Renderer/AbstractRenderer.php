@@ -48,7 +48,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * Renders grid column
      *
-     * @param   Object $row
+     * @param DataObject $row
      * @return  string
      */
     public function render(DataObject $row)
@@ -66,7 +66,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * Render column for export
      *
-     * @param Object $row
+     * @param DataObject $row
      * @return string
      */
     public function renderExport(DataObject $row)
@@ -75,7 +75,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * @param DataObject $row
      * @return mixed
      */
     protected function _getValue(DataObject $row)
@@ -92,7 +92,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * @param DataObject $row
      * @return string
      */
     public function _getInputValueElement(DataObject $row)
@@ -108,7 +108,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * @param DataObject $row
      * @return mixed
      */
     protected function _getInputValue(DataObject $row)
