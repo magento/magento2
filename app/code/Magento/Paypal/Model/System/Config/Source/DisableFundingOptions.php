@@ -5,27 +5,30 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Paypal\Model\System\Config\Source\ExpressButtons;
+namespace Magento\Paypal\Model\System\Config\Source;
 
+/**
+ * Get disable funding options
+ */
 class DisableFundingOptions
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {
         return [
             [
                 'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT,
-                'label' => 'PayPal Credit'
+                'label' => __('PayPal Credit')
             ],
             [
                 'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CARD,
-                'label' => 'PayPal Guest Checkout Credit Card Icons'
+                'label' => __('PayPal Guest Checkout Credit Card Icons')
             ],
             [
                 'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_ELV,
-                'label' => 'Elektronisches Lastschriftverfahren - German ELV'
+                'label' => __('Elektronisches Lastschriftverfahren - German ELV')
             ]
         ];
     }

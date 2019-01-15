@@ -650,19 +650,20 @@
                         <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
                         <attribute type="shared">1</attribute>
                     </field>
-                    <group id="checkout_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
+                    <group id="checkout_page_button" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
                         <label>PayPal Button - Checkout Page</label>
                         <field id="checkout_page_button_customize" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                             <label>Customize Button</label>
                             <comment><![CDATA[Customize the display of the PayPal button in the Checkout.]]></comment>
-                            <config_path>payment/paypal_express/checkout_page_button_customize</config_path>
+                            <config_path>paypal/style/checkout_page_button_customize</config_path>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <attribute type="shared">1</attribute>
                         </field>
-                        <field id="checkout_page_button_label" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                        <field id="checkout_page_button_label" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                             <label>Label</label>
-                            <config_path>payment/paypal_express/checkout_page_button_label</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Label::getCheckoutLabel</source_model>
+                            <comment><![CDATA[The installment feature is available only in these locales: en_MX, es_MX, en_BR, pt_BR.]]></comment>
+                            <config_path>paypal/style/checkout_page_button_label</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getLabel</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                             </depends>
@@ -670,8 +671,8 @@
                         </field>
                         <field id="checkout_page_button_mx_installment_period" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                             <label>Mexico Installment Period</label>
-                            <config_path>payment/paypal_express/checkout_page_button_mx_installment_period</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\InstallmentPeriod::getCheckoutMxInstallmentPeriod</source_model>
+                            <config_path>paypal/style/checkout_page_button_mx_installment_period</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getMxInstallmentPeriod</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                                 <field id="checkout_page_button_label">installment</field>
@@ -680,8 +681,8 @@
                         </field>
                         <field id="checkout_page_button_br_installment_period" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                             <label>Brazil Installment Period</label>
-                            <config_path>payment/paypal_express/checkout_page_button_br_installment_period</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\InstallmentPeriod::getCheckoutBrInstallmentPeriod</source_model>
+                            <config_path>paypal/style/checkout_page_button_br_installment_period</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getBrInstallmentPeriod</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                                 <field id="checkout_page_button_label">installment</field>
@@ -690,8 +691,8 @@
                         </field>
                         <field id="checkout_page_button_layout" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
                             <label>Layout</label>
-                            <config_path>payment/paypal_express/checkout_page_button_layout</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Layout::getCheckoutLayout</source_model>
+                            <config_path>paypal/style/checkout_page_button_layout</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getLayout</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                                 <field id="checkout_page_button_label" negative="1">credit</field>
@@ -700,8 +701,8 @@
                         </field>
                         <field id="checkout_page_button_size" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                             <label>Size</label>
-                            <config_path>payment/paypal_express/checkout_page_button_size</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Size::getCheckoutSize</source_model>
+                            <config_path>paypal/style/checkout_page_button_size</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getSize</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                             </depends>
@@ -709,8 +710,8 @@
                         </field>
                         <field id="checkout_page_button_shape" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                             <label>Shape</label>
-                            <config_path>payment/paypal_express/checkout_page_button_shape</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Shape::getCheckoutShape</source_model>
+                            <config_path>paypal/style/checkout_page_button_shape</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getShape</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                             </depends>
@@ -718,8 +719,8 @@
                         </field>
                         <field id="checkout_page_button_color" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
                             <label>Color</label>
-                            <config_path>payment/paypal_express/checkout_page_button_color</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\Color::getCheckoutColor</source_model>
+                            <config_path>paypal/style/checkout_page_button_color</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getColor</source_model>
                             <depends>
                                 <field id="checkout_page_button_customize">1</field>
                                 <field id="checkout_page_button_label" negative="1">credit</field>
@@ -727,7 +728,7 @@
                             <attribute type="shared">1</attribute>
                         </field>
                     </group>
-                    <group id="features" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                    <group id="features" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
                         <label>Features</label>
                         <field id="disable_funding_options" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Disable Funding Options</label>
@@ -736,8 +737,8 @@
                                 For example, PayPal Credit is only shown to buyers in countries where Paybal Credit is
                                 offered and the currency offered by the merchant is USD.]]>
                             </comment>
-                            <config_path>payment/paypal_express/disable_funding_options</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ExpressButtons\DisableFundingOptions</source_model>
+                            <config_path>paypal/style/disable_funding_options</config_path>
+                            <source_model>Magento\Paypal\Model\System\Config\Source\DisableFundingOptions</source_model>
                             <attribute type="shared">1</attribute>
                         </field>
                     </group>

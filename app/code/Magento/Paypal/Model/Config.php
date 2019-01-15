@@ -1645,21 +1645,6 @@ class Config extends AbstractConfig
             case 'paypal_hdrbackcolor':
             case 'paypal_hdrbordercolor':
             case 'paypal_payflowcolor':
-                return "paypal/style/{$fieldName}";
-            default:
-                return $this->_mapButtonStyleFieldset($fieldName);
-        }
-    }
-
-    /**
-     * Map PayPal button style config fields
-     *
-     * @param string $fieldName
-     * @return string|null
-     */
-    protected function _mapButtonStyleFieldset($fieldName)
-    {
-        switch ($fieldName) {
             case 'checkout_page_button_customize':
             case 'checkout_page_button_layout':
             case 'checkout_page_button_size':
@@ -1669,7 +1654,7 @@ class Config extends AbstractConfig
             case 'checkout_page_button_mx_installment_period':
             case 'checkout_page_button_br_installment_period':
             case 'disable_funding_options':
-                return "payment/{$this->_methodCode}/{$fieldName}";
+                return "paypal/style/{$fieldName}";
             default:
                 return null;
         }
