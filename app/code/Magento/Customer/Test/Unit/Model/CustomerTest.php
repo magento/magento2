@@ -18,6 +18,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
