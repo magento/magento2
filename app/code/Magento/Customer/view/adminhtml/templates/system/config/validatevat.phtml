@@ -35,7 +35,7 @@ require(['prototype'], function(){
                         validationMessage.removeClassName('hidden').addClassName('error')
                     }
                 } catch (e) {
-                    validationMessage.removeClassName('hidden').addClassName('error')
+                    validationMessage.removeClassName('hidden').addClassName('error-message error')
                 }
                 validationMessage.update(result);
             }
