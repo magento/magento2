@@ -17,6 +17,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $converter = new Converter();
         $data = [
             'level1' => 'abc',
+            'empty' => null,
             'badchars' => '<>\'"&',
             'twolevels' => ['level2' => 'def'],
             'threelevels' => ['level2' => ['level3' => 'ghi']],
@@ -25,6 +26,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $expected = '<foobar xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">'
             . '<level1>abc</level1>'
+            . '<empty></empty>'
             . '<badchars>&lt;&gt;\'&quot;&amp;</badchars>'
             . '<twolevels><level2>def</level2></twolevels>'
             . '<threelevels><level2><level3>ghi</level3></level2></threelevels>'
@@ -49,6 +51,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $xml = '<foobar>'
             . '<level1>abc</level1>'
+            . '<empty/>'
+            . '<empty2></empty2>'
             . '<badchars>&lt;&gt;\'&quot;&amp;</badchars>'
             . '<twolevels><level2>def</level2></twolevels>'
             . '<threelevels><level2><level3>ghi</level3></level2></threelevels>'
@@ -60,6 +64,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $expected = [
             'level1' => 'abc',
+            'empty' => null,
+            'empty2' => null,
             'badchars' => '<>\'"&',
             'twolevels' => ['level2' => 'def'],
             'threelevels' => ['level2' => ['level3' => 'ghi']],

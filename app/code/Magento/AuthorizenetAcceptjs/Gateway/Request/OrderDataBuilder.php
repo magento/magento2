@@ -25,9 +25,9 @@ class OrderDataBuilder implements BuilderInterface
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
-     {
-         $this->subjectReader = $subjectReader;
-     }
+    {
+        $this->subjectReader = $subjectReader;
+    }
 
     /**
      * @inheritdoc
@@ -38,8 +38,10 @@ class OrderDataBuilder implements BuilderInterface
         $order = $paymentDO->getOrder();
 
         return [
-            'order' => [
-                'invoiceNumber' => $order->getId()
+            'transactionRequest' => [
+                'order' => [
+                    'invoiceNumber' => $order->getOrderIncrementId()
+                ]
             ]
         ];
     }

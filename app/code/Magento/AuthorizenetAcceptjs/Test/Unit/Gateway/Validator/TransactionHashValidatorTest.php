@@ -120,12 +120,12 @@ class TransactionHashValidatorTest extends TestCase
         $this->configMock->expects($this->once())
             ->method('getTransactionSignatureKey')
             ->willReturn('abc');
+        $this->configMock->expects($this->once())
+            ->method('getLoginId')
+            ->willReturn('username');
 
         $this->validator->validate([
             'amount' => '123.00',
-            'merchantAuthentication' => [
-                'name' => 'username',
-            ],
             'response' => [
                 'transactionResponse' => [
                     'transId' => '123',
@@ -190,12 +190,12 @@ class TransactionHashValidatorTest extends TestCase
         $this->configMock->expects($this->once())
             ->method('getLegacyTransactionHash')
             ->willReturn('abc');
+        $this->configMock->expects($this->once())
+            ->method('getLoginId')
+            ->willReturn('username');
 
         $this->validator->validate([
             'amount' => '123.00',
-            'merchantAuthentication' => [
-                'name' => 'username',
-            ],
             'response' => [
                 'transactionResponse' => [
                     'transId' => '123',

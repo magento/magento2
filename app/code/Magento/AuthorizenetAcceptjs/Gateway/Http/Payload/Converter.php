@@ -82,7 +82,7 @@ class Converter
                         $out[$index][] = (is_object($subnode) ? $convertChildren($subnode) : $subnode);
                     }
                 } else {
-                    $out[$index] = (is_object($node)) ? $convertChildren($node) : $node;
+                    $out[$index] = (is_object($node) ? ($node->count() > 0 ? $convertChildren($node) : null) : $node);
                 }
             }
 

@@ -33,7 +33,15 @@ class SubjectReader
      */
     public function readStoreId(array $subject)
     {
-        return $subject['store_id'] ?? null;
+        $storeId = $subject['store_id'] ?? null;
+
+        if (empty($storeId)) {
+            try {
+                $storeId = $this->readPayment($subject)->getOrder()->getStoreId();
+            } catch (\InvalidArgumentException $e) {}
+        }
+
+        return $storeId;
     }
 
     /**
