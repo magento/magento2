@@ -78,8 +78,9 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $this->prevMode = $this->objectManager->get(State::class)->getMode();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
 
-        $this->config = $this->loadConfig();
-        $this->envConfig = $this->loadEnvConfig();
+        // Load the original config to restore it on teardown
+        $this->config = $this->reader->load(ConfigFilePool::APP_CONFIG);
+        $this->envConfig = $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     /**
@@ -87,6 +88,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function tearDown()
     {
+        // Restore the original config
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
 
@@ -128,9 +130,14 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Enable production mode
+     *
+     * @return void
+     */
     private function enableAndAssertProductionMode()
     {
-        // enable production mode
+        // Enable production mode
         $this->clearStaticFiles();
         $this->commandTester = new CommandTester($this->getStaticContentDeployCommand());
         $this->commandTester->execute(
@@ -149,7 +156,9 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Enable
+     * Enable developer mode
+     *
+     * @return void
      */
     private function enableAndAssertDeveloperMode()
     {
@@ -198,21 +207,5 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         );
 
         return $deployStaticContentCommand;
-    }
-
-    /**
-     * @return array
-     */
-    private function loadConfig()
-    {
-        return $this->reader->load(ConfigFilePool::APP_CONFIG);
-    }
-
-    /**
-     * @return array
-     */
-    private function loadEnvConfig()
-    {
-        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 }
