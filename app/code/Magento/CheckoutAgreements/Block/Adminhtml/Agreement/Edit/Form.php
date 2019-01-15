@@ -16,6 +16,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions
      */
     protected $agreementModeOptions;
+    
+    /**
+     * @var \Magento\Cms\Model\Wysiwyg\Config
+     */
+    protected $_wysiwygConfig;
+    
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -23,6 +29,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      * @codeCoverageIgnore
      */
@@ -32,10 +39,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = []
     ) {
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
+        $this->_wysiwygConfig = $wysiwygConfig;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -59,6 +68,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('checkout_agreement');
+        $wysiwygConfig = $this->_wysiwygConfig->getConfig();
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
@@ -154,6 +164,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'rows' => '5',
                 'cols' => '30',
                 'wysiwyg' => false,
+                'config' =>$wysiwygConfig,
                 'required' => true
             ]
         );
@@ -167,6 +178,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Content'),
                 'style' => 'height:24em;',
                 'wysiwyg' => false,
+                'config' =>$wysiwygConfig,
                 'required' => true
             ]
         );
