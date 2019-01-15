@@ -99,7 +99,7 @@
         <!-- Create invoice -->
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.Pending}}" stepKey="seeOrderPending"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusPending}}" stepKey="seeOrderPending"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
 
@@ -117,7 +117,7 @@
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.Processing}}" stepKey="seeOrderProcessing"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{CONST.orderStatusProcessing}}" stepKey="seeOrderProcessing"/>
 
         <!--Create Credit Memo-->
         <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment"/>

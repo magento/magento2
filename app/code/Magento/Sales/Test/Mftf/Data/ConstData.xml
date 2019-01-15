@@ -9,10 +9,10 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CONST" type="CONST">
-        <data key="Complete">Complete</data>
-        <data key="Closed">Closed</data>
-        <data key="Pending">Pending</data>
-        <data key="Processing">Processing</data>
+        <data key="orderStatusComplete">Complete</data>
+        <data key="orderStatusClosed">Closed</data>
+        <data key="orderStatusPending">Pending</data>
+        <data key="orderStatusProcessing">Processing</data>
     </entity>
 </entities>
 

@@ -53,9 +53,11 @@ abstract class AbstractForm extends Form
     protected function waitForElementEnabled(string $selector, string $strategy = Locator::SELECTOR_CSS)
     {
         $browser = $this->browser;
+
         return $browser->waitUntil(
             function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
+
                 return !$element->isDisabled() ? true : null;
             }
         );
