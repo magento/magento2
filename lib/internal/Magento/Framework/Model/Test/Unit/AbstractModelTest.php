@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model\Test\Unit;
 
-
-class AbstractModelTest extends \PHPUnit_Framework_TestCase
+class AbstractModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\AbstractModel
@@ -25,7 +24,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -37,7 +36,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -46,57 +45,35 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $this->contextMock = new \Magento\Framework\Model\Context(
-            $this->getMock('Psr\Log\LoggerInterface'),
-            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\App\State', [], [], '', false),
+            $this->createMock(\Psr\Log\LoggerInterface::class),
+            $this->createMock(\Magento\Framework\Event\ManagerInterface::class),
+            $this->createMock(\Magento\Framework\App\CacheInterface::class),
+            $this->createMock(\Magento\Framework\App\State::class),
             $this->actionValidatorMock
         );
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->resourceMock = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
-            [
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class, [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 '__wakeup',
                 'commit',
                 'delete',
                 'getIdFieldName',
                 'rollBack'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ]);
+        $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
         );
-        $this->adapterMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resourceMock->expects($this->any())
-            ->method('_getWriteAdapter')
-            ->will($this->returnValue($this->adapterMock));
-        $this->resourceMock->expects($this->any())
-            ->method('_getReadAdapter')
-            ->will($this->returnValue($this->adapterMock));
+            ->method('getConnection')
+            ->will($this->returnValue($this->connectionMock));
     }
 
     public function testDelete()
@@ -124,7 +101,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->isDeleted()
+     * Tests \Magento\Framework\DataObject->isDeleted()
      */
     public function testIsDeleted()
     {
@@ -136,7 +113,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->hasDataChanges()
+     * Tests \Magento\Framework\DataObject->hasDataChanges()
      */
     public function testHasDataChanges()
     {
@@ -156,7 +133,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->getId()
+     * Tests \Magento\Framework\DataObject->getId()
      */
     public function testSetGetId()
     {
@@ -172,7 +149,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->setOrigData()
+     * Tests \Magento\Framework\DataObject->setOrigData()
      */
     public function testOrigData()
     {
@@ -188,7 +165,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->setDataChanges()
+     * Tests \Magento\Framework\DataObject->setDataChanges()
      */
     public function testSetDataChanges()
     {

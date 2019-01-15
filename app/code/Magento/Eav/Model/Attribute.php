@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * EAV attribute resource model (Using Forms)
  *
- * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel() Get data model linked to attribute or null.
+ * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel()
+ * Get data model linked to attribute or null.
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -17,7 +16,11 @@ namespace Magento\Eav\Model;
 
 use Magento\Store\Model\Website;
 
-abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
+/**
+ * @api
+ * @since 100.0.2
+ */
+class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
      * Name of the module
@@ -26,9 +29,8 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     //const MODULE_NAME = 'Magento_Eav';
 
     /**
-     * Prefix of model events object
-     *
-     * @var string
+     * Name of the module
+     * Override it
      */
     protected $_eventObject = 'attribute';
 
@@ -44,6 +46,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @param Website|int $website
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setWebsite($website)
     {
@@ -58,7 +61,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      */
     public function getWebsite()
     {
-        if (is_null($this->_website)) {
+        if ($this->_website === null) {
             $this->_website = $this->_storeManager->getWebsite();
         }
 
@@ -84,7 +87,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     public function getUsedInForms()
     {
         $forms = $this->getData('used_in_forms');
-        if (is_null($forms)) {
+        if ($forms === null) {
             $forms = $this->_getResource()->getUsedInForms($this);
             $this->setData('used_in_forms', $forms);
         }
@@ -102,7 +105,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return unserialize($rules);
+            return (array)$this->getSerializer()->unserialize($rules);
         }
         return [];
     }
@@ -118,7 +121,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (empty($rules)) {
             $rules = null;
         } elseif (is_array($rules)) {
-            $rules = serialize($rules);
+            $rules = $this->getSerializer()->serialize($rules);
         }
         $this->setData('validate_rules', $rules);
 
@@ -144,6 +147,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return is attribute value required
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getIsRequired()
     {
@@ -154,6 +158,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return is visible attribute flag
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getIsVisible()
     {
@@ -164,6 +169,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return default value for attribute
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getDefaultValue()
     {
@@ -174,6 +180,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return count of lines for multiply line attribute
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getMultilineCount()
     {

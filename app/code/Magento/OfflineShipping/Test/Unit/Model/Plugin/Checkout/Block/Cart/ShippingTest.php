@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Plugin\Checkout\Block\Cart;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping
@@ -21,7 +21,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getValue',
@@ -29,9 +29,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->model = $helper->getObject('\Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping', [
-            'scopeConfig' => $this->scopeConfigMock
-        ]);
+        $this->model = $helper->getObject(
+            \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping::class,
+            ['scopeConfig' => $this->scopeConfigMock]
+        );
     }
 
     /**
@@ -39,8 +40,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetStateActive($scopeConfigMockReturnValue, $result, $assertResult)
     {
-        /** @var \Magento\Checkout\Block\Cart\Shipping $subjectMock */
-        $subjectMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Shipping')
+        /** @var \Magento\Checkout\Block\Cart\LayoutProcessor $subjectMock */
+        $subjectMock = $this->getMockBuilder(\Magento\Checkout\Block\Cart\LayoutProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,9 +49,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->willReturn($scopeConfigMockReturnValue);
 
-        $this->assertEquals($assertResult, $this->model->afterGetStateActive($subjectMock, $result));
+        $this->assertEquals($assertResult, $this->model->afterIsStateActive($subjectMock, $result));
     }
 
+    /**
+     * @return array
+     */
     public function afterGetStateActiveDataProvider()
     {
         return [

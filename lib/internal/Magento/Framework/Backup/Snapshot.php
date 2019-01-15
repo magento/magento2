@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@
  */
 namespace Magento\Framework\Backup;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem as AppFilesystem;
 
@@ -48,7 +49,7 @@ class Snapshot extends Filesystem
     /**
      * Implementation Rollback functionality for Snapshot
      *
-     * @throws \Exception
+     * @throws Exception
      * @return bool
      */
     public function rollback()
@@ -59,7 +60,7 @@ class Snapshot extends Filesystem
 
         try {
             $this->_getDbBackupManager()->rollback();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_removeDbBackup();
             throw $e;
         }
@@ -73,7 +74,7 @@ class Snapshot extends Filesystem
     /**
      * Implementation Create Backup functionality for Snapshot
      *
-     * @throws \Exception
+     * @throws Exception
      * @return bool
      */
     public function create()
@@ -82,7 +83,7 @@ class Snapshot extends Filesystem
 
         try {
             $result = parent::create();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_removeDbBackup();
             throw $e;
         }
@@ -113,7 +114,7 @@ class Snapshot extends Filesystem
     protected function _createDbBackupInstance()
     {
         return $this->_backupFactory->create(Factory::TYPE_DB)
-            ->setBackupExtension('gz')
+            ->setBackupExtension('sql')
             ->setTime($this->getTime())
             ->setBackupsDir($this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath())
             ->setResourceModel($this->getResourceModel());

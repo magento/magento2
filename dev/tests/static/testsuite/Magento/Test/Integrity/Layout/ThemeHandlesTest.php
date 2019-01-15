@@ -2,12 +2,12 @@
 /**
  * Test declarations of handles in theme layout updates
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Layout;
 
-class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
+class ThemeHandlesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array|null

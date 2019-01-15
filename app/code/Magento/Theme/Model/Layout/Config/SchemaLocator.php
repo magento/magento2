@@ -2,13 +2,12 @@
 /**
  * Locator for page layouts XSD schemas.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -20,12 +19,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $_schema;
 
     /**
-     * @param Filesystem $appFilesystem
+     * @param UrnResolver $urnResolver
      */
-    public function __construct(Filesystem $appFilesystem)
+    public function __construct(UrnResolver $urnResolver)
     {
-        $this->_schema = $appFilesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)->getAbsolutePath()
-            . '/Magento/Framework/View/PageLayout/etc/layouts.xsd';
+        $this->_schema = $urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd');
     }
 
     /**

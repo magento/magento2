@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
-use Magento\Cms\Model\Resource\Block\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -31,7 +31,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            '\Magento\Catalog\Model\Category\Attribute\Source\Page',
+            \Magento\Catalog\Model\Category\Attribute\Source\Page::class,
             [
                 'blockCollectionFactory' => $this->getMockedBlockCollectionFactory()
             ]
@@ -39,13 +39,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Cms\Model\Resource\Block\CollectionFactory
+     * @return \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
      */
     private function getMockedBlockCollectionFactory()
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\CollectionFactory');
+        $mockBuilder = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block\CollectionFactory::class);
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +62,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Framework\Data\Collection');
+        $mockBuilder = $this->getMockBuilder(\Magento\Framework\Data\Collection::class);
         $mock = $mockBuilder->disableOriginalConstructor()
             ->getMock();
 

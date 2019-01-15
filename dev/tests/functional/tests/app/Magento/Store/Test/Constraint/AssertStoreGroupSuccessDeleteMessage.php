@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,9 +28,9 @@ class AssertStoreGroupSuccessDeleteMessage extends AbstractConstraint
      */
     public function processAssert(StoreIndex $storeIndex)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
-            $storeIndex->getMessagesBlock()->getSuccessMessages(),
+            $storeIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success delete message is displayed.'
         );
     }

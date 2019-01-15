@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,7 @@
             <field name="custom_currency_symbol" xsi:type="array">
                 <item name="UAH" xsi:type="string">custom</item>
             </field>
+            <field name="code" xsi:type="string">UAH</field>
         </dataset>
 
         <dataset name="currency_symbols_eur">

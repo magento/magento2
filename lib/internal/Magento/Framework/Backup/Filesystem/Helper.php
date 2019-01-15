@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Filesystem;
+
+use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Filesystem helper
@@ -56,12 +60,12 @@ class Helper
      */
     public function rm($path, $skipPaths = [], $removeRoot = false)
     {
-        $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $filesystemIterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter($filesystemIterator, $skipPaths);
+        $iterator = new Filter($filesystemIterator, $skipPaths);
 
         foreach ($iterator as $item) {
             $item->isDir() ? @rmdir($item->__toString()) : @unlink($item->__toString());
@@ -87,22 +91,24 @@ class Helper
         $info = [];
         if ($infoOptions & self::INFO_READABLE) {
             $info['readable'] = true;
+            $info['readableMeta'] = [];
         }
 
         if ($infoOptions & self::INFO_WRITABLE) {
             $info['writable'] = true;
+            $info['writableMeta'] = [];
         }
 
         if ($infoOptions & self::INFO_SIZE) {
             $info['size'] = 0;
         }
 
-        $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $filesystemIterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter($filesystemIterator, $skipFiles);
+        $iterator = new Filter($filesystemIterator, $skipFiles);
 
         foreach ($iterator as $item) {
             if ($item->isLink()) {
@@ -111,10 +117,12 @@ class Helper
 
             if ($infoOptions & self::INFO_WRITABLE && !$item->isWritable()) {
                 $info['writable'] = false;
+                $info['writableMeta'][] = $item->getPathname();
             }
 
             if ($infoOptions & self::INFO_READABLE && !$item->isReadable()) {
                 $info['readable'] = false;
+                $info['readableMeta'][] = $item->getPathname();
             }
 
             if ($infoOptions & self::INFO_SIZE && !$item->isDir()) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -10,11 +10,10 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Downloadable sample model
  *
- * @method \Magento\Downloadable\Model\Resource\Sample _getResource()
- * @method \Magento\Downloadable\Model\Resource\Sample getResource()
  * @method int getProductId()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {
@@ -36,7 +35,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -45,7 +44,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -67,7 +66,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Resource\Sample');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Sample::class);
         parent::_construct();
     }
 

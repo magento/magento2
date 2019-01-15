@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,6 @@ class AssertSearchTermInGrid extends AbstractConstraint
      *  - correct Store
      *  - correct Results
      *  - correct Uses
-     *  - correct Synonym
      *  - correct Redirect URL
      *  - correct Suggested Terms
      *
@@ -38,7 +37,6 @@ class AssertSearchTermInGrid extends AbstractConstraint
             'store_id' => $searchTerm->getStoreId(),
             'results_from' => $searchTerm->getNumResults(),
             'popularity_from' => $searchTerm->getPopularity(),
-            'synonym_for' => $searchTerm->getSynonymFor(),
             'redirect' => $searchTerm->getRedirect(),
             'display_in_terms' => strtolower($searchTerm->getDisplayInTerms()),
         ];
@@ -46,7 +44,7 @@ class AssertSearchTermInGrid extends AbstractConstraint
         $filters = array_filter($filters);
         $grid->search($filters);
         unset($filters['store_id']);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $grid->isRowVisible($filters, false),
             'Row terms according to the filters is not found.'
         );

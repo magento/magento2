@@ -1,18 +1,19 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global alert:true*/
+
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'useDefault',
     'collapsable',
     'mage/translate',
-    'mage/backend/validation'
-], function ($, mageTemplate) {
+    'mage/backend/validation',
+    'Magento_Ui/js/modal/modal'
+], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.customOptions', {
@@ -20,6 +21,7 @@ define([
             selectionItemCount: {}
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.baseTmpl = mageTemplate('#custom-option-base-template');
             this.rowTmpl = mageTemplate('#custom-option-select-type-row-template');
@@ -31,10 +33,13 @@ define([
             this._addValidation();
         },
 
+        /**
+         * @private
+         */
         _addValidation: function () {
             $.validator.addMethod(
                 'required-option-select', function (value) {
-                    return (value !== '');
+                    return value !== '';
                 }, $.mage.__('Select type of option.'));
 
             $.validator.addMethod(
@@ -53,7 +58,12 @@ define([
                 }, $.mage.__('Please add rows to option.'));
         },
 
+        /**
+         * @private
+         */
         _initOptionBoxes: function () {
+            var syncOptionTitle;
+
             if (!this.options.isReadonly) {
                 this.element.sortable({
                     axis: 'y',
@@ -63,9 +73,16 @@ define([
                     tolerance: 'pointer'
                 });
             }
-            var syncOptionTitle = function (event) {
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            syncOptionTitle = function (event) {
                 var currentValue = $(event.target).val(),
-                    optionBoxTitle = $('.admin__collapsible-title > span', $(event.target).closest('.fieldset-wrapper')),
+                    optionBoxTitle = $(
+                        '.admin__collapsible-title > span',
+                        $(event.target).closest('.fieldset-wrapper')
+                    ),
                     newOptionTitle = $.mage.__('New Option');
 
                 optionBoxTitle.text(currentValue === '' ? newOptionTitle : currentValue);
@@ -90,6 +107,7 @@ define([
                         this.refreshSortableElements();
                     }
                 },
+
                 /**
                  * Minimize custom option block
                  */
@@ -120,90 +138,75 @@ define([
                     var importContainer = $('#import-container'),
                         widget = this;
 
-                    importContainer.dialog({
+                    importContainer.modal({
                         title: $.mage.__('Select Product'),
-                        autoOpen: false,
-                        minWidth: 980,
-                        width: '75%',
-                        modal: true,
-                        resizable: true,
-                        position: {
-                            my: 'left top',
-                            at: 'center top',
-                            of: 'body'
-                        },
-                        create: function (event, ui) {
-                            $(document).on('click', '#productGrid_massaction-form button', function () {
-                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                        type: 'slide',
+
+                        /** @inheritdoc */
+                        opened: function () {
+                            $(document).off().on('click', '#productGrid_massaction-form button', function () {
+                                $('.import-custom-options-apply-button').trigger('click', 'massActionTrigger');
                             });
                         },
-                        open: function () {
-                            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                        buttons: [{
+                            text: $.mage.__('Import'),
+                            attr: {
+                                id: 'import-custom-options-apply-button'
+                            },
+                            'class': 'action-primary action-import import-custom-options-apply-button',
 
-                            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
-                            $(this).closest('.ui-dialog').css('margin-top', topMargin);
+                            /** @inheritdoc */
+                            click: function (event, massActionTrigger) {
+                                var request = [];
 
-                            $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                        },
-                        close: function () {
-                            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                        },
-                        buttons: [
-                            {
-                                text: $.mage.__('Import'),
-                                id: 'import-custom-options-apply-button',
-                                'class': 'action-primary action-import',
-                                click: function (event, massActionTrigger) {
-                                    var request = [];
-                                    $(this).find('input[name=product]:checked').map(function () {
-                                        request.push(this.value);
-                                    });
+                                $(this.element).find('input[name=product]:checked').map(function () {
+                                    request.push(this.value);
+                                });
 
-                                    if (request.length === 0) {
-                                        if (!massActionTrigger) {
-                                            alert($.mage.__('Please select items.'));
-                                        }
-
-                                        return;
+                                if (request.length === 0) {
+                                    if (!massActionTrigger) {
+                                        alert({
+                                            content: $.mage.__('An item needs to be selected. Select and try again.')
+                                        });
                                     }
 
-                                    $.post(widget.options.customOptionsUrl, {
-                                        'products[]': request,
-                                        form_key: widget.options.formKey
-                                    }, function ($data) {
-                                        $.parseJSON($data).each(function (el) {
-                                            el.id = widget.getFreeOptionId(el.id);
-                                            el.option_id = el.id;
+                                    return;
+                                }
 
-                                            if (typeof el.optionValues !== 'undefined') {
-                                                for (var i = 0; i < el.optionValues.length; i++) {
-                                                    el.optionValues[i].option_id = el.id;
-                                                }
+                                $.post(widget.options.customOptionsUrl, {
+                                    'products[]': request,
+                                    'form_key': widget.options.formKey
+                                }, function ($data) {
+                                    $.parseJSON($data).each(function (el) {
+                                        var i;
+
+                                        el.id = widget.getFreeOptionId(el.id);
+                                        el['option_id'] = el.id;
+
+                                        if (typeof el.optionValues !== 'undefined') {
+                                            for (i = 0; i < el.optionValues.length; i++) {
+                                                el.optionValues[i]['option_id'] = el.id;
                                             }
-                                            //Adding option
-                                            widget.addOption(el);
-                                            //Will save new option on server side
-                                            $('#product_option_' + el.id + '_option_id').val(0);
-                                            $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
-                                        });
-                                        importContainer.dialog('close');
+                                        }
+                                        //Adding option
+                                        widget.addOption(el);
+                                        //Will save new option on server side
+                                        $('#product_option_' + el.id + '_option_id').val(0);
+                                        $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
                                     });
-                                }
-                            },
-                            {
-                                text: $.mage.__('Cancel'),
-                                id: 'import-custom-options-close-button',
-                                'class': 'action-close',
-                                click: function () {
-                                    $(this).dialog('close');
-                                }
-                            }]
+                                    importContainer.modal('closeModal');
+                                });
+                            }
+                        }]
                     });
                     importContainer.load(
                         this.options.productGridUrl,
-                        {form_key: this.options.formKey},
+                        {
+                            'form_key': this.options.formKey,
+                            'current_product_id': this.options.currentProductId
+                        },
                         function () {
-                            importContainer.dialog('open');
+                            importContainer.modal('openModal');
                         }
                     );
                 },
@@ -212,14 +215,16 @@ define([
                  * Change custom option type
                  */
                 'change select[id^=product_option_][id$=_type]': function (event, data) {
-                    data = data || {};
                     var widget = this,
                         currentElement = $(event.target),
                         parentId = '#' + currentElement.closest('.fieldset-alt').attr('id'),
-                        group = currentElement.find('[value="' + currentElement.val() + '"]').closest('optgroup').attr('label'),
+                        group = currentElement.find('[value="' + currentElement.val() + '"]')
+                            .closest('optgroup').attr('data-optgroup-name'),
                         previousGroup = $(parentId + '_previous_group').val(),
                         previousBlock = $(parentId + '_type_' + previousGroup),
-                        tmpl;
+                        tmpl, disabledBlock, priceType;
+
+                    data = data || {};
 
                     if (typeof group !== 'undefined') {
                         group = group.toLowerCase();
@@ -234,13 +239,13 @@ define([
                         if (typeof group === 'undefined') {
                             return;
                         }
-                        var disabledBlock = $(parentId).find(parentId + '_type_' + group);
+                        disabledBlock = $(parentId).find(parentId + '_type_' + group);
 
                         if (disabledBlock.length) {
                             disabledBlock.removeClass('ignore-validate').show();
                         } else {
-                            if ($.isEmptyObject(data)) {
-                                data.option_id = $(parentId + '_id').val();
+                            if ($.isEmptyObject(data)) { //eslint-disable-line max-depth
+                                data['option_id'] = $(parentId + '_id').val();
                                 data.price = data.sku = '';
                             }
                             data.group = group;
@@ -252,13 +257,14 @@ define([
 
                             $(tmpl).insertAfter($(parentId));
 
-                            if (data.price_type) {
-                                var priceType = $('#' + widget.options.fieldId + '_' + data.option_id + '_price_type');
-                                priceType.val(data.price_type).attr('data-store-label', data.price_type);
+                            if (data['price_type']) { //eslint-disable-line max-depth
+                                priceType = $('#' + widget.options.fieldId + '_' + data['option_id'] + '_price_type');
+                                priceType.val(data['price_type']).attr('data-store-label', data['price_type']);
                             }
-                            this._bindUseDefault(widget.options.fieldId + '_' + data.option_id, data);
+                            this._bindUseDefault(widget.options.fieldId + '_' + data['option_id'], data);
                             //Add selections
-                            if (data.optionValues) {
+
+                            if (data.optionValues) { //eslint-disable-line max-depth
                                 data.optionValues.each(function (value) {
                                     widget.addSelection(value);
                                 });
@@ -273,11 +279,16 @@ define([
             });
         },
 
+        /**
+         * @private
+         */
         _initSortableSelections: function () {
             if (!this.options.isReadonly) {
                 this.element.find('[id^=product_option_][id$=_type_select] tbody').sortable({
                     axis: 'y',
                     handle: '[data-role=draggable-handle]',
+
+                    /** @inheritdoc */
                     helper: function (event, ui) {
                         ui.children().each(function () {
                             $(this).width($(this).width());
@@ -296,13 +307,19 @@ define([
          */
         _bindCheckboxHandlers: function () {
             this._on({
+                /**
+                 * @param {jQuery.Event} event
+                 */
                 'change [id^=product_option_][id$=_required]': function (event) {
                     var $this = $(event.target);
-                    $this.closest('#product_options_container_top > div').find('[name$="[is_require]"]').val($this.is(':checked') ? 1 : 0);
+
+                    $this.closest('#product_options_container_top > div')
+                        .find('[name$="[is_require]"]').val($this.is(':checked') ? 1 : 0);
                 }
             });
             this.element.find('[id^=product_option_][id$=_required]').each(function () {
-                $(this).prop('checked', $(this).closest('#product_options_container_top > div').find('[name$="[is_require]"]').val() > 0);
+                $(this).prop('checked', $(this).closest('#product_options_container_top > div')
+                        .find('[name$="[is_require]"]').val() > 0);
             });
         },
 
@@ -310,9 +327,10 @@ define([
          * Update Custom option position
          */
         _updateOptionBoxPositions: function () {
-            $(this).find('div[id^=option_]:not(.ignore-validate) .fieldset-alt > [name$="[sort_order]"]').each(function (index) {
-                $(this).val(index);
-            });
+            $(this).find('div[id^=option_]:not(.ignore-validate) .fieldset-alt > [name$="[sort_order]"]').each(
+                function (index) {
+                    $(this).val(index);
+                });
         },
 
         /**
@@ -329,7 +347,7 @@ define([
          */
         _bindReadOnlyMode: function () {
             if (this.options.isReadonly) {
-                $('div.product-custom-options').find('button,input,select,textarea,').each(function () {
+                $('div.product-custom-options').find('button,input,select,textarea').each(function () {
                     $(this).prop('disabled', true);
 
                     if ($(this).is('button')) {
@@ -339,10 +357,16 @@ define([
             }
         },
 
+        /**
+         * @param {String} id
+         * @param {Object} data
+         * @private
+         */
         _bindUseDefault: function (id, data) {
             var title = $('#' + id + '_title'),
                 price = $('#' + id + '_price'),
                 priceType = $('#' + id + '_price_type');
+
             //enable 'use default' link for title
             if (data.checkboxScopeTitle) {
                 title.useDefault({
@@ -360,7 +384,7 @@ define([
                     checkbox: 'input[id$=_price_use_default]',
                     label: 'span'
                 });
-                //@TODO not work set default value for second field
+                //not work set default value for second field
                 priceType.useDefault({
                     field: '.field',
                     useDefault: 'label[for$=_price]',
@@ -376,24 +400,24 @@ define([
         addSelection: function (event) {
             var data = {},
                 element = event.target || event.srcElement || event.currentTarget,
-                rowTmpl;
+                rowTmpl, priceType;
 
             if (typeof element !== 'undefined') {
                 data.id = $(element).closest('#product_options_container_top > div')
                     .find('[name^="product[options]"][name$="[id]"]').val();
-                data.option_type_id = -1;
+                data['option_type_id'] = -1;
 
                 if (!this.options.selectionItemCount[data.id]) {
                     this.options.selectionItemCount[data.id] = 1;
                 }
 
-                data.select_id = this.options.selectionItemCount[data.id];
+                data['select_id'] = this.options.selectionItemCount[data.id];
                 data.price = data.sku = '';
             } else {
                 data = event;
-                data.id = data.option_id;
-                data.select_id = data.option_type_id;
-                this.options.selectionItemCount[data.id] = data.item_count;
+                data.id = data['option_id'];
+                data['select_id'] = data['option_type_id'];
+                this.options.selectionItemCount[data.id] = data['item_count'];
             }
 
             rowTmpl = this.rowTmpl({
@@ -403,13 +427,17 @@ define([
             $(rowTmpl).appendTo($('#select_option_type_row_' + data.id));
 
             //set selected price_type value if set
-            if (data.price_type) {
-                var priceType = $('#' + this.options.fieldId + '_' + data.id + '_select_' + data.select_id + '_price_type');
-                priceType.val(data.price_type).attr('data-store-label', data.price_type);
+            if (data['price_type']) {
+                priceType = $('#' + this.options.fieldId + '_' + data.id + '_select_' + data['select_id'] +
+                    '_price_type');
+                priceType.val(data['price_type']).attr('data-store-label', data['price_type']);
             }
-            this._bindUseDefault(this.options.fieldId + '_' + data.id + '_select_' + data.select_id, data);
+
+            this._bindUseDefault(this.options.fieldId + '_' + data.id + '_select_' + data['select_id'], data);
             this.refreshSortableElements();
             this.options.selectionItemCount[data.id] = parseInt(this.options.selectionItemCount[data.id], 10) + 1;
+
+            $('#' + this.options.fieldId + '_' + data.id + '_select_' + data['select_id'] + '_title').focus();
         },
 
         /**
@@ -423,10 +451,10 @@ define([
             if (typeof element !== 'undefined') {
                 data.id = this.options.itemCount;
                 data.type = '';
-                data.option_id = 0;
+                data['option_id'] = 0;
             } else {
                 data = event;
-                this.options.itemCount = data.item_count;
+                this.options.itemCount = data['item_count'];
             }
 
             baseTmpl = this.baseTmpl({
@@ -443,8 +471,8 @@ define([
             }
 
             //set selected is_require value if set
-            if (data.is_require) {
-                $('#' + this.options.fieldId + '_' + data.id + '_is_require').val(data.is_require).trigger('change');
+            if (data['is_require']) {
+                $('#' + this.options.fieldId + '_' + data.id + '_is_require').val(data['is_require']).trigger('change');
             }
 
             this.refreshSortableElements();
@@ -454,6 +482,9 @@ define([
             $('#' + this.options.fieldId + '_' + data.id + '_title').trigger('change');
         },
 
+        /**
+         * @return {Object}
+         */
         refreshSortableElements: function () {
             if (!this.options.isReadonly) {
                 this.element.sortable('refresh');
@@ -465,6 +496,10 @@ define([
             return this;
         },
 
+        /**
+         * @param {String} id
+         * @return {*}
+         */
         getFreeOptionId: function (id) {
             return $('#' + this.options.fieldId + '_' + id).length ? this.getFreeOptionId(parseInt(id, 10) + 1) : id;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
@@ -9,6 +9,13 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
 abstract class Role extends \Magento\Backend\App\AbstractAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_User::acl_roles';
+
     /**
      * Core registry
      *
@@ -107,15 +114,5 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
 
         $this->_coreRegistry->register('current_role', $role);
         return $this->_coreRegistry->registry('current_role');
-    }
-
-    /**
-     * Acl checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_User::acl_roles');
     }
 }

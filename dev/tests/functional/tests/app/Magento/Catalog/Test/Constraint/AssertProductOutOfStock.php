@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,17 +12,17 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductOutOfStock
+ * Assert product stock status.
  */
 class AssertProductOutOfStock extends AbstractConstraint
 {
     /**
-     * Text value for checking Stock Availability
+     * Text value for checking Stock Availability.
      */
     const STOCK_AVAILABILITY = 'out of stock';
 
     /**
-     * Assert that Out of Stock status is displayed on product page
+     * Assert that Out of Stock status is displayed on product page.
      *
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
@@ -35,7 +35,7 @@ class AssertProductOutOfStock extends AbstractConstraint
         FixtureInterface $product
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::STOCK_AVAILABILITY,
             $catalogProductView->getViewBlock()->stockAvailability(),
             'Control \'' . self::STOCK_AVAILABILITY . '\' is not visible.'
@@ -43,7 +43,7 @@ class AssertProductOutOfStock extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

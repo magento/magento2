@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\View\Layout\Reader\Container;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -37,13 +37,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->helperMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure\Helper')
+        $this->helperMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
             ->disableOriginalConstructor()->getMock();
-        $this->readerPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderPool')
+        $this->readerPoolMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ReaderPool::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->container = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Layout\Reader\Container',
+            \Magento\Framework\View\Layout\Reader\Container::class,
             [
                 'helper' => $this->helperMock,
                 'readerPool' => $this->readerPoolMock
@@ -56,6 +56,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */
@@ -63,22 +66,28 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $elementCurrent,
         $containerName,
         $structureElement,
-        $expectedData
+        $expectedData,
+        $getStructureCondition,
+        $setStructureCondition,
+        $setRemoveCondition
     ) {
         /** @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject $scheduledStructureMock */
-        $scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()->getMock();
-        $scheduledStructureMock->expects($this->once())
+        $scheduledStructureMock->expects($getStructureCondition)
             ->method('getStructureElementData')
             ->with($containerName)
             ->willReturn($structureElement);
-        $scheduledStructureMock->expects($this->once())
+        $scheduledStructureMock->expects($setStructureCondition)
             ->method('setStructureElementData')
             ->with($containerName, $expectedData)
             ->willReturnSelf();
+        $scheduledStructureMock->expects($setRemoveCondition)
+            ->method('setElementToRemoveList')
+            ->with($containerName);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        /** @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())
             ->method('getScheduledStructure')
@@ -93,11 +102,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->with($contextMock, $elementCurrent)
             ->willReturnSelf();
 
+        if ($elementCurrent->getAttribute('remove') == 'false') {
+            $scheduledStructureMock->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($elementCurrent->getAttribute('name'));
+        }
+        
         $this->container->interpret($contextMock, $elementCurrent);
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function processDataProvider()
     {
@@ -122,6 +138,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                         'unchanged' => 'unchanged_value',
                     ],
                 ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
             ],
             'referenceContainer' => [
                 'elementCurrent' => $this->getElement(
@@ -136,8 +155,77 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                         Container::CONTAINER_OPT_HTML_ID    => 'id_add',
                         Container::CONTAINER_OPT_HTML_CLASS => 'new',
                         Container::CONTAINER_OPT_LABEL      => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY    => null,
                     ],
                 ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
+            ],
+            'referenceContainerNoRemove' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="false"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [
+                    'attributes' => [
+                        Container::CONTAINER_OPT_HTML_TAG   => null,
+                        Container::CONTAINER_OPT_HTML_ID    => null,
+                        Container::CONTAINER_OPT_HTML_CLASS => null,
+                        Container::CONTAINER_OPT_LABEL      => null,
+                        Container::CONTAINER_OPT_DISPLAY    => null,
+                    ],
+                ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
+            ],
+            'referenceContainerRemove' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="1"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [],
+                'getStructureCondition' => $this->never(),
+                'setStructureCondition' => $this->never(),
+                'setRemoveCondition' => $this->once(),
+            ],
+            'referenceContainerRemove2' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" remove="true"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [],
+                'getStructureCondition' => $this->never(),
+                'setStructureCondition' => $this->never(),
+                'setRemoveCondition' => $this->once(),
+            ],
+            'referenceContainerDisplayFalse' => [
+                'elementCurrent' => $this->getElement(
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"'
+                    . ' display="true"/>',
+                    'referenceContainer'
+                ),
+                'containerName' => 'reference',
+                'structureElement' => [],
+                'expectedData' => [
+                    'attributes' => [
+                        Container::CONTAINER_OPT_HTML_TAG   => 'span',
+                        Container::CONTAINER_OPT_HTML_ID    => 'id_add',
+                        Container::CONTAINER_OPT_HTML_CLASS => 'new',
+                        Container::CONTAINER_OPT_LABEL      => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY    => 'true',
+                    ],
+                ],
+                'getStructureCondition' => $this->once(),
+                'setStructureCondition' => $this->once(),
+                'setRemoveCondition' => $this->never(),
             ]
         ];
     }
@@ -151,7 +239,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',
-            'Magento\Framework\View\Layout\Element'
+            \Magento\Framework\View\Layout\Element::class
         );
         return $xml->{$elementType};
     }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Model;
 
 use Magento\Framework\Validator\EmailAddress;
@@ -12,6 +13,9 @@ use Magento\Framework\Validator\StringLength;
 
 /**
  * Class for adding validation rules to an Admin user
+ *
+ * @api
+ * @since 100.0.2
  */
 class UserValidationRules
 {
@@ -23,21 +27,33 @@ class UserValidationRules
     /**
      * Adds validation rule for user first name, last name, username and email
      *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return \Magento\Framework\Validator\Object
+     * @param \Magento\Framework\Validator\DataObject $validator
+     * @return \Magento\Framework\Validator\DataObject
      */
-    public function addUserInfoRules(\Magento\Framework\Validator\Object $validator)
+    public function addUserInfoRules(\Magento\Framework\Validator\DataObject $validator)
     {
         $userNameNotEmpty = new NotEmpty();
-        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $userNameNotEmpty->setMessage(
+            __('"User Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $firstNameNotEmpty = new NotEmpty();
-        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $firstNameNotEmpty->setMessage(
+            __('"First Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $lastNameNotEmpty = new NotEmpty();
-        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $lastNameNotEmpty->setMessage(
+            __('"Last Name" is required. Enter and try again.'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
         $emailValidity = new EmailAddress();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
+        $emailValidity->setMessage(
+            __('Please enter a valid email.'),
+            \Zend_Validate_EmailAddress::INVALID
+        );
 
-        /** @var $validator \Magento\Framework\Validator\Object */
+        /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator->addRule(
             $userNameNotEmpty,
             'username'
@@ -58,10 +74,10 @@ class UserValidationRules
     /**
      * Adds validation rule for user password
      *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return \Magento\Framework\Validator\Object
+     * @param \Magento\Framework\Validator\DataObject $validator
+     * @return \Magento\Framework\Validator\DataObject
      */
-    public function addPasswordRules(\Magento\Framework\Validator\Object $validator)
+    public function addPasswordRules(\Magento\Framework\Validator\DataObject $validator)
     {
         $passwordNotEmpty = new NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), NotEmpty::IS_EMPTY);
@@ -93,12 +109,12 @@ class UserValidationRules
     /**
      * Adds validation rule for user password confirmation
      *
-     * @param \Magento\Framework\Validator\Object $validator
+     * @param \Magento\Framework\Validator\DataObject $validator
      * @param string $passwordConfirmation
-     * @return \Magento\Framework\Validator\Object
+     * @return \Magento\Framework\Validator\DataObject
      */
     public function addPasswordConfirmationRule(
-        \Magento\Framework\Validator\Object $validator,
+        \Magento\Framework\Validator\DataObject $validator,
         $passwordConfirmation
     ) {
         $passwordConfirmation = new \Zend_Validate_Identical($passwordConfirmation);

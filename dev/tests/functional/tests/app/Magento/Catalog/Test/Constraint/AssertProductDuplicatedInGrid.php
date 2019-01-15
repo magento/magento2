@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertProductDuplicatedInGrid extends AbstractConstraint
 {
     /**
-     * Assert that duplicated product is found by sku and has correct product type, product template,
+     * Assert that duplicated product is found by sku and has correct product type, attribute set,
      * product status disabled and out of stock
      *
      * @param FixtureInterface $product
@@ -40,7 +40,7 @@ class AssertProductDuplicatedInGrid extends AbstractConstraint
             ->search($filter);
 
         $filter['price_to'] = '$' . $filter['price_to'];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $productGrid->getProductGrid()->isRowVisible($filter, false),
             'Product duplicate is absent in Products grid.'
         );

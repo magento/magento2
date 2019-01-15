@@ -1,21 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
+/**
+ * @inheritdoc
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Field implements FieldInterface
 {
     /**
      * @var string
      */
     private $column;
+
     /**
      * @var int|null
      */
     private $attributeId;
+
     /**
      * @var int
      */
@@ -34,6 +41,8 @@ class Field implements FieldInterface
     }
 
     /**
+     * Get column.
+     *
      * @return string
      */
     public function getColumn()
@@ -42,6 +51,8 @@ class Field implements FieldInterface
     }
 
     /**
+     * Get attribute ID.
+     *
      * @return int|null
      */
     public function getAttributeId()
@@ -50,6 +61,8 @@ class Field implements FieldInterface
     }
 
     /**
+     * Get type.
+     *
      * @return int
      */
     public function getType()

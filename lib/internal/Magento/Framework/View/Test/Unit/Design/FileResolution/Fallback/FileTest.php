@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Framework\View\Design\FileResolution\Fallback\File;
 
 use Magento\Framework\View\Design\Fallback\RulePool;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,13 +24,15 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resolver = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface');
+        $this->resolver = $this->createMock(
+            \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
+        );
         $this->object = new File($this->resolver);
     }
 
     public function testGetFile()
     {
-        $theme = $this->getMockForAbstractClass('\Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $expected = 'some/file.ext';
         $this->resolver->expects($this->once())
             ->method('resolve')

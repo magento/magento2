@@ -2,7 +2,7 @@
 /**
  * Interface of Magento filesystem driver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;
@@ -11,9 +11,25 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Driver
+ *
+ * @api
  */
 interface DriverInterface
 {
+    /**
+     * Permissions to give read/write/execute access to owner and owning group, but not to all users
+     *
+     * @deprecated
+     */
+    const WRITEABLE_DIRECTORY_MODE = 0770;
+
+    /**
+     * Permissions to give read/write access to owner and owning group, but not to all users
+     *
+     * @deprecated
+     */
+    const WRITEABLE_FILE_MODE = 0660;
+
     /**
      *
      * @param string $path
@@ -94,7 +110,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function createDirectory($path, $permissions);
+    public function createDirectory($path, $permissions = 0777);
 
     /**
      * Read directory
@@ -184,6 +200,17 @@ interface DriverInterface
      * @throws FileSystemException
      */
     public function changePermissions($path, $permissions);
+
+    /**
+     * Recursively hange permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
 
     /**
      * Sets access and modification time of file.

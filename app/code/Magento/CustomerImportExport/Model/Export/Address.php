@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
 /**
+ * Customer address export
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -24,6 +29,16 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
+    /**
+     * Country column name for index value
+     */
+    const COLUMN_COUNTRY_ID = 'country_id';
+
+    /**
+     * Name of region id column
+     */
+    const COLUMN_REGION_ID = 'region_id';
+
     /**#@+
      * Particular columns that contains of customer default addresses
      */
@@ -36,7 +51,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -47,12 +62,16 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
+    /**#@-*/
+    protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
+
     /**
-     * Permanent entity columns
+     * Attributes with index (not label) value
      *
      * @var string[]
+     * @since 100.2.0
      */
-    protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
+    protected $_indexValueAttributes = [self::COLUMN_COUNTRY_ID];
 
     /**
      * Default addresses column names to appropriate customer attribute code
@@ -67,14 +86,14 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Customers whose addresses are exported
      *
-     * @var \Magento\Customer\Model\Resource\Customer\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
      */
     protected $_customerCollection;
 
     /**
      * Customer addresses collection
      *
-     * @var \Magento\Customer\Model\Resource\Address\Collection
+     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected $_addressCollection;
 
@@ -105,12 +124,12 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
-     * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
+     * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory
+     * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory
      * @param \Magento\CustomerImportExport\Model\Export\CustomerFactory $eavCustomerFactory
-     * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
+     * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -118,12 +137,12 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory,
         \Magento\CustomerImportExport\Model\Export\CustomerFactory $eavCustomerFactory,
-        \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
+        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
         array $data = []
     ) {
         parent::__construct(
@@ -148,7 +167,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
             $data['address_collection']
         ) ? $data['address_collection'] : $addressColFactory->create();
 
-        $this->_initWebsites(true);
+        $this->_initAttributeValues()->_initAttributeTypes()->_initWebsites(true);
         $this->setFileName($this->getEntityTypeCode());
     }
 
@@ -192,7 +211,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Get customers collection
      *
-     * @return \Magento\Customer\Model\Resource\Address\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
     protected function _getEntityCollection()
     {
@@ -242,6 +261,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row[self::COLUMN_ADDRESS_ID] = $item['entity_id'];
         $row[self::COLUMN_EMAIL] = $customer['email'];
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$customer['website_id']];
+        $row[self::COLUMN_REGION_ID] = $item->getRegionId();
 
         $this->getWriter()->writeRow($row);
     }

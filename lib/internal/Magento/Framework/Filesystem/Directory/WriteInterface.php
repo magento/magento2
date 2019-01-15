@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+/**
+ * Interface \Magento\Framework\Filesystem\Directory\WriteInterface
+ * @api
+ */
 interface WriteInterface extends ReadInterface
 {
     /**
@@ -48,7 +52,7 @@ interface WriteInterface extends ReadInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
     /**
-     * Creates symlink on a file and places it to destination
+     * Creates symlink on a file or directory and places it to destination
      *
      * @param string $path
      * @param string $destination
@@ -67,6 +71,17 @@ interface WriteInterface extends ReadInterface
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function changePermissions($path, $permissions);
+
+    /**
+     * Change permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
 
     /**
      * Sets access and modification time of file.

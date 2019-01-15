@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -12,6 +12,11 @@ namespace Magento\Framework\Message;
  */
 interface MessageInterface
 {
+    /**
+     * Default identifier
+     */
+    const DEFAULT_IDENTIFIER = 'default_message_identifier';
+
     /**
      * Error type
      */
@@ -91,4 +96,20 @@ interface MessageInterface
      * @return string
      */
     public function toString();
+
+    /**
+     * Sets message data
+     *
+     * @param array $data
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setData(array $data = []);
+
+    /**
+     * Returns message data
+     *
+     * @return array
+     */
+    public function getData();
 }

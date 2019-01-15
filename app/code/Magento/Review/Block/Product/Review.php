@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Product Review Tab
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
-class Review extends \Magento\Framework\View\Element\Template
+class Review extends Template implements IdentityInterface
 {
     /**
      * Core registry
@@ -23,20 +27,20 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
      */
     protected $_reviewsColFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
+        \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -64,7 +68,13 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function getProductReviewUrl()
     {
-        return $this->getUrl('review/product/listAjax', ['id' => $this->getProductId()]);
+        return $this->getUrl(
+            'review/product/listAjax',
+            [
+                '_secure' => $this->getRequest()->isSecure(),
+                'id' => $this->getProductId(),
+            ]
+        );
     }
 
     /**
@@ -97,5 +107,15 @@ class Review extends \Magento\Framework\View\Element\Template
         );
 
         return $collection->getSize();
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [\Magento\Review\Model\Review::CACHE_TAG];
     }
 }

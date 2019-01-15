@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller\Block;
@@ -24,7 +24,7 @@ class Esi extends \Magento\PageCache\Controller\Block
             $blockInstance = array_shift($blocks);
             $html = $blockInstance->toHtml();
             $ttl = $blockInstance->getTtl();
-            if ($blockInstance instanceof \Magento\Framework\Object\IdentityInterface) {
+            if ($blockInstance instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
             }
         }

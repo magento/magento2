@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer;
@@ -15,12 +15,14 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return mixed
      */
-    public function _getValue(\Magento\Framework\Object $row)
+    public function _getValue(\Magento\Framework\DataObject $row)
     {
         return '<p> ' . $row->getData('imported_file') .  '</p><a href="'
-        . $this->getUrl('*/*/download', ['filename' => $row->getData('imported_file')]) . '">Download</a>';
+        . $this->getUrl('*/*/download', ['filename' => $row->getData('imported_file')]) . '">'
+        . __('Download')
+        . '</a>';
     }
 }

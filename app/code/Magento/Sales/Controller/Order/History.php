@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Order;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class History extends \Magento\Framework\App\Action\Action implements OrderInterface
+class History extends \Magento\Framework\App\Action\Action implements OrderInterface, HttpGetActionInterface
 {
     /**
      * @var PageFactory

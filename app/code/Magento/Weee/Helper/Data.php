@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Helper;
 
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
+use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -34,9 +42,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_storeDisplayConfig = [];
 
     /**
@@ -69,12 +75,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var string
+     */
+    protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Weee\Model\Config $weeeConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -82,13 +102,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Weee\Model\Config $weeeConfig,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_weeeTax = $weeeTax;
         $this->_coreRegistry = $coreRegistry;
         $this->_taxData = $taxData;
         $this->_weeeConfig = $weeeConfig;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context);
     }
 
@@ -188,19 +211,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   mixed $website
      * @return  float
      */
-    public function getAmount($product, $website = null)
+    public function getAmountExclTax($product, $website = null)
     {
-        /** @var \Magento\Store\Model\Store $store */
-        if ($website) {
-            $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
-        } else {
-            $store = $product->getStore();
-        }
+        if (!$product->hasData($this->cacheProductWeeeAmount)) {
+            /** @var \Magento\Store\Model\Store $store */
+            if ($website) {
+                $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+            } else {
+                $store = $product->getStore();
+            }
 
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+            $amount = 0;
+            if ($this->isEnabled($store)) {
+                $amount = $this->_weeeTax->getWeeeAmountExclTax($product, null, null, $website);
+            }
+
+            $product->setData($this->cacheProductWeeeAmount, $amount);
         }
-        return 0;
+        return $product->getData($this->cacheProductWeeeAmount);
     }
 
     /**
@@ -257,38 +285,106 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object     $shipping
-     * @param null|false|\Magento\Framework\Object     $billing
-     * @param Website                        $website
-     * @param bool                           $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @param \Magento\Catalog\Model\Product                $product
+     * @param null|false|\Magento\Framework\DataObject      $shipping
+     * @param null|false|\Magento\Framework\DataObject      $billing
+     * @param Website                                       $website
+     * @param bool                                          $calculateTaxes
+     * @param bool                                          $round
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
         $product,
         $shipping = null,
         $billing = null,
         $website = null,
-        $calculateTaxes = false
+        $calculateTaxes = false,
+        $round = true
     ) {
         return $this->_weeeTax->getProductWeeeAttributes(
             $product,
             $shipping,
             $billing,
             $website,
-            $calculateTaxes
+            $calculateTaxes,
+            $round
         );
+    }
+
+    /**
+     * Returns applied weee tax amount
+     *
+     * @param QuoteAbstractItem $item
+     * @return float
+     */
+    public function getWeeeTaxAppliedAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedAmount');
+    }
+
+    /**
+     * Returns applied weee tax amount for the row
+     *
+     * @param QuoteAbstractItem $item
+     * @return float
+     */
+    public function getWeeeTaxAppliedRowAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedRowAmount');
+    }
+
+    /**
+     * Returns applied base weee tax amount for the row
+     *
+     * @param QuoteAbstractItem|OrderItem $item
+     * @return float
+     * @since 100.2.0
+     */
+    public function getBaseWeeeTaxAppliedRowAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, 'getBaseWeeeTaxAppliedRowAmnt');
+    }
+
+    /**
+     * Returns accumulated amounts for the item
+     *
+     * @param QuoteAbstractItem|OrderItem $item
+     * @param string $functionName
+     * @return float
+     */
+    protected function getRecursiveNumericAmount($item, $functionName)
+    {
+        if ($item instanceof QuoteAbstractItem || $item instanceof OrderItem) {
+            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                $result = 0;
+                $children = $item instanceof OrderItem ? $item->getChildrenItems() : $item->getChildren();
+                foreach ($children as $child) {
+                    $childData = $this->getRecursiveNumericAmount($child, $functionName);
+                    if (!empty($childData)) {
+                        $result += $childData;
+                    }
+                }
+
+                return $result;
+            }
+        }
+
+        $data = $item->$functionName();
+        if (empty($data)) {
+            return 0;
+        }
+        return $data;
     }
 
     /**
      * Returns applied weee taxes
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return array
      */
     public function getApplied($item)
     {
-        if ($item instanceof \Magento\Quote\Model\Quote\Item\AbstractItem) {
+        if ($item instanceof QuoteAbstractItem) {
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 $result = [];
                 foreach ($item->getChildren() as $child) {
@@ -306,19 +402,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (empty($data)) {
             return [];
         }
-        return \Zend_Json::decode($item->getWeeeTaxApplied());
+        return $this->serializer->unserialize($item->getWeeeTaxApplied());
     }
 
     /**
      * Sets applied weee taxes
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @param array $value
      * @return $this
      */
     public function setApplied($item, $value)
     {
-        $item->setWeeeTaxApplied(\Zend_Json::encode($value));
+        $item->setWeeeTaxApplied($this->serializer->serialize($value));
         return $this;
     }
 
@@ -326,7 +422,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns array of weee attributes allowed for display
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForDisplay($product)
     {
@@ -334,7 +430,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $store = $product->getStore();
 
         if ($this->isEnabled($store)) {
-            return $this->getProductWeeeAttributes($product, null, null, null, $this->typeOfDisplay(1));
+            $calculateTax = ($this->typeOfDisplay(1) || $this->typeOfDisplay(2)) ? 1 : 0;
+            return $this->getProductWeeeAttributes($product, null, null, null, $calculateTax, false);
         }
         return [];
     }
@@ -343,11 +440,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Product Weee attributes for price renderer
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object $shipping Shipping Address
-     * @param null|false|\Magento\Framework\Object $billing Billing Address
+     * @param null|false|\Magento\Framework\DataObject $shipping Shipping Address
+     * @param null|false|\Magento\Framework\DataObject $billing Billing Address
      * @param null|Website $website
      * @param bool $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForRenderer(
         $product,
@@ -376,48 +473,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Returns amount to display
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return int
-     */
-    public function getAmountForDisplay($product)
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $product->getStore();
-
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, null, $this->typeOfDisplay(1));
-        }
-        return 0;
-    }
-
-    /**
-     * Returns all summed WEEE taxes with all local taxes applied
-     *
-     * @param \Magento\Framework\Object[] $attributes Result from getProductWeeeAttributes()
-     * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getAmountInclTaxes($attributes)
-    {
-        if (!is_array($attributes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('$attributes must be an array'));
-        }
-
-        $amount = 0;
-        foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Framework\Object */
-            $amount += $attribute->getAmountInclTax();
-        }
-
-        return (float) $amount;
-    }
-
-    /**
      * Get the weee tax including tax
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getWeeeTaxInclTax($item)
@@ -433,7 +491,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get the total base weee tax
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getBaseWeeeTaxInclTax($item)
@@ -449,7 +507,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get the total weee including tax by row
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getRowWeeeTaxInclTax($item)
@@ -465,7 +523,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get the total base weee including tax by row
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getBaseRowWeeeTaxInclTax($item)
@@ -481,7 +539,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get the total tax applied on weee by unit
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getTotalTaxAppliedForWeeeTax($item)
@@ -501,7 +559,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get the total tax applied on weee by unit
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param QuoteAbstractItem $item
      * @return float
      */
     public function getBaseTotalTaxAppliedForWeeeTax($item)
@@ -519,7 +577,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getWeeeAmountInvoiced($orderItem)
@@ -536,7 +594,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getBaseWeeeAmountInvoiced($orderItem)
@@ -553,7 +611,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getWeeeTaxAmountInvoiced($orderItem)
@@ -570,7 +628,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getBaseWeeeTaxAmountInvoiced($orderItem)
@@ -587,7 +645,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getWeeeAmountRefunded($orderItem)
@@ -604,7 +662,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getBaseWeeeAmountRefunded($orderItem)
@@ -621,7 +679,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getWeeeTaxAmountRefunded($orderItem)
@@ -638,7 +696,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @param OrderItem $orderItem
      * @return float
      */
     public function getBaseWeeeTaxAmountRefunded($orderItem)
@@ -657,7 +715,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Returns the total amount of FPT across all items.  Used for displaying the FPT totals line item.
      *
-     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
+     * @param  QuoteAbstractItem[] $items
      * @param  null|string|bool|int|Store $store
      * @return float
      */
@@ -673,5 +731,145 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $weeeTotal;
+    }
+
+    /**
+     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     *
+     * @param  QuoteAbstractItem[] $items
+     * @param  null|string|bool|int|Store $store
+     * @return float
+     * @since 100.1.0
+     */
+    public function getBaseTotalAmounts($items, $store = null)
+    {
+        $baseWeeeTotal = 0;
+        $displayTotalsInclTax = $this->displayTotalsInclTax($store);
+        foreach ($items as $item) {
+            if ($displayTotalsInclTax) {
+                $baseWeeeTotal += $this->getBaseRowWeeeTaxInclTax($item);
+            } else {
+                $baseWeeeTotal += $item->getBaseWeeeTaxAppliedRowAmnt();
+            }
+        }
+        return $baseWeeeTotal;
+    }
+
+    /**
+     * Get FPT DISPLAY_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayIncl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get FPT DISPLAY_INCL_DESCR setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayInclDesc($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_INCL_DESCR,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get FPT DISPLAY_EXCL_DESCR_INCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayExclDescIncl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get FPT DISPLAY_EXCL setting
+     *
+     * @param  int|null $storeId
+     * @return bool
+     */
+    public function isDisplayExcl($storeId = null)
+    {
+        return $this->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+            $storeId
+        );
+    }
+
+    /**
+     * Get tax price display settings
+     *
+     * @param  null|string|bool|int|Store $store
+     * @return int
+     */
+    public function getTaxDisplayConfig($store = null)
+    {
+        return $this->_taxData->getPriceDisplayType($store);
+    }
+
+    /**
+     * Return an array of FPT attributes for a bundle product
+     *
+     * @param  \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    public function getWeeeAttributesForBundle($product)
+    {
+        if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            $typeInstance = $product->getTypeInstance();
+            $typeInstance->setStoreFilter($product->getStoreId(), $product);
+
+            $selectionCollection = $typeInstance->getSelectionsCollection(
+                $typeInstance->getOptionsIds($product),
+                $product
+            );
+            $insertedWeeeCodesArray = [];
+            foreach ($selectionCollection as $selectionItem) {
+                $weeeAttributes = $this->getProductWeeeAttributes(
+                    $selectionItem,
+                    null,
+                    null,
+                    $product->getStore()->getWebsiteId(),
+                    true,
+                    false
+                );
+                $priceTaxDisplay = $this->getTaxDisplayConfig();
+                $priceIncludesTax = $this->displayTotalsInclTax();
+                foreach ($weeeAttributes as $weeeAttribute) {
+                    if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
+                        $priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+                        if ($priceIncludesTax == false) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
+                        }
+                    } elseif ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                        if ($priceIncludesTax == true) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
+                        }
+                    }
+                    $insertedWeeeCodesArray[$selectionItem->getId()][$weeeAttribute->getCode()] = $weeeAttribute;
+                }
+            }
+            return $insertedWeeeCodesArray;
+        }
+        return [];
     }
 }

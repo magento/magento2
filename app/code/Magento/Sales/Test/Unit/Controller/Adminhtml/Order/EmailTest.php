@@ -1,22 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-use \Magento\Sales\Controller\Adminhtml\Order\Email;
-
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Order\Email;
 
 /**
  * Class EmailTest
- *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Sales\Controller\Adminhtml\Order
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Email
@@ -68,12 +67,33 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
-    public function setUp()
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderManagementMock;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderRepositoryMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderMock;
+
+    /**
+     * Test setup
+     */
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            [
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -83,45 +103,34 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
+            ]);
+        $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
+            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMockForAbstractClass();
+        $resultRedirectFactory = $this->createPartialMock(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
+            ['create']
         );
-        $resultRedirectFactory = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
         );
-        $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
-        );
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
+        $this->messageManager = $this->createPartialMock(
+            \Magento\Framework\Message\Manager::class,
+            ['addSuccessMessage', 'addErrorMessage']
         );
-        $this->messageManager = $this->getMock(
-            'Magento\Framework\Message\Manager',
-            ['addSuccess', 'addError'],
-            [],
-            '',
-            false
-        );
-        $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get', 'set'], [], '', false);
-        $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+            ->getMockForAbstractClass();
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set']);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -134,47 +143,41 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
 
         $this->orderEmail = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Email',
+            \Magento\Sales\Controller\Adminhtml\Order\Email::class,
             [
                 'context' => $this->context,
                 'request' => $this->request,
-                'response' => $this->response
+                'response' => $this->response,
+                'orderManagement' => $this->orderManagementMock,
+                'orderRepository' => $this->orderRepositoryMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
 
+    /**
+     * testEmail
+     */
     public function testEmail()
     {
         $orderId = 10000031;
-        $orderClassName = 'Magento\Sales\Model\Order';
-        $orderNotifierClassName = 'Magento\Sales\Model\OrderNotifier';
-        $order = $this->getMock($orderClassName, ['load', 'getId', '__wakeup'], [], '', false);
-        $cmNotifier = $this->getMock($orderNotifierClassName, ['notify', '__wakeup'], [], '', false);
-
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
             ->will($this->returnValue($orderId));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($orderClassName)
-            ->will($this->returnValue($order));
-        $order->expects($this->once())
-            ->method('load')
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
             ->with($orderId)
-            ->will($this->returnSelf());
-        $order->expects($this->atLeastOnce())
-            ->method('getId')
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getEntityId')
             ->will($this->returnValue($orderId));
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with($orderNotifierClassName)
-            ->will($this->returnValue($cmNotifier));
-        $cmNotifier->expects($this->once())
+        $this->orderManagementMock->expects($this->once())
             ->method('notify')
-            ->will($this->returnValue(true));
+            ->with($orderId)
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the order email.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -182,31 +185,31 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->orderEmail->execute()
         );
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
     }
 
+    /**
+     * testEmailNoOrderId
+     */
     public function testEmailNoOrderId()
     {
-        $orderClassName = 'Magento\Sales\Model\Order';
-        $order = $this->getMock($orderClassName, ['load', 'getId', '__wakeup'], [], '', false);
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
             ->will($this->returnValue(null));
-
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($orderClassName)
-            ->will($this->returnValue($order));
-        $order->expects($this->once())
-            ->method('load')
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
             ->with(null)
-            ->will($this->returnSelf());
+            ->willThrowException(
+                new \Magento\Framework\Exception\NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                )
+            );
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This order no longer exists.');
 
         $this->actionFlag->expects($this->once())
@@ -219,7 +222,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->orderEmail->execute()
         );
     }

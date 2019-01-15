@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
@@ -31,12 +31,12 @@ class TermTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->requestFilter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Term')
+        $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
             ->setMethods(['getField', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
+        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
@@ -56,7 +56,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->filter = $objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term',
+            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]

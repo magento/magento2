@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Helper;
@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Helper;
 /**
  * Carrier helper test
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shipping Carrier helper
@@ -22,10 +22,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = 'Magento\Shipping\Helper\Carrier';
+        $className = \Magento\Shipping\Helper\Carrier::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];
@@ -86,5 +86,22 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($configValue)
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
+    }
+
+    public function testIsCountryInEU()
+    {
+        $this->scopeConfig->expects(
+            $this->exactly(2)
+        )->method(
+            'getValue'
+        )->with(
+            'general/country/eu_countries',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->will(
+            $this->returnValue("GB")
+        );
+
+        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
+        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
     }
 }

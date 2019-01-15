@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Helper;
@@ -25,11 +25,6 @@ abstract class AbstractHelper
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
-
-    /**
-     * @var \Magento\Framework\Translate\InlineInterface
-     */
-    protected $translateInline;
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -79,11 +74,15 @@ abstract class AbstractHelper
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Framework\Cache\ConfigInterface
+     */
+    protected $_cacheConfig;
+
+    /**
      * @param Context $context
      */
     public function __construct(Context $context)
     {
-        $this->translateInline = $context->getTranslateInline();
         $this->_moduleManager = $context->getModuleManager();
         $this->_logger = $context->getLogger();
         $this->_request = $context->getRequest();
@@ -126,7 +125,7 @@ abstract class AbstractHelper
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated use \Magento\Framework\Module\Manager::isOutputEnabled()
+     * use \Magento\Framework\Module\Manager::isOutputEnabled()
      */
     public function isModuleOutputEnabled($moduleName = null)
     {

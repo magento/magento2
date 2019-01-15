@@ -1,33 +1,34 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 'use strict';
 angular.module('create-admin-account', ['ngStorage'])
-    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
+    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
         $scope.admin = {
             'passwordStatus': {
                 class: 'none',
                 label: 'None'
             }
         };
-        
+
         $scope.passwordStatusChange = function () {
             if (angular.isUndefined($scope.admin.password)) {
                 return;
             }
             var p = $scope.admin.password;
-            if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
+            var MIN_ADMIN_PASSWORD_LENGTH = 7;
+            if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
                 $scope.admin.passwordStatus.class = 'strong';
                 $scope.admin.passwordStatus.label = 'Strong';
-            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'good';
                 $scope.admin.passwordStatus.label = 'Good';
-            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'fair';
                 $scope.admin.passwordStatus.label = 'Fair';
-            } else if (p.length >= 6) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH) {
                 $scope.admin.passwordStatus.class = 'weak';
                 $scope.admin.passwordStatus.label = 'Weak';
             } else {
@@ -39,6 +40,28 @@ angular.module('create-admin-account', ['ngStorage'])
         if ($localStorage.admin) {
             $scope.admin = $localStorage.admin;
         }
+
+        $scope.validateCredentials = function () {
+            var data = {
+                'db': $localStorage.db,
+                'admin': $scope.admin,
+                'store': $localStorage.store,
+                'config': $localStorage.config
+            };
+            $scope.validate();
+            if ($scope.valid) {
+                $http.post('index.php/validate-admin-credentials', data)
+                    .then(function successCallback(resp) {
+                        $scope.validateCredentials.result = resp.data;
+
+                        if ($scope.validateCredentials.result.success) {
+                            $scope.nextState();
+                        }
+                    }, function errorCallback(resp) {
+                        $scope.validateCredentials.failed = resp.data;
+                    });
+            }
+        };
 
         $scope.$on('nextState', function () {
             $localStorage.admin = $scope.admin;
@@ -57,7 +80,7 @@ angular.module('create-admin-account', ['ngStorage'])
                 $scope.$emit('validation-response', false);
                 $scope.account.submitted = true;
             }
-        }
+        };
 
         // Update 'submitted' flag
         $scope.$watch(function() { return $scope.account.$valid }, function(valid) {
@@ -79,6 +102,30 @@ angular.module('create-admin-account', ['ngStorage'])
                     return value;
                 };
                 
+                ctrl.$parsers.unshift(validator);
+                ctrl.$formatters.unshift(validator);
+            }
+        };
+    })
+    .directive('checkUserNamePassword', function() {
+        return{
+            require: "ngModel",
+            link: function(scope, elm, attrs, ctrl){
+                var validator = function(value){
+                    var password = value,
+                        userName = scope.account.adminUsername.$viewValue;
+
+                    if (password) {
+                        password = password.toLowerCase();
+                    }
+                    if (userName) {
+                        userName = userName.toLowerCase();
+                    }
+
+                    ctrl.$setValidity('checkUserNamePasswordDifferent', password !== userName);
+                    return value;
+                };
+
                 ctrl.$parsers.unshift(validator);
                 ctrl.$formatters.unshift(validator);
             }

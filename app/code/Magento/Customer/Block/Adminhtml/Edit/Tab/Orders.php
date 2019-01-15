@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -9,6 +9,9 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -27,16 +30,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory
+     * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
      */
-    protected $_collectionFactory;
+    protected $collectionFactory;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory
      * @param \Magento\Sales\Helper\Reorder $salesReorder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -44,7 +45,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $collectionFactory,
+        \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory,
         \Magento\Sales\Helper\Reorder $salesReorder,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
@@ -56,7 +57,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -73,7 +74,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create()->addFieldToSelect(
+        $collection = $this->_collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
             'entity_id'
         )->addFieldToSelect(
             'increment_id'
@@ -94,8 +95,6 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
         )->addFieldToFilter(
             'customer_id',
             $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )->setIsCustomerMode(
-            true
         );
 
         $this->setCollection($collection);
@@ -103,7 +102,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -124,7 +123,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Order Total'),
                 'index' => 'grand_total',
                 'type' => 'currency',
-                'currency' => 'order_currency_code'
+                'currency' => 'order_currency_code',
+                'rate'  => 1
             ]
         );
 
@@ -143,7 +143,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                     'filter' => false,
                     'sortable' => false,
                     'width' => '100px',
-                    'renderer' => 'Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action'
+                    'renderer' => \Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action::class
                 ]
             );
         }
@@ -154,7 +154,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Retrieve the Url for a specified sales order row.
      *
-     * @param \Magento\Sales\Model\Order|\Magento\Framework\Object $row
+     * @param \Magento\Sales\Model\Order|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)
@@ -163,7 +163,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {

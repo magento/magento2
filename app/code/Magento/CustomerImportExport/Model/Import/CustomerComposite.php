@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
+
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity customer combined model
@@ -119,9 +121,27 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     /**
      * DB data source models
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data[]
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data[]
      */
     protected $_dataSourceModels;
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        Customer::COLUMN_DEFAULT_BILLING,
+        Customer::COLUMN_DEFAULT_SHIPPING,
+        Customer::COLUMN_PASSWORD,
+    ];
 
     /**
      * {@inheritdoc}
@@ -129,30 +149,33 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
         array $data = []
     ) {
-        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
@@ -248,7 +271,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     {
         $result = $this->_customerEntity->importData();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            return $result && $this->_addressEntity->importData();
+            return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }
 
         return $result;
@@ -262,6 +285,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function getEntityTypeCode()
     {
         return 'customer_composite';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL] ?? null,
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE] ?? null
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData($rows);
+
+        return parent::validateData();
     }
 
     /**
@@ -285,14 +330,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\Object(
+                    $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_addressEntity->getCustomerStorage()->addCustomer($customerData);
                     $this->_nextCustomerId++;
                 }
 
@@ -418,53 +462,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     }
 
     /**
-     * Returns error information grouped by error types and translated (if possible)
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $errors = $this->_customerEntity->getErrorMessages();
-        $addressErrors = $this->_addressEntity->getErrorMessages();
-        foreach ($addressErrors as $message => $rowNumbers) {
-            if (isset($errors[$message])) {
-                foreach ($rowNumbers as $rowNumber) {
-                    $errors[$message][] = $rowNumber;
-                }
-                $errors[$message] = array_unique($errors[$message]);
-            } else {
-                $errors[$message] = $rowNumbers;
-            }
-        }
-
-        return array_merge($errors, parent::getErrorMessages());
-    }
-
-    /**
-     * Returns error counter value
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_customerEntity->getErrorsCount() +
-            $this->_addressEntity->getErrorsCount() +
-            parent::getErrorsCount();
-    }
-
-    /**
-     * Returns invalid rows count
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_customerEntity->getInvalidRowsCount() +
-            $this->_addressEntity->getInvalidRowsCount() +
-            parent::getInvalidRowsCount();
-    }
-
-    /**
      * Returns number of checked entities
      *
      * @return int
@@ -505,5 +502,20 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         $rowData[Address::COLUMN_ADDRESS_ID] = null;
 
         return parent::_prepareRowForDb($rowData);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidColumnNames()
+    {
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->_customerAttributes,
+                $this->_addressAttributes,
+                $this->_customerEntity->getValidColumnNames()
+            )
+        );
     }
 }

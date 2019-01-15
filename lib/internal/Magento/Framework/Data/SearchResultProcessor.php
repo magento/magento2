@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -15,7 +15,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\Object';
+    protected $dataInterface = \Magento\Framework\DataObject::class;
 
     /**
      * @var AbstractSearchResult
@@ -47,7 +47,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @return \Magento\Framework\Object|mixed
+     * @return \Magento\Framework\DataObject|mixed
      */
     public function getFirstItem()
     {
@@ -55,7 +55,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @return \Magento\Framework\Object|mixed
+     * @return \Magento\Framework\DataObject|mixed
      */
     public function getLastItem()
     {
@@ -77,7 +77,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @param int $id
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($id)
     {
@@ -120,7 +120,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     /**
      * @param string $column
      * @param mixed $value
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -188,8 +188,8 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @param null $valueField
-     * @param null $labelField
+     * @param string|null $valueField
+     * @param string|null $labelField
      * @param array $additional
      * @return array
      */

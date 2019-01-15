@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,22 +11,24 @@ use Magento\Framework\DB\Ddl\Table;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Test for \Magento\Indexer\Model\IndexStructure
+ * Test for \Magento\Framework\Indexer\IndexStructure
  */
-class IndexStructureTest extends \PHPUnit_Framework_TestCase
+class IndexStructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
+
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
+
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connection;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\IndexStructure
@@ -35,24 +37,19 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
-            ->willReturn($this->adapter);
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\IndexScopeResolver')
-            ->setMethods(['resolve'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('\Magento\Indexer\Model\ScopeResolver\FlatScopeResolver')
-            ->setMethods(['resolve'])
-            ->disableOriginalConstructor()
+            ->willReturn($this->connection);
+        $this->indexScopeResolver = $this->getMockBuilder(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        )->setMethods(['resolve'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -66,11 +63,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $table
-     * @param array $dimensions
-     * @param bool $isTableExist
-     */
     public function testDelete()
     {
         $index = 'index_name';
@@ -104,9 +96,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $position = $this->mockFulltextTable($position, $expectedTable, true);
+        $this->mockFulltextTable($position, $expectedTable, true);
 
-        $this->target->create($index, $dimensions);
+        $this->target->create($index, [], $dimensions);
     }
 
     /**
@@ -115,7 +107,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     private function createDimensionMock($name, $value)
     {
-        $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
+        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
             ->setMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,14 +120,20 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $dimension;
     }
 
+    /**
+     * @param $callNumber
+     * @param $tableName
+     * @param $isTableExist
+     * @return mixed
+     */
     private function mockDropTable($callNumber, $tableName, $isTableExist)
     {
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('isTableExists')
             ->with($tableName)
             ->willReturn($isTableExist);
         if ($isTableExist) {
-            $this->adapter->expects($this->at($callNumber++))
+            $this->connection->expects($this->at($callNumber++))
                 ->method('dropTable')
                 ->with($tableName)
                 ->willReturn(true);
@@ -143,9 +141,14 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $callNumber;
     }
 
+    /**
+     * @param $callNumber
+     * @param $tableName
+     * @return mixed
+     */
     private function mockFulltextTable($callNumber, $tableName)
     {
-        $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->setMethods(['addColumn', 'addIndex'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -192,11 +195,11 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             )->willReturnSelf();
 
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('newTable')
             ->with($tableName)
             ->willReturn($table);
-        $this->adapter->expects($this->at($callNumber++))
+        $this->connection->expects($this->at($callNumber++))
             ->method('createTable')
             ->with($table)
             ->willReturnSelf();

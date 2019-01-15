@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Url\Plugin;
 
 use \Magento\Store\Model\Store;
+use \Magento\Store\Api\Data\StoreInterface;
 use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
@@ -49,15 +50,14 @@ class RouteParamsResolver
      * Process scope query parameters.
      *
      * @param \Magento\Framework\Url\RouteParamsResolver $subject
-     * @param callable $proceed
      * @param array $data
      * @param bool $unsetOldParams
-     * @return \Magento\Framework\Url\RouteParamsResolver
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @return array
      */
-    public function aroundSetRouteParams(
+    public function beforeSetRouteParams(
         \Magento\Framework\Url\RouteParamsResolver $subject,
-        \Closure $proceed,
         array $data,
         $unsetOldParams = true
     ) {
@@ -66,18 +66,24 @@ class RouteParamsResolver
             unset($data['_scope']);
         }
         if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
-            $storeCode = $subject->getScope() ?: $this->storeManager->getStore()->getCode();
+            /** @var StoreInterface $currentScope */
+            $currentScope = $subject->getScope();
+            $storeCode = $currentScope && $currentScope instanceof StoreInterface ?
+                $currentScope->getCode() :
+                $this->storeManager->getStore()->getCode();
+
             $useStoreInUrl = $this->scopeConfig->getValue(
                 Store::XML_PATH_STORE_IN_URL,
                 StoreScopeInterface::SCOPE_STORE,
                 $storeCode
             );
+
             if (!$useStoreInUrl && !$this->storeManager->hasSingleStore()) {
                 $this->queryParamsResolver->setQueryParam('___store', $storeCode);
             }
         }
         unset($data['_scope_to_url']);
 
-        return $proceed($data, $unsetOldParams);
+        return [$data, $unsetOldParams];
     }
 }

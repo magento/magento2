@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Framework\Object\Copy;
+use Magento\Framework\DataObject\Copy;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory as OrderItemFactory;
@@ -78,7 +78,7 @@ class ToOrderItem
         $this->dataObjectHelper->populateWithArray(
             $orderItem,
             array_merge($orderItemData, $data),
-            '\Magento\Sales\Api\Data\OrderItemInterface'
+            \Magento\Sales\Api\Data\OrderItemInterface::class
         );
         $orderItem->setProductOptions($options);
         if ($item->getParentItem()) {

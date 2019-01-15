@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +20,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $selectionSecond;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -31,35 +31,21 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectionFirst = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId'],
-            [],
-            '',
-            false
+        $this->selectionFirst = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
         );
-        $this->selectionSecond = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId'],
-            [],
-            '',
-            false
+        $this->selectionSecond = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
         );
-        $this->resource = $this->getMock(
-            'Magento\Framework\Model\Resource\AbstractResource',
-            [
+        $this->resource = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 'getIdFieldName',
                 'getSearchableData',
-                'getConnection'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->model = (new ObjectManager($this))->getObject('Magento\Bundle\Model\Option', [
+            ]);
+        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Model\Option::class, [
             'resource' => $this->resource,
         ]);
     }

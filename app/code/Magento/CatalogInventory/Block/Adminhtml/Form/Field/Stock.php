@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,14 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
 use Magento\Framework\Data\Form;
 
+/**
+ * @api
+ * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ */
 class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
     const QUANTITY_FIELD_HTML_ID = 'qty';
@@ -37,10 +45,18 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
     protected $_factoryText;
 
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
+
+    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Data\Form\Element\TextFactory $factoryText
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -48,12 +64,14 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Data\Form\Element\TextFactory $factoryText,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_factoryText = $factoryText;
         $this->_qty = isset($data['qty']) ? $data['qty'] : $this->_createQtyElement();
         unset($data['qty']);
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->coreRegistry = $coreRegistry;
         $this->setName($data['name']);
     }
 
@@ -164,6 +182,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
     {
+        $isNewProduct = (int)$this->coreRegistry->registry('product')->isObjectNew();
         return "
             <script type='text/javascript'>
                 require(['jquery', 'prototype', 'domReady!'], function($) {
@@ -177,6 +196,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                                 '{$inStockFieldId}': 'inventory_stock_availability'
                             };
 
+                        var qtyDefaultValue = qty.val();
                         var disabler = function(event) {
                             if (typeof(event) === 'undefined') {
                                 return;
@@ -184,8 +204,15 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                             var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
                             $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
                             if (stockBeforeDisable.result !== false) {
-                                var manageStockValue = (qty.val() === '') ? 0 : 1,
-                                    stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
+                                var manageStockValue = {$isNewProduct}
+                                    ? (qty.val() === '' ? 0 : 1)
+                                    : parseInt(manageStockField.val());
+                                if ({$isNewProduct} && qtyDefaultValue !== null && qtyDefaultValue === qty.val()) {
+                                    manageStockValue = parseInt(manageStockField.val());
+                                } else {
+                                    qtyDefaultValue = null;
+                                }
+                                var stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
                                 stockAvailabilityField.prop('disabled', !manageStockValue);
                                 stockAssociations.prop('disabled', !manageStockValue);
                                 if ($(event.currentTarget).attr('id') === qty.attr('id') && event.type != 'change') {

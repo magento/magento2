@@ -2,10 +2,12 @@
 /**
  * Locator for payment config XSD schemas.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Config;
+
+use Magento\Framework\Module\Dir;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -38,9 +40,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/' . self::MERGED_CONFIG_SCHEMA;
-        $this->_perFileSchema = $moduleReader->getModuleDir('etc', 'Magento_Payment')
-            . '/' . self::PER_FILE_VALIDATION_SCHEMA;
+        $etcDir = $moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_ETC_DIR, 'Magento_Payment');
+        $this->_schema = $etcDir . '/' . self::MERGED_CONFIG_SCHEMA;
+        $this->_perFileSchema = $etcDir . '/' . self::PER_FILE_VALIDATION_SCHEMA;
     }
 
     /**

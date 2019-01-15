@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
 
-use Magento\ProductAlert\Model\Resource\Price\Customer\Collection;
+use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
 
 /**
  * ProductAlert for changed price model
  *
- * @method \Magento\ProductAlert\Model\Resource\Price _getResource()
- * @method \Magento\ProductAlert\Model\Resource\Price getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Price setCustomerId(int $value)
  * @method int getProductId()
@@ -28,29 +26,34 @@ use Magento\ProductAlert\Model\Resource\Price\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Price setSendCount(int $value)
  * @method int getStatus()
  * @method \Magento\ProductAlert\Model\Price setStatus(int $value)
+ * @method int getStoreId()
+ * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory
+     * @var \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory
      */
     protected $_customerColFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory $customerColFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory $customerColFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -59,14 +62,18 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create customer collection.
+     *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Resource\Price');
+        $this->_init(\Magento\ProductAlert\Model\ResourceModel\Price::class);
     }
 
     /**
+     * Create customer collection.
+     *
      * @return Collection
      */
     public function getCustomerCollection()
@@ -75,6 +82,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load by param.
+     *
      * @return $this
      */
     public function loadByParam()
@@ -86,6 +95,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Method for deleting customer from website.
+     *
      * @param int $customerId
      * @param int $websiteId
      * @return $this

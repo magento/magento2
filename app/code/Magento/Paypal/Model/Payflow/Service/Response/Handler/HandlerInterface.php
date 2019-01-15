@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 
 /**
@@ -21,5 +21,5 @@ interface HandlerInterface
      * @param Object $response
      * @return void
      */
-    public function handle(InfoInterface $payment, Object $response);
+    public function handle(InfoInterface $payment, DataObject $response);
 }

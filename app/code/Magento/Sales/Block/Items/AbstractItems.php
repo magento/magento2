@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Items;
@@ -59,10 +59,10 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Return product type for quote/order item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    protected function _getItemType(\Magento\Framework\Object $item)
+    protected function _getItemType(\Magento\Framework\DataObject $item)
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
@@ -77,10 +77,10 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Get item row html
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  string
      */
-    public function getItemHtml(\Magento\Framework\Object $item)
+    public function getItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
 

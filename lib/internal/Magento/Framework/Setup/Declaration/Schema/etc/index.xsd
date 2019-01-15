@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:complexType name="index">
+        <xs:annotation>
+            <xs:documentation>
+                Describe different SQL indexes. With help of indexes you can improve read SQL
+                operations
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="column" type="indexColumnType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+
+        <xs:attribute name="indexType" type="indexType" />
+        <xs:attribute name="referenceId" type="referenceIdType" use="required" />
+        <xs:attribute name="disabled" type="xs:boolean" />
+    </xs:complexType>
+
+    <xs:complexType name="indexColumnType">
+        <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+
+    <xs:simpleType name="indexType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="fulltext" />
+            <xs:enumeration value="btree" />
+            <xs:enumeration value="hash" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

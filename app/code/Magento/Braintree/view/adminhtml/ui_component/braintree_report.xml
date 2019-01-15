@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">braintree_report.braintree_report_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>braintree_report_columns</spinner>
+        <deps>
+            <dep>braintree_report.braintree_report_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="braintree_report_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Braintree/js/grid/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Braintree::settlement_report</aclResource>
+        <dataProvider class="BraintreeTransactionsDataProvider" name="braintree_report_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>page_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <container name="listing_top" template="ui/grid/toolbar">
+        <container name="bookmarks" component="Magento_Ui/js/grid/controls/bookmarks/bookmarks" displayArea="dataGridActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">localStorage</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
+        <container name="columns_controls" component="Magento_Ui/js/grid/controls/columns" displayArea="dataGridActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="columnsData" xsi:type="array">
+                        <item name="provider" xsi:type="string">braintree_report.braintree_report.braintree_report_columns</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters" displayArea="dataGridFilters">
+            <settings>
+                <dataScope>filters</dataScope>
+                <childDefaults>
+                    <param name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                    </param>
+                    <param name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</param>
+                </childDefaults>
+                <storageConfig>
+                    <namespace>current.filters</namespace>
+                    <provider>braintree_report.braintree_report.listing_top.bookmarks</provider>
+                </storageConfig>
+            </settings>
+            <filterSelect name="status" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\Status"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Status</label>
+                    <dataScope>status</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+            <filterSelect name="type" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Transaction Type</label>
+                    <dataScope>type</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+            <filterSelect name="paymentInstrumentType" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Payment Type</label>
+                    <dataScope>paymentInstrumentType</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+            <filterInput name="paypalDetails_paymentId">
+                <settings>
+                    <label translate="true">PayPal Payment ID</label>
+                    <dataScope>paypalDetails_paymentId</dataScope>
+                </settings>
+            </filterInput>
+            <filterRange name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange" provider="${ $.parentName }" component="Magento_Ui/js/grid/filters/range" template="ui/grid/filters/elements/group">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="parent" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</item>
+                    </item>
+                </argument>
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Created At</label>
+                    <dataScope>createdAt</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterRange>
+        </filters>
+    </container>
+    <columns name="braintree_report_columns">
+        <settings>
+            <childDefaults>
+                <param name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks</item>
+                    <item name="root" xsi:type="string">columns.${ $.index }</item>
+                    <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                </param>
+                <param name="controlVisibility" xsi:type="boolean">true</param>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">braintree_report.braintree_report.braintree_report_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                    </item>
+                </param>
+            </childDefaults>
+            <storageConfig>
+                <namespace>current</namespace>
+                <provider>braintree_report.braintree_report.listing_top.bookmarks</provider>
+            </storageConfig>
+        </settings>
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="id">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Transaction ID</label>
+            </settings>
+        </column>
+        <column name="orderId">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Order ID</label>
+            </settings>
+        </column>
+        <column name="paypalDetails_paymentId">
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">PayPal Payment ID</label>
+            </settings>
+        </column>
+        <column name="paymentInstrumentType">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Payment Type</label>
+            </settings>
+        </column>
+        <column name="type">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Type</label>
+            </settings>
+        </column>
+        <column name="createdAt" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Created At</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="amount" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Amount</label>
+            </settings>
+        </column>
+        <column name="processorSettlementResponseCode">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Settlement Code</label>
+            </settings>
+        </column>
+        <column name="status">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="processorSettlementResponseText">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Settlement Response Text</label>
+            </settings>
+        </column>
+        <column name="refundIds">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Refund Ids</label>
+            </settings>
+        </column>
+        <column name="merchantAccountId">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Merchant Account ID</label>
+            </settings>
+        </column>
+        <column name="settlementBatchId">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Settlement Batch ID</label>
+            </settings>
+        </column>
+        <column name="currencyIsoCode">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Currency</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

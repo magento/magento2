@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * Builder for Filter Service Data Object.
  *
+ * @api
  * @method Filter create()
  */
 class FilterBuilder extends AbstractSimpleObjectBuilder
@@ -28,7 +29,7 @@ class FilterBuilder extends AbstractSimpleObjectBuilder
     /**
      * Set value
      *
-     * @param string $value
+     * @param string|array $value
      * @return $this
      */
     public function setValue($value)

@@ -1,54 +1,55 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Customer store credit(balance) application
  */
-/*global define,alert*/
-define(
-    [
-        'ko',
-        'jquery',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/resource-url-manager',
-        'Magento_Checkout/js/model/payment-service',
-        'Magento_Checkout/js/model/error-processor',
-        'Magento_Ui/js/model/messageList',
-        'mage/storage',
-        'Magento_Checkout/js/action/get-totals',
-        'mage/translate'
-    ],
-    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction, $t) {
-        'use strict';
-        return function (isApplied, isLoading) {
-            var quoteId = quote.getQuoteId();
-            var url = urlManager.getCancelCouponUrl(quoteId);
-            var message = $t('Your coupon was successfully removed');
-            messageList.clear();
-            return storage.delete(
-                url,
-                false
-            ).done(
-                function (response) {
-                    var deferred = $.Deferred();
-                    isLoading(false);
-                    getTotalsAction([], deferred);
-                    $.when(deferred).done(function() {
-                        isApplied(false);
-                        paymentService.setPaymentMethods(
-                            paymentService.getAvailablePaymentMethods()
-                        );
-                    });
-                    messageList.addSuccessMessage({'message': message});
-                }
-            ).fail(
-                function (response) {
-                    isLoading(false);
-                    errorProcessor.process(response);
-                }
-            );
-        };
-    }
-);
+define([
+    'jquery',
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/resource-url-manager',
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_SalesRule/js/model/payment/discount-messages',
+    'mage/storage',
+    'Magento_Checkout/js/action/get-payment-information',
+    'Magento_Checkout/js/model/totals',
+    'mage/translate',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, quote, urlManager, errorProcessor, messageContainer, storage, getPaymentInformationAction, totals, $t,
+  fullScreenLoader
+) {
+    'use strict';
+
+    return function (isApplied) {
+        var quoteId = quote.getQuoteId(),
+            url = urlManager.getCancelCouponUrl(quoteId),
+            message = $t('Your coupon was successfully removed.');
+
+        messageContainer.clear();
+        fullScreenLoader.startLoader();
+
+        return storage.delete(
+            url,
+            false
+        ).done(function () {
+            var deferred = $.Deferred();
+
+            totals.isLoading(true);
+            getPaymentInformationAction(deferred);
+            $.when(deferred).done(function () {
+                isApplied(false);
+                totals.isLoading(false);
+                fullScreenLoader.stopLoader();
+            });
+            messageContainer.addSuccessMessage({
+                'message': message
+            });
+        }).fail(function (response) {
+            totals.isLoading(false);
+            fullScreenLoader.stopLoader();
+            errorProcessor.process(response, messageContainer);
+        });
+    };
+});

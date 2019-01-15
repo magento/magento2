@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@
  */
 namespace Magento\Test\Legacy;
 
-class WordsTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+class WordsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Inspection\WordsFinder
@@ -20,7 +22,8 @@ class WordsTest extends \PHPUnit_Framework_TestCase
     {
         self::$_wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder(
             glob(__DIR__ . '/_files/words_*.xml'),
-            \Magento\Framework\App\Utility\Files::init()->getPathToSource()
+            BP,
+            new ComponentRegistrar()
         );
     }
 
@@ -32,7 +35,7 @@ class WordsTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
-                $words = self::$_wordsFinder->findWords($file);
+                $words = self::$_wordsFinder->findWords(realpath($file));
                 if ($words) {
                     $this->fail("Found words: '" . implode("', '", $words) . "' in '{$file}' file");
                 }

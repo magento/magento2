@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,25 +14,22 @@
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= __('Items'); ?>
+                    <?= /* @escapeNotVerified */  __('Items') ?>
                 </th>
                 <th class="item-qty">
-                    <?= __('Qty'); ?>
+                    <?= /* @escapeNotVerified */  __('Qty') ?>
                 </th>
                 <th class="item-price">
-                    <?= __('Price'); ?>
+                    <?= /* @escapeNotVerified */  __('Price') ?>
                 </th>
             </tr>
         </thead>
         <?php foreach ($_items as $_item): ?>
-            <?php
-                if ($_item->getParentItem()) {
-                    continue;
-                }
-            ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
+            <?php if (!$_item->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
             <?= $block->getChildHtml('order_totals') ?>
@@ -45,10 +42,10 @@
             <table class="message-gift">
                 <tr>
                     <td>
-                        <h3><?= __('Gift Message for this Order') ?></h3>
-                        <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><strong><?= __('Message:'); ?></strong>
+                        <h3><?= /* @escapeNotVerified */  __('Gift Message for this Order') ?></h3>
+                        <strong><?= /* @escapeNotVerified */  __('From:') ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('To:') ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= /* @escapeNotVerified */  __('Message:') ?></strong>
                         <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                     </td>
                 </tr>

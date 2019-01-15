@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\Layout;
@@ -62,7 +62,7 @@ class LayoutPlugin
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [];
             foreach ($subject->getAllBlocks() as $block) {
-                if ($block instanceof \Magento\Framework\Object\IdentityInterface) {
+                if ($block instanceof \Magento\Framework\DataObject\IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
                     $isVarnish = $this->config->getType() == \Magento\PageCache\Model\Config::VARNISH;
                     if ($isVarnish && $isEsiBlock) {

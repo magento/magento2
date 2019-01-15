@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating;
 
 use Magento\Review\Model\Rating;
 use Magento\Review\Model\Rating\Option;
-use Magento\Review\Model\Resource\Rating\Collection as RatingCollection;
-use Magento\Review\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
+use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
+use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteCollection;
 
 /**
  * Adminhtml detailed rating stars
@@ -39,28 +39,28 @@ class Detailed extends \Magento\Backend\Block\Template
     /**
      * Rating resource model
      *
-     * @var \Magento\Review\Model\Resource\Rating\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Rating\CollectionFactory
      */
     protected $_ratingsFactory;
 
     /**
      * Rating resource option model
      *
-     * @var \Magento\Review\Model\Resource\Rating\Option\Vote\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory
      */
     protected $_votesFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Review\Model\Resource\Rating\CollectionFactory $ratingsFactory
-     * @param \Magento\Review\Model\Resource\Rating\Option\Vote\CollectionFactory $votesFactory
+     * @param \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingsFactory
+     * @param \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $votesFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Review\Model\Resource\Rating\CollectionFactory $ratingsFactory,
-        \Magento\Review\Model\Resource\Rating\Option\Vote\CollectionFactory $votesFactory,
+        \Magento\Review\Model\ResourceModel\Rating\CollectionFactory $ratingsFactory,
+        \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $votesFactory,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
@@ -121,9 +121,9 @@ class Detailed extends \Magento\Backend\Block\Template
                 )->setStoreFilter(
                     $stores
                 )->setPositionOrder()->load()->addOptionToItems();
-                if (intval($this->getRequest()->getParam('id'))) {
+                if ((int)$this->getRequest()->getParam('id')) {
                     $this->_voteCollection = $this->_votesFactory->create()->setReviewFilter(
-                        intval($this->getRequest()->getParam('id'))
+                        (int)$this->getRequest()->getParam('id')
                     )->addOptionInfo()->load()->addRatingOptions();
                 }
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 /**
  * Test class for \Magento\ProductAlert\Block\Product\View\Price
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
@@ -38,31 +38,25 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $this->getMock(
-            'Magento\ProductAlert\Helper\Data',
-            ['isPriceAlertAllowed', 'getSaveUrl'],
-            [],
-            '',
-            false
+        $this->_helper = $this->createPartialMock(
+            \Magento\ProductAlert\Helper\Data::class,
+            ['isPriceAlertAllowed', 'getSaveUrl']
         );
-        $this->_product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getCanShowPrice', 'getId', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_product = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getCanShowPrice', 'getId', '__wakeup']
         );
         $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->_registry = $this->getMockBuilder(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->disableOriginalConstructor()->setMethods(
             ['registry']
         )->getMock();
         $this->_block = $objectManager->getObject(
-            'Magento\ProductAlert\Block\Product\View\Price',
+            \Magento\ProductAlert\Block\Product\View\Price::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]
         );
-        $this->_layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->_layout = $this->createMock(\Magento\Framework\View\Layout::class);
     }
 
     public function testSetTemplatePriceAlertAllowed()

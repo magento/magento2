@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\ProductList;
 
-use Magento\Framework\Stdlib\CookieManagerInterface;
-
 /**
  * Class Toolbar
+ *
+ * @api
+ * @since 100.0.2
  */
 class Toolbar
 {
@@ -20,29 +21,22 @@ class Toolbar
     /**
      * Sort order cookie name
      */
-    const ORDER_COOKIE_NAME = 'product_list_order';
+    const ORDER_PARAM_NAME = 'product_list_order';
 
     /**
      * Sort direction cookie name
      */
-    const DIRECTION_COOKIE_NAME = 'product_list_dir';
+    const DIRECTION_PARAM_NAME = 'product_list_dir';
 
     /**
      * Sort mode cookie name
      */
-    const MODE_COOKIE_NAME = 'product_list_mode';
+    const MODE_PARAM_NAME = 'product_list_mode';
 
     /**
      * Products per page limit order cookie name
      */
-    const LIMIT_COOKIE_NAME = 'product_list_limit';
-
-    /**
-     * Cookie manager
-     *
-     * @var CookieManagerInterface
-     */
-    protected $cookieManager;
+    const LIMIT_PARAM_NAME = 'product_list_limit';
 
     /**
      * Request
@@ -52,14 +46,11 @@ class Toolbar
     protected $request;
 
     /**
-     * @param CookieManagerInterface $cookieManager
      * @param \Magento\Framework\App\Request\Http $request
      */
     public function __construct(
-        CookieManagerInterface $cookieManager,
         \Magento\Framework\App\Request\Http $request
     ) {
-        $this->cookieManager = $cookieManager;
         $this->request = $request;
     }
 
@@ -70,7 +61,7 @@ class Toolbar
      */
     public function getOrder()
     {
-        return $this->cookieManager->getCookie(self::ORDER_COOKIE_NAME);
+        return $this->request->getParam(self::ORDER_PARAM_NAME);
     }
 
     /**
@@ -80,7 +71,7 @@ class Toolbar
      */
     public function getDirection()
     {
-        return $this->cookieManager->getCookie(self::DIRECTION_COOKIE_NAME);
+        return $this->request->getParam(self::DIRECTION_PARAM_NAME);
     }
 
     /**
@@ -90,7 +81,7 @@ class Toolbar
      */
     public function getMode()
     {
-        return $this->cookieManager->getCookie(self::MODE_COOKIE_NAME);
+        return $this->request->getParam(self::MODE_PARAM_NAME);
     }
 
     /**
@@ -100,8 +91,9 @@ class Toolbar
      */
     public function getLimit()
     {
-        return $this->cookieManager->getCookie(self::LIMIT_COOKIE_NAME);
+        return $this->request->getParam(self::LIMIT_PARAM_NAME);
     }
+
     /**
      * Return current page from request
      *
@@ -110,6 +102,6 @@ class Toolbar
     public function getCurrentPage()
     {
         $page = (int) $this->request->getParam(self::PAGE_PARM_NAME);
-        return $page ? $page : 1;
+        return $page ?: 1;
     }
 }

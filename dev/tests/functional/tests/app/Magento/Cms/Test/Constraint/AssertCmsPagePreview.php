@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ class AssertCmsPagePreview extends AbstractConstraint
      * @param FrontCmsPage $frontCmsPage
      * @param CmsPage $cms
      * @param BrowserInterface $browser
+     * @param string $displayContent
      * @return void
      */
     public function processAssert(
@@ -37,7 +38,8 @@ class AssertCmsPagePreview extends AbstractConstraint
         FrontCmsIndex $frontCmsIndex,
         FrontCmsPage $frontCmsPage,
         CmsPage $cms,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        $displayContent = null
     ) {
         $cmsIndex->open();
         $filter = ['title' => $cms->getTitle()];
@@ -45,21 +47,21 @@ class AssertCmsPagePreview extends AbstractConstraint
         $browser->selectWindow();
 
         $fixtureContent = $cms->getContent();
-        \PHPUnit_Framework_Assert::assertContains(
-            $fixtureContent['content'],
+        \PHPUnit\Framework\Assert::assertContains(
+            $displayContent != null ? $displayContent : $fixtureContent['content'],
             $frontCmsPage->getCmsPageBlock()->getPageContent(),
             'Wrong content is displayed.'
         );
         if (isset($fixtureContent['widget'])) {
             foreach ($fixtureContent['widget']['dataset'] as $widget) {
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $frontCmsPage->getCmsPageBlock()->isWidgetVisible($widget['widget_type'], $widget['anchor_text']),
                     'Widget \'' . $widget['widget_type'] . '\' is not displayed.'
                 );
             }
         }
         if ($cms->getContentHeading()) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $cms->getContentHeading(),
                 $frontCmsIndex->getTitleBlock()->getTitle(),
                 'Wrong title is displayed.'

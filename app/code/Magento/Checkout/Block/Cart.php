@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
@@ -9,11 +9,13 @@ use Magento\Customer\Model\Context;
 
 /**
  * Shopping cart block
+ *
+ * @api
  */
 class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $_catalogUrlBuilder;
 
@@ -31,16 +33,17 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrlBuilder
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrlBuilder,
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
@@ -55,6 +58,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Prepare Quote Item Product URLs
      *
+     * @codeCoverageIgnore
      * @return void
      */
     protected function _construct()
@@ -98,7 +102,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
                 }
 
                 if (isset($products[$product->getId()])) {
-                    $object = new \Magento\Framework\Object($products[$product->getId()]);
+                    $object = new \Magento\Framework\DataObject($products[$product->getId()]);
                     $item->getProduct()->setUrlDataObject($object);
                 }
             }
@@ -106,6 +110,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function hasError()
@@ -114,6 +119,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return int
      */
     public function getItemsSummaryQty()
@@ -122,6 +128,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function isWishlistActive()
@@ -140,6 +147,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return string
      */
     public function getCheckoutUrl()
@@ -165,6 +173,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
@@ -218,10 +227,22 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return int
      */
     public function getItemsCount()
     {
         return $this->getQuote()->getItemsCount();
+    }
+
+    /**
+     * Render pagination HTML
+     *
+     * @return string
+     * @since 100.2.0
+     */
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
     }
 }

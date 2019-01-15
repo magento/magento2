@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Reader
@@ -23,9 +26,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_moduleDirResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystemDirectoryMock;
+    protected $read;
 
     /**
      * Paths to fixtures
@@ -36,27 +39,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $fileResolver = $this->getMock(
-            'Magento\Email\Model\Template\Config\FileResolver',
-            [],
-            [],
-            '',
-            false
-        );
+        $fileResolver = $this->createMock(\Magento\Email\Model\Template\Config\FileResolver::class);
         $this->_paths = [
             __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml',
             __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml',
         ];
 
-        $this->_converter = $this->getMock('Magento\Email\Model\Template\Config\Converter', ['convert']);
-
-        $moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
-            ['getModuleDir'],
-            [],
-            '',
-            false
+        $this->_converter = $this->createPartialMock(
+            \Magento\Email\Model\Template\Config\Converter::class,
+            ['convert']
         );
+
+        $moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $moduleReader->expects(
             $this->once()
         )->method(
@@ -69,34 +63,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $schemaLocator = new \Magento\Email\Model\Template\Config\SchemaLocator($moduleReader);
 
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
-        $this->_moduleDirResolver = $this->getMock(
-            'Magento\Framework\Module\Dir\ReverseResolver',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_filesystemDirectoryMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Read',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->_filesystemDirectoryMock->expects(
-            $this->any()
-        )->method(
-            'getAbsolutePath'
-        )->will(
-            $this->returnArgument(0)
-        );
+        $this->_moduleDirResolver = $this->createMock(\Magento\Framework\Module\Dir\ReverseResolver::class);
+        $readFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->read = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
+        $readFactory->expects($this->any())->method('create')->willReturn($this->read);
 
         $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
-            $this->_filesystemDirectoryMock,
+            $readFactory,
             $this->_paths,
             $this->_moduleDirResolver
         );
@@ -115,23 +93,23 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             $fileResolver,
             $this->_converter,
             $schemaLocator,
-            $validationState
+            $validationStateMock
         );
     }
 
     public function testRead()
     {
-        $this->_filesystemDirectoryMock->expects(
-            $this->at(1)
+        $this->read->expects(
+            $this->at(0)
         )->method(
-            'readFile'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[0]))
         );
-        $this->_filesystemDirectoryMock->expects(
-            $this->at(3)
+        $this->read->expects(
+            $this->at(1)
         )->method(
-            'readFile'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[1]))
         );
@@ -158,9 +136,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 $expected = file_get_contents(__DIR__ . '/_files/email_templates_merged.xml');
                 $expectedNorm = preg_replace('/xsi:noNamespaceSchemaLocation="[^"]*"/', '', $expected, 1);
                 $actualNorm = preg_replace('/xsi:noNamespaceSchemaLocation="[^"]*"/', '', $actual->saveXML(), 1);
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlString($expectedNorm, $actualNorm);
+                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlString($expectedNorm, $actualNorm);
                 return true;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 return false;
             }
         };

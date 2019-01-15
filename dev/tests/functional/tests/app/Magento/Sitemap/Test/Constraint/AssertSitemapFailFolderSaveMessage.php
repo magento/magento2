@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,8 +26,8 @@ class AssertSitemapFailFolderSaveMessage extends AbstractConstraint
      */
     public function processAssert(SitemapIndex $sitemapPage, Sitemap $sitemap)
     {
-        $actualMessage = $sitemapPage->getMessagesBlock()->getErrorMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessage = $sitemapPage->getMessagesBlock()->getErrorMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::FAIL_FOLDER_MESSAGE, $sitemap->getSitemapPath()),
             $actualMessage,
             'Wrong error message is displayed.'

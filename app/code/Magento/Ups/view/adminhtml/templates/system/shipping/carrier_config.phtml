@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,19 +20,19 @@ if (!$storeCode && $websiteCode) {
     /** @var $web \Magento\Store\Model\Website */
     $web = $block->getWebsiteModel()->load($websiteCode);
     $storedAllowedMethods = explode(',', $web->getConfig('carriers/ups/allowed_methods'));
-    $storedOriginShipment = $web->getConfig('carriers/ups/origin_shipment');
-    $storedFreeShipment   = $web->getConfig('carriers/ups/free_method');
-    $storedUpsType        = $web->getConfig('carriers/ups/type');
+    $storedOriginShipment = $block->escapeHtml($web->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment   = $block->escapeHtml($web->getConfig('carriers/ups/free_method'));
+    $storedUpsType        = $block->escapeHtml($web->getConfig('carriers/ups/type'));
 } elseif ($storeCode) {
     $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods', $storeCode));
-    $storedOriginShipment = $block->getConfig('carriers/ups/origin_shipment', $storeCode);
-    $storedFreeShipment   = $block->getConfig('carriers/ups/free_method', $storeCode);
-    $storedUpsType        = $block->getConfig('carriers/ups/type', $storeCode);
+    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment', $storeCode));
+    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method', $storeCode));
+    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type', $storeCode));
 } else {
     $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods'));
-    $storedOriginShipment = $block->getConfig('carriers/ups/origin_shipment');
-    $storedFreeShipment   = $block->getConfig('carriers/ups/free_method');
-    $storedUpsType        = $block->getConfig('carriers/ups/type');
+    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method'));
+    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type'));
 }
 ?>
 <script>
@@ -81,16 +81,16 @@ require(["prototype"], function(){
             this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url',
                 'carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number',
                 'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
-                'carriers_ups_mode_xml'];
+                'carriers_ups_mode_xml','carriers_ups_include_taxes'];
             this.onlyUpsElements = ['carriers_ups_gateway_url'];
 
-            this.storedOriginShipment = '<?php echo $storedOriginShipment ?>';
-            this.storedFreeShipment = '<?php echo $storedFreeShipment ?>';
-            this.storedUpsType = '<?php echo $storedUpsType ?>';
+            this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
+            this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
+            this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
             <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
-            this.storedAllowedMethods = <?php echo $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
-            this.originShipmentObj = <?php echo $jsonHelper->jsonEncode($orShipArr) ?>;
-            this.originShipmentObj['default'] = <?php echo $jsonHelper->jsonEncode($defShipArr) ?>;
+            this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
@@ -108,7 +108,7 @@ require(["prototype"], function(){
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-            freeMethod.insert(new Element('option', {value:''}).update('<?php echo $block->escapeHtml(__('None')); ?>'));
+            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
 
             var code, option;
             for (code in originShipment) {

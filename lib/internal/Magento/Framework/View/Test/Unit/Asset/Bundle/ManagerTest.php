@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\Bundle;
 
 use Magento\Framework\View\Asset\Bundle\Manager;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Framework\View\Asset\Bundle\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $manager;
 
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
@@ -30,23 +30,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
     private $minificationMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundle = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle')
+        $this->bundle = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfig = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle\ConfigInterface')
+        $this->bundleConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetConfig = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
+        $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->asset = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Asset\LocalInterface',
+            \Magento\Framework\View\Asset\LocalInterface::class,
             [],
             '',
             false,
@@ -55,7 +55,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ['getContentType']
         );
 
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,69 +77,78 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
 
-    public function testAddAssetWithHtmlTypeAndWithoutModule()
-    {
-        $this->asset->expects($this->once())
-            ->method('getContentType')
-            ->willReturn('html');
-        $this->asset->expects($this->once())
-            ->method('getModule')
-            ->willReturn('');
-
-        $this->assertFalse($this->manager->addAsset($this->asset));
-    }
-
     public function testAddAssetWithExcludedFile()
     {
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+            ->setMockClassName('configView')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getContentType')
-            ->willReturn('js');
-        $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
-        $this->asset->expects($this->once())
-            ->method('getModule')
-            ->willReturn('');
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getFilePath')
-            ->willReturn('file/path.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getContentType')
+            ->willReturn('js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getModule')
+            ->willReturn('Lib');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('source/file.min.js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getFilePath')
+            ->willReturn('source/file.min.js');
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);
         $configView->expects($this->once())
             ->method('getExcludedFiles')
-            ->willReturn(['Lib:' . ':file/path.js']);
+            ->willReturn(['Lib:' . ':source/file.min.js']);
 
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
 
     public function testAddAssetWithExcludedDirectory()
     {
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $dirRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('/path/to/file.js')
+            ->willReturn(true);
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('/path/to/source/file.min.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContentType')
             ->willReturn('js');
         $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
+            ->method('getPath')
+            ->willReturn('/path/to/file.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getModule')
             ->willReturn('');
@@ -149,8 +158,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);
@@ -166,27 +174,33 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAsset()
     {
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('/path/to/source/file.min.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContentType')
             ->willReturn('js');
         $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getFilePath')
-            ->willReturn('file/path.js');
+            ->method('getPath')
+            ->willReturn('/path/to/file.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);

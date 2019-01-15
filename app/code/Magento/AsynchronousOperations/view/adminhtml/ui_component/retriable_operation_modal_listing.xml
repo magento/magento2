@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">retriable_operation_modal_listing.retriable_operation_modal_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>retriable_operation_modal_listing_columns</spinner>
+        <deps>
+            <dep>retriable_operation_modal_listing.retriable_operation_modal_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="retriable_operation_modal_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Logging::system_magento_logging_bulk_operations</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="retriable_operation_modal_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="retriable_operation_modal_listing_columns">
+        <settings>
+            <dndConfig>
+                <param name="enabled" xsi:type="boolean">false</param>
+            </dndConfig>
+        </settings>
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>error_code</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="result_message" sortOrder="20">
+            <settings>
+                <label translate="true">Error</label>
+            </settings>
+        </column>
+        <column name="records_qty" sortOrder="30">
+            <settings>
+                <label translate="true">Number of Records Affected</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

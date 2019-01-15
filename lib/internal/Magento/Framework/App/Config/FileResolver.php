@@ -2,7 +2,7 @@
 /**
  * Application config file resolver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -24,6 +24,13 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @var \Magento\Framework\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
+
+    /**
+     * Filesystem
+     *
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $filesystem;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
@@ -48,10 +55,11 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         switch ($scope) {
             case 'primary':
                 $directory = $this->filesystem->getDirectoryRead(DirectoryList::CONFIG);
-                $iterator = $this->iteratorFactory->create(
-                    $directory,
-                    $directory->search('{' . $filename . ',*/' . $filename . '}')
-                );
+                $absolutePaths = [];
+                foreach ($directory->search('{' . $filename . ',*/' . $filename . '}') as $path) {
+                    $absolutePaths[] = $directory->getAbsolutePath($path);
+                }
+                $iterator = $this->iteratorFactory->create($absolutePaths);
                 break;
             case 'global':
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);

@@ -1,47 +1,49 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
-class SecureTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class SecureTest extends \PHPUnit\Framework\TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
     {
-        $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $cacheManager = $this->getMock('Magento\Framework\App\CacheInterface');
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction',
-            [],
-            [],
-            '',
-            false
-        );
-        $context = new \Magento\Framework\Model\Context(
-            $logger,
-            $eventDispatcher,
-            $cacheManager,
-            $appState,
-            $actionValidatorMock
-        );
+        $context = (new ObjectManager($this))->getObject(\Magento\Framework\Model\Context::class);
 
-        $resource = $this->getMock('Magento\Config\Model\Resource\Config\Data', [], [], '', false);
+        $resource = $this->createMock(\Magento\Config\Model\ResourceModel\Config\Data::class);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
-        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', [], [], '', false);
-        $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $coreConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $mergeService = $this->createMock(\Magento\Framework\View\Asset\MergeService::class);
+        $coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
+        $coreConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $cacheTypeListMock = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $model = $this->getMock(
-            'Magento\Config\Model\Config\Backend\Secure',
-            ['getOldValue'],
-            [$context, $coreRegistry, $coreConfig, $mergeService, $resource, $resourceCollection]
-        );
+        $model = $this->getMockBuilder(\Magento\Config\Model\Config\Backend\Secure::class)
+            ->setMethods(['getOldValue'])
+            ->setConstructorArgs(
+                [
+                    $context,
+                    $coreRegistry,
+                    $coreConfig,
+                    $cacheTypeListMock,
+                    $mergeService,
+                    $resource,
+                    $resourceCollection
+                ]
+            )
+            ->getMock();
+
+        $cacheTypeListMock->expects($this->once())
+            ->method('invalidate')
+            ->with(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER)
+            ->willReturn($model);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $model->setValue('new_value');

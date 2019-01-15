@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Country column renderer
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-
+/**
+ * Country column type renderer
+ *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
+ */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -34,10 +36,10 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * Render country grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $name = $this->localeLists->getCountryTranslation($data);

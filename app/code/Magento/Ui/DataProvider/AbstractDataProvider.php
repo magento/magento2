@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
-abstract class AbstractDataProvider implements DataProviderInterface
+/**
+ * @api
+ * @since 100.0.2
+ */
+abstract class AbstractDataProvider implements DataProviderInterface, \Countable
 {
     /**
      * Data Provider name
@@ -43,6 +48,11 @@ abstract class AbstractDataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
+     * @var AbstractCollection
+     */
+    protected $collection;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -64,9 +74,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
-    abstract protected function getCollection();
+    public function getCollection()
+    {
+        return $this->collection;
+    }
 
     /**
      * Get Data Provider name
@@ -123,7 +136,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
     }
 
     /**
@@ -133,17 +146,42 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+        return isset($this->meta[$fieldSetName]['children'][$fieldName])
+            ? $this->meta[$fieldSetName]['children'][$fieldName]
             : [];
     }
 
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->getCollection()->addFieldToFilter($field, $condition);
+        $this->getCollection()->addFieldToFilter(
+            $filter->getField(),
+            [$filter->getConditionType() => $filter->getValue()]
+        );
+    }
+
+    /**
+     * Returns search criteria
+     *
+     * @return null
+     */
+    public function getSearchCriteria()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return null;
+    }
+
+    /**
+     * Returns SearchResult
+     *
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    public function getSearchResult()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return $this->getCollection();
     }
 
     /**
@@ -244,5 +282,16 @@ abstract class AbstractDataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * Retrieve all ids from collection
+     *
+     * @return int[]
+     * @since 100.2.0
+     */
+    public function getAllIds()
+    {
+        return  $this->getCollection()->getAllIds();
     }
 }

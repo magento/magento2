@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\Theme;
@@ -118,7 +118,7 @@ class Validator
     public function getErrorMessages($dataKey = null)
     {
         if ($dataKey) {
-            return isset($this->_errorMessages[$dataKey]) ? $this->_errorMessages[$dataKey] : [];
+            return $this->_errorMessages[$dataKey] ?? [];
         }
         return $this->_errorMessages;
     }
@@ -167,10 +167,10 @@ class Validator
     /**
      * Validate all data items
      *
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $data)
+    public function validate(\Magento\Framework\DataObject $data)
     {
         $this->_errorMessages = [];
         foreach ($this->_dataValidators as $dataKey => $validators) {

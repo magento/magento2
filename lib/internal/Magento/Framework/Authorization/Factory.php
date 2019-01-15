@@ -2,7 +2,7 @@
 /**
  * Factory class for \Magento\Framework\Authorization
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Authorization;
@@ -15,7 +15,7 @@ class Factory
     /**
      * Entity class name
      */
-    const CLASS_NAME = 'Magento\Framework\Authorization';
+    const CLASS_NAME = \Magento\Framework\Authorization::class;
 
     /**
      * Object Manager instance

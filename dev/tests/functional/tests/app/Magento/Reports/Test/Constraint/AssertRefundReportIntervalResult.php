@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
         $this->searchInSalesReportGrid($refundsReport);
         $salesResult = $refundsReportPage->getGridBlock()->getLastResult();
         $prepareInitialResult = $this->prepareExpectedResult($initialRefundsResult);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
             "Refund total Sales result is not correct."
@@ -55,7 +55,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
     protected function prepareExpectedResult(array $expectedOrderData)
     {
         ++$expectedOrderData['orders_count'];
-        $expectedOrderData['refunded'] += $this->order->getPrice()[0]['grand_order_total'];
+        $expectedOrderData['refunded'] += $this->order->getPrice()['invoice'][0]['grand_order_total'];
         return $expectedOrderData;
     }
 

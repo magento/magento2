@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Helper;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
@@ -12,6 +13,9 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -42,14 +46,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_productCollection;
 
     /**
      * Wishlist Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_wishlistItemCollection;
 
@@ -191,6 +195,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Retrieve wishlist item count (include config settings)
+     *
      * Used in top link menu only
      *
      * @return int
@@ -222,7 +227,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -232,7 +237,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve wishlist items collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItemCollection()
     {
@@ -273,12 +278,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve params for removing item from wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @param bool $addReferer
      * @return string
      */
-    public function getRemoveParams($item)
+    public function getRemoveParams($item, $addReferer = false)
     {
         $url = $this->_getUrl('wishlist/index/remove');
         $params = ['item' => $item->getWishlistItemId()];
+        $params[ActionInterface::PARAM_NAME_URL_ENCODED] = '';
+
+        if ($addReferer) {
+            $params = $this->addRefererToParams($params);
+        }
+
         return $this->_postDataHelper->getPostData($url, $params);
     }
 
@@ -381,14 +393,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve URL for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     * @return  string
+     * @param bool $addReferer
+     * @return string
      */
-    public function getAddToCartParams($item)
+    public function getAddToCartParams($item, $addReferer = false)
     {
+        $params = $this->_getCartUrlParameters($item);
+        $params[ActionInterface::PARAM_NAME_URL_ENCODED] = '';
+
+        if ($addReferer) {
+            $params = $this->addRefererToParams($params);
+        }
+
         return $this->_postDataHelper->getPostData(
             $this->_getUrlStore($item)->getUrl('wishlist/index/cart'),
-            $this->_getCartUrlParameters($item)
+            $params
         );
+    }
+
+    /**
+     * Add UENC referer to params
+     *
+     * @param array $params
+     * @return array
+     */
+    public function addRefererToParams(array $params)
+    {
+        $params[ActionInterface::PARAM_NAME_URL_ENCODED] =
+            $this->urlEncoder->encode($this->_getRequest()->getServer('HTTP_REFERER'));
+        return $params;
     }
 
     /**
@@ -418,12 +451,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get cart URL parameters
+     *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
      */
     protected function _getCartUrlParameters($item)
     {
-        return ['item' => is_string($item) ? $item : $item->getWishlistItemId()];
+        $params = [
+            'item' => is_string($item) ? $item : $item->getWishlistItemId(),
+        ];
+        if ($item instanceof \Magento\Wishlist\Model\Item) {
+            $params['qty'] = $item->getQty();
+        }
+        return $params;
     }
 
     /**
@@ -471,7 +512,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve customer name
      *
-     * @return string|void
+     * @return string|null
      */
     public function getCustomerName()
     {
@@ -538,7 +579,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 $count = $collection->getItemsQty();
             } else {
-                $count = $collection->getSize();
+                $count = $collection->count();
             }
             $this->_customerSession->setWishlistDisplayType(
                 $this->scopeConfig->getValue(

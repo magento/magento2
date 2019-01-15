@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -16,11 +16,11 @@ class Validator
      *
      * @param Product $product
      * @param RequestInterface $request
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function validate(Product $product, RequestInterface $request, \Magento\Framework\Object $response)
+    public function validate(Product $product, RequestInterface $request, \Magento\Framework\DataObject $response)
     {
         return $product->validate();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\TestCase;
@@ -12,44 +12,43 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for DeleteProductRatingEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Simple product is created.
  * 2. Product rating is created.
  *
  * Steps:
  * 1. Login to backend.
- * 2. Navigate to Stores->Attributes->Rating.
+ * 2. Navigate to Stores > Attributes > Rating.
  * 3. Search product rating in grid by given data.
  * 4. Open this product rating by clicking.
  * 5. Click 'Delete Rating' button.
  * 6. Perform all asserts.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-23276
  */
 class DeleteProductRatingEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
+     * Product rating grid page.
+     *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
+     * Product rating edit page.
+     *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return array
@@ -63,7 +62,7 @@ class DeleteProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Inject data
+     * Inject data.
      *
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
@@ -76,7 +75,7 @@ class DeleteProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Runs delete product Rating entity test
+     * Runs delete product Rating entity test.
      *
      * @param Rating $productRating
      * @return void
@@ -90,5 +89,6 @@ class DeleteProductRatingEntityTest extends Injectable
         $this->ratingIndex->open();
         $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $productRating->getRatingCode()]);
         $this->ratingEdit->getPageActions()->delete();
+        $this->ratingEdit->getModalBlock()->acceptAlert();
     }
 }

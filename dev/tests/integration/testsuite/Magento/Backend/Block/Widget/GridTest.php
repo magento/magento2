@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\ColumnSet
@@ -27,7 +28,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->_layoutMock = $this->createPartialMock(
+            \Magento\Framework\View\Layout::class,
+            ['getChildName', 'getBlock', 'createBlock', 'helper', 'renameElement', 'unsetChild', 'setChild']
+        );
         $this->_columnSetMock = $this->_getColumnSetMock();
 
         $returnValueMap = [
@@ -56,13 +60,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->will(
             $this->returnValue(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\View\LayoutInterface'
+                    \Magento\Framework\View\LayoutInterface::class
                 )->createBlock(
-                    'Magento\Backend\Block\Widget\Button'
+                    \Magento\Backend\Block\Widget\Button::class
                 )
             )
         );
@@ -71,17 +75,19 @@ class GridTest extends \PHPUnit_Framework_TestCase
         )->method(
             'helper'
         )->with(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->will(
             $this->returnValue(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Json\Helper\Data')
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    \Magento\Framework\Json\Helper\Data::class
+                )
             )
         );
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Backend\Block\Widget\Grid'
+            \Magento\Backend\Block\Widget\Grid::class
         );
         $this->_block->setLayout($this->_layoutMock);
         $this->_block->setNameInLayout('grid');
@@ -96,27 +102,27 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryList = $objectManager->create(
-            'Magento\Framework\App\Filesystem\DirectoryList',
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
             ['root' => __DIR__]
         );
-        return $this->getMock(
-            'Magento\Backend\Block\Widget\Grid\ColumnSet',
-            [],
-            [
-                $objectManager->create(
-                    'Magento\Framework\View\Element\Template\Context',
-                    [
-                        'filesystem' => $objectManager->create(
-                            'Magento\Framework\Filesystem',
-                            ['directoryList' => $directoryList]
-                        )
-                    ]
-                ),
-                $objectManager->create('Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory'),
-                $objectManager->create('Magento\Backend\Model\Widget\Grid\SubTotals'),
-                $objectManager->create('Magento\Backend\Model\Widget\Grid\Totals')
-            ]
-        );
+        return $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\ColumnSet::class)
+            ->setConstructorArgs(
+                [
+                    $objectManager->create(
+                        \Magento\Framework\View\Element\Template\Context::class,
+                        [
+                            'filesystem' => $objectManager->create(
+                                \Magento\Framework\Filesystem::class,
+                                ['directoryList' => $directoryList]
+                            )
+                        ]
+                    ),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory::class),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\SubTotals::class),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\Totals::class)
+                ]
+            )
+            ->getMock();
     }
 
     public function testToHtmlPreparesColumns()
@@ -140,11 +146,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\Widget\Grid */
-        $block = $layout->createBlock('Magento\Backend\Block\Widget\Grid\Extended', 'block');
-        $child = $layout->addBlock('Magento\Framework\View\Element\Template', 'massaction', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\Widget\Grid\Extended::class, 'block');
+        $child = $layout->addBlock(\Magento\Framework\View\Element\Template::class, 'massaction', 'block');
         $this->assertSame($child, $block->getMassactionBlock());
     }
 }

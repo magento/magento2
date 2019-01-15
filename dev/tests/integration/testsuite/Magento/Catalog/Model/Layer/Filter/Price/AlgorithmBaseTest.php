@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
@@ -11,8 +11,10 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_base.php
+ * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
+class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Layer model
@@ -29,45 +31,72 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
     protected $_filter;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     protected $priceResource;
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
-     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
+     * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
         $objectManager = Bootstrap::getObjectManager();
-        $layer = $objectManager->create('Magento\Catalog\Model\Layer\Category');
+        $layer = $objectManager->create(\Magento\Catalog\Model\Layer\Category::class);
         /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
         $termBucket = $objectManager->create(
-            'Magento\Framework\Search\Request\Aggregation\TermBucket',
+            \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
             ['name' => 'name', 'field' => 'price', 'metrics' => []]
         );
 
         $dimensions = [
             'scope' => $objectManager->create(
-                'Magento\Framework\Search\Request\Dimension',
+                \Magento\Framework\Search\Request\Dimension::class,
                 ['name' => 'someName', 'value' => 'default']
             ),
         ];
 
+        /** @var \Magento\Framework\Search\EntityMetadata $entityMetadata */
+        $entityMetadata = $objectManager->create(\Magento\Framework\Search\EntityMetadata::class, ['entityId' => 'id']);
+        $idKey = $entityMetadata->getEntityId();
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
+        $documentFactory = $objectManager->create(
+            \Magento\Framework\Search\Adapter\Mysql\DocumentFactory::class,
+            ['entityMetadata' => $entityMetadata]
+        );
+
+        /** @var \Magento\Framework\Api\Search\Document[] $documents */
+        $documents = [];
+        foreach ($entityIds as $entityId) {
+            $rawDocument = [
+                $idKey => $entityId,
+                'score' => 1,
+            ];
+            $documents[] = $documentFactory->create($rawDocument);
+        }
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
+        $temporaryStorage = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
+        $table = $temporaryStorage->storeDocuments($documents);
+
         /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
-        $dataProvider = $objectManager->create('Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider');
-        $select = $dataProvider->getDataSet($termBucket, $dimensions);
-        $select->where('main_table.entity_id IN (?)', $entityIds);
+        $dataProvider = $objectManager->create(
+            \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider::class
+        );
+        $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
-        $intervalFactory = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory');
+        $intervalFactory = $objectManager->create(
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory::class
+        );
         $interval = $intervalFactory->create(['select' => $select]);
 
         /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
-        $model = $objectManager->create('Magento\Framework\Search\Dynamic\Algorithm');
+        $model = $objectManager->create(\Magento\Framework\Search\Dynamic\Algorithm::class);
 
         $layer->setCurrentCategory($categoryId);
         $collection = $layer->getProductCollection();
@@ -83,7 +112,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
         $items = $model->calculateSeparators($interval);
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
-        for ($i = 0; $i < count($intervalItems); ++$i) {
+        for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
             $this->assertInternalType('array', $items[$i]);
             $this->assertEquals($intervalItems[$i]['from'], $items[$i]['from']);
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);

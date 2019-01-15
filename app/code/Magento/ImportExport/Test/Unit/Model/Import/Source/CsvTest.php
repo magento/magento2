@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -22,14 +22,8 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->_directoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
     }
 
     /**
@@ -111,6 +105,10 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage wrongColumnsNumber
+     */
     public function testRewind()
     {
         $this->_directoryMock->expects(
@@ -139,6 +137,6 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $model->next();
         $model->next();
         $this->assertSame(2, $model->key());
-        $this->assertSame(['column1' => '5', 'column2' => ''], $model->current());
+        $model->current();
     }
 }

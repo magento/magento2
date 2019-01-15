@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -14,6 +15,8 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Base items collection class
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
@@ -21,14 +24,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * DB connection
      *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_conn;
 
     /**
      * Select object
      *
-     * @var \Zend_Db_Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
@@ -98,13 +101,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param EntityFactoryInterface $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory);
         $this->_fetchStrategy = $fetchStrategy;
@@ -117,7 +120,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get resource instance.
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     abstract public function getResource();
 
@@ -159,10 +162,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get collection item identifier
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return mixed
      */
-    protected function _getItemId(\Magento\Framework\Object $item)
+    protected function _getItemId(\Magento\Framework\DataObject $item)
     {
         if ($field = $this->getIdFieldName()) {
             return $item->getData($field);
@@ -173,18 +176,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Set database connection adapter
      *
-     * @param \Zend_Db_Adapter_Abstract $conn
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setConnection($conn)
+    public function setConnection(\Magento\Framework\DB\Adapter\AdapterInterface $conn)
     {
-        if (!$conn instanceof \Zend_Db_Adapter_Abstract) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('dbModel read resource does not implement \Zend_Db_Adapter_Abstract')
-            );
-        }
-
         $this->_conn = $conn;
         $this->_select = $this->_conn->select();
         $this->_isOrdersRendered = false;
@@ -192,7 +189,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Get \Zend_Db_Select instance
+     * Get \Magento\Framework\DB\Select instance
      *
      * @return Select
      */
@@ -222,7 +219,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
-        return intval($this->_totalRecords);
+        return (int)$this->_totalRecords;
     }
 
     /**
@@ -235,13 +232,20 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_renderFilters();
 
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        $countSelect->columns('COUNT(*)');
+        $part = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+        if (!is_array($part) || !count($part)) {
+            $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
+            return $countSelect;
+        }
 
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
         return $countSelect;
     }
 
@@ -249,7 +253,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get sql select string or object
      *
      * @param   bool $stringMode
-     * @return  string || \Zend_Db_Select
+     * @return  string|\Magento\Framework\DB\Select
      */
     public function getSelectSql($stringMode = false)
     {
@@ -272,7 +276,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * self::setOrder() alias
+     * Sets order and direction.
      *
      * @param string $field
      * @param string $direction
@@ -361,6 +365,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * Hook for operations before rendering filters
+     *
      * @return void
      */
     protected function _renderFiltersBefore()
@@ -384,7 +389,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
 
-            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';
         } else {
             $resultCondition = $this->_translateCondition($field, $condition);
         }
@@ -589,15 +594,16 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Let do something before add loaded item in collection
      *
-     * @param \Magento\Framework\Object $item
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         return $item;
     }
 
     /**
+     * Returns an items collection.
      * Returns a collection item that corresponds to the fetched row
      * and moves the internal data pointer ahead
      *
@@ -626,7 +632,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param null $valueField
+     * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
      * @return array
@@ -763,10 +769,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Fetch collection data
      *
-     * @param \Zend_Db_Select $select
+     * @param Select $select
      * @return array
      */
-    protected function _fetchAll(\Zend_Db_Select $select)
+    protected function _fetchAll(Select $select)
     {
         $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
         if ($this->extensionAttributesJoinProcessor) {
@@ -833,7 +839,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         JoinDataInterface $join,
         JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
-        $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
+        $selectFrom = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
             $joinOn = $this->getMainTableAlias() . '.' . $join->getJoinField()
@@ -873,11 +879,36 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     private function getMainTableAlias()
     {
-        foreach ($this->getSelect()->getPart(\Zend_Db_Select::FROM) as $tableAlias => $tableMetadata) {
+        foreach ($this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM) as $tableAlias => $tableMetadata) {
             if ($tableMetadata['joinType'] == 'from') {
                 return $tableAlias;
             }
         }
         throw new \LogicException("Main table cannot be identified.");
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.11
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.11
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_logger = $objectManager->get(Logger::class);
+        $this->_fetchStrategy = $objectManager->get(FetchStrategyInterface::class);
+        $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

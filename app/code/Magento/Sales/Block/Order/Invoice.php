@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -9,13 +9,16 @@ use Magento\Customer\Model\Context;
 
 /**
  * Sales order view block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
 {
     /**
      * @var string
      */
-    protected $_template = 'order/invoice.phtml';
+    protected $_template = 'Magento_Sales::order/invoice.phtml';
 
     /**
      * @var \Magento\Framework\App\Http\Context

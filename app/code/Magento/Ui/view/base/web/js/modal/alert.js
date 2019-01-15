@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -16,19 +20,31 @@ define([
             modalClass: 'confirm',
             title: $.mage.__('Attention'),
             actions: {
+
+                /**
+                 * Callback always - called on all actions.
+                 */
                 always: function () {}
             },
             buttons: [{
                 text: $.mage.__('OK'),
-                class: 'action-secondary',
+                class: 'action-primary action-accept',
+
+                /**
+                 * Click handler.
+                 */
                 click: function () {
                     this.closeModal(true);
                 }
             }]
         },
+
+        /**
+         * Close modal window.
+         */
         closeModal: function () {
             this.options.actions.always();
-            this.element.bind('confirmclosed', _.bind(this._remove, this));
+            this.element.bind('alertclosed', _.bind(this._remove, this));
 
             return this._super();
         }

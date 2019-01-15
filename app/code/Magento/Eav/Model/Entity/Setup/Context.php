@@ -1,12 +1,25 @@
 <?php
 /**
- * Eav setup context object
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
+/**
+ * Constructor modification point for Magento\Eav\Model\Entity\Setup.
+ *
+ * All such context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with their
+ * corresponding abstract classes.
+ *
+ * @api
+ * @codeCoverageIgnore
+ * @since 100.0.2
+ */
 class Context extends \Magento\Framework\Module\Setup\Context
 {
     /**
@@ -17,7 +30,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\App\Resource $appResource
+     * @param \Magento\Framework\App\ResourceConnection $appResource
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Module\ResourceInterface $resource
@@ -30,7 +43,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\App\Resource $appResource,
+        \Magento\Framework\App\ResourceConnection $appResource,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Module\ResourceInterface $resource,

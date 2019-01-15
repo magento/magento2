@@ -1,72 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result as ImportResultBlock;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 
-class Validate extends ImportController
+/**
+ * Import validate controller action.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Validate extends ImportResultController implements HttpPostActionInterface
 {
     /**
-     * Process validation results
-     *
-     * @param \Magento\ImportExport\Model\Import $import
-     * @param \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result $resultBlock
-     * @return void
+     * @var Import
      */
-    protected function processValidationError(
-        Import $import,
-        ImportResultBlock $resultBlock
-    ) {
-        if ($import->getProcessedRowsCount() == $import->getInvalidRowsCount()) {
-            $resultBlock->addNotice(__('This file is invalid. Please fix errors and re-upload the file.'));
-        } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
-            $resultBlock->addNotice(
-                __(
-                    'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
-                    $import->getErrorsLimit()
-                )
-            );
-        } else {
-            if ($import->isImportAllowed()) {
-                $resultBlock->addNotice(
-                    __(
-                        'Please fix errors and re-upload the file. Or press "Import" to skip rows with errors.'
-                    ),
-                    true
-                );
-            } else {
-                $resultBlock->addNotice(
-                    __('The file is partially valid, but we can\'t import it for some reason.'),
-                    false
-                );
-            }
-        }
-        // errors info
-        foreach ($import->getErrors() as $errorCode => $rows) {
-            $error = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
-            $resultBlock->addError($error);
-        }
-    }
+    private $import;
 
     /**
      * Validate uploaded files action
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
-        /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
+        /** @var $resultBlock Result */
         $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
         if ($data) {
             // common actions
@@ -75,49 +44,15 @@ class Validate extends ImportController
                 'import_validation_container'
             );
 
+            /** @var $import \Magento\ImportExport\Model\Import */
+            $import = $this->getImport()->setData($data);
             try {
-                /** @var $import \Magento\ImportExport\Model\Import */
-                $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
-                $source = ImportAdapter::findAdapterFor(
-                    $import->uploadSource(),
-                    $this->_objectManager->create('Magento\Framework\Filesystem')
-                        ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
-                );
-                $validationResult = $import->validateSource($source);
-
-                if (!$import->getProcessedRowsCount()) {
-                    $resultBlock->addError(__('This file is empty. Please try another one.'));
-                } else {
-                    if (!$validationResult) {
-                        $this->processValidationError($import, $resultBlock);
-                    } else {
-                        if ($import->isImportAllowed()) {
-                            $resultBlock->addSuccess(
-                                __('File is valid! To start import process press "Import" button'),
-                                true
-                            );
-                        } else {
-                            $resultBlock->addError(
-                                __('The file is valid, but we can\'t import it for some reason.'),
-                                false
-                            );
-                        }
-                    }
-                    $resultBlock->addNotice($import->getNotices());
-                    $resultBlock->addNotice(
-                        __(
-                            'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                            $import->getProcessedRowsCount(),
-                            $import->getProcessedEntitiesCount(),
-                            $import->getInvalidRowsCount(),
-                            $import->getErrorsCount()
-                        )
-                    );
-                }
+                $source = $import->uploadFileAndGetSource();
+                $this->processValidationResult($import->validateSource($source), $resultBlock);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
-                $resultBlock->addNotice(__('Please fix errors and re-upload the file.'))
-                    ->addError($e->getMessage());
+                $resultBlock->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
             return $resultLayout;
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
@@ -129,5 +64,121 @@ class Validate extends ImportController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * Process validation result and add required error or success messages to Result block
+     *
+     * @param bool $validationResult
+     * @param Result $resultBlock
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processValidationResult($validationResult, $resultBlock)
+    {
+        $import = $this->getImport();
+        $errorAggregator = $import->getErrorAggregator();
+
+        if ($import->getProcessedRowsCount()) {
+            if ($validationResult) {
+                $this->addMessageForValidResult($resultBlock);
+            } else {
+                $resultBlock->addError(
+                    __('Data validation failed. Please fix the following errors and upload the file again.')
+                );
+                $this->addErrorMessages($resultBlock, $errorAggregator);
+                if ($errorAggregator->getErrorsCount()) {
+                    $this->addMessageToSkipErrors($resultBlock);
+                }
+            }
+            $resultBlock->addNotice(
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $import->getProcessedRowsCount(),
+                    $import->getProcessedEntitiesCount(),
+                    $errorAggregator->getInvalidRowsCount(),
+                    $errorAggregator->getErrorsCount()
+                )
+            );
+        } else {
+            if ($errorAggregator->getErrorsCount()) {
+                $this->collectErrors($resultBlock);
+            } else {
+                $resultBlock->addError(__('This file is empty. Please try another one.'));
+            }
+        }
+    }
+
+    /**
+     * Provides import model.
+     *
+     * @return Import
+     * @deprecated 100.1.0
+     */
+    private function getImport()
+    {
+        if (!$this->import) {
+            $this->import = $this->_objectManager->get(Import::class);
+        }
+        return $this->import;
+    }
+
+    /**
+     * Add error message to Result block and allow 'Import' button
+     *
+     * If validation strategy is equal to 'validation-skip-errors' and validation error limit is not exceeded,
+     * then add error message and allow 'Import' button.
+     *
+     * @param Result $resultBlock
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function addMessageToSkipErrors(Result $resultBlock)
+    {
+        $import = $this->getImport();
+        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
+            $resultBlock->addSuccess(
+                __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
+                true
+            );
+        }
+    }
+
+    /**
+     * Add success message to Result block
+     *
+     * 1. Add message for case when imported data was checked and result is valid.
+     * 2. Add message for case when imported data was checked and result is valid, but import is not allowed.
+     *
+     * @param Result $resultBlock
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function addMessageForValidResult(Result $resultBlock)
+    {
+        if ($this->getImport()->isImportAllowed()) {
+            $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
+        } else {
+            $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));
+        }
+    }
+
+    /**
+     * Collect errors and add error messages to Result block
+     *
+     * Get all errors from Error Aggregator and add appropriated error messages
+     * to Result block.
+     *
+     * @param Result $resultBlock
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function collectErrors(Result $resultBlock)
+    {
+        $import = $this->getImport();
+        $errors = $import->getErrorAggregator()->getAllErrors();
+        foreach ($errors as $error) {
+            $resultBlock->addError($error->getErrorMessage());
+        }
     }
 }

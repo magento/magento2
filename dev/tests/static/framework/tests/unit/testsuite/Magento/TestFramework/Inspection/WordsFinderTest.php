@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Inspection;
 
-class WordsFinderTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+class WordsFinderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $configFile
@@ -15,7 +17,7 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException($configFile, $baseDir)
     {
-        new \Magento\TestFramework\Inspection\WordsFinder($configFile, $baseDir);
+        new \Magento\TestFramework\Inspection\WordsFinder($configFile, $baseDir, new ComponentRegistrar());
     }
 
     public function constructorExceptionDataProvider()
@@ -40,7 +42,8 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
     {
         $wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder(
             $configFiles,
-            __DIR__ . '/_files/words_finder'
+            __DIR__ . '/_files/words_finder',
+            new ComponentRegistrar()
         );
         $actual = $wordsFinder->findWords($file);
         $this->assertEquals($expected, $actual);

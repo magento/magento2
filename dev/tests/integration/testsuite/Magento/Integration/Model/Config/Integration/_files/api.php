@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
     'TestIntegration1' => [
-        'resources' => [
+        'resource' => [
             'Magento_Customer::manage',
             'Magento_Customer::online',
             'Magento_Sales::capture',
@@ -13,9 +13,9 @@ return [
         ],
     ],
     'TestIntegration2' => [
-        'resources' => ['Magento_Catalog::product_read', 'Magento_SalesRule::config_promo'],
+        'resource' => ['Magento_Catalog::product_read', 'Magento_SalesRule::config_promo'],
     ],
     'TestIntegration3' => [
-        'resources' => ['Magento_Catalog::product_read', 'Magento_Sales::create', 'Magento_SalesRule::quote'],
+        'resource' => ['Magento_Catalog::product_read', 'Magento_Sales::create', 'Magento_SalesRule::quote'],
     ]
 ];

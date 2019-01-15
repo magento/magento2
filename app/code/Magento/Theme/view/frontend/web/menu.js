@@ -1,116 +1,165 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
- * @classDescription simple Navigation with replacing old handlers
- * @param {String} id id of ul element with navigation lists
- * @param {Object} settings object with settings
+ * Simple Navigation with replacing old handlers.
+ *
+ * @param {String} id - id of ul element with navigation lists
+ * @param {Object} settings - object with settings
  */
-define(["prototype"], function(){
+/**
+ * global mainNav
+ *
+ * @deprecated
+ * @see lib/web/mage/menu.js
+ */
+define([
+    'prototype'
+], function () {
+    'use strict';
 
+    /**
+     * Main nav.
+     */
+    window.mainNav = function () {
+        var main = {
+            'obj_nav':   $(arguments[0]) || $('nav'),
+            settings:  {
+                'show_delay': 0,
+                'hide_delay': 0,
+                _ie6: /MSIE 6.+Win/.test(navigator.userAgent),
+                _ie7: /MSIE 7.+Win/.test(navigator.userAgent)
+            },
 
-window.mainNav = function() {
+            /**
+             * @param {Object} obj
+             * @param {*} level
+             */
+            init: function (obj, level) {
+                obj.lists = obj.childElements();
+                obj.lists.each(function (el, ind) {
+                    main.handlNavElement(el);
 
-    var main = {
-        obj_nav :   $(arguments[0]) || $("nav"),
+                    if ((main.settings._ie6 || main.settings._ie7) && level) {
+                        main.ieFixZIndex(el, ind, obj.lists.size());
+                    }
+                });
 
-        settings :  {
-            show_delay      :   0,
-            hide_delay      :   0,
-            _ie6            :   /MSIE 6.+Win/.test(navigator.userAgent),
-            _ie7            :   /MSIE 7.+Win/.test(navigator.userAgent)
-        },
-
-        init :  function(obj, level) {
-            obj.lists = obj.childElements();
-            obj.lists.each(function(el,ind){
-                main.handlNavElement(el);
-                if((main.settings._ie6 || main.settings._ie7) && level){
-                    main.ieFixZIndex(el, ind, obj.lists.size());
+                if (main.settings._ie6 && !level) {
+                    document.execCommand('BackgroundImageCache', false, true);
                 }
-            });
-            if(main.settings._ie6 && !level){
-                document.execCommand("BackgroundImageCache", false, true);
-            }
-        },
+            },
 
-        handlNavElement :   function(list) {
-            if(list !== undefined){
-                list.onmouseover = function(){
-                    main.fireNavEvent(this,true);
-                };
-                list.onmouseout = function(){
-                    main.fireNavEvent(this,false);
-                };
-                if(list.down("ul")){
-                    main.init(list.down("ul"), true);
-                }
-            }
-        },
+            /**
+             * @param {Object} list
+             */
+            handlNavElement: function (list) {
+                if (list !== undefined) {
 
-        ieFixZIndex : function(el, i, l) {
-            if(el.tagName.toString().toLowerCase().indexOf("iframe") == -1){
-                el.style.zIndex = l - i;
-            } else {
-                el.onmouseover = "null";
-                el.onmouseout = "null";
-            }
-        },
+                    /**
+                     * On mouse over.
+                     */
+                    list.onmouseover = function () {
+                        main.fireNavEvent(this, true);
+                    };
 
-        fireNavEvent :  function(elm,ev) {
-            if(ev){
-                elm.addClassName("over");
-                elm.down("a").addClassName("over");
-                if (elm.childElements()[1]) {
-                    main.show(elm.childElements()[1]);
-                }
-            } else {
-                elm.removeClassName("over");
-                elm.down("a").removeClassName("over");
-                if (elm.childElements()[1]) {
-                    main.hide(elm.childElements()[1]);
-                }
-            }
-        },
+                    /**
+                     * On mouse out.
+                     */
+                    list.onmouseout = function () {
+                        main.fireNavEvent(this, false);
+                    };
 
-        show : function (sub_elm) {
-            if (sub_elm.hide_time_id) {
-                clearTimeout(sub_elm.hide_time_id);
-            }
-            sub_elm.show_time_id = setTimeout(function() {
-                if (!sub_elm.hasClassName("shown-sub")) {
-                    sub_elm.addClassName("shown-sub");
+                    if (list.down('ul')) {
+                        main.init(list.down('ul'), true);
+                    }
                 }
-            }, main.settings.show_delay);
-        },
+            },
 
-        hide : function (sub_elm) {
-            if (sub_elm.show_time_id) {
-                clearTimeout(sub_elm.show_time_id);
-            }
-            sub_elm.hide_time_id = setTimeout(function(){
-                if (sub_elm.hasClassName("shown-sub")) {
-                    sub_elm.removeClassName("shown-sub");
+            /**
+             * @param {HTMLElement} el
+             * @param {*} i
+             * @param {*} l
+             */
+            ieFixZIndex: function (el, i, l) {
+                if (el.tagName.toString().toLowerCase().indexOf('iframe') == -1) { //eslint-disable-line eqeqeq
+                    el.style.zIndex = l - i;
+                } else {
+                    el.onmouseover = 'null';
+                    el.onmouseout = 'null';
                 }
-            }, main.settings.hide_delay);
+            },
+
+            /**
+             * @param {Object} elm
+             * @param {*} ev
+             */
+            fireNavEvent: function (elm, ev) {
+                if (ev) {
+                    elm.addClassName('over');
+                    elm.down('a').addClassName('over');
+
+                    if (elm.childElements()[1]) {
+                        main.show(elm.childElements()[1]);
+                    }
+                } else {
+                    elm.removeClassName('over');
+                    elm.down('a').removeClassName('over');
+
+                    if (elm.childElements()[1]) {
+                        main.hide(elm.childElements()[1]);
+                    }
+                }
+            },
+
+            /**
+             * @param {Object} subElm
+             */
+            show: function (subElm) {
+                if (subElm['hide_time_id']) {
+                    clearTimeout(subElm['hide_time_id']);
+                }
+                subElm['show_time_id'] = setTimeout(function () {
+                    if (!subElm.hasClassName('shown-sub')) {
+                        subElm.addClassName('shown-sub');
+                    }
+                }, main.settings['show_delay']);
+            },
+
+            /**
+             * @param {Object} subElm
+             */
+            hide: function (subElm) {
+                if (subElm['show_time_id']) {
+                    clearTimeout(subElm['show_time_id']);
+                }
+                subElm['hide_time_id'] = setTimeout(function () {
+                    if (subElm.hasClassName('shown-sub')) {
+                        subElm.removeClassName('shown-sub');
+                    }
+                }, main.settings['hide_delay']);
+            }
+
+        };
+
+        if (arguments[1]) {
+            main.settings = Object.extend(main.settings, arguments[1]);
         }
 
+        if (main['obj_nav']) {
+            main.init(main['obj_nav'], false);
+        }
     };
-    if (arguments[1]) {
-        main.settings = Object.extend(main.settings, arguments[1]);
-    }
-    if (main.obj_nav) {
-        main.init(main.obj_nav, false);
-    }
-};
 
-document.observe("dom:loaded", function() {
-    //run navigation without delays and with default id="#nav"
-    //mainNav();
+    document.observe('dom:loaded', function () {
+        //run navigation without delays and with default id="#nav"
+        //mainNav();
 
-    //run navigation with delays
-    mainNav("nav", {"show_delay":"100","hide_delay":"100"});
-});
-
+        //run navigation with delays
+        window.mainNav('nav', {
+            'show_delay': '100',
+            'hide_delay': '100'
+        });
+    });
 });

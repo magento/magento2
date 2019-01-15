@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
- *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Track extends AbstractModel implements ShipmentTrackInterface
 {
@@ -44,9 +44,9 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
-    protected $_shipmentFactory;
+    protected $shipmentRepository;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -54,8 +54,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -66,8 +66,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -81,7 +81,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
             $data
         );
         $this->_storeManager = $storeManager;
-        $this->_shipmentFactory = $shipmentFactory;
+        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
@@ -91,7 +91,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Track');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class);
     }
 
     /**
@@ -112,7 +112,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @codeCoverageIgnore
      *
      * @param string $number
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setNumber($number)
     {
@@ -137,11 +137,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Retrieve Shipment instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getShipment()
     {
         if (!$this->_shipment instanceof \Magento\Sales\Model\Order\Shipment) {
-            $this->_shipment = $this->_shipmentFactory->create()->load($this->getParentId());
+            if ($this->getParentId()) {
+                $this->_shipment = $this->shipmentRepository->get($this->getParentId());
+            } else {
+                throw new LocalizedException(__("Parent shipment cannot be loaded for track object."));
+            }
         }
 
         return $this->_shipment;
@@ -208,6 +213,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns track_number
      *
@@ -408,5 +414,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

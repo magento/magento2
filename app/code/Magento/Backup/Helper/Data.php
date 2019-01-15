@@ -1,8 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Backup\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -11,6 +14,8 @@ use Magento\Framework\Filesystem;
 
 /**
  * Backup data helper
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -108,7 +113,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getExtensionByType($type)
     {
         $extensions = $this->getExtensions();
-        return isset($extensions[$type]) ? $extensions[$type] : '';
+        return $extensions[$type] ?? '';
     }
 
     /**
@@ -122,7 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
             \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
             \Magento\Framework\Backup\Factory::TYPE_MEDIA => 'tgz',
-            \Magento\Framework\Backup\Factory::TYPE_DB => 'gz'
+            \Magento\Framework\Backup\Factory::TYPE_DB => 'sql'
         ];
     }
 
@@ -252,7 +257,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Extracts information from backup's filename
      *
      * @param string $filename
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function extractDataFromFilename($filename)
     {
@@ -278,9 +283,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $name = substr($name, 1);
         }
 
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         $result->addData(['name' => $name, 'type' => $type, 'time' => $time]);
 
         return $result;
+    }
+
+    /**
+     * Is backup functionality enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag('system/backup/functionality_enabled');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,12 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
-
 class Totals extends \Magento\Backend\Block\Dashboard\Bar
 {
     /**
      * @var string
      */
-    protected $_template = 'dashboard/totalbar.phtml';
+    protected $_template = 'Magento_Backend::dashboard/totalbar.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -26,13 +25,13 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
@@ -57,7 +56,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         );
         $period = $this->getRequest()->getParam('period', '24h');
 
-        /* @var $collection \Magento\Reports\Model\Resource\Order\Collection */
+        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
             $period
         )->calculateTotals(

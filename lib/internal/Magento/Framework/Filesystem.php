@@ -2,13 +2,16 @@
 /**
  * Magento filesystem facade
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * @api
+ */
 class Filesystem
 {
     /**
@@ -65,6 +68,20 @@ class Filesystem
             $this->readInstances[$code] = $this->readFactory->create($this->getDirPath($directoryCode), $driverCode);
         }
         return $this->readInstances[$code];
+    }
+
+    /**
+     * Create an instance of directory with read permissions by path.
+     *
+     * @param string $path
+     * @param string $driverCode
+     *
+     * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     *
+     */
+    public function getDirectoryReadByPath($path, $driverCode = DriverPool::FILE)
+    {
+        return $this->readFactory->create($path, $driverCode);
     }
 
     /**

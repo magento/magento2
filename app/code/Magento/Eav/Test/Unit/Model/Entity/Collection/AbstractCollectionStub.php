@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
@@ -11,7 +11,7 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Abstra
      * Retrieve item by id
      *
      * @param   mixed $id
-     * @return  \Magento\Framework\Object
+     * @return  \Magento\Framework\DataObject
      */
     public function getItemById($id)
     {
@@ -28,6 +28,6 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Abstra
      */
     protected function _construct()
     {
-        return $this->_init('Magento\Framework\Object', 'test_entity_model');
+        return $this->_init(\Magento\Framework\DataObject::class, 'test_entity_model');
     }
 }

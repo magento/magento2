@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
@@ -10,7 +10,6 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Object;
 
 /**
  * Class AbstractMapper
@@ -29,7 +28,7 @@ abstract class AbstractMapper implements MapperInterface
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $resource;
 
@@ -45,7 +44,7 @@ abstract class AbstractMapper implements MapperInterface
      *
      * @var AdapterInterface
      */
-    protected $conn;
+    protected $connection;
 
     /**
      * Select object
@@ -124,7 +123,7 @@ abstract class AbstractMapper implements MapperInterface
             $mapperMethod = 'map' . $camelCaseKey;
             if (method_exists($this, $mapperMethod)) {
                 if (!is_array($value)) {
-                    $value = [$value];
+                    throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
                 }
                 call_user_func_array([$this, $mapperMethod], $value);
             }
@@ -167,7 +166,7 @@ abstract class AbstractMapper implements MapperInterface
                 $conditions[] = $this->translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
 
-            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';
         } else {
             $resultCondition = $this->translateCondition($field, $condition);
         }
@@ -206,7 +205,7 @@ abstract class AbstractMapper implements MapperInterface
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getResource()
     {
@@ -227,7 +226,7 @@ abstract class AbstractMapper implements MapperInterface
     protected function initResource($resourceInterface)
     {
         $this->setResourceModelName($resourceInterface);
-        $this->setConnection($this->getResource()->getReadConnection());
+        $this->setConnection($this->getResource()->getConnection());
         if (!$this->select) {
             $this->select = $this->getConnection()->select();
             $this->initSelect();
@@ -276,26 +275,26 @@ abstract class AbstractMapper implements MapperInterface
      */
     protected function getConnection()
     {
-        return $this->conn;
+        return $this->connection;
     }
 
     /**
      * Set database connection adapter
      *
-     * @param AdapterInterface $conn
+     * @param AdapterInterface $connection
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function setConnection($conn)
+    protected function setConnection($connection)
     {
-        if (!$conn instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
+        if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
             throw new \InvalidArgumentException(
                 (string)new \Magento\Framework\Phrase(
                     'dbModel read resource does not implement \Magento\Framework\DB\Adapter\AdapterInterface'
                 )
             );
         }
-        $this->conn = $conn;
+        $this->connection = $connection;
     }
 
     /**

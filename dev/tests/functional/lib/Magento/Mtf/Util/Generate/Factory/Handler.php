@@ -1,7 +1,7 @@
 <?php
 /**
  * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class Handler extends AbstractFactory
             $this->factoryContent .= "\n";
         }
 
-        $this->factoryContent .= "        \$handler = \$this->objectManager->get('{$realClass}');\n";
+        $this->factoryContent .= "        \$handler = \$this->objectManager->get({$realClass}::class);\n";
         $this->factoryContent .= "        return \$handler->persist(\$fixture);";
         $this->factoryContent .= "\n    }\n";
 

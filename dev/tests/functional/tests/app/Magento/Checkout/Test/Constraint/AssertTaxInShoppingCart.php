@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,15 +24,18 @@ class AssertTaxInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
-        $checkoutCart->open();
+        if ($requireReload) {
+            $checkoutCart->open();
+        }
 
         $fixtureTaxAmount = number_format((float)$cart->getTaxAmount(), 2);
         $pageTaxAmount = $checkoutCart->getTotalsBlock()->getTax();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $fixtureTaxAmount,
             $pageTaxAmount,
             'Tax amount in the shopping cart not equals to tax amount from fixture.'

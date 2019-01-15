@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\TestFramework\Unit\Utility;
@@ -16,14 +16,11 @@ class XsdValidator
     {
         $document = new \DOMDocument();
         $document->loadXML($xml);
+
         libxml_use_internal_errors(true);
-        $document->schemaValidate($schema);
-        $validationResult = libxml_get_errors();
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($document, $schema);
         libxml_use_internal_errors(false);
-        $result = [];
-        foreach ($validationResult as $error) {
-            $result[] = trim($error->message);
-        }
-        return $result;
+
+        return $errors;
     }
 }

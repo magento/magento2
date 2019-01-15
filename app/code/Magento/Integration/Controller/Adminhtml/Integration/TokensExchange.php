@@ -1,9 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
@@ -19,6 +20,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
     {
+        $integrationName = $this->escaper->escapeHtml($integrationName);
         $msg = $isReauthorize ? __(
             "Integration '%1' has been sent for re-authorization.",
             $integrationName
@@ -53,10 +55,19 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             $this->_setActivationInProcessMsg($isReauthorize, $integration->getName());
             $this->_view->renderLayout();
             $popupContent = $this->_response->getBody();
+            $consumer = $this->_oauthService->loadConsumer($integration->getConsumerId());
+            if (!$consumer->getId()) {
+                throw new \Magento\Framework\Oauth\Exception(
+                    __(
+                        'A consumer with "%1" ID doesn\'t exist. Verify the ID and try again.',
+                        $integration->getConsumerId()
+                    )
+                );
+            }
             /** Initialize response body */
             $result = [
                 IntegrationModel::IDENTITY_LINK_URL => $integration->getIdentityLinkUrl(),
-                IntegrationModel::CONSUMER_ID => $integration->getConsumerId(),
+                'oauth_consumer_key' => $consumer->getKey(),
                 'popup_content' => $popupContent,
             ];
             $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));

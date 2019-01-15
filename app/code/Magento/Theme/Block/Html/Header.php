@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Theme\Block\Html;
 
 /**
  * Html page header block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Header extends \Magento\Framework\View\Element\Template
 {
@@ -16,7 +19,7 @@ class Header extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'html/header.phtml';
+    protected $_template = 'Magento_Theme::html/header.phtml';
 
     /**
      * Retrieve welcome text
@@ -31,6 +34,6 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->_data['welcome'];
+        return __($this->_data['welcome']);
     }
 }

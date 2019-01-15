@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
@@ -9,12 +9,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create\Reorder
 {
     /**
-     * Acl check for admin
+     * Authorization level of a basic admin session
      *
-     * @return bool
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 }

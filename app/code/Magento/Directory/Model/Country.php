@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\Directory\Model;
 
 /**
  * Country model
  *
- * @method \Magento\Directory\Model\Resource\Country _getResource()
- * @method \Magento\Directory\Model\Resource\Country getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
+ *
+ * @api
+ * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Directory\Model;
-
 class Country extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -34,7 +34,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     protected $_formatFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionCollectionFactory;
 
@@ -43,8 +43,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param Country\FormatFactory $formatFactory
-     * @param Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -53,8 +53,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -69,7 +69,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Resource\Country');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Country::class);
     }
 
     /**
@@ -87,7 +87,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     /**
      * Get regions
      *
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegions()
     {
@@ -95,7 +95,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getLoadedRegionCollection()
     {
@@ -105,7 +105,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {
@@ -115,11 +115,11 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param bool $html
      * @return string
      */
-    public function formatAddress(\Magento\Framework\Object $address, $html = false)
+    public function formatAddress(\Magento\Framework\DataObject $address, $html = false)
     {
         //TODO: is it still used?
         $address->getRegion();
@@ -158,7 +158,7 @@ T: {{telephone}}";
     /**
      * Retrieve country formats
      *
-     * @return \Magento\Directory\Model\Resource\Country\Format\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Format\Collection
      */
     public function getFormats()
     {
@@ -198,11 +198,17 @@ T: {{telephone}}";
      *
      * @return string
      */
-    public function getName()
+    public function getName($locale = null)
     {
-        if (!$this->getData('name')) {
-            $this->setData('name', $this->_localeLists->getCountryTranslation($this->getId()));
+        if ($locale == null) {
+            $cache_key = 'name_default';
+        } else {
+            $cache_key = 'name_' . $locale;
         }
-        return $this->getData('name');
+
+        if (!$this->getData($cache_key)) {
+            $this->setData($cache_key, $this->_localeLists->getCountryTranslation($this->getId(), $locale));
+        }
+        return $this->getData($cache_key);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,8 +25,8 @@ class AssertUrlRewriteSaveMessage extends AbstractConstraint
      */
     public function processAssert(UrlRewriteIndex $index)
     {
-        $actualMessage = $index->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessage = $index->getMessagesBlock()->getSuccessMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

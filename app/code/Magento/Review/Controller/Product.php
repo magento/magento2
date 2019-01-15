@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller;
@@ -39,7 +39,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     protected $reviewSession;
 
     /**
-     * Catalog catgory model
+     * Catalog category model
      *
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
      */
@@ -146,7 +146,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        $allowGuest = $this->_objectManager->get('Magento\Review\Helper\Data')->getIsGuestAllowToWrite();
+        $allowGuest = $this->_objectManager->get(\Magento\Review\Helper\Data::class)->getIsGuestAllowToWrite();
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
@@ -155,13 +155,13 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             if (!$this->customerSession->isLoggedIn()) {
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
                 $this->customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', ['_current' => true]));
-                $this->_reviewSession->setFormData(
+                $this->reviewSession->setFormData(
                     $request->getPostValue()
                 )->setRedirectUrl(
                     $this->_redirect->getRefererUrl()
                 );
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get('Magento\Customer\Model\Url')->getLoginUrl()
+                    $this->_objectManager->get(\Magento\Customer\Model\Url::class)->getLoginUrl()
                 );
             }
         }
@@ -219,6 +219,11 @@ abstract class Product extends \Magento\Framework\App\Action\Action
 
         try {
             $product = $this->productRepository->getById($productId);
+
+            if (!in_array($this->storeManager->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
+                throw new NoSuchEntityException();
+            }
+
             if (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
                 throw new NoSuchEntityException();
             }

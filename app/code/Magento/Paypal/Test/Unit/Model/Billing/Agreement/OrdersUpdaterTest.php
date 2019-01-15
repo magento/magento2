@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Billing\Agreement;
 
-class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
+class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrdersUpdater
@@ -18,32 +18,26 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
     protected $_registry;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_agreementResource;
 
     protected function setUp()
     {
-        $this->_registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->_agreementResource = $this->getMock(
-            '\Magento\Paypal\Model\Resource\Billing\Agreement',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->_agreementResource = $this->createMock(\Magento\Paypal\Model\ResourceModel\Billing\Agreement::class);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
-            'Magento\Paypal\Model\Billing\Agreement\OrdersUpdater',
+            \Magento\Paypal\Model\Billing\Agreement\OrdersUpdater::class,
             ['coreRegistry' => $this->_registry, 'agreementResource' => $this->_agreementResource]
         );
     }
 
     public function testUpdate()
     {
-        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', [], [], '', false);
-        $argument = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
+        $agreement = $this->createMock(\Magento\Paypal\Model\Billing\Agreement::class);
+        $argument = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
 
         $this->_registry->expects(
             $this->once()

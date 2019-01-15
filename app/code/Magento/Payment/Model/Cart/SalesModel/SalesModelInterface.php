@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
@@ -43,7 +43,7 @@ interface SalesModelInterface
     public function getBaseDiscountAmount();
 
     /**
-     * Wrapper for \Magento\Framework\Object getDataUsingMethod method
+     * Wrapper for \Magento\Framework\DataObject getDataUsingMethod method
      *
      * @param string $key
      * @param mixed $args

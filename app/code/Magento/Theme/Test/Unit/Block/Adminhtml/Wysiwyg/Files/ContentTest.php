@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
-class ContentTest extends \PHPUnit_Framework_TestCase
+use Magento\Theme\Model\Wysiwyg\Storage;
+
+class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Url|PHPUnit_Framework_MockObject_MockObject
@@ -29,13 +31,13 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', [], [], '', false);
-        $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
-        $this->_request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
+        $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content',
+            \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content::class,
             [
                 'urlBuilder' => $this->_urlBuilder,
                 'request' => $this->_request,
@@ -43,7 +45,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->_filesContent = $objectManagerHelper->getObject(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content',
+            \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content::class,
             $constructArguments
         );
     }
@@ -145,10 +147,12 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     public function requestParamsProvider()
     {
         return [
-            'requestParams' => [
-                \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
-                \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
+            [
+                'requestParams' => [
+                    \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
+                    \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => Storage::TYPE_IMAGE,
+                    \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
+                ]
             ]
         ];
     }
@@ -178,7 +182,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $requestParams = [
             \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
-            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => Storage::TYPE_IMAGE,
             \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
         ];
 

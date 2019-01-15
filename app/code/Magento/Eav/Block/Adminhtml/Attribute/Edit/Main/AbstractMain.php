@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Product attribute add/edit form main tab
@@ -13,7 +11,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -55,6 +53,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory
      * @param \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -78,6 +77,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Attribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeObject($attribute)
     {
@@ -110,6 +110,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
+            
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
@@ -129,7 +130,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             'text',
             [
                 'name' => 'frontend_label[0]',
-                'label' => __('Default label'),
+                'label' => __('Default Label'),
                 'title' => __('Default label'),
                 'required' => true,
                 'value' => is_array($labels) ? $labels[0] : $labels
@@ -233,7 +234,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
             ]
         );
@@ -264,7 +265,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */
@@ -287,7 +288,8 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _afterToHtml($html)
     {
-        $jsScripts = $this->getLayout()->createBlock('Magento\Eav\Block\Adminhtml\Attribute\Edit\Js')->toHtml();
+        $jsScripts = $this->getLayout()->createBlock(\Magento\Eav\Block\Adminhtml\Attribute\Edit\Js::class)
+            ->toHtml();
         return $html . $jsScripts;
     }
 }

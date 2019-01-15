@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
@@ -8,12 +8,13 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
 /**
  * Bundle option dropdown type renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/view/type/bundle/option/select.phtml';
+    protected $_template = 'Magento_Bundle::catalog/product/view/type/bundle/option/select.phtml';
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
@@ -14,7 +14,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Products;
 class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Report\Bestsellers\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -27,14 +27,14 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Report\Bestsellers\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Report\Bestsellers\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -70,7 +70,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         }
 
         $collection = $this->_collectionFactory->create()->setModel(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         )->addStoreFilter(
             $storeId
         );
@@ -86,7 +86,8 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareColumns()
     {
         $this->addColumn(
-            'name', [
+            'name',
+            [
                 'header' => __('Product'),
                 'sortable' => false,
                 'index' => 'product_name',

@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Share extends Action\Action implements IndexInterface
+class Share extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -35,7 +34,7 @@ class Share extends Action\Action implements IndexInterface
      */
     public function execute()
     {
-        if ($this->customerSession->authenticate($this)) {
+        if ($this->customerSession->authenticate()) {
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             return $resultPage;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,78 +15,73 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateProductReviewEntity on product page
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create Product
- * 2. Create review with rating for this product
+ * 1. Create Product.
+ * 2. Create review with rating for this product.
  *
  * Steps:
- * 1. Open Products -> Catalog
- * 2. Search and open product from preconditions
- * 3. Open Review tab
- * 4. Search and open review created in preconditions
- * 5. Fill data according to dataset
- * 6. Save changes
- * 7. Perform all assertions
+ * 1. Open Products -> Catalog.
+ * 2. Search and open product from preconditions.
+ * 3. Open Review tab.
+ * 4. Search and open review created in preconditions.
+ * 5. Fill data according to dataset.
+ * 6. Save changes.
+ * 7. Perform all assertions.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-27743
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateProductReviewEntityOnProductPageTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
-     * Catalog product edit page
+     * Catalog product edit page.
      *
      * @var CatalogProductEdit
      */
     protected $catalogProductEdit;
 
     /**
-     * Backend rating grid page
+     * Backend rating grid page.
      *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
-     * Backend rating edit page
+     * Backend rating edit page.
      *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Review fixture
+     * Review fixture.
      *
      * @var Review
      */
     protected $reviewInitial;
 
     /**
-     * Review edit page
+     * Review edit page.
      *
      * @var ReviewEdit
      */
     protected $reviewEdit;
 
     /**
-     * Fixture factory
+     * Fixture factory.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return void
@@ -102,7 +97,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
@@ -123,7 +118,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     }
 
     /**
-     * Update product review on product page
+     * Update product review on product page.
      *
      * @param Review $review
      * @param int $rating
@@ -135,16 +130,16 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
         $review = $this->createReview($review, $rating);
         $product = $this->reviewInitial->getDataFieldConfig('entity_id')['source']->getEntity();
         $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\OpenProductOnBackendStep',
+            \Magento\Catalog\Test\TestStep\OpenProductOnBackendStep::class,
             ['product' => $product]
         )->run();
 
-        $this->catalogProductEdit->getProductForm()->openTab('product_reviews');
+        $this->catalogProductEdit->getProductForm()->openSection('product_reviews');
         $filter = [
             'title' => $this->reviewInitial->getTitle(),
             'sku' => $product->getSku(),
         ];
-        $this->catalogProductEdit->getProductForm()->getTab('product_reviews')->getReviewsGrid()
+        $this->catalogProductEdit->getProductForm()->getSection('product_reviews')->getReviewsGrid()
             ->searchAndOpen($filter);
         $this->reviewEdit->getReviewForm()->fill($review);
         $this->reviewEdit->getPageActions()->save();
@@ -154,7 +149,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     }
 
     /**
-     * Create review
+     * Create review.
      *
      * @param Review $review
      * @param int $rating
@@ -170,7 +165,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */
@@ -183,6 +178,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
         foreach ($this->reviewInitial->getRatings() as $rating) {
             $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
             $this->ratingEdit->getPageActions()->delete();
+            $this->ratingEdit->getModalBlock()->acceptAlert();
         }
     }
 }

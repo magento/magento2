@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
@@ -9,6 +9,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
  * Adminhtml additional helper block for product configuration
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @codeCoverageIgnore
  */
 class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
 {

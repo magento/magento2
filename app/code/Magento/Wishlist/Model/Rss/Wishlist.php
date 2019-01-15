@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Wishlist implements DataProviderInterface
@@ -70,6 +72,8 @@ class Wishlist implements DataProviderInterface
     protected $customerFactory;
 
     /**
+     * Wishlist constructor.
+     *
      * @param \Magento\Wishlist\Helper\Rss $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock
      * @param \Magento\Catalog\Helper\Output $outputHelper
@@ -114,9 +118,9 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -124,6 +128,7 @@ class Wishlist implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRssData()
     {
@@ -148,7 +153,7 @@ class Wishlist implements DataProviderInterface
                 }
 
                 $description = '<table><tr><td><a href="' . $productUrl . '"><img src="'
-                    . $this->imageHelper->init($product, 'thumbnail')->resize(75, 75)
+                    . $this->imageHelper->init($product, 'rss_thumbnail')->getUrl()
                     . '" border="0" align="left" height="75" width="75"></a></td>'
                     . '<td style="text-decoration:none;">'
                     . $this->outputHelper->productAttribute(
@@ -191,6 +196,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * GetCacheKey
+     *
      * @return string
      */
     public function getCacheKey()
@@ -199,6 +206,8 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
+     * Get Cache Lifetime
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -248,14 +257,14 @@ class Wishlist implements DataProviderInterface
         $priceRender = $this->layout->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->layout->createBlock(
-                'Magento\Framework\Pricing\Render',
+                \Magento\Framework\Pricing\Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
         }
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                'wishlist_configured_price',
                 $product,
                 ['zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST]
             );
@@ -264,7 +273,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getFeeds()
     {
@@ -272,7 +281,7 @@ class Wishlist implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

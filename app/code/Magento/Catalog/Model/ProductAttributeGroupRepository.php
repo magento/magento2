@@ -1,9 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -22,18 +23,18 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     protected $groupFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group
      */
     protected $groupResource;
 
     /**
      * @param \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource
      * @param Product\Attribute\GroupFactory $groupFactory
      */
     public function __construct(
         \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource,
         \Magento\Catalog\Model\Product\Attribute\GroupFactory $groupFactory
     ) {
         $this->groupRepository = $groupRepository;
@@ -66,7 +67,9 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
         $group = $this->groupFactory->create();
         $this->groupResource->load($group, $groupId);
         if (!$group->getId()) {
-            throw new NoSuchEntityException(__('Group with id "%1" does not exist.', $groupId));
+            throw new NoSuchEntityException(
+                __('The group with the "%1" ID doesn\'t exist. Verify the ID and try again.', $groupId)
+            );
         }
         return $group;
     }
@@ -90,7 +93,7 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
         /** @var \Magento\Catalog\Model\Product\Attribute\Group $group */
         if ($group->hasSystemAttributes()) {
             throw new StateException(
-                __('Attribute group that contains system attributes can not be deleted')
+                __("The attribute group can't be deleted because it contains system attributes.")
             );
         }
         return $this->groupRepository->delete($group);

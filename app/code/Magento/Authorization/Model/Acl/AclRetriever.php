@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Authorization\Model\Acl;
 
-use Magento\Authorization\Model\Resource\Role\CollectionFactory as RoleCollectionFactory;
-use Magento\Authorization\Model\Resource\Rules\CollectionFactory as RulesCollectionFactory;
+use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
+use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory as RulesCollectionFactory;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Builder as AclBuilder;
@@ -24,16 +24,24 @@ class AclRetriever
     const PERMISSION_ANONYMOUS = 'anonymous';
     const PERMISSION_SELF = 'self';
 
-    /** @var Logger */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var RulesCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
+     */
     protected $rulesCollectionFactory;
 
-    /** @var AclBuilder */
+    /**
+     * @var \Magento\Framework\Acl\Builder
+     */
     protected $aclBuilder;
 
-    /** @var RoleCollectionFactory */
+    /**
+     * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory
+     */
     protected $roleCollectionFactory;
 
     /**
@@ -76,7 +84,7 @@ class AclRetriever
             $role = $this->_getUserRole($userType, $userId);
             if (!$role) {
                 throw new AuthorizationException(
-                    __('We can\'t find the role for the user you wanted.')
+                    __("The role wasn't found for the user. Verify the role and try again.")
                 );
             }
             $allowedResources = $this->getAllowedResourcesByRole($role->getId());

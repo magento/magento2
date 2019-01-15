@@ -1,33 +1,32 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext
-     */
-    protected $resourceFulltext;
 
     /**
      * @var \Magento\CatalogSearch\Model\Fulltext
@@ -40,24 +39,27 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $queryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productApple;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productBanana;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productOrange;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productPapaya;
+
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $productCherry;
 
@@ -68,26 +70,22 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Indexer\Model\IndexerInterface indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
 
         $this->engine = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Resource\Engine'
-        );
-
-        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Resource\Fulltext'
+            \Magento\CatalogSearch\Model\ResourceModel\Engine::class
         );
 
         $this->queryFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Search\Model\QueryFactory'
+            \Magento\Search\Model\QueryFactory::class
         );
 
         $this->dimension = Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Dimension',
+            \Magento\Framework\Search\Request\Dimension::class,
             ['name' => 'scope', 'value' => '1']
         );
 
@@ -108,11 +106,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -120,7 +113,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
-        $this->testReindexAll();
+        $this->indexer->reindexAll();
+
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -133,11 +127,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -145,7 +134,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
+
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -156,7 +146,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product\Action $action */
         $action = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Action'
+            \Magento\Catalog\Model\Product\Action::class
         );
         $action->updateAttributes($productIds, $attrData, 1);
 
@@ -171,16 +161,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $products = $this->search('Common');
         $this->assertCount(2, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
 
         $products = $this->search('Simple Product');
         $this->assertCount(5, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productBanana->getId(), $products[1]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[2]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[3]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[4]->getId());
     }
 
     /**
@@ -188,32 +171,70 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterDelete()
     {
-        $this->testReindexRowAfterEdit();
+        $this->indexer->reindexAll();
 
         $this->productBanana->delete();
 
         $products = $this->search('Simple Product');
+
         $this->assertCount(4, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-        $this->assertEquals($this->productOrange->getId(), $products[1]->getId());
-        $this->assertEquals($this->productPapaya->getId(), $products[2]->getId());
-        $this->assertEquals($this->productCherry->getId(), $products[3]->getId());
+    }
+
+    /**
+     * Test the case when the last child product of the configurable becomes disabled/out of stock.
+     *
+     * Such behavior should enforce parent product to be deleted from the index as its latest child become unavailable
+     * and the configurable cannot be sold anymore.
+     *
+     * @return void
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_with_single_child.php
+     */
+    public function testReindexParentProductWhenChildBeingDisabled()
+    {
+        $this->indexer->reindexAll();
+
+        $visibilityFilter = [
+            Visibility::VISIBILITY_IN_SEARCH,
+            Visibility::VISIBILITY_IN_CATALOG,
+            Visibility::VISIBILITY_BOTH
+        ];
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(1, $products);
+
+        $childProduct = $this->getProductBySku('configurable_option_single_child');
+        $childProduct->setStatus(Product\Attribute\Source\Status::STATUS_DISABLED)->save();
+
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(0, $products);
     }
 
     /**
      * Search the text and return result collection
      *
      * @param string $text
-     * @return \Magento\Catalog\Model\Product[]
+     * @param array|null $visibilityFilter
+     * @return Product[]
      */
-    protected function search($text)
+    protected function search(string $text, $visibilityFilter = null): array
     {
-        $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
-        $query->unsetData()->setQueryText($text)->prepare();
+        $query->unsetData();
+        $query->setQueryText($text);
+        $query->saveIncrementalPopularity();
         $products = [];
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection = Bootstrap::getObjectManager()->create(
+            Collection::class,
+            [
+                'searchRequestName' => 'quick_search_container'
+            ]
+        );
         $collection->addSearchFilter($text);
+
+        if (null !== $visibilityFilter) {
+            $collection->setVisibility($visibilityFilter);
+        }
+
         foreach ($collection as $product) {
             $products[] = $product;
         }
@@ -224,13 +245,13 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * Return product by SKU
      *
      * @param string $sku
-     * @return \Magento\Catalog\Model\Product
+     * @return Product|bool
      */
-    protected function getProductBySku($sku)
+    protected function getProductBySku(string $sku)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         return $product->loadByAttribute('sku', $sku);
     }

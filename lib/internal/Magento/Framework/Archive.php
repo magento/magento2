@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -96,14 +96,14 @@ class Archive
     {
         $archivers = $this->_getArchivers($destination);
         $interimSource = '';
-        for ($i = 0; $i < count($archivers); $i++) {
-            if ($i == count($archivers) - 1) {
+        for ($i = 0, $count = count($archivers); $i < $count; $i++) {
+            if ($i == $count - 1) {
                 $packed = $destination;
             } else {
                 $packed = dirname($destination) . '/~tmp-' . microtime(true) . $archivers[$i] . '.' . $archivers[$i];
             }
             $source = $this->_getArchiver($archivers[$i])->pack($source, $packed, $skipRoot);
-            if ($interimSource && $i < count($archivers)) {
+            if ($interimSource && $i < $count) {
                 unlink($interimSource);
             }
             $interimSource = $source;

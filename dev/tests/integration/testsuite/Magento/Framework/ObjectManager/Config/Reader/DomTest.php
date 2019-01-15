@@ -1,11 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\ObjectManager\Config\Reader;
 
-class DomTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Phrase;
+
+/**
+ * Class DomTest @covers \Magento\Framework\ObjectManager\Config\Reader\Dom
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\Config\Reader\Dom
@@ -50,16 +58,20 @@ class DomTest extends \PHPUnit_Framework_TestCase
             file_get_contents($fixturePath . 'config_two.xml'),
         ];
 
-        $this->_fileResolverMock = $this->getMock(
-            'Magento\Framework\App\Arguments\FileResolver\Primary',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\App\Arguments\FileResolver\Primary::class);
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
+
+        /** @var Phrase\Renderer\Composite|\PHPUnit_Framework_MockObject_MockObject $renderer */
+        $renderer = $this->getMockBuilder(Phrase\Renderer\Composite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** check arguments won't be translated for ObjectManager, even if has attribute 'translate'=true. */
+        $renderer->expects(self::never())
+            ->method('render');
+        Phrase::setRenderer($renderer);
+
         $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\ObjectManager\Config\Mapper\Dom'
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class
         );
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT

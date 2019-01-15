@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertBackupInGrid extends AbstractConstraint
      */
     public function processAssert(BackupIndex $backupIndex)
     {
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $backupIndex->open()->getBackupGrid()->isBackupRowVisible(),
             'Backup is not present in grid.'
         );

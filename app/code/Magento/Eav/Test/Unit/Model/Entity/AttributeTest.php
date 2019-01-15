@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
-class AttributeTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class AttributeTest.
+ */
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Attribute model to be tested
@@ -13,11 +16,17 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->_model = $this->getMock('Magento\Eav\Model\Entity\Attribute', ['__wakeup'], [], '', false);
+        $this->_model = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->_model = null;
@@ -27,12 +36,16 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      * @param string $givenFrontendInput
      * @param string $expectedBackendType
      * @dataProvider dataGetBackendTypeByInput
+     * @return void
      */
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
         $this->assertEquals($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
     }
 
+    /**
+     * @return array
+     */
     public static function dataGetBackendTypeByInput()
     {
         return [
@@ -61,6 +74,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
     }
 
+    /**
+     * @return array
+     */
     public static function dataGetDefaultValueByInput()
     {
         return [
@@ -105,5 +121,44 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'expectedWeight' => 7000.0005,
             ]
         ];
+    }
+
+    /**
+     * return void
+     */
+    public function testGetFrontendLabels()
+    {
+        $attributeId = 1;
+        $storeLabels = ['test_attribute_store1'];
+        $frontendLabelFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
+            ->setMethods(['getStoreLabelsByAttributeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $arguments = [
+            '_resource' => $resource,
+            'frontendLabelFactory' => $frontendLabelFactory,
+        ];
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute::class, $arguments);
+        $this->_model->setAttributeId($attributeId);
+
+        $resource->expects($this->once())
+            ->method('getStoreLabelsByAttributeId')
+            ->with($attributeId)
+            ->willReturn($storeLabels);
+        $frontendLabel = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class)
+            ->setMethods(['setStoreId', 'setLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $frontendLabelFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($frontendLabel);
+        $expectedFrontendLabel[] = $frontendLabel;
+
+        $this->assertEquals($expectedFrontendLabel, $this->_model->getFrontendLabels());
     }
 }

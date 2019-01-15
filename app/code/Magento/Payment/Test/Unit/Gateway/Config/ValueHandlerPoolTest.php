@@ -1,40 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
+use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Config\ValueHandlerPool;
 
-class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
+class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorException()
     {
-        $this->setExpectedException('LogicException');
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $this->expectException('LogicException');
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $tMapFactory->expects(static::never())
             ->method('create');
-        new ValueHandlerPool([], $tMapFactory);
+        new ValueHandlerPool($tMapFactory, []);
     }
 
     public function testGet()
     {
-        $defaultHandler = $this->getMockBuilder('Magento\Payment\Gateway\Config\ValueHandlerInterface')
+        $defaultHandler = $this->getMockBuilder(\Magento\Payment\Gateway\Config\ValueHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $someValueHandler = $this->getMockBuilder('Magento\Payment\Gateway\Config\ValueHandlerInterface')
+        $someValueHandler = $this->getMockBuilder(\Magento\Payment\Gateway\Config\ValueHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -43,10 +44,11 @@ class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [
-                        ValueHandlerPool::DEFAULT_HANDLER => 'Magento\Payment\Gateway\Config\ValueHandlerInterface',
-                        'some_value' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+                        ValueHandlerPool::DEFAULT_HANDLER =>
+                            \Magento\Payment\Gateway\Config\ValueHandlerInterface::class,
+                        'some_value' => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
                     ],
-                    'type' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+                    'type' => ValueHandlerInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -68,11 +70,11 @@ class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
             );
 
         $pool = new ValueHandlerPool(
+            $tMapFactory,
             [
-                ValueHandlerPool::DEFAULT_HANDLER => 'Magento\Payment\Gateway\Config\ValueHandlerInterface',
-                'some_value' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
-            ],
-            $tMapFactory
+                ValueHandlerPool::DEFAULT_HANDLER => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class,
+                'some_value' => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
+            ]
         );
         static::assertSame($someValueHandler, $pool->get('some_value'));
         static::assertSame($defaultHandler, $pool->get(ValueHandlerPool::DEFAULT_HANDLER));

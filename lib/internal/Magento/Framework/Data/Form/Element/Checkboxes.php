@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -121,13 +121,13 @@ class Checkboxes extends AbstractElement
             return;
         }
         if (!is_array($checked)) {
-            $checked = [strval($checked)];
+            $checked = [(string)$checked];
         } else {
             foreach ($checked as $k => $v) {
-                $checked[$k] = strval($v);
+                $checked[$k] = (string)$v;
             }
         }
-        if (in_array(strval($value), $checked)) {
+        if (in_array((string)$value, $checked)) {
             return 'checked';
         }
         return;
@@ -141,13 +141,13 @@ class Checkboxes extends AbstractElement
     {
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
-                $disabled = [strval($disabled)];
+                $disabled = [(string)$disabled];
             } else {
                 foreach ($disabled as $k => $v) {
-                    $disabled[$k] = strval($v);
+                    $disabled[$k] = (string)$v;
                 }
             }
-            if (in_array(strval($value), $disabled)) {
+            if (in_array((string)$value, $disabled)) {
                 return 'disabled';
             }
         }
@@ -178,14 +178,6 @@ class Checkboxes extends AbstractElement
         return;
     }
 
-    //    public function getName($value)
-    //    {
-    //        if ($name = $this->getData('name')) {
-    //            return str_replace('$value', $value, $name);
-    //        }
-    //        return ;
-    //    }
-
     /**
      * @param array $option
      * @return string
@@ -194,10 +186,10 @@ class Checkboxes extends AbstractElement
     {
         $id = $this->getHtmlId() . '_' . $this->_escape($option['value']);
 
-        $html = '<div class="field choice"><input id="' . $id . '"';
+        $html = '<div class="field choice admin__field admin__field-option"><input id="' . $id . '"';
         foreach ($this->getHtmlAttributes() as $attribute) {
             if ($value = $this->getDataUsingMethod($attribute, $option['value'])) {
-                $html .= ' ' . $attribute . '="' . $value . '"';
+                $html .= ' ' . $attribute . '="' . $value . '" class="admin__control-checkbox"';
             }
         }
         $html .= ' value="' .
@@ -205,9 +197,9 @@ class Checkboxes extends AbstractElement
             '" />' .
             ' <label for="' .
             $id .
-            '">' .
+            '" class="admin__field-label"><span>' .
             $option['label'] .
-            '</label></div>' .
+            '</span></label></div>' .
             "\n";
         return $html;
     }

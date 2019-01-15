@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class UrlRewriteForm extends Form
      *
      * @param array $data
      * @param SimpleElement $context
-     * @retun void
+     * @return void
      */
     protected function fillFields(array $data, SimpleElement $context)
     {

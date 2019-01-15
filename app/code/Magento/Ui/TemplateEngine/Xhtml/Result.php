@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Ui\Component\Layout\Generator\Structure;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Result
@@ -37,23 +40,37 @@ class Result implements ResultInterface
     protected $structure;
 
     /**
-     * Constructor
-     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
      * @param Template $template
      * @param CompilerInterface $compiler
      * @param UiComponentInterface $component
      * @param Structure $structure
+     * @param LoggerInterface $logger
+     * @param JsonHexTag $jsonSerializer
      */
     public function __construct(
         Template $template,
         CompilerInterface $compiler,
         UiComponentInterface $component,
-        Structure $structure
+        Structure $structure,
+        LoggerInterface $logger,
+        JsonHexTag $jsonSerializer = null
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
         $this->component = $component;
         $this->structure = $structure;
+        $this->logger = $logger;
+        $this->jsonSerializer = $jsonSerializer ?? ObjectManager::getInstance()->get(JsonHexTag::class);
     }
 
     /**
@@ -73,7 +90,9 @@ class Result implements ResultInterface
      */
     public function appendLayoutConfiguration()
     {
-        $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
+        $layoutConfiguration = $this->wrapContent(
+            $this->jsonSerializer->serialize($this->structure->generate($this->component))
+        );
         $this->template->append($layoutConfiguration);
     }
 
@@ -97,7 +116,8 @@ class Result implements ResultInterface
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
         } catch (\Exception $e) {
-            $result = '';
+            $this->logger->critical($e->getMessage());
+            $result = $e->getMessage();
         }
         return $result;
     }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
-class ToolbarTest extends \PHPUnit_Framework_TestCase
+class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ProductList\Toolbar
@@ -17,6 +17,11 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $memorizer;
 
     /**
      * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
@@ -32,6 +37,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
+
     /**
      * @var \Magento\Catalog\Model\Config | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -54,23 +60,25 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = $this->getMock(
-            'Magento\Catalog\Model\Product\ProductList\Toolbar',
-            [
+        $this->model = $this->createPartialMock(\Magento\Catalog\Model\Product\ProductList\Toolbar::class, [
                 'getDirection',
                 'getOrder',
                 'getMode',
                 'getLimit',
                 'getCurrentPage'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', ['getChildName', 'getBlock'], [], '', false);
-        $this->pagerBlock = $this->getMock(
-            'Magento\Theme\Block\Html\Pager',
+            ]);
+        $this->memorizer = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer::class,
             [
+                'getDirection',
+                'getOrder',
+                'getMode',
+                'getLimit',
+                'isMemorizingAllowed'
+            ]
+        );
+        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
+        $this->pagerBlock = $this->createPartialMock(\Magento\Theme\Block\Html\Pager::class, [
                 'setUseContainer',
                 'setShowPerPage',
                 'setShowAmounts',
@@ -79,13 +87,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
                 'setLimit',
                 'setCollection',
                 'toHtml'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->urlBuilder = $this->getMock('Magento\Framework\Url', ['getUrl'], [], '', false);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+            ]);
+        $this->urlBuilder = $this->createPartialMock(\Magento\Framework\Url::class, ['getUrl']);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $scopeConfig = [
             [\Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],
@@ -99,20 +103,14 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValueMap($scopeConfig));
 
-        $this->catalogConfig = $this->getMock(
-            'Magento\Catalog\Model\Config',
-            ['getAttributeUsedForSortByArray'],
-            [],
-            '',
-            false
+        $this->catalogConfig = $this->createPartialMock(
+            \Magento\Catalog\Model\Config::class,
+            ['getAttributeUsedForSortByArray']
         );
 
-        $context = $this->getMock(
-            'Magento\Framework\View\Element\Template\Context',
-            ['getUrlBuilder', 'getScopeConfig', 'getLayout'],
-            [],
-            '',
-            false
+        $context = $this->createPartialMock(
+            \Magento\Framework\View\Element\Template\Context::class,
+            ['getUrlBuilder', 'getScopeConfig', 'getLayout']
         );
         $context->expects($this->any())
             ->method('getUrlBuilder')
@@ -123,22 +121,17 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getlayout')
             ->will($this->returnValue($this->layout));
-        $this->productListHelper = $this->getMock(
-            'Magento\Catalog\Helper\Product\ProductList',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->productListHelper = $this->createMock(\Magento\Catalog\Helper\Product\ProductList::class);
 
-        $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
+        $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
-            'Magento\Catalog\Block\Product\ProductList\Toolbar',
+            \Magento\Catalog\Block\Product\ProductList\Toolbar::class,
             [
                 'context' => $context,
                 'catalogConfig' => $this->catalogConfig,
                 'toolbarModel' => $this->model,
+                'toolbarMemorizer' => $this->memorizer,
                 'urlEncoder' => $this->urlEncoder,
                 'productListHelper' => $this->productListHelper
             ]
@@ -178,7 +171,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentOrder()
     {
         $order = 'price';
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getOrder')
             ->will($this->returnValue($order));
         $this->catalogConfig->expects($this->once())
@@ -192,7 +185,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     {
         $direction = 'desc';
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getDirection')
             ->will($this->returnValue($direction));
 
@@ -206,7 +199,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->productListHelper->expects($this->once())
             ->method('getAvailableViewMode')
             ->will($this->returnValue(['list' => 'List']));
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
 
@@ -239,6 +232,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $block->getModes());
     }
 
+    /**
+     * @return array
+     */
     public function setModesDataProvider()
     {
         return [
@@ -252,11 +248,11 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $mode = 'list';
         $limit = 10;
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
 
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getLimit')
             ->will($this->returnValue($limit));
         $this->productListHelper->expects($this->once())
@@ -286,7 +282,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
             ->will($this->returnValue([10 => 10, 20 => 20]));
-        $this->model->expects($this->once())
+        $this->memorizer->expects($this->once())
             ->method('getLimit')
             ->will($this->returnValue($limit));
         $this->pagerBlock->expects($this->once())

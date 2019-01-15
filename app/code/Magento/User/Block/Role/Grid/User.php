@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Grid;
@@ -9,6 +9,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
+ *
+ * @api
+ * @since 100.0.2
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -32,9 +35,15 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
+     * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
      */
     protected $_userRolesFactory;
+
+    /**
+     * @var bool|array
+     * @since 100.1.0
+     */
+    protected $restoredUsersFormData;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -42,7 +51,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
+     * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
@@ -51,7 +60,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
+        \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
@@ -164,24 +173,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-        /*
-        $this->addColumn('grid_actions',
-            array(
-                'header'=>__('Actions'),
-                'width'=>5,
-                'sortable'=>false,
-                'filter'    =>false,
-                'type' => 'action',
-                'actions'   => array(
-                                    array(
-                                        'caption' => __('Remove'),
-                                        'onClick' => 'role.deleteFromRole($role_id);'
-                                    )
-                                )
-            )
-        );
-        */
-
         return parent::_prepareColumns();
     }
 
@@ -210,7 +201,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         ) : $this->_coreRegistry->registry(
             'RID'
         );
-        $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+
+        $users = $this->getUsersFormData();
+        if (false === $users) {
+            $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+        }
         if (sizeof($users) > 0) {
             if ($json) {
                 $jsonUsers = [];
@@ -228,5 +223,39 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 return [];
             }
         }
+    }
+
+    /**
+     * Get Form Data if exist
+     *
+     * @return array|bool
+     * @since 100.1.0
+     */
+    protected function getUsersFormData()
+    {
+        if (false !== $this->restoredUsersFormData && null === $this->restoredUsersFormData) {
+            $this->restoredUsersFormData = $this->restoreUsersFormData();
+        }
+
+        return $this->restoredUsersFormData;
+    }
+
+    /**
+     * Restore Users Form Data from the registry
+     *
+     * @return array|bool
+     * @since 100.1.0
+     */
+    protected function restoreUsersFormData()
+    {
+        $sessionData = $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
+        );
+        if (null !== $sessionData) {
+            parse_str($sessionData, $sessionData);
+            return array_keys($sessionData);
+        }
+
+        return false;
     }
 }

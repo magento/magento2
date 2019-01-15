@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div data-bind="bindHtml: content,
+        visible: visible,
+        css: contentSelector"></div>
+
+<!--ko if: showSpinner -->
+<div data-role="spinner" class="admin__data-grid-loading-mask" data-bind="visible: loading">
+    <div class="spinner">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- /ko -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -13,6 +13,7 @@ namespace Magento\Sales\Api\Data;
  * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
  * a merchant creates a credit memo.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

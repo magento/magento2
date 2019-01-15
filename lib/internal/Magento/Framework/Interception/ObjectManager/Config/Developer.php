@@ -2,15 +2,37 @@
 /**
  * ObjectManager config with interception processing
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\ObjectManager\Config;
 
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\ObjectManager\InterceptableValidator;
 
 class Developer extends \Magento\Framework\ObjectManager\Config\Config implements ConfigInterface
 {
+    /**
+     * @var InterceptableValidator
+     */
+    private $interceptableValidator;
+
+    /**
+     * @param RelationsInterface $relations
+     * @param DefinitionInterface $definitions
+     * @param InterceptableValidator $interceptableValidator
+     */
+    public function __construct(
+        RelationsInterface $relations = null,
+        DefinitionInterface $definitions = null,
+        InterceptableValidator $interceptableValidator = null
+    ) {
+        $this->interceptableValidator = $interceptableValidator ?: new InterceptableValidator();
+        parent::__construct($relations, $definitions);
+    }
+
     /**
      * @var \Magento\Framework\Interception\ConfigInterface
      */
@@ -36,7 +58,9 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
     public function getInstanceType($instanceName)
     {
         $type = parent::getInstanceType($instanceName);
-        if ($this->interceptionConfig && $this->interceptionConfig->hasPlugins($instanceName)) {
+        if ($this->interceptionConfig && $this->interceptionConfig->hasPlugins($instanceName)
+            && $this->interceptableValidator->validate($instanceName)
+        ) {
             return $type . '\\Interceptor';
         }
         return $type;

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\Options;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -26,13 +26,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 
     public function testEvaluate()
     {
-        $modelClass = 'Magento\Framework\Data\OptionSourceInterface';
+        $modelClass = \Magento\Framework\Data\OptionSourceInterface::class;
         $model = $this->getMockForAbstractClass($modelClass);
         $model->expects(
             $this->once()
@@ -67,16 +67,22 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateWrongModel($input, $expectedException, $expectedExceptionMessage)
     {
-        $this->setExpectedException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $this->_objectManager->method('get')
+            ->willReturnSelf();
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateWrongModelDataProvider()
     {
         return [
             'no model' => [[], '\InvalidArgumentException', 'Options source model class is missing'],
             'wrong model class' => [
-                ['model' => 'Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\OptionsTest'],
+                ['model' => \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\OptionsTest::class],
                 '\UnexpectedValueException',
                 'Instance of the options source model is expected',
             ]

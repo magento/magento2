@@ -2,11 +2,9 @@
 /**
  * Plugin for \Magento\Framework\Mview\View\StateInterface model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
@@ -54,7 +52,9 @@ class MviewState
     {
         if (in_array($state->getViewId(), $this->viewIds)) {
             $viewId = $state->getViewId() ==
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+                ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID
+                : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
             $relatedViewState = $this->state->loadByView($viewId);
 

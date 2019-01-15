@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Category\Rss;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class LinkTest
  * @package Magento\Catalog\Block\Category\Rss
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Category\Rss\Link
@@ -45,14 +45,14 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderInterface = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
-        $this->scopeConfigInterface = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->registry = $this->getMock('Magento\Framework\Registry');
+        $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Block\Category\Rss\Link',
+            \Magento\Catalog\Block\Category\Rss\Link::class,
             [
                 'rssUrlBuilder' => $this->urlBuilderInterface,
                 'registry' => $this->registry,
@@ -72,6 +72,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isAllowed, $this->link->isRssAllowed());
     }
 
+    /**
+     * @return array
+     */
     public function isRssAllowedDataProvider()
     {
         return [
@@ -92,12 +95,15 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsTopCategory($isTop, $categoryLevel)
     {
-        $categoryModel = $this->getMock('\Magento\Catalog\Model\Category', ['__wakeup', 'getLevel'], [], '', false);
+        $categoryModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getLevel']);
         $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
         $categoryModel->expects($this->any())->method('getLevel')->will($this->returnValue($categoryLevel));
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
+    /**
+     * @return array
+     */
     public function isTopCategoryDataProvider()
     {
         return [
@@ -111,11 +117,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $rssUrl = 'http://rss.magento.com';
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
 
-        $categoryModel = $this->getMock('\Magento\Catalog\Model\Category', ['__wakeup', 'getId'], [], '', false);
+        $categoryModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getId']);
         $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
         $categoryModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
 
-        $storeModel = $this->getMock('\Magento\Store\Model\Category', ['__wakeup', 'getId'], [], '', false);
+        $storeModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getId']);
         $this->storeManagerInterface->expects($this->any())->method('getStore')->will($this->returnValue($storeModel));
         $storeModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
 

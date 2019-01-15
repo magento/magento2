@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Index;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Index\Index
@@ -42,34 +42,36 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageId = 'home';
 
+    /**
+     * Test setUp
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->resultPageMock = $this->getMockBuilder('\Magento\Framework\View\Result\Page')
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardFactoryMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\ForwardFactory')
+        $this->forwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
+        $this->forwardMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
+        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $valueMap = [
-            [
-                'Magento\Framework\App\Config\ScopeConfigInterface',
+            [\Magento\Framework\App\Config\ScopeConfigInterface::class,
                 $scopeConfigMock,
             ],
-            ['Magento\Cms\Helper\Page', $this->cmsHelperMock],
+            [\Magento\Cms\Helper\Page::class, $this->cmsHelperMock],
         ];
         $objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $scopeConfigMock->expects($this->once())
@@ -80,16 +82,21 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($this->pageId);
         $this->controller = $helper->getObject(
-            'Magento\Cms\Controller\Index\Index',
+            \Magento\Cms\Controller\Index\Index::class,
             [
                 'response' => $responseMock,
                 'objectManager' => $objectManagerMock,
                 'request' => $this->requestMock,
-                'resultForwardFactory' => $this->forwardFactoryMock
+                'resultForwardFactory' => $this->forwardFactoryMock,
+                'scopeConfig' => $scopeConfigMock,
+                'page' => $this->cmsHelperMock
             ]
         );
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultPage()
     {
         $this->cmsHelperMock->expects($this->once())
@@ -99,6 +106,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
+    /**
+     * Controller test
+     */
     public function testExecuteResultForward()
     {
         $this->forwardMock->expects($this->once())

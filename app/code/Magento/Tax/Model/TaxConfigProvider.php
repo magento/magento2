@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class TaxConfigProvider implements ConfigProviderInterface
 {
@@ -21,13 +23,31 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected $taxConfig;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSession;
+
+    /**
      * @param TaxHelper $taxHelper
      * @param Config $taxConfig
+     * @param CheckoutSession $checkoutSession
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(TaxHelper $taxHelper, Config $taxConfig)
-    {
+    public function __construct(
+        TaxHelper $taxHelper,
+        Config $taxConfig,
+        CheckoutSession $checkoutSession,
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->taxHelper = $taxHelper;
         $this->taxConfig = $taxConfig;
+        $this->checkoutSession = $checkoutSession;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -35,6 +55,14 @@ class TaxConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $defaultRegionId = $this->scopeConfig->getValue(
+            \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        // prevent wrong assignment on shipping rate estimation requests
+        if (0 == $defaultRegionId) {
+            $defaultRegionId = null;
+        }
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
             'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
@@ -44,6 +72,16 @@ class TaxConfigProvider implements ConfigProviderInterface
             'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
+            'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
+            'defaultCountryId' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
+            'defaultRegionId' => $defaultRegionId,
+            'defaultPostcode' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
         ];
     }
 
@@ -133,5 +171,20 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function isTaxDisplayedInGrandTotal()
     {
         return $this->taxConfig->displayCartTaxWithGrandTotal();
+    }
+
+    /**
+     * Reload totals(taxes) on billing address update
+     *
+     * @return bool
+     */
+    protected function reloadOnBillingAddress()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        $configValue = $this->scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_BASED_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return 'billing' == $configValue || $quote->isVirtual();
     }
 }

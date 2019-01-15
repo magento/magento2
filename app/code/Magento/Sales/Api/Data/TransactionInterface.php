@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -10,9 +10,28 @@ namespace Magento\Sales\Api\Data;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 100.0.2
  */
 interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Supported transaction types
+     * @var string
+     */
+    const TYPE_PAYMENT = 'payment';
+
+    const TYPE_ORDER = 'order';
+
+    const TYPE_AUTH = 'authorization';
+
+    const TYPE_CAPTURE = 'capture';
+
+    const TYPE_VOID = 'void';
+
+    const TYPE_REFUND = 'refund';
+
+    /**#@-*/
+
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/websites.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/websites.phtml';
 
     /**
      * Core registry
@@ -131,7 +131,10 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     public function getChooseFromStoreHtml($storeTo)
     {
         if (!$this->_storeFromHtml) {
-            $this->_storeFromHtml = '<select name="copy_to_stores[__store_identifier__]" disabled="disabled">';
+            $this->_storeFromHtml = '<select ' .
+                                         'class="admin__control-select" ' .
+                                         'name="copy_to_stores[__store_identifier__]" ' .
+                                         'disabled="disabled">';
             $this->_storeFromHtml .= '<option value="0">' . __('Default Values') . '</option>';
             foreach ($this->getWebsiteCollection() as $_website) {
                 if (!$this->hasWebsite($_website->getId())) {

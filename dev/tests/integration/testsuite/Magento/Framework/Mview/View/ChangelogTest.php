@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
  */
-class ChangelogTest extends \PHPUnit_Framework_TestCase
+class ChangelogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -16,7 +18,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -32,20 +34,26 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->connection = $this->resource->getConnection('core_write');
+        $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $this->model->setViewId('test_view_id_1');
         $this->model->create();
     }
 
+    /**
+     * @return void
+     */
     public function tearDown()
     {
         $this->model->drop();
@@ -53,12 +61,14 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for create() and drop() methods
+     *
+     * @return void
      */
     public function testCreateAndDrop()
     {
         /** @var \Magento\Framework\Mview\View\Changelog $model */
         $model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');
@@ -72,11 +82,13 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for getVersion() method
+     *
+     * @return void
      */
     public function testGetVersion()
     {
         $model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');
@@ -90,6 +102,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for clear() method
+     *
+     * @return void
      */
     public function testClear()
     {
@@ -104,20 +118,22 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for getList() method
+     *
+     * @return void
      */
     public function testGetList()
     {
         $this->assertEquals(0, $this->model->getVersion());
         //the same that a table is empty
         $changelogName = $this->resource->getTableName($this->model->getName());
-        $testChengelogData = [
+        $testChangelogData = [
             ['version_id' => 1, 'entity_id' => 1],
             ['version_id' => 2, 'entity_id' => 1],
             ['version_id' => 3, 'entity_id' => 2],
             ['version_id' => 4, 'entity_id' => 3],
             ['version_id' => 5, 'entity_id' => 1],
         ];
-        foreach ($testChengelogData as $data) {
+        foreach ($testChangelogData as $data) {
             $this->connection->insert($changelogName, $data);
         }
         $this->assertEquals(5, $this->model->getVersion());

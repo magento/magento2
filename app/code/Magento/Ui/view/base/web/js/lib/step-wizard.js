@@ -1,145 +1,338 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
-    "uiRegistry",
-    "jquery",
-    "underscore",
-    "mage/backend/notification"
-], function (uiRegistry, $, _) {
-    "use strict";
-    var stepComponents;
-    var getStep = _.memoize(function(step) {
-        return _.findWhere(stepComponents, {name: step});
-    });
-    var Wizard = function (steps, element, uiWizard) {
+    'uiRegistry',
+    'uiComponent',
+    'jquery',
+    'underscore',
+    'ko',
+    'mage/backend/notification',
+    'mage/translate'
+], function (uiRegistry, Component, $, _, ko) {
+    'use strict';
+
+    var Wizard;
+
+    ko.utils.domNodeDisposal.cleanExternalData = _.wrap(
+        ko.utils.domNodeDisposal.cleanExternalData,
+        function (func, node) {
+            if (!$(node).closest('[data-type=skipKO]').length) {
+                func(node);
+            }
+        }
+    );
+
+    /**
+     * Wizard constructor.
+     *
+     * @param {Array} steps
+     * @param {String} modalClass
+     * @constructor
+     */
+    Wizard = function (steps, modalClass) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
-        this.element = element;
-        this.uiWizard = uiWizard;
-        this.nextLabel = uiWizard.nextLabel.text();
-        this.prevLabel = uiWizard.prevLabel.text();
-        $(this.element).notification();
+        this.nextLabelText = $.mage.__('Next');
+        this.prevLabelText = $.mage.__('Back');
+        this.elementSelector = '[data-role=steps-wizard-main]';
+        this.element = modalClass ? $('.' + modalClass + this.elementSelector) : $(this.elementSelector);
+        this.nextLabel = '[data-role="step-wizard-next"]';
+        this.prevLabel = '[data-role="step-wizard-prev"]';
+        this.element.notification();
+
+        /**
+         * Move to newIndex.
+         *
+         * @param {Number} newIndex
+         * @return {String}
+         */
         this.move = function (newIndex) {
-            if (newIndex > this.index) {
-                this._next(newIndex);
-            } else if (newIndex < this.index) {
-                this._prev(newIndex);
+            if (!this.preventSwitch(newIndex)) {
+                if (newIndex > this.index) {
+                    this._next(newIndex);
+                } else if (newIndex < this.index) {
+                    this._prev(newIndex);
+                }
             }
-        };
-        this._next = function () {
-            try {
-                this.force();
-            } catch (e) {
-                this.notifyMessage(e.message, true);
-                throw new Error(e);
-            }
-            this.index++;
             this.updateLabels(this.getStep());
+            this.showNotificationMessage();
+
+            return this.getStep().name;
+        };
+
+        /**
+         * Move wizard to next step.
+         *
+         * @return {String}
+         */
+        this.next = function () {
+            this.move(this.index + 1);
+
+            return this.getStep().name;
+        };
+
+        /**
+         * Move wizard to previous step.
+         *
+         * @return {String}
+         */
+        this.prev = function () {
+            this.move(this.index - 1);
+
+            return this.getStep().name;
+        };
+
+        /**
+         * @return {*}
+         */
+        this.preventSwitch = function (newIndex) {
+            return newIndex < 0 || (newIndex - this.index) > 1;//eslint-disable-line no-extra-parens
+        };
+
+        /**
+         * @param {Number} newIndex
+         * @return {Boolean}
+         * @private
+         */
+        this._next = function (newIndex) {
+            newIndex = _.isNumber(newIndex) ? newIndex : this.index + 1;
+
+            try {
+                this.getStep().force(this);
+
+                if (newIndex >= steps.length) {
+                    return false;
+                }
+            } catch (e) {
+                this.setNotificationMessage(e.message, true);
+
+                return false;
+            }
+            this.cleanErrorNotificationMessage();
+            this.index = newIndex;
+            this.cleanNotificationMessage();
             this.render();
         };
-        this.getStep = function(stepIndex) {
-            return getStep(this.steps[stepIndex || this.index]);
-        };
-        this.force = function() {
-            this.getStep().force(this);
-        };
+
+        /**
+         * @param {Number} newIndex
+         * @private
+         */
         this._prev = function (newIndex) {
-            this.updateLabels(this.getStep(this.index - 1));
+            newIndex = _.isNumber(newIndex) ? newIndex : this.index - 1;
             this.getStep().back(this);
             this.index = newIndex;
         };
+
+        /**
+         * @param {Number} stepIndex
+         * @return {Object}
+         */
+        this.getStep = function (stepIndex) {
+            return this.steps[stepIndex || this.index] || {};
+        };
+
+        /**
+         * @param {String} message
+         * @param {String} error
+         */
         this.notifyMessage = function (message, error) {
             $(this.element).notification('clear').notification('add', {
                 error: error,
-                message: $.mage.__(message)
+                message: message
             });
         };
-        this.updateLabels = function(step) {
-            this.uiWizard.nextLabel.text(step.nextLabel || this.nextLabel);
-            this.uiWizard.prevLabel.text(step.prevLabel || this.prevLabel);
+
+        /**
+         * @param {Object} step
+         */
+        this.updateLabels = function (step) {
+            this.element.find(this.nextLabel).find('button').text(step.nextLabelText || this.nextLabelText);
+            this.element.find(this.prevLabel).find('button').text(step.prevLabelText || this.prevLabelText);
         };
-        this.render = function() {
+
+        /**
+         * Show notification message.
+         */
+        this.showNotificationMessage = function () {
+            if (!_.isEmpty(this.getStep())) {
+                this.hideNotificationMessage();
+
+                if (this.getStep().notificationMessage.text !== null) {
+                    this.notifyMessage(
+                        this.getStep().notificationMessage.text,
+                        this.getStep().notificationMessage.error
+                    );
+                }
+            }
+        };
+
+        /**
+         * Remove notification message.
+         */
+        this.cleanNotificationMessage = function () {
+            this.getStep().notificationMessage.text = null;
+            this.hideNotificationMessage();
+        };
+
+        /**
+         * Remove error message.
+         */
+        this.cleanErrorNotificationMessage = function () {
+            if (this.getStep().notificationMessage.error === true) {
+                this.cleanNotificationMessage();
+            }
+        };
+
+        /**
+         * @param {String} text
+         * @param {String} error
+         */
+        this.setNotificationMessage = function (text, error) {
+            error = error !== undefined;
+
+            if (!_.isEmpty(this.getStep())) {
+                this.getStep().notificationMessage.text = text;
+                this.getStep().notificationMessage.error = error;
+                this.showNotificationMessage();
+            }
+        };
+
+        /**
+         * Hide notification message.
+         */
+        this.hideNotificationMessage = function () {
             $(this.element).notification('clear');
+        };
+
+        /**
+         * Render step.
+         */
+        this.render = function () {
+            this.hideNotificationMessage();
             this.getStep().render(this);
         };
+
+        /**
+         * Initialize step.
+         */
+        this.init = function () {
+            this.updateLabels(this.getStep());
+            this.render();
+        };
+        this.init();
     };
 
-    $.widget('mage.step-wizard', $.ui.tabs, {
-        wizard: undefined,
-        options: {
-            collapsible: false,
-            disabled: [],
-            event: "click",
-            buttonNextElement: '[data-role="step-wizard-next"]',
-            buttonPrevElement: '[data-role="step-wizard-prev"]',
-            stepRegistryComponent: null,
-            steps: null
+    return Component.extend({
+        defaults: {
+            modalClass: '',
+            initData: [],
+            stepsNames: [],
+            selectedStep: '',
+            steps: [],
+            disabled: true
         },
-        _create: function () {
-            this._control();
+
+        /** @inheritdoc */
+        initialize: function () {
             this._super();
-            this.options.beforeActivate = this._handlerStep.bind(this);
+            this.selectedStep.subscribe(this.wrapDisabledBackButton.bind(this));
         },
-        _control: function () {
-            var self = this;
-            this.prev = this.element.find(this.options.buttonPrevElement);
-            this.prevLabel = $('button', this.prev);
-            this.next = this.element.find(this.options.buttonNextElement);
-            this.nextLabel = $('button', this.next);
 
-            this.next.on('click.' + this.eventNamespace, function (event) {
-                // TODO: try to avoid ui.tabs for simplify logic
-                if ((self.options.active+1) == (self.options.steps.length)) {
-                    self.wizard.force();
-                }
-                self._activate(self.options.active + 1);
-            });
-            this.prev.on('click.' + this.eventNamespace, function (event) {
-                self._activate(self.options.active - 1);
-            });
+        /** @inheritdoc */
+        initElement: function (step) {
+            step.initData = this.initData;
+            step.mode = _.all(this.initData, _.isEmpty) ? 'create' : 'edit';
+            this.steps[this.getStepIndexByName(step.name)] = step;
         },
-        load: function (index, event) {
-            this._disabledTabs(index);
-            this._actionControl(index);
-            this._super(index, event);
-        },
-        _handlerStep: function (event, ui) {
-            try {
-                var index = this.tabs.index(ui.newTab[0]);
-                var tab = this.panels.eq(index);
-                var steps =  uiRegistry.async(this.options.stepRegistryComponent);
 
-                steps(function(component) {
-                    if (this.wizard === undefined) {
-                        this.wizard = new Wizard(this.options.steps, tab, this);
-                        stepComponents = component.steps;
-                    }
-                    this.wizard.move(index);
-                }.bind(this));
-            } catch (e) {
-                return false;
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super().observe([
+                'selectedStep',
+                'disabled'
+            ]);
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        destroy: function () {
+            _.each(this.steps, function (step) {
+                step.destroy();
+            });
+
+            this._super();
+        },
+
+        /**
+         * Toggle disable property.
+         *
+         * @param {String} stepName
+         */
+        wrapDisabledBackButton: function (stepName) {
+            if (_.first(this.stepsNames) === stepName) {
+                this.disabled(true);
+            } else {
+                this.disabled(false);
             }
         },
-        _way: function (index) {
-            return this.options.selected > index ? 'back' : 'force';
+
+        /**
+         * Get step by index name.
+         *
+         * @param {String} stepName
+         */
+        getStepIndexByName: function (stepName) {
+            return _.indexOf(this.stepsNames, stepName);
         },
-        _actionControl: function (index) {
-            if (index < 1) {
-                this.prev.find('button').addClass("disabled");
-            }
-            if (index === 1 && this._way(index) === 'force') {
-                this.prev.find('button').removeClass("disabled");
+        //controls, todo to another object
+        /**
+         * Select next step.
+         */
+        next: function () {
+            this.selectedStep(this.wizard.next());
+        },
+
+        /**
+         * Select previous step.
+         */
+        back: function () {
+            this.selectedStep(this.wizard.prev());
+        },
+
+        /**
+         * Open wizard.
+         */
+        open: function () {
+            this.selectedStep(this.stepsNames.first());
+            this.wizard = new Wizard(this.steps, this.modalClass);
+        },
+
+        /**
+         * Close wizard.
+         */
+        close: function () {
+            var modal =  uiRegistry.get(this.initData.configurableModal);
+
+            if (!_.isUndefined(modal)) {
+                modal.closeModal();
             }
         },
-        _disabledTabs: function (index) {
-            this._setupDisabled(_.range(index + 2, this.tabs.length));
+
+        /**
+         * @param {Object} data
+         * @param {Object} event
+         */
+        showSpecificStep: function (data, event) {
+            var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
+                stepName = this.wizard.move(index);
+
+            this.selectedStep(stepName);
         }
-
     });
-
-    return $.mage["step-wizard"];
-
 });

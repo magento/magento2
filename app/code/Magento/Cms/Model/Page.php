@@ -1,21 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Cms\Helper\Page as PageHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\Resource\Page _getResource()
- * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method int[] getStores()
+ * @api
+ * @method Page setStoreId(array $storeId)
+ * @method array getStoreId()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
+class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
@@ -32,12 +38,12 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'cms_page';
+    const CACHE_TAG = 'cms_p';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'cms_page';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names
@@ -47,13 +53,18 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     protected $_eventPrefix = 'cms_page';
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Initialize resource model
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Page');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Page::class);
     }
 
     /**
@@ -79,6 +90,16 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function noRoutePage()
     {
         return $this->load(self::NOROUTE_PAGE_ID, $this->getIdFieldName());
+    }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : (array)$this->getData('store_id');
     }
 
     /**
@@ -153,6 +174,17 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function getPageLayout()
     {
         return $this->getData(self::PAGE_LAYOUT);
+    }
+
+    /**
+     * Get meta title
+     *
+     * @return string|null
+     * @since 101.0.0
+     */
+    public function getMetaTitle()
+    {
+        return $this->getData(self::META_TITLE);
     }
 
     /**
@@ -340,6 +372,18 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     }
 
     /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        return $this->setData(self::META_TITLE, $metaTitle);
+    }
+
+    /**
      * Set meta keywords
      *
      * @param string $metaKeywords
@@ -491,5 +535,50 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @since 101.0.0
+     */
+    public function beforeSave()
+    {
+        $originalIdentifier = $this->getOrigData('identifier');
+        $currentIdentifier = $this->getIdentifier();
+
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
+
+        if (!$this->getId() || $originalIdentifier === $currentIdentifier) {
+            return parent::beforeSave();
+        }
+
+        switch ($originalIdentifier) {
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
+                throw new LocalizedException(
+                    __('This identifier is reserved for "CMS No Route Page" in configuration.')
+                );
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
+                throw new LocalizedException(__('This identifier is reserved for "CMS Home Page" in configuration.'));
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_COOKIES_PAGE):
+                throw new LocalizedException(
+                    __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
+                );
+        }
+
+        return parent::beforeSave();
+    }
+
+    /**
+     * @return ScopeConfigInterface
+     */
+    private function getScopeConfig()
+    {
+        if (null === $this->scopeConfig) {
+            $this->scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        }
+
+        return $this->scopeConfig;
     }
 }

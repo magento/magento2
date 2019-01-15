@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends AbstractConfig
+class Save extends AbstractConfig implements HttpPostActionInterface
 {
     /**
      * Backend Config Model Factory
@@ -28,7 +29,7 @@ class Save extends AbstractConfig
     protected $_cache;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -38,7 +39,7 @@ class Save extends AbstractConfig
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,7 +47,7 @@ class Save extends AbstractConfig
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
@@ -159,7 +160,10 @@ class Save extends AbstractConfig
             /** @var \Magento\Config\Model\Config $configModel  */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
-
+            $this->_eventManager->dispatch('admin_system_config_save', [
+                'configData' => $configData,
+                'request' => $this->getRequest()
+            ]);
             $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());

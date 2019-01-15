@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml order totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
@@ -20,7 +22,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block
     protected function _initTotals()
     {
         parent::_initTotals();
-        $this->_totals['paid'] = new \Magento\Framework\Object(
+        $this->_totals['paid'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'paid',
                 'strong' => true,
@@ -30,7 +32,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block
                 'area' => 'footer',
             ]
         );
-        $this->_totals['refunded'] = new \Magento\Framework\Object(
+        $this->_totals['refunded'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'refunded',
                 'strong' => true,
@@ -40,7 +42,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block
                 'area' => 'footer',
             ]
         );
-        $this->_totals['due'] = new \Magento\Framework\Object(
+        $this->_totals['due'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'due',
                 'strong' => true,

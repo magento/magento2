@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
     <type name="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
@@ -28,7 +28,7 @@
             <argument name="boolZeroParam" xsi:type="boolean">false</argument>
             <argument name="intValueParam" xsi:type="number">100500</argument>
             <argument name="nullValueParam" xsi:type="null"/>
-            <argument name="stringPatternParam" xsi:type="string">az-value</argument>
+            <argument name="stringPatternParam" xsi:type="string" translate="true">az-value</argument>
         </arguments>
     </type>
 </config>

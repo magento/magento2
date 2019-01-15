@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
 /**
  * Theme model class
@@ -78,6 +80,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_customFactory;
 
     /**
+     * @var ThemeFactory
+     */
+    private $themeModelFactory;
+
+    /**
      * @var ThemeInterface[]
      */
     protected $inheritanceSequence;
@@ -92,10 +99,10 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory
      * @param \Magento\Framework\View\Design\Theme\Validator $validator
      * @param \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory
-     * @param \Magento\Theme\Model\Resource\Theme $resource
-     * @param \Magento\Theme\Model\Resource\Theme\Collection $resourceCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme $resource
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
-     *
+     * @param ThemeFactory $themeModelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,9 +113,10 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\ImageFactory $imageFactory,
         \Magento\Framework\View\Design\Theme\Validator $validator,
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
-        Resource\Theme $resource = null,
-        Resource\Theme\Collection $resourceCollection = null,
-        array $data = []
+        \Magento\Theme\Model\ResourceModel\Theme $resource = null,
+        ThemeCollection $resourceCollection = null,
+        array $data = [],
+        ThemeFactory $themeModelFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -116,6 +124,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
+        $this->themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 
@@ -126,7 +135,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Resource\Theme');
+        $this->_init(\Magento\Theme\Model\ResourceModel\Theme::class);
     }
 
     /**
@@ -373,5 +382,57 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
             $this->inheritanceSequence = array_reverse($result);
         }
         return $this->inheritanceSequence;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function toArray(array $keys = [])
+    {
+        $data = parent::toArray($keys);
+        if (isset($data['parent_theme'])) {
+            $data['parent_theme'] = $this->getParentTheme()->toArray();
+        }
+
+        if (isset($data['inherited_themes'])) {
+            foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
+                $data['inherited_themes'][$key] = $inheritedTheme->toArray();
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Populate Theme object from an array
+     *
+     * @param array $data
+     * @return Theme
+     */
+    public function populateFromArray(array $data)
+    {
+        $this->_data = $data;
+        if (isset($data['parent_theme'])) {
+            $this->_data['parent_theme'] = $this->createThemeInstance()->populateFromArray($data['parent_theme']);
+        }
+
+        if (isset($data['inherited_themes'])) {
+            foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
+                $themeInstance = $this->createThemeInstance()->populateFromArray($inheritedTheme);
+                $this->_data['inherited_themes'][$key] = $themeInstance;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create Theme instance
+     *
+     * @return \Magento\Theme\Model\Theme
+     */
+    private function createThemeInstance()
+    {
+        return $this->themeModelFactory->create();
     }
 }

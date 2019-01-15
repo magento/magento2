@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,10 +14,10 @@
             <thead>
             <tr class="headings">
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?php echo __('Price') ?></th>
-                <th><?php echo __('Price Type') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Price Type') ?></th>
                 <?php endif; ?>
-                <th><?php echo __('SKU') ?></th>
+                <th><?= /* @escapeNotVerified */ __('SKU') ?></th>
             </tr>
             </thead>
             <tr>
@@ -31,7 +31,9 @@
                            disabled="disabled"
                         <?php endif; ?>>
                 </td>
-                <td class="opt-price-type"><?php echo $block->getPriceTypeSelectHtml() ?><%- data.checkboxScopePrice %></td>
+                <td class="opt-price-type">
+                    <?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
+                </td>
                 <?php else : ?>
                 <input id="product_option_<%- data.option_id %>_price" name="product[options][<%- data.option_id %>][price]" type="hidden">
                 <input id="product_option_<%- data.option_id %>_price_type" name="product[options][<%- data.option_id %>][price_type]" type="hidden">

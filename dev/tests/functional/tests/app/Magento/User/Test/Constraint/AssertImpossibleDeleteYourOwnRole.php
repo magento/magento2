@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,8 @@ class AssertImpossibleDeleteYourOwnRole extends AbstractConstraint
      */
     public function processAssert(UserRoleEditRole $rolePage)
     {
-        $errorMessage = $rolePage->getMessagesBlock()->getErrorMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $errorMessage = $rolePage->getMessagesBlock()->getErrorMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,
             'Wrong success message is displayed.'

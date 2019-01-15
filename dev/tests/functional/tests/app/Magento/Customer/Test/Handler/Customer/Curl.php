@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,11 +32,13 @@ class Curl extends AbstractCurl implements CustomerInterface
     protected $mappingData = [
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'gender' => [
             'Male' => 1,
             'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
@@ -85,6 +87,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         /** @var Customer $customer */
         $data = $customer->getData();
         $data['group_id'] = $this->getCustomerGroup($customer);
+        $data['website_id'] = $this->getCustomerWebsite($customer);
         $address = [];
         $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
 
@@ -94,11 +97,11 @@ class Curl extends AbstractCurl implements CustomerInterface
         }
 
         $curl = new CurlTransport();
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         // After caching My Account page we cannot check by success message
-        if (!strpos($response, 'block-dashboard-info')) {
+        if (strpos($response, 'block-dashboard-info') === false) {
             throw new \Exception("Customer entity creating  by curl handler was not successful! Response: $response");
         }
 
@@ -120,14 +123,22 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     protected function getCustomerId($email)
     {
-        $url = $_ENV['app_backend_url'] . 'customer/index/grid/filter/' . $this->encodeFilter(['email' => $email]);
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'customer_listing',
+            'filters' => [
+                'placeholder' => true,
+                'email' => $email
+            ],
+            'isAjax' => true
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
-        $curl->write(CurlInterface::GET, $url, '1.0');
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
         $curl->close();
 
-        preg_match('/data-column="entity_id"[^>]*>\s*([0-9]+)\s*</', $response, $match);
+        preg_match('/customer_listing_data_source.+items.+"entity_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 
@@ -177,11 +188,11 @@ class Curl extends AbstractCurl implements CustomerInterface
 
         $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $curlData['customer']['entity_id'];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $curlData);
+        $curl->write($url, $curlData);
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
             throw new \Exception('Failed to update customer!');
         }
@@ -221,19 +232,13 @@ class Curl extends AbstractCurl implements CustomerInterface
     }
 
     /**
-     * Encoded filter parameters
+     * Prepare customer website data.
      *
-     * @param array $filter
-     * @return string
+     * @param Customer $customer
+     * @return int
      */
-    protected function encodeFilter(array $filter)
+    private function getCustomerWebsite(Customer $customer)
     {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
     }
 }

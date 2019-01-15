@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,14 +11,16 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
-use Magento\Framework\View\Element\Template;
-
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
      * @var string
      */
-    protected $_template = 'toolbar/rate/add.phtml';
+    protected $_template = 'Magento_Tax::toolbar/rate/add.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList

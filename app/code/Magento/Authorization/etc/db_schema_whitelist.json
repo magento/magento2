@@ -1,0 +1,38 @@
+{
+    "authorization_role": {
+        "column": {
+            "role_id": true,
+            "parent_id": true,
+            "tree_level": true,
+            "sort_order": true,
+            "role_type": true,
+            "user_id": true,
+            "user_type": true,
+            "role_name": true
+        },
+        "index": {
+            "AUTHORIZATION_ROLE_PARENT_ID_SORT_ORDER": true,
+            "AUTHORIZATION_ROLE_TREE_LEVEL": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "authorization_rule": {
+        "column": {
+            "rule_id": true,
+            "role_id": true,
+            "resource_id": true,
+            "privileges": true,
+            "permission": true
+        },
+        "index": {
+            "AUTHORIZATION_RULE_RESOURCE_ID_ROLE_ID": true,
+            "AUTHORIZATION_RULE_ROLE_ID_RESOURCE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID": true
+        }
+    }
+}

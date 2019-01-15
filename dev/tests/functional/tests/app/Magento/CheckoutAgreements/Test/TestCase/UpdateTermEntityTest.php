@@ -1,16 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CheckoutAgreements\Test\TestCase;
 
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
-use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
-use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
@@ -24,68 +20,23 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Save
  * 5. Perform all assertions
  *
- * @group Terms_and_Conditions_(CS)
+ * @group Terms_and_Conditions
  * @ZephyrId MAGETWO-29635
  */
-class UpdateTermEntityTest extends Injectable
+class UpdateTermEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const SEVERITY = 'S2';
     /* end tags */
-
-    // TODO: Move set up configuration to "__prepare" method after fix bug MAGETWO-29331
-    /**
-     * Set up configuration.
-     *
-     * @return void
-     */
-    public function __inject()
-    {
-        $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'checkout_term_condition']
-        )->run();
-    }
 
     /**
      * Update Term Entity test.
      *
-     * @param CheckoutAgreementNew $agreementNew
-     * @param CheckoutAgreementIndex $agreementIndex
-     * @param CheckoutAgreement $agreement
-     * @param CheckoutAgreement $agreementOrigin
      * @return void
      */
-    public function test(
-        CheckoutAgreementNew $agreementNew,
-        CheckoutAgreementIndex $agreementIndex,
-        CheckoutAgreement $agreement,
-        CheckoutAgreement $agreementOrigin
-    ) {
-        // Precondition
-        $agreementOrigin->persist();
-
-        // Steps
-        $agreementIndex->open();
-        $agreementIndex->getAgreementGridBlock()->searchAndOpen(['name' => $agreementOrigin->getName()]);
-        $agreementNew->getAgreementsForm()->fill($agreement);
-        $agreementNew->getPageActionsBlock()->save();
-    }
-
-    /**
-     * Clear data after test.
-     *
-     * @return void
-     */
-    public function tearDown()
+    public function test()
     {
-        $this->objectManager->create('Magento\CheckoutAgreements\Test\TestStep\DeleteAllTermsEntityStep')->run();
-
-        // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
-        ObjectManager::getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'checkout_term_condition', 'rollback' => true]
-        )->run();
+        $this->executeScenario();
     }
 }

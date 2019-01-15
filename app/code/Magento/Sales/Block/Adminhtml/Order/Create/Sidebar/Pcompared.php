@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
@@ -10,7 +10,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml sales order create sidebar recently compared block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -24,7 +26,7 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
     /**
      * Event
      *
-     * @var \Magento\Reports\Model\Resource\Event
+     * @var \Magento\Reports\Model\ResourceModel\Event
      */
     protected $_event;
 
@@ -34,7 +36,7 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Config $salesConfig
-     * @param \Magento\Reports\Model\Resource\Event $event
+     * @param \Magento\Reports\Model\ResourceModel\Event $event
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
@@ -44,7 +46,7 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Config $salesConfig,
-        \Magento\Reports\Model\Resource\Event $event,
+        \Magento\Reports\Model\ResourceModel\Event $event,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = []
     ) {
@@ -149,7 +151,7 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
     /**
      * Retrieve product identifier of block item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
     public function getProductId($item)

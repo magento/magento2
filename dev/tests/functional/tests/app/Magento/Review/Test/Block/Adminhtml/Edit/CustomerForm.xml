@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <tabs>
     <product_reviews>
         <class>\Magento\Review\Test\Block\Adminhtml\Customer\Edit\Tab\Reviews</class>
-        <selector>#tab_block_reviews</selector>
+        <selector>#tab_reviews_content</selector>
         <strategy>css selector</strategy>
     </product_reviews>
 </tabs>

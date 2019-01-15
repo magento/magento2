@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryFromProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/Edit Category in Admin"/>
+            <title value="Admin should be able to create category from the product page"/>
+            <description value="Admin should be able to create category from the product page" />
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-234"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <createData entity="SimpleTwo" stepKey="simpleProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the created category -->
+            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Find the product that we just created using the product grid and go to its page-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+            <argument name="product" value="SimpleTwo"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Fill out the form for the new category -->
+        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+        <!-- Check that category was created -->
+        <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+    </test>
+</tests>

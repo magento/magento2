@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,20 +17,20 @@ return [
         ['field' => 'customer/customer'],
         ['field' => 'customer/attribute_data_postcode'],
         ['field' => 'customer/attribute_data_postcode::someMethod'],
-        ['field' => 'Magento\Customer\Model\Customer'],
+        ['field' => \Magento\Customer\Model\Customer::class],
     ],
     '$expected' => [
         'updates' => [
             [
                 'table' => 'table',
                 'field' => 'field',
-                'to' => 'Magento\Customer\Model\Customer_FROM_MAP',
+                'to' => \Magento\Customer\Model\Customer_FROM_MAP::class,
                 'from' => ['`field` = ?' => 'customer/customer'],
             ],
             [
                 'table' => 'table',
                 'field' => 'field',
-                'to' => 'Magento\Customer\Model\Attribute\Data\Postcode',
+                'to' => \Magento\Customer\Model\Attribute\Data\Postcode::class,
                 'from' => ['`field` = ?' => 'customer/attribute_data_postcode']
             ],
             [
@@ -42,14 +42,14 @@ return [
         ],
         'aliases_map' => [
             \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL => [
-                'customer/customer' => 'Magento\Customer\Model\Customer_FROM_MAP',
-                'customer/attribute_data_postcode' => 'Magento\Customer\Model\Attribute\Data\Postcode',
+                'customer/customer' => \Magento\Customer\Model\Customer_FROM_MAP::class,
+                'customer/attribute_data_postcode' => \Magento\Customer\Model\Attribute\Data\Postcode::class,
             ],
         ],
     ],
     '$aliasesMap' => [
         \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL => [
-            'customer/customer' => 'Magento\Customer\Model\Customer_FROM_MAP',
+            'customer/customer' => \Magento\Customer\Model\Customer_FROM_MAP::class,
         ],
     ]
 ];

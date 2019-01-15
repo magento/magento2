@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -34,10 +34,10 @@ class CartTotalRepositoryTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
         $this->filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
     }
 
@@ -47,7 +47,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
     public function testGetTotals()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -102,7 +102,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     public function testGetTotalsWithAbsentQuote()
     {
-        $cartId = 'unknownCart';
+        $cartId = 9999999999;
         $requestData = ['cartId' => $cartId];
         $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
     }
@@ -162,22 +162,22 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $item = array_shift($items);
         return [
             ItemTotals::KEY_ITEM_ID => $item->getItemId(),
-            ItemTotals::KEY_PRICE => intval($item->getPrice()),
-            ItemTotals::KEY_BASE_PRICE => intval($item->getBasePrice()),
+            ItemTotals::KEY_PRICE => (int)$item->getPrice(),
+            ItemTotals::KEY_BASE_PRICE => (int)$item->getBasePrice(),
             ItemTotals::KEY_QTY => $item->getQty(),
-            ItemTotals::KEY_ROW_TOTAL => intval($item->getRowTotal()),
-            ItemTotals::KEY_BASE_ROW_TOTAL => intval($item->getBaseRowTotal()),
-            ItemTotals::KEY_ROW_TOTAL_WITH_DISCOUNT => intval($item->getRowTotalWithDiscount()),
-            ItemTotals::KEY_TAX_AMOUNT => intval($item->getTaxAmount()),
-            ItemTotals::KEY_BASE_TAX_AMOUNT => intval($item->getBaseTaxAmount()),
-            ItemTotals::KEY_TAX_PERCENT => intval($item->getTaxPercent()),
-            ItemTotals::KEY_DISCOUNT_AMOUNT => intval($item->getDiscountAmount()),
-            ItemTotals::KEY_BASE_DISCOUNT_AMOUNT => intval($item->getBaseDiscountAmount()),
-            ItemTotals::KEY_DISCOUNT_PERCENT => intval($item->getDiscountPercent()),
-            ItemTotals::KEY_PRICE_INCL_TAX => intval($item->getPriceInclTax()),
-            ItemTotals::KEY_BASE_PRICE_INCL_TAX => intval($item->getBasePriceInclTax()),
-            ItemTotals::KEY_ROW_TOTAL_INCL_TAX => intval($item->getRowTotalInclTax()),
-            ItemTotals::KEY_BASE_ROW_TOTAL_INCL_TAX => intval($item->getBaseRowTotalInclTax()),
+            ItemTotals::KEY_ROW_TOTAL => (int)$item->getRowTotal(),
+            ItemTotals::KEY_BASE_ROW_TOTAL => (int)$item->getBaseRowTotal(),
+            ItemTotals::KEY_ROW_TOTAL_WITH_DISCOUNT => (int)$item->getRowTotalWithDiscount(),
+            ItemTotals::KEY_TAX_AMOUNT => (int)$item->getTaxAmount(),
+            ItemTotals::KEY_BASE_TAX_AMOUNT => (int)$item->getBaseTaxAmount(),
+            ItemTotals::KEY_TAX_PERCENT => (int)$item->getTaxPercent(),
+            ItemTotals::KEY_DISCOUNT_AMOUNT => (int)$item->getDiscountAmount(),
+            ItemTotals::KEY_BASE_DISCOUNT_AMOUNT => (int)$item->getBaseDiscountAmount(),
+            ItemTotals::KEY_DISCOUNT_PERCENT => (int)$item->getDiscountPercent(),
+            ItemTotals::KEY_PRICE_INCL_TAX => (int)$item->getPriceInclTax(),
+            ItemTotals::KEY_BASE_PRICE_INCL_TAX => (int)$item->getBasePriceInclTax(),
+            ItemTotals::KEY_ROW_TOTAL_INCL_TAX => (int)$item->getRowTotalInclTax(),
+            ItemTotals::KEY_BASE_ROW_TOTAL_INCL_TAX => (int)$item->getBaseRowTotalInclTax(),
             ItemTotals::KEY_WEEE_TAX_APPLIED_AMOUNT => $item->getWeeeTaxAppliedAmount(),
             ItemTotals::KEY_WEEE_TAX_APPLIED => $item->getWeeeTaxApplied(),
             ItemTotals::KEY_NAME => $item->getName(),
@@ -194,12 +194,12 @@ class CartTotalRepositoryTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [

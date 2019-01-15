@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -23,10 +23,10 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp()
     {
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State'
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class
         );
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class
         );
     }
 
@@ -53,10 +53,10 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $productResource = $product->getResource();
         $productResource->getAttribute('sku')->setData('used_for_sort_by', 1)->save();
 
@@ -74,10 +74,10 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $productResource = $product->getResource();
         $productResource->getAttribute('media_gallery')->delete();
 
@@ -85,7 +85,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
@@ -105,7 +105,9 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     public function testAddNewStoreGroup()
     {
         /** @var \Magento\Store\Model\Group $storeGroup */
-        $storeGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
+        $storeGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\Group::class
+        );
         $storeGroup->setData(
             ['website_id' => 1, 'name' => 'New Store Group', 'root_category_id' => 2, 'group_id' => null]
         );

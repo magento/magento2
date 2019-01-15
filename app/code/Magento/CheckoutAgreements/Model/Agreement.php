@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
@@ -18,14 +18,15 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\Resource\Agreement');
+        $this->_init(\Magento\CheckoutAgreements\Model\ResourceModel\Agreement::class);
     }
 
     /**
-     * @param \Magento\Framework\Object $agreementData
+     * @param \Magento\Framework\DataObject $agreementData
      * @return array|bool
      */
     public function validateData($agreementData)
@@ -64,6 +65,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @inheritdoc
      */
@@ -177,6 +179,22 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getMode()
+    {
+        return $this->getData(self::MODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMode($mode)
+    {
+        return $this->setData(self::MODE, $mode);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
@@ -197,5 +215,6 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

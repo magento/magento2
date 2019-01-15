@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem;
 
 /**
  *  Context
@@ -26,6 +30,19 @@ class Context
 
     /**#@-*/
 
+    /**#@-*/
+    private $componentRegistrar;
+
+    /**
+     * Constructor
+     *
+     * @param ComponentRegistrar $componentRegistrar
+     */
+    public function __construct(ComponentRegistrar $componentRegistrar)
+    {
+        $this->componentRegistrar = $componentRegistrar;
+    }
+
     /**
      * Get context from file path in array(<context type>, <context value>) format
      * - for module: <Namespace>_<module name>
@@ -38,14 +55,10 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if ($value = strstr($path, '/app/code/')) {
+        if ($value = $this->getComponentName(ComponentRegistrar::MODULE, $path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-            $value = explode('/', $value);
-            $value = $value[3] . '_' . $value[4];
-        } elseif ($value = strstr($path, '/app/design/')) {
+        } elseif ($value = $this->getComponentName(ComponentRegistrar::THEME, $path)) {
             $type = self::CONTEXT_TYPE_THEME;
-            $value = explode('/', $value);
-            $value = $value[3] . '/' . $value[4] . '/' . $value[5];
         } elseif ($value = strstr($path, '/lib/web/')) {
             $type = self::CONTEXT_TYPE_LIB;
             $value = ltrim($value, '/');
@@ -56,28 +69,47 @@ class Context
     }
 
     /**
+     * Try to get component name by path, return false if not found
+     *
+     * @param string $componentType
+     * @param string $path
+     * @return bool|string
+     */
+    private function getComponentName($componentType, $path)
+    {
+        foreach ($this->componentRegistrar->getPaths($componentType) as $componentName => $componentDir) {
+            $componentDir .= '/';
+            if (strpos($path, $componentDir) !== false) {
+                return $componentName;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get paths by context
      *
      * @param string $type
      * @param array $value
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      */
     public function buildPathToLocaleDirectoryByContext($type, $value)
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $path = 'app/code/' . str_replace('_', '/', $value);
+                $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
                 break;
             case self::CONTEXT_TYPE_THEME:
-                $path = 'app/design/' . $value;
+                $path = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $value);
                 break;
             case self::CONTEXT_TYPE_LIB:
-                $path = 'lib/web';
+                $path = BP . '/lib/web';
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));
         }
-        return $path . '/' . self::LOCALE_DIRECTORY . '/';
+
+        return (null === $path) ? null : $path . '/' . self::LOCALE_DIRECTORY . '/';
     }
 }

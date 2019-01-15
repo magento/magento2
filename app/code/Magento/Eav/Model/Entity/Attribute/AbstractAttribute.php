@@ -1,26 +1,35 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     AttributeInterface,
     \Magento\Eav\Api\Data\AttributeInterface
 {
     const TYPE_STATIC = 'static';
+
+    /**
+     * Const for empty string value.
+     */
+    const EMPTY_STRING = '';
 
     /**
      * Attribute name
@@ -87,7 +96,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $_storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -112,6 +121,38 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * @var FrontendLabelFactory
+     */
+    private $frontendLabelFactory;
+
+    /**
+     * Serializer Instance.
+     *
+     * @var Json
+     * @since 100.2.0
+     */
+    protected $serializer;
+
+    /**
+     * Array of attribute types that have empty string as a possible value.
+     *
+     * @var array
+     */
+    private $emptyStringTypes = [
+        'int',
+        'decimal',
+        'datetime',
+        'varchar',
+        'text',
+        'static',
+    ];
+
+    /**
+     * @var \Magento\Eav\Api\Data\AttributeExtensionFactory
+     */
+    private $eavExtensionFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -119,15 +160,18 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavExtensionFactory
+     * @param FrontendLabelFactory|null $frontendLabelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -137,14 +181,16 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
+        FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -163,23 +209,45 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->eavExtensionFactory = $eavExtensionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
+        $this->frontendLabelFactory = $frontendLabelFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(FrontendLabelFactory::class);
+    }
+
+    /**
+     * Get Serializer instance.
+     *
+     * @deprecated 100.2.0
+     *
+     * @return Json
+     * @since 100.2.0
+     */
+    protected function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(Json::class);
+        }
+
+        return $this->serializer;
     }
 
     /**
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
     }
 
     /**
      * Load attribute data by code
      *
-     * @param  string|int|\Magento\Eav\Model\Entity\Type $entityType
-     * @param  string $code
+     * @param string|int|\Magento\Eav\Model\Entity\Type $entityType
+     * @param string $code
      * @return $this
      * @throws LocalizedException
      */
@@ -195,11 +263,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $entityTypeId = $entityType->getId();
         }
         if (empty($entityTypeId)) {
-            throw new LocalizedException(__('Invalid entity supplied'));
+            throw new LocalizedException(__('The entity supplied is invalid. Verify the entity and try again.'));
         }
         $this->_getResource()->loadByCode($this, $entityTypeId, $code);
         $this->_afterLoad();
         \Magento\Framework\Profiler::stop('load_by_code');
+
         return $this;
     }
 
@@ -207,6 +276,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Get attribute name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -218,15 +288,18 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param   int $data
      * @return  $this
+     * @codeCoverageIgnore
      */
     public function setAttributeId($data)
     {
         $this->_data['attribute_id'] = $data;
+
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function getAttributeId()
     {
@@ -234,8 +307,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set attribute code
+     *
      * @param string $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeCode($data)
     {
@@ -243,7 +319,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function getAttributeCode()
     {
@@ -251,8 +328,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set attribute model
+     *
      * @param array $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeModel($data)
     {
@@ -260,7 +340,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Returns attribute model
+     *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getAttributeModel()
     {
@@ -268,8 +351,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set backend type
+     *
      * @param string $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setBackendType($data)
     {
@@ -277,7 +363,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function getBackendType()
     {
@@ -285,8 +372,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set backend model
+     *
      * @param string $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setBackendModel($data)
     {
@@ -294,7 +384,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function getBackendModel()
     {
@@ -302,8 +393,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set backend table
+     *
      * @param string $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setBackendTable($data)
     {
@@ -311,8 +405,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Returns is visible on front
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getIsVisibleOnFront()
     {
@@ -320,7 +417,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * @return string|int|bool|float
+     * Returns default value
+     *
+     * @return string|null
+     * @codeCoverageIgnore
      */
     public function getDefaultValue()
     {
@@ -332,6 +432,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param string $defaultValue
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setDefaultValue($defaultValue)
     {
@@ -339,7 +440,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Returns attribute set id
+     *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getAttributeSetId()
     {
@@ -347,17 +451,22 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set attribute set id
+     *
      * @param int $id
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeSetId($id)
     {
         $this->_data['attribute_set_id'] = $id;
+
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function getEntityTypeId()
     {
@@ -365,22 +474,30 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set entity type id
+     *
      * @param int|string $id
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntityTypeId($id)
     {
         $this->_data['entity_type_id'] = $id;
+
         return $this;
     }
 
     /**
+     * Set entity type
+     *
      * @param string $type
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntityType($type)
     {
         $this->setData('entity_type', $type);
+
         return $this;
     }
 
@@ -404,8 +521,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Set attribute name
      *
-     * @param   string $name
+     * @param string $name
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setName($name)
     {
@@ -415,7 +533,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Retrieve entity type
      *
-     * @return string
+     * @return \Magento\Eav\Model\Entity\Type
+     * @codeCoverageIgnore
      */
     public function getEntityType()
     {
@@ -427,10 +546,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntity($entity)
     {
         $this->_entity = $entity;
+
         return $this;
     }
 
@@ -442,8 +563,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function getEntity()
     {
         if (!$this->_entity) {
-            $this->_entity = $this->getEntityType();
+            $this->_entity = $this->getEntityType()->getEntity();
         }
+
         return $this->_entity;
     }
 
@@ -451,6 +573,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve entity type
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getEntityIdField()
     {
@@ -471,7 +594,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $backend = $this->_universalFactory->create($this->getBackendModel());
             if (!$backend) {
-                throw new LocalizedException(__('Invalid backend model specified: ' . $this->getBackendModel()));
+                throw new LocalizedException(
+                    __(
+                        'The "%1" backend model is invalid. Verify the backend model and try again.',
+                        $this->getBackendModel()
+                    )
+                );
             }
             $this->_backend = $backend->setAttribute($this);
         }
@@ -506,9 +634,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         if (empty($this->_source)) {
             if (!$this->getSourceModel()) {
-                $this->setSourceModel($this->_getDefaultSourceModel());
+                $this->_source = $this->_getDefaultSourceModel();
+            } else {
+                $this->_source = $this->getSourceModel();
             }
-            $source = $this->_universalFactory->create($this->getSourceModel());
+            $source = $this->_universalFactory->create($this->_source);
             if (!$source) {
                 throw new LocalizedException(
                     __(
@@ -520,6 +650,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $this->_source = $source->setAttribute($this);
         }
+
         return $this->_source;
     }
 
@@ -531,11 +662,15 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function usesSource()
     {
         $input = $this->getFrontendInput();
+
         return $input === 'select' || $input === 'multiselect' || $this->_getData('source_model') != '';
     }
 
     /**
+     * Returns default backend model
+     *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getDefaultBackendModel()
     {
@@ -543,7 +678,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Returns default frontend model
+     *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getDefaultFrontendModel()
     {
@@ -551,28 +689,50 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Returns default source model
+     *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getDefaultSourceModel()
     {
-        return $this->getEntity()->getDefaultAttributeSourceModel();
+        return $this->getEntityType()->getEntity()->getDefaultAttributeSourceModel();
     }
 
     /**
+     * Check if Value is empty.
+     *
      * @param array|null|bool|int|float|string $value
      * @return bool
      */
     public function isValueEmpty($value)
     {
-        $attrType = $this->getBackend()->getType();
-        $isEmpty = (is_array($value) && count($value) == 0) ||
-            $value === null ||
-            $value === false && $attrType != 'int' ||
-            $value === '' && ($attrType == 'int' ||
-            $attrType == 'decimal' ||
-            $attrType == 'datetime');
+        return (is_array($value) && count($value) == 0)
+            || $value === null
+            || ($value === false && $this->getBackend()->getType() != 'int')
+            || ($value === self::EMPTY_STRING && $this->isInEmptyStringTypes());
+    }
 
-        return $isEmpty;
+    /**
+     * Check if attribute empty value is valid.
+     *
+     * @param array|null|bool|int|float|string $value
+     * @return bool
+     * @since 100.1.6
+     */
+    public function isAllowedEmptyTextValue($value)
+    {
+        return $this->isInEmptyStringTypes() && $value === self::EMPTY_STRING;
+    }
+
+    /**
+     * Check is attribute type in allowed empty string types.
+     *
+     * @return bool
+     */
+    private function isInEmptyStringTypes()
+    {
+        return in_array($this->getBackend()->getType(), $this->emptyStringTypes);
     }
 
     /**
@@ -628,6 +788,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         if (!isset($this->_attributeIdCache[$cacheKey])) {
             $this->_attributeIdCache[$cacheKey] = $this->getResource()->getIdByCode($entityType, $code);
         }
+
         return $this->_attributeIdCache[$cacheKey];
     }
 
@@ -652,14 +813,15 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             if ($this->isStatic()) {
                 $this->_dataTable = $this->getEntityType()->getValueTablePrefix();
             } else {
-                $backendTable = trim($this->_getData('backend_table'));
+                $backendTable = trim((string)$this->_getData('backend_table'));
                 if (empty($backendTable)) {
-                    $entityTable = [$this->getEntity()->getEntityTablePrefix(), $this->getBackendType()];
+                    $entityTable = [$this->getEntityType()->getEntityTablePrefix(), $this->getBackendType()];
                     $backendTable = $this->getResource()->getTable($entityTable);
                 }
                 $this->_dataTable = $backendTable;
             }
         }
+
         return $this->_dataTable;
     }
 
@@ -674,6 +836,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         if ($this->usesSource() && $this->getBackendType() != self::TYPE_STATIC) {
             return $this->getSource()->getFlatColumns();
         }
+
         return $this->_getFlatColumnsDdlDefinition();
     }
 
@@ -697,60 +860,60 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 $size = $prop['LENGTH'] ? $prop['LENGTH'] : null;
 
                 $columns[$this->getAttributeCode()] = [
-                    'type' => $this->_resourceHelper->getDdlTypeByColumnType($type),
-                    'length' => $size,
+                    'type'     => $this->_resourceHelper->getDdlTypeByColumnType($type),
+                    'length'   => $size,
                     'unsigned' => $prop['UNSIGNED'] ? true : false,
                     'nullable' => $prop['NULLABLE'],
-                    'default' => $prop['DEFAULT'],
-                    'extra' => null,
+                    'default'  => $prop['DEFAULT'],
+                    'extra'    => null,
                 ];
                 break;
             case 'datetime':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'decimal':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    'length' => '12,4',
+                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'length'   => '12,4',
                     'unsigned' => false,
                     'nullable' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'int':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'text':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default' => null,
-                    'extra' => null,
-                    'length' => \Magento\Framework\DB\Ddl\Table::MAX_TEXT_SIZE,
+                    'default'  => null,
+                    'extra'    => null,
+                    'length'   => \Magento\Framework\DB\Ddl\Table::MAX_TEXT_SIZE,
                 ];
                 break;
             case 'varchar':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => '255',
+                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length'   => '255',
                     'unsigned' => false,
                     'nullable' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             default:
@@ -762,8 +925,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * Retrieve flat columns definition in old format (before MMDB support)
+     *
      * Used in database compatible mode
      *
+     * @deprecated 100.2.0
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -778,61 +943,62 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 }
                 $prop = $describe[$this->getAttributeCode()];
                 $columns[$this->getAttributeCode()] = [
-                    'type' => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ""),
+                    'type'     => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ""),
                     'unsigned' => $prop['UNSIGNED'] ? true : false,
-                    'is_null' => $prop['NULLABLE'],
-                    'default' => $prop['DEFAULT'],
-                    'extra' => null,
+                    'is_null'  => $prop['NULLABLE'],
+                    'default'  => $prop['DEFAULT'],
+                    'extra'    => null,
                 ];
                 break;
             case 'datetime':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => 'datetime',
+                    'type'     => 'datetime',
                     'unsigned' => false,
-                    'is_null' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'is_null'  => true,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'decimal':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => 'decimal(12,4)',
+                    'type'     => 'decimal(12,4)',
                     'unsigned' => false,
-                    'is_null' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'is_null'  => true,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'int':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => 'int',
+                    'type'     => 'int',
                     'unsigned' => false,
-                    'is_null' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'is_null'  => true,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'text':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => 'text',
+                    'type'     => 'text',
                     'unsigned' => false,
-                    'is_null' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'is_null'  => true,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             case 'varchar':
                 $columns[$this->getAttributeCode()] = [
-                    'type' => 'varchar(255)',
+                    'type'     => 'varchar(255)',
                     'unsigned' => false,
-                    'is_null' => true,
-                    'default' => null,
-                    'extra' => null,
+                    'is_null'  => true,
+                    'default'  => null,
+                    'extra'    => null,
                 ];
                 break;
             default:
                 break;
         }
+
         return $columns;
     }
 
@@ -919,6 +1085,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             foreach ($this->_storeManager->getStores() as $store) {
                 $this->getFlatUpdateSelect($store->getId());
             }
+
             return $this;
         }
 
@@ -929,16 +1096,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         if ($this->usesSource()) {
             return $this->getSource()->getFlatUpdateSelect($store);
         }
+
         return $this->_getResource()->getFlatUpdateSelect($this, $store);
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     * {@inheritdoc}
      */
     public function getIsUnique()
     {
-        return $this->getData(self::IS_UNIQUE);
+        return $this->_getData(self::IS_UNIQUE);
     }
 
     /**
@@ -953,11 +1121,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendClass()
     {
-        return $this->getData(self::FRONTEND_CLASS);
+        return $this->_getData(self::FRONTEND_CLASS);
     }
 
     /**
@@ -972,15 +1140,15 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendInput()
     {
-        return $this->getData(self::FRONTEND_INPUT);
+        return $this->_getData(self::FRONTEND_INPUT);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFrontendInput($frontendInput)
     {
@@ -988,28 +1156,29 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsRequired()
     {
-        return $this->getData(self::IS_REQUIRED);
+        return $this->_getData(self::IS_REQUIRED);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsRequired($isRequired)
     {
         return $this->setData(self::IS_REQUIRED, $isRequired);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
-        $options = $this->getData(self::OPTIONS);
+        $options = $this->_getData(self::OPTIONS);
         if (!$options) {
             $options = $this->usesSource() ? $this->getSource()->getAllOptions() : [];
         }
@@ -1030,7 +1199,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             foreach ($options as $option) {
                 $optionData = $this->dataObjectProcessor->buildOutputDataArray(
                     $option,
-                    '\Magento\Eav\Api\Data\AttributeOptionInterface'
+                    \Magento\Eav\Api\Data\AttributeOptionInterface::class
                 );
                 $optionDataArray[] = $optionData;
             }
@@ -1038,6 +1207,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         } else {
             $this->setData(self::OPTIONS, $options);
         }
+
         return $this;
     }
 
@@ -1056,16 +1226,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $this->dataObjectHelper->populateWithArray(
                 $optionDataObject,
                 $option,
-                '\Magento\Eav\Api\Data\AttributeOptionInterface'
+                \Magento\Eav\Api\Data\AttributeOptionInterface::class
             );
             $dataObjects[] = $optionDataObject;
         }
+
         return $dataObjects;
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     * {@inheritdoc}
      */
     public function getIsUserDefined()
     {
@@ -1084,11 +1255,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultFrontendLabel()
     {
-        return $this->getData(self::FRONTEND_LABEL);
+        return $this->_getData(self::FRONTEND_LABEL);
     }
 
     /**
@@ -1103,11 +1274,24 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFrontendLabels()
     {
-        return $this->getData(self::FRONTEND_LABELS);
+        if ($this->getData(self::FRONTEND_LABELS) == null) {
+            $attributeId = $this->getAttributeId();
+            $storeLabels = $this->_getResource()->getStoreLabelsByAttributeId($attributeId);
+
+            $resultFrontedLabels = [];
+            foreach ($storeLabels as $i => $label) {
+                $frontendLabel = $this->frontendLabelFactory->create();
+                $frontendLabel->setStoreId($i);
+                $frontendLabel->setLabel($label);
+                $resultFrontedLabels[] = $frontendLabel;
+            }
+            $this->setData(self::FRONTEND_LABELS, $resultFrontedLabels);
+        }
+        return $this->_getData(self::FRONTEND_LABELS);
     }
 
     /**
@@ -1122,11 +1306,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNote()
     {
-        return $this->getData(self::NOTE);
+        return $this->_getData(self::NOTE);
     }
 
     /**
@@ -1141,11 +1325,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceModel()
     {
-        return $this->getData(self::SOURCE_MODEL);
+        return $this->_getData(self::SOURCE_MODEL);
     }
 
     /**
@@ -1158,19 +1342,21 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::SOURCE_MODEL, $sourceModel);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValidationRules()
     {
-        $rules = $this->getData(self::VALIDATE_RULES);
+        $rules = $this->_getData(self::VALIDATE_RULES);
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return unserialize($rules);
+            return $this->getSerializer()->unserialize($rules);
         }
+
         return [];
     }
 
@@ -1179,6 +1365,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param \Magento\Eav\Api\Data\AttributeValidationRuleInterface[] $validationRules
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setValidationRules(array $validationRules = null)
     {
@@ -1186,23 +1373,74 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
+     * @codeCoverageIgnore
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!($extensionAttributes instanceof \Magento\Eav\Api\Data\AttributeExtensionInterface)) {
+            /** @var \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->eavExtensionFactory->create();
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.7
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            [
+                '_eavConfig',
+                '_eavTypeFactory',
+                '_storeManager',
+                '_resourceHelper',
+                '_universalFactory',
+                'optionDataFactory',
+                'dataObjectProcessor',
+                'dataObjectHelper',
+                '_entity',
+                '_backend',
+                '_source',
+                '_frontend',
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.7
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        $this->_eavTypeFactory = $objectManager->get(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_resourceHelper = $objectManager->get(\Magento\Eav\Model\ResourceModel\Helper::class);
+        $this->_universalFactory = $objectManager->get(\Magento\Framework\Validator\UniversalFactory ::class);
+        $this->optionDataFactory = $objectManager->get(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
+        $this->dataObjectProcessor = $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
     }
 }

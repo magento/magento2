@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Response;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorizenet\Model\Response\Factory
@@ -28,16 +28,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->responseMock = $this->getMock('Magento\Authorizenet\Model\Response', [], [], '', false);
+        $this->responseMock = $this->createMock(\Magento\Authorizenet\Model\Response::class);
 
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Authorizenet\Model\Response', [])
+            ->with(\Magento\Authorizenet\Model\Response::class, [])
             ->willReturn($this->responseMock);
 
         $this->responseFactory = $objectManager->getObject(
-            'Magento\Authorizenet\Model\Response\Factory',
+            \Magento\Authorizenet\Model\Response\Factory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }

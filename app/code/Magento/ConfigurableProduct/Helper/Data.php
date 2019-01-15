@@ -1,33 +1,72 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Helper;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Image;
 
 /**
  * Class Data
  * Helper class for getting options
- *
+ * @api
+ * @since 100.0.2
  */
 class Data
 {
     /**
-     * Catalog Image Helper
-     *
-     * @var \Magento\Catalog\Helper\Image
+     * @var ImageHelper
      */
     protected $imageHelper;
 
     /**
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var UrlBuilder
      */
-    public function __construct(\Magento\Catalog\Helper\Image $imageHelper)
+    private $imageUrlBuilder;
+
+    /**
+     * @param ImageHelper $imageHelper
+     * @param UrlBuilder $urlBuilder
+     */
+    public function __construct(ImageHelper $imageHelper, UrlBuilder $urlBuilder = null)
     {
         $this->imageHelper = $imageHelper;
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+    }
+
+    /**
+     * Retrieve collection of gallery images
+     *
+     * @param ProductInterface $product
+     * @return Image[]|null
+     */
+    public function getGalleryImages(ProductInterface $product)
+    {
+        $images = $product->getMediaGalleryImages();
+        if ($images instanceof \Magento\Framework\Data\Collection) {
+            /** @var $image Image */
+            foreach ($images as $image) {
+                $smallImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_small');
+                $image->setData('small_image_url', $smallImageUrl);
+
+                $mediumImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_medium');
+                $image->setData('medium_image_url', $mediumImageUrl);
+
+                $largeImageUrl = $this->imageUrlBuilder
+                    ->getUrl($image->getFile(), 'product_page_image_large');
+                $image->setData('large_image_url', $largeImageUrl);
+            }
+        }
+
+        return $images;
     }
 
     /**
@@ -40,25 +79,19 @@ class Data
     public function getOptions($currentProduct, $allowedProducts)
     {
         $options = [];
-        $baseImageUrl = (string)$this->imageHelper->init($currentProduct, 'image');
+        $allowAttributes = $this->getAllowAttributes($currentProduct);
 
         foreach ($allowedProducts as $product) {
             $productId = $product->getId();
-            $image = (string)$this->imageHelper->init($product, 'image');
-
-            foreach ($this->getAllowAttributes($currentProduct) as $attribute) {
+            foreach ($allowAttributes as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
-                $imageUrl = (!$product->getImage() || $product->getImage() === 'no_selection')
-                    ? $baseImageUrl
-                    : (string)$image;
-                $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
+                $options['index'][$productId][$productAttributeId] = $attributeValue;
             }
         }
-
         return $options;
     }
 

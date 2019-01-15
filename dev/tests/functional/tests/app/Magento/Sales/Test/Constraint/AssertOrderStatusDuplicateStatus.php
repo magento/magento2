@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,8 +25,8 @@ class AssertOrderStatusDuplicateStatus extends AbstractConstraint
      */
     public function processAssert(OrderStatusNew $orderStatusNewPage)
     {
-        $actualMessage = $orderStatusNewPage->getMessagesBlock()->getErrorMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessage = $orderStatusNewPage->getMessagesBlock()->getErrorMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::DUPLICATE_MESSAGE,
             $actualMessage,
             'Wrong duplicate message is displayed.'

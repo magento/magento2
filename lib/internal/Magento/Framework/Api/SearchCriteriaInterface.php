@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,9 +13,6 @@ namespace Magento\Framework\Api;
  */
 interface SearchCriteriaInterface
 {
-    const SORT_ASC = 1;
-    const SORT_DESC = -1;
-
     /**
      * Get a list of filter groups.
      *

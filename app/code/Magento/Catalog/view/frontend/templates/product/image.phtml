@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <img class="photo image"
-     <?php echo $block->getAddAttribute(); ?>
-     src="<?php echo $block->getProductImageView()->getUrl() ?>"
-     width="<?php echo $block->getProductImageView()->getWidth();?>"
-     height="<?php echo $block->getProductImageView()->getHeight();?>"
-     alt="<?php echo $block->stripTags($block->getProductImageView()->getLabel(), null, true) ?>" />
+    <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
+    src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
+    width="<?= /* @escapeNotVerified */ $block->getWidth() ?>"
+    height="<?= /* @escapeNotVerified */ $block->getHeight() ?>"
+    alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true) ?>" />

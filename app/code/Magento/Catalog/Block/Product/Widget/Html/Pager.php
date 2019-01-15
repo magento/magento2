@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -98,7 +98,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
     /**
      * Connect collection to paging
      *
-     * @param   \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection $collection
+     * @param   \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
      * @return  \Magento\Catalog\Block\Product\Widget\Html\Pager
      */
     public function setCollection($collection)

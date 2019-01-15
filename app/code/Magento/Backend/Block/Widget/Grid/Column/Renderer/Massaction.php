@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -8,7 +8,9 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Grid widget column renderer massaction
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
@@ -43,10 +45,10 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
     /**
      * Returns HTML of the object
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($this->getColumn()->getGrid()->getMassactionIdFieldOnlyIndexValue()) {
             $this->setNoObjectId(true);
@@ -63,7 +65,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
      */
     protected function _getCheckboxHtml($value, $checked)
     {
-        $id = 'id_' . rand(0, 999);
+        $id = 'id_' . random_int(0, 999);
         $html = '<label class="data-grid-checkbox-cell-inner" for="'. $id .'">';
         $html .= '<input type="checkbox" name="' . $this->getColumn()->getName() . '" ';
         $html .= 'id="' . $id . '" data-role="select-row"';

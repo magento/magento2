@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
@@ -16,21 +16,21 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Block config data
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_config;
 
     /**
      * Purchased Separately Attribute cache
      *
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected $_purchasedSeparatelyAttribute = null;
 
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/links.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/links.phtml';
 
     /**
      * Downloadable file
@@ -140,7 +140,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Retrieve Purchased Separately Attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getPurchasedSeparatelyAttribute()
     {
@@ -157,27 +157,13 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve Purchased Separately HTML select
+     * Get Links can be purchased separately value for current product
      *
-     * @return string
+     * @return bool
      */
-    public function getPurchasedSeparatelySelect()
+    public function isProductLinksCanBePurchasedSeparately()
     {
-        $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
-        )->setName(
-            'product[links_purchased_separately]'
-        )->setId(
-            'downloadable_link_purchase_type'
-        )->setOptions(
-            $this->_sourceModel->toOptionArray()
-        )->setValue(
-            $this->getProduct()->getLinksPurchasedSeparately()
-        )->setClass(
-            'admin__control-select'
-        );
-
-        return $select->getHtml();
+        return (bool) $this->getProduct()->getData('links_purchased_separately');
     }
 
     /**
@@ -188,12 +174,12 @@ class Links extends \Magento\Backend\Block\Template
     public function getAddButtonHtml()
     {
         $addButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
-                'label' => __('Add New Row'),
+                'label' => __('Add New Link'),
                 'id' => 'add_link_item',
-                'class' => 'add',
+                'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-link'],
             ]
         );
@@ -332,7 +318,7 @@ class Links extends \Magento\Backend\Block\Template
             if ($this->getProduct()->getStoreId() && $priceWebsiteScope) {
                 $tmpLinkItem['website_price'] = $item->getWebsitePrice();
             }
-            $linkArr[] = new \Magento\Framework\Object($tmpLinkItem);
+            $linkArr[] = new \Magento\Framework\DataObject($tmpLinkItem);
         }
         return $linkArr;
     }
@@ -370,7 +356,7 @@ class Links extends \Magento\Backend\Block\Template
     {
         $this->addChild(
             'upload_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'id' => '',
                 'label' => __('Upload Files'),
@@ -436,12 +422,12 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Retrieve config object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig()
     {
         if ($this->_config === null) {
-            $this->_config = new \Magento\Framework\Object();
+            $this->_config = new \Magento\Framework\DataObject();
         }
 
         return $this->_config;
@@ -462,5 +448,14 @@ class Links extends \Magento\Backend\Block\Template
     public function getBaseCurrencyCode($storeId)
     {
         return $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+    }
+
+    /**
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
+     * @return string
+     */
+    public function getBaseCurrencySymbol($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getBaseCurrency()->getCurrencySymbol();
     }
 }

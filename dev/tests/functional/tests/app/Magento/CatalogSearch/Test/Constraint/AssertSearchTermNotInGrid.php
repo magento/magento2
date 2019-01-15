@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,14 +32,13 @@ class AssertSearchTermNotInGrid extends AbstractConstraint
             'store_id' => $searchTerm->getStoreId(),
             'results_from' => $searchTerm->getNumResults(),
             'popularity_from' => $searchTerm->getPopularity(),
-            'synonym_for' => $searchTerm->getSynonymFor(),
             'redirect' => $searchTerm->getRedirect(),
             'display_in_terms' => strtolower($searchTerm->getDisplayInTerms()),
         ];
 
         $grid->search($filters);
         unset($filters['store_id']);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $grid->isRowVisible($filters, false),
             'Search term "' . $queryText . '" was found in grid.'
         );

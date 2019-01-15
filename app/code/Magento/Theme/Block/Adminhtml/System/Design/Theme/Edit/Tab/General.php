@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme\Collection;
 
 /**
  * Theme form, general tab
@@ -56,7 +58,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     protected function _prepareForm()
     {
         /** @var \Magento\Backend\Model\Session $session */
-        $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         $formDataFromSession = $session->getThemeData();
         $this->_isThemeEditable = $this->_getCurrentTheme()->isEditable();
         /** @var ThemeInterface $currentTheme */
@@ -99,23 +101,24 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
             $themeFieldset->addField('theme_id', 'hidden', ['name' => 'theme_id']);
         }
 
-        /** @var \Magento\Theme\Model\Theme\Collection $themesCollections */
-        $themesCollections = $this->_objectManager->create('Magento\Theme\Model\Theme\Collection');
+        /** @var Collection $themesCollections */
+        $themesCollections = $this->_objectManager->create(\Magento\Theme\Model\Theme\Collection::class);
 
         /** @var \Magento\Framework\Json\Helper\Data $helper */
-        $helper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
+        $helper = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class);
 
+        $themesCollections->addConstraint(Collection::CONSTRAINT_AREA, Area::AREA_FRONTEND);
         $onChangeScript = sprintf(
             'parentThemeOnChange(this.value, %s)',
             str_replace(
                 '"',
                 '\'',
-                $helper->jsonEncode($this->_getDefaultsInherited($themesCollections->addDefaultPattern()))
+                $helper->jsonEncode($this->_getDefaultsInherited($themesCollections))
             )
         );
 
         /** @var ThemeInterface $parentTheme */
-        $parentTheme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $parentTheme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         if (!empty($formData['parent_id'])) {
             $parentTheme->load($formData['parent_id']);
         }
@@ -238,7 +241,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      */
     protected function _getAdditionalElementTypes()
     {
-        $element = 'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Image';
+        $element = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Image::class;
         return ['image' => $element];
     }
 

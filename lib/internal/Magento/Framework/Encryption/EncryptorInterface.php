@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Encryption;
 
 /**
  * Encryptor interface
+ *
+ * @api
  */
 interface EncryptorInterface
 {
@@ -42,6 +44,25 @@ interface EncryptorInterface
      * @throws \Exception
      */
     public function validateHash($password, $hash);
+
+    /**
+     * Validate hash against hashing method (with or without salt)
+     *
+     * @param string $password
+     * @param string $hash
+     * @return bool
+     * @throws \Exception
+     */
+    public function isValidHash($password, $hash);
+
+    /**
+     * Validate hashing algorithm version
+     *
+     * @param string $hash
+     * @param bool $validateCount
+     * @return bool
+     */
+    public function validateHashVersion($hash, $validateCount = false);
 
     /**
      * Encrypt a string

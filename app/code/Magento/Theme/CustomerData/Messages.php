@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Theme\CustomerData;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Messages section
@@ -17,21 +18,32 @@ class Messages implements SectionSourceInterface
 {
     /**
      * Manager messages
+     *
      * @var MessageManager
      */
     protected $messageManager;
 
     /**
-     * Constructor
-     * @param MessageManager $messageManager
+     * @var InterpretationStrategyInterface
      */
-    public function __construct(MessageManager $messageManager)
-    {
+    private $interpretationStrategy;
+
+    /**
+     * Constructor
+     *
+     * @param MessageManager $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
+     */
+    public function __construct(
+        MessageManager $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy
+    ) {
         $this->messageManager = $messageManager;
+        $this->interpretationStrategy = $interpretationStrategy;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -40,7 +52,10 @@ class Messages implements SectionSourceInterface
             'messages' => array_reduce(
                 $messages->getItems(),
                 function (array $result, MessageInterface $message) {
-                    $result[] = ['type' => $message->getType(), 'text' => $message->getText()];
+                    $result[] = [
+                        'type' => $message->getType(),
+                        'text' => $this->interpretationStrategy->interpret($message)
+                    ];
                     return $result;
                 },
                 []

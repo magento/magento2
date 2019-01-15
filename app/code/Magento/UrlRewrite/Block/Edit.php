@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -65,7 +65,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('edit.phtml');
+        $this->setTemplate('Magento_UrlRewrite::edit.phtml');
 
         $this->_addBackButton();
         $this->_prepareLayoutFeatures();
@@ -118,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
             'reset',
             [
                 'label' => __('Reset'),
-                'onclick' => '$(\'edit_form\').reset()',
+                'onclick' => 'location.reload();',
                 'class' => 'scalable',
                 'level' => -1
             ]
@@ -173,7 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
                             ['id' => $this->getUrlRewrite()->getId()]
                         )
                     )
-                    . ')',
+                    . ', {data: {}})',
                 'class' => 'scalable delete',
                 'level' => -1
             ]
@@ -208,7 +208,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Edit\Form',
+            \Magento\UrlRewrite\Block\Edit\Form::class,
             '',
             ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
         );
@@ -232,7 +232,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     private function _getSelectorBlock()
     {
         if (!$this->_selectorBlock) {
-            $this->_selectorBlock = $this->getLayout()->createBlock('Magento\UrlRewrite\Block\Selector');
+            $this->_selectorBlock = $this->getLayout()->createBlock(\Magento\UrlRewrite\Block\Selector::class);
         }
         return $this->_selectorBlock;
     }
@@ -243,7 +243,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Since buttons are set as children, we remove them as children after generating them
      * not to duplicate them in future
      *
-     * @param null $area
+     * @param string|null $area
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

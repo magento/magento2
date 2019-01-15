@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
@@ -10,7 +10,7 @@ use \Magento\Framework\Event\Observer\Regex;
 /**
  * Class RegexTest
  */
-class RegexTest extends \PHPUnit_Framework_TestCase
+class RegexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Regex
@@ -36,7 +36,7 @@ class RegexTest extends \PHPUnit_Framework_TestCase
     public function testIsValidFor($pattern, $name, $expectedResult)
     {
         $this->regex->setEventRegex($pattern);
-        $eventMock = $this->getMock('Magento\Framework\Event', [], [], '', false);
+        $eventMock = $this->createMock(\Magento\Framework\Event::class);
         $eventMock->expects($this->any())
             ->method('getName')
             ->will($this->returnValue($name));
@@ -44,6 +44,9 @@ class RegexTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->regex->isValidFor($eventMock));
     }
 
+    /**
+     * @return array
+     */
     public function isValidForProvider()
     {
         return [

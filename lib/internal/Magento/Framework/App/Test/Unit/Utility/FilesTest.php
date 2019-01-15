@@ -1,66 +1,83 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
 
-use \Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Utility/Files class.
+ *
+ * @package Magento\Framework\App\Test\Unit\Utility
+ */
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var string
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    private static $baseDir;
+    private $dirSearchMock;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        self::$baseDir = __DIR__ . '/_files/foo';
-        Files::setInstance(new Files(self::$baseDir));
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $fileUtilities = $objectManager->getObject(
+            Files::class,
+            [
+                'dirSearch' => $this->dirSearchMock
+            ]
+        );
+        Files::setInstance($fileUtilities);
     }
 
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
         Files::setInstance();
     }
 
-    public function testReadLists()
+    public function testGetConfigFiles()
     {
-        $result = Files::init()->readLists(__DIR__ . '/_files/*good.txt');
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/some.file')
+            ->willReturn(['/one/some.file', '/two/some.file', 'some.other.file']);
 
-        // the braces
-        $this->assertContains(self::$baseDir . '/one.txt', $result);
-        $this->assertContains(self::$baseDir . '/two.txt', $result);
-
-        // directory is returned as-is, without expanding contents recursively
-        $this->assertContains(self::$baseDir . '/bar', $result);
-
-        // the * wildcard
-        $this->assertContains(self::$baseDir . '/baz/one.txt', $result);
-        $this->assertContains(self::$baseDir . '/baz/two.txt', $result);
+        $expected = ['/one/some.file', '/two/some.file'];
+        $actual = Files::init()->getConfigFiles('some.file', ['some.other.file'], false);
+        $this->assertSame($expected, $actual);
+        // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
     }
 
-    public function testReadListsWrongPattern()
+    public function testGetDbSchemaFiles()
     {
-        $this->assertSame([], Files::init()->readLists(__DIR__ . '/_files/no_good.txt'));
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
+        $this->assertSame($expected, $actual);
     }
 
-    public function testReadListsCorruptedDir()
+    public function testGetLayoutConfigFiles()
     {
-        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_dir.txt');
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::THEME, '/etc/some.file')
+            ->willReturn(['/one/some.file', '/two/some.file']);
 
-        foreach ($result as $path) {
-            $this->assertNotContains('bar/unknown', $path);
-        }
-    }
-
-    public function testReadListsCorruptedFile()
-    {
-        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_file.txt');
-
-        foreach ($result as $path) {
-            $this->assertNotContains('unknown.txt', $path);
-        }
+        $expected = ['/one/some.file', '/two/some.file'];
+        $actual = Files::init()->getLayoutConfigFiles('some.file', false);
+        $this->assertSame($expected, $actual);
+        // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
     }
 }

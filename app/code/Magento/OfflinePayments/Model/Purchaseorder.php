@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Purchaseorder
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @api
+ * @since 100.0.2
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -24,12 +29,12 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Purchaseorder';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Purchaseorder::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Purchaseorder';
+    protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
     /**
      * Availability option
@@ -41,16 +46,31 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\Object|mixed $data
+     * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
+     * @throws LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
-        if (!$data instanceof \Magento\Framework\Object) {
-            $data = new \Magento\Framework\Object($data);
+        $this->getInfoInstance()->setPoNumber($data->getPoNumber());
+        return $this;
+    }
+
+    /**
+     * Validate payment method information object
+     *
+     * @return $this
+     * @throws LocalizedException
+     * @api
+     */
+    public function validate()
+    {
+        parent::validate();
+
+        if (empty($this->getInfoInstance()->getPoNumber())) {
+            throw new LocalizedException(__('Purchase order number is a required field.'));
         }
 
-        $this->getInfoInstance()->setPoNumber($data->getPoNumber());
         return $this;
     }
 }

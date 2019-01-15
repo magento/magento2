@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -9,6 +9,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create form block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -100,7 +103,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve url for form submiting
+     * Retrieve url for form submitting
      *
      * @return string
      */
@@ -161,6 +164,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getOrderDataJson()
     {
         $data = [];
+        $this->_storeManager->setCurrentStore($this->getStoreId());
         if ($this->getCustomerId()) {
             $data['customer_id'] = $this->getCustomerId();
             $data['addresses'] = [];
@@ -186,6 +190,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $data['shipping_method_reseted'] = !(bool)$this->getQuote()->getShippingAddress()->getShippingMethod();
             $data['payment_method'] = $this->getQuote()->getPayment()->getMethod();
         }
+        $data['quote_id'] = $this->_sessionQuote->getQuoteId();
 
         return $this->_jsonEncoder->encode($data);
     }

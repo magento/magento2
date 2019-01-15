@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Builder;
 
-class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
+class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Dependency\ParserInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -24,11 +24,11 @@ class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dependenciesParserMock = $this->getMock('Magento\Setup\Module\Dependency\ParserInterface');
-        $this->reportWriterMock = $this->getMock('Magento\Setup\Module\Dependency\Report\WriterInterface');
+        $this->dependenciesParserMock = $this->createMock(\Magento\Setup\Module\Dependency\ParserInterface::class);
+        $this->reportWriterMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\WriterInterface::class);
 
         $this->builder = $this->getMockForAbstractClass(
-            'Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder',
+            \Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder::class,
             ['dependenciesParser' => $this->dependenciesParserMock, 'reportWriter' => $this->reportWriterMock]
         );
     }
@@ -79,7 +79,7 @@ class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $parseResult = ['foo', 'bar', 'baz'];
-        $configMock = $this->getMock('\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface');
+        $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
 
         $this->dependenciesParserMock->expects(
             $this->once()

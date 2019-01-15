@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
@@ -17,7 +18,9 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testFlushAllAction()
     {
         /** @var $cache \Magento\Framework\App\Cache */
-        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\App\Cache');
+        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\Cache::class
+        );
         $this->assertNotEmpty($cache->load('APPLICATION_FIXTURE'));
 
         $this->dispatch('backend/admin/cache/flushAll');
@@ -26,7 +29,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertFalse($cache->load('APPLICATION_FIXTURE'));
 
         $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Cache\Frontend\Pool'
+            \Magento\Framework\App\Cache\Frontend\Pool::class
         );
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
@@ -43,12 +46,14 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/cache/flushSystem');
 
         /** @var $cache \Magento\Framework\App\Cache */
-        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\App\Cache');
+        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\App\Cache::class
+        );
         /** @var $cachePool \Magento\Framework\App\Cache\Frontend\Pool */
         $this->assertFalse($cache->load('APPLICATION_FIXTURE'));
 
         $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Cache\Frontend\Pool'
+            \Magento\Framework\App\Cache\Frontend\Pool::class
         );
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
@@ -68,7 +73,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);
         $this->dispatch('backend/admin/cache/' . $action);
         $this->assertSessionMessages(
-            $this->contains("Specified cache type(s) don't exist: invalid_type_1, invalid_type_2"),
+            $this->contains("These cache type(s) don&#039;t exist: invalid_type_1, invalid_type_2"),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

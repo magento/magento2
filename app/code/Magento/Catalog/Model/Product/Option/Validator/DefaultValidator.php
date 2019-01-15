@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 use Magento\Catalog\Model\Product\Option;
 use Zend_Validate_Exception;
 
+/**
+ * Product option default validator
+ */
 class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
@@ -26,12 +29,19 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     protected $priceTypes;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    private $localeFormat;
+
+    /**
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig
+     * @param \Magento\Framework\Locale\FormatInterface|null $localeFormat
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
-        \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig
+        \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig,
+        \Magento\Framework\Locale\FormatInterface $localeFormat = null
     ) {
         foreach ($productOptionConfig->getAll() as $option) {
             foreach ($option['types'] as $type) {
@@ -42,6 +52,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         foreach ($priceConfig->toOptionArray() as $item) {
             $this->priceTypes[] = $item['value'];
         }
+
+        $this->localeFormat = $localeFormat ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Locale\FormatInterface::class);
     }
 
     /**
@@ -106,7 +119,9 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $title === null) {
             return true;
         }
-        if ($this->isEmpty($title)) {
+
+        // checking whether title is null and is empty string
+        if ($title === null || $title === '') {
             return false;
         }
 
@@ -132,11 +147,11 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      */
     protected function validateOptionValue(Option $option)
     {
-        return $this->isInRange($option->getPriceType(), $this->priceTypes) && !$this->isNegative($option->getPrice());
+        return $this->isInRange($option->getPriceType(), $this->priceTypes) && $this->isNumber($option->getPrice());
     }
 
     /**
-     * Check whether value is empty
+     * Check whether the value is empty
      *
      * @param mixed $value
      * @return bool
@@ -147,7 +162,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
-     * Check whether value is in range
+     * Check whether the value is in range
      *
      * @param string $value
      * @param array $range
@@ -159,13 +174,24 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
-     * Check whether value is not negative
+     * Check whether the value is negative
      *
      * @param string $value
      * @return bool
      */
     protected function isNegative($value)
     {
-        return intval($value) < 0;
+        return $this->localeFormat->getNumber($value) < 0;
+    }
+
+    /**
+     * Check whether the value is a number
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function isNumber($value)
+    {
+        return is_numeric($this->localeFormat->getNumber($value));
     }
 }

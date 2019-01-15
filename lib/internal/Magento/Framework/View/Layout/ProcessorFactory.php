@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -32,7 +32,7 @@ class ProcessorFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\Layout\ProcessorInterface'
+        $instanceName = \Magento\Framework\View\Layout\ProcessorInterface::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Plugin;
@@ -37,14 +37,14 @@ class Layer
      * Before prepare product collection handler
      *
      * @param \Magento\Catalog\Model\Layer $subject
-     * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePrepareProductCollection(
         \Magento\Catalog\Model\Layer $subject,
-        \Magento\Catalog\Model\Resource\Collection\AbstractCollection $collection
+        \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
         if ($this->_isEnabledShowOutOfStock()) {
             return;

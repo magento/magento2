@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ProductRepositoryInterfaceTest extends WebapiAbstract
@@ -126,6 +127,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::STATUS => 1,
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
+                'stock_item' => $this->getStockItemData()
+            ]
         ];
 
         $this->saveProduct($productData);
@@ -158,7 +162,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                             "position" => 0, "extension_attributes" => ["qty" => 4]];
         $productLinkData2 = ["sku" => "group_product_500", "link_type" => "upsell",
                              "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                             "position" => 0, "extension_attributes" => []];
+                             "position" => 0];
         $productWithGroupData =  [
             ProductInterface::SKU => "group_product_500",
             ProductInterface::NAME => "Group Product 500",
@@ -199,5 +203,37 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->deleteProduct("product_simple_500");
         $this->deleteProduct("group_product_500");
+    }
+
+    /**
+     * @return array
+     */
+    private function getStockItemData()
+    {
+        return [
+            StockItemInterface::IS_IN_STOCK => 1,
+            StockItemInterface::QTY => 100500,
+            StockItemInterface::IS_QTY_DECIMAL => 1,
+            StockItemInterface::SHOW_DEFAULT_NOTIFICATION_MESSAGE => 0,
+            StockItemInterface::USE_CONFIG_MIN_QTY => 0,
+            StockItemInterface::USE_CONFIG_MIN_SALE_QTY => 0,
+            StockItemInterface::MIN_QTY => 1,
+            StockItemInterface::MIN_SALE_QTY => 1,
+            StockItemInterface::MAX_SALE_QTY => 100,
+            StockItemInterface::USE_CONFIG_MAX_SALE_QTY => 0,
+            StockItemInterface::USE_CONFIG_BACKORDERS => 0,
+            StockItemInterface::BACKORDERS => 0,
+            StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY => 0,
+            StockItemInterface::NOTIFY_STOCK_QTY => 0,
+            StockItemInterface::USE_CONFIG_QTY_INCREMENTS => 0,
+            StockItemInterface::QTY_INCREMENTS => 0,
+            StockItemInterface::USE_CONFIG_ENABLE_QTY_INC => 0,
+            StockItemInterface::ENABLE_QTY_INCREMENTS => 0,
+            StockItemInterface::USE_CONFIG_MANAGE_STOCK => 1,
+            StockItemInterface::MANAGE_STOCK => 1,
+            StockItemInterface::LOW_STOCK_DATE => null,
+            StockItemInterface::IS_DECIMAL_DIVIDED => 0,
+            StockItemInterface::STOCK_STATUS_CHANGED_AUTO => 0,
+        ];
     }
 }

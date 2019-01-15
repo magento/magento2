@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Before extends \Magento\Backend\Block\Template
 {
     /**
@@ -52,6 +56,20 @@ class Before extends \Magento\Backend\Block\Template
         $behaviors = $this->_importModel->getEntityBehaviors();
         foreach ($behaviors as $entityCode => $behavior) {
             $behaviors[$entityCode] = $behavior['code'];
+        }
+        return $this->_jsonEncoder->encode($behaviors);
+    }
+
+    /**
+     * Returns json-encoded entity behaviors notes array
+     *
+     * @return string
+     */
+    public function getEntityBehaviorsNotes()
+    {
+        $behaviors = $this->_importModel->getEntityBehaviors();
+        foreach ($behaviors as $entityCode => $behavior) {
+            $behaviors[$entityCode] = $behavior['notes'];
         }
         return $this->_jsonEncoder->encode($behaviors);
     }

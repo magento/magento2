@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -136,7 +136,8 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
     private function isProductInCategory($categoryId, $productId, $productPosition)
     {
         /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $categoryLoader */
-        $categoryLoader = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $categoryLoader = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $category = $categoryLoader->get($categoryId);
         $productsPosition = $category->getProductsPosition();
 

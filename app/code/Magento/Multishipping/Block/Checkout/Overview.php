@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -11,7 +11,9 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Multishipping checkout overview information
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Overview extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -36,10 +38,22 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsReader
+     */
+    protected $totalsReader;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
      * @param array $data
      */
     public function __construct(
@@ -47,6 +61,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Tax\Helper\Data $taxHelper,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
         array $data = []
     ) {
         $this->_taxHelper = $taxHelper;
@@ -54,6 +70,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
     }
 
     /**
@@ -98,15 +116,11 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get object with payment info posted data
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getPayment()
     {
-        if (!$this->hasData('payment')) {
-            $payment = new \Magento\Framework\Object($this->getRequest()->getPost('payment'));
-            $this->setData('payment', $payment);
-        }
-        return $this->_getData('payment');
+        return $this->getCheckout()->getQuote()->getPayment();
     }
 
     /**
@@ -182,9 +196,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param Address $address
-     * @return mixed
+     * @return array
      */
-    public function getShippingAddressItems($address)
+    public function getShippingAddressItems($address): array
     {
         return $address->getAllVisibleItems();
     }
@@ -281,7 +295,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getVirtualProductEditUrl()
     {
-        return $this->getUrl('*/cart');
+        return $this->getUrl('checkout/cart');
     }
 
     /**
@@ -291,16 +305,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getVirtualItems()
     {
-        $items = [];
-        foreach ($this->getBillingAddress()->getItemsCollection() as $_item) {
-            if ($_item->isDeleted()) {
-                continue;
-            }
-            if ($_item->getProduct()->getIsVirtual() && !$_item->getParentItemId()) {
-                $items[] = $_item;
-            }
-        }
-        return $items;
+        return $this->getBillingAddress()->getAllVisibleItems();
     }
 
     /**
@@ -314,12 +319,22 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * @deprecated
+     * typo in method name, see getBillingAddressTotals()
      * @return mixed
      */
     public function getBillinAddressTotals()
     {
-        $_address = $this->getQuote()->getBillingAddress();
-        return $this->getShippingAddressTotals($_address);
+        return $this->getBillingAddressTotals();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBillingAddressTotals()
+    {
+        $address = $this->getQuote()->getBillingAddress();
+        return $this->getShippingAddressTotals($address);
     }
 
     /**
@@ -353,10 +368,10 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Return row-level item html
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function getRowItemHtml(\Magento\Framework\Object $item)
+    public function getRowItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
         $renderer = $this->_getRowItemRenderer($type)->setItem($item);

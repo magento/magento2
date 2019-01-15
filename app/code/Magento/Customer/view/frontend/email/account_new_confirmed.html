@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Welcome to {{var store.getFrontendName()}} @-->
+<!--@subject {{trans "Welcome to %store_name" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var this.getUrl($store, 'customer/account/')":"Customer Account URL",
 "var customer.email":"Customer Email",
@@ -18,7 +18,7 @@
     {{trans
         'To sign in to our site, use these credentials during checkout or on the <a href="%customer_url">My Account</a> page:'
 
-        customer_url=$this.getUrl($store,'customer/account/')
+        customer_url=$this.getUrl($store,'customer/account/',[_nosid:1])
     |raw}}
 </p>
 <ul>
@@ -29,7 +29,7 @@
     {{trans
         'Forgot your account password? Click <a href="%reset_url">here</a> to reset it.'
 
-        reset_url="$this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token]])"
+        reset_url="$this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token],_nosid:1])"
     |raw}}
 </p>
 <p>{{trans "When you sign in to your account, you will be able to:"}}</p>

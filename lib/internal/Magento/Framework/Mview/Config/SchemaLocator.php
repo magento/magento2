@@ -1,11 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Config;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -24,14 +22,12 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Framework\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
-    public function __construct(\Magento\Framework\Filesystem\DirectoryList $directoryList)
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $etcDir = $directoryList->getPath(DirectoryList::LIB_INTERNAL)
-            . '/Magento/Framework/Mview/etc';
-        $this->_schema = $etcDir . '/mview.xsd';
-        $this->_perFileSchema = $etcDir . '/mview.xsd';
+        $this->_schema = $urnResolver->getRealPath('urn:magento:framework:Mview/etc/mview.xsd');
+        $this->_perFileSchema = $this->_schema;
     }
 
     /**

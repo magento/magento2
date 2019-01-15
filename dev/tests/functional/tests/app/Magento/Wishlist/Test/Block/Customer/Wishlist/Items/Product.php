@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,19 +11,19 @@ use Magento\Mtf\Client\Locator;
 
 /**
  * Class Product
- * Wishlist item product form
+ * Wish List item Product form
  */
 class Product extends Form
 {
     /**
-     * Selector for 'Add to Cart' button
+     * Locator value for "Add to Cart" button.
      *
      * @var string
      */
     protected $addToCart = '.action.tocart';
 
     /**
-     * Selector for 'Remove item' button
+     * Locator value for "Remove item" button.
      *
      * @var string
      */
@@ -37,74 +37,105 @@ class Product extends Form
     protected $viewDetails = '.details.tooltip';
 
     /**
-     * Selector for 'Details block' element
+     * Locator value for "Details" block.
      *
      * @var string
      */
     protected $detailsBlock = '.product-item-tooltip';
 
     /**
-     * Edit button css selector
+     * Locator value for "Edit" button.
      *
      * @var string
      */
     protected $edit = '.action.edit';
 
     /**
-     * Selector for option's label
+     * Locator value for option's label.
      *
      * @var string
      */
     protected $optionLabel = '.tooltip.content .label';
 
     /**
-     * Selector for option's value
+     * Locator value for option's value.
      *
      * @var string
      */
     protected $optionValue = '.tooltip.content .values';
 
     /**
-     * Selector for click on footer block
+     * Locator value for Footer block.
      *
      * @var string
      */
     protected $footer = './ancestor::body//footer';
 
     /**
-     * Fill item product details
+     * Locator value for item Price.
+     *
+     * @var string
+     */
+    protected $price = '.price';
+
+    /**
+     * Locator value for item Price in Product Grid.
+     *
+     * @var string
+     */
+    protected $priceInGrid = '.products-grid .price';
+
+    /**
+     * Locator value for item Regular Price.
+     *
+     * @var string
+     */
+    private $regularPrice = '.old-price [data-price-type="oldPrice"] .price';
+
+    /**
+     * Locator value for item Regular Price Label.
+     *
+     * @var string
+     */
+    private $regularPriceLabel = '.old-price .price-label';
+
+    /**
+     * Fill item with details.
      *
      * @param array $fields
      * @return void
      */
     public function fillProduct(array $fields)
     {
+        $this->hoverProductBlock();
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping);
     }
 
     /**
-     * Click button 'Add To Cart'
+     * Click "Add to Cart" button.
      *
      * @return void
      */
     public function clickAddToCart()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->addToCart)->click();
     }
 
     /**
-     * Remove product from wish list
+     * Remove item from Wish List.
      *
      * @return void
      */
     public function remove()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->remove)->click();
     }
 
     /**
-     * Get product options
+     * Get Product options.
      *
      * @return array|null
      */
@@ -113,14 +144,12 @@ class Product extends Form
         $viewDetails = $this->_rootElement->find($this->viewDetails);
         if ($viewDetails->isVisible()) {
             $this->_rootElement->find($this->footer, Locator::SELECTOR_XPATH)->click();
-            $viewDetails->click();
+            $viewDetails->hover();
             $labels = $this->_rootElement->getElements($this->optionLabel);
             $values = $this->_rootElement->getElements($this->optionValue);
             $data = [];
             foreach ($labels as $key => $label) {
-                if (!$label->isVisible()) {
-                    $viewDetails->click();
-                }
+                $viewDetails->hover();
                 $data[] = [
                     'title' => $label->getText(),
                     'value' => str_replace('$', '', $values[$key]->getText()),
@@ -134,12 +163,85 @@ class Product extends Form
     }
 
     /**
-     * Click edit button
+     * Click "Edit" button.
      *
      * @return void
      */
     public function clickEdit()
     {
+        $this->hoverProductBlock();
         $this->_rootElement->find($this->edit)->click();
+    }
+
+    /**
+     * Hover Product block so that possible actions appear.
+     *
+     * @return void
+     */
+    public function hoverProductBlock()
+    {
+        $this->_rootElement->find($this->priceInGrid)->hover();
+    }
+
+    /**
+     * Returns product price.
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getPrice(string $currency = '$'): string
+    {
+        return $this->getPriceBySelector($this->price, $currency);
+    }
+
+    /**
+     * Returns product regular price.
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getRegularPrice(string $currency = '$'): string
+    {
+        return $this->getPriceBySelector($this->regularPrice, $currency);
+    }
+
+    /**
+     * Returns product price by selector.
+     *
+     * @param string $selector
+     * @param string $currency
+     * @return string
+     */
+    private function getPriceBySelector(string $selector, string $currency = '$'): string
+    {
+        $price = $this->_rootElement->find($selector)->getText();
+
+        return str_replace($currency, '', $price);
+    }
+
+    /**
+     * Returns product regular price label.
+     *
+     * @return string
+     */
+    public function getPriceLabel(): string
+    {
+        return (string)$this->_rootElement->find($this->regularPriceLabel)->getText();
+    }
+
+    /**
+     * Get Wish List data for the Product.
+     *
+     * @param mixed $qty
+     * @return array
+     */
+    public function getWishlistData($qty = null)
+    {
+        $this->hoverProductBlock();
+        $mapping = $this->dataMapping();
+        if (!is_numeric($qty)) {
+            unset($mapping['qty']);
+        }
+        return $this->_getData($mapping);
     }
 }

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * WYSIWYG widget options form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Widget\Block\Adminhtml\Widget;
-
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -95,12 +95,12 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
-            ['legend' => __('Frontend App Options'), 'class' => 'fieldset-wide']
+            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide fieldset-widget-options']
         );
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence');
+        $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         $this->setChild('form_after', $block);
 
         return $fieldset;
@@ -116,7 +116,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Frontend App Type.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Widget Type.'));
         }
         $config = $this->_widget->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {
@@ -132,7 +132,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add field to Options form based on parameter configuration
      *
-     * @param \Magento\Framework\Object $parameter
+     * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -157,10 +157,19 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
         } else {
             $data['value'] = $parameter->getValue();
-            //prepare unique id value
-            if ($fieldName == 'unique_id' && $data['value'] == '') {
-                $data['value'] = md5(microtime(1));
+        }
+
+        //prepare unique id value
+        if ($fieldName == 'unique_id' && $data['value'] == '') {
+            $data['value'] = hash('sha256', microtime(1));
+        }
+
+        if (is_array($data['value'])) {
+            foreach ($data['value'] as &$value) {
+                $value = html_entity_decode($value);
             }
+        } else {
+            $data['value'] = html_entity_decode($data['value']);
         }
 
         // prepare element dropdown values
@@ -200,7 +209,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
                 '',
                 ['data' => $helper->getData()]
             );
-            if ($helperBlock instanceof \Magento\Framework\Object) {
+            if ($helperBlock instanceof \Magento\Framework\DataObject) {
                 $helperBlock->setConfig(
                     $helper->getData()
                 )->setFieldsetId(

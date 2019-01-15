@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $string
@@ -16,7 +16,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $parameter */
-        $parameter = $objectManager->create('Magento\Framework\Filter\Template\Tokenizer\Parameter');
+        $parameter = $objectManager->create(\Magento\Framework\Filter\Template\Tokenizer\Parameter::class);
         $parameter->setString($string);
 
         foreach ($values as $value) {
@@ -33,7 +33,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $parameter */
-        $parameter = $objectManager->create('Magento\Framework\Filter\Template\Tokenizer\Parameter');
+        $parameter = $objectManager->create(\Magento\Framework\Filter\Template\Tokenizer\Parameter::class);
         $parameter->setString($string);
         $this->assertEquals($params, $parameter->tokenize());
     }
@@ -48,7 +48,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
                 ' type="Magento\\Catalog\\Block\\Product\\Widget\\NewWidget" display_type="all_products"'
                 . ' products_count="10" template="product/widget/new/content/new_grid.phtml"',
                 [
-                    'type' => 'Magento\Catalog\Block\Product\Widget\NewWidget',
+                    'type' => \Magento\Catalog\Block\Product\Widget\NewWidget::class,
                     'display_type' => 'all_products',
                     'products_count' => 10,
                     'template' => 'product/widget/new/content/new_grid.phtml'
@@ -58,7 +58,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
                 ' type="Magento\Catalog\Block\Product\Widget\NewWidget" display_type="all_products"'
                 . ' products_count="10" template="product/widget/new/content/new_grid.phtml"',
                 [
-                    'type' => 'Magento\Catalog\Block\Product\Widget\NewWidget',
+                    'type' => \Magento\Catalog\Block\Product\Widget\NewWidget::class,
                     'display_type' => 'all_products',
                     'products_count' => 10,
                     'template' => 'product/widget/new/content/new_grid.phtml'

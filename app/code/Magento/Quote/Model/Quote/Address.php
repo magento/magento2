@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -8,10 +8,14 @@ namespace Magento\Quote\Model\Quote;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales Quote address model
  *
+ * @api
  * @method int getQuoteId()
  * @method Address setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -24,9 +28,8 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setAddressType(string $value)
  * @method int getFreeShipping()
  * @method Address setFreeShipping(int $value)
- * @method int getCollectShippingRates()
- * @method Address setCollectShippingRates(int $value)
- * @method string getShippingMethod()
+ * @method bool getCollectShippingRates()
+ * @method Address setCollectShippingRates(bool $value)
  * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
  * @method Address setShippingDescription(string $value)
@@ -86,10 +89,13 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
+ *
+ * @property $_objectCopyService \Magento\Framework\DataObject\Copy
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     \Magento\Quote\Api\Data\AddressInterface
@@ -174,7 +180,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_addressItemFactory;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -184,7 +190,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_rateCollector;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory
      */
     protected $_rateCollectionFactory;
 
@@ -197,6 +203,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
      */
     protected $_addressTotalFactory;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateFactory
+     * @since 100.2.0
+     */
+    protected $_addressRateFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
@@ -224,6 +236,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $attributeList;
 
     /**
+     * @var TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsReader
+     */
+    protected $totalsReader;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -239,21 +271,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Address\ItemFactory $addressItemFactory
-     * @param \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
-     * @param Address\RateFactory $addressRateFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateFactory $addressRateFactory
      * @param Address\RateCollectorInterfaceFactory $rateCollector
-     * @param \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
      * @param Address\RateRequestFactory $rateRequestFactory
-     * @param \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
+     * @param Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param Address\CustomAttributeListInterface $attributeList
+     * @param TotalsCollector $totalsCollector
+     * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Json $serializer
+     * @param StoreManagerInterface $storeManager
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -272,21 +309,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\ItemFactory $addressItemFactory,
-        \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateFactory $addressRateFactory,
         \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector,
-        \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $addressTotalFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         Address\Validator $validator,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         Address\CustomAttributeListInterface $attributeList,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -303,6 +344,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->validator = $validator;
         $this->addressMapper = $addressMapper;
         $this->attributeList = $attributeList;
+        $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -330,7 +375,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote\Address');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address::class);
     }
 
     /**
@@ -495,7 +540,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $customerAddressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         return $addressDataObject;
     }
@@ -521,7 +566,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve address items collection
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {
@@ -547,8 +592,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        $cachedItems = 'all';
-        $key = 'cached_items_' . $cachedItems;
+        $key = 'cached_items_all';
         if (!$this->hasData($key)) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
@@ -762,7 +806,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve collection of quote shipping rates
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getShippingRatesCollection()
     {
@@ -828,13 +872,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _sortRates($firstItem, $secondItem)
     {
-        if ((int)$firstItem[0]->carrier_sort_order < (int)$secondItem[0]->carrier_sort_order) {
-            return -1;
-        } elseif ((int)$firstItem[0]->carrier_sort_order > (int)$secondItem[0]->carrier_sort_order) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return (int) $firstItem[0]->carrier_sort_order <=> (int) $secondItem[0]->carrier_sort_order;
     }
 
     /**
@@ -927,6 +965,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * Request shipping rates for entire address or specified address item
+     *
      * Returns true if current selected shipping method code corresponds to one of the found rates
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
@@ -962,22 +1001,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
 
         /**
-         * Store and website identifiers need specify from quote
+         * Store and website identifiers specified from StoreManager
          */
-        /*$request->setStoreId($this->_storeManager->getStore()->getId());
-          $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());*/
-
-        $request->setStoreId($this->getQuote()->getStore()->getId());
-        $request->setWebsiteId($this->getQuote()->getStore()->getWebsiteId());
+        if ($this->getQuote()->getStoreId()) {
+            $storeId = $this->getQuote()->getStoreId();
+            $request->setStoreId($storeId);
+            $request->setWebsiteId($this->storeManager->getStore($storeId)->getWebsiteId());
+        } else {
+            $request->setStoreId($this->storeManager->getStore()->getId());
+            $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        }
         $request->setFreeShipping($this->getFreeShipping());
         /**
          * Currencies need to convert in free shipping
          */
-        $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
-        $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
+        $request->setBaseCurrency($this->storeManager->getStore()->getBaseCurrency());
+        $request->setPackageCurrency($this->storeManager->getStore()->getCurrentCurrency());
         $request->setLimitCarrier($this->getLimitCarrier());
-
-        $request->setBaseSubtotalInclTax($this->getBaseSubtotalInclTax());
+        $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
+        $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
         $result = $this->_rateCollector->create()->collectRates($request)->getResult();
 
@@ -995,13 +1037,13 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
                     if ($item) {
                         $item->setBaseShippingAmount($rate->getPrice());
                     } else {
-                        /**
-                         * possible bug: this should be setBaseShippingAmount(),
-                         * see \Magento\Quote\Model\Quote\Address\Total\Shipping::collect()
-                         * where this value is set again from the current specified rate price
-                         * (looks like a workaround for this bug)
-                         */
-                        $this->setShippingAmount($rate->getPrice());
+
+                        /** @var \Magento\Store\Api\Data\StoreInterface */
+                        $store = $this->storeManager->getStore();
+                        $amountPrice = $store->getBaseCurrency()
+                            ->convert($rate->getPrice(), $store->getCurrentCurrencyCode());
+                        $this->setBaseShippingAmount($rate->getPrice());
+                        $this->setShippingAmount($amountPrice);
                     }
 
                     $found = true;
@@ -1012,43 +1054,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         return $found;
     }
 
-    /**
-     * Get totals collector model
-     *
-     * @return \Magento\Quote\Model\Quote\Address\Total\Collector
-     */
-    public function getTotalCollector()
-    {
-        if ($this->_totalCollector === null) {
-            $this->_totalCollector = $this->_totalCollectorFactory->create(
-                ['store' => $this->getQuote()->getStore()]
-            );
-        }
-
-        return $this->_totalCollector;
-    }
-
-    /**
-     * Collect address totals
-     *
-     * @return $this
-     */
-    public function collectTotals()
-    {
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_before',
-            [$this->_eventObject => $this]
-        );
-        foreach ($this->getTotalCollector()->getCollectors() as $model) {
-            $model->collect($this);
-        }
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_after',
-            [$this->_eventObject => $this]
-        );
-
-        return $this;
-    }
+    /******************************* Total Collector Interface *******************************************/
 
     /**
      * Get address totals as array
@@ -1057,8 +1063,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getTotals()
     {
-        foreach ($this->getTotalCollector()->getRetrievers() as $model) {
-            $model->fetch($this);
+        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
+        foreach ($totals as $total) {
+            $this->addTotal($total);
         }
 
         return $this->_totals;
@@ -1067,25 +1075,28 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add total data or model
      *
-     * @param \Magento\Quote\Model\Quote\Total|array $total
+     * @param \Magento\Quote\Model\Quote\Address\Total|array $total
      * @return $this
      */
     public function addTotal($total)
     {
+        $addressTotal = null;
         if (is_array($total)) {
-            $totalInstance = $this->_addressTotalFactory->create(
-                'Magento\Quote\Model\Quote\Address\Total'
-            )->setData(
-                $total
-            );
-        } elseif ($total instanceof \Magento\Quote\Model\Quote\Total) {
-            $totalInstance = $total;
+            /** @var \Magento\Quote\Model\Quote\Address\Total $addressTotal */
+            $addressTotal = $this->_addressTotalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
+            $addressTotal->setData($total);
+        } elseif ($total instanceof \Magento\Quote\Model\Quote\Address\Total) {
+            $addressTotal = $total;
         }
-        $totalInstance->setAddress($this);
-        $this->_totals[$totalInstance->getCode()] = $totalInstance;
 
+        if ($addressTotal !== null) {
+            $addressTotal->setAddress($this);
+            $this->_totals[$addressTotal->getCode()] = $addressTotal;
+        }
         return $this;
     }
+
+    /******************************* End Total Collector Interface *******************************************/
 
     /**
      * Rewrite clone method
@@ -1160,7 +1171,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getAppliedTaxes()
     {
-        return unserialize($this->getData('applied_taxes'));
+        $taxes = $this->getData('applied_taxes');
+        return $taxes ? $this->serializer->unserialize($taxes) : [];
     }
 
     /**
@@ -1171,8 +1183,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function setAppliedTaxes($data)
     {
-        return $this->setData('applied_taxes', serialize($data));
+        return $this->setData('applied_taxes', $this->serializer->serialize($data));
     }
+
+    /******************************* Start Total Collector Interface *******************************************/
 
     /**
      * Set shipping amount
@@ -1317,6 +1331,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get all total amount values
      *
@@ -1337,8 +1352,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         return $this->_baseTotalAmounts;
     }
 
+    /******************************* End Total Collector Interface *******************************************/
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -1346,7 +1363,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCountryId()
     {
@@ -1354,7 +1371,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCountryId($countryId)
     {
@@ -1362,16 +1379,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStreet()
     {
         $street = $this->getData(self::KEY_STREET);
-        return explode("\n", $street);
+        return is_array($street) ? $street : explode("\n", $street);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStreet($street)
     {
@@ -1379,7 +1396,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompany()
     {
@@ -1387,7 +1404,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCompany($company)
     {
@@ -1395,7 +1412,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTelephone()
     {
@@ -1403,7 +1420,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTelephone($telephone)
     {
@@ -1411,7 +1428,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFax()
     {
@@ -1419,7 +1436,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFax($fax)
     {
@@ -1427,7 +1444,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPostcode()
     {
@@ -1435,7 +1452,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPostcode($postcode)
     {
@@ -1443,7 +1460,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCity()
     {
@@ -1451,7 +1468,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCity($city)
     {
@@ -1459,7 +1476,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFirstname()
     {
@@ -1467,7 +1484,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFirstname($firstname)
     {
@@ -1475,7 +1492,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLastname()
     {
@@ -1483,7 +1500,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLastname($lastname)
     {
@@ -1491,7 +1508,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMiddlename()
     {
@@ -1499,7 +1516,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMiddlename($middlename)
     {
@@ -1507,7 +1524,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrefix()
     {
@@ -1515,7 +1532,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrefix($prefix)
     {
@@ -1523,7 +1540,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSuffix()
     {
@@ -1531,7 +1548,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSuffix($suffix)
     {
@@ -1539,7 +1556,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVatId()
     {
@@ -1547,7 +1564,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatId($vatId)
     {
@@ -1555,7 +1572,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerId()
     {
@@ -1563,7 +1580,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($customerId)
     {
@@ -1571,12 +1588,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getEmail()
     {
         $email = $this->getData(self::KEY_EMAIL);
-        if (!$email) {
+        if (!$email && $this->getQuote()) {
             $email = $this->getQuote()->getCustomerEmail();
             $this->setEmail($email);
         }
@@ -1584,7 +1601,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmail($email)
     {
@@ -1592,7 +1609,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegion($region)
     {
@@ -1600,7 +1617,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionId($regionId)
     {
@@ -1608,7 +1625,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionCode($regionCode)
     {
@@ -1616,7 +1633,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSameAsBilling()
     {
@@ -1624,7 +1641,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSameAsBilling($sameAsBilling)
     {
@@ -1632,7 +1649,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerAddressId()
     {
@@ -1640,7 +1657,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerAddressId($customerAddressId)
     {
@@ -1667,10 +1684,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     {
         return $this->setData(self::SAVE_IN_ADDRESS_BOOK, $saveInAddressBook);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Quote\Api\Data\AddressExtensionInterface|null
      */
@@ -1680,7 +1698,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes
      * @return $this
@@ -1691,7 +1709,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * Shipping method
+     *
+     * @return string
+     */
+    public function getShippingMethod()
+    {
+        return $this->getData('shipping_method');
+    }
+
+    /**
+     * @inheritdoc
      */
     protected function getCustomAttributesCodes()
     {

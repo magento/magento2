@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Magento configuration XML DOM utility
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Phrase;
+
 /**
  * Class Dom
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Dom
 {
@@ -29,44 +32,60 @@ class Dom
     const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
 
     /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    private $validationState;
+
+    /**
      * Dom document
      *
      * @var \DOMDocument
      */
-    protected $_dom;
+    protected $dom;
 
     /**
      * @var Dom\NodeMergingConfig
      */
-    protected $_nodeMergingConfig;
+    protected $nodeMergingConfig;
 
     /**
      * Name of attribute that specifies type of argument node
      *
      * @var string|null
      */
-    protected $_typeAttributeName;
+    protected $typeAttributeName;
 
     /**
      * Schema validation file
      *
      * @var string
      */
-    protected $_schemaFile;
+    protected $schema;
 
     /**
      * Format of error messages
      *
      * @var string
      */
-    protected $_errorFormat;
+    protected $errorFormat;
 
     /**
      * Default namespace for xml elements
      *
      * @var string
      */
-    protected $_rootNamespace;
+    protected $rootNamespace;
+
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
+    private static $urnResolver;
+
+    /**
+     * @var array
+     * @since 2.2.0
+     */
+    private static $resolvedSchemaPaths = [];
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -75,6 +94,7 @@ class Dom
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
      * @param string $xml
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param array $idAttributes
      * @param string $typeAttributeName
      * @param string $schemaFile
@@ -82,17 +102,40 @@ class Dom
      */
     public function __construct(
         $xml,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        $this->_schemaFile = $schemaFile;
-        $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
-        $this->_typeAttributeName = $typeAttributeName;
-        $this->_errorFormat = $errorFormat;
-        $this->_dom = $this->_initDom($xml);
-        $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+        $this->validationState = $validationState;
+        $this->schema = $schemaFile;
+        $this->nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
+        $this->typeAttributeName = $typeAttributeName;
+        $this->errorFormat = $errorFormat;
+        $this->dom = $this->_initDom($xml);
+        $this->rootNamespace = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
+    }
+
+    /**
+     * Retrieve array of xml errors
+     *
+     * @param string $errorFormat
+     * @return string[]
+     * @since 2.1.0
+     */
+    private static function getXmlErrors($errorFormat)
+    {
+        $errors = [];
+        $validationErrors = libxml_get_errors();
+        if (count($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                $errors[] = self::_renderErrorMessage($error, $errorFormat);
+            }
+        } else {
+            $errors[] = 'Unknown validation error';
+        }
+        return $errors;
     }
 
     /**
@@ -129,18 +172,13 @@ class Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             //different node type
-            if ($this->_typeAttributeName && $node->hasAttribute(
-                $this->_typeAttributeName
-            ) && $matchedNode->hasAttribute(
-                $this->_typeAttributeName
-            ) && $node->getAttribute(
-                $this->_typeAttributeName
-            ) !== $matchedNode->getAttribute(
-                $this->_typeAttributeName
-            )
+            if ($this->typeAttributeName &&
+                $node->hasAttribute($this->typeAttributeName) &&
+                $matchedNode->hasAttribute($this->typeAttributeName) &&
+                $node->getAttribute($this->typeAttributeName) !== $matchedNode->getAttribute($this->typeAttributeName)
             ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
-                $newNode = $this->_dom->importNode($node, true);
+                $newNode = $this->dom->importNode($node, true);
                 $parentMatchedNode->replaceChild($newNode, $matchedNode);
                 return;
             }
@@ -166,7 +204,7 @@ class Dom
         } else {
             /* Add node as is to the document under the same parent element */
             $parentMatchedNode = $this->_getMatchedNode($parentPath);
-            $newNode = $this->_dom->importNode($node, true);
+            $newNode = $this->dom->importNode($node, true);
             $parentMatchedNode->appendChild($newNode);
         }
     }
@@ -205,16 +243,16 @@ class Dom
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
-        $prefix = is_null($this->_rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
+        $prefix = $this->rootNamespace === null ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
-        $idAttribute = $this->_nodeMergingConfig->getIdAttribute($path);
+        $idAttribute = $this->nodeMergingConfig->getIdAttribute($path);
         if (is_array($idAttribute)) {
             $constraints = [];
             foreach ($idAttribute as $attribute) {
                 $value = $node->getAttribute($attribute);
                 $constraints[] = "@{$attribute}='{$value}'";
             }
-            $path .= '[' . join(' and ', $constraints) . ']';
+            $path .= '[' . implode(' and ', $constraints) . ']';
         } elseif ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
@@ -225,20 +263,24 @@ class Dom
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains multiple nodes for identifier
+     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains
+     *     multiple nodes for identifier
      * @return \DOMElement|null
      */
     protected function _getMatchedNode($nodePath)
     {
-        $xPath = new \DOMXPath($this->_dom);
-        if ($this->_rootNamespace) {
-            $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
+        $xPath = new \DOMXPath($this->dom);
+        if ($this->rootNamespace) {
+            $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->rootNamespace);
         }
         $matchedNodes = $xPath->query($nodePath);
         $node = null;
         if ($matchedNodes->length > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
+                new \Magento\Framework\Phrase(
+                    "More than one node matching the query: %1, Xml is: %2",
+                    [$nodePath, $this->dom->saveXML()]
+                )
             );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);
@@ -250,34 +292,43 @@ class Dom
      * Validate dom document
      *
      * @param \DOMDocument $dom
-     * @param string $schemaFileName
+     * @param string $schema Absolute schema file path or URN
      * @param string $errorFormat
      * @return array of errors
      * @throws \Exception
      */
     public static function validateDomDocument(
         \DOMDocument $dom,
-        $schemaFileName,
+        $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            return [];
+        }
+
+        if (!self::$urnResolver) {
+            self::$urnResolver = new UrnResolver();
+        }
+        if (!isset(self::$resolvedSchemaPaths[$schema])) {
+            self::$resolvedSchemaPaths[$schema] = self::$urnResolver->getRealPath($schema);
+        }
+        $schema = self::$resolvedSchemaPaths[$schema];
+
         libxml_use_internal_errors(true);
+        libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
+        $errors = [];
         try {
-            $result = $dom->schemaValidate($schemaFileName);
-            $errors = [];
+            $result = $dom->schemaValidate($schema);
             if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = self::_renderErrorMessage($error, $errorFormat);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
+                $errors = self::getXmlErrors($errorFormat);
             }
         } catch (\Exception $exception) {
+            $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
-            throw $exception;
+            array_unshift($errors, new Phrase('Processed schema file: %1', [$schema]));
+            throw new ValidationSchemaException(new Phrase(implode("\n", $errors)));
         }
+        libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);
         return $errors;
     }
@@ -299,7 +350,19 @@ class Dom
             $result = str_replace($placeholder, $value, $result);
         }
         if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException("Error format '{$format}' contains unsupported placeholders.");
+            if (preg_match_all('/%.+%/', $result, $matches)) {
+                $unsupported = [];
+                foreach ($matches[0] as $placeholder) {
+                    if (strpos($result, $placeholder) !== false) {
+                        $unsupported[] = $placeholder;
+                    }
+                }
+                if (!empty($unsupported)) {
+                    throw new \InvalidArgumentException(
+                        "Error format '{$format}' contains unsupported placeholders: " . implode(', ', $unsupported)
+                    );
+                }
+            }
         }
         return $result;
     }
@@ -311,7 +374,7 @@ class Dom
      */
     public function getDom()
     {
-        return $this->_dom;
+        return $this->dom;
     }
 
     /**
@@ -324,9 +387,16 @@ class Dom
     protected function _initDom($xml)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML($xml);
-        if ($this->_schemaFile) {
-            $errors = self::validateDomDocument($dom, $this->_schemaFile, $this->_errorFormat);
+        $useErrors = libxml_use_internal_errors(true);
+        $res = $dom->loadXML($xml);
+        if (!$res) {
+            $errors = self::getXmlErrors($this->errorFormat);
+            libxml_use_internal_errors($useErrors);
+            throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
+        }
+        libxml_use_internal_errors($useErrors);
+        if ($this->validationState->isValidationRequired() && $this->schema) {
+            $errors = $this->validateDomDocument($dom, $this->schema, $this->errorFormat);
             if (count($errors)) {
                 throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
             }
@@ -343,8 +413,11 @@ class Dom
      */
     public function validate($schemaFileName, &$errors = [])
     {
-        $errors = self::validateDomDocument($this->_dom, $schemaFileName, $this->_errorFormat);
-        return !count($errors);
+        if ($this->validationState->isValidationRequired()) {
+            $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
+            return !count($errors);
+        }
+        return true;
     }
 
     /**
@@ -355,7 +428,7 @@ class Dom
      */
     public function setSchemaFile($schemaFile)
     {
-        $this->_schemaFile = $schemaFile;
+        $this->schema = $schemaFile;
         return $this;
     }
 
@@ -367,7 +440,7 @@ class Dom
      */
     private function _getAttributeName($attribute)
     {
-        if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
+        if ($attribute->prefix !== null && !empty($attribute->prefix)) {
             $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
             $attributeName = $attribute->name;

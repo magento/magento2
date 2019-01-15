@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\View\Asset\ConfigInterface as AssetConfigInterface;
-
 /**
  * A locally available static view file asset that can be referred with a file path
  *
  * This class is a value object with lazy loading of some of its data (content, physical file path)
+ *
+ * @api
  */
 class File implements MergeableInterface
 {
@@ -49,6 +49,11 @@ class File implements MergeableInterface
      * @var Minification
      */
     private $minification;
+
+    /**
+     * @var string
+     */
+    private $sourceContentType;
 
     /**
      * @param Source $source
@@ -117,8 +122,11 @@ class File implements MergeableInterface
     public function getRelativeSourceFilePath()
     {
         $path = $this->filePath;
-        if (strpos($this->source->findRelativeSourceFilePath($this), 'less')) {
-            $path = str_replace('.css', '.less', $this->filePath);
+        $sourcePath = $this->source->findSource($this);
+        if ($sourcePath) {
+            $origExt = pathinfo($path, PATHINFO_EXTENSION);
+            $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
+            $path = str_replace('.' . $origExt, '.' . $ext, $this->filePath);
         }
         $result = '';
         $result = $this->join($result, $this->context->getPath());
@@ -152,6 +160,20 @@ class File implements MergeableInterface
             }
         }
         return $this->resolvedFile;
+    }
+
+    /**
+     * Get source content type
+     *
+     * @return string
+     * @since 100.2.0
+     */
+    public function getSourceContentType()
+    {
+        if ($this->sourceContentType === null) {
+            $this->sourceContentType = $this->source->getSourceContentType($this);
+        }
+        return $this->sourceContentType;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Search;
@@ -9,8 +9,10 @@ namespace Magento\Backend\Model\Search;
  * Search Order Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-class Order extends \Magento\Framework\Object
+class Order extends \Magento\Framework\DataObject
 {
     /**
      * Adminhtml data
@@ -20,16 +22,16 @@ class Order extends \Magento\Framework\Object
     protected $_adminhtmlData = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      */
     public function __construct(
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Data $adminhtmlData
     ) {
         $this->_collectionFactory = $collectionFactory;

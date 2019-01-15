@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Class EmailNotConfirmedExceptionTest
- *
- * @package Magento\Framework\Exception
  */
-class EmailNotConfirmedExceptionTest extends \PHPUnit_Framework_TestCase
+class EmailNotConfirmedExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void
@@ -23,7 +21,7 @@ class EmailNotConfirmedExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $emailNotConfirmedException = new EmailNotConfirmedException(
             new Phrase(
-                EmailNotConfirmedException::EMAIL_NOT_CONFIRMED,
+                'Email not confirmed',
                 ['consumer_id' => 1, 'resources' => 'record2']
             )
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Entity type id
@@ -24,7 +24,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -34,12 +34,12 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_importFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -60,42 +60,27 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_string = new \Magento\Framework\Stdlib\String();
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        parent::setUp();
 
-        $this->_importFactory = $this->getMock(
-            'Magento\ImportExport\Model\ImportFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->_collectionFactory = $this->getMock(
-            'Magento\ImportExport\Model\Export\Factory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->_string = new \Magento\Framework\Stdlib\StringUtils();
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+        $this->_importFactory = $this->createMock(\Magento\ImportExport\Model\ImportFactory::class);
+        $this->_resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->_resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
+        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_collectionFactory = $this->createMock(\Magento\ImportExport\Model\Export\Factory::class);
+        $this->_eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
+            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
             [
                 $this->_string,
                 $scopeConfig,
                 $this->_importFactory,
                 $this->_resourceHelper,
                 $this->_resource,
+                $this->getErrorAggregatorObject(),
                 $this->_storeManager,
                 $this->_collectionFactory,
                 $this->_eavConfig,

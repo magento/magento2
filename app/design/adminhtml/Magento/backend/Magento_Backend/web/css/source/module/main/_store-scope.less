@@ -1,0 +1,44 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.tree-store-scope {
+    &.admin__fieldset {
+        padding: 0;
+
+        > .admin__field {
+            margin-left: -@temp_gutter;
+        }
+    }
+
+    [class*='field-w'],
+    [class*='field-sg'] {
+        &.admin__field {
+            margin: 0 0 0 -@temp_gutter;
+        }
+
+        .admin__field-label {
+            text-align: left;
+        }
+    }
+
+    [class*='field-website_label'] {
+        .admin__field-label {
+            text-align: right;
+        }
+
+        .admin__field-tooltip {
+            margin: -.2rem 0 0 -@indent__m;
+        }
+    }
+}
+
+.store-scope {
+    .admin__legend {
+        .admin__field-tooltip {
+            margin-left: -@indent__base;
+            margin-top: -.2rem;
+        }
+    }
+}

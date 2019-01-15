@@ -1,55 +1,48 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Layout\Config;
 
-use \Magento\Theme\Model\Layout\Config\SchemaLocator;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
-
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SchemaLocator
+     * @var \Magento\Theme\Model\Layout\Config\SchemaLocator
      */
     protected $object;
 
     /**
      * @var string
      */
-    protected $scheme;
+    protected $schema = 'framework_dir/Magento/Framework/View/PageLayout/etc/layouts.xsd';
 
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
-        $path = '/root/path/lib';
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()->getMock();
-        $read = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')->getMock();
-
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::LIB_INTERNAL)
-            ->willReturn($read);
-        $read->expects($this->once())
-            ->method('getAbsolutePath')
-            ->willReturn($path);
-
-        $this->scheme = $path . '/Magento/Framework/View/PageLayout/etc/layouts.xsd';
-
-        /** @var $filesystem \Magento\Framework\Filesystem */
-        $this->object = new SchemaLocator($filesystem);
+        /**
+         * @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock | \PHPUnit_Framework_MockObject_MockObject
+         */
+        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
+            ->willReturn($this->schema);
+        $this->object = new \Magento\Theme\Model\Layout\Config\SchemaLocator($urnResolverMock);
     }
 
     /**
-     * cover getPerFileSchema and getSchema
+     * Cover getSchema
      */
-    public function testGetScheme()
+    public function testGetSchema()
     {
-        $this->assertEquals($this->scheme, $this->object->getPerFileSchema());
-        $this->assertEquals($this->scheme, $this->object->getSchema());
+        $this->assertEquals($this->schema, $this->object->getSchema());
+    }
+
+    public function testGetPerFileSchema()
+    {
+        $this->assertEquals($this->schema, $this->object->getPerFileSchema());
     }
 }

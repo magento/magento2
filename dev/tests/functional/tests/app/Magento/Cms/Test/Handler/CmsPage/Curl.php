@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,6 @@ use Magento\Backend\Test\Handler\Conditions;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -26,8 +25,8 @@ class Curl extends Conditions implements CmsPageInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Enabled' => 1,
-            'Disabled' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
         'store_id' => [
             'All Store Views' => 0,
@@ -78,10 +77,10 @@ class Curl extends Conditions implements CmsPageInterface
         $data = $this->prepareData($this->replaceMappingData($fixture->getData()));
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Cms page entity creating by curl handler was not successful! Response: $response");
         }
         preg_match("~page_id\/(\d*?)\/~", $response, $matches);

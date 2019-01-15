@@ -2,17 +2,19 @@
 /**
  * Renders HTML anchor or nothing depending on isVisible().
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Framework\Object */
+    /**
+     * @var \Magento\Framework\DataObject
+     */
     protected $_row;
 
     /**
@@ -37,10 +39,10 @@ class Link extends AbstractRenderer
     /**
      * Render grid row
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(Object $row)
+    public function render(DataObject $row)
     {
         $this->_row = $row;
 
@@ -118,7 +120,7 @@ class Link extends AbstractRenderer
             if ($value === null || $value == '') {
                 continue;
             }
-            $html[] = sprintf('%s="%s"', $key, $this->escapeHtml($value));
+            $html[] = sprintf('%s="%s"', $key, $this->escapeHtmlAttr($value, false));
         }
 
         return join(' ', $html);
@@ -157,10 +159,10 @@ class Link extends AbstractRenderer
     /**
      * Render URL for current item.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getUrl(Object $row)
+    protected function _getUrl(DataObject $row)
     {
         return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
     }

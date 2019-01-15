@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 
+/**
+ * MySQL search data provider container.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ * @api
+ */
 class DataProviderContainer
 {
     /**
@@ -21,6 +28,8 @@ class DataProviderContainer
     }
 
     /**
+     * Get data provider by index name.
+     *
      * @param string $indexName
      * @return DataProviderInterface
      */

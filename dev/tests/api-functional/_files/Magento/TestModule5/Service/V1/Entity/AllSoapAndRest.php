@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule5\Service\V1\Entity;
@@ -13,8 +13,15 @@ namespace Magento\TestModule5\Service\V1\Entity;
  */
 class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
 {
+    /**
+     * Entity ID
+     */
     const ID = 'entity_id';
     const NAME = 'name';
+
+    /**
+     * Is Enabled
+     */
     const ENABLED = 'enabled';
     const HAS_ORDERS = 'orders';
 

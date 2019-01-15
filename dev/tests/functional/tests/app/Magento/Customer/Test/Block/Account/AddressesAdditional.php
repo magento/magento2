@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Block\Account;
@@ -20,7 +20,14 @@ class AddressesAdditional extends Block
      *
      * @var string
      */
-    protected $addressSelector = '//li[address[contains(.,"%s")]]';
+    protected $addressSelector = '//tbody//tr[contains(.,"%s")]';
+
+    /**
+     * Selector for addresses block
+     *
+     * @var string
+     */
+    protected $addressesSelector = '.additional-addresses';
 
     /**
      * Selector for delete link
@@ -37,6 +44,13 @@ class AddressesAdditional extends Block
     protected $additionalAddressContent = '.block-content';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Delete Additional Address
      *
      * @param Address $address
@@ -46,7 +60,33 @@ class AddressesAdditional extends Block
     {
         $this->_rootElement->find(sprintf($this->addressSelector, $address->getStreet()), Locator::SELECTOR_XPATH)
             ->find($this->deleteAddressLink)->click();
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
+    }
+
+    /**
+     * Check if additional address exists.
+     *
+     * @param string $address
+     * @return boolean
+     */
+    public function isAdditionalAddressExists($address)
+    {
+        $addressExists = true;
+        foreach (explode("\n", $address) as $addressItem) {
+            $addressElement = $this->_rootElement->find(
+                sprintf($this->addressSelector, $addressItem),
+                Locator::SELECTOR_XPATH
+            );
+            if (!$addressElement->isVisible()) {
+                $addressExists = false;
+                break;
+            }
+        }
+
+        return $addressExists;
     }
 
     /**

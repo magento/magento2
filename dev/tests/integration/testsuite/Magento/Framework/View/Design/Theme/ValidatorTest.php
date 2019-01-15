@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test validator with valid data
@@ -18,7 +18,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $validator \Magento\Framework\View\Design\Theme\Validator */
         $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\Theme\Validator'
+            \Magento\Framework\View\Design\Theme\Validator::class
         );
 
         $themeModel = $this->_getThemeModel();
@@ -34,7 +34,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $validator \Magento\Framework\View\Design\Theme\Validator */
         $validator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\Theme\Validator'
+            \Magento\Framework\View\Design\Theme\Validator::class
         );
 
         $themeModel = $this->_getThemeModel();
@@ -51,7 +51,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeModel()
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
     }
 

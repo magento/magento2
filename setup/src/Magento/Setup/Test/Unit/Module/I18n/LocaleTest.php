@@ -1,23 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
 use \Magento\Setup\Module\I18n\Locale;
 
-class LocaleTest extends \PHPUnit_Framework_TestCase
+class LocaleTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Target locale is system default locale.
-     */
-    public function testLocaleIsSystemDefaultLocaleException()
-    {
-        new Locale('en_US');
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Target locale must match the following format: "aa_AA".

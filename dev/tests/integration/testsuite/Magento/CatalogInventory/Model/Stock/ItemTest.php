@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Item
@@ -15,7 +15,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Model\Stock\Item'
+            \Magento\CatalogInventory\Model\Stock\Item::class
         );
     }
 
@@ -26,17 +26,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product');
+            ->get(\Magento\Catalog\Model\Product::class);
 
-        $product->load(1);
+        $product->loadByAttribute('sku', 'simple');
 
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
         $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
+            ->create(\Magento\CatalogInventory\Model\Stock\StockItemRepository::class);
 
         /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
         $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
+            ->create(\Magento\CatalogInventory\Api\StockItemCriteriaInterface::class);
 
         $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
         $savedStockItemId = $savedStockItem->getItemId();
@@ -65,11 +65,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
         $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
+            ->create(\Magento\CatalogInventory\Model\Stock\StockItemRepository::class);
 
         /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
         $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
+            ->create(\Magento\CatalogInventory\Api\StockItemCriteriaInterface::class);
 
         $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
 

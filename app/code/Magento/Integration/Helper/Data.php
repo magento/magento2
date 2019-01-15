@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Helper;
@@ -21,7 +21,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($resources as $resource) {
             $item = [];
             $item['attr']['data-id'] = $resource['id'];
-            $item['data'] = $resource['title'];
+            $item['data'] = __($resource['title']);
             $item['children'] = [];
             if (isset($resource['children'])) {
                 $item['state'] = 'open';

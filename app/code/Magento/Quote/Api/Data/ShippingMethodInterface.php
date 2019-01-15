@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api\Data;
@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface ShippingMethodInterface
  * @api
+ * @since 100.0.2
  */
 interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

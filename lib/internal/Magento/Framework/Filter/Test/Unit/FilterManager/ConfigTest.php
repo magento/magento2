@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit\FilterManager;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\FilterManager\Config
@@ -20,9 +20,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetFactories()
     {
         $expectedConfig = [
-            'test' => 'test',
-            'Magento\Framework\Filter\Factory',
-            'Magento\Framework\Filter\ZendFactory',
+            'test' => 'test', \Magento\Framework\Filter\Factory::class, \Magento\Framework\Filter\ZendFactory::class,
         ];
         $this->assertEquals($expectedConfig, $this->_config->getFactories());
     }

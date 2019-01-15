@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Webapi\Model;
@@ -84,7 +84,8 @@ class ConfigTest extends AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Webapi/etc/webapi.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        return $urnResolver->getRealPath('urn:magento:module:Magento_Webapi:etc/webapi.xsd');
     }
 
     /**

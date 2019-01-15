@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -27,7 +27,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -47,11 +47,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => null,
-                'cc_owner' => 'John',
-                'cc_type' => null,
-                'cc_exp_year' => null,
-                'cc_exp_month' => null,
+                'po_number' => null
             ],
         ];
 
@@ -64,7 +60,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testSetPaymentWithVirtualProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -84,11 +80,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -100,7 +92,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testSetPaymentWithSimpleProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -120,11 +112,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
 
@@ -134,12 +122,12 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -159,11 +147,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -175,7 +159,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -209,7 +193,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testGet()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -244,7 +228,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -266,7 +250,6 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->assertContains($expectedResponse, $requestResponse);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
      */
@@ -275,7 +258,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
 
         $serviceInfo = [
@@ -303,7 +286,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -317,11 +300,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $requestData = [
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
 
@@ -333,7 +312,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
      */
     protected function getPaymentMethodFieldsForAssert()
     {
-        return ['method', 'po_number', 'cc_owner', 'cc_type', 'cc_exp_year', 'cc_exp_month', 'additional_data'];
+        return ['method', 'po_number', 'additional_data'];
     }
 
     /**
@@ -345,7 +324,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     {
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         return $token;

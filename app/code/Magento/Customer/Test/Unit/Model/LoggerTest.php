@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model;
 /**
  * Customer log data logger test.
  */
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer log data logger.
@@ -25,36 +25,33 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * Resource instance.
      *
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
      * DB connection instance.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connection;
 
     /**
      * @return void
      */
     protected function setUp()
     {
-        $this->adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo',
-            ['select', 'insertOnDuplicate', 'fetchRow'],
-            [],
-            '',
-            false
+        $this->connection = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'insertOnDuplicate', 'fetchRow']
         );
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', ['create'], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->logFactory = $this->createPartialMock(\Magento\Customer\Model\LogFactory::class, ['create']);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->logger = $objectManagerHelper->getObject(
-            '\Magento\Customer\Model\Logger',
+            \Magento\Customer\Model\Logger::class,
             [
                 'resource' => $this->resource,
                 'logFactory' => $this->logFactory
@@ -65,7 +62,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider testLogDataProvider
+     * @dataProvider logDataProvider
      * @return void
      */
     public function testLog($customerId, $data)
@@ -74,20 +71,20 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $data = array_filter($data);
 
         if (!$data) {
-            $this->setExpectedException('\InvalidArgumentException', 'Log data is empty');
+            $this->expectException('\InvalidArgumentException');
+            $this->expectExceptionMessage('Log data is empty');
             $this->logger->log($customerId, $data);
             return;
         }
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('write')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connection);
         $this->resource->expects($this->once())
             ->method('getTableName')
             ->with('customer_log')
             ->willReturn($tableName);
-        $this->adapter->expects($this->once())
+        $this->connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($tableName, array_merge(['customer_id' => $customerId], $data), array_keys($data));
 
@@ -97,7 +94,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testLogDataProvider()
+    public function logDataProvider()
     {
         return [
             [235, ['last_login_at' => '2015-03-04 12:00:00']],
@@ -108,7 +105,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $customerId
      * @param array $data
-     * @dataProvider testGetDataProvider
+     * @dataProvider getDataProvider
      * @return void
      */
     public function testGet($customerId, $data)
@@ -120,7 +117,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             'lastVisitAt' => $data['last_visit_at']
         ];
 
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
 
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
@@ -128,24 +125,21 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('order')->willReturnSelf();
         $select->expects($this->any())->method('limit')->willReturnSelf();
 
-        $this->adapter->expects($this->any())
+        $this->connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
 
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->with('read')
-            ->willReturn($this->adapter);
-        $this->adapter->expects($this->any())
+            ->willReturn($this->connection);
+        $this->connection->expects($this->any())
             ->method('fetchRow')
             ->with($select)
             ->willReturn($data);
 
-        $log = $this->getMock(
-            'Magento\Customer\Model\Log',
-            [],
-            $logArguments
-        );
+        $log = $this->getMockBuilder(\Magento\Customer\Model\Log::class)
+            ->setConstructorArgs($logArguments)
+            ->getMock();
 
         $this->logFactory->expects($this->any())
             ->method('create')
@@ -158,7 +152,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testGetDataProvider()
+    public function getDataProvider()
     {
         return [
             [

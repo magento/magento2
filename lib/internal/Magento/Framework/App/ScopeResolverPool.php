@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
 
+/**
+ * Provider of scope resolvers by type
+ */
 class ScopeResolverPool
 {
     /**
@@ -17,7 +20,7 @@ class ScopeResolverPool
      * @param \Magento\Framework\App\ScopeResolverInterface[] $scopeResolvers
      */
     public function __construct(
-        array $scopeResolvers
+        array $scopeResolvers = []
     ) {
         $this->_scopeResolvers = $scopeResolvers;
     }

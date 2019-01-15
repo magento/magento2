@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Template\Html;
 
+/**
+ * HTML minifier
+ *
+ * @api
+ */
 interface MinifierInterface
 {
     /**
@@ -28,6 +33,7 @@ interface MinifierInterface
      * Minify template file
      *
      * @param string $file
+     * @return void
      */
     public function minify($file);
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use \Magento\Framework\Data\Argument\Interpreter\ArrayType;
 
-class ArrayTypeTest extends \PHPUnit_Framework_TestCase
+class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Argument\InterpreterInterface
@@ -22,7 +22,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_itemInterpreter = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Argument\InterpreterInterface'
+            \Magento\Framework\Data\Argument\InterpreterInterface::class
         );
         $this->_model = new ArrayType($this->_itemInterpreter);
     }
@@ -38,6 +38,9 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         $this->_model->evaluate($inputData);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         return [
@@ -62,6 +65,9 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateDataProvider()
     {
         return [
@@ -85,6 +91,56 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
                     'key1' => '-value 1-',
                     'key2' => '-value 2-',
                     'key3' => '-value 3-',
+                ],
+            ],
+            'sorted array items' => [
+                [
+                    'item' => [
+                        'key1' => ['value' => 'value 1', 'sortOrder' => 50],
+                        'key2' => ['value' => 'value 2'],
+                        'key3' => ['value' => 'value 3', 'sortOrder' => 10],
+                        'key4' => ['value' => 'value 4'],
+                    ],
+                ],
+                [
+                    'key2' => '-value 2-',
+                    'key4' => '-value 4-',
+                    'key3' => '-value 3-',
+                    'key1' => '-value 1-',
+                ],
+            ],
+            'pre-sorted array items' => [
+                [
+                    'item' => [
+                        'key1' => ['value' => 'value 1'],
+                        'key4' => ['value' => 'value 4'],
+                        'key2' => ['value' => 'value 2', 'sortOrder' => 10],
+                        'key3' => ['value' => 'value 3'],
+                    ],
+                ],
+                [
+                    'key1' => '-value 1-',
+                    'key4' => '-value 4-',
+                    'key3' => '-value 3-',
+                    'key2' => '-value 2-',
+                ],
+            ],
+            'sort order edge case values' => [
+                [
+                    'item' => [
+                        'key1' => ['value' => 'value 1', 'sortOrder' => 101],
+                        'key4' => ['value' => 'value 4'],
+                        'key2' => ['value' => 'value 2', 'sortOrder' => -10],
+                        'key3' => ['value' => 'value 3'],
+                        'key5' => ['value' => 'value 5', 'sortOrder' => 20],
+                    ],
+                ],
+                [
+                    'key2' => '-value 2-',
+                    'key4' => '-value 4-',
+                    'key3' => '-value 3-',
+                    'key5' => '-value 5-',
+                    'key1' => '-value 1-',
                 ],
             ],
         ];

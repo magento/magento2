@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="customer_grid" view_id="customer_dummy" class="Magento\Framework\Indexer\Action\Entity" primary="customer">
+        <title translate="true">Customer Grid</title>
+        <description translate="true">Rebuild Customer grid index</description>
+
+        <fieldset name="customer" source="Magento\Customer\Model\Indexer\Source"
+                  provider="Magento\Customer\Model\Indexer\AttributeProvider">
+            <field name="name" xsi:type="searchable" dataType="text" handler="CustomerNameHandler"/>
+            <field name="email" xsi:type="searchable" dataType="varchar"/>
+            <field name="group_id" xsi:type="filterable" dataType="int"/>
+            <field name="created_at" xsi:type="filterable" dataType="timestamp"/>
+            <field name="website_id" xsi:type="filterable" dataType="int"/>
+            <field name="confirmation" xsi:type="filterable" dataType="varchar"/>
+            <field name="created_in" xsi:type="filterable" dataType="text"/>
+            <field name="dob" xsi:type="filterable" dataType="date"/>
+            <field name="gender" xsi:type="filterable" dataType="int"/>
+            <field name="taxvat" xsi:type="searchable" dataType="varchar"/>
+            <field name="lock_expires" xsi:type="filterable" dataType="timestamp" />
+        </fieldset>
+
+        <fieldset name="shipping" source="Magento\Customer\Model\ResourceModel\Address\Collection">
+            <reference fieldset="customer" from="entity_id" to="default_shipping"/>
+            <field name="full" xsi:type="searchable" dataType="text" handler="ShippingAddressHandler"/>
+        </fieldset>
+
+        <fieldset name="billing" source="Magento\Customer\Model\ResourceModel\Address\Collection"
+                  provider="Magento\Customer\Model\Indexer\Address\AttributeProvider">
+            <reference fieldset="customer" from="entity_id" to="default_billing"/>
+            <field name="full" xsi:type="searchable" dataType="text" handler="BillingAddressHandler"/>
+            <field name="firstname" xsi:type="searchable" dataType="varchar"/>
+            <field name="lastname" xsi:type="searchable" dataType="varchar"/>
+            <field name="telephone" xsi:type="searchable" dataType="varchar"/>
+            <field name="postcode" xsi:type="searchable" dataType="varchar"/>
+            <field name="country_id" xsi:type="filterable" dataType="varchar"/>
+            <field name="region" xsi:type="searchable" dataType="varchar"/>
+            <field name="street" xsi:type="searchable" dataType="varchar"/>
+            <field name="city" xsi:type="searchable" dataType="varchar"/>
+            <field name="fax" xsi:type="searchable" dataType="varchar"/>
+            <field name="vat_id" xsi:type="searchable" dataType="varchar"/>
+            <field name="company" xsi:type="searchable" dataType="varchar"/>
+        </fieldset>
+
+        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <structure class="Magento\Framework\Indexer\GridStructure"/>
+    </indexer>
+</config>

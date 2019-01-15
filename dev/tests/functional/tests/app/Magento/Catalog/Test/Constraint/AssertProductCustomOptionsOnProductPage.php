@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -85,7 +85,6 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         BrowserInterface $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-
         $actualPrice = null;
         if ($this->isPrice) {
             $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
@@ -95,9 +94,8 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         }
         $fixtureCustomOptions = $this->prepareOptions($product, $actualPrice);
         $formCustomOptions = $catalogProductView->getViewBlock()->getOptions($product)['custom_options'];
-
         $error = $this->verifyData($fixtureCustomOptions, $formCustomOptions);
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**
@@ -106,33 +104,143 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      * @param FixtureInterface $product
      * @param int|null $actualPrice
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareOptions(FixtureInterface $product, $actualPrice = null)
     {
         $result = [];
         $customOptions = $product->hasData('custom_options')
             ? $product->getDataFieldConfig('custom_options')['source']->getCustomOptions()
-            : null;
-        $actualPrice = $actualPrice ? $actualPrice : $product->getPrice();
+            : [];
+        $actualPrice = $actualPrice ?: $product->getPrice();
         foreach ($customOptions as $customOption) {
-            $skippedField = isset($this->skippedFieldOptions[$customOption['type']])
-                ? $this->skippedFieldOptions[$customOption['type']]
-                : [];
-            foreach ($customOption['options'] as &$option) {
-                // recalculate percent price
-                if ('Percent' == $option['price_type']) {
-                    $option['price'] = ($actualPrice * $option['price']) / 100;
-                    $option['price'] = round($option['price'], 2);
-                }
+            $result = $this->prepareEachCustomOption($actualPrice, $customOption, $result);
+        }
+        return $result;
+    }
 
-                $option = array_diff_key($option, array_flip($skippedField));
+    /**
+     * Verify fixture and form data
+     *
+     * @param array $fixtureData
+     * @param array $formData
+     * @param bool $isStrict
+     * @param bool $isPrepareError
+     * @return array|string
+     */
+    protected function verifyData(array $fixtureData, array $formData, $isStrict = false, $isPrepareError = true)
+    {
+        $errors = [];
+        foreach ($fixtureData as $key => $value) {
+            if (in_array($key, $this->skippedFields, true)) {
+                continue;
+            }
+            $formValue = isset($formData[$key]) ? $formData[$key] : null;
+            $errors = $this->verifyDataForErrors($formValue, $key, $errors, $value);
+        }
+        return $this->prepareErrorsForOutput($fixtureData, $formData, $isStrict, $isPrepareError, $errors);
+    }
+
+    /**
+     * Checks data for not equal values error
+     *
+     * @param array|string $value
+     * @param array|string $formValue
+     * @param string $key
+     * @return string
+     */
+    private function checkNotEqualValuesErrors($value, $formValue, $key)
+    {
+        /**
+         * It is needed because sorting in db begins from 1, but when selenium driver gets value from form it starts
+         * calculate from 0. So this operation checks this case
+         */
+        if ((int)$value === (int)$formValue + 1) {
+            return '';
+        }
+        if (is_array($value)) {
+            $value = $this->arrayToString($value);
+        }
+        if (is_array($formValue)) {
+            $formValue = $this->arrayToString($formValue);
+        }
+        return sprintf('- %s: "%s" instead of "%s"', $key, $formValue, $value);
+    }
+
+    /**
+     * Prepare errors data to output
+     *
+     * @param array $fixtureData
+     * @param array $formData
+     * @param $isStrict
+     * @param $isPrepareError
+     * @param $errors
+     * @return array|string
+     */
+    private function prepareErrorsForOutput(array $fixtureData, array $formData, $isStrict, $isPrepareError, $errors)
+    {
+        if ($isStrict) {
+            $diffData = array_diff(array_keys($formData), array_keys($fixtureData));
+            if ($diffData) {
+                $errors[] = '- fields ' . implode(', ', $diffData) . ' is absent in fixture';
+            }
+        }
+        if ($isPrepareError) {
+            return $this->prepareErrors($errors);
+        }
+        return $errors;
+    }
+
+    /**
+     * Checks data for errors
+     *
+     * @param array|string $formValue
+     * @param string $key
+     * @param array $errors
+     * @param string $value
+     * @return array
+     */
+    private function verifyDataForErrors($formValue, $key, $errors, $value)
+    {
+        if (is_numeric($formValue)) {
+            $formValue = (float)$formValue;
+        }
+        if (null === $formValue) {
+            $errors[] = '- field "' . $key . '" is absent in form';
+        } elseif (is_array($value) && is_array($formValue)) {
+            $valueErrors = $this->verifyData($value, $formValue, true, false);
+            if (!empty($valueErrors)) {
+                $errors[$key] = $valueErrors;
+            }
+        } elseif ($value != $formValue) {
+            $notEqualValuesErrors = $this->checkNotEqualValuesErrors($value, $formValue, $key);
+            if ($notEqualValuesErrors) {
+                $errors[] = $notEqualValuesErrors;
+            }
+        }
+        return $errors;
+    }
+
+    /**
+     * @param $actualPrice
+     * @param $customOption
+     * @param $result
+     * @return array
+     */
+    private function prepareEachCustomOption($actualPrice, $customOption, $result)
+    {
+        $skippedField = isset($this->skippedFieldOptions[$customOption['type']])
+            ? $this->skippedFieldOptions[$customOption['type']]
+            : [];
+        foreach ($customOption['options'] as &$option) {
+            // recalculate percent price
+            if ('Percent' == $option['price_type']) {
+                $option['price'] = ($actualPrice * $option['price']) / 100;
+                $option['price'] = round($option['price'], 2);
             }
 
-            $result[$customOption['title']] = $customOption;
+            $option = array_diff_key($option, array_flip($skippedField));
         }
-
+        $result[$customOption['title']] = $customOption;
         return $result;
     }
 

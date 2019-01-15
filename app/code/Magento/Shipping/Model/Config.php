@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model;
 
-class Config extends \Magento\Framework\Object
+use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
+
+/**
+ * Class Config
+ * @api
+ * @since 100.0.2
+ */
+class Config extends \Magento\Framework\DataObject
 {
     /**
      * Shipping origin settings
@@ -54,14 +59,18 @@ class Config extends \Magento\Framework\Object
      * Retrieve active system carriers
      *
      * @param   mixed $store
-     * @return  array
+     * @return  AbstractCarrierInterface[]
      */
     public function getActiveCarriers($store = null)
     {
         $carriers = [];
         $config = $this->_scopeConfig->getValue('carriers', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         foreach (array_keys($config) as $carrierCode) {
-            if ($this->_scopeConfig->isSetFlag('carriers/' . $carrierCode . '/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)) {
+            if ($this->_scopeConfig->isSetFlag(
+                'carriers/' . $carrierCode . '/active',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )) {
                 $carrierModel = $this->_carrierFactory->create($carrierCode, $store);
                 if ($carrierModel) {
                     $carriers[$carrierCode] = $carrierModel;
@@ -75,7 +84,7 @@ class Config extends \Magento\Framework\Object
      * Retrieve all system carriers
      *
      * @param   mixed $store
-     * @return  array
+     * @return  AbstractCarrierInterface[]
      */
     public function getAllCarriers($store = null)
     {

@@ -1,30 +1,46 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Grid\CollectionFactory as GridCollectionFactory;
+
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory
+     * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
+     * @deprecated
      */
     protected $_collectionFactory;
 
     /**
+     * @param GridCollectionFactory
+     */
+    private $gridCollectionFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory
+     * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory
      * @param array $data
+     * @param GridCollectionFactory $gridColFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory,
-        array $data = []
+        \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory,
+        array $data = [],
+        GridCollectionFactory $gridColFactory = null
     ) {
+
         $this->_collectionFactory = $collectionFactory;
+        $this->gridCollectionFactory = $gridColFactory
+            ? : ObjectManager::getInstance()->get(GridCollectionFactory::class);
+
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -42,10 +58,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _prepareCollection()
     {
-        $this->setCollection($this->_collectionFactory->create());
+        $this->setCollection($this->gridCollectionFactory->create());
         return parent::_prepareCollection();
     }
 
@@ -76,10 +93,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
-                'store_id',
+                'stores',
                 [
                     'header' => __('Store View'),
-                    'index' => 'store_id',
+                    'index' => 'stores',
                     'type' => 'store',
                     'store_all' => true,
                     'store_view' => true,
@@ -131,8 +148,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRowUrl($row)
     {

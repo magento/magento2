@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Items\Price;
@@ -14,11 +14,16 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order items price column renderer
+ *
+ * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Tax\Helper\Data
+     * @deprecated
+     * Marked as deprecated as it is unused.
      */
     protected $taxHelper;
 
@@ -43,6 +48,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * @param TaxHelper $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -134,7 +140,7 @@ class Renderer extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve formated price, use different formatter depending on type of item
+     * Retrieve formatted price, use different formatter depending on type of item
      *
      * @param float $price
      * @return string

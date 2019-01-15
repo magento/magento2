@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-class FieldsetTest extends \PHPUnit_Framework_TestCase
+class FieldsetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Fieldset
@@ -20,8 +20,8 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $elementFactory \Magento\Framework\Data\Form\ElementFactory */
-        $elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
-        $this->_fieldset = $elementFactory->create('Magento\Framework\Data\Form\Element\Fieldset', []);
+        $elementFactory = $objectManager->create(\Magento\Framework\Data\Form\ElementFactory::class);
+        $this->_fieldset = $elementFactory->create(\Magento\Framework\Data\Form\Element\Fieldset::class, []);
     }
 
     /**
@@ -246,7 +246,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $fieldsetField = $textField;
         $fieldsetField[1] = 'fieldset';
         $advancedFieldsetFld = $fieldsetField;
-        // set isAdvenced flag
+        // set isAdvanced flag
         $advancedFieldsetFld[4] = true;
         $result = [[[$fieldsetField, $textField, $advancedFieldsetFld], 1]];
         return $result;

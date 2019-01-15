@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,67 +9,49 @@ namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 /**
  * Class SubtotalTest
  */
-class SubtotalTest extends \PHPUnit_Framework_TestCase
+class SubtotalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Total\Subtotal
      */
     protected $total;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoItemMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'],
-            [],
-            '',
-            false
+        $this->orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount']
         );
-        $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [
+        $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
                 'getDiscountRefunded', 'getQtyRefunded'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->creditmemoMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo',
-            [
+            ]);
+        $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
                 'setDiscountAmount', 'setBaseDiscountAmount', 'setSubtotal', 'setBaseSubtotal',
                 'setSubtotalInclTax', 'setBaseSubtotalInclTax', 'getGrandTotal', 'setGrandTotal',
                 'getBaseGrandTotal', 'setBaseGrandTotal'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->creditmemoItemMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo\Item',
-            [
+            ]);
+        $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
                 'setBaseDiscountAmount', 'isLast', 'getRowTotalInclTax', 'getBaseRowTotalInclTax',
                 'getRowTotal', 'getBaseRowTotal', 'calcRowTotal'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Subtotal();
     }
 

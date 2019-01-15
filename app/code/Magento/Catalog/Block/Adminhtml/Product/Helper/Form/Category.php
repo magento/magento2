@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-use Magento\Catalog\Model\Resource\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\AuthorizationInterface;
 
 /**
@@ -29,7 +27,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     protected $_backendData;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -47,7 +45,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -58,7 +56,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
@@ -126,16 +124,16 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         $newCategoryCaption = __('New Category');
 
         $button = $this->_layout->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-                [
-                    'id' => 'add_category_button',
-                    'label' => $newCategoryCaption,
-                    'title' => $newCategoryCaption,
-                    'onclick' => 'jQuery("#new-category").modal("openModal")',
-                    'disabled' => $this->getDisabled(),
-                ]
-            );
+            [
+                'id' => 'add_category_button',
+                'label' => $newCategoryCaption,
+                'title' => $newCategoryCaption,
+                'onclick' => 'jQuery("#new-category").modal("openModal")',
+                'disabled' => $this->getDisabled(),
+            ]
+        );
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
     <script>

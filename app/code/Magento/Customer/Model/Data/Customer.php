@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Customer
- *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\CustomerInterface
@@ -95,6 +95,16 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function getCreatedIn()
     {
         return $this->_get(self::CREATED_IN);
+    }
+
+    /**
+     * Get updated at time
+     *
+     * @return string|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->_get(self::UPDATED_AT);
     }
 
     /**
@@ -311,6 +321,17 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setCreatedAt($createdAt)
     {
         return $this->setData(self::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Set updated at time
+     *
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
     /**

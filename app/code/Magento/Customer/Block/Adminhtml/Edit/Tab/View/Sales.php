@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -17,7 +17,7 @@ class Sales extends \Magento\Backend\Block\Template
     /**
      * Sales entity collection
      *
-     * @var \Magento\Sales\Model\Resource\Sale\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Sale\Collection
      */
     protected $_collection;
 
@@ -51,7 +51,7 @@ class Sales extends \Magento\Backend\Block\Template
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Sale\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -60,14 +60,14 @@ class Sales extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
@@ -147,10 +147,12 @@ class Sales extends \Magento\Backend\Block\Template
      */
     public function getWebsiteCount($websiteId)
     {
-        return isset($this->_websiteCounts[$websiteId]) ? $this->_websiteCounts[$websiteId] : 0;
+        return $this->_websiteCounts[$websiteId] ?? 0;
     }
 
     /**
+     * Returns Grouped Collection Rows
+     *
      * @return array
      */
     public function getRows()
@@ -159,7 +161,9 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * Return totals data
+     *
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {
@@ -171,7 +175,9 @@ class Sales extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @param null|int $websiteId
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function formatCurrency($price, $websiteId = null)
     {

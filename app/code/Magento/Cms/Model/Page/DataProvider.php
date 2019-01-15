@@ -1,67 +1,69 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection
+     * @var \Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $collection;
 
     /**
-     * @var FilterPool
+     * @var DataPersistorInterface
      */
-    protected $filterPool;
+    protected $dataPersistor;
+
+    /**
+     * @var array
+     */
+    protected $loadedData;
 
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $collectionFactory
-     * @param FilterPool $filterPool
+     * @param CollectionFactory $pageCollectionFactory
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $collectionFactory,
-        FilterPool $filterPool,
+        CollectionFactory $pageCollectionFactory,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $pool = null
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->filterPool = $filterPool;
-        $this->collection = $collectionFactory->create();
-        $this->collection->setFirstStoreFlag(true);
+        $this->collection = $pageCollectionFactory->create();
+        $this->dataPersistor = $dataPersistor;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
+        $this->meta = $this->prepareMeta($this->meta);
     }
 
     /**
-     * @return \Magento\Cms\Model\Resource\Page\Collection
+     * Prepares Meta
+     *
+     * @param array $meta
+     * @return array
      */
-    protected function getCollection()
+    public function prepareMeta(array $meta)
     {
-        return $this->collection;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addFilter($condition, $field = null, $type = 'regular')
-    {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
+        return $meta;
     }
 
     /**
@@ -71,18 +73,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getData()
     {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->toArray();
-    }
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        $items = $this->collection->getItems();
+        /** @var $page \Magento\Cms\Model\Page */
+        foreach ($items as $page) {
+            $this->loadedData[$page->getId()] = $page->getData();
+        }
 
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
+        $data = $this->dataPersistor->get('cms_page');
+        if (!empty($data)) {
+            $page = $this->collection->getNewEmptyItem();
+            $page->setData($data);
+            $this->loadedData[$page->getId()] = $page->getData();
+            $this->dataPersistor->clear('cms_page');
+        }
+
+        return $this->loadedData;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
-class CleanupFilesTest extends \PHPUnit_Framework_TestCase
+class CleanupFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -25,17 +25,24 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->object = new CleanupFiles($this->filesystem);
     }
 
     public function testClearCodeGeneratedClasses()
     {
-        $dir = $this->getDirectoryCleanMock();
-        $this->filesystem->expects($this->once())
+        $dir1 = $this->getDirectoryCleanMock();
+        $dir2 = $this->getDirectoryCleanMock();
+        $this->filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::GENERATION)
-            ->willReturn($dir);
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
+                        [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
+                    ]
+                )
+            );
         $this->object->clearCodeGeneratedClasses();
     }
 
@@ -58,7 +65,7 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
      */
     private function getDirectoryCleanMock($subPath = null)
     {
-        $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
         $dir->expects($this->once())->method('isExist')->will($this->returnValue(true));

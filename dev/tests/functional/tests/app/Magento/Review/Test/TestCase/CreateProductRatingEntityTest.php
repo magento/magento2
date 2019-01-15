@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,53 +14,56 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Create Backend Product Rating
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create simple product
+ * 1. Create simple product.
  *
  * Steps:
- * 1. Login to backend
- * 2. Navigate Stores->Attributes->Rating
- * 3. Add New Rating
- * 4. Fill data according to dataset
- * 5. Save Rating
- * 6. Perform asserts
+ * 1. Login to backend.
+ * 2. Navigate Stores > Attributes > Rating.
+ * 3. Add New Rating.
+ * 4. Fill data according to dataset.
+ * 5. Save Rating.
+ * 6. Perform asserts.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-23331
  */
 class CreateProductRatingEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
+     * Product rating fixture.
+     *
      * @var Rating
      */
     protected $productRating;
 
     /**
+     * Product rating grid page.
+     *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
+     * Create product rating page.
+     *
      * @var RatingNew
      */
     protected $ratingNew;
 
     /**
+     * Edit product rating page.
+     *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return array
@@ -74,7 +77,7 @@ class CreateProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param RatingIndex $ratingIndex
      * @param RatingNew $ratingNew
@@ -92,7 +95,7 @@ class CreateProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Run create backend Product Rating test
+     * Run create backend Product Rating test.
      *
      * @param Rating $productRating
      * @return void
@@ -110,7 +113,7 @@ class CreateProductRatingEntityTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */
@@ -123,5 +126,6 @@ class CreateProductRatingEntityTest extends Injectable
         $this->ratingIndex->open();
         $this->ratingIndex->getRatingGrid()->searchAndOpen($filter);
         $this->ratingEdit->getPageActions()->delete();
+        $this->ratingEdit->getModalBlock()->acceptAlert();
     }
 }

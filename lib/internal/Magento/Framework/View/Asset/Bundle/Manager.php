@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,36 +10,54 @@ use Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 100.2.0
+ * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
 {
+    const BUNDLE_JS_DIR = 'js/bundle';
+
     const BUNDLE_PATH = '/js/bundle/bundle';
 
     const ASSET_TYPE_JS = 'js';
 
     const ASSET_TYPE_HTML = 'html';
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     protected $filesystem;
 
-    /** @var  Bundle */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle
+     */
     protected $bundle;
 
-    /** @var Bundle\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
-    /** @var Asset\ConfigInterface  */
+    /**
+     * @var \Magento\Framework\View\Asset\ConfigInterface
+     */
     protected $assetConfig;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $excluded = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+
     /**
      * @var Asset\Minification
      */
@@ -157,7 +175,7 @@ class Manager
      */
     protected function splitPath($path)
     {
-        if (strpos($path, '::') > 0) {
+        if (strpos($path, '::') !== false) {
             list($excludedModule, $excludedPath) = explode('::', $path);
             return [
                 'excludedModule' => $excludedModule,
@@ -175,7 +193,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!($this->isValidAsset($asset))) {
+        if (!$this->isValidAsset($asset)) {
             return false;
         }
 
@@ -190,33 +208,21 @@ class Manager
     protected function isAssetMinification(LocalInterface $asset)
     {
         $sourceFile = $asset->getSourceFile();
-        if (in_array($asset->getFilePath(), $this->excluded)) {
+        $extension = $asset->getContentType();
+        if (in_array($sourceFile, $this->excluded)) {
             return false;
         }
-        if ($this->minification->isEnabled($asset->getContentType())) {
 
-            if (strpos($sourceFile, '.min.') !== false) {
-                $this->excluded[] = str_replace('.min.', '', $sourceFile);
-                return true;
-            }
-
-            $extension = $asset->getContentType();
-            $minAbsolutePath = str_replace($extension, "min.{$extension}", $sourceFile);
-            if (file_exists($minAbsolutePath)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        if (strpos($sourceFile, '.min.') !== false) {
-            $absolutePath = str_replace('.min.', '', $asset->getFilePath());
-            if (file_exists($absolutePath)) {
+        if (strpos($sourceFile, '.min.') === false) {
+            $info = pathinfo($asset->getPath());
+            $assetMinifiedPath = $info['dirname'] . '/' . $info['filename'] . '.min.' . $info['extension'];
+            if ($this->filesystem->getDirectoryRead(DirectoryList::APP)->isExist($assetMinifiedPath)) {
+                $this->excluded[] = $sourceFile;
                 return false;
             }
         } else {
-            $extension = $asset->getContentType();
-            $this->excluded[] = str_replace($extension, "min.{$extension}", $asset->getFilePath());
+            $this->excluded[] = $this->filesystem->getDirectoryRead(DirectoryList::APP)
+                ->getAbsolutePath(str_replace(".min.$extension", ".$extension", $asset->getPath()));
         }
 
         return true;
@@ -248,13 +254,8 @@ class Manager
             return false;
         }
 
-        if ($type == self::ASSET_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
         return true;
     }
-
 
     /**
      * Flush bundle

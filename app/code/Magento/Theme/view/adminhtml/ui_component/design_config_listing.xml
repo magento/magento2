@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">design_config_listing.design_config_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>design_config_columns</spinner>
+        <deps>
+            <dep>design_config_listing.design_config_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="design_config_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Config::config_design</aclResource>
+        <dataProvider class="Magento\Theme\Ui\Component\Design\Config\DataProvider" name="design_config_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="design_config_columns">
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+        <column name="default" sortOrder="0">
+            <settings>
+                <label translate="true">Default</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="store_website_id" component="Magento_Ui/js/grid/columns/select" sortOrder="10">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\WebsiteSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Website</label>
+            </settings>
+        </column>
+        <column name="store_group_id" component="Magento_Ui/js/grid/columns/select" sortOrder="20">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\GroupSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Store</label>
+            </settings>
+        </column>
+        <column name="store_id" component="Magento_Ui/js/grid/columns/select" sortOrder="30">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\StoreSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Store View</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="editUrlPath" xsi:type="string">theme/design_config/edit</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,13 @@ var tasks = {},
 function init(config) {
     var grunt  = require('grunt'),
         expand = grunt.file.expand.bind(grunt.file),
-        themes, root, host, port, files;
+        staticMode = 'quick',
+        themes, root, staticDir, baseUrl, mapFile, host, port, files, requireJs;
 
     root         = config.root;
+    staticDir       = config.static;
     port         = config.port;
     files        = config.files;
-    host         = _.template(config.host)({ port: port });
     themes       = config.themes;
 
     _.each(themes, function (themeData, themeName) {
@@ -24,19 +25,44 @@ function init(config) {
             configs,
             render;
 
-        _.extend(themeData, { root: root });
+        _.extend(themeData, {
+            root: root,
+            static: staticDir
+        });
 
+        host    = _.template(config.host)({
+            port: port++
+        });
         render  = renderTemplate.bind(null, themeData);
+        mapFile = renderTemplate(themeData, files.compactMap);
+        baseUrl = renderTemplate(themeData, files.requireBaseUrl);
+
+        if (grunt.file.exists(mapFile)) {
+            staticMode = 'compact';
+        }
+
+        if (config.singleTest) {
+            files.specs = [config.singleTest];
+        }
+
         specs   = files.specs.map(render);
         specs   = expand(specs).map(cutJsExtension);
-        configs = files.requirejsConfigs.map(render);
+        configs = files.requirejsConfigs[staticMode].map(render);
+        requireJs = renderTemplate(themeData, files.requireJs[staticMode]);
 
         tasks[themeName] = {
             src: configs,
             options: {
                 host: host,
                 template: render(files.template),
-                vendor: files.requireJs,
+                templateOptions: {
+                    baseUrl: baseUrl
+                },
+                vendor: requireJs,
+                junit: {
+                    path: "var/log/js-unit/",
+                    consolidate: true
+                },
 
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)

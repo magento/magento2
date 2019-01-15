@@ -2,7 +2,7 @@
 /**
  * Console request
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Console;
@@ -20,7 +20,7 @@ class Request implements \Magento\Framework\App\RequestInterface
     public function __construct(array $parameters = [])
     {
         $data = getopt(null, $parameters);
-        // It can happen that request comes from http, but it runs the console (e.g. pub/cron.php)
+        // It can happen that request comes from http (e.g. pub/cron.php), but it runs the console
         if ($data) {
             $this->setParams($data);
         } else {

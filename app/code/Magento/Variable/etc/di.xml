@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Variable\Model\Source\Variables">
+        <arguments>
+            <argument name="configPaths" xsi:type="array">
+                <item name="web" xsi:type="array">
+                    <item name="web/unsecure/base_url" xsi:type="string">1</item>
+                    <item name="web/secure/base_url" xsi:type="string">1</item>
+                </item>
+                <item name="trans_email/ident_general" xsi:type="array">
+                    <item name="trans_email/ident_general/name" xsi:type="string">1</item>
+                    <item name="trans_email/ident_general/email" xsi:type="string">1</item>
+                </item>
+                <item name="trans_email/ident_sales" xsi:type="array">
+                    <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
+                    <item name="trans_email/ident_sales/email" xsi:type="string">1</item>
+                </item>
+                <item name="trans_email/ident_custom1" xsi:type="array">
+                    <item name="trans_email/ident_custom1/name" xsi:type="string">1</item>
+                    <item name="trans_email/ident_custom1/email" xsi:type="string">1</item>
+                </item>
+                <item name="trans_email/ident_custom2" xsi:type="array">
+                    <item name="trans_email/ident_custom2/name" xsi:type="string">1</item>
+                    <item name="trans_email/ident_custom2/email" xsi:type="string">1</item>
+                </item>
+                <item name="general/store_information" xsi:type="array">
+                    <item name="general/store_information/name" xsi:type="string">1</item>
+                    <item name="general/store_information/phone" xsi:type="string">1</item>
+                    <item name="general/store_information/hours" xsi:type="string">1</item>
+                    <item name="general/store_information/country_id" xsi:type="string">1</item>
+                    <item name="general/store_information/region_id" xsi:type="string">1</item>
+                    <item name="general/store_information/postcode" xsi:type="string">1</item>
+                    <item name="general/store_information/city" xsi:type="string">1</item>
+                    <item name="general/store_information/street_line1" xsi:type="string">1</item>
+                    <item name="general/store_information/street_line2" xsi:type="string">1</item>
+                    <item name="general/store_information/merchant_vat_number" xsi:type="string">1</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

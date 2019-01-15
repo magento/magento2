@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-use \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email;
-
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email;
 
 /**
  * Class EmailTest
  *
  * @package Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Email
@@ -73,12 +73,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirectMock;
 
-    public function setUp()
+    /**
+     * Test setup
+     */
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            [
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -88,37 +89,31 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ]);
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
         );
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
+        $this->objectManager = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create']
         );
-        $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addSuccess'], [], '', false);
-        $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
-            ->disableOriginalConstructor()
+        $this->messageManager = $this->createPartialMock(
+            \Magento\Framework\Message\Manager::class,
+            ['addSuccessMessage']
+        );
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -132,81 +127,53 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
         $this->creditmemoEmail = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email',
+            \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email::class,
             [
-                'context' => $this->context,
-                'request' => $this->request,
-                'response' => $this->response,
+                'context' => $this->context
             ]
         );
     }
 
+    /**
+     * testEmail
+     */
     public function testEmail()
     {
         $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
-        $cmNotifierClassName = 'Magento\Sales\Model\Order\CreditmemoNotifier';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
-        $cmNotifier = $this->getMock($cmNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $cmManagement = \Magento\Sales\Api\CreditmemoManagementInterface::class;
+        $cmManagementMock = $this->createMock($cmManagement);
         $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
+            ->willReturn($cmId);
+        $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
-            ->with($cmId)
-            ->will($this->returnSelf());
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with($cmNotifierClassName)
-            ->will($this->returnValue($cmNotifier));
-        $cmNotifier->expects($this->once())
+            ->with($cmManagement)
+            ->willReturn($cmManagementMock);
+        $cmManagementMock->expects($this->once())
             ->method('notify')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the message.');
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->creditmemoEmail->execute()
         );
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
     }
 
+    /**
+     * testEmailNoCreditmemoId
+     */
     public function testEmailNoCreditmemoId()
     {
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue(null));
-
-        $this->assertNull($this->creditmemoEmail->execute());
-    }
-
-    public function testEmailNoCreditmemo()
-    {
-        $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
-
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
-            ->with($cmId)
             ->will($this->returnValue(null));
 
         $this->assertNull($this->creditmemoEmail->execute());

@@ -1,29 +1,34 @@
 {
     "name": "magento/module-authorizenet",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-sales": "1.0.0-beta",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-quote": "1.0.0-beta",
-        "magento/module-checkout": "1.0.0-beta",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-payment": "1.0.0-beta",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-checkout": "*",
+        "magento/module-payment": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
     "license": [
-        "proprietary"
+        "OSL-3.0",
+        "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Authorizenet"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Authorizenet\\": ""
+        }
     }
 }

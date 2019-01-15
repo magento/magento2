@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\File;
+
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Csv parse
@@ -31,10 +31,18 @@ class Csv
     protected $_enclosure = '"';
 
     /**
-     * Constructor
+     * @var File
      */
-    public function __construct()
+    protected $file;
+
+    /**
+     * Constructor
+     *
+     * @param File $file File Driver used for writing CSV
+     */
+    public function __construct(File $file)
     {
+        $this->file = $file;
     }
 
     /**
@@ -118,76 +126,37 @@ class Csv
     /**
      * Saving data row array into file
      *
-     * @param   string $file
-     * @param   array $data
-     * @return  $this
+     * @param string $file
+     * @param array $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @deprecated
+     * @see appendData
      */
     public function saveData($file, $data)
     {
-        $fh = fopen($file, 'w');
-        foreach ($data as $dataRow) {
-            $this->fputcsv($fh, $dataRow, $this->_delimiter, $this->_enclosure);
-        }
-        fclose($fh);
-        return $this;
+        return $this->appendData($file, $data, 'w');
     }
 
     /**
-     * Write to csv
+     * Replace the saveData method by allowing to select the input mode
      *
-     * @param resource $handle
-     * @param string[] $fields
-     * @param string $delimiter
-     * @param string $enclosure
-     * @return int
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param string $file
+     * @param array $data
+     * @param string $mode
+     *
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function fputcsv(&$handle, $fields = [], $delimiter = ',', $enclosure = '"')
+    public function appendData($file, $data, $mode = 'w')
     {
-        $str = '';
-        $escape_char = '\\';
-        foreach ($fields as $value) {
-            if (strpos(
-                $value,
-                $delimiter
-            ) !== false || strpos(
-                $value,
-                $enclosure
-            ) !== false || strpos(
-                $value,
-                "\n"
-            ) !== false || strpos(
-                $value,
-                "\r"
-            ) !== false || strpos(
-                $value,
-                "\t"
-            ) !== false || strpos(
-                $value,
-                ' '
-            ) !== false
-            ) {
-                $str2 = $enclosure;
-                $escaped = 0;
-                $len = strlen($value);
-                for ($i = 0; $i < $len; $i++) {
-                    if ($value[$i] == $escape_char) {
-                        $escaped = 1;
-                    } elseif (!$escaped && $value[$i] == $enclosure) {
-                        $str2 .= $enclosure;
-                    } else {
-                        $escaped = 0;
-                    }
-                    $str2 .= $value[$i];
-                }
-                $str2 .= $enclosure;
-                $str .= $str2 . $delimiter;
-            } else {
-                $str .= $enclosure . $value . $enclosure . $delimiter;
-            }
+        $fileHandler = fopen($file, $mode);
+        foreach ($data as $dataRow) {
+            $this->file->filePutCsv($fileHandler, $dataRow, $this->_delimiter, $this->_enclosure);
         }
-        $str = substr($str, 0, -1);
-        $str .= "\n";
-        return fwrite($handle, $str);
+        fclose($fileHandler);
+
+        return $this;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,8 +22,8 @@ class Factory
      * @var array
      */
     protected $_types = [
-        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER => 'Magento\Tax\Model\TaxClass\Type\Customer',
-        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT => 'Magento\Tax\Model\TaxClass\Type\Product',
+        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER => \Magento\Tax\Model\TaxClass\Type\Customer::class,
+        \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT => \Magento\Tax\Model\TaxClass\Type\Product::class,
     ];
 
     /**

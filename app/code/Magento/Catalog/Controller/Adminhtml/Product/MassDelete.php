@@ -1,74 +1,77 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
-class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
+class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
-     * Field id
-     */
-    const ID_FIELD = 'entity_id';
-
-    /**
-     * Redirect url
-     */
-    const REDIRECT_URL = 'catalog/*/index';
-
-    /**
-     * Resource collection
+     * Massactions filter
      *
-     * @var string
+     * @var Filter
      */
-    protected $collection = 'Magento\Catalog\Model\Resource\Product\Collection';
+    protected $filter;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @param Context $context
+     * @param Builder $productBuilder
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(
+        Context $context,
+        Builder $productBuilder,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        ProductRepositoryInterface $productRepository = null
+    ) {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        $this->productRepository = $productRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
+        parent::__construct($context, $productBuilder);
+    }
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        $selected = $this->getRequest()->getParam('selected');
-        $excluded = $this->getRequest()->getParam('excluded');
-
-        $collection = $this->_objectManager->create($this->collection);
-        try {
-            if (!empty($excluded)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-                $this->massAction($collection);
-            } elseif (!empty($selected)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
-                $this->massAction($collection);
-            } else {
-                $this->messageManager->addError(__('Please select product(s).'));
-            }
-        } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        }
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath(static::REDIRECT_URL);
-    }
-
-    /**
-     * Cancel selected orders
-     *
-     * @param Collection $collection
-     * @return void
-     */
-    protected function massAction($collection)
-    {
-        $count = 0;
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $productDeleted = 0;
+        /** @var \Magento\Catalog\Model\Product $product */
         foreach ($collection->getItems() as $product) {
-            $product->delete();
-            ++$count;
+            $this->productRepository->delete($product);
+            $productDeleted++;
         }
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $count));
+
+        if ($productDeleted) {
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have been deleted.', $productDeleted)
+            );
+        }
+
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
     }
 }

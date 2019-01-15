@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,8 +79,6 @@ class AssertOrderTaxOnBackendIncludingTax extends AbstractAssertOrderTaxOnBacken
 
         $actualPrices['discount'] = $totalsBlock->getDiscount();
 
-        $actualPrices['shipping_excl_tax'] = $totalsBlock->getShippingExclTax();
-        $actualPrices['shipping_incl_tax'] = $totalsBlock->getShippingInclTax();
         $actualPrices['tax'] = $totalsBlock->getTax();
         $actualPrices['grand_total_excl_tax'] = $totalsBlock->getGrandTotalExclTax();
         $actualPrices['grand_total_incl_tax'] = $totalsBlock->getGrandTotalInclTax();

@@ -2,18 +2,26 @@
 /**
  * Mail Template Transport Builder
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\Message;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
+/**
+ * TransportBuilder
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TransportBuilder
 {
     /**
@@ -22,6 +30,13 @@ class TransportBuilder
      * @var string
      */
     protected $templateIdentifier;
+
+    /**
+     * Template Model
+     *
+     * @var string
+     */
+    protected $templateModel;
 
     /**
      * Template Variables
@@ -75,7 +90,12 @@ class TransportBuilder
     /**
      * @var \Magento\Framework\Mail\TransportInterfaceFactory
      */
-    protected $_mailTransportFactory;
+    protected $mailTransportFactory;
+
+    /**
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+     */
+    private $messageFactory;
 
     /**
      * @param FactoryInterface $templateFactory
@@ -83,19 +103,24 @@ class TransportBuilder
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
+     * @param MessageInterfaceFactory $messageFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FactoryInterface $templateFactory,
         MessageInterface $message,
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
-        TransportInterfaceFactory $mailTransportFactory
+        TransportInterfaceFactory $mailTransportFactory,
+        MessageInterfaceFactory $messageFactory = null
     ) {
         $this->templateFactory = $templateFactory;
-        $this->message = $message;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
-        $this->_mailTransportFactory = $mailTransportFactory;
+        $this->mailTransportFactory = $mailTransportFactory;
+        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+        $this->message = $this->messageFactory->create();
     }
 
     /**
@@ -152,13 +177,30 @@ class TransportBuilder
     /**
      * Set mail from address
      *
+     * @deprecated This function sets the from address for the first store only.
+     * new function setFromByStore introduced to allow setting of from address
+     * based on store.
+     * @see setFromByStore()
+     *
      * @param string|array $from
      * @return $this
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
+        return $this->setFromByStore($from, null);
+    }
+
+    /**
+     * Set mail from address by store
+     *
+     * @param string|array $from
+     * @param string|int $store
+     * @return $this
+     */
+    public function setFromByStore($from, $store = null)
+    {
+        $result = $this->_senderResolver->resolve($from, $store);
+        $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
 
@@ -171,6 +213,18 @@ class TransportBuilder
     public function setTemplateIdentifier($templateIdentifier)
     {
         $this->templateIdentifier = $templateIdentifier;
+        return $this;
+    }
+
+    /**
+     * Set template model
+     *
+     * @param string $templateModel
+     * @return $this
+     */
+    public function setTemplateModel($templateModel)
+    {
+        $this->templateModel = $templateModel;
         return $this;
     }
 
@@ -206,7 +260,7 @@ class TransportBuilder
     public function getTransport()
     {
         $this->prepareMessage();
-        $mailTransport = $this->_mailTransportFactory->create(['message' => clone $this->message]);
+        $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
         $this->reset();
 
         return $mailTransport;
@@ -219,7 +273,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create('Magento\Framework\Mail\Message');
+        $this->message = $this->messageFactory->create();
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
@@ -233,29 +287,36 @@ class TransportBuilder
      */
     protected function getTemplate()
     {
-        return $this->templateFactory->get($this->templateIdentifier)
+        return $this->templateFactory->get($this->templateIdentifier, $this->templateModel)
             ->setVars($this->templateVars)
             ->setOptions($this->templateOptions);
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
+     * @throws LocalizedException if template type is unknown
      */
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $types = [
-            TemplateTypesInterface::TYPE_TEXT => MessageInterface::TYPE_TEXT,
-            TemplateTypesInterface::TYPE_HTML => MessageInterface::TYPE_HTML,
-        ];
-
         $body = $template->processTemplate();
-        $this->message->setMessageType($types[$template->getType()])
-            ->setBody($body)
-            ->setSubject($template->getSubject());
+        switch ($template->getType()) {
+            case TemplateTypesInterface::TYPE_TEXT:
+                $this->message->setBodyText($body);
+                break;
 
+            case TemplateTypesInterface::TYPE_HTML:
+                $this->message->setBodyHtml($body);
+                break;
+
+            default:
+                throw new LocalizedException(
+                    new Phrase('Unknown template type')
+                );
+        }
+        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;
     }
 }

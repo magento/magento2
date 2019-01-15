@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Helper;
@@ -31,6 +31,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Helper\Context $context
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\ActionFlag $actionFlag,
@@ -60,7 +61,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
 
         $expressRedirect->getResponse()->setRedirect(
             $this->_objectManager->get(
-                'Magento\Framework\Url\Helper\Data'
+                \Magento\Framework\Url\Helper\Data::class
             )->addRequestParam(
                 $expressRedirect->getLoginUrl(),
                 ['context' => 'checkout']

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -10,6 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 
 abstract class Cache extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::cache';
+
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
      */
@@ -66,17 +74,7 @@ abstract class Cache extends Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new LocalizedException(__('Specified cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
+            throw new LocalizedException(__('These cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
         }
-    }
-
-    /**
-     * Check if cache management is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::cache');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,73 +15,72 @@ use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Create ProductReviewEntity Backend
- *
- * Test Flow:
  * Preconditions:
- * 1. Simple Product created
+ * 1. Simple Product created.
  *
  * Steps:
- * 1. Login to backend
- * 2. Navigate to Marketing -> User Content -> Reviews
- * 3. Click the "+" (Add New Review) button
- * 4. Select the product in the Products Grid
- * 5. Fill data according to DataSet
- * 6. Click "Save Review" button
- * 7. Perform Asserts
+ * 1. Login to backend.
+ * 2. Navigate to Marketing > User Content > Reviews.
+ * 3. Click the "+" (Add New Review) button.
+ * 4. Select the product in the Products Grid.
+ * 5. Fill data according to DataSet.
+ * 6. Click "Save Review" button.
+ * 7. Perform Asserts.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-26476
  */
 class CreateProductReviewBackendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
-     * ReviewIndex page
+     * ReviewIndex page.
      *
      * @var ReviewIndex
      */
     protected $reviewIndex;
 
     /**
-     * ReviewEdit page
+     * ReviewEdit page.
      *
      * @var ReviewEdit
      */
     protected $reviewEdit;
 
     /**
-     * RatingIndex page
+     * RatingIndex page.
      *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
-     * RatingEdit page
+     * RatingEdit page.
      *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
+     * Product rating fixture.
+     *
      * @var Rating
      */
     protected $productRating;
 
     /**
-     * Review fixture
+     * Review fixture.
      *
      * @var Review
      */
     protected $review;
 
     /**
-     * Inject pages into test
+     * Inject pages into test.
      *
      * @param ReviewIndex $reviewIndex
      * @param ReviewEdit $reviewEdit
@@ -102,7 +101,7 @@ class CreateProductReviewBackendEntityTest extends Injectable
     }
 
     /**
-     * Run Create Product Review Entity Backend Test
+     * Run Create Product Review Entity Backend Test.
      *
      * @param Review $review
      * @return array
@@ -111,13 +110,14 @@ class CreateProductReviewBackendEntityTest extends Injectable
     {
         // Precondition:
         $product = $review->getDataFieldConfig('entity_id')['source']->getEntity();
-        $filter = ['id' => $product->getId()];
+        $filter = ['sku' => $product->getSku()];
         $this->review = $review;
 
         // Steps:
         $this->reviewIndex->open();
         $this->reviewIndex->getReviewActions()->addNew();
-        $this->reviewEdit->getProductGrid()->searchAndOpen($filter);
+        $this->reviewEdit->getProductGrid()->search($filter);
+        $this->reviewEdit->getProductGrid()->openFirstRow();
         $this->reviewEdit->getReviewForm()->fill($this->review);
         $this->reviewEdit->getPageActions()->save();
 
@@ -125,7 +125,7 @@ class CreateProductReviewBackendEntityTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */
@@ -136,6 +136,7 @@ class CreateProductReviewBackendEntityTest extends Injectable
             foreach ($this->review->getRatings() as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();
+                $this->ratingEdit->getModalBlock()->acceptAlert();
             }
         }
     }

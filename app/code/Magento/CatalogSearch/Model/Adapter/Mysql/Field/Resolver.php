@@ -1,21 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Field;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\Collection as AttributeCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Resolver implements ResolverInterface
 {
     /**
      * @var AttributeCollection
      */
     private $attributeCollection;
+
     /**
      * @var FieldFactory
      */
@@ -39,6 +44,7 @@ class Resolver implements ResolverInterface
     public function resolve(array $fields)
     {
         $resolvedFields = [];
+        $this->attributeCollection->addFieldToFilter('attribute_code', ['in' => $fields]);
         foreach ($fields as $field) {
             if ('*' === $field) {
                 $resolvedFields = [

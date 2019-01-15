@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class AssertShipmentInShipmentsGrid extends AbstractConstraint
                 'total_qty_to' => $totalQty[$key],
             ];
             $shipmentIndex->getShipmentsGrid()->search($filter + $filterQty);
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $shipmentIndex->getShipmentsGrid()->isRowVisible($filter, false),
                 'Shipment is absent in shipment grid on shipment index page.'
             );

@@ -1,18 +1,40 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="billing-address-details" data-bind="if: isAddressDetailsVisible() && currentBillingAddress()">
-    <!-- ko text: currentBillingAddress().firstname --><!-- /ko --> <!-- ko text: currentBillingAddress().lastname --><!-- /ko --><br/>
-    <!-- ko text: currentBillingAddress().street --><!-- /ko --><br/>
-    <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
+<div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
+    <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
+    <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+    <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
+    <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
+    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
 
-    <!-- ko text: currentBillingAddress().telephone --><!-- /ko --><br/>
-    <button type="button"
+    <each args="data: currentBillingAddress().customAttributes, as: 'element'">
+        <each args="data: Object.keys(element), as: 'attribute'">
+            <if args="typeof element[attribute] === 'object'">
+                <if args="element[attribute].label">
+                    <text args="element[attribute].label"/>
+                </if>
+                <ifnot args="element[attribute].label">
+                    <if args="element[attribute].value">
+                        <text args="element[attribute].value"/>
+                    </if>
+                </ifnot>
+            </if>
+            <if args="typeof element[attribute] === 'string'">
+                <text args="element[attribute]"/>
+            </if><br/>
+        </each>
+    </each>
+
+    <button visible="!isAddressSameAsShipping()"
+            type="button"
             class="action action-edit-address"
-            data-bind="visible: !isAddressSameAsShipping(), click: editAddress">
-        <span data-bind="text: $t('Edit')"></span>
+            click="editAddress">
+        <span translate="'Edit'"></span>
     </button>
 </div>
+

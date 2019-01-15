@@ -1,15 +1,51 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Model\Import;
 
-class Start extends ImportController
+/**
+ * Controller responsible for initiating the import process
+ */
+class Start extends ImportResultController implements HttpPostActionInterface
 {
+    /**
+     * @var \Magento\ImportExport\Model\Import
+     */
+    protected $importModel;
+
+    /**
+     * @var \Magento\Framework\Message\ExceptionMessageFactoryInterface
+     */
+    private $exceptionMessageFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
+     * @param \Magento\ImportExport\Model\History $historyModel
+     * @param \Magento\ImportExport\Helper\Report $reportHelper
+     * @param \Magento\ImportExport\Model\Import $importModel
+     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
+        \Magento\ImportExport\Model\History $historyModel,
+        \Magento\ImportExport\Helper\Report $reportHelper,
+        \Magento\ImportExport\Model\Import $importModel,
+        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+    ) {
+        parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
+        $this->importModel = $importModel;
+        $this->exceptionMessageFactory = $exceptionMessageFactory;
+    }
+
     /**
      * Start import process action
      *
@@ -21,26 +57,63 @@ class Start extends ImportController
         if ($data) {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
             $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
-            /** @var $importModel \Magento\ImportExport\Model\Import */
-            $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
+            $resultBlock
+                ->addAction('show', 'import_validation_container')
+                ->addAction('innerHTML', 'import_validation_container_header', __('Status'))
+                ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
+
+            $this->importModel->setData($data);
+            $errorAggregator = $this->importModel->getErrorAggregator();
+            $errorAggregator->initValidationStrategy(
+                $this->importModel->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
+                $this->importModel->getData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT)
+            );
 
             try {
-                $importModel->setData($data);
-                $importModel->importSource();
-                $importModel->invalidateIndex();
-                $resultBlock->addAction('show', 'import_validation_container')
-                    ->addAction('innerHTML', 'import_validation_container_header', __('Status'));
+                $this->importModel->importSource();
             } catch (\Exception $e) {
-                $resultBlock->addError($e->getMessage());
-                return $resultLayout;
+                $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
+                $message = $this->exceptionMessageFactory->createMessage($e);
+                $html = $resultMessageBlock->addMessage($message)->toHtml();
+                $errorAggregator->addError(
+                    \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                    \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::ERROR_LEVEL_CRITICAL,
+                    null,
+                    null,
+                    null,
+                    $html
+                );
             }
-            $resultBlock->addAction('hide', ['edit_form', 'upload_button', 'messages'])
-                ->addSuccess(__('Import successfully done'));
+
+            if ($this->importModel->getErrorAggregator()->hasToBeTerminated()) {
+                $resultBlock->addError(__('Maximum error count has been reached or system error is occurred!'));
+                $this->addErrorMessages($resultBlock, $errorAggregator);
+            } else {
+                $this->importModel->invalidateIndex();
+
+                $noticeHtml = $this->historyModel->getSummary();
+
+                if ($this->historyModel->getErrorFile()) {
+                    $noticeHtml .=  '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
+                                    . '<a href="'
+                                    . $this->createDownloadUrlImportHistoryFile($this->historyModel->getErrorFile())
+                                    . '">' . __('Download full report') . '</a></div>';
+                }
+
+                $resultBlock->addNotice(
+                    $noticeHtml
+                );
+
+                $this->addErrorMessages($resultBlock, $errorAggregator);
+                $resultBlock->addSuccess(__('Import successfully done'));
+            }
+
             return $resultLayout;
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
@@ -8,8 +8,10 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 /**
  * Entity/Attribute/Model - attribute selection source abstract
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractSource implements
     \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface,
@@ -34,6 +36,7 @@ abstract class AbstractSource implements
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @codeCoverageIgnore
      */
     public function setAttribute($attribute)
     {
@@ -45,6 +48,7 @@ abstract class AbstractSource implements
      * Get attribute instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     public function getAttribute()
     {
@@ -96,6 +100,7 @@ abstract class AbstractSource implements
      * @param string $dir direction
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {
@@ -105,6 +110,7 @@ abstract class AbstractSource implements
     /**
      * Retrieve flat column definition
      *
+     * @codeCoverageIgnore
      * @return array
      */
     public function getFlatColumns()
@@ -116,6 +122,7 @@ abstract class AbstractSource implements
      * Retrieve Indexes(s) for Flat
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getFlatIndexes()
     {
@@ -128,6 +135,7 @@ abstract class AbstractSource implements
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function getFlatUpdateSelect($store)
     {
@@ -139,6 +147,7 @@ abstract class AbstractSource implements
      *
      * @param string|int $value
      * @return string|bool
+     * @codeCoverageIgnore
      */
     public function getIndexOptionText($value)
     {
@@ -149,6 +158,7 @@ abstract class AbstractSource implements
      * Get options as array
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {

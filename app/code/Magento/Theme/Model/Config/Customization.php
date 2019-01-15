@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Config;
@@ -167,7 +167,7 @@ class Customization
      */
     protected function _prepareThemeCustomizations()
     {
-        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->themeProvider->getThemeCustomizations(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         $assignedThemes = $this->getStoresByThemes();

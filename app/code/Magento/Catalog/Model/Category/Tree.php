@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -13,7 +13,7 @@ use Magento\Framework\Data\Tree\Node;
 class Tree
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Tree
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
      */
     protected $categoryTree;
 
@@ -23,7 +23,7 @@ class Tree
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $categoryCollection;
 
@@ -33,15 +33,15 @@ class Tree
     protected $treeFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Category\Collection $categoryCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Category\Collection $categoryCollection,
+        \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection,
         \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
     ) {
         $this->categoryTree = $categoryTree;

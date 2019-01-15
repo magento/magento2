@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Http;
 
 use Magento\Payment\Gateway\Http\Transfer;
 
-class TransferTest extends \PHPUnit_Framework_TestCase
+class TransferTest extends \PHPUnit\Framework\TestCase
 {
     public function testIO()
     {
         $clientConfig = ['config'];
         $headers = ['Header'];
         $body = ['data', 'data2'];
+        $auth = ['username', 'password'];
         $method = 'POST';
         $uri = 'https://gateway.com';
         $encode = false;
@@ -22,6 +23,7 @@ class TransferTest extends \PHPUnit_Framework_TestCase
             $clientConfig,
             $headers,
             $body,
+            $auth,
             $method,
             $uri,
             $encode

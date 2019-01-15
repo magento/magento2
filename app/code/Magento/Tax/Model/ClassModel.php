@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,9 @@ namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Tax class model
- *
- * @method \Magento\Tax\Model\Resource\TaxClass _getResource()
- * @method \Magento\Tax\Model\Resource\TaxClass getResource()
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -48,7 +44,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -58,7 +54,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -79,7 +75,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\TaxClass');
+        $this->_init(\Magento\Tax\Model\ResourceModel\TaxClass::class);
     }
 
     /**
@@ -153,6 +149,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     {
         return $this->getData(self::KEY_TYPE);
     }
+
     /**
      * Set tax class ID.
      *
@@ -185,6 +182,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     {
         return $this->setData(self::KEY_TYPE, $classType);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

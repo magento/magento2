@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click on the "Delete Rule" button.
  * 5. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-20924
  */
 class DeleteTaxRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -89,5 +88,6 @@ class DeleteTaxRuleEntityTest extends Injectable
         $this->taxRuleIndexPage->open();
         $this->taxRuleIndexPage->getTaxRuleGrid()->searchAndOpen(['code' => $taxRule->getCode()]);
         $this->taxRuleNewPage->getFormPageActions()->delete();
+        $this->taxRuleNewPage->getModalBlock()->acceptAlert();
     }
 }

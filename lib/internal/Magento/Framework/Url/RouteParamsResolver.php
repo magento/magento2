@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url;
@@ -19,7 +19,7 @@ use Magento\Framework\Url\RouteParamsResolverInterface;
  * @method $this setSecure(bool $isForced)
  * @method bool getSecure()
  */
-class RouteParamsResolver extends \Magento\Framework\Object implements RouteParamsResolverInterface
+class RouteParamsResolver extends \Magento\Framework\DataObject implements RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -30,6 +30,11 @@ class RouteParamsResolver extends \Magento\Framework\Object implements RoutePara
      * @var \Magento\Framework\Url\QueryParamsResolverInterface
      */
     protected $queryParamsResolver;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -102,7 +107,14 @@ class RouteParamsResolver extends \Magento\Framework\Object implements RoutePara
         }
 
         foreach ($data as $key => $value) {
-            $this->setRouteParam($key, $value);
+            if (!is_scalar($value) || $key == 'key' || !$this->getData('escape_params')) {
+                $this->setRouteParam($key, $value);
+            } else {
+                $this->setRouteParam(
+                    $this->getEscaper()->encodeUrlParam($key),
+                    $this->getEscaper()->encodeUrlParam($value)
+                );
+            }
         }
 
         return $this;
@@ -136,5 +148,20 @@ class RouteParamsResolver extends \Magento\Framework\Object implements RoutePara
     public function getRouteParam($key)
     {
         return $this->getData('route_params', $key);
+    }
+
+    /**
+     * Get escaper
+     *
+     * @return \Magento\Framework\Escaper
+     * @deprecated 100.2.0
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\Escaper::class);
+        }
+        return $this->escaper;
     }
 }

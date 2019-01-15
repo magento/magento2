@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class PriceModifierTest extends \PHPUnit_Framework_TestCase
+class PriceModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\PriceModifier
@@ -33,15 +31,8 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productMock =
-            $this->getMock('Magento\Catalog\Model\Product',
-                ['getData', 'setData', '__wakeup'], [], '', false);
-        $this->productRepositoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ProductRepository',
-            [],
-            [],
-            '',
-            false
-        );
+            $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData', 'setData', '__wakeup']);
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
         $this->priceModifier = new \Magento\Catalog\Model\Product\PriceModifier(
             $this->productRepositoryMock
         );
@@ -61,54 +52,9 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testSuccessfullyRemoveGroupPriceSpecifiedForOneGroup()
-    {
-        $this->productMock
-            ->expects($this->once())
-            ->method('getData')
-            ->with('group_price')
-            ->will($this->returnValue($this->prices));
-        $expectedPrices = [1 => $this->prices[1]];
-        $this->productMock->expects($this->once())->method('setData')->with('group_price', $expectedPrices);
-        $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
-        $this->priceModifier->removeGroupPrice($this->productMock, 1, 1);
-    }
-
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage This product doesn't have group price
-     */
-    public function testRemoveWhenGroupPricesNotExists()
-    {
-        $this->productMock
-            ->expects($this->once())
-            ->method('getData')
-            ->with('group_price')
-            ->will($this->returnValue([]));
-        $this->productMock->expects($this->never())->method('setData');
-        $this->productRepositoryMock->expects($this->never())->method('save');
-        $this->priceModifier->removeGroupPrice($this->productMock, 1, 1);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage For current  customerGroupId = '10' any group price exist'.
-     */
-    public function testRemoveGroupPriceForNonExistingCustomerGroup()
-    {
-        $this->productMock
-            ->expects($this->once())
-            ->method('getData')
-            ->with('group_price')
-            ->will($this->returnValue($this->prices));
-        $this->productMock->expects($this->never())->method('setData');
-        $this->productRepositoryMock->expects($this->never())->method('save');
-        $this->priceModifier->removeGroupPrice($this->productMock, 10, 1);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage This product doesn't have tier price
+     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '1', website = 1, qty = 3
      */
     public function testRemoveWhenTierPricesNotExists()
     {
@@ -124,7 +70,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage For current  customerGroupId = '10' with 'qty' = 15 any tier price exist'.
+     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '10', website = 1, qty = 5
      */
     public function testRemoveTierPriceForNonExistingCustomerGroup()
     {
@@ -135,7 +81,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->prices));
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
-        $this->priceModifier->removeTierPrice($this->productMock, 10, 15, 1);
+        $this->priceModifier->removeTierPrice($this->productMock, 10, 5, 1);
     }
 
     public function testSuccessfullyRemoveTierPriceSpecifiedForAllGroups()

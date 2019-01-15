@@ -1,42 +1,55 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails $block
+ */
+$payment = $block->getPayment();
+$fraudDetails = $payment->getAdditionalInformation('fraud_details');
 ?>
-
-<?php $payment = $block->getPayment() ?>
-<?php $fraudDetails = $payment->getAdditionalInformation('fraud_details') ?>
 
 <?php if (!empty($fraudDetails)): ?>
     <div class="admin__page-section-item-title">
-        <span class="title"><?php echo __('Fraud Detection ') ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Fraud Detection ')) ?></span>
     </div>
 
     <div class="admin__page-section-item-content">
         <div class="order-payment-additional">
             <?php if(!empty($fraudDetails['fds_filter_action'])): ?>
-                <?php echo __('FDS Filter Action') ?>: <?php echo $fraudDetails['fds_filter_action'] ?></br>
+                <?= $block->escapeHtml(__('FDS Filter Action')) ?>:
+                <?= $block->escapeHtml($fraudDetails['fds_filter_action']) ?>
+                </br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['avs_response'])): ?>
-                <?php echo __('AVS Response') ?>: <?php echo $fraudDetails['avs_response'] ?></br>
+                <?= $block->escapeHtml(__('AVS Response')) ?>:
+                <?= $block->escapeHtml($fraudDetails['avs_response']) ?>
+                </br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['card_code_response'])): ?>
-                <?php echo __('Card Code Response') ?>: <?php echo $fraudDetails['card_code_response'] ?></br>
+                <?= $block->escapeHtml(__('Card Code Response')) ?>:
+                <?= $block->escapeHtml($fraudDetails['card_code_response']) ?>
+                </br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['cavv_response']) || ($fraudDetails['cavv_response'] === 0)): ?>
-                <?php echo __('CAVV Response') ?>: <?php echo $fraudDetails['cavv_response'] ?></br>
+                <?= $block->escapeHtml(__('CAVV Response')) ?>:
+                <?= $block->escapeHtml($fraudDetails['cavv_response']) ?>
+                </br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['fraud_filters'])): ?>
-                <b><?php echo __('Fraud Filters') ?>:</b></br>
+                <strong><?= $block->escapeHtml(__('Fraud Filters')) ?>:
+                </strong></br>
                 <?php foreach($fraudDetails['fraud_filters'] as $filter): ?>
-                    <?php echo $filter['name'] ?>: <?php echo $filter['action'] ?></br>
+                    <?= $block->escapeHtml($filter['name']) ?>:
+                    <?= $block->escapeHtml($filter['action']) ?>
+                    </br>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $xsdFile
@@ -15,16 +15,20 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidXmlFile($xsdFile, $invalidXmlFile, $expectedErrorsQty)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$invalidXmlFile}");
-        libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate(BP . "/lib/internal/Magento/Framework/Config/etc/{$xsdFile}");
+        $schema = __DIR__ . "/../../etc/{$xsdFile}";
 
-        $errorsQty = count(libxml_get_errors());
+        libxml_use_internal_errors(true);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
+        $errorsQty = count($result);
         libxml_use_internal_errors(false);
 
         if ($expectedErrorsQty > 0) {
-            $this->assertFalse($result);
+            $this->assertNotEmpty($result);
         }
         $this->assertEquals($expectedErrorsQty, $errorsQty);
     }
@@ -34,6 +38,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidXmlFileDataProvider()
     {
-        return [['view.xsd', 'view_invalid.xml', 1], ['theme.xsd', 'theme_invalid.xml', 1]];
+        return [['view.xsd', 'view_invalid.xml', 8], ['theme.xsd', 'theme_invalid.xml', 1]];
     }
 }

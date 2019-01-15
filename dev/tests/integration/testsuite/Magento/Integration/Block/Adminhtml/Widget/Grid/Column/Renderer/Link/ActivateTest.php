@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
-class ActivateTest extends \PHPUnit_Framework_TestCase
+class ActivateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate
@@ -24,9 +24,9 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->activateLinkBlock = $objectManager->create(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate'
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate::class
         );
-        $column = $objectManager->create('Magento\Backend\Block\Widget\Grid\Column');
+        $column = $objectManager->create(\Magento\Backend\Block\Widget\Grid\Column::class);
         $this->activateLinkBlock->setColumn($column);
     }
 
@@ -99,7 +99,7 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         return $integration->load('Fixture Integration', 'name');
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Framework\App\Response\Http as HttpResponse;
 
 class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
 {
@@ -15,7 +16,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
      */
     protected function _createLink()
     {
-        return $this->_objectManager->create('Magento\Downloadable\Model\Link');
+        return $this->_objectManager->create(\Magento\Downloadable\Model\Link::class);
     }
 
     /**
@@ -23,7 +24,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
      */
     protected function _getLink()
     {
-        return $this->_objectManager->get('Magento\Downloadable\Model\Link');
+        return $this->_objectManager->get(\Magento\Downloadable\Model\Link::class);
     }
 
     /**
@@ -36,13 +37,15 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
     protected function _processDownload($resource, $resourceType)
     {
         /* @var $helper \Magento\Downloadable\Helper\Download */
-        $helper = $this->_objectManager->get('Magento\Downloadable\Helper\Download');
+        $helper = $this->_objectManager->get(\Magento\Downloadable\Helper\Download::class);
         $helper->setResource($resource, $resourceType);
 
         $fileName = $helper->getFilename();
         $contentType = $helper->getContentType();
 
-        $this->getResponse()->setHttpResponseCode(
+        /** @var HttpResponse $response */
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(
             200
         )->setHeader(
             'Pragma',
@@ -59,16 +62,22 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
         );
 
         if ($fileSize = $helper->getFileSize()) {
-            $this->getResponse()->setHeader('Content-Length', $fileSize);
+            $response->setHeader('Content-Length', $fileSize);
         }
-
-        if ($contentDisposition = $helper->getContentDisposition()) {
-            $this->getResponse()
-                ->setHeader('Content-Disposition', $contentDisposition . '; filename=' . $fileName);
+        //Setting disposition as state in the config or forcing it for HTML.
+        /** @var string|null $contentDisposition */
+        $contentDisposition = $helper->getContentDisposition();
+        if (!$contentDisposition || $contentType === 'text/html') {
+            $contentDisposition = 'attachment';
         }
-
-        $this->getResponse()->clearBody();
-        $this->getResponse()->sendHeaders();
+        $response->setHeader(
+            'Content-Disposition',
+            $contentDisposition . '; filename=' . $fileName
+        );
+        //Rendering
+        $response->clearBody();
+        $response->sendHeaders();
+        
         $helper->output();
     }
 
@@ -92,7 +101,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
                     $resourceType = DownloadHelper::LINK_TYPE_URL;
                 } elseif ($link->getLinkType() == DownloadHelper::LINK_TYPE_FILE) {
                     $resource = $this->_objectManager->get(
-                        'Magento\Downloadable\Helper\File'
+                        \Magento\Downloadable\Helper\File::class
                     )->getFilePath(
                         $this->_getLink()->getBasePath(),
                         $link->getLinkFile()
@@ -105,7 +114,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
                     $resourceType = DownloadHelper::LINK_TYPE_URL;
                 } elseif ($link->getSampleType() == DownloadHelper::LINK_TYPE_FILE) {
                     $resource = $this->_objectManager->get(
-                        'Magento\Downloadable\Helper\File'
+                        \Magento\Downloadable\Helper\File::class
                     )->getFilePath(
                         $this->_getLink()->getBaseSamplePath(),
                         $link->getSampleFile()

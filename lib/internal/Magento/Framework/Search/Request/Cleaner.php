@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class Cleaner
 {
     /**
@@ -56,6 +60,12 @@ class Cleaner
         $requestData = $this->requestData;
         $this->clear();
 
+        if (empty($requestData['queries']) && empty($requestData['filters'])) {
+            throw new EmptyRequestDataException(
+                new Phrase("The request query and filters aren't set. Verify the query and filters and try again.")
+            );
+        }
+
         return $requestData;
     }
 
@@ -75,7 +85,7 @@ class Cleaner
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
-                new Phrase('Cycle found. Query %1 already used in request hierarchy', [$queryName])
+                new Phrase('A cycle was found. The "%1" query is already used in the request hierarchy.', [$queryName])
             );
         }
         $this->mappedQueries[] = $queryName;
@@ -90,7 +100,7 @@ class Cleaner
                 }
                 break;
             case QueryInterface::TYPE_MATCH:
-                if (preg_match('/\$(.+)\$/si', $query['value'], $matches)) {
+                if (!array_key_exists('is_bind', $query)) {
                     unset($this->requestData['queries'][$queryName]);
                 }
                 break;
@@ -131,7 +141,7 @@ class Cleaner
                     switch ($aggregationValue['type']) {
                         case 'dynamicBucket':
                             if (is_string($aggregationValue['method'])
-                                && preg_match('/\$(.+)\$/si', $aggregationValue['method'])
+                                && preg_match('/^\$(.+)\$$/si', $aggregationValue['method'])
                             ) {
                                 unset($this->requestData['aggregations'][$aggregationName]);
                             }
@@ -156,7 +166,10 @@ class Cleaner
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
-                new Phrase('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
+                new Phrase(
+                    'A cycle was found. The "%1" filter is already used in the request hierarchy.',
+                    [$filterName]
+                )
             );
         }
         $this->mappedFilters[] = $filterName;
@@ -164,14 +177,14 @@ class Cleaner
         switch ($filter['type']) {
             case FilterInterface::TYPE_WILDCARD:
             case FilterInterface::TYPE_TERM:
-                if (is_string($filter['value']) && preg_match('/\$(.+)\$/si', $filter['value'], $matches)) {
+                if (!array_key_exists('is_bind', $filter)) {
                     unset($this->requestData['filters'][$filterName]);
                 }
                 break;
             case FilterInterface::TYPE_RANGE:
                 $keys = ['from', 'to'];
                 foreach ($keys as $key) {
-                    if (isset($filter[$key]) && preg_match('/\$(.+)\$/si', $filter[$key], $matches)) {
+                    if (isset($filter[$key]) && preg_match('/^\$(.+)\$$/si', $filter[$key])) {
                         unset($this->requestData['filters'][$filterName][$key]);
                     }
                 }

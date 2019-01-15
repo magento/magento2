@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
@@ -40,7 +40,7 @@ class NewAction extends \Magento\Sales\Controller\Adminhtml\Order\Status
     {
         $data = $this->_getSession()->getFormData(true);
         if ($data) {
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->setData($data);
+            $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->setData($data);
             $this->_coreRegistry->register('current_status', $status);
         }
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

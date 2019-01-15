@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test;
 
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
@@ -14,12 +14,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            ['load', 'save', 'delete', 'getIdFieldName', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_model = $this->createPartialMock(
+            \Magento\Framework\Model\AbstractModel::class,
+            ['load', 'save', 'delete', 'getIdFieldName', '__wakeup']
         );
     }
 
@@ -66,7 +63,10 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'successful CRUD' => ['saveModelSuccessfully'],
-            'cleanup on update error' => ['saveModelAndFailOnUpdate', 'Magento\Framework\Exception\LocalizedException']
+            'cleanup on update error' => [
+                'saveModelAndFailOnUpdate',
+                \Magento\Framework\Exception\LocalizedException::class
+            ]
         ];
     }
 
@@ -75,7 +75,9 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestCrud($saveCallback, $expectedException = null)
     {
-        $this->setExpectedException($expectedException);
+        if ($expectedException != null) {
+            $this->expectException($expectedException);
+        }
 
         $this->_model->expects($this->atLeastOnce())
             ->method('load');
@@ -93,11 +95,10 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
 
-        $test = $this->getMock(
-            'Magento\TestFramework\Entity',
-            ['_getEmptyModel'],
-            [$this->_model, ['test' => 'test']]
-        );
+        $test = $this->getMockBuilder(\Magento\TestFramework\Entity::class)
+            ->setMethods(['_getEmptyModel'])
+            ->setConstructorArgs([$this->_model, ['test' => 'test']])
+            ->getMock();
 
         $test->expects($this->any())->method('_getEmptyModel')->will($this->returnValue($this->_model));
         $test->testCrud();

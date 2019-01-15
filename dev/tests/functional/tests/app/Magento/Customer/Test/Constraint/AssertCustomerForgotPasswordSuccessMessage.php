@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  */
 class AssertCustomerForgotPasswordSuccessMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = "We'll email you a link to reset your password.";
+    const SUCCESS_MESSAGE =
+        'If there is an account associated with %s you will receive an email with a link to reset your password.';
 
     /**
      * Assert that customer forgot password message is present on customer account forgot password page.
@@ -28,14 +29,9 @@ class AssertCustomerForgotPasswordSuccessMessage extends AbstractConstraint
         CustomerAccountLogin $customerLogin,
         Customer $customer
     ) {
-        $message = sprintf(
-            self::SUCCESS_MESSAGE,
-            $customer->getEmail()
-        );
-
-        \PHPUnit_Framework_Assert::assertEquals(
-            $message,
-            $customerLogin->getMessages()->getSuccessMessages(),
+        \PHPUnit\Framework\Assert::assertEquals(
+            sprintf(self::SUCCESS_MESSAGE, $customer->getEmail()),
+            $customerLogin->getMessages()->getSuccessMessage(),
             'Wrong forgot password message is displayed.'
         );
     }

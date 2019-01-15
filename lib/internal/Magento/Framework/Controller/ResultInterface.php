@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\Framework\App\ResponseInterface;
  * An abstraction of result that controller actions must return
  * The point of this kind of object is to encapsulate all information/objects relevant to the result
  * and be able to set it to the HTTP response
+ *
+ * @api
  */
 interface ResultInterface
 {

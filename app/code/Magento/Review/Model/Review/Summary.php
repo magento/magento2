@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\Review;
@@ -8,22 +8,25 @@ namespace Magento\Review\Model\Review;
 /**
  * Review summary
  *
+ * @api
+ *
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Summary extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Review\Model\Resource\Review\Summary $resource
-     * @param \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection
+     * @param \Magento\Review\Model\ResourceModel\Review\Summary $resource
+     * @param \Magento\Review\Model\ResourceModel\Review\Summary\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Review\Model\Resource\Review\Summary $resource,
-        \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection,
+        \Magento\Review\Model\ResourceModel\Review\Summary $resource,
+        \Magento\Review\Model\ResourceModel\Review\Summary\Collection $resourceCollection,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

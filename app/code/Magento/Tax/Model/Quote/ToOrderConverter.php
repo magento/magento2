@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Quote;
@@ -58,13 +58,31 @@ class ToOrderConverter
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
         if (!empty($taxes)) {
+            foreach ($taxes as $key => $tax) {
+                $tax['extension_attributes']['rates'] = $tax['rates'];
+                unset($tax['rates']);
+                $taxes[$key] = $tax;
+            }
             $extensionAttributes->setAppliedTaxes($taxes);
             $extensionAttributes->setConvertingFromQuote(true);
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
+        $itemAppliedTaxesModified = [];
         if (!empty($itemAppliedTaxes)) {
-            $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxes);
+            foreach ($itemAppliedTaxes as $key => $itemAppliedTaxItem) {
+                if (is_array($itemAppliedTaxItem) && !empty($itemAppliedTaxItem)) {
+                    foreach ($itemAppliedTaxItem as $itemAppliedTax) {
+                        $itemAppliedTaxesModified[$key]['type'] = $itemAppliedTax['item_type'];
+                        $itemAppliedTaxesModified[$key]['item_id'] = $itemAppliedTax['item_id'];
+                        $itemAppliedTaxesModified[$key]['associated_item_id'] = $itemAppliedTax['associated_item_id'];
+                        $itemAppliedTax['extension_attributes']['rates'] = $itemAppliedTax['rates'];
+                        unset($itemAppliedTax['rates']);
+                        $itemAppliedTaxesModified[$key]['applied_taxes'][] = $itemAppliedTax;
+                    }
+                }
+            }
+            $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxesModified);
         }
         $order->setExtensionAttributes($extensionAttributes);
         return $order;

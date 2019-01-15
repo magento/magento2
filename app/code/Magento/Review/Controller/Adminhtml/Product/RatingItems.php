@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
@@ -13,7 +15,7 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 
-class RatingItems extends ProductController
+class RatingItems extends ProductController implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -47,7 +49,7 @@ class RatingItems extends ProductController
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
         $resultRaw->setContents(
-            $layout->createBlock('Magento\Review\Block\Adminhtml\Rating\Detailed')
+            $layout->createBlock(\Magento\Review\Block\Adminhtml\Rating\Detailed::class)
                 ->setIndependentMode()
                 ->toHtml()
         );

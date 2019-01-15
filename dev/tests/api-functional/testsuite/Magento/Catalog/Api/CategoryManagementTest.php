@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Api;
 
@@ -40,6 +38,9 @@ class CategoryManagementTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
         for ($i = 0; $i < $expectedLevel; $i++) {
+            if (!array_key_exists(0, $result['children_data'])) {
+                $this->fail('Category "' . $result['name'] . '" doesn\'t have children but expected to have');
+            }
             $result = $result['children_data'][0];
         }
         $this->assertEquals($expectedId, $result['id']);
@@ -78,7 +79,7 @@ class CategoryManagementTest extends WebapiAbstract
             ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $categoryData));
         /** @var \Magento\Catalog\Model\Category $model */
-        $readService = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $readService = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $model = $readService->get($categoryId);
         $this->assertEquals($expectedPath, $model->getPath());
         $this->assertEquals($expectedPosition, $model->getPosition());

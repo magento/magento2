@@ -2,7 +2,7 @@
 /**
  * Magento validator config factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\PageLayout\Config;
@@ -23,24 +23,24 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     protected $fileCollector;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected $themeCollection;
 
     /**
      * @param \Magento\Framework\View\PageLayout\ConfigFactory $configFactory
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
-     * @param \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
      */
     public function __construct(
         \Magento\Framework\View\PageLayout\ConfigFactory $configFactory,
         \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector,
-        \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
+        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
     ) {
         $this->configFactory = $configFactory;
         $this->fileCollector = $fileCollector;
         $this->themeCollection = $themeCollection;
-        $this->themeCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
+        $this->themeCollection->setItemObjectClass(\Magento\Theme\Model\Theme\Data::class);
     }
 
     /**

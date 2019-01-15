@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $className = 'Magento\GoogleAdwords\Helper\Data';
+        $className = \Magento\GoogleAdwords\Helper\Data::class;
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments($className);
         $this->_helper = $objectManager->getObject($className, $arguments);
@@ -91,6 +91,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($languages, $this->_helper->getLanguageCodes());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestConvertLanguage()
     {
         return [
@@ -171,7 +174,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['getConversionColor', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],
             ['getConversionLabel', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LABEL, 'Label'],
             ['getConversionValueType', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'],
-            ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0']
+            ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0'],
         ];
     }
 
@@ -194,6 +197,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($returnValue, $this->_helper->{$method}());
+    }
+
+    public function testHasSendConversionValueCurrency()
+    {
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $this->assertTrue($this->_helper->hasSendConversionValueCurrency());
     }
 
     public function testGetConversionValueDynamic()
@@ -219,6 +229,23 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
+    }
+
+    public function testGetConversionValueCurrency()
+    {
+        $returnValueCurrency = 'USD';
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
+        $this->_registryMock->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME
+        )->will(
+            $this->returnValue($returnValueCurrency)
+        );
+
+        $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
     }
 
     /**

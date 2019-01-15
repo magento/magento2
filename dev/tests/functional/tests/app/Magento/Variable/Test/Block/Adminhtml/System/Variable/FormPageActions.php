@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,6 +36,13 @@ class FormPageActions extends AbstractFormPageActions
     protected $storeView = './/*/a[contains(text(),"%s")]';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Select Store View.
      *
      * @param string $storeName
@@ -56,7 +63,10 @@ class FormPageActions extends AbstractFormPageActions
         } else {
             throw new \Exception('Store View with name \'' . $storeName . '\' is not visible!');
         }
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
 
         return null;
     }

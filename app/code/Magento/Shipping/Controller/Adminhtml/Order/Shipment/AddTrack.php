@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -10,6 +10,13 @@ use Magento\Backend\App\Action;
 
 class AddTrack extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
@@ -25,14 +32,6 @@ class AddTrack extends \Magento\Backend\App\Action
     ) {
         $this->shipmentLoader = $shipmentLoader;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
     }
 
     /**
@@ -60,7 +59,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $shipment = $this->shipmentLoader->load();
             if ($shipment) {
                 $track = $this->_objectManager->create(
-                    'Magento\Sales\Model\Order\Shipment\Track'
+                    \Magento\Sales\Model\Order\Shipment\Track::class
                 )->setNumber(
                     $number
                 )->setCarrierCode(
@@ -85,7 +84,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

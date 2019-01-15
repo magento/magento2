@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <container name="root">
         <container name="backend.page">
             <container name="after.body.start" as="after.body.start" label="Page Top" before="-"/>
@@ -17,9 +17,9 @@
                     <container name="global.notices" as="global_notices" after="notification.window"/>
                 </container>
 
-                <container name="header" after="global.notices" htmlTag="header" htmlClass="page-header"/>
+                <container name="header" htmlTag="header" htmlClass="page-header"/>
                 <container name="page.menu" as="page.menu" after="header"/>
-                <container name="page.breadcrumbs" after="notifications" as="page.breadcrumbs"/>
+                <container name="page.breadcrumbs" as="page.breadcrumbs"/>
 
                 <container name="page.formkey" as="page.formkey"/>
 

@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Interface CompilerInterface
+ *
+ * @api
  */
 interface CompilerInterface
 {
@@ -22,7 +24,7 @@ interface CompilerInterface
      * @param Object $context
      * @return void
      */
-    public function compile(\DOMNode $node, Object $dataObject, Object $context);
+    public function compile(\DOMNode $node, DataObject $dataObject, DataObject $context);
 
     /**
      * Run postprocessing contents

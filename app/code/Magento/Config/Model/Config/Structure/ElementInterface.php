@@ -1,10 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure;
 
+use Magento\Config\Model\Config\StructureElementInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ * @deprecated
+ * @see StructureElementInterface
+ */
 interface ElementInterface
 {
     /**

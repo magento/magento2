@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -87,7 +87,7 @@ class AccountsGrid extends \Magento\Backend\Test\Block\Widget\Grid
                 continue;
             }
             $date = ObjectManager::getInstance()->create(
-                '\Magento\Backend\Test\Fixture\Source\Date',
+                \Magento\Backend\Test\Fixture\Source\Date::class,
                 ['params' => [], 'data' => ['pattern' => $reportFilter]]
             );
             $customersReport[$name] = $date->getData();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api\Data;
@@ -10,6 +10,11 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface StockItem
  * @api
+ * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 interface StockItemInterface extends ExtensibleDataInterface
 {
@@ -17,7 +22,6 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     const ITEM_ID = 'item_id';
     const PRODUCT_ID = 'product_id';
-    const WEBSITE_ID = 'website_id';
     const STOCK_ID = 'stock_id';
     const QTY = 'qty';
     const IS_QTY_DECIMAL = 'is_qty_decimal';
@@ -76,21 +80,6 @@ interface StockItemInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setProductId($productId);
-
-    /**
-     * Retrieve Website Id
-     *
-     * @return int|null
-     */
-    public function getWebsiteId();
-
-    /**
-     * Set Website Id
-     *
-     * @param int $websiteId
-     * @return $this
-     */
-    public function setWebsiteId($websiteId);
 
     /**
      * Retrieve stock identifier

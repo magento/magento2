@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Payflow\Link;
 
 /**
  * Payflow link iframe block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
@@ -22,6 +25,8 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
      */
@@ -30,11 +35,13 @@ class Iframe extends \Magento\Paypal\Block\Iframe
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Module\Dir\Reader $reader,
         \Magento\Payment\Helper\Data $paymentData,
         array $data = []
     ) {
         $this->_paymentData = $paymentData;
-        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $data);
+        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $readFactory, $reader, $data);
     }
 
     /**

@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Data;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+
 /**
  * Customer attribute metadata class.
  */
 class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Customer\Api\Data\AttributeMetadataInterface
+    \Magento\Customer\Api\Data\AttributeMetadataInterface,
+    \Magento\Eav\Api\Data\AttributeDefaultValueInterface
 {
     /**
      * {@inheritdoc}
@@ -333,5 +336,85 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     public function setBackendType($backendType)
     {
         return $this->setData(self::BACKEND_TYPE, $backendType);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsUsedInGrid()
+    {
+        return $this->_get(self::IS_USED_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsVisibleInGrid()
+    {
+        return $this->_get(self::IS_VISIBLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsFilterableInGrid()
+    {
+        return $this->_get(self::IS_FILTERABLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsSearchableInGrid()
+    {
+        return $this->_get(self::IS_SEARCHABLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        return $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        return $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        return $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsSearchableInGrid($isSearchableInGrid)
+    {
+        return $this->setData(self::IS_SEARCHABLE_IN_GRID, $isSearchableInGrid);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultValue()
+    {
+        return $this->_get(self::DEFAULT_VALUE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        return $this->setData(self::DEFAULT_VALUE, $defaultValue);
     }
 }

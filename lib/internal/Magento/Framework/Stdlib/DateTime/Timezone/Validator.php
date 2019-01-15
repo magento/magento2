@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\DateTime\Timezone;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class Validator
 {
     /**
@@ -50,7 +54,10 @@ class Validator
 
         if ($transitionYear > $this->_yearMaxValue || $transitionYear < $this->_yearMinValue) {
             throw new ValidatorException(
-                new Phrase('Transition year is out of system date range.')
+                new Phrase(
+                    "The transition year isn't included in the system date range. "
+                    . "Verify the year date range and try again."
+                )
             );
         }
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
-class NewProductTest extends \PHPUnit_Framework_TestCase
+class NewProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ListProduct
@@ -15,7 +15,7 @@ class NewProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject('Magento\Catalog\Block\Product\NewProduct');
+        $this->block = $objectManager->getObject(\Magento\Catalog\Block\Product\NewProduct::class);
     }
 
     protected function tearDown()

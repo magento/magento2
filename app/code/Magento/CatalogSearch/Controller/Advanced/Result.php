@@ -1,24 +1,26 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
-class Result extends \Magento\Framework\App\Action\Action
+/**
+ * Advanced search result.
+ */
+class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * Catalog Layer Resolver
-     *
-     * @var Resolver
+     * No results default handle.
      */
-    private $layerResolver;
+    const DEFAULT_NO_RESULT_HANDLE = 'catalogsearch_advanced_result_noresults';
 
     /**
      * Url factory
@@ -40,36 +42,43 @@ class Result extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param ModelAdvanced $catalogSearchAdvanced
      * @param UrlFactory $urlFactory
-     * @param Resolver $layerResolver
      */
     public function __construct(
         Context $context,
         ModelAdvanced $catalogSearchAdvanced,
-        UrlFactory $urlFactory,
-        Resolver $layerResolver
+        UrlFactory $urlFactory
     ) {
         parent::__construct($context);
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_urlFactory = $urlFactory;
-        $this->layerResolver = $layerResolver;
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function execute()
     {
         try {
-            $this->layerResolver->create('advanced');
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
-            $this->_view->loadLayout();
+            $size = $this->_catalogSearchAdvanced->getProductCollection()->getSize();
+
+            $handles = null;
+            if ($size == 0) {
+                $this->_view->getPage()->initLayout();
+                $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+                $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
+            }
+
+            $this->_view->loadLayout($handles);
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()
                 ->addQueryParams($this->getRequest()->getQueryValue())
                 ->getUrl('*/*/');
-            $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
+            return $resultRedirect;
         }
     }
 }

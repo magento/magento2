@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 return [
     'region' => 'CA',
+    'region_id' => '12',
     'postcode' => '11111',
     'lastname' => 'lastname',
     'firstname' => 'firstname',

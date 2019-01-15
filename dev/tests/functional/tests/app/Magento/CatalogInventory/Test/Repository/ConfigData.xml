@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,6 +25,15 @@
             </field>
         </dataset>
 
+        <dataset name="decrease_stock_after_order_no">
+            <field name="cataloginventory/options/can_subtract" xsi:type="array">
+                <item name="scope" xsi:type="string">cataloginventory</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="display_out_of_stock_rollback">
             <field name="cataloginventory/options/show_out_of_stock" xsi:type="array">
                 <item name="scope" xsi:type="string">cataloginventory</item>
@@ -40,6 +49,15 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No Backorders</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="decrease_stock_after_order_no_rollback">
+            <field name="cataloginventory/options/can_subtract" xsi:type="array">
+                <item name="scope" xsi:type="string">cataloginventory</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
     </repository>

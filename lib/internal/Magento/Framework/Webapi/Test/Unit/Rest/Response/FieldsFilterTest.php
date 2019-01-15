@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response;
 
-use \Magento\Framework\Webapi\Rest\Response\FieldsFilter;
+use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 
 /**
  * Unit test for FieldsFilter
  */
-class FieldsFilterTest extends \PHPUnit_Framework_TestCase
+class FieldsFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FieldsFilter SUT
@@ -23,15 +23,22 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $sampleResponseValue;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $requestMock;
+
+    /**
+     * @var FieldsFilter
+     */
+    protected $processor;
 
     /**
      * Setup SUT
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\Webapi\Rest\Request', [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\Webapi\Rest\Request::class);
         $this->processor = new FieldsFilter($this->requestMock);
         $this->sampleResponseValue = [
             'customer' => [
@@ -48,7 +55,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                         ],
                     'firstname' => 'Jane',
                     'lastname' => 'Doe',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                     'default_billing' => '1',
                     'default_shipping' => '1',
                     'created_at' => '2014-05-27 18:59:43',
@@ -134,7 +141,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer' => [
                     'id' => '1',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
                     0 => [
@@ -170,7 +177,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer' => [
                     'id' => '1',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
                     0 => [

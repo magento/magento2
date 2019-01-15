@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Items;
@@ -9,7 +9,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order Pdf Items renderer Abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,7 +33,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Item object
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_item;
 
@@ -71,7 +74,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -81,7 +84,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -118,10 +121,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set item object
      *
-     * @param  \Magento\Framework\Object $item
+     * @param  \Magento\Framework\DataObject $item
      * @return $this
      */
-    public function setItem(\Magento\Framework\Object $item)
+    public function setItem(\Magento\Framework\DataObject $item)
     {
         $this->_item = $item;
         return $this;
@@ -183,7 +186,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Retrieve item object
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getItem()
     {
@@ -335,7 +338,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     protected function _setFontRegular($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerif.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;
@@ -350,7 +353,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     protected function _setFontBold($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifBold.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;
@@ -365,7 +368,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     protected function _setFontItalic($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifItalic.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;

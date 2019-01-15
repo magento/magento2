@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Listing;
 
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\UrlInterface;
 
 /**
- * Class Columns
+ * @api
+ * @since 100.0.2
  */
 class Columns extends AbstractComponent
 {
@@ -23,25 +26,5 @@ class Columns extends AbstractComponent
     public function getComponentName()
     {
         return static::NAME;
-    }
-
-    /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        foreach ($this->getChildComponents() as $column) {
-            if ($column instanceof Column) {
-                $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $column->getName());
-                if ($meta) {
-                    $config = $column->getData('config');
-                    $config = array_replace_recursive($config, $meta);
-                    $column->setData('config', $config);
-                }
-            }
-        }
-        parent::prepare();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,10 +23,50 @@ class Totals extends Block
     protected $submitOrder = '.order-totals-actions button';
 
     /**
+     * Order Totals rows locator.
+     *
+     * @var string
+     */
+    private $totalsRowsLocator = '.data-table tr';
+
+    /**
+     * Order Totals Item label locator.
+     *
+     * @var string
+     */
+    private $totalsRowKeyLocator = '.admin__total-mark';
+
+    /**
+     * Order Totals Item amount locator.
+     *
+     * @var string
+     */
+    private $totalsRowValueLocator = '.price';
+
+    /**
      * Click 'Submit Order' button
      */
     public function submitOrder()
     {
         $this->_rootElement->find($this->submitOrder)->click();
+    }
+
+    /**
+     * Get Order totals.
+     *
+     * @return array
+     */
+    public function getOrderTotals()
+    {
+        $totals = [];
+        $elements = $this->_rootElement->getElements($this->totalsRowsLocator);
+        foreach ($elements as $row) {
+            if ($row->isVisible()) {
+                $key = trim($row->find($this->totalsRowKeyLocator)->getText());
+                $value = $row->find($this->totalsRowValueLocator)->getText();
+                $totals[$key] = $value;
+            }
+        }
+        return $totals;
     }
 }

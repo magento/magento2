@@ -1,59 +1,64 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
-define(
-    [
-        'jquery',
-        'Magento_Payment/js/view/payment/iframe',
-        'Magento_Checkout/js/action/set-payment-information'
-    ],
-    function ($, Component, setPaymentInformationAction) {
-        'use strict';
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Authorizenet/payment/authorizenet-directpost'
-            },
-            placeOrderHandler: null,
-            validateHandler: null,
 
-            setPlaceOrderHandler: function(handler) {
-                this.placeOrderHandler = handler;
-            },
+define([
+    'jquery',
+    'Magento_Payment/js/view/payment/iframe',
+    'mage/translate'
+],
+function ($, Component, $t) {
+    'use strict';
 
-            setValidateHandler: function(handler) {
-                this.validateHandler = handler;
-            },
+    return Component.extend({
+        defaults: {
+            template: 'Magento_Authorizenet/payment/authorizenet-directpost',
+            timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
+        },
+        placeOrderHandler: null,
+        validateHandler: null,
 
-            context: function() {
-                return this;
-            },
+        /**
+         * @param {Object} handler
+         */
+        setPlaceOrderHandler: function (handler) {
+            this.placeOrderHandler = handler;
+        },
 
-            isShowLegend: function() {
-                return true;
-            },
+        /**
+         * @param {Object} handler
+         */
+        setValidateHandler: function (handler) {
+            this.validateHandler = handler;
+        },
 
-            getCode: function() {
-                return 'authorizenet_directpost';
-            },
+        /**
+         * @returns {Object}
+         */
+        context: function () {
+            return this;
+        },
 
-            isActive: function() {
-                return true;
-            },
+        /**
+         * @returns {Boolean}
+         */
+        isShowLegend: function () {
+            return true;
+        },
 
-            placeOrder: function() {
-                var self = this;
-                if (this.validateHandler()) {
-                    this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction()).done(function() {
-                        self.placeOrderHandler();
-                    }).fail(function() {
-                        self.isPlaceOrderActionAllowed(true);
-                    });
-                }
-            }
-        });
-    }
-);
+        /**
+         * @returns {String}
+         */
+        getCode: function () {
+            return 'authorizenet_directpost';
+        },
+
+        /**
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            return true;
+        }
+    });
+});

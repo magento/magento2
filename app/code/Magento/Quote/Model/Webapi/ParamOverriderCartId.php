@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,7 +56,7 @@ class ParamOverriderCartId implements ParamOverriderInterface
                 }
             }
         } catch (NoSuchEntityException $e) {
-            /* do nothing and just return null */
+            throw new NoSuchEntityException(__('Current customer does not have an active cart.'));
         }
         return null;
     }

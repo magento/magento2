@@ -2,14 +2,16 @@
 /**
  * Encrypted config field backend model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Encrypted extends \Magento\Framework\App\Config\Value implements
     \Magento\Framework\App\Config\Data\ProcessorInterface
 {
@@ -22,8 +24,9 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -31,13 +34,14 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -60,7 +64,7 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
     {
         parent::__wakeup();
         $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Framework\Encryption\EncryptorInterface'
+            \Magento\Framework\Encryption\EncryptorInterface::class
         );
     }
 
@@ -91,6 +95,8 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
             $this->_dataSaveAllowed = true;
             $encrypted = $this->_encryptor->encrypt($value);
             $this->setValue($encrypted);
+        } elseif (empty($value)) {
+            $this->_dataSaveAllowed = true;
         }
     }
 

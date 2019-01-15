@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -26,6 +26,7 @@ class AttributeSetManagement implements AttributeSetManagementInterface
     /**
      * @param Config $eavConfig
      * @param AttributeSetRepositoryInterface $repository
+     * @codeCoverageIgnore
      */
     public function __construct(
         EavConfig $eavConfig,

@@ -2,19 +2,20 @@
 /**
  * Module configuration file reader
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
+/**
+ * @api
+ */
 class Reader
 {
     /**
@@ -39,68 +40,99 @@ class Reader
     protected $modulesList;
 
     /**
-     * @var Read
-     */
-    protected $modulesDirectory;
-
-    /**
      * @var FileIteratorFactory
      */
     protected $fileIteratorFactory;
 
     /**
+     * @var Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
+    /**
+     * Found configuration files grouped by configuration types (filename).
+     *
+     * @var array
+     */
+    private $fileIterators = [];
+
+    /**
      * @param Dir $moduleDirs
      * @param ModuleListInterface $moduleList
-     * @param Filesystem $filesystem
      * @param FileIteratorFactory $fileIteratorFactory
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
         Dir $moduleDirs,
         ModuleListInterface $moduleList,
-        Filesystem $filesystem,
-        FileIteratorFactory $fileIteratorFactory
+        FileIteratorFactory $fileIteratorFactory,
+        Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->moduleDirs = $moduleDirs;
         $this->modulesList = $moduleList;
         $this->fileIteratorFactory = $fileIteratorFactory;
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
     }
 
     /**
-     * Go through all modules and find configuration files of active modules
+     * Go through all modules and find configuration files of active modules.
      *
      * @param string $filename
      * @return FileIterator
      */
     public function getConfigurationFiles($filename)
     {
-        $result = [];
-        foreach ($this->modulesList->getNames() as $moduleName) {
-            $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
-                $result[] = $path;
-            }
-        }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->getFilesIterator($filename, Dir::MODULE_ETC_DIR);
     }
 
     /**
-     * Go through all modules and find composer.json files of active modules
+     * Go through all modules and find composer.json files of active modules.
      *
      * @return FileIterator
      */
     public function getComposerJsonFiles()
     {
+        return $this->getFilesIterator('composer.json');
+    }
+
+    /**
+     * Retrieve iterator for files with $filename from components located in component $subDir.
+     *
+     * @param string $filename
+     * @param string $subDir
+     *
+     * @return FileIterator
+     */
+    private function getFilesIterator($filename, $subDir = '')
+    {
+        if (!isset($this->fileIterators[$subDir][$filename])) {
+            $this->fileIterators[$subDir][$filename] = $this->fileIteratorFactory->create(
+                $this->getFiles($filename, $subDir)
+            );
+        }
+        return $this->fileIterators[$subDir][$filename];
+    }
+
+    /**
+     * Go through all modules and find corresponding files of active modules
+     *
+     * @param string $filename
+     * @param string $subDir
+     * @return array
+     */
+    private function getFiles($filename, $subDir = '')
+    {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $file = $this->getModuleDir('', $moduleName) . '/composer.json';
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
-                $result[] = $path;
+            $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            $file = $moduleSubDir . '/' . $filename;
+            $directoryRead = $this->readFactory->create($moduleSubDir);
+            $path = $directoryRead->getRelativePath($file);
+            if ($directoryRead->isExist($path)) {
+                $result[] = $file;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $result;
     }
 
     /**
@@ -112,15 +144,18 @@ class Reader
     {
         $actions = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $actionDir = $this->getModuleDir('Controller', $moduleName);
+            $actionDir = $this->getModuleDir(Dir::MODULE_CONTROLLER_DIR, $moduleName);
             if (!file_exists($actionDir)) {
                 continue;
             }
             $dirIterator = new \RecursiveDirectoryIterator($actionDir, \RecursiveDirectoryIterator::SKIP_DOTS);
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
+            $namespace = str_replace('_', '\\', $moduleName);
             /** @var \SplFileInfo $actionFile */
             foreach ($recursiveIterator as $actionFile) {
-                $actions[] = $this->modulesDirectory->getRelativePath($actionFile->getPathname());
+                $actionName = str_replace('/', '\\', str_replace($actionDir, '', $actionFile->getPathname()));
+                $action = $namespace . "\\" . Dir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
+                $actions[strtolower($action)] = $action;
             }
         }
         return $actions;
@@ -152,5 +187,6 @@ class Reader
     public function setModuleDir($moduleName, $type, $path)
     {
         $this->customModuleDirs[$moduleName][$type] = $path;
+        $this->fileIterators = [];
     }
 }

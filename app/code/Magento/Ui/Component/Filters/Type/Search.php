@@ -1,25 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\Component\Filters\Type;
 
 /**
- * Class Input
+ * @api
+ * @since 100.0.2
  */
 class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
 {
-    /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return 'keyword_search';
-    }
+    const NAME = 'keyword_search';
 
     /**
      * Prepare component configuration
@@ -40,10 +32,15 @@ class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
      */
     protected function applyFilter()
     {
-        $keyword = $this->getContext()->getRequestParam('search');
-        if ($keyword) {
-            $this->getContext()->getDataProvider()->addFilter($keyword, null, 'fulltext');
-        }
+        $value = $this->getContext()->getRequestParam('search');
 
+        if ($value) {
+            $filter = $this->filterBuilder->setConditionType('fulltext')
+                ->setField($this->getName())
+                ->setValue($value)
+                ->create();
+
+            $this->getContext()->getDataProvider()->addFilter($filter);
+        }
     }
 }

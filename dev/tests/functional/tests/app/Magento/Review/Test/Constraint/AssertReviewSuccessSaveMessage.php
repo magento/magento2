@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,8 @@ class AssertReviewSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(ReviewIndex $reviewIndex)
     {
-        $actualMessage = $reviewIndex->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessage = $reviewIndex->getMessagesBlock()->getSuccessMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

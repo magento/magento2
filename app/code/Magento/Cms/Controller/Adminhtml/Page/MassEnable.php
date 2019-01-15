@@ -1,40 +1,71 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Cms\Controller\Adminhtml\AbstractMassStatus;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class MassEnable
  */
-class MassEnable extends AbstractMassStatus
+class MassEnable extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
-     * Field id
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    const ID_FIELD = 'page_id';
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @var Filter
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Page\Collection';
+    protected $filter;
 
     /**
-     * Page model
-     *
-     * @var string
+     * @var CollectionFactory
      */
-    protected $model = 'Magento\Cms\Model\Page';
+    protected $collectionFactory;
 
     /**
-     * Page enable status
-     *
-     * @var boolean
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
-    protected $status = true;
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context);
+    }
+
+    /**
+     * Execute action
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     */
+    public function execute()
+    {
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+
+        foreach ($collection as $item) {
+            $item->setIsActive(true);
+            $item->save();
+        }
+
+        $this->messageManager->addSuccessMessage(
+            __('A total of %1 record(s) have been enabled.', $collection->getSize())
+        );
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
+    }
 }

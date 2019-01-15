@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
+use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPool;
 
-class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
+class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {
-        $commandI = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ValidatorInterface')
+        $commandI = $this->getMockBuilder(\Magento\Payment\Gateway\Validator\ValidatorInterface::class)
             ->getMockForAbstractClass();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -25,8 +26,8 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'array' => ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'],
-                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    'array' => ['validator' => \Magento\Payment\Gateway\Validator\ValidatorInterface::class],
+                    'type' => ValidatorInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -40,8 +41,8 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->willReturn($commandI);
 
         $pool = new ValidatorPool(
-            ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'],
-            $tMapFactory
+            $tMapFactory,
+            ['validator' => \Magento\Payment\Gateway\Validator\ValidatorInterface::class]
         );
 
         static::assertSame($commandI, $pool->get('validator'));
@@ -49,13 +50,13 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGetException()
     {
-        $this->setExpectedException('Magento\Framework\Exception\NotFoundException');
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
 
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -64,7 +65,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [],
-                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    'type' => ValidatorInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -73,7 +74,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->with('validator')
             ->willReturn(false);
 
-        $pool = new ValidatorPool([], $tMapFactory);
+        $pool = new ValidatorPool($tMapFactory, []);
         $pool->get('validator');
     }
 }

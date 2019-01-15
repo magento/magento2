@@ -2,12 +2,12 @@
 /**
  * Find "backend/system.xml" files and validate them
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Backend;
 
-class SystemConfigTest extends \PHPUnit_Framework_TestCase
+class SystemConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testSchema()
     {
@@ -19,8 +19,8 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
             function ($configFile) {
                 $dom = new \DOMDocument();
                 $dom->loadXML(file_get_contents($configFile));
-                $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                    '/app/code/Magento/Config/etc/system_file.xsd';
+                $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+                $schema =  $urnResolver->getRealPath('urn:magento:module:Magento_Config:etc/system_file.xsd');
                 $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
                 if ($errors) {
                     $this->fail('XML-file has validation errors:' . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));

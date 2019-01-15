@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Validator;
@@ -9,6 +9,12 @@ use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
+/**
+ * Class ValidatorComposite
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ * @since 100.0.2
+ */
 class ValidatorComposite extends AbstractValidator
 {
     /**
@@ -18,18 +24,18 @@ class ValidatorComposite extends AbstractValidator
 
     /**
      * @param ResultInterfaceFactory $resultFactory
-     * @param array $validators
      * @param TMapFactory $tmapFactory
+     * @param array $validators
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
-        array $validators,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $validators = []
     ) {
         $this->validators = $tmapFactory->create(
             [
                 'array' => $validators,
-                'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                'type' => ValidatorInterface::class
             ]
         );
         parent::__construct($resultFactory);

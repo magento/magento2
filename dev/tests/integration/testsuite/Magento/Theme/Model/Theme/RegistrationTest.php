@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
-class RegistrationTest extends \PHPUnit_Framework_TestCase
+class RegistrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme\Registration
@@ -20,43 +19,42 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $_theme;
 
+    public static function setUpBeforeClass()
+    {
+        ComponentRegistrar::register(
+            ComponentRegistrar::THEME,
+            'frontend/Test/test_theme',
+            dirname(__DIR__) . '/_files/design/frontend/Test/test_theme'
+        );
+    }
+
     /**
      * Initialize base models
      */
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(__DIR__) . '/_files/design',
-                    ],
-                ],
-            ]
-        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\AreaList')
+        $objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
-        $objectManager->get('Magento\Framework\App\State')
+        $objectManager->get(\Magento\Framework\App\State::class)
             ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_theme = $objectManager
-            ->create('Magento\Framework\View\Design\ThemeInterface');
+            ->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->_model = $objectManager
-            ->create('Magento\Theme\Model\Theme\Registration');
+            ->create(\Magento\Theme\Model\Theme\Registration::class);
     }
 
     /**
-     * Register themes by pattern
+     * Register themes
      * Use this method only with database isolation
      *
      * @return \Magento\Theme\Model\Theme\RegistrationTest
      */
     protected function registerThemes()
     {
-        $pathPattern = 'frontend/*/*/theme.xml';
-        $this->_model->register($pathPattern);
+        $this->_model->register();
         return $this;
     }
 

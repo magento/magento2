@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Version\Controller\Index;
@@ -15,20 +15,31 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\ProductMetadataInterface $productMetadata */
-        $productMetadata = $objectManager->get('Magento\Framework\App\ProductMetadataInterface');
+        $productMetadata = $objectManager->get(\Magento\Framework\App\ProductMetadataInterface::class);
         $name = $productMetadata->getName();
         $edition = $productMetadata->getEdition();
 
         $fullVersion = $productMetadata->getVersion();
-        $versionParts = explode('.', $fullVersion);
-        $majorMinor = $versionParts[0] . '.' . $versionParts[1];
+        if ($this->isComposerBasedInstallation($fullVersion)) {
+            $versionParts = explode('.', $fullVersion);
+            $majorMinor = $versionParts[0] . '.' . $versionParts[1];
 
-        // Response must contain Major.Minor version, product name, and edition
-        $this->assertContains($majorMinor, $body);
-        $this->assertContains($name, $body);
-        $this->assertContains($edition, $body);
+            // Response must contain Major.Minor version, product name, and edition
+            $this->assertContains($majorMinor, $body);
+            $this->assertContains($name, $body);
+            $this->assertContains($edition, $body);
 
-        // Response must not contain full version including patch version
-        $this->assertNotContains($fullVersion, $body);
+            // Response must not contain full version including patch version
+            $this->assertNotContains($fullVersion, $body);
+        } else {
+            // Response is supposed to be empty when the project is installed from git
+            $this->assertEmpty($body);
+        }
+    }
+
+    private function isComposerBasedInstallation($fullVersion)
+    {
+        $versionParts = explode('-', $fullVersion);
+        return !(isset($versionParts[0]) && $versionParts[0] == 'dev');
     }
 }

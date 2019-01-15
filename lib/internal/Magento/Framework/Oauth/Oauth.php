@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Oauth;
 
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 
 class Oauth implements OauthInterface
@@ -196,8 +198,8 @@ class Oauth implements OauthInterface
             $requestUrl
         );
 
-        if ($calculatedSign != $params['oauth_signature']) {
-            throw new Exception(new Phrase('Invalid signature'));
+        if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
+            throw new Exception(new Phrase('The signatire is invalid. Verify and try again.'));
         }
     }
 
@@ -212,7 +214,7 @@ class Oauth implements OauthInterface
     {
         // validate version if specified
         if ('1.0' != $version) {
-            throw new OauthInputException(new Phrase('OAuth version %1 is not supported', [$version]));
+            throw new OauthInputException(new Phrase('The "%1" Oauth version isn\'t supported.', [$version]));
         }
     }
 
@@ -249,7 +251,7 @@ class Oauth implements OauthInterface
             $protocolParams['oauth_token']
         )
         ) {
-            throw new OauthInputException(new Phrase('Token is not the correct length'));
+            throw new OauthInputException(new Phrase('The token length is invalid. Check the length and try again.'));
         }
 
         // Validate signature method.
@@ -283,7 +285,9 @@ class Oauth implements OauthInterface
         $exception = new OauthInputException();
         foreach ($requiredParams as $param) {
             if (!isset($protocolParams[$param])) {
-                $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]));
+                $exception->addError(
+                    new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $param])
+                );
             }
         }
         if ($exception->wasErrorAdded()) {

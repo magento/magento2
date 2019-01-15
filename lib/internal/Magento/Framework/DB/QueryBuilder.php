@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
@@ -25,7 +25,7 @@ class QueryBuilder
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $resource;
 
@@ -65,10 +65,10 @@ class QueryBuilder
     /**
      * Set Resource
      *
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @return void
      */
-    public function setResource(\Magento\Framework\Model\Resource\Db\AbstractDb $resource)
+    public function setResource(\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource)
     {
         $this->resource = $resource;
     }
@@ -83,7 +83,7 @@ class QueryBuilder
         $mapperInstance = $this->mapperFactory->create($mapper);
         $select = $mapperInstance->map($this->criteria);
         $query = $this->queryFactory->create(
-            'Magento\Framework\DB\Query',
+            \Magento\Framework\DB\Query::class,
             [
                 'select' => $select,
                 'criteria' => $this->criteria,

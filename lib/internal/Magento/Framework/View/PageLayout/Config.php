@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,35 @@ namespace Magento\Framework\View\PageLayout;
 class Config extends \Magento\Framework\Config\AbstractXml
 {
     /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
+    protected $urnResolver;
+
+    /**
+     * Instantiate with the list of files to merge
+     *
+     * @param array $configFiles
+     * @param \Magento\Framework\Config\DomFactory $domFactory
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        $configFiles,
+        \Magento\Framework\Config\DomFactory $domFactory,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+    ) {
+        $this->urnResolver = $urnResolver;
+        parent::__construct($configFiles, $domFactory);
+    }
+
+    /**
      * Get absolute path to the XML-schema file
      *
      * @return string
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/layouts.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class Factory
     /**
      * Default strategy key
      */
-    const DEFAULT_STRATEGY = 'Magento\Framework\App\View\Asset\MaterializationStrategy\Copy';
+    const DEFAULT_STRATEGY = \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy::class;
 
     /**
      * @param ObjectManagerInterface $objectManager

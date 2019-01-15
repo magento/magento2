@@ -1,13 +1,17 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @api
+ */
 define([
-    'uiComponent'
-], function (Component) {
+    'uiCollection'
+], function (Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             uniqueProp:     'active',
             active:         false,
@@ -35,14 +39,6 @@ define([
             return this;
         },
 
-        onUniqueUpdate: function (name) {
-            var active = name === this.name;
-
-            this._super();
-
-            this.trigger('active', active);
-        },
-
         /**
          * Sets active property to true, then invokes pushParams method.
          */
@@ -51,6 +47,8 @@ define([
             this.wasActivated(true);
 
             this.setUnique();
+
+            return true;
         }
     });
 });

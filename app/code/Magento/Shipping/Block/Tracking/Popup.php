@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Block\Tracking;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Popup extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -18,17 +22,25 @@ class Popup extends \Magento\Framework\View\Element\Template
     protected $_registry;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->_registry = $registry;
         parent::__construct($context, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -65,7 +77,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     public function formatDeliveryDate($date)
     {
         $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
-        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($date)), $format);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($date)), $format);
     }
 
     /**
@@ -82,7 +94,7 @@ class Popup extends \Magento\Framework\View\Element\Template
         }
 
         $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
-        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($time)), $format);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($time)), $format);
     }
 
     /**

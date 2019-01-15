@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class ExpressTest extends \PHPUnit_Framework_TestCase
+abstract class ExpressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Express */
     protected $model;
@@ -60,36 +60,36 @@ abstract class ExpressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->markTestIncomplete();
-        $this->messageManager = $this->getMockForAbstractClass('Magento\Framework\Message\ManagerInterface');
-        $this->config = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
+        $this->config = $this->createMock(\Magento\Paypal\Model\Config::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quote->expects($this->any())
             ->method('hasItems')
             ->will($this->returnValue(true));
-        $this->redirect = $this->getMockForAbstractClass('Magento\Framework\App\Response\RedirectInterface');
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->customerData = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
-        $this->checkout = $this->getMock('Magento\Paypal\Model\Express\Checkout', [], [], '', false);
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->redirect = $this->getMockForAbstractClass(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->customerData = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->checkout = $this->createMock(\Magento\Paypal\Model\Express\Checkout::class);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->customerSession->expects($this->any())
             ->method('getCustomerDataObject')
             ->will($this->returnValue($this->customerData));
-        $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
-        $this->checkoutFactory = $this->getMock('Magento\Paypal\Model\Express\Checkout\Factory', [], [], '', false);
+        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutFactory = $this->createMock(\Magento\Paypal\Model\Express\Checkout\Factory::class);
         $this->checkoutFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->checkout));
         $this->checkoutSession->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
-        $this->session = $this->getMock('Magento\Framework\Session\Generic', [], [], '', false);
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->session = $this->createMock(\Magento\Framework\Session\Generic::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerCallback = function ($className) {
-            if ($className == 'Magento\Paypal\Model\Config') {
+            if ($className == \Magento\Paypal\Model\Config::class) {
                 return $this->config;
             }
-            return $this->getMock($className, [], [], '', false);
+            return $this->createMock($className);
         };
         $objectManager->expects($this->any())
             ->method('get')
@@ -104,7 +104,7 @@ abstract class ExpressTest extends \PHPUnit_Framework_TestCase
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(
-            '\\Magento\\\Paypal\\Controller\\Express\\' . $this->name,
+            '\\Magento\\Paypal\\Controller\\Express\\' . $this->name,
             [
                 'messageManager' => $this->messageManager,
                 'response' => $this->response,

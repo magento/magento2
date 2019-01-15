@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Block\System;
@@ -10,30 +10,40 @@ class Messages extends \Magento\Backend\Block\Template
     /**
      * Message list
      *
-     * @var \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized
+     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized
      */
     protected $_messages;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @deprecated
      */
     protected $jsonHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages
+     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages,
+        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $data);
         $this->_messages = $messages;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -117,14 +127,11 @@ class Messages extends \Magento\Backend\Block\Template
      */
     public function getSystemMessageDialogJson()
     {
-        return $this->jsonHelper->jsonEncode(
+        return $this->serializer->serialize(
             [
                 'systemMessageDialog' => [
-                    'autoOpen' => false,
-                    'width' => '75%',
-                    'modal' => true,
-                    'minHeight' => '0',
-                    'dialogClass' => 'ui-dialog-active ui-popup-message',
+                    'buttons' => [],
+                    'modalClass' => 'ui-dialog-active ui-popup-message modal-system-messages',
                     'ajaxUrl' => $this->_getMessagesUrl()
                 ],
             ]

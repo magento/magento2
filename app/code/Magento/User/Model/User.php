@@ -1,22 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Model;
 
-use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Store\Model\Store;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\User\Api\Data\UserInterface;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
+use Magento\User\Model\Spi\NotificatorInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Admin user model
  *
- * @method \Magento\User\Model\Resource\User _getResource()
- * @method \Magento\User\Model\Resource\User getResource()
+ * @api
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -26,18 +29,36 @@ use Magento\User\Api\Data\UserInterface;
  * @method string getExtra()
  * @method \Magento\User\Model\User setExtra(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
+ * @since 100.0.2
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
-     * Configuration paths for email templates and identities
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
+    /**
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
+     */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
+    /**
+     * @deprecated
+     * @see \Magento\User\Model\Spi\NotificatorInterface
+     */
+    const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
+
+    /** @deprecated */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+
+    const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
 
     /**
      * Model event prefix
@@ -77,7 +98,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Factory for validator composite object
      *
-     * @var \Magento\Framework\Validator\ObjectFactory
+     * @var \Magento\Framework\Validator\DataObjectFactory
      */
     protected $_validatorObject;
 
@@ -94,17 +115,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @deprecated
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated
      */
     protected $_storeManager;
 
@@ -114,20 +130,37 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $validationRules;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var NotificatorInterface
+     */
+    private $notificator;
+
+    /**
+     * @deprecated
+     */
+    private $deploymentConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Framework\Validator\ObjectFactory $validatorObjectFactory
+     * @param \Magento\Framework\Validator\DataObjectFactory $validatorObjectFactory
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param UserValidationRules $validationRules
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json $serializer
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param NotificatorInterface|null $notificator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -135,19 +168,20 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Registry $registry,
         \Magento\User\Helper\Data $userData,
         \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Framework\Validator\ObjectFactory $validatorObjectFactory,
+        \Magento\Framework\Validator\DataObjectFactory $validatorObjectFactory,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null,
+        DeploymentConfig $deploymentConfig = null,
+        ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
-        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_userData = $userData;
         $this->_config = $config;
@@ -156,6 +190,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->validationRules = $validationRules;
+        $this->serializer = $serializer
+            ?: ObjectManager::getInstance()->get(Json::class);
+        $this->deploymentConfig = $deploymentConfig
+            ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->notificator = $notificator
+            ?: ObjectManager::getInstance()->get(NotificatorInterface::class);
     }
 
     /**
@@ -165,10 +205,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\Resource\User');
+        $this->_init(\Magento\User\Model\ResourceModel\User::class);
     }
 
     /**
+     * Removing dependencies and leaving only entity's properties.
+     *
      * @return string[]
      */
     public function __sleep()
@@ -185,27 +227,37 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 '_encryptor',
                 '_transportBuilder',
                 '_storeManager',
-                '_validatorBeforeSave'
+                '_validatorBeforeSave',
+                'validationRules',
+                'serializer',
+                'deploymentConfig',
+                'notificator'
             ]
         );
     }
 
     /**
+     * Restoring required objects after serialization.
+     *
      * @return void
      */
     public function __wakeup()
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
-        $this->_userData = $objectManager->get('Magento\User\Helper\Data');
-        $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_registry = $objectManager->get('Magento\Framework\Registry');
-        $this->_validatorObject = $objectManager->get('Magento\Framework\Validator\ObjectFactory');
-        $this->_roleFactory = $objectManager->get('Magento\Authorization\Model\RoleFactory');
-        $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
-        $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $this->serializer = $objectManager->get(Json::class);
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_userData = $objectManager->get(\Magento\User\Helper\Data::class);
+        $this->_config = $objectManager->get(\Magento\Backend\App\ConfigInterface::class);
+        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
+        $this->_validatorObject = $objectManager->get(\Magento\Framework\Validator\DataObjectFactory::class);
+        $this->_roleFactory = $objectManager->get(\Magento\Authorization\Model\RoleFactory::class);
+        $this->_encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->_transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->validationRules = $objectManager->get(UserValidationRules::class);
+        $this->deploymentConfig = $objectManager->get(DeploymentConfig::class);
+        $this->notificator = $objectManager->get(NotificatorInterface::class);
     }
 
     /**
@@ -216,8 +268,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function beforeSave()
     {
         $data = [
-            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'extra' => serialize($this->getExtra()),
+            'extra' => $this->serializer->serialize($this->getExtra()),
         ];
 
         if ($this->_willSavePassword()) {
@@ -225,7 +276,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         if ($this->getIsActive() !== null) {
-            $data['is_active'] = intval($this->getIsActive());
+            $data['is_active'] = (int)$this->getIsActive();
         }
 
         $this->addData($data);
@@ -250,7 +301,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _getValidationRulesBeforeSave()
     {
-        /** @var $validator \Magento\Framework\Validator\Object */
+        /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 
@@ -265,15 +316,15 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Validate customer attribute values.
-     * For existing customer password + confirmation will be validated only when password is set
-     * (i.e. its change is requested)
+     * Validate admin user data.
+     *
+     * Existing user password confirmation will be validated only when password is set
      *
      * @return bool|string[]
      */
     public function validate()
     {
-        /** @var $validator \Magento\Framework\Validator\Object */
+        /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 
@@ -281,8 +332,35 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             return $validator->getMessages();
         }
 
-        return true;
+        return $this->validatePasswordChange();
+    }
 
+    /**
+     * Make sure admin password was changed.
+     *
+     * New password is compared to at least 4 previous passwords to prevent setting them again
+     *
+     * @return bool|string[]
+     * @since 100.0.3
+     */
+    protected function validatePasswordChange()
+    {
+        $password = $this->getPassword();
+        if ($password && !$this->getForceNewPassword() && $this->getId()) {
+            $errorMessage = __('Sorry, but this password has already been used. Please create another.');
+            // Check if password is equal to the current one
+            if ($this->_encryptor->isValidHash($password, $this->getOrigData('password'))) {
+                return [$errorMessage];
+            }
+
+            // Check whether password was used before
+            foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
+                if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {
+                    return [$errorMessage];
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -305,7 +383,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function saveExtra($data)
     {
         if (is_array($data)) {
-            $data = serialize($data);
+            $data = $this->serializer->serialize($data);
         }
         $this->_getResource()->saveExtra($this, $data);
         return $this;
@@ -350,7 +428,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Check if such combination role/user exists
+     * Check if such combination role/user exists.
      *
      * @return bool
      */
@@ -361,40 +439,96 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Send email with reset password confirmation link
+     * Send email with reset password confirmation link.
+     *
+     * @deprecated
+     * @see NotificatorInterface::sendForgotPassword()
      *
      * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
-        $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
-        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
-            ->getTransport();
+        $this->notificator->sendForgotPassword($this);
 
-        $transport->sendMessage();
         return $this;
     }
 
     /**
      * Send email to when password is resetting
      *
+     * @throws NotificationExceptionInterface
      * @return $this
+     * @deprecated 100.1.0
      */
     public function sendPasswordResetNotificationEmail()
     {
-        $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
-        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
-            ->getTransport();
+        $this->sendNotificationEmailsIfRequired();
+        return $this;
+    }
 
-        $transport->sendMessage();
+    /**
+     * Check changes and send notification emails.
+     *
+     * @throws NotificationExceptionInterface
+     * @return $this
+     * @since 100.1.0
+     */
+    public function sendNotificationEmailsIfRequired()
+    {
+        if ($this->isObjectNew()) {
+            //Notification about a new user.
+            $this->notificator->sendCreated($this);
+        } elseif ($changes = $this->createChangesDescriptionString()) {
+            //User changed.
+            $this->notificator->sendUpdated($this, explode(', ', $changes));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create changes description string
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    protected function createChangesDescriptionString()
+    {
+        $changes = [];
+
+        if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+            $changes[] = __('email');
+        }
+
+        if ($this->getPassword()
+            && $this->getOrigData('password')
+            && $this->getPassword() != $this->getOrigData('password')) {
+            $changes[] = __('password');
+        }
+
+        if ($this->getUserName() != $this->getOrigData('username') && $this->getOrigData('username')) {
+            $changes[] = __('username');
+        }
+
+        return implode(', ', $changes);
+    }
+
+    /**
+     * Send user notification email.
+     *
+     * @param string $changes
+     * @param string $email
+     * @throws NotificationExceptionInterface
+     * @return $this
+     * @since 100.1.0
+     * @deprecated
+     * @see NotificatorInterface::sendUpdated()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function sendUserNotificationEmail($changes, $email = null)
+    {
+        $this->notificator->sendUpdated($this, explode(', ', $changes));
+
         return $this;
     }
 
@@ -406,7 +540,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getName($separator = ' ')
     {
-        return $this->getFirstname() . $separator . $this->getLastname();
+        return $this->getFirstName() . $separator . $this->getLastName();
     }
 
     /**
@@ -438,7 +572,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 ['username' => $username, 'user' => $this]
             );
             $this->loadByUsername($username);
-            $sensitive = $config ? $username == $this->getUsername() : true;
+            $sensitive = $config ? $username == $this->getUserName() : true;
             if ($sensitive && $this->getId()) {
                 $result = $this->verifyIdentity($password);
             }
@@ -470,10 +604,15 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $result = false;
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
-                throw new AuthenticationException(__('This account is inactive.'));
+                throw new AuthenticationException(
+                    __(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    )
+                );
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('You need more permissions to access this.'));
+                throw new AuthenticationException(__('More permissions are needed to access this.'));
             }
             $result = true;
         }
@@ -519,6 +658,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $data = $this->getResource()->loadByUsername($username);
         if ($data !== false) {
             $this->setData($data);
+            $this->setOrigData();
         }
         return $this;
     }
@@ -557,7 +697,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The password reset token is incorrect. Verify the token and try again.')
+            );
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
@@ -587,8 +729,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
+        if ($hourDifference >= $expirationPeriod) {
             return true;
         }
 
@@ -618,7 +760,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -626,7 +768,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setFirstName($firstName)
     {
@@ -634,7 +776,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {
@@ -642,7 +784,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setLastName($lastName)
     {
@@ -650,7 +792,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getEmail()
     {
@@ -658,7 +800,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setEmail($email)
     {
@@ -666,7 +808,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserName()
     {
@@ -674,7 +816,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setUserName($userName)
     {
@@ -682,7 +824,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPassword()
     {
@@ -690,7 +832,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setPassword($password)
     {
@@ -698,7 +840,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCreated()
     {
@@ -706,7 +848,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCreated($created)
     {
@@ -714,7 +856,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getModified()
     {
@@ -722,7 +864,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setModified($modified)
     {
@@ -730,7 +872,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getIsActive()
     {
@@ -738,7 +880,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setIsActive($isActive)
     {
@@ -746,7 +888,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getInterfaceLocale()
     {
@@ -754,10 +896,53 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setInterfaceLocale($interfaceLocale)
     {
         return $this->setData('interface_locale', $interfaceLocale);
+    }
+
+    /**
+     * Security check for admin user
+     *
+     * @param string $passwordString
+     * @return $this
+     * @throws \Magento\Framework\Exception\State\UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 100.1.0
+     */
+    public function performIdentityCheck($passwordString)
+    {
+        try {
+            $isCheckSuccessful = $this->verifyIdentity($passwordString);
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $isCheckSuccessful = false;
+        }
+        $this->_eventManager->dispatch(
+            'admin_user_authenticate_after',
+            [
+                'username' => $this->getUserName(),
+                'password' => $passwordString,
+                'user' => $this,
+                'result' => $isCheckSuccessful
+            ]
+        );
+        // Check if lock information has been updated in observers
+        $clonedUser = clone($this);
+        $clonedUser->reload();
+        if ($clonedUser->getLockExpires()) {
+            throw new \Magento\Framework\Exception\State\UserLockedException(
+                __('Your account is temporarily disabled. Please try again later.')
+            );
+        }
+
+        if (!$isCheckSuccessful) {
+            throw new \Magento\Framework\Exception\AuthenticationException(
+                __('The password entered for the current user is invalid. Verify the password and try again.')
+            );
+        }
+
+        return $this;
     }
 }

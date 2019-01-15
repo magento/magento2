@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\ContentType;
@@ -98,10 +98,10 @@ class Xml extends AbstractContentType
     /**
      * Convert object to xml format
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return string
      */
-    protected function objectToXml(\Magento\Framework\Object $object)
+    protected function objectToXml(\Magento\Framework\DataObject $object)
     {
         return (string)$object;
     }

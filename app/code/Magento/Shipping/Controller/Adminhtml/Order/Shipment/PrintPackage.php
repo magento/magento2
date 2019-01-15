@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -12,6 +12,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class PrintPackage extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
@@ -38,14 +45,6 @@ class PrintPackage extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
-
-    /**
      * Create pdf document with information about packages
      *
      * @return ResponseInterface|void
@@ -60,10 +59,10 @@ class PrintPackage extends \Magento\Backend\App\Action
 
         if ($shipment) {
             /** @var \Zend_Pdf $pdf */
-            $pdf = $this->_objectManager->create('Magento\Shipping\Model\Order\Pdf\Packaging')->getPdf($shipment);
+            $pdf = $this->_objectManager->create(\Magento\Shipping\Model\Order\Pdf\Packaging::class)->getPdf($shipment);
             return $this->_fileFactory->create(
                 'packingslip' . $this->_objectManager->get(
-                    'Magento\Framework\Stdlib\DateTime\DateTime'
+                    \Magento\Framework\Stdlib\DateTime\DateTime::class
                 )->date(
                     'Y-m-d_H-i-s'
                 ) . '.pdf',

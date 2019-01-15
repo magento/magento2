@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
@@ -33,7 +33,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
         $resultItems = [];
 
         foreach ($this->_salesModel->getAllItems() as $item) {
-            $resultItems[] = new \Magento\Framework\Object(
+            $resultItems[] = new \Magento\Framework\DataObject(
                 [
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),

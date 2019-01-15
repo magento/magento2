@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Ui\Component\Listing\Column\Status;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
  * Class Options

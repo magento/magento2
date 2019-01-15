@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
 
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,15 +33,15 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
         $arguments = [
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
             'layout' => $this->_layoutMock,
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_blockMock = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Button', $arguments);
+        $this->_blockMock = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Button::class, $arguments);
     }
 
     protected function tearDown()
@@ -61,6 +61,9 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp($expect, $attributes);
     }
 
+    /**
+     * @return array
+     */
     public function getAttributesHtmlDataProvider()
     {
         return [

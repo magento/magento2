@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method\Online;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 
 /**
@@ -21,9 +21,9 @@ interface GatewayInterface
      * @param Object $request
      * @param ConfigInterface $config
      *
-     * @return Object
+     * @return DataObject
      *
      * @throws \Exception
      */
-    public function postRequest(Object $request, ConfigInterface $config);
+    public function postRequest(DataObject $request, ConfigInterface $config);
 }

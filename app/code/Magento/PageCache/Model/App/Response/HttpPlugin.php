@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,9 @@ class HttpPlugin
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {
+        if ($subject instanceof \Magento\Framework\App\PageCache\NotCacheableInterface) {
+            return;
+        }
         $subject->sendVary();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ return [
             'restrict' => ['fields' => ['allow_ips' => ['value' => '']]],
             'debug' => [
                 'fields' => [
-                    'template_hints' => ['value' => '0'],
+                    'template_hints_admin' => ['value' => '0'],
                     'template_hints_blocks' => ['value' => '0'],
                 ],
             ],

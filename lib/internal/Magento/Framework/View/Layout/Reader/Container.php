@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
@@ -26,11 +26,10 @@ class Container implements Layout\ReaderInterface
     const CONTAINER_OPT_HTML_CLASS = 'htmlClass';
     const CONTAINER_OPT_HTML_ID = 'htmlId';
     const CONTAINER_OPT_LABEL = 'label';
+    const CONTAINER_OPT_DISPLAY = 'display';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
-     */
+    /**#@-*/
     protected $helper;
 
     /**
@@ -81,7 +80,7 @@ class Container implements Layout\ReaderInterface
                 break;
 
             case self::TYPE_REFERENCE_CONTAINER:
-                $this->mergeContainerAttributes($readerContext->getScheduledStructure(), $currentElement);
+                $this->containerReference($readerContext->getScheduledStructure(), $currentElement);
                 break;
 
             default:
@@ -118,8 +117,34 @@ class Container implements Layout\ReaderInterface
                 self::CONTAINER_OPT_HTML_ID    => (string)$currentElement[self::CONTAINER_OPT_HTML_ID],
                 self::CONTAINER_OPT_HTML_CLASS => (string)$currentElement[self::CONTAINER_OPT_HTML_CLASS],
                 self::CONTAINER_OPT_LABEL      => (string)$currentElement[self::CONTAINER_OPT_LABEL],
+                self::CONTAINER_OPT_DISPLAY    => (string)$currentElement[self::CONTAINER_OPT_DISPLAY],
             ];
         }
         $scheduledStructure->setStructureElementData($containerName, $elementData);
+    }
+
+    /**
+     * Handling reference of container
+     *
+     * If attribute remove="true" then add the element to list remove,
+     * else merge container attributes
+     *
+     * @param Layout\ScheduledStructure $scheduledStructure
+     * @param Layout\Element $currentElement
+     * @return void
+     */
+    protected function containerReference(
+        Layout\ScheduledStructure $scheduledStructure,
+        Layout\Element $currentElement
+    ) {
+        $containerName = $currentElement->getAttribute('name');
+        $containerRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
+        if ($containerRemove) {
+            $scheduledStructure->setElementToRemoveList($containerName);
+            return;
+        } elseif ($currentElement->getAttribute('remove')) {
+            $scheduledStructure->unsetElementFromListToRemove($containerName);
+        }
+        $this->mergeContainerAttributes($scheduledStructure, $currentElement);
     }
 }

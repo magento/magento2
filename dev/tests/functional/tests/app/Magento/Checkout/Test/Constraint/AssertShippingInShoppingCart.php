@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,15 +24,18 @@ class AssertShippingInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
-        $checkoutCart->open();
+        if ($requireReload) {
+            $checkoutCart->open();
+        }
 
         $fixtureShippingAmount = number_format((float)$cart->getShippingAmount(), 2);
         $pageShippingAmount = $checkoutCart->getTotalsBlock()->getShippingPrice();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $fixtureShippingAmount,
             $pageShippingAmount,
             'Shipping amount in the shopping cart not equals to shipping amount from fixture.'

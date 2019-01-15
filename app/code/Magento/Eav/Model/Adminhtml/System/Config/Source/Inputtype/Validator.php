@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
@@ -21,6 +21,7 @@ class Validator extends \Zend_Validate_InArray
 
     /**
      * @param \Magento\Eav\Helper\Data $eavData
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Eav\Helper\Data $eavData)
     {

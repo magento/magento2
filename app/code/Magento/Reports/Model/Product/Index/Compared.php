@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Product\Index;
@@ -8,8 +8,6 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Catalog Compared Product Index Model
  *
- * @method \Magento\Reports\Model\Resource\Product\Index\Compared _getResource()
- * @method \Magento\Reports\Model\Resource\Product\Index\Compared getResource()
  * @method \Magento\Reports\Model\Product\Index\Compared setVisitorId(int $value)
  * @method \Magento\Reports\Model\Product\Index\Compared setCustomerId(int $value)
  * @method int getProductId()
@@ -19,6 +17,8 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Compared setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
@@ -46,7 +46,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Helper\Product\Compare $productCompare
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -61,7 +61,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Helper\Product\Compare $productCompare,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -88,7 +88,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Resource\Product\Index\Compared');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Product\Index\Compared::class);
     }
 
     /**

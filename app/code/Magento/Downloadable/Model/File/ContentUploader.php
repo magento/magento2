@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\File;
@@ -118,6 +118,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
         $this->setAllowRenameFiles(true);
         $this->setFilesDispersion(true);
         $result = $this->save($this->getDestinationDirectory($contentType));
+        unset($result['path']);
         $result['status'] = 'new';
         $result['name'] = substr($result['file'], strrpos($result['file'], '/') + 1);
         return $result;

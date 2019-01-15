@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class Ftp
     }
 
     /**
-     * ftp_mkdir wrapper
+     * Wrapper for ftp_mkdir
      *
      * @param string $name
      * @return string the newly created directory name on success or <b>FALSE</b> on error.
@@ -56,7 +56,7 @@ class Ftp
         $dir = explode("/", $path);
         $path = "";
         $ret = true;
-        for ($i = 0; $i < count($dir); $i++) {
+        for ($i = 0, $count = count($dir); $i < $count; $i++) {
             $path .= "/" . $dir[$i];
             if (!@ftp_chdir($this->_conn, $path)) {
                 @ftp_chdir($this->_conn, "/");
@@ -105,6 +105,12 @@ class Ftp
         if ($data['scheme'] != 'ftp') {
             throw new \Exception("Support for scheme unsupported: '{$data['scheme']}'");
         }
+        
+        // Decode user & password strings from URL
+        foreach (array_intersect(array_keys($data), ['user','pass']) as $key) {
+            $data[$key] = urldecode($data[$key]);
+        }
+        
         return $data;
     }
 
@@ -121,7 +127,7 @@ class Ftp
     public function connect($string, $timeout = 900)
     {
         $params = $this->validateConnectionString($string);
-        $port = isset($params['port']) ? intval($params['port']) : 21;
+        $port = isset($params['port']) ? (int)$params['port'] : 21;
 
         $this->_conn = ftp_connect($params['host'], $port, $timeout);
 
@@ -141,7 +147,7 @@ class Ftp
     }
 
     /**
-     * ftp_fput wrapper
+     * Wrapper for ftp_fput
      *
      * @param string $remoteFile
      * @param resource $handle
@@ -156,7 +162,7 @@ class Ftp
     }
 
     /**
-     * ftp_put wrapper
+     * Wrapper for ftp_put
      *
      * @param string $remoteFile
      * @param string $localFile
@@ -182,7 +188,7 @@ class Ftp
         if (empty($data[1])) {
             return false;
         }
-        if (intval($data[0]) != 257) {
+        if ((int)$data[0] != 257) {
             return false;
         }
         $out = trim($data[1], '"');
@@ -193,7 +199,7 @@ class Ftp
     }
 
     /**
-     * ftp_raw wrapper
+     * Wrapper for ftp_raw
      *
      * @param string $cmd
      * @return array The server's response as an array of strings.
@@ -266,7 +272,7 @@ class Ftp
     }
 
     /**
-     * ftp_pasv wrapper
+     * Wrapper for ftp_pasv
      *
      * @param bool $pasv
      * @return bool
@@ -290,7 +296,7 @@ class Ftp
     }
 
     /**
-     * ftp_chmod wrapper
+     * Wrapper for ftp_chmod
      *
      * @param int $mode
      * @param string $remoteFile
@@ -303,7 +309,7 @@ class Ftp
     }
 
     /**
-     * ftp_chdir wrapper
+     * Wrapper for ftp_chdir
      *
      * @param string $dir
      * @return bool
@@ -315,7 +321,7 @@ class Ftp
     }
 
     /**
-     * ftp_cdup wrapper
+     * Wrapper for ftp_cdup
      *
      * @return bool
      */
@@ -326,7 +332,7 @@ class Ftp
     }
 
     /**
-     * ftp_get wrapper
+     * Wrapper for ftp_get
      *
      * @param string $localFile
      * @param string $remoteFile
@@ -343,7 +349,7 @@ class Ftp
     }
 
     /**
-     * ftp_nlist wrapper
+     * Wrapper for ftp_nlist
      *
      * @param string $dir
      * @return bool
@@ -356,7 +362,7 @@ class Ftp
     }
 
     /**
-     * ftp_rawlist wrapper
+     * Wrapper for ftp_rawlist
      *
      * @param string $dir
      * @param bool $recursive

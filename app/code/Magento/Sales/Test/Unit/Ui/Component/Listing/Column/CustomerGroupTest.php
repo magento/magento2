@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\CustomerGroup;
 /**
  * Class CustomerGroupTest
  */
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerGroup
@@ -24,13 +24,19 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->groupRepository = $this->getMockForAbstractClass('Magento\Customer\Api\GroupRepositoryInterface');
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
+        $this->groupRepository = $this->getMockForAbstractClass(\Magento\Customer\Api\GroupRepositoryInterface::class);
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\CustomerGroup',
-            ['groupRepository' => $this->groupRepository]
+            \Magento\Sales\Ui\Component\Listing\Column\CustomerGroup::class,
+            ['groupRepository' => $this->groupRepository, 'context' => $contextMock]
         );
     }
 
@@ -47,7 +53,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $group = $this->getMockForAbstractClass('Magento\Customer\Api\Data\GroupInterface');
+        $group = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupInterface::class);
         $group->expects($this->once())
             ->method('getCode')
             ->willReturn($newItemValue);
@@ -57,7 +63,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ->willReturn($group);
 
         $this->model->setData('name', $itemName);
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

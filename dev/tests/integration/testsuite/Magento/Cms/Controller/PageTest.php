@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,18 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     public function testViewAction()
     {
-        $this->dispatch('/enable-cookies/');
+        $this->dispatch('/enable-cookies');
         $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
+    }
+
+    public function testViewRedirectWithTrailingSlash()
+    {
+        $this->dispatch('/enable-cookies/');
+        $code = $this->getResponse()->getStatusCode();
+        $location = $this->getResponse()->getHeader('Location')->getFieldValue();
+
+        $this->assertEquals(301, $code, 'Invalid response code');
+        $this->assertStringEndsWith('/enable-cookies', $location, 'Invalid location header');
     }
 
     /**
@@ -22,9 +32,9 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddBreadcrumbs()
     {
-        $this->dispatch('/enable-cookies/');
+        $this->dispatch('/enable-cookies');
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         $breadcrumbsBlock = $layout->getBlock('breadcrumbs');
         $this->assertContains($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
@@ -35,7 +45,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCreatePageWithSameModuleName()
     {
-        $this->dispatch('/shipping/');
+        $this->dispatch('/shipping');
         $content = $this->getResponse()->getBody();
         $this->assertContains('Shipping Test Page', $content);
     }
@@ -43,7 +53,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     public static function cmsPageWithSystemRouteFixture()
     {
         /** @var $page \Magento\Cms\Model\Page */
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
         $page->setTitle('Test title')
             ->setIdentifier('shipping')
             ->setStores([0])

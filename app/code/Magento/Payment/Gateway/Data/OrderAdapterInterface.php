@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Data;
 
 /**
  * Interface OrderAdapterInterface
+ * @api
+ * @since 100.0.2
  */
 interface OrderAdapterInterface
 {
@@ -34,14 +36,14 @@ interface OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress();
 
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress();
 
@@ -65,4 +67,18 @@ interface OrderAdapterInterface
      * @return float
      */
     public function getGrandTotalAmount();
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return array
+     */
+    public function getItems();
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp();
 }

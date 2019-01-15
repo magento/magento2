@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\Framework\App\Resource;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -48,7 +50,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -62,58 +64,78 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $aggregatioBuilder;
 
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $temporaryStorage;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->setMethods(['getAggregation'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionAdapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['fetchAssoc'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connectionAdapter));
 
-        $this->mapper = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Mapper')
+        $this->mapper = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Mapper::class)
             ->setMethods(['buildQuery'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseFactory = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ResponseFactory')
+        $this->responseFactory = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ResponseFactory::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aggregatioBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder')
-            ->setMethods(['build'])
+        $this->aggregatioBuilder = $this->getMockBuilder(
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder::class
+        )->setMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->setMethods(['getType', 'getName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $temporaryStorageFactoryName = \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory::class;
+        $temporaryStorageFactory = $this->getMockBuilder($temporaryStorageFactoryName)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $temporaryStorageFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->temporaryStorage);
+
         $this->adapter = $this->objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Adapter',
+            \Magento\Framework\Search\Adapter\Mysql\Adapter::class,
             [
                 'mapper' => $this->mapper,
                 'responseFactory' => $this->responseFactory,
                 'resource' => $this->resource,
-                'aggregationBuilder' => $this->aggregatioBuilder
+                'aggregationBuilder' => $this->aggregatioBuilder,
+                'temporaryStorageFactory' => $temporaryStorageFactory,
             ]
         );
     }
@@ -135,7 +157,22 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->connectionAdapter->expects($this->at(0))
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionAdapter->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->temporaryStorage->expects($this->any())
+            ->method('storeDocumentsFromSelect')
+            ->willReturn($table);
+
+        $this->connectionAdapter->expects($this->any())
             ->method('fetchAssoc')
             ->will($this->returnValue($selectResult['documents']));
         $this->mapper->expects($this->once())
@@ -146,7 +183,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($selectResult)
             ->will($this->returnArgument(0));
-        $this->aggregatioBuilder->expects($this->once())->method('build')->willReturn($selectResult['aggregations']);
+        $this->aggregatioBuilder->expects($this->once())
+            ->method('build')
+            ->with($this->request, $table, $selectResult['documents'])
+            ->willReturn($selectResult['aggregations']);
         $response = $this->adapter->query($this->request);
         $this->assertEquals($selectResult, $response);
     }

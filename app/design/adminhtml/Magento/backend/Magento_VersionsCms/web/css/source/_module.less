@@ -1,0 +1,43 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Hierarchy styles
+//  _____________________________________________
+
+.cms-hierarchy {
+    &:extend(.abs-clearfix all);
+
+    .cms-hierarchy-tree,
+    .cms-hierarchy-node {
+        float: left;
+        width: 50%;
+    }
+
+    .cms-page-grid-container {
+        clear: both;
+    }
+
+    .admin__page-section-title {
+        .actions {
+            float: right;
+        }
+    }
+
+    .buttons-set {
+        margin: 0 0 1.14rem;
+        button {
+            margin-right: .36rem;
+        }
+    }
+}
+
+.version-fieldset {
+    .grid-actions {
+        border-bottom: 1px solid @color-lazy-sun-white;
+        margin: 0 0 15px;
+        padding: 0 0 15px;
+    }
+}

@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Config
 {
     const XML_PATH_SHARING_EMAIL_LIMIT = 'wishlist/email/number_limit';
@@ -18,19 +22,19 @@ class Config
     /**
      * @var \Magento\Catalog\Model\Config
      */
-    private $_catalogConfig;
+    private $catalogConfig;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
-    private $_attributeConfig;
+    private $attributeConfig;
 
     /**
      * Number of emails allowed for sharing wishlist
      *
      * @var int
      */
-    private $_sharingEmailLimit;
+    private $sharingEmailLimit;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -50,10 +54,10 @@ class Config
             self::XML_PATH_SHARING_TEXT_LIMIT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $this->_sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
+        $this->sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
         $this->_sharignTextLimit = $textLimitInConfig ?: self::SHARING_TEXT_LIMIT;
-        $this->_catalogConfig = $catalogConfig;
-        $this->_attributeConfig = $attributeConfig;
+        $this->catalogConfig = $catalogConfig;
+        $this->attributeConfig = $attributeConfig;
     }
 
     /**
@@ -63,8 +67,8 @@ class Config
      */
     public function getProductAttributes()
     {
-        $catalogAttributes = $this->_catalogConfig->getProductAttributes();
-        $wishlistAttributes = $this->_attributeConfig->getAttributeNames('wishlist_item');
+        $catalogAttributes = $this->catalogConfig->getProductAttributes();
+        $wishlistAttributes = $this->attributeConfig->getAttributeNames('wishlist_item');
         return array_merge($catalogAttributes, $wishlistAttributes);
     }
 
@@ -75,7 +79,7 @@ class Config
      */
     public function getSharingEmailLimit()
     {
-        return $this->_sharingEmailLimit;
+        return $this->sharingEmailLimit;
     }
 
     /**

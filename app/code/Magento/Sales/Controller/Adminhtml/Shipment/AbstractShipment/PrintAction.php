@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
@@ -14,6 +14,13 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
     /**
      * @var FileFactory
      */
@@ -40,31 +47,28 @@ abstract class PrintAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
-
-    /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
+     * @throws \Exception
      */
     public function execute()
     {
         $shipmentId = $this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment')->load($shipmentId);
+            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             if ($shipment) {
                 $pdf = $this->_objectManager->create(
-                    'Magento\Sales\Model\Order\Pdf\Shipment'
+                    \Magento\Sales\Model\Order\Pdf\Shipment::class
                 )->getPdf(
                     [$shipment]
                 );
-                $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+                $date = $this->_objectManager->get(
+                    \Magento\Framework\Stdlib\DateTime\DateTime::class
+                )->date('Y-m-d_H-i-s');
+                $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
                 return $this->_fileFactory->create(
                     'packingslip' . $date . '.pdf',
-                    $pdf->render(),
+                    $fileContent,
                     DirectoryList::VAR_DIR,
                     'application/pdf'
                 );

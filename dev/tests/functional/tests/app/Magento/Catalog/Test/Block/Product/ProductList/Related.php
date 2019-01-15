@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class Related extends PromotedSection
         $locator = sprintf($this->productItemByName, $product->getName());
 
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+            \Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem::class,
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }
@@ -38,12 +38,16 @@ class Related extends PromotedSection
      */
     public function getProducts()
     {
+        if (!$this->_rootElement->isVisible($this->productItem)) {
+            return [];
+        }
+
         $elements = $this->_rootElement->getElements($this->productItem, Locator::SELECTOR_CSS);
         $result = [];
 
         foreach ($elements as $element) {
             $result[] = $this->blockFactory->create(
-                'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+                \Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem::class,
                 ['element' => $element]
             );
         }

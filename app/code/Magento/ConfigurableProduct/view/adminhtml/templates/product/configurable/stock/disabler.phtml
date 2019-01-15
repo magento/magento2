@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -8,7 +8,7 @@
 require(['jquery'], function($){
     $('[data-tab-panel=product-details]').on('stockbeforedisable', function(e) {
         var variations = $('[data-panel=product-variations]');
-        if (e.productType === 'configurable' || (variations.is(':visible') && variations.is('.opened'))) {
+        if (e.productType === 'configurable' || (variations.is(':visible'))) {
             e.stopPropagation();
             return false;
         }

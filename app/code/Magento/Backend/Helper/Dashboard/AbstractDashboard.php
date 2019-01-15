@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
 
 /**
  * Adminhtml abstract  dashboard helper.
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Helper collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|array
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|array
      */
     protected $_collection;
 
@@ -25,7 +28,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     protected $_params = [];
 
     /**
-     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -72,7 +75,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
                 } else {
                     $result[] = null;
                 }
-            } elseif ($item instanceof \Magento\Framework\Object) {
+            } elseif ($item instanceof \Magento\Framework\DataObject) {
                 $result[] = $item->getData($index);
             } else {
                 $result[] = null;

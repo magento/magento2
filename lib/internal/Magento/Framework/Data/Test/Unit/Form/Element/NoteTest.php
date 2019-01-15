@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class NoteTest extends \PHPUnit_Framework_TestCase
+class NoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,21 +23,15 @@ class NoteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->_model = new \Magento\Framework\Data\Form\Element\Note(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock
         );
-        $formMock = new \Magento\Framework\Object();
+        $formMock = new \Magento\Framework\DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_model->setForm($formMock);
@@ -63,7 +57,7 @@ class NoteTest extends \PHPUnit_Framework_TestCase
         $this->_model->setValue('Note Text');
         $html = $this->_model->getElementHtml();
         $this->assertEquals(
-            "note_before<div id=\"note_id\" class=\"control-value\"></div>note_after",
+            "note_before<div id=\"note_id\" class=\"control-value admin__field-value\"></div>note_after",
             $html
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
@@ -40,8 +40,8 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
-        $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
+        $this->_soapConfig = $objectManager->get(\Magento\Webapi\Model\Soap\Config::class);
+        $this->_converter = $objectManager->get(\Magento\Framework\Api\SimpleDataObjectConverter::class);
         ini_set('default_socket_timeout', 120);
     }
 
@@ -63,7 +63,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * Get proper SOAP client instance that is initialized with with WSDL corresponding to requested service interface.
+     * Get proper SOAP client instance that is initialized with WSDL corresponding to requested service interface.
      *
      * @param string $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode
@@ -122,13 +122,12 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** Sort list of services to avoid having different WSDL URLs for the identical lists of services. */
         //TODO: This may change since same resource of multiple versions may be allowed after namespace changes
         ksort($services);
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeCode = $storeCode !== null
-            ? (string)$storeCode
-            : Bootstrap::getObjectManager()
-                ->get('Magento\Store\Model\StoreManagerInterface')
+        if ($storeCode == null) {
+            $storeCode = Bootstrap::getObjectManager()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class)
                 ->getStore()
                 ->getCode();
+        }
 
         /** TESTS_BASE_URL is initialized in PHPUnit configuration */
         $wsdlUrl = rtrim(TESTS_BASE_URL, '/') . self::WSDL_BASE_PATH . '/' . $storeCode . '?wsdl=1&services=';

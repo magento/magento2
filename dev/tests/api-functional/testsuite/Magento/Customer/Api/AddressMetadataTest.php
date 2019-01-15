@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,23 +61,27 @@ class AddressMetadataTest extends WebapiAbstract
             Address::POSTCODE => [
                 Address::POSTCODE,
                 [
-                    AttributeMetadata::ATTRIBUTE_CODE => 'postcode',
                     AttributeMetadata::FRONTEND_INPUT => 'text',
                     AttributeMetadata::INPUT_FILTER => '',
                     AttributeMetadata::STORE_LABEL => 'Zip/Postal Code',
+                    AttributeMetadata::MULTILINE_COUNT => 0,
                     AttributeMetadata::VALIDATION_RULES => [],
                     AttributeMetadata::VISIBLE => true,
                     AttributeMetadata::REQUIRED => false,
-                    AttributeMetadata::MULTILINE_COUNT => 0,
-                    AttributeMetadata::DATA_MODEL => 'Magento\Customer\Model\Attribute\Data\Postcode',
+                    AttributeMetadata::DATA_MODEL => \Magento\Customer\Model\Attribute\Data\Postcode::class,
                     AttributeMetadata::OPTIONS => [],
                     AttributeMetadata::FRONTEND_CLASS => '',
+                    AttributeMetadata::USER_DEFINED => false,
+                    AttributeMetadata::SORT_ORDER => 110,
                     AttributeMetadata::FRONTEND_LABEL => 'Zip/Postal Code',
                     AttributeMetadata::NOTE => '',
                     AttributeMetadata::SYSTEM => true,
-                    AttributeMetadata::USER_DEFINED => false,
                     AttributeMetadata::BACKEND_TYPE => 'static',
-                    AttributeMetadata::SORT_ORDER => 110
+                    AttributeMetadata::IS_USED_IN_GRID => true,
+                    AttributeMetadata::IS_VISIBLE_IN_GRID => true,
+                    AttributeMetadata::IS_FILTERABLE_IN_GRID => true,
+                    AttributeMetadata::IS_SEARCHABLE_IN_GRID => true,
+                    AttributeMetadata::ATTRIBUTE_CODE => 'postcode',
                 ],
             ]
         ];
@@ -266,7 +270,7 @@ class AddressMetadataTest extends WebapiAbstract
         parent::tearDownAfterClass();
         /** @var \Magento\Customer\Model\Attribute $attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Attribute'
+            \Magento\Customer\Model\Attribute::class
         );
         foreach (['custom_attribute1', 'custom_attribute2'] as $attributeCode) {
             $attribute->loadByCode('customer_address', $attributeCode);

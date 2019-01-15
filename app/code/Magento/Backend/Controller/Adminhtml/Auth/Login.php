@@ -1,12 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-class Login extends \Magento\Backend\Controller\Adminhtml\Auth
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
+class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGet, HttpPost
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -38,11 +45,29 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
             if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
                 $this->_auth->getAuthStorage()->setIsFirstPageAfterLogin(true);
             }
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath($this->_backendUrl->getStartupPageUrl());
-            return $resultRedirect;
+            return $this->getRedirect($this->_backendUrl->getStartupPageUrl());
+        }
+
+        $requestUrl = $this->getRequest()->getUri();
+        $backendUrl = $this->getUrl('*');
+        // redirect according to rewrite rule
+        if ($requestUrl != $backendUrl) {
+            return $this->getRedirect($backendUrl);
         }
         return $this->resultPageFactory->create();
+    }
+
+    /**
+     * Get redirect response
+     *
+     * @param string $path
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    private function getRedirect($path)
+    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath($path);
+        return $resultRedirect;
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
+class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Editablemultiselect
@@ -15,14 +15,14 @@ class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $testHelper->getObject('Magento\Framework\Data\Form\Element\Editablemultiselect');
+        $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
         $values = [
             ['value' => 1, 'label' => 'Value1'],
             ['value' => 2, 'label' => 'Value2'],
             ['value' => 3, 'label' => 'Value3'],
         ];
         $value = [1, 3];
-        $this->_model->setForm(new \Magento\Framework\Object());
+        $this->_model->setForm(new \Magento\Framework\DataObject());
         $this->_model->setData(['values' => $values, 'value' => $value]);
     }
 

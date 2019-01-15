@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class AssertWebsiteOnStoreForm extends AbstractConstraint
     {
         $websiteName = $website->getName();
         $storeIndex->open()->getGridPageActions()->createStoreGroup();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $newGroupIndex->getEditFormGroup()->isWebsiteVisible($websiteName),
             'Website \'' . $websiteName . '\' is not present on Store Group Form in Website dropdown.'
         );

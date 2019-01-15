@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     const ALL_STORE_VIEWS = '0';
+
     /**
      * @var \Magento\Store\Model\System\Store
      */
@@ -48,7 +49,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
         $allShow = $this->getColumn()->getStoreAll();
 
-        $html = '<select name="' . $this->escapeHtml(
+        $html = '<select class="admin__control-select" name="' . $this->escapeHtml(
             $this->_getHtmlName()
         ) . '" ' . $this->getColumn()->getValidateClass() . $this->getUiId(
             'filter',

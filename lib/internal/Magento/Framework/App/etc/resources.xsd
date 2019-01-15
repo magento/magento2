@@ -3,7 +3,7 @@
 /**
  * This schema must be used to validate resources.xml files
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -37,11 +37,11 @@
     <xs:simpleType name="nameIdentifier">
         <xs:annotation>
             <xs:documentation>
-                Name identifier can contain only [A-Za-z_].
+                Name identifier can contain only [A-Za-z_0-9].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z_]+" />
+            <xs:pattern value="[A-Za-z_0-9]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

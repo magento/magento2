@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserFailedLoginMessage extends AbstractConstraint
 {
-    const FAILED_LOGIN_MESSAGE = 'This account is inactive.';
+    const FAILED_LOGIN_MESSAGE =
+        'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.';
 
     /**
      * Verify incorrect credentials message while login to admin
@@ -32,9 +33,9 @@ class AssertUserFailedLoginMessage extends AbstractConstraint
         $adminAuth->getLoginBlock()->fill($customAdmin);
         $adminAuth->getLoginBlock()->submit();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::FAILED_LOGIN_MESSAGE,
-            $adminAuth->getMessagesBlock()->getErrorMessages(),
+            $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'
         );
     }

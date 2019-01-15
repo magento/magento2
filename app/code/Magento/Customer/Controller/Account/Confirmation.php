@@ -1,25 +1,46 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-class Confirmation extends \Magento\Customer\Controller\Account
+class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var Url
+     */
+    private $customerUrl;
 
     /**
      * @param Context $context
@@ -27,17 +48,22 @@ class Confirmation extends \Magento\Customer\Controller\Account
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
+     * @param Url $customerUrl
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement
+        AccountManagementInterface $customerAccountManagement,
+        Url $customerUrl = null
     ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
+        parent::__construct($context);
     }
 
     /**
@@ -47,7 +73,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        if ($this->_getSession()->isLoggedIn()) {
+        if ($this->session->isLoggedIn()) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*/');
@@ -73,7 +99,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }
-            $this->_getSession()->setUsername($email);
+            $this->session->setUsername($email);
             $resultRedirect->setPath('*/*/index', ['_secure' => true]);
             return $resultRedirect;
         }
@@ -82,6 +108,8 @@ class Confirmation extends \Magento\Customer\Controller\Account
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
             $this->getRequest()->getParam('email', $email)
+        )->setLoginUrl(
+            $this->customerUrl->getLoginUrl()
         );
         return $resultPage;
     }

@@ -1,26 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product list toolbar
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Toolbar extends \Magento\Framework\View\Element\Template
 {
     /**
      * Products collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected $_collection = null;
 
@@ -64,7 +68,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_direction = \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION;
+    protected $_direction = ProductList::DEFAULT_SORT_DIRECTION;
 
     /**
      * Default View mode
@@ -75,13 +79,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
 
     /**
      * @var bool $_paramsMemorizeAllowed
+     * @deprecated
      */
     protected $_paramsMemorizeAllowed = true;
 
     /**
      * @var string
      */
-    protected $_template = 'product/list/toolbar.phtml';
+    protected $_template = 'Magento_Catalog::product/list/toolbar.phtml';
 
     /**
      * Catalog config
@@ -94,6 +99,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
+     * @deprecated
      */
     protected $_catalogSession;
 
@@ -103,7 +109,12 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_toolbarModel;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList
+     * @var ToolbarMemorizer
+     */
+    private $toolbarMemorizer;
+
+    /**
+     * @var ProductList
      */
     protected $_productListHelper;
 
@@ -118,14 +129,29 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_postDataHelper;
 
     /**
+     * @var \Magento\Framework\App\Http\Context
+     */
+    private $httpContext;
+
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey
+     */
+    private $formKey;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param ToolbarModel $toolbarModel
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
+     * @param ProductList $productListHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
+     * @param ToolbarMemorizer|null $toolbarMemorizer
+     * @param \Magento\Framework\App\Http\Context|null $httpContext
+     * @param \Magento\Framework\Data\Form\FormKey|null $formKey
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -133,9 +159,12 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\Config $catalogConfig,
         ToolbarModel $toolbarModel,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Catalog\Helper\Product\ProductList $productListHelper,
+        ProductList $productListHelper,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        array $data = []
+        array $data = [],
+        ToolbarMemorizer $toolbarMemorizer = null,
+        \Magento\Framework\App\Http\Context $httpContext = null,
+        \Magento\Framework\Data\Form\FormKey $formKey = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
@@ -143,6 +172,15 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         $this->urlEncoder = $urlEncoder;
         $this->_productListHelper = $productListHelper;
         $this->_postDataHelper = $postDataHelper;
+        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(
+            ToolbarMemorizer::class
+        );
+        $this->httpContext = $httpContext ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Http\Context::class
+        );
+        $this->formKey = $formKey ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Data\Form\FormKey::class
+        );
         parent::__construct($context, $data);
     }
 
@@ -150,6 +188,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * Disable list state params memorizing
      *
      * @return $this
+     * @deprecated
      */
     public function disableParamsMemorizing()
     {
@@ -163,6 +202,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param string $param parameter name
      * @param mixed $value parameter value
      * @return $this
+     * @deprecated
      */
     protected function _memorizeParam($param, $value)
     {
@@ -190,7 +230,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $this->_collection->setPageSize($limit);
         }
         if ($this->getCurrentOrder()) {
-            $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
+            if (($this->getCurrentOrder()) == 'position') {
+                $this->_collection->addAttributeToSort(
+                    $this->getCurrentOrder(),
+                    $this->getCurrentDirection()
+                );
+            } else {
+                $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
+            }
         }
         return $this;
     }
@@ -198,7 +245,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Return products collection instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -235,13 +282,13 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $defaultOrder = $keys[0];
         }
 
-        $order = $this->_toolbarModel->getOrder();
+        $order = $this->toolbarMemorizer->getOrder();
         if (!$order || !isset($orders[$order])) {
             $order = $defaultOrder;
         }
 
-        if ($order != $defaultOrder) {
-            $this->_memorizeParam('sort_order', $order);
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
+            $this->httpContext->setValue(ToolbarModel::ORDER_PARAM_NAME, $order, $defaultOrder);
         }
 
         $this->setData('_current_grid_order', $order);
@@ -261,13 +308,13 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         }
 
         $directions = ['asc', 'desc'];
-        $dir = strtolower($this->_toolbarModel->getDirection());
+        $dir = strtolower($this->toolbarMemorizer->getDirection());
         if (!$dir || !in_array($dir, $directions)) {
             $dir = $this->_direction;
         }
 
-        if ($dir != $this->_direction) {
-            $this->_memorizeParam('sort_direction', $dir);
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
+            $this->httpContext->setValue(ToolbarModel::DIRECTION_PARAM_NAME, $dir, $this->_direction);
         }
 
         $this->setData('_current_grid_direction', $dir);
@@ -356,7 +403,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Compare defined order field vith current order field
+     * Compare defined order field with current order field
      *
      * @param string $order
      * @return bool
@@ -376,13 +423,15 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $urlParams = [];
         $urlParams['_current'] = true;
-        $urlParams['_escape'] = true;
+        $urlParams['_escape'] = false;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
         return $this->getUrl('*/*/*', $urlParams);
     }
 
     /**
+     * Get pager encoded url.
+     *
      * @param array $params
      * @return string
      */
@@ -403,9 +452,13 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             return $mode;
         }
         $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
-        $mode = $this->_toolbarModel->getMode();
+        $mode = $this->toolbarMemorizer->getMode();
         if (!$mode || !isset($this->_availableMode[$mode])) {
             $mode = $defaultMode;
+        }
+
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
+            $this->httpContext->setValue(ToolbarModel::MODE_PARAM_NAME, $mode, $defaultMode);
         }
 
         $this->setData('_current_grid_mode', $mode);
@@ -559,13 +612,13 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $defaultLimit = $keys[0];
         }
 
-        $limit = $this->_toolbarModel->getLimit();
+        $limit = $this->toolbarMemorizer->getLimit();
         if (!$limit || !isset($limits[$limit])) {
             $limit = $defaultLimit;
         }
 
-        if ($limit != $defaultLimit) {
-            $this->_memorizeParam('limit_page', $limit);
+        if ($this->toolbarMemorizer->isMemorizingAllowed()) {
+            $this->httpContext->setValue(ToolbarModel::LIMIT_PARAM_NAME, $limit, $defaultLimit);
         }
 
         $this->setData('_current_limit', $limit);
@@ -573,6 +626,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if limit is current used in toolbar.
+     *
      * @param int $limit
      * @return bool
      */
@@ -582,6 +637,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Pager number of items from which products started on current page.
+     *
      * @return int
      */
     public function getFirstNum()
@@ -591,6 +648,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Pager number of items products finished on current page.
+     *
      * @return int
      */
     public function getLastNum()
@@ -600,6 +659,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Total number of products in current category.
+     *
      * @return int
      */
     public function getTotalNum()
@@ -608,6 +669,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if current page is the first.
+     *
      * @return bool
      */
     public function isFirstPage()
@@ -616,6 +679,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return last page number.
+     *
      * @return int
      */
     public function getLastPageNum()
@@ -632,7 +697,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Framework\Object) {
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
@@ -672,16 +737,19 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getWidgetOptionsJson(array $customOptions = [])
     {
-        $postData = $this->_postDataHelper->getPostData(
-            $this->getPagerUrl(),
-            [\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl()]
-        );
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
         $options = [
-            'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,
-            'directionCookie' => ToolbarModel::DIRECTION_COOKIE_NAME,
-            'orderCookie' => ToolbarModel::ORDER_COOKIE_NAME,
-            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME,
-            'postData' => json_decode($postData),
+            'mode' => ToolbarModel::MODE_PARAM_NAME,
+            'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
+            'order' => ToolbarModel::ORDER_PARAM_NAME,
+            'limit' => ToolbarModel::LIMIT_PARAM_NAME,
+            'modeDefault' => $defaultMode,
+            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
+            'orderDefault' => $this->getOrderField(),
+            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'url' => $this->getPagerUrl(),
+            'formKey' => $this->formKey->getFormKey(),
+            'post' => $this->toolbarMemorizer->isMemorizingAllowed() ? true : false
         ];
         $options = array_replace_recursive($options, $customOptions);
         return json_encode(['productListToolbarForm' => $options]);

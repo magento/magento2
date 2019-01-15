@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,15 +23,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save product.
  * 6. Verify created product.
  *
- * @group Virtual_Product_(CS)
+ * @group Virtual_Product
  * @ZephyrId MAGETWO-23417
  */
 class CreateVirtualProductEntityTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

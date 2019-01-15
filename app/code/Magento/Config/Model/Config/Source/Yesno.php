@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Used in creating options for Yes|No config value selection
- *
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Yesno implements \Magento\Framework\Option\ArrayInterface
 {
     /**

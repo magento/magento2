@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -128,22 +128,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField('customer', 'note', ['label' => __('Author'), 'text' => $customerText]);
 
         $fieldset->addField(
-            'summary_rating',
+            'summary-rating',
             'note',
             [
                 'label' => __('Summary Rating'),
-                'text' => $this->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Summary')->toHtml()
+                'text' => $this->getLayout()->createBlock(
+                    \Magento\Review\Block\Adminhtml\Rating\Summary::class
+                )->toHtml()
             ]
         );
 
         $fieldset->addField(
-            'detailed_rating',
+            'detailed-rating',
             'note',
             [
                 'label' => __('Detailed Rating'),
                 'required' => true,
                 'text' => '<div id="rating_detail">' . $this->getLayout()->createBlock(
-                    'Magento\Review\Block\Adminhtml\Rating\Detailed'
+                    \Magento\Review\Block\Adminhtml\Rating\Detailed::class
                 )->toHtml() . '</div>'
             ]
         );
@@ -174,7 +176,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
             $review->setSelectStores($review->getStores());

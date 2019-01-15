@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data
@@ -21,8 +21,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate(array $data, $result, array $messages)
     {
-        /** @var $themeMock \Magento\Framework\Object */
-        $themeMock = new \Magento\Framework\Object();
+        /** @var $themeMock \Magento\Framework\DataObject */
+        $themeMock = new \Magento\Framework\DataObject();
         $themeMock->setData($data);
 
         $validator = new \Magento\Framework\View\Design\Theme\Validator();
@@ -31,6 +31,9 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messages, $validator->getErrorMessages());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderValidate()
     {
         return [

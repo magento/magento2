@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface;
 
 /**
@@ -32,10 +32,10 @@ class Attribute implements AttributeInterface
      * Compiles the Element node
      *
      * @param \DOMAttr $node
-     * @param Object $processedObject
+     * @param DataObject $processedObject
      * @return void
      */
-    public function compile(\DOMAttr $node, Object $processedObject)
+    public function compile(\DOMAttr $node, DataObject $processedObject)
     {
         foreach ($this->directivePool as $directive) {
             $node->value = preg_replace_callback(

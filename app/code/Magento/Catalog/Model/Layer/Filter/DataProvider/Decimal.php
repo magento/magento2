@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
@@ -32,14 +32,14 @@ class Decimal
     private $rangeItemsCount = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
      */
     private $resource;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Decimal $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal $resource
      */
-    public function __construct(\Magento\Catalog\Model\Resource\Layer\Filter\Decimal $resource)
+    public function __construct(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal $resource)
     {
         $this->resource = $resource;
     }
@@ -56,7 +56,7 @@ class Decimal
             $index = 1;
             do {
                 $range = pow(10, strlen(floor($maxValue)) - $index);
-                $items = $this->getRangeItemCounts($range, $filter);
+                $items = $this->getRangeItemCounts($range, $filter) ?: [];
                 $index++;
             } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
             $this->range = $range;
@@ -109,7 +109,7 @@ class Decimal
      *
      * @param int $range
      * @param FilterInterface $filter
-     * @return mixed
+     * @return array
      */
     public function getRangeItemCounts($range, FilterInterface $filter)
     {
@@ -124,7 +124,7 @@ class Decimal
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
      */
     public function getResource()
     {

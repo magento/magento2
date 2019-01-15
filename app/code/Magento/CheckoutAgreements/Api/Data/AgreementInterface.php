@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Api\Data;
 
+/**
+ * Interface AgreementInterface
+ * @api
+ * @since 100.0.2
+ */
 interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -17,6 +22,7 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     const CHECKBOX_TEXT = 'checkbox_text';
     const IS_ACTIVE = 'is_active';
     const IS_HTML = 'is_html';
+    const MODE = 'mode';
     /**#@-*/
 
     /**
@@ -128,6 +134,21 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setIsHtml($isHtml);
+
+    /**
+     * Returns the agreement applied mode.
+     *
+     * @return int
+     */
+    public function getMode();
+
+    /**
+     * Sets the agreement applied mode.
+     *
+     * @param int $mode
+     * @return $this
+     */
+    public function setMode($mode);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper\Mysql;
@@ -9,14 +9,14 @@ use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMatchQuery()
     {
         /** @var Fulltext $select */
         $select = (new ObjectManager($this))->getObject(
-            'Magento\Framework\DB\Helper\Mysql\Fulltext',
-            ['resource' => $this->getAdapter()]
+            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
+            ['resource' => $this->getResourceMock()]
         );
 
         $result = $select->getMatchQuery(
@@ -37,10 +37,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         $fullCondition = "MATCH (title, description) AGAINST ('some searchable text' IN NATURAL LANGUAGE MODE)";
 
-        $resource = $this->getAdapter();
+        $resource = $this->getResourceMock();
 
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $select->expects($this->once())
@@ -49,7 +49,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         /** @var Fulltext $fulltext */
         $fulltext = (new ObjectManager($this))->getObject(
-            'Magento\Framework\DB\Helper\Mysql\Fulltext',
+            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
             ['resource' => $resource]
         );
 
@@ -64,6 +64,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($select, $result);
     }
 
+    /**
+     * @return array
+     */
     public function matchProvider()
     {
         return [[true], [false]];
@@ -72,22 +75,22 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getAdapter()
+    protected function getResourceMock()
     {
-        $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $adapter->expects($this->at(0))
+        $connection->expects($this->at(0))
             ->method('quote')
             ->with($this->equalTo('some searchable text'))
             ->will($this->returnValue("'some searchable text'"));
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->willReturn($adapter);
+            ->willReturn($connection);
 
         return $resource;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Review;
@@ -8,7 +8,9 @@ namespace Magento\Reports\Block\Adminhtml\Review;
 /**
  * Adminhtml cms blocks content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Customer extends \Magento\Backend\Block\Widget\Grid\Container
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Rss;
@@ -53,8 +53,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Rss\Category $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
@@ -66,8 +64,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Rss\Category $rssModel,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
@@ -142,7 +138,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
             $description = sprintf(
                 $description,
                 $product->getProductUrl(),
-                $this->imageHelper->init($product, 'thumbnail')->resize(75, 75),
+                $this->imageHelper->init($product, 'rss_thumbnail')->getUrl(),
                 $product->getDescription(),
                 $product->getAllowedPriceInRss() ? $this->renderPriceHtml($product) : ''
             );
@@ -168,7 +164,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->getLayout()->createBlock(
-                'Magento\Framework\Pricing\Render',
+                \Magento\Framework\Pricing\Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
@@ -238,7 +234,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 $nodeIds[] = $node->getId();
             }
 
-            /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
+            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             $collection = $category->getResourceCollection();
             $collection->addIdFilter($nodeIds)
                 ->addAttributeToSelect('url_key')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -78,21 +78,24 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     protected function cleanup(InputInterface $input, OutputInterface $output)
     {
         /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
+        $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
         $cache->clean();
         $output->writeln('<info>Cache cleared successfully.</info>');
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $cleanupFiles = $this->objectManager->get(\Magento\Framework\App\State\CleanupFiles::class);
         $cleanupFiles->clearCodeGeneratedClasses();
-        $output->writeln('<info>Generated classes cleared successfully.</info>');
+        $output->writeln(
+            "<info>Generated classes cleared successfully. Please run the 'setup:di:compile' command to "
+            . 'generate classes.</info>'
+        );
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $cleanupFiles->clearMaterializedViewFiles();
             $output->writeln('<info>Generated static view files cleared successfully.</info>');
         } else {
             $output->writeln(
-                '<error>Alert: Generated static view files were not cleared.'
-                . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
-                . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
+                "<info>Info: Some modules might require static view files to be cleared. To do this, run '"
+                . $this->getName() . "' with the --" . self::INPUT_KEY_CLEAR_STATIC_CONTENT
+                . ' option to clear them.</info>'
             );
         }
     }

@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event;
 
 use Magento\Framework\Event;
 
-class Observer extends \Magento\Framework\Object
+/**
+ * @api
+ */
+class Observer extends \Magento\Framework\DataObject
 {
     /**
      * Checks the observer's event_regex against event's name
@@ -60,7 +63,7 @@ class Observer extends \Magento\Framework\Object
 
     /**
      * @param string $data
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setName($data)
     {
@@ -77,7 +80,7 @@ class Observer extends \Magento\Framework\Object
 
     /**
      * @param string $data
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setEventName($data)
     {
@@ -94,7 +97,7 @@ class Observer extends \Magento\Framework\Object
 
     /**
      * @param string $data
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setCallback($data)
     {
@@ -113,7 +116,7 @@ class Observer extends \Magento\Framework\Object
 
     /**
      * @param mixed $data
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setEvent($data)
     {

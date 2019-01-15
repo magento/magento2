@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payment\Method\Billing;
+
+use Magento\Paypal\Model\Billing\Agreement;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Billing Agreement Payment Method Abstract model
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -22,12 +27,12 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info\Billing\Agreement';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info\Billing\Agreement::class;
 
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Payment\Form\Billing\Agreement';
+    protected $_formBlockType = \Magento\Paypal\Block\Payment\Form\Billing\Agreement::class;
 
     /**
      * Is method instance available
@@ -50,7 +55,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Payment\Model\Method\Logger $logger
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -64,7 +69,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -86,10 +91,10 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * Check whether method is available
      *
-     * @param \Magento\Paypal\Model\Quote|null $quote
+     * @param \Magento\Paypal\Model\Quote|\Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if ($this->_isAvailable === null) {
             $this->_isAvailable = parent::isAvailable($quote) && $this->_isAvailable($quote);
@@ -102,39 +107,41 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * Assign data to info model instance
      *
-     * @param mixed $data
+     * @param \Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
-        $result = parent::assignData($data);
+        parent::assignData($data);
 
-        $key = self::TRANSPORT_BILLING_AGREEMENT_ID;
-        $id = false;
-        if (is_array($data) && isset($data[$key])) {
-            $id = $data[$key];
-        } elseif ($data instanceof \Magento\Framework\Object && $data->getData($key)) {
-            $id = $data->getData($key);
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
+        if (!is_array($additionalData) || !isset($additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID])) {
+            return $this;
         }
-        if ($id) {
-            $info = $this->getInfoInstance();
-            $ba = $this->_agreementFactory->create()->load($id);
-            if ($ba->getId() && $ba->getCustomerId() == $info->getQuote()->getCustomerId()) {
-                $info->setAdditionalInformation(
-                    $key,
-                    $id
-                )->setAdditionalInformation(
-                    self::PAYMENT_INFO_REFERENCE_ID,
-                    $ba->getReferenceId()
-                );
-            }
+
+        $id = $additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID];
+        if (!$id || !is_numeric($id)) {
+            return $this;
         }
-        return $result;
+
+        $info = $this->getInfoInstance();
+        /** @var Agreement $ba */
+        $ba = $this->_agreementFactory->create();
+        $ba->load($id);
+
+        if ($ba->getId() && $ba->getCustomerId() == $info->getQuote()->getCustomerId()) {
+            $info->setAdditionalInformation(self::TRANSPORT_BILLING_AGREEMENT_ID, $id);
+            $info->setAdditionalInformation(self::PAYMENT_INFO_REFERENCE_ID, $ba->getReferenceId());
+        }
+
+        return $this;
     }
 
     /**
      * @param object $quote
-     * @return void
+     * @return bool
      */
     abstract protected function _isAvailable($quote);
 }

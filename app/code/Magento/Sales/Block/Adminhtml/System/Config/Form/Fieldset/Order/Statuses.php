@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
@@ -10,7 +10,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Dummy element
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_dummyElement;
 
@@ -29,7 +29,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Order status collection
      *
-     * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
      */
     protected $_orderStatusCollection;
 
@@ -37,14 +37,14 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection
+     * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\View\Helper\Js $jsHelper,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollection,
+        \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollection,
         array $data = []
     ) {
         $this->_orderStatusCollection = $orderStatusCollection;
@@ -52,7 +52,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * Render elemnt
+     * Render element
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
@@ -72,12 +72,12 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Get dummy element
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getDummyElement()
     {
         if (empty($this->_dummyElement)) {
-            $this->_dummyElement = new \Magento\Framework\Object(['showInDefault' => 1, 'showInWebsite' => 1]);
+            $this->_dummyElement = new \Magento\Framework\DataObject(['showInDefault' => 1, 'showInWebsite' => 1]);
         }
         return $this->_dummyElement;
     }
@@ -91,7 +91,7 @@ class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         if (empty($this->_fieldRenderer)) {
             $this->_fieldRenderer = $this->getLayout()->getBlockSingleton(
-                'Magento\Config\Block\System\Config\Form\Field'
+                \Magento\Config\Block\System\Config\Form\Field::class
             );
         }
         return $this->_fieldRenderer;

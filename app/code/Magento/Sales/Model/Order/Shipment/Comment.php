@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -9,10 +9,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
-/**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment getResource()
- */
 class Comment extends AbstractModel implements ShipmentCommentInterface
 {
     /**
@@ -33,7 +29,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -44,7 +40,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -67,7 +63,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Comment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Comment::class);
     }
 
     /**
@@ -110,6 +106,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns comment
      *
@@ -221,5 +218,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

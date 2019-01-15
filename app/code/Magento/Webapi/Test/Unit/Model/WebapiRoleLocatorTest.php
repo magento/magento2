@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Test\Unit\Model;
 
-use Magento\Authorization\Model\Resource\Role\Collection as RoleCollection;
-use Magento\Authorization\Model\Resource\Role\CollectionFactory as RoleCollectionFactory;
+use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
+use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 
-class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
+class WebapiRoleLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Webapi\Model\WebapiRoleLocator
@@ -50,7 +50,7 @@ class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
         $userId = 'userId';
         $userType = 'userType';
 
-        $this->userContext = $this->getMockBuilder('Magento\Authorization\Model\CompositeUserContext')
+        $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUserId', 'getUserType'])
             ->getMock();
@@ -62,10 +62,10 @@ class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($userType));
 
         $this->roleCollectionFactory = $this->getMockBuilder(
-            'Magento\Authorization\Model\Resource\Role\CollectionFactory'
+            \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
-        $this->roleCollection = $this->getMockBuilder('Magento\Authorization\Model\Resource\Role\Collection')
+        $this->roleCollection = $this->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['setUserFilter', 'getFirstItem'])
             ->getMock();
@@ -77,7 +77,7 @@ class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
             ->with($userId, $userType)
             ->will($this->returnValue($this->roleCollection));
 
-        $this->role = $this->getMockBuilder('Magento\Authorization\Model\Role')
+        $this->role = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
@@ -87,7 +87,7 @@ class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->role));
 
         $this->locator = $this->_objectManager->getObject(
-            'Magento\Webapi\Model\WebapiRoleLocator',
+            \Magento\Webapi\Model\WebapiRoleLocator::class,
             [
                 'userContext' => $this->userContext,
                 'roleCollectionFactory' => $this->roleCollectionFactory

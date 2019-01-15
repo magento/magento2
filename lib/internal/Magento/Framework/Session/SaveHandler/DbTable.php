@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\Exception\SessionException;
@@ -25,17 +26,17 @@ class DbTable extends \SessionHandler
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $_write;
+    protected $connection;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
         $this->_sessionTable = $resource->getTableName('session');
-        $this->_write = $resource->getConnection('core_write');
+        $this->connection = $resource->getConnection();
         $this->checkConnection();
     }
 
@@ -47,11 +48,15 @@ class DbTable extends \SessionHandler
      */
     protected function checkConnection()
     {
-        if (!$this->_write) {
-            throw new SessionException(new Phrase('Write DB connection is not available'));
+        if (!$this->connection) {
+            throw new SessionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
-        if (!$this->_write->isTableExists($this->_sessionTable)) {
-            throw new SessionException(new Phrase('DB storage table does not exist'));
+        if (!$this->connection->isTableExists($this->_sessionTable)) {
+            throw new SessionException(
+                new Phrase("The database storage table doesn't exist. Verify the table and try again.")
+            );
         }
     }
 
@@ -87,14 +92,14 @@ class DbTable extends \SessionHandler
     public function read($sessionId)
     {
         // need to use write connection to get the most fresh DB sessions
-        $select = $this->_write->select()->from(
+        $select = $this->connection->select()->from(
             $this->_sessionTable,
             ['session_data']
         )->where(
             'session_id = :session_id'
         );
         $bind = ['session_id' => $sessionId];
-        $data = $this->_write->fetchOne($select, $bind);
+        $data = $this->connection->fetchOne($select, $bind);
 
         // check if session data is a base64 encoded string
         $decodedData = base64_decode($data, true);
@@ -115,18 +120,18 @@ class DbTable extends \SessionHandler
     {
         // need to use write connection to get the most fresh DB sessions
         $bindValues = ['session_id' => $sessionId];
-        $select = $this->_write->select()->from($this->_sessionTable)->where('session_id = :session_id');
-        $exists = $this->_write->fetchOne($select, $bindValues);
+        $select = $this->connection->select()->from($this->_sessionTable)->where('session_id = :session_id');
+        $exists = $this->connection->fetchOne($select, $bindValues);
 
         // encode session serialized data to prevent insertion of incorrect symbols
         $sessionData = base64_encode($sessionData);
         $bind = ['session_expires' => time(), 'session_data' => $sessionData];
 
         if ($exists) {
-            $this->_write->update($this->_sessionTable, $bind, ['session_id=?' => $sessionId]);
+            $this->connection->update($this->_sessionTable, $bind, ['session_id=?' => $sessionId]);
         } else {
             $bind['session_id'] = $sessionId;
-            $this->_write->insert($this->_sessionTable, $bind);
+            $this->connection->insert($this->_sessionTable, $bind);
         }
         return true;
     }
@@ -140,7 +145,7 @@ class DbTable extends \SessionHandler
     public function destroy($sessionId)
     {
         $where = ['session_id = ?' => $sessionId];
-        $this->_write->delete($this->_sessionTable, $where);
+        $this->connection->delete($this->_sessionTable, $where);
         return true;
     }
 
@@ -154,7 +159,7 @@ class DbTable extends \SessionHandler
     public function gc($maxLifeTime)
     {
         $where = ['session_expires < ?' => time() - $maxLifeTime];
-        $this->_write->delete($this->_sessionTable, $where);
+        $this->connection->delete($this->_sessionTable, $where);
         return true;
     }
 }

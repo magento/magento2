@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Helper;
 
 /**
  * Persistent Shopping Cart Data Helper
+ *
+ * @api
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -85,6 +88,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Persistent\Model\Session $sessionModel
      * @return \Magento\Persistent\Model\Session
+     * @codeCoverageIgnore
      */
     public function setSession($sessionModel)
     {
@@ -131,6 +135,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param bool $checked
      * @return void
+     * @codeCoverageIgnore
      */
     public function setRememberMeChecked($checked = true)
     {

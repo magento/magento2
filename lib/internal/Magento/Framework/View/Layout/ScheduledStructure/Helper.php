@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\ScheduledStructure;
 
 use Magento\Framework\View\Layout;
+use Magento\Framework\App\State;
 
 class Helper
 {
@@ -19,11 +20,7 @@ class Helper
     const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
     /**#@-*/
 
-    /**
-     * Anonymous block counter
-     *
-     * @var int
-     */
+    /**#@-*/
     protected $counter = 0;
 
     /**
@@ -32,12 +29,20 @@ class Helper
     protected $logger;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
+     * @param State $state
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        State $state
     ) {
         $this->logger = $logger;
+        $this->state = $state;
     }
 
     /**
@@ -190,10 +195,13 @@ class Helper
                 }
             } else {
                 $scheduledStructure->setElementToBrokenParentList($key);
-                $this->logger->critical(
-                    "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
-                    'because the latter doesn\'t exist'
-                );
+
+                if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                    $this->logger->info(
+                        "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
+                        'because the latter doesn\'t exist'
+                    );
+                }
             }
         }
 
@@ -203,13 +211,10 @@ class Helper
 
         /**
          * Some elements provide info "after" or "before" which sibling they are supposed to go
-         * Make sure to populate these siblings as well and order them correctly
+         * Add element into list of sorting
          */
         if ($siblingName) {
-            if ($scheduledStructure->hasStructureElement($siblingName)) {
-                $this->scheduleElement($scheduledStructure, $structure, $siblingName);
-            }
-            $structure->reorderChildElement($parentName, $name, $siblingName, $isAfter);
+            $scheduledStructure->setElementToSortList($parentName, $name, $siblingName, $isAfter);
         }
     }
 

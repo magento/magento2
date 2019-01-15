@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Model\Sidebar;
 
-class SidebarTest extends \PHPUnit_Framework_TestCase
+class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Sidebar */
     protected $sidebar;
@@ -23,9 +24,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cartMock = $this->getMock('Magento\Checkout\Model\Cart', [], [], '', false);
-        $this->checkoutHelperMock = $this->getMock('Magento\Checkout\Helper\Data', [], [], '', false);
-        $this->resolverMock = $this->getMock('Magento\Framework\Locale\ResolverInterface');
+        $this->cartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
+        $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
+        $this->resolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,
@@ -45,6 +46,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetResponseData()
     {
         return [
@@ -74,10 +78,10 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 1;
 
-        $itemMock = $this->getMockBuilder('Magento\Quote\Api\Data\CartItemInterface')
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Api\Data\CartItemInterface::class)
             ->getMock();
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->once())
@@ -94,13 +98,13 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @exceptedExceptionMessage We can't find the quote item.
+     * @expectedExceptionMessage The quote item isn't found. Verify the item and try again.
      */
     public function testCheckQuoteItemWithException()
     {
         $itemId = 2;
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->once())

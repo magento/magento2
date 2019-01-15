@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -16,6 +20,9 @@ define([
             }
         },
 
+        /**
+         * @param {String} value
+         */
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
@@ -27,14 +34,14 @@ define([
 
             option = options[value];
 
-            if (option.is_zipcode_optional) {
+            if (option['is_zipcode_optional']) {
                 this.error(false);
                 this.validation = _.omit(this.validation, 'required-entry');
             } else {
                 this.validation['required-entry'] = true;
             }
 
-            this.required(!option.is_zipcode_optional);
+            this.required(!option['is_zipcode_optional']);
         }
     });
 });

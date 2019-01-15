@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Search;
@@ -10,7 +10,7 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Search model for backend search
  */
-class Catalog extends \Magento\Framework\Object
+class Catalog extends \Magento\Framework\DataObject
 {
     /**
      * Catalog search data
@@ -22,7 +22,7 @@ class Catalog extends \Magento\Framework\Object
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -35,12 +35,12 @@ class Catalog extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param QueryFactory $queryFactory
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         QueryFactory $queryFactory
     ) {
         $this->_adminhtmlData = $adminhtmlData;

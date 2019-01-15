@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,8 +31,8 @@ class AssertProductCompareSuccessAddMessage extends AbstractConstraint
     public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
     {
         $successMessage = sprintf(self::SUCCESS_MESSAGE, $product->getName());
-        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             $successMessage,
             $actualMessage,
             'Wrong success message is displayed.'

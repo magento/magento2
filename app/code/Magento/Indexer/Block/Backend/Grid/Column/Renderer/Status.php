@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
@@ -10,23 +10,23 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * Render indexer status
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $class = '';
         $text = '';
         switch ($this->_getValue($row)) {
-            case \Magento\Indexer\Model\Indexer\State::STATUS_INVALID:
+            case \Magento\Framework\Indexer\StateInterface::STATUS_INVALID:
                 $class = 'grid-severity-critical';
                 $text = __('Reindex required');
                 break;
-            case \Magento\Indexer\Model\Indexer\State::STATUS_VALID:
+            case \Magento\Framework\Indexer\StateInterface::STATUS_VALID:
                 $class = 'grid-severity-notice';
                 $text = __('Ready');
                 break;
-            case \Magento\Indexer\Model\Indexer\State::STATUS_WORKING:
+            case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                 $class = 'grid-severity-major';
                 $text = __('Processing');
                 break;

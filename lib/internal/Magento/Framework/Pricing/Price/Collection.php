@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Pricing\Price;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class Collection
+ *
+ * @api
  */
 class Collection implements \Iterator
 {
@@ -19,7 +21,7 @@ class Collection implements \Iterator
     protected $pool;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface
+     * @var \Magento\Framework\Pricing\SaleableInterface
      */
     protected $saleableItem;
 

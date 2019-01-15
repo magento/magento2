@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Message;
@@ -33,7 +33,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'inline.phtml';
+    protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
      * Gift message message
@@ -48,9 +48,9 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
-    protected $_imageHelper;
+    protected $imageBuilder;
 
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -68,7 +68,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
@@ -76,11 +76,11 @@ class Inline extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
     ) {
-        $this->_imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
@@ -93,6 +93,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param mixed $entity
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntity($entity)
     {
@@ -104,6 +105,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get entity
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getEntity()
     {
@@ -115,6 +117,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param string $type
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setType($type)
     {
@@ -126,6 +129,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get type
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -135,8 +139,9 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Define checkout type
      *
-     * @param $type string
+     * @param string $type
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setCheckoutType($type)
     {
@@ -148,6 +153,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Return checkout type. Typical values are 'onepage_checkout' and 'multishipping_address'
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getCheckoutType()
     {
@@ -232,7 +238,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getItems()
     {
-        if (!$this->getData('items')) {
+        if (!$this->hasData('items')) {
             $items = [];
 
             $entityItems = $this->getEntity()->getAllItems();
@@ -272,12 +278,23 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Call method getItemsHasMessages
+     *
+     * @deprecated Misspelled method
+     * @see getItemsHasMessages
+     */
+    public function getItemsHasMesssages()
+    {
+        return $this->getItemsHasMessages();
+    }
+
+    /**
      * Check if items has messages
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getItemsHasMesssages()
+    public function getItemsHasMessages()
     {
         foreach ($this->getItems() as $item) {
             if ($item->getGiftMessageId()) {
@@ -311,6 +328,20 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check availability of order level functionality
+     *
+     * @return bool
+     */
+    public function isMessagesOrderAvailable()
+    {
+        $entity = $this->getEntity();
+        if (!$entity->hasIsGiftOptionsAvailable()) {
+            $this->_eventManager->dispatch('gift_options_prepare', ['entity' => $entity]);
+        }
+        return $entity->getIsGiftOptionsAvailable();
+    }
+
+    /**
      * Check availability of giftmessages on order level
      *
      * @return bool
@@ -323,34 +354,13 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Check availability of giftmessages for specified entity item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return bool
      */
     public function isItemMessagesAvailable($item)
     {
         $type = substr($this->getType(), 0, 5) == 'multi' ? 'address_item' : 'item';
         return $this->_giftMessageMessage->isMessagesAllowed($type, $item);
-    }
-
-    /**
-     * Product thumbnail image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getThumbnailUrl($product)
-    {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
     }
 
     /**
@@ -361,9 +371,22 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         // render HTML when messages are allowed for order or for items only
-        if ($this->isItemsAvailable() || $this->isMessagesAvailable()) {
+        if ($this->isItemsAvailable() || $this->isMessagesAvailable() || $this->isMessagesOrderAvailable()) {
             return parent::_toHtml();
         }
         return '';
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

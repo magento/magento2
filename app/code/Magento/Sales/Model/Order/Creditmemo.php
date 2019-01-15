@@ -1,33 +1,34 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\Order\InvoiceFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Order creditmemo model
  *
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
- * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @api
+ * @method \Magento\Sales\Model\Order\Creditmemo setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNote(string $value)
  * @method string getCustomerNote()
- * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method \Magento\Sales\Model\Order\Creditmemo setCustomerNoteNotify(bool $value)
  * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInterface
 {
@@ -41,7 +42,12 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
-    /*
+    /**
+     * Allow Zero Grandtotal for Creditmemo path
+     */
+    const XML_PATH_ALLOW_ZERO_GRANDTOTAL = 'sales/zerograndtotal_creditmemo/allow_zero_grandtotal';
+
+    /**
      * Identifier for order history item
      *
      * @var string
@@ -86,7 +92,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory
      */
     protected $_cmItemCollectionFactory;
 
@@ -106,7 +112,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_commentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory
      */
     protected $_commentCollectionFactory;
 
@@ -116,21 +122,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $priceCurrency;
 
     /**
+     * @var InvoiceFactory
+     */
+    private $invoiceFactory;
+
+    /**
+     * @var ScopeConfigInterface;
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param Creditmemo\Config $creditmemoConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param InvoiceFactory $invoiceFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -140,15 +158,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        InvoiceFactory $invoiceFactory = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -158,6 +178,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -176,7 +198,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Creditmemo');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class);
     }
 
     /**
@@ -256,6 +278,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Retrieve collection if items.
+     *
      * @return mixed
      */
     public function getItemsCollection()
@@ -271,6 +295,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Retrieve all items.
+     *
      * @return \Magento\Sales\Model\Order\Creditmemo\Item[]
      */
     public function getAllItems()
@@ -285,6 +311,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Retrieve item by id.
+     *
      * @param mixed $itemId
      * @return mixed
      */
@@ -315,6 +343,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Add an item to credit memo.
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo\Item $item
      * @return $this
      */
@@ -360,6 +390,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Check if credit memo can be refunded.
+     *
      * @return bool
      */
     public function canRefund()
@@ -380,6 +412,9 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getInvoice()
     {
+        if (!$this->getData('invoice') instanceof \Magento\Sales\Api\Data\InvoiceInterface && $this->getInvoiceId()) {
+            $this->setInvoice($this->invoiceFactory->create()->load($this->getInvoiceId()));
+        }
         return $this->getData('invoice');
     }
 
@@ -413,191 +448,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function canVoid()
     {
         return false;
-        $canVoid = false;
-        if ($this->getState() == self::STATE_REFUNDED) {
-            $canVoid = $this->getCanVoidFlag();
-            /**
-             * If we not retrieve negative answer from payment yet
-             */
-            if (is_null($canVoid)) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid();
-                if ($canVoid === false) {
-                    $this->setCanVoidFlag(false);
-                    $this->_saveBeforeDestruct = true;
-                }
-            } else {
-                $canVoid = (bool)$canVoid;
-            }
-        }
-        return $canVoid;
-    }
-
-    /**
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function refund()
-    {
-        $this->setState(self::STATE_REFUNDED);
-        $orderRefund = $this->priceCurrency->round(
-            $this->getOrder()->getTotalRefunded() + $this->getGrandTotal()
-        );
-        $baseOrderRefund = $this->priceCurrency->round(
-            $this->getOrder()->getBaseTotalRefunded() + $this->getBaseGrandTotal()
-        );
-
-        if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
-            $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
-
-            throw new LocalizedException(
-                __(
-                    'The most money available to refund is %1.',
-                    $this->getOrder()->formatBasePrice($baseAvailableRefund)
-                )
-            );
-        }
-        $order = $this->getOrder();
-        $order->setBaseTotalRefunded($baseOrderRefund);
-        $order->setTotalRefunded($orderRefund);
-
-        $order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() + $this->getBaseSubtotal());
-        $order->setSubtotalRefunded($order->getSubtotalRefunded() + $this->getSubtotal());
-
-        $order->setBaseTaxRefunded($order->getBaseTaxRefunded() + $this->getBaseTaxAmount());
-        $order->setTaxRefunded($order->getTaxRefunded() + $this->getTaxAmount());
-        $order->setBaseDiscountTaxCompensationRefunded($order->getBaseDiscountTaxCompensationRefunded() + $this->getBaseDiscountTaxCompensationAmount());
-        $order->setDiscountTaxCompensationRefunded($order->getDiscountTaxCompensationRefunded() + $this->getDiscountTaxCompensationAmount());
-
-        $order->setBaseShippingRefunded($order->getBaseShippingRefunded() + $this->getBaseShippingAmount());
-        $order->setShippingRefunded($order->getShippingRefunded() + $this->getShippingAmount());
-
-        $order->setBaseShippingTaxRefunded($order->getBaseShippingTaxRefunded() + $this->getBaseShippingTaxAmount());
-        $order->setShippingTaxRefunded($order->getShippingTaxRefunded() + $this->getShippingTaxAmount());
-
-        $order->setAdjustmentPositive($order->getAdjustmentPositive() + $this->getAdjustmentPositive());
-        $order->setBaseAdjustmentPositive($order->getBaseAdjustmentPositive() + $this->getBaseAdjustmentPositive());
-
-        $order->setAdjustmentNegative($order->getAdjustmentNegative() + $this->getAdjustmentNegative());
-        $order->setBaseAdjustmentNegative($order->getBaseAdjustmentNegative() + $this->getBaseAdjustmentNegative());
-
-        $order->setDiscountRefunded($order->getDiscountRefunded() + $this->getDiscountAmount());
-        $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() + $this->getBaseDiscountAmount());
-
-        if ($this->getInvoice()) {
-            $this->getInvoice()->setIsUsedForRefund(true);
-            $this->getInvoice()->setBaseTotalRefunded(
-                $this->getInvoice()->getBaseTotalRefunded() + $this->getBaseGrandTotal()
-            );
-            $this->setInvoiceId($this->getInvoice()->getId());
-        }
-
-        if (!$this->getPaymentRefundDisallowed()) {
-            $order->getPayment()->refund($this);
-        }
-
-        $this->_eventManager->dispatch('sales_order_creditmemo_refund', [$this->_eventObject => $this]);
-        return $this;
-    }
-
-    /**
-     * Cancel Creditmemo action
-     *
-     * @return $this
-     */
-    public function cancel()
-    {
-        $this->setState(self::STATE_CANCELED);
-        foreach ($this->getAllItems() as $item) {
-            $item->cancel();
-        }
-        $this->getOrder()->getPayment()->cancelCreditmemo($this);
-
-        if ($this->getTransactionId()) {
-            $this->getOrder()->setTotalOnlineRefunded(
-                $this->getOrder()->getTotalOnlineRefunded() - $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOnlineRefunded(
-                $this->getOrder()->getBaseTotalOnlineRefunded() - $this->getBaseGrandTotal()
-            );
-        } else {
-            $this->getOrder()->setTotalOfflineRefunded(
-                $this->getOrder()->getTotalOfflineRefunded() - $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOfflineRefunded(
-                $this->getOrder()->getBaseTotalOfflineRefunded() - $this->getBaseGrandTotal()
-            );
-        }
-
-        $this->getOrder()->setBaseSubtotalRefunded(
-            $this->getOrder()->getBaseSubtotalRefunded() - $this->getBaseSubtotal()
-        );
-        $this->getOrder()->setSubtotalRefunded($this->getOrder()->getSubtotalRefunded() - $this->getSubtotal());
-
-        $this->getOrder()->setBaseTaxRefunded($this->getOrder()->getBaseTaxRefunded() - $this->getBaseTaxAmount());
-        $this->getOrder()->setTaxRefunded($this->getOrder()->getTaxRefunded() - $this->getTaxAmount());
-
-        $this->getOrder()->setBaseShippingRefunded(
-            $this->getOrder()->getBaseShippingRefunded() - $this->getBaseShippingAmount()
-        );
-        $this->getOrder()->setShippingRefunded($this->getOrder()->getShippingRefunded() - $this->getShippingAmount());
-
-        $this->_eventManager->dispatch('sales_order_creditmemo_cancel', [$this->_eventObject => $this]);
-        return $this;
-    }
-
-    /**
-     * Register creditmemo
-     *
-     * Apply to order, order items etc.
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function register()
-    {
-        if ($this->getId()) {
-            throw new LocalizedException(__('We cannot register an existing credit memo.'));
-        }
-
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQty() > 0) {
-                $item->register();
-            } else {
-                $item->isDeleted(true);
-            }
-        }
-
-        $this->setDoTransaction(true);
-        if ($this->getOfflineRequested()) {
-            $this->setDoTransaction(false);
-        }
-        $this->refund();
-
-        if ($this->getDoTransaction()) {
-            $this->getOrder()->setTotalOnlineRefunded(
-                $this->getOrder()->getTotalOnlineRefunded() + $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOnlineRefunded(
-                $this->getOrder()->getBaseTotalOnlineRefunded() + $this->getBaseGrandTotal()
-            );
-        } else {
-            $this->getOrder()->setTotalOfflineRefunded(
-                $this->getOrder()->getTotalOfflineRefunded() + $this->getGrandTotal()
-            );
-            $this->getOrder()->setBaseTotalOfflineRefunded(
-                $this->getOrder()->getBaseTotalOfflineRefunded() + $this->getBaseGrandTotal()
-            );
-        }
-
-        $this->getOrder()->setBaseTotalInvoicedCost(
-            $this->getOrder()->getBaseTotalInvoicedCost() - $this->getBaseCost()
-        );
-
-        $state = $this->getState();
-        if (is_null($state)) {
-            $this->setState(self::STATE_OPEN);
-        }
-        return $this;
     }
 
     /**
@@ -607,14 +457,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(self::$_states)) {
-            self::$_states = [
+        if (static::$_states === null) {
+            static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
                 self::STATE_CANCELED => __('Canceled'),
             ];
         }
-        return self::$_states;
+        return static::$_states;
     }
 
     /**
@@ -625,36 +475,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 
-        if (is_null(self::$_states)) {
-            self::getStates();
+        if (static::$_states === null) {
+            static::getStates();
         }
-        if (isset(self::$_states[$stateId])) {
-            return self::$_states[$stateId];
+        if (isset(static::$_states[$stateId])) {
+            return static::$_states[$stateId];
         }
         return __('Unknown State');
     }
 
     /**
+     * Set shipping amount.
+     *
      * @param float $amount
      * @return $this
      */
     public function setShippingAmount($amount)
     {
-        // base shipping amount calculated in total model
-        //        $amount = $this->getStore()->round($amount);
-        //        $this->setData('base_shipping_amount', $amount);
-        //
-        //        $amount = $this->getStore()->round(
-        //            $amount*$this->getOrder()->getStoreToOrderRate()
-        //        );
         return $this->setData(CreditmemoInterface::SHIPPING_AMOUNT, $amount);
     }
 
     /**
+     * Set adjustment positive amount.
+     *
      * @param string $amount
      * @return $this
      */
@@ -675,6 +522,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Set adjustment negative amount.
+     *
      * @param string $amount
      * @return $this
      */
@@ -701,15 +550,30 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function isLast()
     {
-        foreach ($this->getAllItems() as $item) {
+        $items = $this->getAllItems();
+        foreach ($items as $item) {
             if (!$item->isLast()) {
                 return false;
             }
         }
+
+        if (empty($items)) {
+            $order = $this->getOrder();
+            if ($order) {
+                foreach ($order->getItems() as $orderItem) {
+                    if ($orderItem->canRefund()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
     /**
+     * Add comment to credit memo.
+     *
      * Adds comment to credit memo with additional possibility to send it to customer via email
      * and show it in customer account
      *
@@ -736,21 +600,16 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Retrieve collection of comments.
+     *
      * @param bool $reload
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\Collection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCommentsCollection($reload = false)
     {
         $collection = $this->_commentCollectionFactory->create()->setCreditmemoFilter($this->getId())
             ->setCreatedAtOrder();
-//
-//            $this->setComments($comments);
-//            /**
-//             * When credit memo created with adding comment,
-//             * comments collection must be loaded before we added this comment.
-//             */
-//            $this->getComments()->load();
 
         if ($this->getId()) {
             foreach ($collection as $comment) {
@@ -764,7 +623,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Get creditmemos collection filtered by $filter
      *
      * @param array|null $filter
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection
      */
     public function getFilteredCollectionItems($filter = null)
     {
@@ -782,11 +641,27 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Check if grand total is valid.
+     *
      * @return bool
      */
     public function isValidGrandTotal()
     {
-        return !($this->getGrandTotal() <= 0 && !$this->getAllowZeroGrandTotal());
+        return !($this->getGrandTotal() <= 0 && !$this->isAllowZeroGrandTotal());
+    }
+
+    /**
+     * Return Zero GrandTotal availability.
+     *
+     * @return bool
+     */
+    public function isAllowZeroGrandTotal()
+    {
+        $isAllowed = $this->scopeConfig->getValue(
+            self::XML_PATH_ALLOW_ZERO_GRANDTOTAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $isAllowed;
     }
 
     /**
@@ -822,6 +697,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns discount_description
      *
@@ -833,7 +709,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setItems($items)
     {
@@ -955,7 +831,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -975,7 +851,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns base_shipping_discount_tax_compensation_amnt
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingDiscountTaxCompensationAmnt()
     {
@@ -1073,7 +949,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -1133,7 +1009,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -1193,7 +1069,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns shipping_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingDiscountTaxCompensationAmount()
     {
@@ -1332,7 +1208,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setComments($comments)
     {
@@ -1340,7 +1216,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($id)
     {
@@ -1348,7 +1224,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingTaxAmount($amount)
     {
@@ -1356,7 +1232,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToOrderRate($rate)
     {
@@ -1364,7 +1240,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -1372,7 +1248,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToOrderRate($rate)
     {
@@ -1380,7 +1256,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGrandTotal($amount)
     {
@@ -1388,7 +1264,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalInclTax($amount)
     {
@@ -1396,7 +1272,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalInclTax($amount)
     {
@@ -1404,7 +1280,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingAmount($amount)
     {
@@ -1412,7 +1288,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToBaseRate($rate)
     {
@@ -1420,7 +1296,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToGlobalRate($rate)
     {
@@ -1428,7 +1304,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseAdjustment($baseAdjustment)
     {
@@ -1436,7 +1312,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotal($amount)
     {
@@ -1444,7 +1320,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -1452,7 +1328,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotal($amount)
     {
@@ -1460,7 +1336,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdjustment($adjustment)
     {
@@ -1468,7 +1344,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseGrandTotal($amount)
     {
@@ -1476,7 +1352,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxAmount($amount)
     {
@@ -1484,7 +1360,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingTaxAmount($amount)
     {
@@ -1492,7 +1368,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxAmount($amount)
     {
@@ -1500,7 +1376,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -1508,7 +1384,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmailSent($emailSent)
     {
@@ -1516,7 +1392,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreditmemoStatus($creditmemoStatus)
     {
@@ -1524,7 +1400,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setState($state)
     {
@@ -1532,7 +1408,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAddressId($id)
     {
@@ -1540,7 +1416,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBillingAddressId($id)
     {
@@ -1548,7 +1424,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setInvoiceId($id)
     {
@@ -1556,7 +1432,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreCurrencyCode($code)
     {
@@ -1564,7 +1440,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderCurrencyCode($code)
     {
@@ -1572,7 +1448,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseCurrencyCode($code)
     {
@@ -1580,7 +1456,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGlobalCurrencyCode($code)
     {
@@ -1588,7 +1464,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIncrementId($id)
     {
@@ -1596,7 +1472,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -1604,7 +1480,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -1612,7 +1488,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -1620,7 +1496,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingDiscountTaxCompensationAmount($amount)
     {
@@ -1628,7 +1504,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
@@ -1636,7 +1512,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingInclTax($amount)
     {
@@ -1644,7 +1520,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingInclTax($amount)
     {
@@ -1652,7 +1528,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountDescription($description)
     {
@@ -1660,9 +1536,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Sales\Api\Data\CreditmemoExtensionInterface|null
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -1670,10 +1544,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes)
     {

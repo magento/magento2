@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class AssertCurrencyRateAppliedOnCatalogPage extends AbstractConstraint
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
         $actualPrice = $priceBlock->getPrice('');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $basePrice,
             $actualPrice,
             'Wrong price is displayed on Category page.'
@@ -52,7 +52,7 @@ class AssertCurrencyRateAppliedOnCatalogPage extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
         $actualPrice = $priceBlock->getPrice('');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $convertedPrice,
             $actualPrice,
             'Wrong price is displayed on Category page.'

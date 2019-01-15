@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Element;
  */
 class ExceptionHandlerBlockFactory
 {
-    const DEFAULT_INSTANCE_NAME = 'Magento\Framework\View\Element\ExceptionHandlerBlock';
+    const DEFAULT_INSTANCE_NAME = \Magento\Framework\View\Element\ExceptionHandlerBlock::class;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

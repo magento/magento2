@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 /**
  * Steps:
  * 1. Log in to backend.
- * 2. Navigate throught menu to the page.
+ * 2. Navigate through menu to the page.
  * 3. Perform asserts.
  *
  * @ZephyrId MAGETWO-34874
@@ -21,7 +21,6 @@ class NavigateMenuTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -29,11 +28,12 @@ class NavigateMenuTest extends Injectable
      *
      * @param Dashboard $dashboard
      * @param string $menuItem
+     * @param bool $waitMenuItemNotVisible
      * @return void
      */
-    public function test(Dashboard $dashboard, $menuItem)
+    public function test(Dashboard $dashboard, $menuItem, $waitMenuItemNotVisible = true)
     {
         $dashboard->open();
-        $dashboard->getMenuBlock()->navigate($menuItem);
+        $dashboard->getMenuBlock()->navigate($menuItem, $waitMenuItemNotVisible);
     }
 }

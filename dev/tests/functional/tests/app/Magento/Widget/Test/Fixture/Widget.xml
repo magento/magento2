@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="widget"
+             module="Magento_Widget"
+             type="flat"
+             entity_type="widget_instance"
+             collection="Magento\Widget\Model\ResourceModel\Widget\Instance\Collection"
+             identifier="parameters"
+             repository_class="Magento\Widget\Test\Repository\Widget"
+             handler_interface="Magento\Widget\Test\Handler\Widget\WidgetInterface"
+             class="Magento\Widget\Test\Fixture\Widget">
+        <field name="code" group="settings" />
+        <field name="theme_id" group="settings" />
+        <field name="title" group="frontend_properties" />
+        <field name="template" />
+        <field name="chosen_option" source="Magento\Widget\Test\Fixture\Widget\ChosenOption" />
+        <field name="display_type" />
+        <field name="show_pager" />
+        <field name="products_count" />
+        <field name="cache_lifetime" />
+        <field name="page_size" />
+        <field name="store_ids" source="Magento\Widget\Test\Fixture\Widget\StoreIds" group="frontend_properties" />
+        <field name="id" />
+        <field name="widget_instance" source="Magento\Widget\Test\Fixture\Widget\WidgetInstance" repository="Magento\Widget\Test\Repository\Widget\WidgetInstance" group="widget_instance" />
+        <field name="parameters" source="Magento\Widget\Test\Fixture\Widget\Parameters" repository="Magento\Widget\Test\Repository\Widget\Parameters" group="widget_options" />
+    </fixture>
+</config>

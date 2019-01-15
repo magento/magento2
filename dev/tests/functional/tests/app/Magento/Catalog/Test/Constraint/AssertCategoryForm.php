@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,9 @@ class AssertCategoryForm extends AbstractAssertForm
      * @var array
      */
     protected $skippedFixtureFields = [
-        'parent_id'
+        'parent_id',
+        'id',
+        'store_id'
     ];
 
     /**
@@ -44,11 +46,14 @@ class AssertCategoryForm extends AbstractAssertForm
     ) {
         $catalogCategoryIndex->open();
         $catalogCategoryIndex->getTreeCategories()->selectCategory($category, true);
-
+        if ($category->hasData('store_id')) {
+            $storeName = $category->getStoreId()['source']->getName();
+            $catalogCategoryEdit->getFormPageActions()->selectStoreView($storeName);
+        }
         $fixtureData = $this->prepareFixtureData($category->getData());
         $formData = $catalogCategoryEdit->getEditForm()->getData($category);
         $error = $this->verifyData($this->sortData($fixtureData), $this->sortData($formData));
-        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+        \PHPUnit\Framework\Assert::assertEmpty($error, $error);
     }
 
     /**

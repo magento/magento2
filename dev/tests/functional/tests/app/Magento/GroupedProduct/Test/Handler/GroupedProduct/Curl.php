@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,54 +10,30 @@ use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as AbstractCurl;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Curl
- * Create new grouped product via curl
+ * Create new grouped product via curl.
  */
 class Curl extends AbstractCurl implements GroupedProductInterface
 {
     /**
-     * Prepare POST data for creating product request
+     * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
-     * @param string|null $prefix [optional]
      * @return array
      */
-    protected function prepareData(FixtureInterface $fixture, $prefix = null)
+    public function prepareData(FixtureInterface $fixture)
     {
-        $data = parent::prepareData($fixture, null);
+        $data = parent::prepareData($fixture);
 
         $assignedProducts = [];
-        if (!empty($data['associated'])) {
-            $assignedProducts = $data['associated']['assigned_products'];
-            unset($data['associated']);
+        if (!empty($data['product']['associated'])) {
+            $assignedProducts = $data['product']['associated']['assigned_products'];
+            unset($data['product']['associated']);
         }
 
-        $data = $prefix ? [$prefix => $data] : $data;
         foreach ($assignedProducts as $item) {
             $data['links']['associated'][$item['id']] = $item;
         }
 
         return $data;
-    }
-
-    /**
-     * Preparation of stock data.
-     *
-     * @param array $fields
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function prepareStockData(array $fields)
-    {
-        $fields = parent::prepareStockData($fields);
-        if (
-            isset($fields['quantity_and_stock_status']['is_in_stock'])
-            && $fields['quantity_and_stock_status']['is_in_stock']
-        ) {
-            $fields['quantity_and_stock_status']['use_config_manage_stock'] = 1;
-        }
-        return $fields;
     }
 }

@@ -1,20 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestSafetyInterface;
+
 /**
  * Class Visitor
+ *
  * @package Magento\Customer\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
     const VISITOR_TYPE_CUSTOMER = 'c';
 
     const VISITOR_TYPE_VISITOR = 'v';
+
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
+    const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
 
     /**
      * @var string[]
@@ -56,17 +65,29 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
+     * @var RequestSafetyInterface
+     */
+    private $requestSafety;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\HTTP\Header $httpHeader
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
+     * @param RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -77,11 +98,13 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\Header $httpHeader,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
-        array $data = []
+        array $data = [],
+        RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -90,6 +113,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->ignores = $ignores;
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
+        $this->indexerRegistry = $indexerRegistry;
+        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
     /**
@@ -99,7 +124,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Visitor');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Visitor::class);
         $userAgent = $this->httpHeader->getHttpUserAgent();
         if ($this->ignoredUserAgents) {
             if (in_array($userAgent, $this->ignoredUserAgents)) {
@@ -136,10 +161,17 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         if ($this->session->getVisitorData()) {
             $this->setData($this->session->getVisitorData());
+            if ($this->getSessionId() != $this->session->getSessionId()) {
+                $this->setSessionId($this->session->getSessionId());
+            }
         }
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->requestSafety->isSafeMethod()) {
+            return $this;
+        }
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -159,7 +191,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -246,6 +279,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
      */
@@ -280,5 +314,19 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         $this->getResource()->clean($this);
         return $this;
+    }
+
+    /**
+     * Retrieve Online Interval (in minutes)
+     *
+     * @return int Minutes Interval
+     */
+    public function getOnlineInterval()
+    {
+        $configValue = (int)$this->scopeConfig->getValue(
+            static::XML_PATH_ONLINE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }

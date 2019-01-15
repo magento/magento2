@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\Lists;
 
-class ListsTest extends \PHPUnit_Framework_TestCase
+class ListsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Lists
@@ -50,14 +50,17 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         'de_DE',
     ];
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->mockConfig = $this->getMockBuilder('\Magento\Framework\Locale\ConfigInterface')
+        $this->mockConfig = $this->getMockBuilder(\Magento\Framework\Locale\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockConfig->expects($this->any())
             ->method('getAllowedLocales')
             ->willReturn($this->expectedLocales);
+        $this->mockConfig->expects($this->any())
+            ->method('getAllowedCurrencies')
+            ->willReturn($this->expectedCurrencies);
 
         $this->lists = new Lists($this->mockConfig);
     }
@@ -68,15 +71,18 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->expectedTimezones, $timezones);
     }
 
-    public function testGetCurrencyList()
-    {
-        $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
-        $this->assertEquals($this->expectedCurrencies, $currencies);
-    }
-
     public function testGetLocaleList()
     {
         $locales = array_intersect($this->expectedLocales, array_keys($this->lists->getLocaleList()));
         $this->assertEquals($this->expectedLocales, $locales);
+    }
+
+    /**
+     * Test Lists:getCurrencyList() considering allowed currencies config values.
+     */
+    public function testGetCurrencyList()
+    {
+        $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
+        $this->assertEquals($this->expectedCurrencies, $currencies);
     }
 }

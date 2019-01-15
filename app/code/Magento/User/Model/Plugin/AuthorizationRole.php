@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,15 +13,17 @@ use Magento\Authorization\Model\Role;
  */
 class AuthorizationRole
 {
-    /** @var \Magento\User\Model\Resource\User */
+    /**
+     * @var \Magento\User\Model\ResourceModel\User
+     */
     protected $userResourceModel;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\User\Model\Resource\User $userResourceModel
+     * @param \Magento\User\Model\ResourceModel\User $userResourceModel
      */
-    public function __construct(\Magento\User\Model\Resource\User $userResourceModel)
+    public function __construct(\Magento\User\Model\ResourceModel\User $userResourceModel)
     {
         $this->userResourceModel = $userResourceModel;
     }

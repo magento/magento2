@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper;
@@ -8,7 +8,10 @@ namespace Magento\Backend\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
+ * @api
+ * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Data extends AbstractHelper
 {
@@ -198,10 +201,11 @@ class Data extends AbstractHelper
     /**
      * Return Backend area front name
      *
-     * @return string
+     * @param bool $checkHost
+     * @return bool|string
      */
-    public function getAreaFrontName()
+    public function getAreaFrontName($checkHost = false)
     {
-        return $this->_frontNameResolver->getFrontName();
+        return $this->_frontNameResolver->getFrontName($checkHost);
     }
 }

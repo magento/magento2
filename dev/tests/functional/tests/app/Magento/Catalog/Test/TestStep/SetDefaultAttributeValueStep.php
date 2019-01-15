@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,19 +38,29 @@ class SetDefaultAttributeValueStep implements TestStepInterface
     protected $catalogProductEdit;
 
     /**
+     * Custom attribute value to set while product creation.
+     *
+     * @var string
+     */
+    protected $attributeValue;
+
+    /**
      * @constructor
      * @param CatalogProductAttribute $attribute
      * @param CatalogProductEdit $catalogProductEdit
      * @param FixtureFactory $fixtureFactory
+     * @param string $attributeValue [optional]
      */
     public function __construct(
         CatalogProductAttribute $attribute,
         CatalogProductEdit $catalogProductEdit,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        $attributeValue = null
     ) {
         $this->attribute = $attribute;
         $this->catalogProductEdit = $catalogProductEdit;
         $this->fixtureFactory = $fixtureFactory;
+        $this->attributeValue = $attributeValue;
     }
 
     /**
@@ -60,9 +70,13 @@ class SetDefaultAttributeValueStep implements TestStepInterface
      */
     public function run()
     {
+        $customAttribute = $this->attribute;
+        if ($this->attributeValue !== null) {
+            $customAttribute = ['value' => $this->attributeValue, 'attribute' => $customAttribute];
+        }
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['data' => ['custom_attribute' => $this->attribute]]
+            ['data' => ['custom_attribute' => $customAttribute]]
         );
         $this->catalogProductEdit->getProductForm()->fill($product);
     }

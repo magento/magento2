@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Wishlist\Model\Resource\Item\CollectionFactory;
-use Magento\Wishlist\Model\Resource\Wishlist as ResourceWishlist;
-use Magento\Wishlist\Model\Resource\Wishlist\Collection;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
+use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 
 /**
  * Wishlist model
  *
- * @method \Magento\Wishlist\Model\Resource\Wishlist _getResource()
- * @method \Magento\Wishlist\Model\Resource\Wishlist getResource()
  * @method int getShared()
  * @method \Magento\Wishlist\Model\Wishlist setShared(int $value)
  * @method string getSharingCode()
@@ -23,8 +25,12 @@ use Magento\Wishlist\Model\Resource\Wishlist\Collection;
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
+ * @since 100.0.2
  */
-class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Cache tag
@@ -41,7 +47,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Wishlist item collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_itemCollection;
 
@@ -119,6 +125,13 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $productRepository;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -135,6 +148,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param ProductRepositoryInterface $productRepository
      * @param bool $useCurrentWebsite
      * @param array $data
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -153,7 +167,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         \Magento\Framework\Stdlib\DateTime $dateTime,
         ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -165,6 +180,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $this->_productFactory = $productFactory;
         $this->mathRandom = $mathRandom;
         $this->dateTime = $dateTime;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
     }
@@ -201,7 +217,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getName()
     {
         $name = $this->_getData('name');
-        if (!strlen($name)) {
+        if ($name === null || !strlen($name)) {
             return $this->_wishlistData->getDefaultWishlistName();
         }
         return $name;
@@ -317,7 +333,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getItemCollection()
     {
@@ -364,10 +380,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
     /**
      * Adds new product to wishlist.
+     *
      * Returns new item or string on error.
      *
      * @param int|\Magento\Catalog\Model\Product $product
-     * @param \Magento\Framework\Object|array|string|null $buyRequest
+     * @param \Magento\Framework\DataObject|array|string|null $buyRequest
      * @param bool $forciblySetQty
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return Item|string
@@ -400,14 +417,26 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
         }
 
-        if ($buyRequest instanceof \Magento\Framework\Object) {
+        if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\Object(unserialize($buyRequest));
+            $isInvalidItemConfiguration = false;
+            try {
+                $buyRequestData = $this->serializer->unserialize($buyRequest);
+                if (!is_array($buyRequestData)) {
+                    $isInvalidItemConfiguration = true;
+                }
+            } catch (\InvalidArgumentException $exception) {
+                $isInvalidItemConfiguration = true;
+            }
+            if ($isInvalidItemConfiguration) {
+                throw new \InvalidArgumentException('Invalid wishlist item configuration.');
+            }
+            $_buyRequest = new \Magento\Framework\DataObject($buyRequestData);
         } elseif (is_array($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\Object($buyRequest);
+            $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
-            $_buyRequest = new \Magento\Framework\Object();
+            $_buyRequest = new \Magento\Framework\DataObject();
         }
 
         /* @var $product \Magento\Catalog\Model\Product */
@@ -553,7 +582,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemsCount()
     {
-        return $this->getItemCollection()->getSize();
+        return $this->getItemCollection()->count();
     }
 
     /**
@@ -589,16 +618,16 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * It's passed to \Magento\Catalog\Helper\Product->addParamsToBuyRequest() to compose resulting buyRequest.
      *
      * Basically it can hold
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest
+     *   that configures product in this item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
      * so they won't intersect with other submitted options
      *
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
      * @param int|Item $itemId
-     * @param \Magento\Framework\Object $buyRequest
-     * @param null|array|\Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param null|array|\Magento\Framework\DataObject $params
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -611,6 +640,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $item = null;
         if ($itemId instanceof Item) {
             $item = $itemId;
+            $itemId = $item->getId();
         } else {
             $item = $this->getItem((int)$itemId);
         }
@@ -622,9 +652,9 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $productId = $product->getId();
         if ($productId) {
             if (!$params) {
-                $params = new \Magento\Framework\Object();
+                $params = new \Magento\Framework\DataObject();
             } elseif (is_array($params)) {
-                $params = new \Magento\Framework\Object($params);
+                $params = new \Magento\Framework\DataObject($params);
             }
             $params->setCurrentConfig($item->getBuyRequest());
             $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);

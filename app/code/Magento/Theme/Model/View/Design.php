@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Model\View;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Keeps design settings for current request
@@ -104,7 +105,6 @@ class Design implements \Magento\Framework\View\DesignInterface
      *
      * @param string $area
      * @return $this
-     * @deprecated
      */
     public function setArea($area)
     {
@@ -169,16 +169,16 @@ class Design implements \Magento\Framework\View\DesignInterface
         $theme = null;
         $store = isset($params['store']) ? $params['store'] : null;
 
-        if ($this->_isThemePerStoveView($area)) {
+        if ($this->_isThemePerStoreView($area)) {
             if ($this->_storeManager->isSingleStoreMode()) {
                 $theme = $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
-                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                    ScopeInterface::SCOPE_WEBSITES
                 );
             } else {
                 $theme = (string) $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    ScopeInterface::SCOPE_STORE,
                     $store
                 );
             }
@@ -197,7 +197,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param string $area
      * @return bool
      */
-    private function _isThemePerStoveView($area)
+    private function _isThemePerStoreView($area)
     {
         return $area == self::DEFAULT_AREA;
     }
@@ -251,9 +251,19 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function getLocale()
     {
         if (null === $this->_locale) {
-            $this->_locale = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+            $this->_locale = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         }
         return $this->_locale->getLocale();
+    }
+
+    /**
+     * @param \Magento\Framework\Locale\ResolverInterface $locale
+     * @return $this
+     */
+    public function setLocale(\Magento\Framework\Locale\ResolverInterface $locale)
+    {
+        $this->_locale = $locale;
+        return $this;
     }
 
     /**

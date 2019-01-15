@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,8 @@ class AssertImpossibleDeleteYourOwnAccount extends AbstractConstraint
      */
     public function processAssert(UserEdit $userEdit)
     {
-        $errorMessage = $userEdit->getMessagesBlock()->getErrorMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $errorMessage = $userEdit->getMessagesBlock()->getErrorMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,
             'Wrong error message is displayed.'

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <tab>advanced</tab>
+            <group id="bulk" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
+                <label>Bulk Actions</label>
+                <field id="lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Days Saved in Log</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

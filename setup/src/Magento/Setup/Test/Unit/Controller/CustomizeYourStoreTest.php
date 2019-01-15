@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\CustomizeYourStore;
 
-class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
+class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Controller\CustomizeYourStore
@@ -16,41 +16,62 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\SampleData
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\State
      */
-    private $sampleData;
+    private $sampleDataState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Lists
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\Lists
      */
     private $lists;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\FullModuleList
+     */
+    private $moduleList;
+
     public function setup()
     {
-        $this->sampleData = $this->getMock('\Magento\Setup\Model\SampleData', [], [], '', false);
-        $this->lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
-        $this->controller = new CustomizeYourStore($this->lists, $this->sampleData);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
+        $this->sampleDataState = $this->createMock(\Magento\Framework\Setup\SampleData\State::class);
+        $this->lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
+        $this->moduleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
+        $this->controller = new CustomizeYourStore($this->moduleList, $this->lists, $objectManagerProvider);
     }
 
     /**
      * @param array $expected
+     * @param $withSampleData
      *
      * @dataProvider indexActionDataProvider
      */
-    public function testIndexAction($expected)
+    public function testIndexAction($expected, $withSampleData)
     {
-        $this->sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);
-        $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
-            ->willReturn($expected['isSampleDataInstalled']);
-        $this->sampleData->expects($this->once())->method('isInstallationError')
-            ->willReturn($expected['isSampleDataErrorInstallation']);
+        if ($withSampleData) {
+            $this->moduleList->expects($this->once())->method('has')->willReturn(true);
+            $this->objectManager->expects($this->once())->method('get')->willReturn($this->sampleDataState);
+            $this->sampleDataState->expects($this->once())->method('isInstalled')
+                ->willReturn($expected['isSampleDataInstalled']);
+            $this->sampleDataState->expects($this->once())->method('hasError')
+                ->willReturn($expected['isSampleDataErrorInstallation']);
+        } else {
+            $this->moduleList->expects($this->once())->method('has')->willReturn(false);
+            $this->objectManager->expects($this->never())->method('get');
+        }
         $this->lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
         $this->lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
         $this->lists->expects($this->once())->method('getLocaleList')->willReturn($expected['language']);
 
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
 
         $variables = $viewModel->getVariables();
@@ -69,30 +90,26 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
         $sampleData = [
-            'isSampledataEnabled' => null,
-            'isSampleDataInstalled' => null,
-            'isSampleDataErrorInstallation' => null
+            'isSampleDataInstalled' => false,
+            'isSampleDataErrorInstallation' => false
         ];
-        $sampleDataTrue = array_merge($sampleData, ['isSampledataEnabled' => true]);
-        $sampleDataFalse = array_merge($sampleData, ['isSampledataEnabled' => false]);
 
         return [
-            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleDataTrue)],
-            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleDataTrue)],
-            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleDataTrue)],
-            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleDataTrue)],
-            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleDataTrue)],
-            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleDataTrue)],
-            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleDataTrue)],
-            'false_sample_data' => [array_merge($timezones, $currency, $language, $sampleDataFalse)],
-            'no_sample_data' => [array_merge($timezones, $currency, $language, $sampleData)],
+            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleData), true],
+            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleData), true],
+            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleData), true],
+            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleData), true],
+            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleData), true],
+            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleData), true],
+            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleData), true],
+            'no_sample_data' => [array_merge($timezones, $currency, $language, $sampleData), false],
         ];
     }
 
     public function testDefaultTimeZoneAction()
     {
         $jsonModel = $this->controller->defaultTimeZoneAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $this->assertArrayHasKey('defaultTimeZone', $jsonModel->getVariables());
     }
 }

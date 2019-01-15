@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,16 @@ namespace Magento\Framework\App\Cache\Frontend;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Factory
 {
     /**
      * Default cache entry lifetime
      */
     const DEFAULT_LIFETIME = 7200;
+
     /**
      * Caching params, that applied for all cache frontends regardless of type
      */
@@ -65,28 +69,27 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => 0777,
         'file_name_prefix' => 'mage',
     ];
 
     /**
      * Resource
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Filesystem $filesystem
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $enforcedOptions
      * @param array $decorators
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Filesystem $filesystem,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $enforcedOptions = [],
         array $decorators = []
     ) {
@@ -140,17 +143,19 @@ class Factory
 
         /** @var $result \Magento\Framework\Cache\Frontend\Adapter\Zend */
         $result = $this->_objectManager->create(
-            'Magento\Framework\Cache\Frontend\Adapter\Zend',
+            \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
-                'frontend' => \Zend_Cache::factory(
-                    $frontend['type'],
-                    $backend['type'],
-                    $frontend,
-                    $backend['options'],
-                    true,
-                    true,
-                    true
-                )
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return \Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                }
             ]
         );
         $result = $this->_applyDecorators($result);
@@ -253,12 +258,21 @@ class Factory
             case 'varien_cache_backend_eaccelerator':
                 if (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
                     $enableTwoLevels = true;
-                    $backendType = 'Magento\Framework\Cache\Backend\Eaccelerator';
+                    $backendType = \Magento\Framework\Cache\Backend\Eaccelerator::class;
                 }
                 break;
             case 'database':
-                $backendType = 'Magento\Framework\Cache\Backend\Database';
+                $backendType = \Magento\Framework\Cache\Backend\Database::class;
                 $options = $this->_getDbAdapterOptions();
+                break;
+            case 'remote_synchronized_cache':
+                $backendType = \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class;
+                $options['remote_backend'] = \Magento\Framework\Cache\Backend\Database::class;
+                $options['remote_backend_options'] = $this->_getDbAdapterOptions();
+                $options['local_backend'] = \Cm_Cache_Backend_File::class;
+                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                $options['local_backend_options']['cache_dir'] = $cacheDir->getAbsolutePath();
+                $cacheDir->create();
                 break;
             default:
                 if ($type != $this->_defaultBackend) {
@@ -300,7 +314,7 @@ class Factory
     protected function _getDbAdapterOptions()
     {
         $options['adapter_callback'] = function () {
-            return $this->_resource->getConnection('core_write');
+            return $this->_resource->getConnection();
         };
         $options['data_table_callback'] = function () {
             return $this->_resource->getTableName('cache');
@@ -344,7 +358,7 @@ class Factory
             $options['slow_backend_options'] = $this->_backendOptions;
         }
         if ($options['slow_backend'] == 'database') {
-            $options['slow_backend'] = 'Magento\Framework\Cache\Backend\Database';
+            $options['slow_backend'] = \Magento\Framework\Cache\Backend\Database::class;
             $options['slow_backend_options'] = $this->_getDbAdapterOptions();
             if (isset($cacheOptions['slow_backend_store_data'])) {
                 $options['slow_backend_options']['store_data'] = (bool)$cacheOptions['slow_backend_store_data'];
@@ -379,7 +393,7 @@ class Factory
             $options['automatic_cleaning_factor'] = 0;
         }
         $options['type'] =
-            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : 'Magento\Framework\Cache\Core';
+            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : \Magento\Framework\Cache\Core::class;
         return $options;
     }
 }

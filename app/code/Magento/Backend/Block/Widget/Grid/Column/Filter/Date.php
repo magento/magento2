@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
 /**
  * Date grid column filter
+ * @api
+ * @since 100.0.2
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
@@ -22,10 +26,16 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     protected $localeResolver;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
@@ -33,11 +43,13 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
         $this->localeResolver = $localeResolver;
         parent::__construct($context, $resourceHelper, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -115,17 +127,22 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
 
     /**
      * @param string|null $index
-     * @return string
+     * @return array|string|int|float|null
      */
     public function getEscapedValue($index = null)
     {
         $value = $this->getValue($index);
-        if ($value instanceof \DateTime) {
-            return \IntlDateFormatter::formatObject(
+        if ($value instanceof \DateTimeInterface) {
+            return $this->dateTimeFormatter->formatObject(
                 $value,
                 $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );
         }
+
+        if (is_string($value)) {
+            return $this->escapeHtml($value);
+        }
+
         return $value;
     }
 
@@ -189,12 +206,8 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      */
     protected function _convertDate($date)
     {
-        $adminTimeZone = new \DateTimeZone(
-            $this->_scopeConfig->getValue(
-                $this->_localeDate->getDefaultTimezonePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
+        $timezone = $this->getColumn()->getTimezone() !== false ? $this->_localeDate->getConfigTimezone() : 'UTC';
+        $adminTimeZone = new \DateTimeZone($timezone);
         $formatter = new \IntlDateFormatter(
             $this->localeResolver->getLocale(),
             \IntlDateFormatter::SHORT,

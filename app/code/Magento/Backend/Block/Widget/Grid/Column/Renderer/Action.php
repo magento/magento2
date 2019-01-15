@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid column widget for rendering action grid cells
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -37,10 +37,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $actions = $this->getColumn()->getActions();
         if (empty($actions) || !is_array($actions)) {
@@ -72,18 +72,20 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as dropdown option html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toOptionHtml($action, \Magento\Framework\Object $row)
+    protected function _toOptionHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
 
-        $htmlAttibutes = ['value' => $this->escapeHtml($this->_jsonEncoder->encode($action))];
-        $actionAttributes->setData($htmlAttibutes);
+        $htmlAttributes = [
+            'value' => $this->escapeHtmlAttr($this->_jsonEncoder->encode($action), false)
+        ];
+        $actionAttributes->setData($htmlAttributes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
     }
 
@@ -91,12 +93,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as link html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toLinkHtml($action, \Magento\Framework\Object $row)
+    protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
@@ -117,12 +119,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param array &$action
      * @param string &$actionCaption
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\Object $row)
+    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\DataObject $row)
     {
         foreach ($action as $attribute => $value) {
             if (isset($action[$attribute]) && !is_array($action[$attribute])) {
@@ -153,7 +155,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     break;
 
                 case 'popup':
-                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
+                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,'
+                        . 'scrollbars=1\');return false;';
                     break;
             }
         }

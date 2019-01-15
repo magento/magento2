@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Backend\Console\Command;
 
 /**
  * Command for cleaning cache
+ *
+ * @api
+ * @since 100.0.2
  */
 class CacheCleanCommand extends AbstractCacheTypeManageCommand
 {
@@ -29,6 +32,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
      */
     protected function performAction(array $cacheTypes)
     {
+        $this->eventManager->dispatch('adminhtml_cache_flush_system');
         $this->cacheManager->clean($cacheTypes);
     }
 

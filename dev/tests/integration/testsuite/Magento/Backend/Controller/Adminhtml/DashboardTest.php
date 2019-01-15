@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -50,7 +50,7 @@ class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         /** @var $helper \Magento\Backend\Helper\Dashboard\Data */
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Helper\Dashboard\Data'
+            \Magento\Backend\Helper\Dashboard\Data::class
         );
         $hash = $helper->getChartDataHash($gaFixture);
         $this->getRequest()->setParam('ga', $gaFixture)->setParam('h', $hash);

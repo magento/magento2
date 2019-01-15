@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Layer;
-
 
 class FilterList
 {
@@ -30,10 +29,10 @@ class FilterList
      * @var string[]
      */
     protected $filterTypes = [
-        self::CATEGORY_FILTER  => 'Magento\Catalog\Model\Layer\Filter\Category',
-        self::ATTRIBUTE_FILTER => 'Magento\Catalog\Model\Layer\Filter\Attribute',
-        self::PRICE_FILTER     => 'Magento\Catalog\Model\Layer\Filter\Price',
-        self::DECIMAL_FILTER   => 'Magento\Catalog\Model\Layer\Filter\Decimal',
+        self::CATEGORY_FILTER  => \Magento\Catalog\Model\Layer\Filter\Category::class,
+        self::ATTRIBUTE_FILTER => \Magento\Catalog\Model\Layer\Filter\Attribute::class,
+        self::PRICE_FILTER     => \Magento\Catalog\Model\Layer\Filter\Price::class,
+        self::DECIMAL_FILTER   => \Magento\Catalog\Model\Layer\Filter\Decimal::class,
     ];
 
     /**
@@ -80,12 +79,12 @@ class FilterList
     /**
      * Create filter
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\Layer $layer
      * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function createAttributeFilter(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute,
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\Layer $layer
     ) {
         $filterClassName = $this->getAttributeFilterClass($attribute);
@@ -100,10 +99,10 @@ class FilterList
     /**
      * Get Attribute Filter Class Name
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return string
      */
-    protected function getAttributeFilterClass(\Magento\Catalog\Model\Resource\Eav\Attribute $attribute)
+    protected function getAttributeFilterClass(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
     {
         $filterClassName = $this->filterTypes[self::ATTRIBUTE_FILTER];
 

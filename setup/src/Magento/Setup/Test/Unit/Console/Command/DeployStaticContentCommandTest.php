@@ -1,122 +1,154 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use Magento\Setup\Model\ObjectManagerProvider;
+
+use Magento\Deploy\Console\ConsoleLogger;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Console\ConsoleLoggerFactory;
+use Magento\Deploy\Console\DeployStaticOptions;
+use Magento\Deploy\Service\DeployStaticContent;
+
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Validator\Locale;
 
-class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
+use PHPUnit_Framework_MockObject_MockObject as Mock;
+
+class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerProvider;
-
-    /**
-     * @var \Magento\Setup\Model\Deployer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deployer;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\Utility\Files|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filesUtil;
-
     /**
      * @var DeployStaticContentCommand
      */
     private $command;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputValidator|Mock
      */
-    private $validator;
+    private $inputValidator;
 
+    /**
+     * @var ConsoleLogger|Mock
+     */
+    private $logger;
+
+    /**
+     * @var ConsoleLoggerFactory|Mock
+     */
+    private $consoleLoggerFactory;
+
+    /**
+     * @var DeployStaticContent|Mock
+     */
+    private $deployService;
+
+    /**
+     * Object manager to create various objects
+     *
+     * @var ObjectManagerInterface|Mock
+     *
+     */
+    private $objectManager;
+
+    /**
+     * @var State|Mock
+     */
+    private $appState;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
-        $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
-        $this->command = new DeployStaticContentCommand(
-            $this->objectManagerProvider,
-            $this->deploymentConfig,
-            $this->validator
-        );
-    }
+        $this->inputValidator = $this->createMock(InputValidator::class);
+        $this->consoleLoggerFactory = $this->createMock(ConsoleLoggerFactory::class);
+        $this->logger = $this->createMock(ConsoleLogger::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->appState = $this->createMock(State::class);
+        $this->deployService = $this->createMock(DeployStaticContent::class);
 
-    public function testExecute()
-    {
-        $omFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManagerProvider->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($this->objectManager));
+        $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
+        $objectManagerProvider->method('get')->willReturn($this->objectManager);
 
-        $this->objectManagerProvider->expects($this->once())
-            ->method('getObjectManagerFactory')
-            ->with([])
-            ->willReturn($omFactory);
-
-        $this->deployer->expects($this->once())->method('deploy');
-
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->willReturn($this->filesUtil);
-
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->willReturn($this->deployer);
-
-        $this->validator->expects($this->once())->method('isValid')->with('en_US')->willReturn(true);
-
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(true));
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-    }
-
-    public function testExecuteNotInstalled()
-    {
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(false));
-        $this->objectManagerProvider->expects($this->never())->method('get');
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-        $this->assertStringMatchesFormat(
-            'You need to install the Magento application before running this utility.%w',
-            $tester->getDisplay()
-        );
+        $this->command = (new ObjectManager($this))->getObject(DeployStaticContentCommand::class, [
+            'inputValidator' => $this->inputValidator,
+            'consoleLoggerFactory' => $this->consoleLoggerFactory,
+            'options' => new DeployStaticOptions(),
+            'appState' => $this->appState,
+            'objectManagerProvider' => $objectManagerProvider
+        ]);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ARG_IS_WRONG argument has invalid value, please run info:language:list
+     * @param array $input
+     * @see DeployStaticContentCommand::execute()
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteInvalidLanguageArgument()
+    public function testExecute($input)
     {
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(true));
-        $wrongParam = ['languages' => ['ARG_IS_WRONG']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($wrongParam);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $this->inputValidator->expects($this->once())
+            ->method('validate');
+
+        $this->consoleLoggerFactory->expects($this->once())
+            ->method('getLogger')->willReturn($this->logger);
+        $this->logger->expects($this->exactly(2))->method('notice');
+
+        $this->objectManager->expects($this->once())->method('create')->willReturn($this->deployService);
+        $this->deployService->expects($this->once())->method('deploy');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute($input);
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            'No options' => [
+                []
+            ],
+            'With static content version option' => [
+                ['--content-version' => '123456']
+            ]
+        ];
+    }
+
+    /**
+     * @param string $mode
+     * @return void
+     * @expectedException  \Magento\Framework\Exception\LocalizedException
+     * @dataProvider executionInNonProductionModeDataProvider
+     */
+    public function testExecuteInNonProductionMode($mode)
+    {
+        $this->appState->expects($this->any())->method('getMode')->willReturn($mode);
+        $this->objectManager->expects($this->never())->method('create');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute([]);
+    }
+
+    /**
+     * @return array
+     */
+    public function executionInNonProductionModeDataProvider()
+    {
+        return [
+            [State::MODE_DEFAULT],
+            [State::MODE_DEVELOPER],
+        ];
     }
 }

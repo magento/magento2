@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,7 @@ class AssertProductVisibleInCategory extends AbstractConstraint
             $this->successfulMessage = 'Asserts that the product could not be found in this category.';
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isProductVisible,
             $this->errorMessage
         );

@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Guest;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
 class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\PrintCreditmemo
 {
@@ -17,10 +18,16 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
     protected $orderLoader;
 
     /**
+     * @var CreditmemoRepositoryInterface;
+     */
+    protected $creditmemoRepository;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderLoader $orderLoader
      */
     public function __construct(
@@ -28,14 +35,17 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
         PageFactory $resultPageFactory,
+        CreditmemoRepositoryInterface $creditmemoRepository,
         OrderLoader $orderLoader
     ) {
         $this->orderLoader = $orderLoader;
+        $this->creditmemoRepository = $creditmemoRepository;
         parent::__construct(
             $context,
             $orderAuthorization,
             $registry,
-            $resultPageFactory
+            $resultPageFactory,
+            $creditmemoRepository
         );
     }
 
@@ -51,7 +61,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
 
         $creditmemoId = (int)$this->getRequest()->getParam('creditmemo_id');
         if ($creditmemoId) {
-            $creditmemo = $this->_objectManager->create('Magento\Sales\Model\Order\Creditmemo')->load($creditmemoId);
+            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
             $order = $creditmemo->getOrder();
         } else {
             $order = $this->_coreRegistry->registry('current_order');

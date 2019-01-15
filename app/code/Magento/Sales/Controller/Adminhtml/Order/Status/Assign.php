@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status
+class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status implements HttpGetActionInterface
 {
     /**
      * @var PageFactory

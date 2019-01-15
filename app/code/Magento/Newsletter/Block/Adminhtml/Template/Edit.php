@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Newsletter Template Edit Block
@@ -13,7 +11,14 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
-class Edit extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+use Magento\Framework\App\TemplateTypesInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
+class Edit extends Widget
 {
     /**
      * Core registry
@@ -62,15 +67,9 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        // Load Wysiwyg on demand and Prepare layout
-//        $block = $this->getLayout()->getBlock('head');
-//        if ($this->_wysiwygConfig->isEnabled() && $block) {
-//            $block->setCanLoadTinyMce(true);
-//        }
-
         $this->getToolbar()->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Back'),
                 'onclick' => "window.location.href = '" . $this->getUrl('*/*') . "'",
@@ -80,7 +79,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Reset'),
                 'onclick' => 'window.location.href = window.location.href',
@@ -91,7 +90,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->isTextType()) {
             $this->getToolbar()->addChild(
                 'to_plain_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Convert to Plain Text'),
                     'data_attribute' => [
@@ -104,7 +103,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
             $this->getToolbar()->addChild(
                 'to_html_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Return HTML Version'),
                     'data_attribute' => [
@@ -119,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'preview_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Preview Template'),
                 'data_attribute' => [
@@ -132,7 +131,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if ($this->getEditMode()) {
             $this->getToolbar()->addChild(
                 'delete_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete Template'),
                     'data_attribute' => [
@@ -144,7 +143,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
             $this->getToolbar()->addChild(
                 'save_as_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Save As'),
                     'data_attribute' => [
@@ -157,7 +156,7 @@ class Edit extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save Template'),
                 'data_attribute' => [
@@ -205,11 +204,13 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getForm()
     {
-        return $this->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Template\Edit\Form')->toHtml();
+        return $this->getLayout()->createBlock(
+            \Magento\Newsletter\Block\Adminhtml\Template\Edit\Form::class
+        )->toHtml();
     }
 
     /**
-     * Return return template name for JS
+     * Return template name for JS
      *
      * @return string
      */
@@ -235,7 +236,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getPreviewUrl()
     {
-        return $this->getUrl('*/*/preview');
+        return $this->getUrl('*/*/preview', ['id' => $this->getRequest()->getParam('id')]);
     }
 
     /**
@@ -246,6 +247,19 @@ class Edit extends \Magento\Backend\Block\Widget
     public function isTextType()
     {
         return $this->getModel()->isPlain();
+    }
+
+    /**
+     * Return template type from template object or TYPE_HTML by default
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        if ($this->getModel()->getTemplateType()) {
+            return $this->getModel()->getTemplateType();
+        }
+        return TemplateTypesInterface::TYPE_HTML;
     }
 
     /**
@@ -281,8 +295,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
-     * @return boolean
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @return int
      */
     protected function getStoreId()
     {

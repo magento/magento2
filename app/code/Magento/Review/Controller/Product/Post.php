@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
-class Post extends ProductController
+class Post extends ProductController implements HttpPostActionInterface
 {
     /**
      * Submit new review action
@@ -37,10 +38,10 @@ class Post extends ProductController
             $data = $this->getRequest()->getPostValue();
             $rating = $this->getRequest()->getParam('ratings', []);
         }
-
         if (($product = $this->initProduct()) && !empty($data)) {
             /** @var \Magento\Review\Model\Review $review */
             $review = $this->reviewFactory->create()->setData($data);
+            $review->unsetData('review_id');
 
             $validate = $review->validate();
             if ($validate === true) {

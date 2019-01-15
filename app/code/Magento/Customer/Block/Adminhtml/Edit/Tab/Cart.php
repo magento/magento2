@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -11,6 +11,9 @@ use Magento\Directory\Model\Currency;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -27,7 +30,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_dataCollectionFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -42,24 +45,32 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_parentTemplate;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = []
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->quoteRepository = $quoteRepository;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -71,7 +82,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::_construct();
         $this->setUseAjax(true);
         $this->_parentTemplate = $this->getTemplate();
-        $this->setTemplate('tab/cart.phtml');
+        $this->setTemplate('Magento_Customer::tab/cart.phtml');
     }
 
     /**
@@ -119,7 +130,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Product'),
                 'index' => 'name',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
             ]
         );
 
@@ -157,7 +168,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Action'),
                 'index' => 'quote_item_id',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
+                'renderer' => \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction::class,
                 'filter' => false,
                 'sortable' => false,
                 'actions' => [
@@ -209,7 +220,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {
@@ -230,7 +241,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             try {
                 $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->quote = $this->quoteRepository->create()->setSharedStoreIds($storeIds);
+                $this->quote = $this->quoteFactory->create()->setSharedStoreIds($storeIds);
             }
         }
         return $this->quote;

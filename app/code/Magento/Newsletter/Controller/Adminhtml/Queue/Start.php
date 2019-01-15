@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
@@ -16,7 +16,7 @@ class Start extends \Magento\Newsletter\Controller\Adminhtml\Queue
     public function execute()
     {
         $queue = $this->_objectManager->create(
-            'Magento\Newsletter\Model\Queue'
+            \Magento\Newsletter\Model\Queue::class
         )->load(
             $this->getRequest()->getParam('id')
         );
@@ -31,7 +31,7 @@ class Start extends \Magento\Newsletter\Controller\Adminhtml\Queue
             }
 
             $queue->setQueueStartAt(
-                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate()
             )->setQueueStatus(
                 \Magento\Newsletter\Model\Queue::STATUS_SENDING
             )->save();

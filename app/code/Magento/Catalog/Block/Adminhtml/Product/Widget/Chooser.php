@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,17 +24,17 @@ class Chooser extends Extended
     protected $_selectedProducts = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $_resourceCategory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_resourceProduct;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -47,18 +47,18 @@ class Chooser extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Model\Resource\Category $resourceCategory
-     * @param \Magento\Catalog\Model\Resource\Product $resourceProduct
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category $resourceCategory
+     * @param \Magento\Catalog\Model\ResourceModel\Product $resourceProduct
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Resource\Category $resourceCategory,
-        \Magento\Catalog\Model\Resource\Product $resourceProduct,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category $resourceCategory,
+        \Magento\Catalog\Model\ResourceModel\Product $resourceProduct,
         array $data = []
     ) {
         $this->_categoryFactory = $categoryFactory;
@@ -95,7 +95,7 @@ class Chooser extends Extended
         );
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(
@@ -202,7 +202,7 @@ class Chooser extends Extended
                 {jsObject}.categoryName = node.attributes.id != "none" ? node.text : false;
             }
         ';
-        $js = str_replace('{jsObject}', $this->getJsObjectName(), $js);
+        $js = str_replace('{jsObject}', $this->escapeJs($this->getJsObjectName()), $js);
         return $js;
     }
 
@@ -234,7 +234,7 @@ class Chooser extends Extended
      */
     protected function _prepareCollection()
     {
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_collectionFactory->create()->setStoreId(0)->addAttributeToSelect('name');
 
         if ($categoryId = $this->getCategoryId()) {

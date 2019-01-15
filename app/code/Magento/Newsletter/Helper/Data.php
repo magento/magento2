@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Newsletter\Helper;
 
 /**
  * Newsletter Data Helper
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Newsletter\Helper;
-
 class Data
 {
     /**
@@ -27,7 +27,7 @@ class Data
     }
 
     /**
-     * Retrieve subsription confirmation url
+     * Retrieve subscription confirmation url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string
@@ -43,7 +43,7 @@ class Data
     }
 
     /**
-     * Retrieve unsubsription url
+     * Retrieve unsubscription url
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @return string

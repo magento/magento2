@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -12,6 +12,9 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class ProductActions
+ *
+ * @api
+ * @since 100.0.2
  */
 class ProductActions extends Column
 {
@@ -42,9 +45,9 @@ class ProductActions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array &$dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             $storeId = $this->context->getFilterParam('store_id');
@@ -60,5 +63,7 @@ class ProductActions extends Column
                 ];
             }
         }
+
+        return $dataSource;
     }
 }

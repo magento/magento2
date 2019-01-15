@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
 
 /**
  * DB data resource interface for a module
+ *
+ * @api
  */
 interface ModuleDataSetupInterface extends SetupInterface
 {
-    const DEFAULT_SETUP_CONNECTION = 'core_setup';
+    const DEFAULT_SETUP_CONNECTION = 'default_setup';
 
     const VERSION_COMPARE_EQUAL = 0;
 

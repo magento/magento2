@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class PreferencesResolving implements ModificationInterface
         }
 
         foreach ($argument as $key => &$value) {
-            if (in_array($key, ['_i_', '_ins_'])) {
+            if (in_array($key, ['_i_', '_ins_'], true)) {
                 $value = $this->resolvePreferenceRecursive($value, $preferences);
                 continue;
             }

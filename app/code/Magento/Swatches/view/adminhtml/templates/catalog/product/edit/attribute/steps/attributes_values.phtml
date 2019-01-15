@@ -1,0 +1,114 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
+?>
+<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName() ?>'">
+    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 2: Attribute Values') ?></h2>
+    <div class="steps-wizard-info">
+        <span><?= $block->escapeHtml(__('Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.')) ?></span>
+    </div>
+    <div data-bind="foreach: attributes, sortableList: attributes">
+
+        <div class="attribute-entity" data-bind="attr:{'data-attribute-title':label}">
+            <div class="attribute-entity-top">
+                <div class="attribute-entity-title-block">
+                    <span class="draggable-handle"
+                          data-role="draggable"
+                          title="<?= $block->escapeHtml(__('Sort Variations')) ?>">
+                    </span>
+                    <div class="attribute-entity-title" data-bind="text: label"></div>
+                    <div class="attribute-options-block">
+                        (<span class="attribute-length" data-bind="text: $data.options().length"></span>
+                        <?= /* @escapeNotVerified */  __('Options') ?>)
+                    </div>
+                </div>
+
+                <div class="attribute-entity-actions">
+                    <button type="button"
+                            class="action-select-all action-tertiary"
+                            data-bind="click: $parent.selectAllAttributes"
+                            title="<?= $block->escapeHtml(__('Select All')) ?>">
+                        <span><?= /* @escapeNotVerified */  __('Select All') ?></span>
+                    </button>
+                    <button type="button"
+                            class="action-deselect-all action-tertiary"
+                            data-bind="click: $parent.deSelectAllAttributes"
+                            title="<?= $block->escapeHtml(__('Deselect All')) ?>">
+                        <span><?= /* @escapeNotVerified */  __('Deselect All') ?></span>
+                    </button>
+                    <button type="button"
+                            class="action-remove-all action-tertiary"
+                            data-bind="click: $parent.removeAttribute.bind($parent)"
+                            title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
+                        <span><?= /* @escapeNotVerified */  __('Remove Attribute') ?></span>
+                    </button>
+                </div>
+            </div>
+
+            <fieldset class="admin__fieldset admin__fieldset-options">
+                <ul class="attribute-options" data-bind="foreach: options">
+                    <li class="attribute-option" data-bind="attr:{'data-attribute-option-title':label}">
+                        <div class="admin__field admin__field-option">
+                            <input
+                                type="checkbox"
+                                class="admin__control-checkbox"
+                                data-bind="checkedValue: id, checked: $parent.chosenOptions, attr:{id:id}" />
+                            <label data-bind="text: label, visible: label, attr:{for:id}"
+                                   class="admin__field-label"></label>
+                        </div>
+                        <div class="admin__field admin__field-create-new" data-bind="visible: !label">
+                            <div class="admin__field-control">
+                                <input class="admin__control-text"
+                                       name="label"
+                                       data-bind="value: label, valueUpdate: 'keyup'"
+                                       type="text" />
+                            </div>
+                            <button type="button"
+                                    class="action-save"
+                                    title="<?= $block->escapeHtml(__('Save Option')) ?>"
+                                    data-action="save"
+                                    data-bind="click: $parents[1].saveOption.bind($parent)">
+                                <span><?= /* @escapeNotVerified */  __('Save Option') ?></span>
+                            </button>
+                            <button type="button"
+                                    class="action-remove"
+                                    title="<?= $block->escapeHtml(__('Remove Option')) ?>"
+                                    data-action="remove"
+                                    data-bind="click: $parents[1].removeOption.bind($parent)">
+                                <span><?= /* @escapeNotVerified */  __('Remove Option') ?></span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </fieldset>
+            <button class="action-create-new action-tertiary"
+                    type="button"
+                    data-action="addOption"
+                    data-bind="click: $parent.createOption, visible: canCreateOption">
+                <span><?= /* @escapeNotVerified */  __('Create New Value') ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= /* @escapeNotVerified */  $block->getComponentName() ?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
+                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName() ?>",
+                        "optionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
+                        "createOptionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

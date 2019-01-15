@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Helper;
 
+/**
+ * Sales admin helper.
+ */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -51,7 +56,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Display price attribute value in base order currency and in place order currency
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   string $code
      * @param   bool $strong
      * @param   string $separator
@@ -75,7 +80,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get "double" prices html (block with base and place currency)
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   float $basePrice
      * @param   float $price
      * @param   bool $strong
@@ -84,7 +89,6 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function displayPrices($dataObject, $basePrice, $price, $strong = false, $separator = '<br/>')
     {
-        $order = false;
         if ($dataObject instanceof \Magento\Sales\Model\Order) {
             $order = $dataObject;
         } else {
@@ -113,8 +117,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Filter collection by removing not available product types
      *
-     * @param \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection $collection
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function applySalableProductTypesFilter($collection)
     {
@@ -149,15 +153,52 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $links = [];
             $i = 1;
             $data = str_replace('%', '%%', $data);
-            $regexp = '@(<a[^>]*>(?:[^<]|<[^/]|</[^a]|</a[^>])*</a>)@';
+            $regexp = "#(?J)<a"
+                ."(?:(?:\s+(?:(?:href\s*=\s*(['\"])(?<link>.*?)\\1\s*)|(?:\S+\s*=\s*(['\"])(.*?)\\3)\s*)*)|>)"
+                .">?(?:(?:(?<text>.*?)(?:<\/a\s*>?|(?=<\w))|(?<text>.*)))#si";
             while (preg_match($regexp, $data, $matches)) {
-                $links[] = $matches[1];
-                $data = str_replace($matches[1], '%' . $i . '$s', $data);
+                $text = '';
+                if (!empty($matches['text'])) {
+                    $text = str_replace('%%', '%', $matches['text']);
+                }
+                $url = $this->filterUrl($matches['link'] ?? '');
+                //Recreate a minimalistic secure a tag
+                $links[] = sprintf(
+                    '<a href="%s">%s</a>',
+                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
+                    $this->escaper->escapeHtml($text)
+                );
+                $data = str_replace($matches[0], '%' . $i . '$s', $data);
                 ++$i;
             }
             $data = $this->escaper->escapeHtml($data, $allowedTags);
             return vsprintf($data, $links);
         }
         return $this->escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Filter the URL for allowed protocols.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function filterUrl(string $url): string
+    {
+        if ($url) {
+            //Revert the sprintf escaping
+            $url = str_replace('%%', '%', $url);
+            $urlScheme = parse_url($url, PHP_URL_SCHEME);
+            $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
+            if ($urlScheme !== 'http' && $urlScheme !== 'https') {
+                $url = null;
+            }
+        }
+
+        if (!$url) {
+            $url = '#';
+        }
+
+        return $url;
     }
 }

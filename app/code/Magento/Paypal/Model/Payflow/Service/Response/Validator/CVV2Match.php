@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class CVV2Match
  */
-class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
+class CVV2Match implements ValidatorInterface
 {
     /**
      * Result of the card security code (CVV2) check
@@ -29,31 +30,32 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
      */
     const ERROR_MESSAGE = 'Card security code does not match.';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Validation settings payments */
+    /**#@+ Validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
 
     const CONFIG_NAME = 'avs_security_code';
-    /**  */
+    /**#@-*/
 
     /**
      * Validate data
      *
-     * @param Object $response
+     * @param DataObject $response
+     * @param Transparent $transparentModel
      * @return bool
      */
-    public function validate(Object $response)
+    public function validate(DataObject $response, Transparent $transparentModel)
     {
-        if ($this->isValidationOff()) {
+        if ($transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
             return true;
         }
 
@@ -75,22 +77,12 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     }
 
     /**
-     * Check whether validation is enabled
-     *
-     * @return bool
-     */
-    protected function isValidationOff()
-    {
-        return $this->getConfig()->getValue(static::CONFIG_NAME) == static::CONFIG_OFF;
-    }
-
-    /**
      * Matching card CVV (positive)
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isMatchCvv(Object $response)
+    protected function isMatchCvv(DataObject $response)
     {
         $cvvMatch = strtolower((string) $response->getData(static::CVV2MATCH));
         return $cvvMatch === static::RESPONSE_YES || $cvvMatch === static::RESPONSE_NOT_SUPPORTED;
@@ -99,10 +91,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Matching card CVV (negative)
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isNotMatchCvv(Object $response)
+    protected function isNotMatchCvv(DataObject $response)
     {
         return strtolower((string) $response->getData(static::CVV2MATCH)) === static::RESPONSE_NO;
     }
@@ -110,10 +102,10 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Checking that the CVV does not exist in the response
      *
-     * @param Object $response
+     * @param DataObject $response
      * @return bool
      */
-    protected function isCvvDoNotExists(Object $response)
+    protected function isCvvDoNotExists(DataObject $response)
     {
         return $response->getData(static::CVV2MATCH) == '';
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -99,7 +99,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
     {
         parent::_prepareLayout();
         if (!$this->getTemplate()) {
-            $this->setTemplate('system/config/validatevat.phtml');
+            $this->setTemplate('Magento_Customer::system/config/validatevat.phtml');
         }
         return $this;
     }

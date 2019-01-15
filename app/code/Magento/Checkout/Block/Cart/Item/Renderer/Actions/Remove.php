@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
@@ -8,6 +8,9 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Checkout\Helper\Cart;
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Remove extends Generic
 {
     /**
@@ -19,6 +22,7 @@ class Remove extends Generic
      * @param Template\Context $context
      * @param Cart $cartHelper
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,
@@ -33,6 +37,7 @@ class Remove extends Generic
      * Get delete item POST JSON
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getDeletePostJson()
     {

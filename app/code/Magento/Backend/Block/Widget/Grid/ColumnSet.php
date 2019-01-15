@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
- *
- *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class ColumnSet extends \Magento\Framework\View\Element\Template
 {
@@ -110,7 +111,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
         array $data = []
     ) {
-        $generatorClassName = 'Magento\Backend\Model\Widget\Grid\Row\UrlGenerator';
+        $generatorClassName = \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator::class;
         if (isset($data['rowUrl'])) {
             $rowUrlParams = $data['rowUrl'];
             if (isset($rowUrlParams['generatorClass'])) {
@@ -237,7 +238,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
     public function getRowUrl($item)
@@ -252,18 +253,19 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Get children of specified item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return array
      */
     public function getMultipleRows($item)
     {
-        return $item->getChildren();
+        $children = $item->getChildren();
+        return $children ?: [];
     }
 
     /**
      * Has children of specified item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return bool
      */
     public function hasMultipleRows($item)
@@ -287,7 +289,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Check whether subtotal should be rendered
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return boolean
      */
     public function shouldRenderSubTotal($item)
@@ -308,7 +310,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve rowspan number
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
      */
@@ -348,7 +350,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Check whether should render empty cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -370,7 +372,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Check whether should render cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -563,8 +565,8 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve subtotal for item
      *
-     * @param \Magento\Framework\Object $item
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject
      */
     public function getSubTotals($item)
     {
@@ -576,7 +578,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve subtotal items
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {
@@ -588,10 +590,10 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     /**
      * Update item with first sub-item data
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return void
      */
-    public function updateItemByFirstMultiRow(\Magento\Framework\Object $item)
+    public function updateItemByFirstMultiRow(\Magento\Framework\DataObject $item)
     {
         $multiRows = $this->getMultipleRows($item);
         if (is_object($multiRows) && $multiRows instanceof \Magento\Framework\Data\Collection) {

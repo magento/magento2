@@ -1,43 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @see \Magento\Paypal\Block\System\Config\Fieldset\Hint
+ * @var \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint $block
  */
+$helpLink = $block->escapeUrl($block->getHelpLink());
 ?>
 <?php
-    if ($block->getHelpLink()):
+if ($helpLink):
 ?>
-<div class="paypal-payment-notice">
-    <?php echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
-</div>
+    <div class="paypal-payment-notice">
+        <?= $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')) ?>
+        <a href="<?php /* @noEscape */
+        echo $helpLink; ?>" target="_blank"><?= $block->escapeHtml(__('here')) ?></a>
+        <?= $block->escapeHtml(__(' to learn more.')) ?>
+    </div>
 <?php
-    endif;
+endif;
 ?>
-<script>
-require(['jquery', 'prototype'], function(jQuery){
-    window.paypalToggleSolution = function (id, url) {
-        var doScroll = false;
-        Fieldset.toggleCollapse(id, url);
-        if ($(this).hasClassName("open")) {
-            $$(".with-button button.button").each(function(anotherButton) {
-                if (anotherButton != this && $(anotherButton).hasClassName("open")) {
-                    $(anotherButton).click();
-                    doScroll = true;
-                }
-            }.bind(this));
-        }
-        if (doScroll) {
-            var pos = Element.cumulativeOffset($(this));
-            window.scrollTo(pos[0], pos[1] - 45);
-        }
-    }
-});
-</script>

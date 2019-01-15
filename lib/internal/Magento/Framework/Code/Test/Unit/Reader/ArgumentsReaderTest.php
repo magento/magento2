@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
-class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
+class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\Reader\ArgumentsReader
@@ -39,35 +39,35 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
             'someVariable' => [
                 'name' => 'someVariable',
                 'position' => 2,
-                'type' => null,
+                'type' => 'mixed',
                 'isOptional' => false,
                 'default' => null,
             ],
             'const' => [
                 'name' => 'const',
                 'position' => 3,
-                'type' => null,
+                'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
                 'position' => 4,
-                'type' => null,
+                'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
                 'position' => 5,
-                'type' => null,
+                'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
                 'position' => 6,
-                'type' => null,
+                'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
             ],
@@ -106,35 +106,35 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
             'someVariable' => [
                 'name' => 'someVariable',
                 'position' => 2,
-                'type' => null,
+                'type' => 'mixed',
                 'isOptional' => false,
                 'default' => null,
             ],
             'const' => [
                 'name' => 'const',
                 'position' => 3,
-                'type' => null,
+                'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
                 'position' => 4,
-                'type' => null,
+                'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
                 'position' => 5,
-                'type' => null,
+                'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
                 'position' => 6,
-                'type' => null,
+                'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
             ],
@@ -175,14 +175,14 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
             'message' => [
                 'name' => 'message',
                 'position' => 0,
-                'type' => null,
+                'type' => 'string',
                 'isOptional' => true,
                 'default' => '',
             ],
             'code' => [
                 'name' => 'code',
                 'position' => 1,
-                'type' => null,
+                'type' => 'int',
                 'isOptional' => true,
                 'default' => 0,
             ],
@@ -263,6 +263,9 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function testIsCompatibleTypeDataProvider()
     {
         return [

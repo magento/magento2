@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
@@ -8,8 +8,10 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 /**
  * Sales Adminhtml report filter form order
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -22,8 +24,6 @@ class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $form = $this->getForm();
-        $htmlIdPrefix = $form->getHtmlIdPrefix();
         /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 

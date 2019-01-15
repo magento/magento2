@@ -1,65 +1,85 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\Order\Pdf\Creditmemo;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
-
+/**
+ * Class Pdfcreditmemos
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected $_fileFactory;
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
-     * @var string
+     * @var FileFactory
      */
-    protected $collection = 'Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection';
+    protected $fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var Creditmemo
+     */
+    protected $pdfCreditmemo;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param Creditmemo $pdfCreditmemo
+     * @param DateTime $dateTime
+     * @param FileFactory $fileFactory
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        Filter $filter,
+        Creditmemo $pdfCreditmemo,
+        DateTime $dateTime,
+        FileFactory $fileFactory,
+        CollectionFactory $collectionFactory
     ) {
-        $this->_fileFactory = $fileFactory;
-        parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
+        $this->pdfCreditmemo = $pdfCreditmemo;
+        $this->fileFactory = $fileFactory;
+        $this->dateTime = $dateTime;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $filter);
     }
 
     /**
      * @param AbstractCollection $collection
-     * @return ResponseInterface|\Magento\Framework\Controller\Result\Redirect
+     * @return ResponseInterface
      * @throws \Exception
+     * @throws \Zend_Pdf_Exception
      */
     public function massAction(AbstractCollection $collection)
     {
-        if (!isset($pdf)) {
-            $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($collection);
-        } else {
-            $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($collection);
-            $pdf->pages = array_merge($pdf->pages, $pages->pages);
-        }
-        $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
+        $pdf = $this->pdfCreditmemo->getPdf($collection);
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
 
-        return $this->_fileFactory->create(
-            'creditmemo' . $date . '.pdf',
-            $pdf->render(),
+        return $this->fileFactory->create(
+            sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AssertStoreGroupOnStoreViewForm extends AbstractConstraint
     {
         $storeGroupName = $storeGroup->getName();
         $storeIndex->open()->getGridPageActions()->addStoreView();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $storeNew->getStoreForm()->isStoreVisible($storeGroupName),
             'Store Group \'' . $storeGroupName . '\' is not present on StoreView Form in Store dropdown.'
         );

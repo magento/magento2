@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Search\Model\Autocomplete;
 
-class Item extends \Magento\Framework\Object implements ItemInterface
+class Item extends \Magento\Framework\DataObject implements ItemInterface
 {
     /**
      * {@inheritdoc}

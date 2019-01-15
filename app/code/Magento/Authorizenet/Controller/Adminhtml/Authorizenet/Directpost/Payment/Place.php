@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
@@ -14,6 +14,8 @@ use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
 
 /**
  * Class Place
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -89,11 +91,11 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
                 $payment = $order->getPayment();
                 if ($payment && $payment->getMethod() == $this->_objectManager->create(
-                    'Magento\Authorizenet\Model\Directpost'
+                    \Magento\Authorizenet\Model\Directpost::class
                 )->getCode()
                 ) {
                     //return json with data.
-                    $session = $this->_objectManager->get('Magento\Authorizenet\Model\Directpost\Session');
+                    $session = $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);
                     $session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $session->setLastOrderIncrementId($order->getIncrementId());
 
@@ -105,7 +107,7 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
                     $requestToAuthorizenet->setOrderSendConfirmation($sendConfirmationFlag);
                     $requestToAuthorizenet->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
 
-                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\UrlInterface');
+                    $adminUrl = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class);
                     if ($adminUrl->useSecretKey()) {
                         $requestToAuthorizenet->setKey(
                             $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment', 'redirect')
@@ -119,11 +121,11 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $message = $e->getMessage();
                 if (!empty($message)) {
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
                 $isError = true;
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Order saving error: %1', $e->getMessage()));
+                $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
                 $isError = true;
             }
 
@@ -131,19 +133,19 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 $result['success'] = 0;
                 $result['error'] = 1;
                 $result['redirect'] = $this->_objectManager->get(
-                    'Magento\Backend\Model\UrlInterface'
+                    \Magento\Backend\Model\UrlInterface::class
                 )->getUrl(
                     'sales/order_create/'
                 );
             }
 
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         } else {
             $result = ['error_messages' => __('Please choose a payment method.')];
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -10,7 +10,7 @@ namespace Magento\Backend\Block;
  *
  * @magentoAppArea adminhtml
  */
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Backend\Block\Widget::getButtonHtml
@@ -18,13 +18,13 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testGetButtonHtml()
     {
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE]
         );
         $layout->getUpdate()->load();
         $layout->generateXml()->generateElements();
 
-        $widget = $layout->createBlock('Magento\Backend\Block\Widget');
+        $widget = $layout->createBlock(\Magento\Backend\Block\Widget::class);
 
         $this->assertRegExp(
             '/<button.*onclick\=\"this.form.submit\(\)\".*\>[\s\S]*Button Label[\s\S]*<\/button>/iu',
@@ -40,13 +40,13 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testGetButtonHtmlForTwoButtonsInOneBlock()
     {
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE]
         );
         $layout->getUpdate()->load();
         $layout->generateXml()->generateElements();
 
-        $widget = $layout->createBlock('Magento\Backend\Block\Widget');
+        $widget = $layout->createBlock(\Magento\Backend\Block\Widget::class);
 
         $this->assertRegExp(
             '/<button.*onclick\=\"this.form.submit\(\)\".*\>[\s\S]*Button Label[\s\S]*<\/button>/iu',
@@ -61,7 +61,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuffixId()
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Backend\Block\Widget');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Backend\Block\Widget::class);
         $this->assertStringEndsNotWith('_test', $block->getSuffixId('suffix'));
         $this->assertStringEndsWith('_test', $block->getSuffixId('test'));
     }

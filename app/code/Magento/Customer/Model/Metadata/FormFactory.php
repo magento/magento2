@@ -2,7 +2,7 @@
 /**
  * Customer Form Element Factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata;
@@ -49,6 +49,6 @@ class FormFactory
             'filterAttributes' => $filterAttributes,
             'isAjax' => $isAjax,
         ];
-        return $this->_objectManager->create('Magento\Customer\Model\Metadata\Form', $params);
+        return $this->_objectManager->create(\Magento\Customer\Model\Metadata\Form::class, $params);
     }
 }

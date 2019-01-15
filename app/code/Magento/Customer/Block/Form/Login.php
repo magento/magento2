@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Form;
@@ -8,7 +8,9 @@ namespace Magento\Customer\Block\Form;
 /**
  * Customer login form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Login extends \Magento\Framework\View\Element\Template
 {
@@ -40,7 +42,7 @@ class Login extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->_isScopePrivate = false;
         $this->_customerUrl = $customerUrl;
         $this->_customerSession = $customerSession;
     }
@@ -85,5 +87,18 @@ class Login extends \Magento\Framework\View\Element\Template
             $this->_username = $this->_customerSession->getUsername(true);
         }
         return $this->_username;
+    }
+
+    /**
+     * Check if autocomplete is disabled on storefront
+     *
+     * @return bool
+     */
+    public function isAutocompleteDisabled()
+    {
+        return (bool)!$this->_scopeConfig->getValue(
+            \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

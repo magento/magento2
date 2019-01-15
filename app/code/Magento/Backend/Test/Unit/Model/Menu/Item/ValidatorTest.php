@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Item;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Item\Validator
@@ -79,6 +79,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function requiredParamsProvider()
     {
         return [['id'], ['title'], ['resource']];
@@ -102,6 +105,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function invalidParamsProvider()
     {
         return [
@@ -138,7 +144,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         }
 
         $newItem = array_merge($newItem, $this->_params);
-        $this->_model->validate($newItem);
+        $result = $this->_model->validate($newItem);
+        $this->assertNull($result);
     }
 
     /**
@@ -207,7 +214,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateParamWithNullForNonRequiredParamDoesntValidate()
     {
         try {
-            $this->_model->validateParam('toolTip', null);
+            $result = $this->_model->validateParam('toolTip', null);
+            $this->assertNull($result);
         } catch (\Exception $e) {
             $this->fail("Non required null values should not be validated");
         }
@@ -226,6 +234,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateParamResourceCompoundModuleNamespace()
     {
-        $this->_model->validateParam('resource', 'TheCompoundNamespace_TheCompoundModule::resource');
+        $result = $this->_model->validateParam('resource', 'TheCompoundNamespace_TheCompoundModule::resource');
+        $this->assertNull($result);
     }
 }

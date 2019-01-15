@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
  * Catalog product option default type
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class DefaultType extends \Magento\Framework\Object
+class DefaultType extends \Magento\Framework\DataObject
 {
     /**
      * Option Instance
@@ -171,12 +172,12 @@ class DefaultType extends \Magento\Framework\Object
     /**
      * Getter for Buy Request
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRequest()
     {
-        if ($this->_getData('request') instanceof \Magento\Framework\Object) {
+        if ($this->_getData('request') instanceof \Magento\Framework\DataObject) {
             return $this->_getData('request');
         }
         throw new LocalizedException(__('The BuyRequest instance in options group is incorrect.'));
@@ -190,7 +191,10 @@ class DefaultType extends \Magento\Framework\Object
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            'catalog/custom_options/' . $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -208,7 +212,9 @@ class DefaultType extends \Magento\Framework\Object
 
         $option = $this->getOption();
         if (!isset($values[$option->getId()]) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         } elseif (isset($values[$option->getId()])) {
             $this->setUserValue($values[$option->getId()]);
             $this->setIsValid(true);
@@ -273,7 +279,7 @@ class DefaultType extends \Magento\Framework\Object
      */
     public function getCustomizedView($optionInfo)
     {
-        return isset($optionInfo['value']) ? $optionInfo['value'] : $optionInfo;
+        return $optionInfo['value'] ?? $optionInfo;
     }
 
     /**
@@ -335,7 +341,7 @@ class DefaultType extends \Magento\Framework\Object
     {
         $option = $this->getOption();
 
-        return $this->_getChargableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
+        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -366,7 +372,7 @@ class DefaultType extends \Magento\Framework\Object
                     $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = [
                         'option_id' => $_option->getId(),
                     ];
-                    if ($_option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
+                    if ($_option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
                         $optionValues = [];
                         foreach ($_option->getValues() as $_value) {
                             /* @var $value \Magento\Catalog\Model\Product\Option\Value */
@@ -389,14 +395,27 @@ class DefaultType extends \Magento\Framework\Object
     }
 
     /**
-     * Return final chargable price for option
+     * @param float $price Price of option
+     * @param boolean $isPercent Price type - percent or fixed
+     * @param float $basePrice For percent price type
+     * @return float
+     * @deprecated 102.0.4 typo in method name
+     * @see _getChargeableOptionPrice
+     */
+    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    {
+        return $this->_getChargeableOptionPrice($price, $isPercent, $basePrice);
+    }
+
+    /**
+     * Return final chargeable price for option
      *
      * @param float $price Price of option
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
      */
-    protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
+    protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {
         if ($isPercent) {
             return $basePrice * $price / 100;

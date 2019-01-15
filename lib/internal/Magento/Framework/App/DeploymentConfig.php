@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
+
 /**
  * Application deployment configuration
+ *
+ * @api
  */
 class DeploymentConfig
 {
@@ -40,13 +44,6 @@ class DeploymentConfig
     private $overrideData;
 
     /**
-     * Availability of deployment config file
-     *
-     * @var bool
-     */
-    private $isAvailable;
-
-    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -65,7 +62,7 @@ class DeploymentConfig
      *
      * @param string $key
      * @param mixed $defaultValue
-     * @return array|null
+     * @return mixed|null
      */
     public function get($key = null, $defaultValue = null)
     {
@@ -73,7 +70,7 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData;
         }
-        return isset($this->flatData[$key]) ? $this->flatData[$key] : $defaultValue;
+        return $this->flatData[$key] ?? $defaultValue;
     }
 
     /**
@@ -85,7 +82,7 @@ class DeploymentConfig
     {
         $this->data = null;
         $this->load();
-        return $this->isAvailable;
+        return isset($this->flatData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE]);
     }
 
     /**
@@ -120,6 +117,18 @@ class DeploymentConfig
     }
 
     /**
+     * Check if data from deploy files is available
+     *
+     * @return bool
+     * @since 100.1.3
+     */
+    public function isDbAvailable()
+    {
+        $this->load();
+        return isset($this->data['db']);
+    }
+
+    /**
      * Loads the configuration data
      *
      * @return void
@@ -128,7 +137,6 @@ class DeploymentConfig
     {
         if (null === $this->data) {
             $this->data = $this->reader->load();
-            $this->isAvailable = !empty($this->data);
             if ($this->overrideData) {
                 $this->data = array_replace($this->data, $this->overrideData);
             }

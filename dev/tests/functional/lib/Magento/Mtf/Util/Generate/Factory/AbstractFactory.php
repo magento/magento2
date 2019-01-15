@@ -1,17 +1,20 @@
 <?php
 /**
- * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Util\Generate\Factory;
+
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class AbstractFactory
  *
  * Abstract Factory Generator
  *
+ * @api
  */
 abstract class AbstractFactory
 {
@@ -24,10 +27,9 @@ abstract class AbstractFactory
     protected $_checkList = [];
 
     /**
-     * @return mixed
-     */
-    /**
      * Generate Blocks
+     *
+     * @return void
      */
     public function launch()
     {
@@ -154,7 +156,7 @@ abstract class AbstractFactory
 
             $pattern = $this->_getPattern($type, $location);
 
-            $filesIterator = glob($pattern, GLOB_BRACE);
+            $filesIterator = Glob::glob($pattern, Glob::GLOB_BRACE);
 
             foreach ($filesIterator as $filePath) {
                 if (!is_dir($filePath)) {
@@ -207,7 +209,7 @@ abstract class AbstractFactory
         if ($reflectionClass->isAbstract()) {
             return;
         }
-        $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations($className);
+        $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations($className);
 
         list(, $targetClassName) = explode($location . '/', $filename);
         $targetClassName = str_replace('.php', '', $targetClassName);

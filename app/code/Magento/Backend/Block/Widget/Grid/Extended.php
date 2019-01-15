@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -8,10 +8,14 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
@@ -48,7 +52,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Grid export types
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_exportTypes = [];
 
@@ -85,7 +89,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      *
      * @var string
      */
-    protected $_massactionBlockName = 'Magento\Backend\Block\Widget\Grid\Massaction\Extended';
+    protected $_massactionBlockName = \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class;
 
     /**
      * Columns view order
@@ -151,7 +155,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * SubTotals
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
 
@@ -192,7 +196,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     {
         $this->setChild(
             'export_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Export'),
                     'onclick' => $this->getJsObjectName() . '.doExport()',
@@ -202,7 +206,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         );
         $this->setChild(
             'reset_filter_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Reset Filter'),
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
@@ -216,7 +220,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         );
         $this->setChild(
             'search_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
@@ -241,7 +245,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         if (!$this->getChildBlock('grid.columnSet')) {
             $this->setChild(
                 'grid.columnSet',
-                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Grid\ColumnSet')
+                $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Grid\ColumnSet::class)
             );
         }
         return parent::getColumnSet();
@@ -266,7 +270,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new \Magento\Framework\Object(
+        $this->_exportTypes[] = new \Magento\Framework\DataObject(
             ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
@@ -276,7 +280,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Add column to grid
      *
      * @param   string $columnId
-     * @param   array|\Magento\Framework\Object $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @return  $this
      * @throws  \Exception
      */
@@ -286,7 +290,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             $this->getColumnSet()->setChild(
                 $columnId,
                 $this->getLayout()
-                    ->createBlock('Magento\Backend\Block\Widget\Grid\Column\Extended')
+                    ->createBlock(\Magento\Backend\Block\Widget\Grid\Column\Extended::class)
                     ->setData($column)
                     ->setId($columnId)
                     ->setGrid($this)
@@ -311,7 +315,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         if ($this->getColumnSet()->getChildBlock($columnId)) {
             $this->getColumnSet()->unsetChild($columnId);
             if ($this->_lastColumnId == $columnId) {
-                $this->_lastColumnId = array_pop($this->getColumnSet()->getChildNames());
+                $names = $this->getColumnSet()->getChildNames();
+                $this->_lastColumnId = array_pop($names);
             }
         }
         return $this;
@@ -321,7 +326,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Add column to grid after specified column.
      *
      * @param   string $columnId
-     * @param   array|\Magento\Framework\Object $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @param   string $after
      * @return  $this
      */
@@ -430,7 +435,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()
-            ->createBlock('Magento\Backend\Block\Widget\Grid\Column')
+            ->createBlock(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->setData(
                 [
                     'index' => $this->getMassactionIdField(),
@@ -613,7 +618,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether should render cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -653,7 +658,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $item
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $item
      * @return string
      */
     public function getRowUrl($item)
@@ -665,7 +670,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Get children of specified item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return array
      */
     public function getMultipleRows($item)
@@ -689,7 +694,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether subtotal should be rendered
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return boolean
      */
     public function shouldRenderSubTotal($item)
@@ -700,7 +705,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve rowspan number
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
      */
@@ -734,7 +739,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Check whether should render empty cell
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
@@ -756,8 +761,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve subtotal item
      *
-     * @param \Magento\Framework\Object $item
-     * @return \Magento\Framework\Object|string
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject|string
      */
     public function getSubTotalItem($item)
     {
@@ -975,12 +980,12 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Write item data to csv export file
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
     protected function _exportCsvItem(
-        \Magento\Framework\Object $item,
+        \Magento\Framework\DataObject $item,
         \Magento\Framework\Filesystem\File\WriteInterface $stream
     ) {
         $row = [];
@@ -1116,10 +1121,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      *  Get a row data of the particular columns
      *
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return string[]
      */
-    public function getRowRecord(\Magento\Framework\Object $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data)
     {
         $row = [];
         foreach ($this->getColumns() as $column) {
@@ -1220,7 +1225,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve grid export types
      *
-     * @return \Magento\Framework\Object[]|false
+     * @return \Magento\Framework\DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -1274,7 +1279,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Set subtotal items
      *
-     * @param \Magento\Framework\Object[] $items
+     * @param \Magento\Framework\DataObject[] $items
      * @return $this
      */
     public function setSubTotals(array $items)
@@ -1286,7 +1291,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve subtotal items
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getSubTotals()
     {

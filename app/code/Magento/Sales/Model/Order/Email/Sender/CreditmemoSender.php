@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -11,9 +11,10 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
-use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class CreditmemoSender
@@ -102,7 +103,7 @@ class CreditmemoSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
-            
+
             $transport = [
                 'order' => $order,
                 'creditmemo' => $creditmemo,
@@ -113,19 +114,26 @@ class CreditmemoSender extends Sender
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
             ];
+            $transportObject = new DataObject($transport);
 
+            /**
+             * Event argument `transport` is @deprecated. Use `transportObject` instead.
+             */
             $this->eventManager->dispatch(
                 'email_creditmemo_set_template_vars_before',
-                ['sender' => $this, 'transport' => $transport]
+                ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transportObject->getData());
 
             if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);
                 $this->creditmemoResource->saveAttribute($creditmemo, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $creditmemo->setEmailSent(null);
+            $this->creditmemoResource->saveAttribute($creditmemo, 'email_sent');
         }
 
         $this->creditmemoResource->saveAttribute($creditmemo, 'send_email');

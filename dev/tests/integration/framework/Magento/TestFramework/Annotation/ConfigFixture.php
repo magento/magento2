@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,17 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Handler which works with magentoConfigFixture annotations
+ *
+ * @package Magento\TestFramework\Annotation
+ */
 class ConfigFixture
 {
     /**
      * Test instance that is available between 'startTest' and 'stopTest' events
      *
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_currentTest;
 
@@ -47,7 +52,7 @@ class ConfigFixture
         $result = null;
         if ($scopeCode !== false) {
             /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
-            $scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+            $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $result = $scopeConfig->getValue(
                 $configPath,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -71,7 +76,7 @@ class ConfigFixture
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
                 $objectManager->get(
-                    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
                 )->setValue(
                     $configPath,
                     $value,
@@ -80,7 +85,7 @@ class ConfigFixture
             }
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                \Magento\Framework\App\Config\MutableScopeConfigInterface::class
             )->setValue(
                 $configPath,
                 $value,
@@ -93,9 +98,10 @@ class ConfigFixture
     /**
      * Assign required config values and save original ones
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _assignConfigData(\PHPUnit_Framework_TestCase $test)
+    protected function _assignConfigData(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         if (!isset($annotations['method']['magentoConfigFixture'])) {
@@ -106,7 +112,7 @@ class ConfigFixture
                 /* Store-scoped config value */
                 $storeCode = $matches[0] != 'current' ? $matches[0] : null;
                 $parts = preg_split('/\s+/', $configPathAndValue, 3);
-                list(, $configPath, $requiredValue) = $parts + ['', '', ''];
+                list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
                 $originalValue = $this->_getConfigValue($configPath, $storeCode);
                 $this->_storeConfigValues[$storeCode][$configPath] = $originalValue;
                 $this->_setConfigValue($configPath, $requiredValue, $storeCode);
@@ -148,9 +154,9 @@ class ConfigFixture
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
@@ -159,11 +165,11 @@ class ConfigFixture
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = null;
         $this->_restoreConfigData();

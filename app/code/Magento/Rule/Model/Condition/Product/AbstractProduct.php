@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\Condition\Product;
+
+use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract Rule product condition data model
  *
- * @author Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Rule\Model\Condition\Product;
-
-/**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -65,12 +67,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_attrSetCollection;
 
@@ -80,15 +82,23 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_localeFormat;
 
     /**
+     * @var ProductCategoryList
+     */
+    private $productCategoryList;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param ProductCategoryList|null $categoryList
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -96,10 +106,11 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = []
+        array $data = [],
+        ProductCategoryList $categoryList = null
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
@@ -108,6 +119,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
         $this->_localeFormat = $localeFormat;
+        $this->productCategoryList = $categoryList ?: ObjectManager::getInstance()->get(ProductCategoryList::class);
         parent::__construct($context, $data);
     }
 
@@ -132,14 +144,14 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttributeObject()
     {
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
         } catch (\Exception $e) {
-            $obj = new \Magento\Framework\Object();
+            $obj = new \Magento\Framework\DataObject();
             $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;
@@ -153,7 +165,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
-        $attributes['attribute_set_id'] = __('Product Template');
+        $attributes['attribute_set_id'] = __('Attribute Set');
         $attributes['category_ids'] = __('Category');
     }
 
@@ -168,7 +180,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
                 $this->_isUsedForRuleProperty
             )
@@ -332,7 +344,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Collect validated attributes
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)
@@ -520,7 +532,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            $productId = (int)$model->getEntityId();
+            return $this->validateAttribute($this->productCategoryList->getCategoryIds($productId));
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
                 return false;
@@ -581,7 +594,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         if ($this->getAttribute() == 'category_ids') {
             return new \Zend_Db_Expr(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                 ->select()
                 ->from(
                     $this->_productResource->getTable('catalog_category_product'),
@@ -602,7 +615,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     public function getMappedSqlField()
     {
-        if (!$this->isAttributeSetOrCategory()) {
+        if ($this->getAttribute() == 'sku') {
+            $mappedSqlField = 'e.sku';
+        } elseif (!$this->isAttributeSetOrCategory()) {
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
@@ -640,9 +655,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchCol(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(
@@ -663,9 +678,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAttributeSetId($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchOne(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(

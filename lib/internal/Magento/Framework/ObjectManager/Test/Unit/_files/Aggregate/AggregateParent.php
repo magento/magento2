@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Di\Aggregate;
@@ -17,6 +17,14 @@ class AggregateParent implements \Magento\Test\Di\Aggregate\AggregateInterface
 
     public $optionalScalar;
 
+    /**
+     * AggregateParent constructor.
+     * @param \Magento\Test\Di\DiInterface $interface
+     * @param \Magento\Test\Di\DiParent $parent
+     * @param \Magento\Test\Di\Child $child
+     * @param $scalar
+     * @param int $optionalScalar
+     */
     public function __construct(
         \Magento\Test\Di\DiInterface $interface,
         \Magento\Test\Di\DiParent $parent,

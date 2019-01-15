@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,12 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Reports\Test\Page\Adminhtml\CustomerTotalsReport;
 
 /**
- * Class AssertCustomerOrderTotalReportResult
- * Assert OrderTotalReport grid for all params
+ * Assert OrderTotalReport grid for all params.
  */
 class AssertCustomerOrderTotalReportResult extends AbstractAssertCustomerOrderReportResult
 {
     /**
-     * Assert OrderTotalReport grid for all params
+     * Assert OrderTotalReport grid for all params.
      *
      * @param CustomerTotalsReport $customerTotalsReport
      * @param Customer $customer
@@ -32,14 +31,14 @@ class AssertCustomerOrderTotalReportResult extends AbstractAssertCustomerOrderRe
     ) {
         $filter = $this->prepareFilter($customer, $columns, $report);
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $customerTotalsReport->getGridBlock()->isRowVisible($filter),
+        \PHPUnit\Framework\Assert::assertTrue(
+            $customerTotalsReport->getGridBlock()->isRowVisible($filter, false),
             'Order does not present in report grid.'
         );
     }
 
     /**
-     * Returns a string representation of successful assertion
+     * Returns a string representation of successful assertion.
      *
      * @return string
      */

@@ -1,29 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree */
-    protected $_block;
+    protected $block;
 
     protected function setUp()
     {
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree'
+        $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class
         );
     }
 
     public function testSetGetCategoryIds()
     {
-        $this->_block->setCategoryIds([1, 4, 7, 56, 2]);
-        $this->assertEquals([1, 4, 7, 56, 2], $this->_block->getCategoryIds());
+        $this->block->setCategoryIds([1, 4, 7, 56, 2]);
+        $this->assertEquals([1, 4, 7, 56, 2], $this->block->getCategoryIds());
     }
 
     /**
@@ -31,8 +33,8 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTreeJson()
     {
-        $jsonTree = $this->_block->getTreeJson();
-        $this->assertContains('Default Category (1)', $jsonTree);
+        $jsonTree = $this->block->getTreeJson();
+        $this->assertContains('Default Category (4)', $jsonTree);
         $this->assertContains('Category 1.1 (2)', $jsonTree);
         $this->assertContains('Category 1.1.1 (1)', $jsonTree);
         $this->assertContains('Category 2 (0)', $jsonTree);
@@ -41,6 +43,6 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Movable Position 2 (2)', $jsonTree);
         $this->assertContains('Movable Position 3 (2)', $jsonTree);
         $this->assertContains('Category 12 (2)', $jsonTree);
-        $this->assertContains('"path":"1\/2\/3\/4\/5"', $jsonTree);
+        $this->assertStringMatchesFormat('%s"path":"1\/2\/%s\/%s\/%s"%s', $jsonTree);
     }
 }

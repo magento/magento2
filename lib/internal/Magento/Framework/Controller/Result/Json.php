@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller\Result;
 
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\Translate\InlineInterface;
 
 /**
  * A possible implementation of JSON response type (instead of hardcoding json_encode() all over the place)
  * Actual for controller actions that serve ajax requests
+ *
+ * @api
  */
 class Json extends AbstractResult
 {
@@ -27,11 +29,21 @@ class Json extends AbstractResult
     protected $json;
 
     /**
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    public function __construct(InlineInterface $translateInline)
-    {
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     */
+    public function __construct(
+        InlineInterface $translateInline,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
         $this->translateInline = $translateInline;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -41,10 +53,14 @@ class Json extends AbstractResult
      * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
      * @param array $options Additional options used during encoding
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        $this->json = \Zend_Json::encode($data, $cycleCheck, $options);
+        if ($data instanceof \Magento\Framework\DataObject) {
+            $data = $data->toArray();
+        }
+        $this->json = $this->serializer->serialize($data);
         return $this;
     }
 
@@ -61,10 +77,11 @@ class Json extends AbstractResult
     /**
      * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->translateInline->processResponseBody($this->json, true);
-        $response->representJson($this->json);
+        $response->setHeader('Content-Type', 'application/json', true);
+        $response->setBody($this->json);
         return $this;
     }
 }

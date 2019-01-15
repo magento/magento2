@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Variable\Model\Variable');
+$variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Variable\Model\Variable::class
+);
 $variable->setCode(
     'variable_code'
 )->setName(

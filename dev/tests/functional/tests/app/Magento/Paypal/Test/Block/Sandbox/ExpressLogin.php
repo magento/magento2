@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,23 +19,6 @@ class ExpressLogin extends Form
      * @var string
      */
     protected $loginButton = '#btnLogin';
-
-    /**
-     * PayPal load spinner.
-     *
-     * @var string
-     */
-    protected $preloaderSpinner = '#preloaderSpinner';
-
-    /**
-     * Wait for PayPal page is loaded.
-     *
-     * @return void
-     */
-    public function waitForFormLoaded()
-    {
-        $this->waitForElementNotVisible($this->preloaderSpinner);
-    }
 
     /**
      * Login to PayPal Sandbox.

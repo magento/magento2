@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Braintree\Test\TestCase\OnePageCheckoutWith3dSecureFailedTest" summary="Onepage checkout with Braintree payment method with 3D Secure enabled.">
+        <variation name="OnePageCheckoutBraintree3dSecureFailedTestVariation1" summary="Guest Checkout with Braintree Credit Card from Storefront with  3D Secure verification failed" ticketId="MAGETWO-46477">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure_failed</data>
+            <data name="secure3d/dataset" xsi:type="string">secure3d_braintree</data>
+            <data name="configData" xsi:type="string">braintree, braintree_3d_secure</data>
+            <data name="expectedErrorMessage" xsi:type="string">Please try again with another form of payment.</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
+        </variation>
+    </testCase>
+</config>

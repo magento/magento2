@@ -1,17 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
-use \Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\Quote\Model\Cart\ShippingMethodConverter;
 
-class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
+class ShippingMethodConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShippingMethodConverter
@@ -56,16 +54,14 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->shippingMethodDataFactoryMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->shippingMethodDataFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class,
+            ['create']
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Model\Cart\ShippingMethod',
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->currencyMock = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $this->shippingMethodMock = $this->createPartialMock(
+            \Magento\Quote\Model\Cart\ShippingMethod::class,
             [
                 'create',
                 'setCarrierCode',
@@ -77,11 +73,10 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
                 'setAvailable',
                 'setPriceExclTax',
                 'setPriceInclTax'
-            ],
-            [],
-            '',
-            false);
-        $this->rateModelMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate',
+            ]
+        );
+        $this->rateModelMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address\Rate::class,
             [
                 'getPrice',
                 'getCarrier',
@@ -90,15 +85,13 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
                 'getMethodTitle',
                 '__wakeup',
                 'getAddress'
-            ],
-            [],
-            '',
-            false);
-        $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->taxHelper = $this->getMock('\Magento\Tax\Helper\Data', [], [], '', false);
+            ]
+        );
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
 
         $this->converter = $objectManager->getObject(
-            'Magento\Quote\Model\Cart\ShippingMethodConverter',
+            \Magento\Quote\Model\Cart\ShippingMethodConverter::class,
             [
                 'shippingMethodDataFactory' => $this->shippingMethodDataFactoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -134,8 +127,8 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->rateModelMock->expects($this->once())
             ->method('getMethodTitle')->will($this->returnValue('METHOD_TITLE'));
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->rateModelMock->expects($this->exactly(4))->method('getAddress')->willReturn($addressMock);
 
         $addressMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);

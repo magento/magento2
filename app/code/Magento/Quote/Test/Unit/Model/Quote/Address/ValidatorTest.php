@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-use \Magento\Quote\Model\Quote\Address\Validator;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+use Magento\Quote\Model\Quote\Address\Validator;
+
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Validator
@@ -35,21 +35,18 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->countryFactoryMock = $this->getMock('\Magento\Directory\Model\CountryFactory', [], [], '', false);
-        $this->countryMock = $this->getMock('\Magento\Directory\Model\Country', [], [], '', false);
-        $this->itemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            ['getCountryId', 'getEmail'],
-            [],
-            '',
-            false
+        $this->countryFactoryMock = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
+        $this->countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
+        $this->itemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getCountryId', 'getEmail']
         );
         $this->countryFactoryMock
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->countryMock));
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Address\Validator',
+            \Magento\Quote\Model\Quote\Address\Validator::class,
             [
                 'countryFactory' => $this->countryFactoryMock,
             ]

@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\Webapi\Exception;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Builder
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Builder
 {
@@ -104,7 +107,6 @@ class Builder
         $this->logger = $logger;
         $this->data = array_flip($this->pattern);
     }
-
 
     /**
      * @param string $entityType
@@ -246,9 +248,9 @@ class Builder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
-            $adapter = $this->appResource->getConnection('sales_write');
-            if (!$adapter->isTableExists($this->data['sequence_table'])) {
-                $adapter->query(
+            $connection = $this->appResource->getConnection('sales');
+            if (!$connection->isTableExists($this->data['sequence_table'])) {
+                $connection->query(
                     $this->ddlSequence->getCreateSequenceDdl(
                         $this->data['sequence_table'],
                         $this->data['start_value']

@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
 use Magento\Quote\Model\Quote\Address;
+use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
+use Magento\Framework\App\ObjectManager;
+use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 
 /**
  * Class RulesApplier
@@ -26,25 +29,39 @@ class RulesApplier
     protected $validatorUtility;
 
     /**
+     * @var ChildrenValidationLocator
+     */
+    private $childrenValidationLocator;
+
+    /**
+     * @var CalculatorFactory
+     */
+    private $calculatorFactory;
+
+    /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Utility $utility
+     * @param ChildrenValidationLocator|null $childrenValidationLocator
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\SalesRule\Model\Utility $utility
+        \Magento\SalesRule\Model\Utility $utility,
+        ChildrenValidationLocator $childrenValidationLocator = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
+        $this->childrenValidationLocator = $childrenValidationLocator
+             ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
     }
 
     /**
      * Apply rules to current order item
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Resource\Rule\Collection $rules
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $rules
      * @param bool $skipValidation
      * @param mixed $couponCode
      * @return array
@@ -61,6 +78,9 @@ class RulesApplier
             }
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
+                if (!$this->childrenValidationLocator->isChildrenValidationRequired($item)) {
+                     continue;
+                }
                 $childItems = $item->getChildren();
                 $isContinue = true;
                 if (!empty($childItems)) {

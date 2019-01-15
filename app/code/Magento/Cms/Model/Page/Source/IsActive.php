@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page\Source;
@@ -34,8 +34,8 @@ class IsActive implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $options[] = ['label' => '', 'value' => ''];
         $availableOptions = $this->cmsPage->getAvailableStatuses();
+        $options = [];
         foreach ($availableOptions as $key => $value) {
             $options[] = [
                 'label' => $value,

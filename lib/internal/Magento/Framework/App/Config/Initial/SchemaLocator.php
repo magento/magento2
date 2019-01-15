@@ -2,10 +2,12 @@
 /**
  * Logging schema locator
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config\Initial;
+
+use Magento\Framework\Module\Dir;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -22,7 +24,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader, $moduleName)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', $moduleName) . '/config.xsd';
+        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, $moduleName) . '/config.xsd';
     }
 
     /**

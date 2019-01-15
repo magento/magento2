@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Catalog\Model\Layer\Filter\Price\Render;
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Catalog\Model\Resource\Layer\Filter\Price;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Form\FormKey;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
@@ -24,14 +24,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formKeyMock = $this->getMock(
-            '\Magento\Framework\Data\Form\FormKey',
-            ['getFormKey'],
-            [],
-            '',
-            false
-        );
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->_formKeyMock = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey::class, ['getFormKey']);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_model = new \Magento\Framework\Data\Form\FormKey\Validator($this->_formKeyMock);
     }
 
@@ -56,6 +50,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->validate($this->_requestMock));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

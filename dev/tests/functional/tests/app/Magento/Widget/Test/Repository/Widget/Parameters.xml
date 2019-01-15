@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Widget\Test\Repository\Widget\Parameters">
+        <dataset name="cmsPageLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">cmsPage::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="cmsStaticBlock">
+            <field name="chooser_title" xsi:type="string">%title%</field>
+            <field name="chooser_identifier" xsi:type="string">%identifier%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">cmsBlock::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogCategoryLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">category::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogNewProductsList">
+            <field name="display_type" xsi:type="string">All products</field>
+            <field name="show_pager" xsi:type="string">No</field>
+            <field name="products_count" xsi:type="string">2</field>
+        </dataset>
+
+        <dataset name="catalogProductLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="recentlyComparedProducts">
+            <field name="page_size" xsi:type="string">4</field>
+            <field name="show_attributes" xsi:type="array">
+                <item name="name" xsi:type="string">Name</item>
+                <item name="image" xsi:type="string">Image</item>
+                <item name="price" xsi:type="string">Price</item>
+            </field>
+            <field name="show_buttons" xsi:type="array">
+                <item name="add_to_cart" xsi:type="string">Add to Cart</item>
+                <item name="add_to_compare" xsi:type="string">Add to Compare</item>
+                <item name="add_to_wishlist" xsi:type="string">Add to Wishlist</item>
+            </field>
+        </dataset>
+
+        <dataset name="recentlyViewedProducts">
+            <field name="page_size" xsi:type="string">4</field>
+            <field name="show_attributes" xsi:type="array">
+                <item name="name" xsi:type="string">Name</item>
+                <item name="image" xsi:type="string">Image</item>
+                <item name="price" xsi:type="string">Price</item>
+                <item name="learn_more" xsi:type="string">Learn More Link</item>
+            </field>
+            <field name="show_buttons" xsi:type="array">
+                <item name="add_to_cart" xsi:type="string">Add to Cart</item>
+                <item name="add_to_compare" xsi:type="string">Add to Compare</item>
+                <item name="add_to_wishlist" xsi:type="string">Add to Wishlist</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogNewProductsListNewOnly">
+            <field name="display_type" xsi:type="string">New products</field>
+            <field name="show_pager" xsi:type="string">No</field>
+            <field name="products_count" xsi:type="string">1</field>
+        </dataset>
+    </repository>
+</config>

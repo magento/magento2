@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @codingStandardsIgnoreStart
+ * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ */
 
 namespace Magento\SomeModule\Model;
 
@@ -29,7 +32,7 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
      * @param array $data
      * @return TestThree
      */
-    public static function testMethod1(array &$data = array());
+    public static function testMethod1(array &$data = []);
 
     /**
      * Method short description

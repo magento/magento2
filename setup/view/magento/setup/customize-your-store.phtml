@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,48 +25,34 @@
         <legend class="legend">
             Customize Your Store
         </legend>
+        <?php if ($this->isSampleDataInstalled || $this->isSampleDataErrorInstallation): ?>
         <div class="row form-row">
             <div class="col-m-3">
                 <label class="form-label">Sample Data</label>
             </div>
             <div class="col-m-6">
-                <p>
-                    Select “Use Sample Data" to create a sample store with sample products, customers, and payment settings. Our <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/install/sample-data.html">Guide to Using Sample Data</a> can help you get started.
-                </p>
-                <input
-                    id="useSampleData"
-                    class="form-el-checkbox"
-                    type="checkbox"
-                    ng-model="store.useSampleData"
-                    <?php echo $this->isSampledataEnabled ? '' : 'disabled' ?>
-                    >
-                <label class="form-label" for="useSampleData">
-                    Use Sample Data
-                </label>
-
-                <?php if ($this->isSampleDataInstalled || $this->isSampleDataErrorInstallation): ?>
-                    <div class="customize-database-clean">
-                        <p>
-                            <?php if ($this->isSampleDataInstalled): ?>
-                                You have already installed sample data. If you want to re-install it, your database has to be cleaned up
-                            <?php endif; ?>
-                            <?php if ($this->isSampleDataErrorInstallation): ?>
-                                Your sample data is broken. If you want to re-install it, your database has to be cleaned up
-                            <?php endif; ?>
-                        </p>
-                        <input
-                            type="checkbox"
-                            ng-model="store.cleanUpDatabase"
-                            class="form-el-checkbox"
-                            id="cleanUpDatabase"
-                            >
-                        <label class="form-label" for="cleanUpDatabase">
-                            Clean up automatically
-                        </label>
-                    </div>
-                <?php endif; ?>
+                <div class="customize-database-clean">
+                    <p>
+                        <?php if ($this->isSampleDataInstalled): ?>
+                            You have already installed sample data. If you want to re-install it, your database has to be cleaned up
+                        <?php endif; ?>
+                        <?php if ($this->isSampleDataErrorInstallation): ?>
+                            Your sample data is broken. If you want to re-install it, your database has to be cleaned up
+                        <?php endif; ?>
+                    </p>
+                    <input
+                        type="checkbox"
+                        ng-model="store.cleanUpDatabase"
+                        class="form-el-checkbox"
+                        id="cleanUpDatabase"
+                        >
+                    <label class="form-label" for="cleanUpDatabase">
+                        Clean up automatically
+                    </label>
+                </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <div class="row form-row">
             <div class="col-m-3">
@@ -83,7 +69,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->timezone as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -107,10 +93,9 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->currency as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
-                </label>
                 </label>
             </div>
         </div>
@@ -132,7 +117,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->language as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -157,7 +142,7 @@
                 >
                 <div class="message-text">
                     <p>
-                        An error has occurred. 
+                        An error has occurred.
                         <a href="#"
                            ng-click="expandError()"
                            ng-class="{'expanded' : store.errorFlag}"
@@ -193,7 +178,7 @@
             <p class="advanced-modules-select">
                 <input id="selectAll" type="checkbox"
                    class="form-el-checkbox"
-                   ng-model="store.selectAll"
+                   ng-checked="store.selectAll"
                    ng-click="toggleAllModules()">
                 <label class="form-label" for="selectAll">
                    Select All

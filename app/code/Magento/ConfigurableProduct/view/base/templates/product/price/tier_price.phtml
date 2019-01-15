@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<script type="text/x-magento-template" id="tier-prices-template">
+    <ul class="prices-tier items">
+        <% _.each(tierPrices, function(item, key) { %>
+        <%  var priceStr = '<span class="price-container price-tier_price">'
+                + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
+                + ' data-price-type=""' + ' class="price-wrapper ">'
+                + '<span class="price">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                + '</span>'
+            + '</span>'; %>
+        <li class="item">
+            <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
+            .replace('%1', item.qty)
+            .replace('%2', priceStr) %>
+            <strong class="benefit">
+                <?= $block->escapeHtml(__('save')) ?><span
+                        class="percent tier-<%= key %>">&nbsp;<%= item.percentage %></span>%
+            </strong>
+        </li>
+        <% }); %>
+    </ul>
+</script>
+<div data-role="tier-price-block"></div>

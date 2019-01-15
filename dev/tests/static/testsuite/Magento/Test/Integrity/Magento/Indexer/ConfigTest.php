@@ -5,13 +5,21 @@
  * Find "indexer.xml" files in code tree and validate them.  Also verify schema fails on an invalid xml and
  * passes on a valid xml.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Indexer;
 
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+    }
+
     /**
      * Returns the name of the XSD file to be used to validate the XML
      *
@@ -19,7 +27,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Indexer/etc/indexer_merged.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd');
     }
 
     /**
@@ -69,7 +77,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '/app/code/Magento/Indexer/etc/indexer.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
     }
 
     /**
@@ -79,6 +87,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXmlName()
     {
-        return '/app/code/Magento/Indexer/etc/indexer.xml';
+        return '/lib/internal/Magento/Framework/Indexer/etc/indexer.xml';
     }
 }

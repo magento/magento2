@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Template model
  *
- * @method \Magento\Newsletter\Model\Resource\Template _getResource()
- * @method \Magento\Newsletter\Model\Resource\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Newsletter\Model\Template setTemplateCode(string $value)
  * @method \Magento\Newsletter\Model\Template setTemplateText(string $value)
@@ -33,13 +31,17 @@ namespace Magento\Newsletter\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
      * Mail object
      *
-     * @var \Zend_Mail
+     * @deprecated Unused property
+     *
      */
     protected $_mail;
 
@@ -76,9 +78,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
      *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
-     * @param \Magento\Framework\Url $urlModel
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Url|\Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
+     * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory ,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -93,6 +96,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
@@ -109,6 +113,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $filterManager,
             $urlModel,
             $data
         );
@@ -124,7 +129,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Resource\Template');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Template::class);
     }
 
     /**
@@ -171,7 +176,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     public function beforeSave()
     {
         $this->validate();
-        return parent::beforeSave();
+        parent::beforeSave();
+        return $this;
     }
 
     /**
@@ -235,9 +241,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
+        return $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Annotation;
@@ -10,7 +10,7 @@ namespace Magento\Test\Annotation;
  *
  * @magentoDbIsolation enabled
  */
-class DbIsolationTest extends \PHPUnit_Framework_TestCase
+class DbIsolationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\DbIsolation

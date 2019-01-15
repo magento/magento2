@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
 {
@@ -138,6 +139,33 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      * @return bool|null
      */
     public function getIsFilterableInGrid();
+
+    /**
+     * Set is attribute used in grid
+     *
+     * @param bool|null $isUsedInGrid
+     * @return $this
+     * @since 101.1.0
+     */
+    public function setIsUsedInGrid($isUsedInGrid);
+
+    /**
+     * Set is attribute visible in grid
+     *
+     * @param bool|null $isVisibleInGrid
+     * @return $this
+     * @since 101.1.0
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid);
+
+    /**
+     * Set is attribute filterable in grid
+     *
+     * @param bool|null $isFilterableInGrid
+     * @return $this
+     * @since 101.1.0
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid);
 
     /**
      * Set whether it is used in search results layered navigation

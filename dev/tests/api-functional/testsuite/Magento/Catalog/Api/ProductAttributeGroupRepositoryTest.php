@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -180,7 +180,7 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Entity\Attribute\Group */
-        $attributeGroup = $objectManager->create('Magento\Eav\Model\Entity\Attribute\Group')
+        $attributeGroup = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Group::class)
             ->load($groupName, 'attribute_group_name');
         if ($attributeGroup->getId() === null) {
             return null;

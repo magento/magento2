@@ -1,36 +1,43 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\SalesRule;
 
-class CalculatorTest extends \PHPUnit_Framework_TestCase
+class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\OfflineShipping\Model\SalesRule\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_model = $this->getMock(
-            'Magento\OfflineShipping\Model\SalesRule\Calculator',
-            ['_getRules', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_model = $this->createPartialMock(
+            \Magento\OfflineShipping\Model\SalesRule\Calculator::class,
+            ['_getRules', '__wakeup']
         );
-        $this->_model->expects($this->any())->method('_getRules')->will($this->returnValue([]));
     }
 
+    /**
+     * @return bool
+     */
     public function testProcessFreeShipping()
     {
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', ['getAddress', '__wakeup'], [], '', false);
-        $item->expects($this->once())->method('getAddress')->will($this->returnValue(true));
+        $addressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getAddress', '__wakeup']);
+        $item->expects($this->once())->method('getAddress')->will($this->returnValue($addressMock));
+
+        $this->_model->expects($this->once())
+            ->method('_getRules')
+            ->with($addressMock)
+            ->will($this->returnValue([]));
 
         $this->assertInstanceOf(
-            'Magento\OfflineShipping\Model\SalesRule\Calculator',
+            \Magento\OfflineShipping\Model\SalesRule\Calculator::class,
             $this->_model->processFreeShipping($item)
         );
 

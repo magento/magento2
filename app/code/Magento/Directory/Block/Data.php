@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Block;
 
+/**
+ * Directory data block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Data extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -13,12 +18,12 @@ class Data extends \Magento\Framework\View\Element\Template
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionCollectionFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countryCollectionFactory;
 
@@ -33,12 +38,17 @@ class Data extends \Magento\Framework\View\Element\Template
     protected $directoryHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -46,8 +56,8 @@ class Data extends \Magento\Framework\View\Element\Template
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -59,6 +69,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns load url for regions
+     *
      * @return string
      */
     public function getLoadrRegionUrl()
@@ -67,7 +79,9 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * Returns country collection instance
+     *
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function getCountryCollection()
     {
@@ -95,6 +109,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns country html select
+     *
      * @param null|string $defValue
      * @param string $name
      * @param string $id
@@ -110,15 +126,15 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = unserialize($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             $options = $this->getCountryCollection()
                 ->setForegroundCountries($this->getTopDestinations())
                 ->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
             $name
         )->setId(
@@ -138,7 +154,9 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * Returns region collection
+     *
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {
@@ -152,6 +170,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns region html select
+     *
      * @return string
      */
     public function getRegionHtmlSelect()
@@ -160,13 +180,13 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = unserialize($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
             'region'
         )->setTitle(
@@ -176,7 +196,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            intval($this->getRegionId())
+            (int)$this->getRegionId()
         )->setOptions(
             $options
         )->getHtml();
@@ -185,6 +205,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns country id
+     *
      * @return string
      */
     public function getCountryId()
@@ -197,6 +219,8 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns regions js
+     *
      * @return string
      */
     public function getRegionsJs()
@@ -223,5 +247,20 @@ class Data extends \Magento\Framework\View\Element\Template
         }
         \Magento\Framework\Profiler::stop('TEST: ' . __METHOD__);
         return $regionsJs;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

@@ -1,0 +1,15 @@
+<input
+    class="admin__control-radio"
+    data-bind="
+    attr: {
+        id: uid,
+        name: inputCheckBoxName,
+        type: 'checkbox'
+    },
+    value: value,
+    disable: disabled,
+    hasFocus: focused,
+    keyboard: keyboard,
+    simpleChecked: checked
+    ">
+<label class="admin__field-label" data-bind="attr: {for: uid}, text: description"></label>

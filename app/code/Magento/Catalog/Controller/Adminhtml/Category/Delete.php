@@ -1,14 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpPostActionInterface
 {
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     protected $categoryRepository;
 
     /**
@@ -42,12 +46,12 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
                 $this->_eventManager->dispatch('catalog_controller_category_delete', ['category' => $category]);
                 $this->_auth->getAuthStorage()->setDeletedPath($category->getPath());
                 $this->categoryRepository->delete($category);
-                $this->messageManager->addSuccess(__('You deleted the category.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while trying to delete the category.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while trying to delete the category.'));
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             }
         }

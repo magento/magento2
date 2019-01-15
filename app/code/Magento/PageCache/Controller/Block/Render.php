@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller\Block;
@@ -27,7 +27,9 @@ class Render extends \Magento\PageCache\Controller\Block
         $currentRequestUri = $this->getRequest()->getRequestUri();
 
         $origRequest = $this->getRequest()->getParam('originalRequest');
-        $origRequest = json_decode($origRequest, true);
+        if ($origRequest && is_string($origRequest)) {
+            $origRequest = json_decode($origRequest, true);
+        }
         $this->getRequest()->setRouteName($origRequest['route']);
         $this->getRequest()->setControllerName($origRequest['controller']);
         $this->getRequest()->setActionName($origRequest['action']);

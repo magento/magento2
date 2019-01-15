@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Fallback Rule Theme
@@ -22,13 +26,27 @@ class Theme implements RuleInterface
     protected $rule;
 
     /**
+     * Component registrar
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * Constructors
      *
      * @param RuleInterface $rule
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(RuleInterface $rule)
+    public function __construct(RuleInterface $rule, ComponentRegistrarInterface $componentRegistrar)
     {
         $this->rule = $rule;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -50,12 +68,54 @@ class Theme implements RuleInterface
         $theme = $params['theme'];
         unset($params['theme']);
         while ($theme) {
-            if ($theme->getThemePath()) {
-                $params['theme_path'] = $theme->getThemePath();
+            if ($theme->getFullPath()) {
+                $params['theme_dir'] = $this->componentRegistrar->getPath(
+                    ComponentRegistrar::THEME,
+                    $theme->getFullPath()
+                );
+
+                $params = $this->getThemePubStaticDir($theme, $params);
                 $result = array_merge($result, $this->rule->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();
         }
         return $result;
+    }
+
+    /**
+     * Get dir of Theme that contains published static view files
+     *
+     * @param ThemeInterface $theme
+     * @param array $params
+     * @return array
+     */
+    private function getThemePubStaticDir(ThemeInterface $theme, $params = [])
+    {
+        if (empty($params['theme_pubstatic_dir'])
+            && isset($params['file'])
+            && pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
+        ) {
+            $params['theme_pubstatic_dir'] = $this->getDirectoryList()
+                    ->getPath(DirectoryList::STATIC_VIEW)
+                . '/' . $theme->getArea() . '/' . $theme->getCode()
+                . (isset($params['locale']) ? '/' . $params['locale'] : '');
+        }
+
+        return $params;
+    }
+
+    /**
+     * Get DirectoryList instance
+     * @return DirectoryList
+     *
+     * @deprecated 100.2.0
+     */
+    private function getDirectoryList()
+    {
+        if (null === $this->directoryList) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 }

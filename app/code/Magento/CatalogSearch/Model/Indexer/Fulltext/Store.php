@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
@@ -8,9 +8,13 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Indexer\Model\ConfigInterface;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Event\ObserverInterface;
 
-class Store
+/**
+ * Catalog search indexer plugin for store.
+ */
+class Store implements ObserverInterface
 {
     /**
      * @var DimensionFactory
@@ -43,6 +47,8 @@ class Store
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param \Magento\Store\Model\Store $store
      * @return void
      */
@@ -58,10 +64,12 @@ class Store
     }
 
     /**
+     * Reindex catalog search on store modification.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function onAdd(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $observer->getEvent()->getData('store');

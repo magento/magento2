@@ -1,35 +1,52 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
 /**
  * Shopping cart validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
-    /** @var \Magento\Checkout\Helper\Cart */
+    /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
     protected $cartHelper;
 
-    /** @var \Magento\Framework\Locale\CurrencyInterface */
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
     protected $currency;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     */
+    private $minimumAmountErrorMessage;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Framework\Locale\CurrencyInterface $currency,
         array $data = []
@@ -39,6 +56,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
             $messageFactory,
             $collectionFactory,
             $messageManager,
+            $interpretationStrategy,
             $data
         );
         $this->cartHelper = $cartHelper;
@@ -66,22 +84,23 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     protected function validateMinimumAmount()
     {
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
-            $warning = $this->_scopeConfig->getValue(
-                'sales/minimum_order/description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            if (!$warning) {
-                $currencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
-                $minimumAmount = $this->currency->getCurrency($currencyCode)->toCurrency(
-                    $this->_scopeConfig->getValue(
-                        'sales/minimum_order/amount',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                );
-                $warning = __('Minimum order amount is %1', $minimumAmount);
-            }
-            $this->messageManager->addNotice($warning);
+            $this->messageManager->addNoticeMessage($this->getMinimumAmountErrorMessage()->getMessage());
         }
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @deprecated 100.1.0
+     */
+    private function getMinimumAmountErrorMessage()
+    {
+        if ($this->minimumAmountErrorMessage === null) {
+            $objectManager = ObjectManager::getInstance();
+            $this->minimumAmountErrorMessage = $objectManager->get(
+                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
+            );
+        }
+        return $this->minimumAmountErrorMessage;
     }
 
     /**
@@ -101,6 +120,9 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
                 $messages[] = $message;
             }
         }
-        $this->messageManager->addUniqueMessages($messages);
+
+        if ($messages) {
+            $this->messageManager->addUniqueMessages($messages);
+        }
     }
 }

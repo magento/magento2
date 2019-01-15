@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
@@ -16,8 +16,10 @@ use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class RequestSecureTokenTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
+class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
@@ -62,28 +64,28 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionTransparentMock = $this->getMockBuilder('Magento\Framework\Session\Generic')
+        $this->sessionTransparentMock = $this->getMockBuilder(\Magento\Framework\Session\Generic::class)
             ->setMethods(['setQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->secureTokenServiceMock = $this->getMockBuilder(
-            'Magento\Paypal\Model\Payflow\Service\Request\SecureToken'
+            \Magento\Paypal\Model\Payflow\Service\Request\SecureToken::class
         )
             ->setMethods(['requestToken'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManagerMock = $this->getMockBuilder('Magento\Framework\Session\SessionManager')
+        $this->sessionManagerMock = $this->getMockBuilder(\Magento\Framework\Session\SessionManager::class)
             ->setMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transparentMock = $this->getMockBuilder('Magento\Paypal\Model\Payflow\Transparent')
+        $this->transparentMock = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Transparent::class)
             ->setMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -98,32 +100,29 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * Run test execute method
-     *
-     * @param array $result
-     * @param array $resultExpectation
-     *
-     * @dataProvider executeDataProvider
-     */
-    public function testExecute(array $result, array $resultExpectation)
+    public function testExecuteSuccess()
     {
         $quoteId = 99;
+        $tokenFields = ['fields-1', 'fields-2', 'fields-3'];
+        $secureToken = 'token_hash';
+        $resultExpectation = [
+            'transparent' => [
+                'fields' => ['fields-1', 'fields-2', 'fields-3']
+            ],
+            'success' => true,
+            'error' => false
+        ];
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $tokenMock = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['getData', 'getSecuretoken'])
+        $tokenMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $jsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->transparentMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('transparent');
         $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
@@ -140,12 +139,14 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
         $this->transparentMock->expects($this->once())
             ->method('getCode')
             ->willReturn('transparent');
-        $tokenMock->expects($this->once())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getData')
-            ->willReturn($result['transparent']['fields']);
-        $tokenMock->expects($this->once())
-            ->method('getSecuretoken')
-            ->willReturn($result['success']);
+            ->willReturnMap(
+                [
+                    ['', null, $tokenFields],
+                    ['securetoken', null, $secureToken]
+                ]
+            );
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonMock);
@@ -157,42 +158,70 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($jsonMock, $this->controller->execute());
     }
 
-    /**
-     * @return array
-     */
-    public function executeDataProvider()
+    public function testExecuteTokenRequestException()
     {
-        return [
-            [
-                'result' => [
-                    'transparent' => [
-                        'fields' => ['fields-1', 'fields-2', 'fields-3']
-                    ],
-                    'success' => 1
-                ],
-                'result_expectation' => [
-                    'transparent' => [
-                        'fields' => ['fields-1', 'fields-2', 'fields-3']
-                    ],
-                    'success' => true
-                ]
-            ],
-            [
-                'result' => [
-                    'transparent' => [
-                        'fields' => ['fields-1', 'fields-2', 'fields-3']
-                    ],
-                    'success' => null,
-                ],
-                'result_expectation' => [
-                    'transparent' => [
-                        'fields' => ['fields-1', 'fields-2', 'fields-3']
-                    ],
-                    'success' => false,
-                    'error' => true,
-                    'error_messages' => __('Secure Token Error. Try again.')
-                ]
-            ]
+        $quoteId = 99;
+        $resultExpectation = [
+            'success' => false,
+            'error' => true,
+            'error_messages' => __('Your payment has been declined. Please try again.')
         ];
+
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sessionManagerMock->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+        $quoteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($quoteId);
+        $this->sessionTransparentMock->expects($this->once())
+            ->method('setQuoteId')
+            ->with($quoteId);
+        $this->secureTokenServiceMock->expects($this->once())
+            ->method('requestToken')
+            ->with($quoteMock)
+            ->willThrowException(new \Exception());
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($jsonMock);
+        $jsonMock->expects($this->once())
+            ->method('setData')
+            ->with($resultExpectation)
+            ->willReturnSelf();
+
+        $this->assertEquals($jsonMock, $this->controller->execute());
+    }
+
+    public function testExecuteEmptyQuoteError()
+    {
+        $resultExpectation = [
+            'success' => false,
+            'error' => true,
+            'error_messages' => __('Your payment has been declined. Please try again.')
+        ];
+
+        $quoteMock = null;
+        $jsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sessionManagerMock->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($jsonMock);
+        $jsonMock->expects($this->once())
+            ->method('setData')
+            ->with($resultExpectation)
+            ->willReturnSelf();
+
+        $this->assertEquals($jsonMock, $this->controller->execute());
     }
 }

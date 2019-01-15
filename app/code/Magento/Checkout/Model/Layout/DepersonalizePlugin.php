@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Layout;
@@ -25,6 +25,7 @@ class DepersonalizePlugin
     /**
      * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @codeCoverageIgnore
      */
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,

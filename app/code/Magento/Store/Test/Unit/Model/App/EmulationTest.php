@@ -2,15 +2,16 @@
 /**
  * Tests Magento\Store\Model\App\Emulation
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model\App;
 
-class EmulationTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class EmulationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
@@ -72,33 +73,33 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // Mocks
-        $this->designMock = $this->getMockBuilder('Magento\Theme\Model\Design')
+        $this->designMock = $this->getMockBuilder(\Magento\Theme\Model\Design::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->translateMock = $this->getMockBuilder('Magento\Framework\TranslateInterface')
+        $this->translateMock = $this->getMockBuilder(\Magento\Framework\TranslateInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->inlineConfigMock = $this->getMockBuilder('Magento\Framework\Translate\Inline\ConfigInterface')
+        $this->inlineConfigMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->inlineTranslationMock = $this->getMockBuilder('Magento\Framework\Translate\Inline\StateInterface')
+        $this->inlineTranslationMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->viewDesignMock = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->viewDesignMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getStoreId'])
             ->getMock();
@@ -108,7 +109,8 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->designMock->expects($this->any())->method('getData')->willReturn(false);
 
         // Prepare SUT
-        $this->model = $this->objectManager->getObject('Magento\Store\Model\App\Emulation',
+        $this->model = $this->objectManager->getObject(
+            \Magento\Store\Model\App\Emulation::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'viewDesign' => $this->viewDesignMock,
@@ -157,7 +159,11 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
             ->method('setCurrentStore')->with(self::NEW_STORE_ID);
 
         // Test
-        $this->model->startEnvironmentEmulation(self::NEW_STORE_ID, \Magento\Framework\App\Area::AREA_FRONTEND);
+        $result = $this->model->startEnvironmentEmulation(
+            self::NEW_STORE_ID,
+            \Magento\Framework\App\Area::AREA_FRONTEND
+        );
+        $this->assertNull($result);
     }
 
     public function testStop()
@@ -204,6 +210,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->translateMock->expects($this->once())->method('loadData')->with($initArea);
 
         // Test
-        $this->model->stopEnvironmentEmulation();
+        $result = $this->model->stopEnvironmentEmulation();
+        $this->assertNotNull($result);
     }
 }

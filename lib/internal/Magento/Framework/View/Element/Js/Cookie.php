@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Js;
@@ -9,6 +9,9 @@ use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Cookie extends Template
 {
     /**
@@ -69,5 +72,13 @@ class Cookie extends Template
     public function getPath()
     {
         return $this->sessionConfig->getCookiePath();
+    }
+
+    /**
+     * @return int
+     */
+    public function getLifetime()
+    {
+        return $this->sessionConfig->getCookieLifetime();
     }
 }

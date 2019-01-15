@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-
+/** @var Magento\Customer\Block\Account\Customer $block */
 ?>
 <?php if($block->customerLoggedIn()): ?>
     <li class="customer-welcome">
@@ -19,8 +19,9 @@
             <span data-bind="text: customer().fullname"></span>
             <button type="button"
                     class="action switch"
-                    tabindex="-1">
-                <span><?php echo __('Change')?></span>
+                    tabindex="-1"
+                    data-action="customer-menu-toggle">
+                <span><?= $block->escapeHtml(__('Change')) ?></span>
             </button>
         </span>
         <script type="text/x-magento-init">
@@ -38,7 +39,7 @@
         </script>
         <?php if($block->getChildHtml()):?>
         <div class="customer-menu" data-target="dropdown">
-            <?php echo $block->getChildHtml();?>
+            <?= $block->getChildHtml() ?>
         </div>
         <?php endif; ?>
     </li>

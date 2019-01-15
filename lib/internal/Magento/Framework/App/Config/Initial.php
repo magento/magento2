@@ -2,12 +2,13 @@
 /**
  * Initial configuration data container. Provides interface for reading initial config values
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Initial
 {
@@ -31,19 +32,30 @@ class Initial
     protected $_metadata = [];
 
     /**
-     * @param \Magento\Framework\App\Config\Initial\Reader $reader
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Initial constructor
+     *
+     * @param Initial\Reader $reader
      * @param \Magento\Framework\App\Cache\Type\Config $cache
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial\Reader $reader,
-        \Magento\Framework\App\Cache\Type\Config $cache
+        \Magento\Framework\App\Cache\Type\Config $cache,
+        SerializerInterface $serializer = null
     ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SerializerInterface::class);
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();
-            $cache->save(serialize($data), self::CACHE_ID);
+            $cache->save($this->serializer->serialize($data), self::CACHE_ID);
         } else {
-            $data = unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];
@@ -60,9 +72,9 @@ class Initial
         list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
 
         if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT == $scopeType) {
-            return isset($this->_data[$scopeType]) ? $this->_data[$scopeType] : [];
+            return $this->_data[$scopeType] ?? [];
         } elseif ($scopeCode) {
-            return isset($this->_data[$scopeType][$scopeCode]) ? $this->_data[$scopeType][$scopeCode] : [];
+            return $this->_data[$scopeType][$scopeCode] ?? [];
         }
         return [];
     }

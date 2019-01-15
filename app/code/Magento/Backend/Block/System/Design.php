@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Design extends \Magento\Backend\Block\Template
 {
     /**
@@ -16,7 +20,7 @@ class Design extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'add_new_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Add Design Change'),
                 'onclick' => "setLocation('" . $this->getUrl('adminhtml/*/new') . "')",

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,14 +9,14 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 class IndexableAttributeFilter
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     protected $_attributeFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      */
-    public function __construct(\Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory)
+    public function __construct(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory)
     {
         $this->_attributeFactory = $attributeFactory;
     }

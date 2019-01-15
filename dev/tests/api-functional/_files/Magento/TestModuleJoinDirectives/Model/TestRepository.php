@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModuleJoinDirectives\Model;
@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 class TestRepository implements TestRepositoryInterface
 {
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
      */
     private $quoteCollectionFactory;
 
@@ -29,12 +29,12 @@ class TestRepository implements TestRepositoryInterface
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @param \Magento\Quote\Model\Resource\Quote\CollectionFactory $quoteCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollectionFactory
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
-        \Magento\Quote\Model\Resource\Quote\CollectionFactory $quoteCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollectionFactory,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
@@ -46,7 +46,7 @@ class TestRepository implements TestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $quoteCollection = $this->quoteCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($quoteCollection);

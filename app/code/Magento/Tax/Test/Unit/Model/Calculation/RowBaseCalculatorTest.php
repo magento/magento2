@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,20 +21,27 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initMocks(true);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->once())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound')->will($this->returnValue(0));
 
         $this->assertSame(
             $this->taxDetailsItem,
-            $this->calculate($this->rowBaseCalculator)
+            $this->calculate($this->rowBaseCalculator, true)
         );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+
+        $this->assertSame(
+            $this->taxDetailsItem,
+            $this->calculate($this->rowBaseCalculator, false)
+        );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()
     {
         $this->initMocks(false);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->never())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound');
 
         $this->assertSame(
@@ -45,20 +52,21 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initRowBaseCalculator()
     {
-        $taxClassService = $this->getMock('Magento\Tax\Api\TaxClassManagementInterface');
-        $this->rowBaseCalculator = $this->getMock(
-            'Magento\Tax\Model\Calculation\RowBaseCalculator',
-            ['deltaRound'],
-            [
-                'taxClassService' => $taxClassService,
-                'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
-                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
-                'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
-                'calculationTool' => $this->mockCalculationTool,
-                'config' => $this->mockConfig,
-                'storeId' => self::STORE_ID,
-                'addressRateRequest' => $this->addressRateRequest
-            ]
-        );
+        $taxClassService = $this->createMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
+        $this->rowBaseCalculator = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RowBaseCalculator::class)
+            ->setMethods(['deltaRound'])
+            ->setConstructorArgs(
+                [
+                    'taxClassService' => $taxClassService,
+                    'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
+                    'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
+                    'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
+                    'calculationTool' => $this->mockCalculationTool,
+                    'config' => $this->mockConfig,
+                    'storeId' => self::STORE_ID,
+                    'addressRateRequest' => $this->addressRateRequest
+                ]
+            )
+            ->getMock();
     }
 }

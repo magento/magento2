@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -8,14 +8,20 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\Resource\Db\AbstractDb getResource()
+ * This model is temporarily marked as API since {@see \Magento\Framework\App\Config\ValueInterface} doesn't fit
+ * developers' needs of extensibility. In 2.4 we are going to introduce a new interface which should cover all needs
+ * and deprecate the mentioned together with the model
+ *
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
  * @method \Magento\Framework\App\Config\ValueInterface setScopeId(int $value)
  * @method string getPath()
  * @method \Magento\Framework\App\Config\ValueInterface setPath(string $value)
+ * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -43,33 +49,31 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     protected $_config;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface
+     */
+    protected $cacheTypeList;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_config = $config;
+        $this->cacheTypeList = $cacheTypeList;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
-     * Add availability call after load as public
-     *
-     * @return void
-     */
-    public function afterLoad()
-    {
-        $this->_afterLoad();
     }
 
     /**
@@ -106,5 +110,35 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         $data = $this->_getData('fieldset_data');
         return is_array($data) && isset($data[$key]) ? $data[$key] : null;
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        if ($this->isValueChanged()) {
+            $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+        }
+
+        return parent::afterSave();
+    }
+
+    /**
+     * Processing object after delete data
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+
+        return parent::afterDelete();
     }
 }

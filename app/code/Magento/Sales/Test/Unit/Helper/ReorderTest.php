@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Helper;
 
 use \Magento\Sales\Helper\Reorder;
 
-class ReorderTest extends \PHPUnit_Framework_TestCase
+class ReorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Helper\Reorder
@@ -36,35 +36,43 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
     protected $customerSessionMock;
 
     /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $repositoryMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->repositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+            ->getMockForAbstractClass();
         $this->helper = new \Magento\Sales\Helper\Reorder(
             $contextMock,
-            $this->customerSessionMock
+            $this->customerSessionMock,
+            $this->repositoryMock
         );
 
-        $this->storeParam = $this->getMockBuilder('Magento\Sales\Model\Store')
+        $this->storeParam = $this->getMockBuilder(\Magento\Sales\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -131,7 +139,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
     public function testCanReorderStoreNotAllowed()
     {
         $this->setupOrderMock(false);
-        $this->assertFalse($this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertFalse($this->helper->canReorder(1));
     }
 
     /**
@@ -146,8 +158,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->will($this->returnValue(false));
-
-        $this->assertTrue($this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertTrue($this->helper->canReorder(1));
     }
 
     /**
@@ -168,8 +183,11 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('canReorder')
             ->will($this->returnValue($orderCanReorder));
-
-        $this->assertEquals($orderCanReorder, $this->helper->canReorder($this->orderMock));
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($this->orderMock);
+        $this->assertEquals($orderCanReorder, $this->helper->canReorder(1));
     }
 
     /**

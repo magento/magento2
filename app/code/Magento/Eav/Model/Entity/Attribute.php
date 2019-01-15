@@ -1,27 +1,39 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * EAV Entity attribute model
  *
+ * @api
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
- * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
-    \Magento\Framework\Object\IdentityInterface
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * Attribute code max length
+     * Attribute code max length.
+     *
+     * The value is defined as 60 because in the flat mode attribute code will be transformed into column name.
+     * MySQL allows only 64 symbols in column name.
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 60;
+
+    /**
+     * Attribute code min length.
+     */
+    const ATTRIBUTE_CODE_MIN_LENGTH = 1;
 
     /**
      * Cache tag
@@ -65,6 +77,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $_localeResolver;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -72,7 +89,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -80,10 +97,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param DateTimeFormatterInterface $dateTimeFormatter
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,7 +112,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
@@ -101,7 +120,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        DateTimeFormatterInterface $dateTimeFormatter,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -125,6 +145,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->_localeDate = $localeDate;
         $this->_localeResolver = $localeResolver;
         $this->reservedAttributeList = $reservedAttributeList;
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -136,32 +157,22 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     {
         switch ($this->getAttributeCode()) {
             case 'created_at':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Created';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Created::class;
 
             case 'updated_at':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated::class;
 
             case 'store_id':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Store';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Store::class;
 
             case 'increment_id':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Increment';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Increment::class;
 
             default:
                 break;
         }
 
         return parent::_getDefaultBackendModel();
-    }
-
-    /**
-     * Retrieve default attribute frontend model
-     *
-     * @return string
-     */
-    protected function _getDefaultFrontendModel()
-    {
-        return parent::_getDefaultFrontendModel();
     }
 
     /**
@@ -172,7 +183,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected function _getDefaultSourceModel()
     {
         if ($this->getAttributeCode() == 'store_id') {
-            return 'Magento\Eav\Model\Entity\Attribute\Source\Store';
+            return \Magento\Eav\Model\Entity\Attribute\Source\Store::class;
         }
         return parent::_getDefaultSourceModel();
     }
@@ -180,7 +191,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * Delete entity
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @codeCoverageIgnore
      */
     public function deleteEntity()
     {
@@ -241,7 +253,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         )
         ) {
             throw new LocalizedException(
-                __('An attribute code must be fewer than %1 characters.', self::ATTRIBUTE_CODE_MAX_LENGTH)
+                __(
+                    'The attribute code needs to be %1 characters or fewer. Re-enter the code and try again.',
+                    self::ATTRIBUTE_CODE_MAX_LENGTH
+                )
             );
         }
 
@@ -252,37 +267,37 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
             $defaultValue = $numberFormatter->parse($defaultValue);
             if ($defaultValue === false) {
-                throw new LocalizedException(__('Invalid default decimal value'));
+                throw new LocalizedException(
+                    __('The default decimal value is invalid. Verify the value and try again.')
+                );
             }
             $this->setDefaultValue($defaultValue);
         }
 
         if ($this->getBackendType() == 'datetime') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Eav\Model\Entity\Attribute\Backend\Datetime');
+                $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class);
             }
 
             if (!$this->getFrontendModel()) {
-                $this->setFrontendModel('Magento\Eav\Model\Entity\Attribute\Frontend\Datetime');
+                $this->setFrontendModel(\Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class);
             }
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = $this->_localeDate->getDateFormat(
-                    \IntlDateFormatter::SHORT
-                );
                 try {
-                    $defaultValue = \IntlDateFormatter::formatObject(new \DateTime($defaultValue), $format);
-                    $this->setDefaultValue($defaultValue);
+                    $locale = $this->_localeResolver->getLocale();
+                    $defaultValue = $this->_localeDate->date($defaultValue, $locale, false, false);
+                    $this->setDefaultValue($defaultValue->format(DateTime::DATETIME_PHP_FORMAT));
                 } catch (\Exception $e) {
-                    throw new LocalizedException(__('Invalid default date'));
+                    throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
                 }
             }
         }
 
         if ($this->getBackendType() == 'gallery') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend');
+                $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
             }
         }
 
@@ -298,6 +313,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     {
         $this->_getResource()->saveInSetIncluding($this);
         return parent::afterSave();
+    }
+
+    /**
+     * @return $this
+     * @since 100.0.7
+     */
+    public function afterDelete()
+    {
+        return parent::afterDelete();
     }
 
     /**
@@ -371,6 +395,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 break;
 
             case 'textarea':
+            case 'texteditor':
                 $field = 'default_value_textarea';
                 break;
 
@@ -394,6 +419,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param string $type
      * @return array
+     * @codeCoverageIgnore
      */
     public function getAttributeCodesByFrontendType($type)
     {
@@ -455,9 +481,37 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Get identities
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.7
+     */
+    public function __sleep()
+    {
+        $this->unsetData('attribute_set_info');
+        return array_diff(
+            parent::__sleep(),
+            ['_localeDate', '_localeResolver', 'reservedAttributeList', 'dateTimeFormatter']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.0.7
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
     }
 }

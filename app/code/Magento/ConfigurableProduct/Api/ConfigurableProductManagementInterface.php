@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Api;
@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Api;
 /**
  * Interface ConfigurableProductManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface ConfigurableProductManagementInterface
 {
@@ -20,4 +21,12 @@ interface ConfigurableProductManagementInterface
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
      */
     public function generateVariation(\Magento\Catalog\Api\Data\ProductInterface $product, $options);
+
+    /**
+     * Provide the number of product count
+     *
+     * @param int|null $status
+     * @return int
+     */
+    public function getCount($status = null);
 }

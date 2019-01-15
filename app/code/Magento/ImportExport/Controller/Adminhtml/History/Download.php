@@ -1,19 +1,27 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\History;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Download extends \Magento\ImportExport\Controller\Adminhtml\History
+/**
+ * Download history controller
+ */
+class Download extends \Magento\ImportExport\Controller\Adminhtml\History implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    private $fileFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -39,10 +47,10 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
      */
     public function execute()
     {
-        $fileName = $this->getRequest()->getParam('filename');
+        $fileName = basename($this->getRequest()->getParam('filename'));
 
         /** @var \Magento\ImportExport\Helper\Report $reportHelper */
-        $reportHelper = $this->_objectManager->get('Magento\ImportExport\Helper\Report');
+        $reportHelper = $this->_objectManager->get(\Magento\ImportExport\Helper\Report::class);
 
         if (!$reportHelper->importFileExists($fileName)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

@@ -1,24 +1,38 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(
-    [
-        'mage/url',
-        'Magento_Ui/js/model/messageList'
-    ],
-    function (url, messageList) {
-        'use strict';
 
-        return {
-            process: function (response) {
-                if (response.status == 401) {
-                    window.location.replace(url.build('customer/account/login/'));
-                } else {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+/**
+ * @api
+ */
+define([
+    'mage/url',
+    'Magento_Ui/js/model/messageList',
+    'mage/translate'
+], function (url, globalMessageList, $t) {
+    'use strict';
+
+    return {
+        /**
+         * @param {Object} response
+         * @param {Object} messageContainer
+         */
+        process: function (response, messageContainer) {
+            var error;
+
+            messageContainer = messageContainer || globalMessageList;
+
+            if (response.status == 401) { //eslint-disable-line eqeqeq
+                window.location.replace(url.build('customer/account/login/'));
+            } else {
+                try {
+                    error = JSON.parse(response.responseText);
+                } catch (exception) {
+                    error = $t('Something went wrong with your request. Please try again later.');
                 }
+                messageContainer.addErrorMessage(error);
             }
-        };
-    }
-);
+        }
+    };
+});

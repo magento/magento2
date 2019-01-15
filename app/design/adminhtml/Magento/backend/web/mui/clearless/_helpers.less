@@ -1,0 +1,169 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+// ==============================================
+// Misc helpers and shortcuts
+// ==============================================
+
+// Shortcuts --------------------------------
+
+.filter(@_filter: grayscale(100%)) {
+    -webkit-filter: @_filter; // Use in 41 Chrome
+    filter: @_filter;
+}
+
+.rotate(@_rotation) {
+    -webkit-transform: rotate(@_rotation); // Use in 8 Safari
+    -ms-transform: rotate(@_rotation); // Use in 9 IE
+    transform: rotate(@_rotation);
+}
+
+.placeholder(@_color: #ddd) {
+    :-moz-placeholder {
+        color: @_color;
+    }
+    ::-webkit-input-placeholder {
+        color: @_color;
+    }
+    :-ms-input-placeholder {
+        color: @_color;
+    }
+}
+
+#gradient {
+    .horizontal (@start-color, @end-color) when not (@disable-filters) {
+        background-color: @end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, @start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(left, @start-color, @end-color);
+    }
+    .horizontal (@start-color, @end-color) when (@disable-filters) {
+        background-color: @end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, @start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(left, @start-color, @end-color);
+    }
+    .vertical (@start-color, @end-color) when (@disable-filters) {
+        background-color: @end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(@start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(@start-color, @end-color);
+    }
+    .vertical (@start-color, @end-color) when not (@disable-filters) {
+        background-color: @end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(@start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(@start-color, @end-color);
+    }
+}
+
+// Helpers --------------------------------
+
+.clearfix() when not (@using-ieclasses) {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.clearfix() when (@using-ieclasses) {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.inline-block() when (@using-ieclasses) {
+    display: inline-block;
+}
+
+.inline-block() when not (@using-ieclasses) {
+    display: inline-block;
+}
+
+.ir() {
+    border: 0;
+    font: 0/0 a;
+    text-shadow: none;
+    color: transparent;
+    background-color: transparent;
+}
+
+.hidden() {
+    display: none !important;
+    visibility: hidden;
+}
+
+.visually-hidden() {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    &.focusable:active,
+    &.focusable:focus {
+        clip: auto;
+        height: auto;
+        margin: 0;
+        overflow: visible;
+        position: static;
+        width: auto;
+    }
+}
+
+.size(@thesize) {
+    width: @thesize;
+    height: @thesize;
+}
+
+.size(@width, @height) {
+    width: @width;
+    height: @height;
+}
+
+// System --------------------------------
+
+.nudge-l( @pos ) when ( @pos = 0 ) {
+}
+
+.nudge-l( @pos ) when not ( @pos = 0 ) {
+    left: @pos;
+}
+
+.nudge-r( @pos ) when ( @pos = 0 ) {
+}
+
+.nudge-r( @pos ) when not ( @pos = 0 ) {
+    right: @pos;
+}
+
+.nudge-t( @pos ) when ( @pos = 0 ) {
+}
+
+.nudge-t( @pos ) when not ( @pos = 0 ) {
+    top: @pos;
+}
+
+.nudge-b( @pos ) when ( @pos = 0 ) {
+}
+
+.nudge-b( @pos ) when not ( @pos = 0 ) {
+    bottom: @pos;
+}

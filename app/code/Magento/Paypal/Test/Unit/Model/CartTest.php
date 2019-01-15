@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\Cart;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cart
@@ -15,7 +15,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_validItem;
 
@@ -32,13 +32,13 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->_validItem = new \Magento\Framework\Object(
+        $this->_validItem = new \Magento\Framework\DataObject(
             [
                 'parent_item' => null,
                 'price' => 2.0,
                 'qty' => 3,
                 'name' => 'valid item',
-                'original_item' => new \Magento\Framework\Object(['base_row_total' => 6.0]),
+                'original_item' => new \Magento\Framework\DataObject(['base_row_total' => 6.0]),
             ]
         );
     }
@@ -46,9 +46,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_salesModel = $this->getMockForAbstractClass(
-            'Magento\Payment\Model\Cart\SalesModel\SalesModelInterface'
+            \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class
         );
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', ['create'], [], '', false);
+        $factoryMock = $this->createPartialMock(\Magento\Payment\Model\Cart\SalesModel\Factory::class, ['create']);
         $factoryMock->expects(
             $this->once()
         )->method(
@@ -58,7 +58,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_salesModel)
         );
-        $eventManagerMock = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');
+        $eventManagerMock = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->_model = new \Magento\Paypal\Model\Cart($factoryMock, $eventManagerMock, 'sales model');
     }
@@ -69,8 +69,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidGetAllItems($items)
     {
-        $taxContainer = new \Magento\Framework\Object(
-            ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
+        $taxContainer = new \Magento\Framework\DataObject(
+            ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amount' => 0.1]
         );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
@@ -85,15 +85,18 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.3, $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAllItemsDataProvider()
     {
         return [
             [[]],
             [
                 [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
-                            'parent_item' => new \Magento\Framework\Object(),
+                            'parent_item' => new \Magento\Framework\DataObject(),
                             'price' => 2.0,
                             'qty' => 3,
                             'name' => 'item 1',
@@ -104,12 +107,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     $this->_validItem,
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'price' => 2.0,
                             'qty' => 3,
                             'name' => 'item 2',
-                            'original_item' => new \Magento\Framework\Object(['base_row_total' => 6.01]),
+                            'original_item' => new \Magento\Framework\DataObject(['base_row_total' => 6.01]),
                         ]
                     ),
                 ]
@@ -117,12 +120,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     $this->_validItem,
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'price' => sqrt(2),
                             'qty' => sqrt(2),
                             'name' => 'item 3',
-                            'original_item' => new \Magento\Framework\Object(['base_row_total' => 2]),
+                            'original_item' => new \Magento\Framework\DataObject(['base_row_total' => 2]),
                         ]
                     ),
                 ]
@@ -143,20 +146,23 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $values['base_tax_amount'] +
             $values['base_discount_tax_compensation_amount'] +
-            $values['base_shipping_discount_tax_compensation_amnt'],
+            $values['base_shipping_discount_tax_compensation_amount'],
             $this->_model->getTax()
         );
         $this->assertEquals($values['base_shipping_amount'], $this->_model->getShipping());
         $this->assertEquals($transferDiscount ? 0.0 : $values['base_discount_amount'], $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidTotalsGetAllItemsDataProvider()
     {
         return [
             [
                 [
                     'base_discount_tax_compensation_amount' => 0,
-                    'base_shipping_discount_tax_compensation_amnt' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
@@ -168,7 +174,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'base_discount_tax_compensation_amount' => 1,
-                    'base_shipping_discount_tax_compensation_amnt' => 2,
+                    'base_shipping_discount_tax_compensation_amount' => 2,
                     'base_subtotal' => 3,
                     'base_tax_amount' => 4,
                     'base_shipping_amount' => 5,
@@ -185,7 +191,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $totals = $this->_prepareValidModelData();
         $this->assertEquals(
             [
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     [
                         'name' => $this->_validItem->getName(),
                         'qty' => $this->_validItem->getQty(),
@@ -222,6 +228,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAmountsDataProvider()
     {
         $data = [];
@@ -242,12 +251,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareInvalidModelData($values, $transferDiscount)
     {
-        $taxContainer = new \Magento\Framework\Object(
+        $taxContainer = new \Magento\Framework\DataObject(
             [
                 'base_discount_tax_compensation_amount' =>
                     $values['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' =>
-                    $values['base_shipping_discount_tax_compensation_amnt'],
+                'base_shipping_discount_tax_compensation_amount' =>
+                    $values['base_shipping_discount_tax_compensation_amount'],
             ]
         );
         $expectedSubtotal = $values['base_subtotal'];
@@ -317,7 +326,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function _prepareValidModelData()
     {
         $totals = ['discount' => 0.1, 'shipping' => 0.2, 'subtotal' => 0.3, 'tax' => 0.4];
-        $taxContainer = new \Magento\Framework\Object(
+        $taxContainer = new \Magento\Framework\DataObject(
             ['base_discount_tax_compensation_amount' => 0, 'base_shipping_discount_tax_compensation_amnt' => 0]
         );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));

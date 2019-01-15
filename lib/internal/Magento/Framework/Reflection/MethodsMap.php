@@ -1,21 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
+use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
  */
 class MethodsMap
 {
+    const SERVICE_METHOD_PARAMS_CACHE_PREFIX = 'service_method_params_';
     const SERVICE_INTERFACE_METHODS_CACHE_PREFIX = 'serviceInterfaceMethodsMap';
-    const BASE_MODEL_CLASS = 'Magento\Framework\Model\AbstractExtensibleModel';
+    const BASE_MODEL_CLASS = \Magento\Framework\Model\AbstractExtensibleModel::class;
+
+    const METHOD_META_NAME = 'name';
+    const METHOD_META_TYPE = 'type';
+    const METHOD_META_HAS_DEFAULT_VALUE = 'isDefaultValueAvailable';
+    const METHOD_META_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface
@@ -36,6 +45,11 @@ class MethodsMap
      * @var FieldNamer
      */
     private $fieldNamer;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -80,6 +94,8 @@ class MethodsMap
      *  'validatePassword' => 'boolean'
      * ]
      * </pre>
+     * @throws \InvalidArgumentException if methods don't have annotation
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
      */
     public function getMethodsMap($interfaceName)
     {
@@ -87,14 +103,46 @@ class MethodsMap
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);
             if ($methodMap) {
-                $this->serviceInterfaceMethodsMap[$key] = unserialize($methodMap);
+                $this->serviceInterfaceMethodsMap[$key] = $this->getSerializer()->unserialize($methodMap);
             } else {
                 $methodMap = $this->getMethodMapViaReflection($interfaceName);
                 $this->serviceInterfaceMethodsMap[$key] = $methodMap;
-                $this->cache->save(serialize($this->serviceInterfaceMethodsMap[$key]), $key);
+                $this->cache->save($this->getSerializer()->serialize($this->serviceInterfaceMethodsMap[$key]), $key);
             }
         }
         return $this->serviceInterfaceMethodsMap[$key];
+    }
+
+    /**
+     * Retrieve requested service method params metadata.
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @return array
+     */
+    public function getMethodParams($serviceClassName, $serviceMethodName)
+    {
+        $cacheId = self::SERVICE_METHOD_PARAMS_CACHE_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
+        $params = $this->cache->load($cacheId);
+        if ($params !== false) {
+            return $this->getSerializer()->unserialize($params);
+        }
+        $serviceClass = new ClassReflection($serviceClassName);
+        /** @var MethodReflection $serviceMethod */
+        $serviceMethod = $serviceClass->getMethod($serviceMethodName);
+        $params = [];
+        /** @var ParameterReflection $paramReflection */
+        foreach ($serviceMethod->getParameters() as $paramReflection) {
+            $isDefaultValueAvailable = $paramReflection->isDefaultValueAvailable();
+            $params[] = [
+                self::METHOD_META_NAME => $paramReflection->getName(),
+                self::METHOD_META_TYPE => $this->typeProcessor->getParamType($paramReflection),
+                self::METHOD_META_HAS_DEFAULT_VALUE => $isDefaultValueAvailable,
+                self::METHOD_META_DEFAULT_VALUE => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
+            ];
+        }
+        $this->cache->save($this->getSerializer()->serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
+        return $params;
     }
 
     /**
@@ -102,6 +150,8 @@ class MethodsMap
      *
      * @param string $interfaceName
      * @return array
+     * @throws \ReflectionException for missing DocBock or invalid reflection class
+     * @throws \InvalidArgumentException if methods don't have annotation
      */
     private function getMethodMapViaReflection($interfaceName)
     {
@@ -176,5 +226,20 @@ class MethodsMap
     {
         $methods = $this->getMethodsMap($type);
         return $methods[$methodName]['isRequired'];
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

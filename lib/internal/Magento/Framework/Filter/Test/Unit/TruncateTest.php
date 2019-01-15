@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class TruncateTest extends \PHPUnit_Framework_TestCase
+class TruncateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $string
@@ -32,13 +32,13 @@ class TruncateTest extends \PHPUnit_Framework_TestCase
         return [
             '1' => [
                 '1234567890',
-                [new \Magento\Framework\Stdlib\String(), 5, '...', '', true],
+                [new \Magento\Framework\Stdlib\StringUtils(), 5, '...', '', true],
                 '12...',
                 '34567890',
             ],
             '2' => [
                 '123 456 789',
-                [new \Magento\Framework\Stdlib\String(), 8, '..', $remainder, false],
+                [new \Magento\Framework\Stdlib\StringUtils(), 8, '..', $remainder, false],
                 '123..',
                 ' 456 789',
             ]

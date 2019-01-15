@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\CustomerData;
@@ -9,11 +9,20 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 class CompareProducts implements SectionSourceInterface
 {
-    /** @var \Magento\Catalog\Helper\Product\Compare */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Compare
+     */
     protected $helper;
 
-    /** @var \Magento\Catalog\Model\Product\Url */
+    /**
+     * @var \Magento\Catalog\Model\Product\Url
+     */
     protected $productUrl;
+
+    /**
+     * @var \Magento\Catalog\Helper\Output
+     */
+    private $outputHelper;
 
     /**
      * @param \Magento\Catalog\Helper\Product\Compare $helper
@@ -50,6 +59,7 @@ class CompareProducts implements SectionSourceInterface
     protected function getItems()
     {
         $items = [];
+        /** @var \Magento\Catalog\Model\Product $item */
         foreach ($this->helper->getItemCollection() as $item) {
             $items[] = [
                 'id' => $item->getId(),

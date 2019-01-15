@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
@@ -8,7 +8,9 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 /**
  * Attribute add/edit form options tab
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Labels extends \Magento\Backend\Block\Template
 {
@@ -26,6 +28,7 @@ class Labels extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,7 +42,7 @@ class Labels extends \Magento\Backend\Block\Template
     /**
      * Retrieve stores collection with default store
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStores()
     {
@@ -70,6 +73,7 @@ class Labels extends \Magento\Backend\Block\Template
      * Retrieve attribute object from registry
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     private function getAttributeObject()
     {

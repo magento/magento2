@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Helper;
 
@@ -18,17 +16,25 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    protected $orderRepository;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
-        $this->_customerSession = $customerSession;
+        $this->orderRepository = $orderRepository;
+        $this->customerSession = $customerSession;
         parent::__construct(
             $context
         );
@@ -50,22 +56,29 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAllowed($store = null)
     {
-        if ($this->scopeConfig->getValue(self::XML_PATH_SALES_REORDER_ALLOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)) {
+        if ($this->scopeConfig->getValue(
+            self::XML_PATH_SALES_REORDER_ALLOW,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        )) {
             return true;
         }
         return false;
     }
 
     /**
-     * @param \Magento\Sales\Model\Order $order
+     * Check is it possible to reorder
+     *
+     * @param int $orderId
      * @return bool
      */
-    public function canReorder(\Magento\Sales\Model\Order $order)
+    public function canReorder($orderId)
     {
+        $order = $this->orderRepository->get($orderId);
         if (!$this->isAllowed($order->getStore())) {
             return false;
         }
-        if ($this->_customerSession->isLoggedIn()) {
+        if ($this->customerSession->isLoggedIn()) {
             return $order->canReorder();
         } else {
             return true;

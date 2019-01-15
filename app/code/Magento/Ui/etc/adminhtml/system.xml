@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="dev">
+            <group id="js">
+                <field id="session_storage_logging" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Log JS Errors to Session Storage</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If enabled, can be used by functional tests for extended reporting</comment>
+                </field>
+                <field id="session_storage_key" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Log JS Errors to Session Storage Key</label>
+                    <comment>Use this key to retrieve collected js errors</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

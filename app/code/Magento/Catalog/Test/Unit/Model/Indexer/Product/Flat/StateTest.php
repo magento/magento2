@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -17,21 +17,15 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $indexerMock = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $flatIndexerHelperMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
-            [],
-            [],
-            '',
-            false
-        );
-        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $indexerMock = $this->createMock(\Magento\Indexer\Model\Indexer::class);
+        $flatIndexerHelperMock = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State',
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
             [
                 'scopeConfig' => $configMock,
                 'flatIndexer' => $indexerMock,
@@ -43,6 +37,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIndexer()
     {
-        $this->assertInstanceOf('\Magento\Catalog\Helper\Product\Flat\Indexer', $this->_model->getFlatIndexerHelper());
+        $this->assertInstanceOf(
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            $this->_model->getFlatIndexerHelper()
+        );
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url\Test\Unit;
 
-class SecurityInfoTest extends \PHPUnit_Framework_TestCase
+class SecurityInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -32,6 +32,9 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->isSecure($url));
     }
 
+    /**
+     * @return array
+     */
     public function secureUrlDataProvider()
     {
         return [

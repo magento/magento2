@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class Bml extends Express
      * Checkout payment form
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Bml\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Bml\Form::class;
 
     /**
      * Checkout redirect URL getter for onepage checkout

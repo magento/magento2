@@ -1,85 +1,162 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
 
 /**
  * Layout structure model
+ *
+ * @api
  */
 class ScheduledStructure
 {
+    /**#@+
+     * Keys for array of elements to sort
+     */
+    const ELEMENT_NAME = 'elementName';
+    const ELEMENT_PARENT_NAME = 'parentName';
+    const ELEMENT_OFFSET_OR_SIBLING  = 'offsetOrSibling';
+    const ELEMENT_IS_AFTER = 'isAfter';
+    /**#@-*/
+
+    /**#@-*/
+    private $serializableProperties = [
+        'scheduledStructure',
+        'scheduledData',
+        'scheduledElements',
+        'scheduledMoves',
+        'scheduledRemoves',
+        'scheduledPaths',
+        'elementsToSort',
+        'brokenParent',
+    ];
+
     /**
      * Information about structural elements, scheduled for creation
      *
      * @var array
      */
-    protected $_scheduledStructure;
+    protected $scheduledStructure = [];
 
     /**
      * Scheduled structure data
      *
      * @var array
      */
-    protected $_scheduledData;
+    protected $scheduledData = [];
 
     /**
      * Full information about elements to be populated in the layout structure after generating structure
      *
      * @var array
      */
-    protected $_scheduledElements;
+    protected $scheduledElements = [];
 
     /**
      * Scheduled structure elements moves
      *
      * @var array
      */
-    protected $_scheduledMoves;
+    protected $scheduledMoves = [];
 
     /**
      * Scheduled structure elements removes
      *
      * @var array
      */
-    protected $_scheduledRemoves;
-
-    /**
-     * Scheduled structure elements with ifconfig attribute
-     *
-     * @var array
-     */
-    protected $_scheduledIfconfig;
+    protected $scheduledRemoves = [];
 
     /**
      * Materialized paths for overlapping workaround of scheduled structural elements
      *
      * @var array
      */
-    protected $_scheduledPaths;
+    protected $scheduledPaths = [];
 
     /**
      * Elements with reference to non-existing parent element
      *
      * @var array
      */
-    protected $_brokenParent = [];
+    protected $brokenParent = [];
+
+    /**
+     * Elements that need to sort
+     *
+     * @var array
+     */
+    protected $elementsToSort = [];
 
     /**
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(array $data = [])
     {
-        $this->_scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
-        $this->_scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
-        $this->_scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
-        $this->_scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
-        $this->_scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
-        $this->_scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
-        $this->_scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+        $this->populateWithArray($data);
+    }
+
+    /**
+     * Set elements to sort
+     *
+     * @param string $parentName
+     * @param string $elementName
+     * @param string|int|null $offsetOrSibling
+     * @param bool $isAfter
+     * @return void
+     */
+    public function setElementToSortList($parentName, $elementName, $offsetOrSibling, $isAfter = true)
+    {
+        $this->elementsToSort[$elementName] = [
+            self::ELEMENT_NAME => $elementName,
+            self::ELEMENT_PARENT_NAME => $parentName,
+            self::ELEMENT_OFFSET_OR_SIBLING => $offsetOrSibling,
+            self::ELEMENT_IS_AFTER => $isAfter
+        ];
+    }
+
+    /**
+     * Check if elements list of sorting is empty
+     *
+     * @return bool
+     */
+    public function isListToSortEmpty()
+    {
+        return empty($this->elementsToSort);
+    }
+
+    /**
+     * Unset specified element from list of sorting
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementToSort($elementName)
+    {
+        unset($this->elementsToSort[$elementName]);
+    }
+
+    /**
+     * Get element to sort by name
+     *
+     * @param string $elementName
+     * @param array $default
+     * @return array
+     */
+    public function getElementToSort($elementName, array $default = [])
+    {
+        return $this->elementsToSort[$elementName] ?? $default;
+    }
+
+    /**
+     * Get elements to sort
+     *
+     * @return array
+     */
+    public function getListToSort()
+    {
+        return $this->elementsToSort;
     }
 
     /**
@@ -89,7 +166,7 @@ class ScheduledStructure
      */
     public function getListToMove()
     {
-        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledMoves));
+        return array_keys(array_intersect_key($this->scheduledElements, $this->scheduledMoves));
     }
 
     /**
@@ -99,17 +176,10 @@ class ScheduledStructure
      */
     public function getListToRemove()
     {
-        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledRemoves));
-    }
-
-    /**
-     * Get elements to check ifconfig attribute
-     *
-     * @return array
-     */
-    public function getIfconfigList()
-    {
-        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledIfconfig));
+        return array_keys(array_intersect_key(
+            $this->scheduledElements,
+            array_merge($this->scheduledRemoves, $this->brokenParent)
+        ));
     }
 
     /**
@@ -119,7 +189,7 @@ class ScheduledStructure
      */
     public function getElements()
     {
-        return $this->_scheduledElements;
+        return $this->scheduledElements;
     }
 
     /**
@@ -131,7 +201,7 @@ class ScheduledStructure
      */
     public function getElement($elementName, $default = [])
     {
-        return $this->hasElement($elementName) ? $this->_scheduledElements[$elementName] : $default;
+        return $this->hasElement($elementName) ? $this->scheduledElements[$elementName] : $default;
     }
 
     /**
@@ -141,7 +211,7 @@ class ScheduledStructure
      */
     public function isElementsEmpty()
     {
-        return empty($this->_scheduledElements);
+        return empty($this->scheduledElements);
     }
 
     /**
@@ -153,7 +223,7 @@ class ScheduledStructure
      */
     public function setElement($elementName, array $data)
     {
-        $this->_scheduledElements[$elementName] = $data;
+        $this->scheduledElements[$elementName] = $data;
     }
 
     /**
@@ -164,7 +234,7 @@ class ScheduledStructure
      */
     public function hasElement($elementName)
     {
-        return isset($this->_scheduledElements[$elementName]);
+        return isset($this->scheduledElements[$elementName]);
     }
 
     /**
@@ -175,7 +245,7 @@ class ScheduledStructure
      */
     public function unsetElement($elementName)
     {
-        unset($this->_scheduledElements[$elementName]);
+        unset($this->scheduledElements[$elementName]);
     }
 
     /**
@@ -187,19 +257,7 @@ class ScheduledStructure
      */
     public function getElementToMove($elementName, $default = null)
     {
-        return isset($this->_scheduledMoves[$elementName]) ? $this->_scheduledMoves[$elementName] : $default;
-    }
-
-    /**
-     * Get element to check by name
-     *
-     * @param string $elementName
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getIfconfigElement($elementName, $default = null)
-    {
-        return isset($this->_scheduledIfconfig[$elementName]) ? $this->_scheduledIfconfig[$elementName] : $default;
+        return $this->scheduledMoves[$elementName] ?? $default;
     }
 
     /**
@@ -211,7 +269,7 @@ class ScheduledStructure
      */
     public function setElementToMove($elementName, array $data)
     {
-        $this->_scheduledMoves[$elementName] = $data;
+        $this->scheduledMoves[$elementName] = $data;
     }
 
     /**
@@ -222,7 +280,7 @@ class ScheduledStructure
      */
     public function unsetElementFromListToRemove($elementName)
     {
-        unset($this->_scheduledRemoves[$elementName]);
+        unset($this->scheduledRemoves[$elementName]);
     }
 
     /**
@@ -233,31 +291,7 @@ class ScheduledStructure
      */
     public function setElementToRemoveList($elementName)
     {
-        $this->_scheduledRemoves[$elementName] = 1;
-    }
-
-    /**
-     * Unset element by name removed by ifconfig attribute
-     *
-     * @param string $elementName
-     * @return void
-     */
-    public function unsetElementFromIfconfigList($elementName)
-    {
-        unset($this->_scheduledIfconfig[$elementName]);
-    }
-
-    /**
-     * Set element value to check ifconfig attribute
-     *
-     * @param string $elementName
-     * @param string $configPath
-     * @param string $scopeType
-     * @return void
-     */
-    public function setElementToIfconfigList($elementName, $configPath, $scopeType)
-    {
-        $this->_scheduledIfconfig[$elementName] = [$configPath, $scopeType];
+        $this->scheduledRemoves[$elementName] = 1;
     }
 
     /**
@@ -267,7 +301,7 @@ class ScheduledStructure
      */
     public function getStructure()
     {
-        return $this->_scheduledStructure;
+        return $this->scheduledStructure;
     }
 
     /**
@@ -279,7 +313,7 @@ class ScheduledStructure
      */
     public function getStructureElement($elementName, $default = null)
     {
-        return $this->hasStructureElement($elementName) ? $this->_scheduledStructure[$elementName] : $default;
+        return $this->hasStructureElement($elementName) ? $this->scheduledStructure[$elementName] : $default;
     }
 
     /**
@@ -289,7 +323,7 @@ class ScheduledStructure
      */
     public function isStructureEmpty()
     {
-        return empty($this->_scheduledStructure);
+        return empty($this->scheduledStructure);
     }
 
     /**
@@ -300,7 +334,7 @@ class ScheduledStructure
      */
     public function hasStructureElement($elementName)
     {
-        return isset($this->_scheduledStructure[$elementName]);
+        return isset($this->scheduledStructure[$elementName]);
     }
 
     /**
@@ -312,7 +346,7 @@ class ScheduledStructure
      */
     public function setStructureElement($elementName, array $data)
     {
-        $this->_scheduledStructure[$elementName] = $data;
+        $this->scheduledStructure[$elementName] = $data;
     }
 
     /**
@@ -323,8 +357,8 @@ class ScheduledStructure
      */
     public function unsetStructureElement($elementName)
     {
-        unset($this->_scheduledStructure[$elementName]);
-        unset($this->_scheduledData[$elementName]);
+        unset($this->scheduledStructure[$elementName]);
+        unset($this->scheduledData[$elementName]);
     }
 
     /**
@@ -336,7 +370,7 @@ class ScheduledStructure
      */
     public function getStructureElementData($elementName, $default = null)
     {
-        return isset($this->_scheduledData[$elementName]) ? $this->_scheduledData[$elementName] : $default;
+        return $this->scheduledData[$elementName] ?? $default;
     }
 
     /**
@@ -348,7 +382,7 @@ class ScheduledStructure
      */
     public function setStructureElementData($elementName, array $data)
     {
-        $this->_scheduledData[$elementName] = $data;
+        $this->scheduledData[$elementName] = $data;
     }
 
     /**
@@ -358,7 +392,7 @@ class ScheduledStructure
      */
     public function getPaths()
     {
-        return $this->_scheduledPaths;
+        return $this->scheduledPaths;
     }
 
     /**
@@ -370,7 +404,7 @@ class ScheduledStructure
      */
     public function getPath($elementName, $default = null)
     {
-        return $this->hasPath($elementName) ? $this->_scheduledPaths[$elementName] : $default;
+        return $this->hasPath($elementName) ? $this->scheduledPaths[$elementName] : $default;
     }
 
     /**
@@ -381,7 +415,7 @@ class ScheduledStructure
      */
     public function hasPath($elementName)
     {
-        return isset($this->_scheduledPaths[$elementName]);
+        return isset($this->scheduledPaths[$elementName]);
     }
 
     /**
@@ -393,7 +427,7 @@ class ScheduledStructure
      */
     public function setPathElement($elementName, $data)
     {
-        $this->_scheduledPaths[$elementName] = $data;
+        $this->scheduledPaths[$elementName] = $data;
     }
 
     /**
@@ -404,7 +438,7 @@ class ScheduledStructure
      */
     public function unsetPathElement($elementName)
     {
-        unset($this->_scheduledPaths[$elementName]);
+        unset($this->scheduledPaths[$elementName]);
     }
 
     /**
@@ -415,7 +449,7 @@ class ScheduledStructure
      */
     public function unsetElementFromBrokenParentList($elementName)
     {
-        unset($this->_brokenParent[$elementName]);
+        unset($this->brokenParent[$elementName]);
     }
 
     /**
@@ -426,7 +460,7 @@ class ScheduledStructure
      */
     public function setElementToBrokenParentList($elementName)
     {
-        $this->_brokenParent[$elementName] = 1;
+        $this->brokenParent[$elementName] = 1;
     }
 
     /**
@@ -436,7 +470,7 @@ class ScheduledStructure
      */
     public function flushPaths()
     {
-        $this->_scheduledPaths = [];
+        $this->scheduledPaths = [];
     }
 
     /**
@@ -447,7 +481,49 @@ class ScheduledStructure
     public function flushScheduledStructure()
     {
         $this->flushPaths();
-        $this->_scheduledElements = [];
-        $this->_scheduledStructure = [];
+        $this->scheduledElements = [];
+        $this->scheduledStructure = [];
+    }
+
+    /**
+     * Reformat 'Layout scheduled structure' to array.
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function __toArray()
+    {
+        $result = [];
+        foreach ($this->serializableProperties as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update 'Layout scheduled structure' data.
+     *
+     * @param array $data
+     * @return void
+     * @since 100.2.0
+     */
+    public function populateWithArray(array $data)
+    {
+        foreach ($this->serializableProperties as $property) {
+            $this->{$property} = $this->getArrayValueByKey($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $key
+     * @param array $array
+     * @return array
+     */
+    private function getArrayValueByKey($key, array $array)
+    {
+        return $array[$key] ?? [];
     }
 }

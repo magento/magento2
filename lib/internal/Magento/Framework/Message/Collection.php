@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
 
 /**
  * Messages collection
+ *
+ * @api
  */
 class Collection
 {
@@ -134,7 +136,7 @@ class Collection
      */
     public function getItemsByType($type)
     {
-        return isset($this->messages[$type]) ? $this->messages[$type] : [];
+        return $this->messages[$type] ?? [];
     }
 
     /**

@@ -2,10 +2,12 @@
 /**
  * Tests that existing payment.xml files are valid to schema individually and merged.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
+
+use Magento\Framework\Component\ComponentRegistrar;
 
 class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
@@ -16,28 +18,27 @@ class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCon
      */
     protected function _getReaderClassName()
     {
-        return 'Magento\Payment\Model\Config\Reader';
+        return \Magento\Payment\Model\Config\Reader::class;
     }
 
     /**
-     * Returns a string that represents the path to the config file, starting in the app directory.
-     *
-     * Format is glob, so * is allowed.
+     * Returns a string that represents the path to the config file
      *
      * @return string
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/payment.xml';
+        return 'etc/payment.xml';
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
     protected function _getXsdPath()
     {
-        return '/Magento/Payment/etc/payment_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Payment')
+            . '/etc/payment_file.xsd';
     }
 }

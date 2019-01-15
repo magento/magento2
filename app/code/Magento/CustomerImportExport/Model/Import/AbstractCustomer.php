@@ -1,15 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity abstract customer model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
 {
@@ -22,6 +29,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     const COLUMN_WEBSITE = '_website';
 
     const COLUMN_EMAIL = '_email';
+
+    const COLUMN_DEFAULT_BILLING = 'default_billing';
+
+    const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
 
     /**#@-*/
 
@@ -42,14 +53,9 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**
-     * Array of attribute codes which will be ignored in validation and import procedures.
-     * For example, when entity attribute has own validation and import procedures
-     * or just to deny this attribute processing.
-     *
-     * @var string[]
-     */
-    protected $_ignoredAttributes = ['website_id', 'store_id', 'default_billing', 'default_shipping'];
+    /**#@-*/
+    protected $_ignoredAttributes = ['website_id', 'store_id',
+        self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
     /**
      * Customer collection wrapper
@@ -59,9 +65,16 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_customerStorage;
 
     /**
-     * @var \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory
+     * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory
      */
     protected $_storageFactory;
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
 
     /**
      * {@inheritdoc}
@@ -69,28 +82,30 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $masterAttributeCode = '_email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
@@ -100,6 +115,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
@@ -107,7 +123,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         );
 
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
-        $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, __('Please specify an email.'));
+        $this->addMessageTemplate(
+            self::ERROR_EMAIL_IS_EMPTY,
+            __("An email wasn't specified. Enter the email and try again.")
+        );
         $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE, __('We found an invalid value in a website column.'));
         $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, __('Please enter a valid email.'));
         $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED, __('Please make sure attribute "%s" is not empty.'));
@@ -168,7 +187,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         if (isset($this->_validatedRows[$rowNumber])) {
             // check that row is already validated
-            return !isset($this->_invalidRows[$rowNumber]);
+            return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
         }
         $this->_validatedRows[$rowNumber] = true;
         $this->_processedEntitiesCount++;
@@ -178,7 +197,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $this->_validateRowForDelete($rowData, $rowNumber);
         }
 
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**
@@ -216,13 +235,13 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
             }
         }
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**
@@ -233,5 +252,33 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     public function getCustomerStorage()
     {
         return $this->_customerStorage;
+    }
+
+    /**
+     * Returns id of option by value for select and multiselect attributes
+     *
+     * @param array $attributeParameters Parameters of an attribute
+     * @param int|string $value A value of an attribute
+     * @return int An option id of attribute
+     * @since 100.2.0
+     */
+    protected function getSelectAttrIdByValue(array $attributeParameters, $value)
+    {
+        return isset($attributeParameters['options'][strtolower($value)])
+            ? $attributeParameters['options'][strtolower($value)]
+            : 0;
+    }
+
+    /**
+     * Returns multiple value separator
+     *
+     * @return string
+     * @since 100.2.0
+     */
+    protected function getMultipleValueSeparator()
+    {
+        return isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 }

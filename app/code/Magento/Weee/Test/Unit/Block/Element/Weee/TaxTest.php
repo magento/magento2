@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Block\Element\Weee;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
@@ -16,46 +16,55 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $collectionFactory = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $localeFormat = $this->getMock(
-            '\Magento\Framework\Locale\Format',
-            [],
-            [],
-            '',
-            false
-        );
-        $localeFormat->expects(
-            $this->any()
-        )->method(
-            'getPriceFormat'
-        )->willReturn([
-            'precision' => 2,
-            'decimalSymbol' => ',',
-            'groupSymbol' => '.',
-        ]);
-
-        $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-
-        $this->model = $objectManager->getObject(
-            'Magento\Weee\Block\Element\Weee\Tax',
-            [
-                'factoryElement' => $factory,
-                'factoryCollection' => $collectionFactory,
-                'localeFormat' => $localeFormat
-            ]
-        );
-
         $inputValue = [
             ['value' => '30000.4'],
         ];
+
+        $collectionFactory = $this->createPartialMock(
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
+            ['create']
+        );
+
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+
+        $localeCurrency = $this->createMock(\Magento\Framework\Locale\Currency::class);
+
+        $currency = $this->createMock(\Magento\Framework\Currency::class);
+
+        $currency->expects(
+            $this->any()
+        )->method(
+            'toCurrency'
+        )->willReturn('30.000,40');
+
+        $localeCurrency->expects(
+            $this->any()
+        )->method(
+            'getCurrency'
+        )->willReturn($currency);
+
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
+
+        $storeManager->expects(
+            $this->any()
+        )->method(
+            'getStore'
+        )->willReturn($store);
+
+        $factory = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+
+        $this->model = $objectManager->getObject(
+            \Magento\Weee\Block\Element\Weee\Tax::class,
+            [
+                'factoryElement' => $factory,
+                'factoryCollection' => $collectionFactory,
+                'storeManager' => $storeManager,
+                'localeCurrency' => $localeCurrency
+            ]
+        );
+
         $this->model->setValue($inputValue);
-        $this->model->setEntityAttribute(true);
+        $this->model->setEntityAttribute(new \Magento\Framework\DataObject(['store_id' => 1]));
 
         $return = $this->model->getEscapedValue();
         $this->assertEquals(

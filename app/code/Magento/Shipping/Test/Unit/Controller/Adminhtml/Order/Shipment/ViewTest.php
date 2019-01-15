@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -9,12 +9,17 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
  * Class ViewTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -27,34 +32,29 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $viewMock;
-
-    /**
      * @var \Magento\Shipping\Block\Adminhtml\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $blockMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $responseMock;
+    protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $sessionMock;
-
-    /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $actionFlag;
-
-    /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardMock;
 
     /**
      * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -73,92 +73,61 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(
-            'Magento\Framework\App\Request\Http',
-            ['getParam'],
-            [],
-            '',
-            false
-        );
-        $this->shipmentLoaderMock = $this->getMock(
-            'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
-        );
-        $this->shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
-            ['getIncrementId', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->viewMock = $this->getMock(
-            'Magento\Framework\App\View',
-            ['loadLayout', 'getLayout', 'renderLayout', 'getPage'],
-            [],
-            '',
-            false
-        );
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\Response\Http',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sessionMock = $this->getMock(
-            'Magento\Backend\Model\Session',
-            ['setIsUrlNotice'],
-            [],
-            '',
-            false
-        );
-        $this->actionFlag = $this->getMock(
-            'Magento\Framework\App\ActionFlag',
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMock();
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->getMock();
+        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->shipmentLoaderMock = $this->createPartialMock(
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
+        $this->shipmentMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Shipment::class,
+            ['getIncrementId', '__wakeup']
+        );
+        $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getView', 'getSession', 'getActionFlag'],
-            [],
-            '',
-            false
+        $this->resultForwardFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\ForwardFactory::class
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->blockMock = $this->createPartialMock(
+            \Magento\Shipping\Block\Adminhtml\View::class,
+            ['updateBackButtonUrl']
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
-
-        $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View(
-            $contextMock,
-            $this->shipmentLoaderMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->context = $objectManager->getObject(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'request' => $this->requestMock,
+                'objectManager' => $this->objectManagerMock
+            ]
         );
-
-        $this->viewMock->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($this->pageConfigMock);
-        $this->pageConfigMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->pageTitleMock);
+        $this->controller = $objectManager->getObject(
+            \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View::class,
+            [
+                'context' => $this->context,
+                'shipmentLoader' => $this->shipmentLoaderMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultForwardFactory' => $this->resultForwardFactoryMock
+            ]
+        );
     }
 
     /**
@@ -173,79 +142,44 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $incrementId = '10000001';
         $comeFrom = true;
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('order_id')
-            ->will($this->returnValue($orderId));
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment')
-            ->will($this->returnValue($shipment));
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('tracking')
-            ->will($this->returnValue($tracking));
-        $this->requestMock->expects($this->at(4))
-            ->method('getParam')
-            ->with('come_from')
-            ->will($this->returnValue($comeFrom));
-        $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
-        $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
-        $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
-        $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
-        $this->shipmentLoaderMock->expects($this->once())
-            ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
-        $this->shipmentMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($incrementId));
+        $this->loadShipment($orderId, $shipmentId, $shipment, $tracking, $comeFrom, $this->shipmentMock);
+        $this->shipmentMock->expects($this->once())->method('getIncrementId')->willReturn($incrementId);
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
 
-        $menuBlockMock = $this->getMock(
-            'Magento\Backend\Block\Menu',
-            ['getParentItems', 'getMenuModel'],
-            [],
-            '',
-            false
-        );
-        $menuBlockMock->expects($this->any())->method('getMenuModel')->will($this->returnSelf());
-        $menuBlockMock->expects($this->any())
-            ->method('getParentItems')
-            ->with('Magento_Sales::sales_order')
-            ->will($this->returnValue([]));
-        $shipmentBlockMock = $this->getMock(
-            'Magento\Shipping\Block\Adminhtml\View',
-            ['updateBackButtonUrl'],
-            [],
-            '',
-            false
-        );
-        $layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
-            ['getBlock'],
-            [],
-            '',
-            false
-        );
-        $shipmentBlockMock->expects($this->once())
-            ->method('updateBackButtonUrl')
-            ->with($comeFrom)
-            ->will($this->returnSelf());
-        $layoutMock->expects($this->at(0))
+        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock', '__wakeup']);
+        $this->resultPageMock->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($layoutMock);
+        $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('sales_shipment_view')
-            ->will($this->returnValue($shipmentBlockMock));
-        $layoutMock->expects($this->at(1))
-            ->method('getBlock')
-            ->with('menu')
-            ->will($this->returnValue($menuBlockMock));
+            ->willReturn($this->blockMock);
+        $this->blockMock->expects($this->once())
+            ->method('updateBackButtonUrl')
+            ->with($comeFrom)
+            ->willReturnSelf();
 
-        $this->viewMock->expects($this->once())->method('loadLayout')->will($this->returnSelf());
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
-        $this->viewMock->expects($this->once())->method('renderLayout')->will($this->returnSelf());
+        $this->resultPageMock->expects($this->once())
+            ->method('setActiveMenu')
+            ->with('Magento_Sales::sales_shipment')
+            ->willReturnSelf();
+        $this->resultPageMock->expects($this->atLeastOnce())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->atLeastOnce())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+        $this->pageTitleMock->expects($this->exactly(2))
+            ->method('prepend')
+            ->withConsecutive(
+                ['Shipments'],
+                ["#" . $incrementId]
+            )
+            ->willReturnSelf();
 
-        $this->assertNull($this->controller->execute());
+        $this->assertEquals($this->resultPageMock, $this->controller->execute());
     }
 
     /**
@@ -258,45 +192,44 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->requestMock->expects($this->at(0))
+        $this->loadShipment($orderId, $shipmentId, $shipment, $tracking, null, false);
+        $this->resultForwardFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultForwardMock);
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
+
+        $this->assertEquals($this->resultForwardMock, $this->controller->execute());
+    }
+
+    /**
+     * @param $orderId
+     * @param $shipmentId
+     * @param $shipment
+     * @param $tracking
+     * @param $comeFrom
+     * @param $returnShipment
+     */
+    protected function loadShipment($orderId, $shipmentId, $shipment, $tracking, $comeFrom, $returnShipment)
+    {
+        $valueMap = [
+            ['order_id', null, $orderId],
+            ['shipment_id', null, $shipmentId],
+            ['shipment', null, $shipment],
+            ['tracking', null, $tracking],
+            ['come_from', null, $comeFrom],
+        ];
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->with('order_id')
-            ->will($this->returnValue($orderId));
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment')
-            ->will($this->returnValue($shipment));
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('tracking')
-            ->will($this->returnValue($tracking));
-        $this->shipmentLoaderMock->expects($this->once())
-            ->method('setOrderId')
-            ->with($orderId);
-        $this->shipmentLoaderMock->expects($this->once())
-            ->method('setShipmentId')
-            ->with($shipmentId);
-        $this->shipmentLoaderMock->expects($this->once())
-            ->method('setShipment')
-            ->with($shipment);
-        $this->shipmentLoaderMock->expects($this->once())
-            ->method('setTracking')
-            ->with($tracking);
+            ->willReturnMap($valueMap);
+        $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
+        $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
+        $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
+        $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
-        $this->actionFlag->expects($this->once())
-            ->method('get')
-            ->with('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())
-            ->method('setIsUrlNotice')
-            ->with(true);
-
-        $this->assertNull($this->controller->execute());
+            ->willReturn($returnShipment);
     }
 }

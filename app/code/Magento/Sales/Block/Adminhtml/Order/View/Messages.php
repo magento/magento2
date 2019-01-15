@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Sales\Model\Order;
 
 /**
  * Order view messages
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Messages extends \Magento\Framework\View\Element\Messages
 {
@@ -26,6 +29,7 @@ class Messages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
@@ -34,11 +38,19 @@ class Messages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
+        parent::__construct(
+            $context,
+            $messageFactory,
+            $collectionFactory,
+            $messageManager,
+            $interpretationStrategy,
+            $data
+        );
         $this->coreRegistry = $registry;
-        parent::__construct($context, $messageFactory, $collectionFactory, $messageManager, $data);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@
  */
 namespace Magento\Test\Legacy;
 
-class ClassesTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Utility\Files;
+
+class ClassesTest extends \PHPUnit\Framework\TestCase
 {
     public function testPhpCode()
     {
@@ -22,7 +24,14 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $classes = \Magento\Framework\App\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
                 $this->_assertNonFactoryName($classes, $file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            )
         );
     }
 
@@ -42,7 +51,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $modules = \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
                 $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
             },
-            \Magento\Framework\App\Utility\Files::init()->getConfigFiles()
+            Files::init()->getConfigFiles()
         );
     }
 
@@ -75,7 +84,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->_assertNonFactoryName(array_unique($tabs), $path, true);
             },
-            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
+            Files::init()->getLayoutFiles()
         );
     }
 
@@ -108,7 +117,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     $this->assertFalse(false === strpos($name, '\\'));
                     $this->assertRegExp('/^([A-Z\\\\][A-Za-z\d\\\\]+)+$/', $name);
                 }
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 $factoryNames[] = $name;
             }
         }

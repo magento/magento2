@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Block\Share;
 
-class WishlistTest extends \PHPUnit_Framework_TestCase
+class WishlistTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -26,8 +26,8 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
-        $this->_block = $this->_objectManager->create('Magento\Wishlist\Block\Share\Wishlist');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->_block = $this->_objectManager->create(\Magento\Wishlist\Block\Share\Wishlist::class);
     }
 
     /**
@@ -39,7 +39,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession->loginById(1);
         $expectedCustomer = $this->_customerSession->getCustomerDataObject();
         $actualCustomer = $this->_block->getWishlistCustomer();
-        $this->assertInstanceOf('Magento\Customer\Api\Data\CustomerInterface', $actualCustomer);
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $actualCustomer);
         $this->assertEquals((int)$expectedCustomer->getId(), (int)$actualCustomer->getId());
         $this->assertEquals((int)$expectedCustomer->getWebsiteId(), (int)$actualCustomer->getWebsiteId());
         $this->assertEquals((int)$expectedCustomer->getStoreId(), (int)$actualCustomer->getStoreId());

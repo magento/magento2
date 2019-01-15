@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Product attribute add/edit form main tab
@@ -15,8 +13,14 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Advanced extends Generic
 {
     /**
@@ -32,11 +36,22 @@ class Advanced extends Generic
     protected $_yesNo;
 
     /**
+     * @var array
+     */
+    protected $disableScopeChangeList;
+
+    /**
+     * @var PropertyLocker
+     */
+    private $propertyLocker;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param Yesno $yesNo
      * @param Data $eavData
+     * @param array $disableScopeChangeList
      * @param array $data
      */
     public function __construct(
@@ -45,10 +60,12 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
+        array $disableScopeChangeList = ['sku'],
         array $data = []
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
+        $this->disableScopeChangeList = $disableScopeChangeList;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -146,7 +163,7 @@ class Advanced extends Generic
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
             ]
         );
@@ -205,14 +222,14 @@ class Advanced extends Generic
         }
 
         $scopes = [
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE => __('Store View'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE => __('Website'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL => __('Global'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
         ];
 
         if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
         ) {
-            unset($scopes[\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE]);
+            unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
         }
 
         $fieldset->addField(
@@ -222,17 +239,18 @@ class Advanced extends Generic
                 'name' => 'is_global',
                 'label' => __('Scope'),
                 'title' => __('Scope'),
-                'note' => __('Declare attribute value saving scope'),
+                'note' => __('Declare attribute value saving scope.'),
                 'values' => $scopes
             ],
             'attribute_code'
         );
 
         $this->_eventManager->dispatch('product_attribute_form_build', ['form' => $form]);
-        if ($attributeObject->getId() && !$attributeObject->getIsUserDefined()) {
+        if (in_array($attributeObject->getAttributeCode(), $this->disableScopeChangeList)) {
             $form->getElement('is_global')->setDisabled(1);
         }
         $this->setForm($form);
+        $this->getPropertyLocker()->lock($form);
         return $this;
     }
 
@@ -255,5 +273,18 @@ class Advanced extends Generic
     private function getAttributeObject()
     {
         return $this->_coreRegistry->registry('entity_attribute');
+    }
+
+    /**
+     * Get property locker
+     *
+     * @return PropertyLocker
+     */
+    private function getPropertyLocker()
+    {
+        if (null === $this->propertyLocker) {
+            $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
+        }
+        return $this->propertyLocker;
     }
 }

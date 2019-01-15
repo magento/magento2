@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Block\Catalog\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -26,7 +27,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @var string
      */
-    protected $_template = 'categories.phtml';
+    protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
      * Adminhtml data
@@ -57,7 +58,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -68,7 +69,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
@@ -131,7 +132,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * Get categories collection
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     public function getCategoryCollection()
     {
@@ -161,7 +162,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             'parent_id' => (int)$node->getParentId(),
             'children_count' => (int)$node->getChildrenCount(),
             'is_active' => (bool)$node->getIsActive(),
-            'name' => $node->getName(),
+            // Scrub names for raw js output
+            'name' => $this->escapeHtml($node->getName()),
             'level' => (int)$node->getLevel(),
             'product_count' => (int)$node->getProductCount(),
         ];

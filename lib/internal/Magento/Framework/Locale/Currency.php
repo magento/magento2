@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
@@ -89,7 +89,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
                 $options[self::CURRENCY_OPTION_SYMBOL] = $currency;
             }
 
-            $options = new \Magento\Framework\Object($options);
+            $options = new \Magento\Framework\DataObject($options);
             $this->_eventManager->dispatch(
                 'currency_display_options_forming',
                 ['currency_options' => $options, 'base_code' => $currency]

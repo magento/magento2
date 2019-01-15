@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Test\Unit\Model\Option;
 
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Option\Validator
@@ -21,9 +22,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new ObjectManager($this);
-        $validate = $helper->getObject('Magento\Framework\Validator\NotEmpty', ['options' => NotEmpty::ALL]);
+        $validate = $helper->getObject(\Magento\Framework\Validator\NotEmpty::class, ['options' => NotEmpty::ALL]);
 
-        $validateFactory = $this->getMockBuilder('Magento\Framework\Validator\NotEmptyFactory')
+        $validateFactory = $this->getMockBuilder(\Magento\Framework\Validator\NotEmptyFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,7 +33,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($validate);
 
         $this->validator = $helper->getObject(
-            'Magento\Bundle\Model\Option\Validator',
+            \Magento\Bundle\Model\Option\Validator::class,
             ['notEmptyFactory' => $validateFactory]
         );
     }
@@ -49,7 +50,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValid($title, $type, $isValid, $expectedMessages)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
-        $option = $this->getMockBuilder('Magento\Bundle\Model\Option')
+        $option = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->setMethods(['getTitle', 'getType'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -71,9 +72,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['title', 'select', true, []],
-            ['title', null, false, ['type' => 'type is a required field.']],
-            [null, 'select', false, ['title' => 'title is a required field.']],
-            [null, null, false, ['type' => 'type is a required field.', 'title' => 'title is a required field.']]
+            ['title', null, false, ['type' => '"type" is required. Enter and try again.']],
+            [null, 'select', false, ['title' => '"title" is required. Enter and try again.']],
+            [
+                null,
+                null,
+                false,
+                [
+                    'type' => '"type" is required. Enter and try again.',
+                    'title' => '"title" is required. Enter and try again.'
+                ]
+            ]
         ];
     }
 }

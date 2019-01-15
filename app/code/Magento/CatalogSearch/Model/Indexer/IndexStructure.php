@@ -1,73 +1,78 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
-class IndexStructure
+/**
+ * Catalog search index structure.
+ *
+ * @api
+ * @since 100.0.2
+ */
+class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
      */
     private $resource;
+
     /**
      * @var IndexScopeResolver
      */
     private $indexScopeResolver;
 
     /**
-     * @param Resource $resource
-     * @param IndexScopeResolver $indexScopeResolver
+     * @param ResourceConnection $resource
+     * @param IndexScopeResolverInterface $indexScopeResolver
      */
     public function __construct(
-        Resource $resource,
-        IndexScopeResolver $indexScopeResolver
+        ResourceConnection $resource,
+        IndexScopeResolverInterface $indexScopeResolver
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;
     }
 
     /**
-     * @param string $index
-     * @param Dimension[] $dimensions
-     * @return void
+     * @inheritdoc
      */
-    public function delete($index, array $dimensions)
+    public function delete($index, array $dimensions = [])
     {
-        $adapter = $this->getAdapter();
         $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
+        if ($this->resource->getConnection()->isTableExists($tableName)) {
+            $this->resource->getConnection()->dropTable($tableName);
         }
     }
 
     /**
-     * @param string $index
-     * @param Dimension[] $dimensions
-     * @return void
+     * @inheritdoc
      */
-    public function create($index, array $dimensions)
+    public function create($index, array $fields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
     }
 
     /**
+     * Create fulltext index table.
+     *
      * @param string $tableName
      * @throws \Zend_Db_Exception
      * @return void
      */
     protected function createFulltextIndex($tableName)
     {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName)
+        $table = $this->resource->getConnection()->newTable($tableName)
             ->addColumn(
                 'entity_id',
                 Table::TYPE_INTEGER,
@@ -94,15 +99,6 @@ class IndexStructure
                 ['data_index'],
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             );
-        $adapter->createTable($table);
-    }
-
-    /**
-     * @return false|AdapterInterface
-     */
-    private function getAdapter()
-    {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-        return $adapter;
+        $this->resource->getConnection()->createTable($table);
     }
 }

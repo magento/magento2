@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Wishlist\Model;
 
@@ -14,13 +12,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
-use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
  *
- * @method \Magento\Wishlist\Model\Resource\Item getResource()
  * @method int getWishlistId()
  * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
  * @method int getProductId()
@@ -32,6 +29,9 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ItemInterface
 {
@@ -96,7 +96,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_date;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $_catalogUrl;
 
@@ -121,18 +121,26 @@ class Item extends AbstractModel implements ItemInterface
     protected $productRepository;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param OptionFactory $wishlistOptFactory
      * @param CollectionFactory $wishlOptionCollectionFactory
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -140,14 +148,15 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
         OptionFactory $wishlistOptFactory,
         CollectionFactory $wishlOptionCollectionFactory,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -155,6 +164,8 @@ class Item extends AbstractModel implements ItemInterface
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
     }
@@ -166,7 +177,7 @@ class Item extends AbstractModel implements ItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Resource\Item');
+        $this->_init(\Magento\Wishlist\Model\ResourceModel\Item::class);
     }
 
     /**
@@ -179,16 +190,6 @@ class Item extends AbstractModel implements ItemInterface
     {
         $this->setData('qty', $qty >= 0 ? $qty : 1);
         return $this;
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Wishlist\Model\Resource\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**
@@ -332,12 +333,12 @@ class Item extends AbstractModel implements ItemInterface
         $this->validate();
 
         // set current store id if it is not defined
-        if (is_null($this->getStoreId())) {
+        if ($this->getStoreId() === null) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }
 
         // set current date if added at data is not defined
-        if (is_null($this->getAddedAt())) {
+        if ($this->getAddedAt() === null) {
             $this->setAddedAt($this->_date->gmtDate());
         }
 
@@ -370,12 +371,12 @@ class Item extends AbstractModel implements ItemInterface
     public function getProduct()
     {
         $product = $this->_getData('product');
-        if (is_null($product)) {
+        if ($product === null) {
             if (!$this->getProductId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
             }
             try {
-                $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId());
+                $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId(), true);
             } catch (NoSuchEntityException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'), $e);
             }
@@ -419,7 +420,7 @@ class Item extends AbstractModel implements ItemInterface
             if (!isset($urlData[$product->getId()])) {
                 return false;
             }
-            $product->setUrlDataObject(new \Magento\Framework\Object($urlData));
+            $product->setUrlDataObject(new \Magento\Framework\DataObject($urlData));
             $visibility = $product->getUrlDataObject()->getVisibility();
             if (!in_array($visibility, $product->getVisibleInSiteVisibilities())) {
                 return false;
@@ -467,18 +468,18 @@ class Item extends AbstractModel implements ItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $initialData = $option ? unserialize($option->getValue()) : null;
+        $initialData = $option ? $this->serializer->unserialize($option->getValue()) : [];
 
-        if ($initialData instanceof \Magento\Framework\Object) {
+        if ($initialData instanceof \Magento\Framework\DataObject) {
             $initialData = $initialData->getData();
         }
 
-        $buyRequest = new \Magento\Framework\Object($initialData);
+        $buyRequest = new \Magento\Framework\DataObject($initialData);
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
         return $buyRequest;
     }
@@ -486,12 +487,12 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Merge data to item info_buyRequest option
      *
-     * @param array|\Magento\Framework\Object $buyRequest
+     * @param array|\Magento\Framework\DataObject $buyRequest
      * @return $this
      */
     public function mergeBuyRequest($buyRequest)
     {
-        if ($buyRequest instanceof \Magento\Framework\Object) {
+        if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $buyRequest = $buyRequest->getData();
         }
 
@@ -500,7 +501,7 @@ class Item extends AbstractModel implements ItemInterface
         }
 
         $oldBuyRequest = $this->getBuyRequest()->getData();
-        $sBuyRequest = serialize($buyRequest + $oldBuyRequest);
+        $sBuyRequest = $this->serializer->serialize($buyRequest + $oldBuyRequest);
 
         $option = $this->getOptionByCode('info_buyRequest');
         if ($option) {
@@ -516,14 +517,14 @@ class Item extends AbstractModel implements ItemInterface
      * Set buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
      */
     public function setBuyRequest($buyRequest)
     {
         $buyRequest->setId($this->getId());
 
-        $_buyRequest = serialize($buyRequest->getData());
+        $_buyRequest = $this->serializer->serialize($buyRequest->getData());
         $this->setData('buy_request', $_buyRequest);
         return $this;
     }
@@ -532,7 +533,7 @@ class Item extends AbstractModel implements ItemInterface
      * Check product representation in item
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @param   \Magento\Framework\Object $buyRequest
+     * @param   \Magento\Framework\DataObject $buyRequest
      * @return  bool
      */
     public function isRepresent($product, $buyRequest)
@@ -650,7 +651,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Add option to item
      *
-     * @param   Option|\Magento\Framework\Object|array $option
+     * @param   Option|\Magento\Framework\DataObject|array $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -660,7 +661,7 @@ class Item extends AbstractModel implements ItemInterface
             $option = $this->_wishlistOptFactory->create()->setData($option)->setItem($this);
         } elseif ($option instanceof Option) {
             $option->setItem($this);
-        } elseif ($option instanceof \Magento\Framework\Object) {
+        } elseif ($option instanceof \Magento\Framework\DataObject) {
             $option = $this->_wishlistOptFactory->create()->setData($option->getData())
                ->setProduct($option->getProduct())
                ->setItem($this);
@@ -745,11 +746,11 @@ class Item extends AbstractModel implements ItemInterface
      *
      * We have to customize only controller url, so return it.
      *
-     * @return null|\Magento\Framework\Object
+     * @return null|\Magento\Framework\DataObject
      */
     public function getFileDownloadParams()
     {
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setUrl($this->_customOptionDownloadUrl);
         return $params;
     }

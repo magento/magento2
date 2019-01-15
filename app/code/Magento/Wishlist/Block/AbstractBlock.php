@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Block;
+
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Wishlist Product Items abstract Block
@@ -14,7 +19,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_collection;
 
@@ -31,20 +36,36 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $httpContext;
 
     /**
+     * @var ConfigInterface
+     */
+    private $viewConfig;
+
+    /**
+     * @var UrlBuilder
+     */
+    private $imageUrlBuilder;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @param ConfigInterface|null $config
+     * @param UrlBuilder|null $urlBuilder
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        array $data = []
+        array $data = [],
+        ConfigInterface $config = null,
+        UrlBuilder $urlBuilder = null
     ) {
         $this->httpContext = $httpContext;
         parent::__construct(
             $context,
             $data
         );
+        $this->viewConfig = $config ?? ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
     }
 
     /**
@@ -70,7 +91,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Prepare additional conditions to collection
      *
-     * @param \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return \Magento\Wishlist\Block\Customer\Wishlist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -82,7 +103,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -92,7 +113,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Wishlist Product Items collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItems()
     {
@@ -210,9 +231,21 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Retrieve formated Date
      *
      * @param string $date
+     * @deprecated
      * @return string
      */
     public function getFormatedDate($date)
+    {
+        return $this->getFormattedDate($date);
+    }
+
+    /**
+     * Retrieve formatted Date
+     *
+     * @param string $date
+     * @return string
+     */
+    public function getFormattedDate($date)
     {
         return $this->formatDate($date, \IntlDateFormatter::MEDIUM);
     }
@@ -288,17 +321,15 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getImageUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'small_image')->resize($this->getImageSize());
-    }
-
-    /**
-     * Product image size getter
-     *
-     * @return int
-     */
-    public function getImageSize()
-    {
-        return $this->getVar('product_image_size', 'Magento_Wishlist');
+        $viewImageConfig = $this->viewConfig->getViewConfig()->getMediaAttributes(
+            'Magento_Catalog',
+            Image::MEDIA_TYPE_CONFIG_NODE,
+            'wishlist_small_image'
+        );
+        return $this->imageUrlBuilder->getUrl(
+            $product->getData($viewImageConfig['type']),
+            'wishlist_small_image'
+        );
     }
 
     /**

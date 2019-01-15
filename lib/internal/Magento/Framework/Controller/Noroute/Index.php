@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Controller\Noroute;
@@ -16,8 +16,8 @@ class Index extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $status = $this->getRequest()->getParam('__status__');
-        if (!$status instanceof \Magento\Framework\Object) {
-            $status = new \Magento\Framework\Object();
+        if (!$status instanceof \Magento\Framework\DataObject) {
+            $status = new \Magento\Framework\DataObject();
         }
 
         $this->_eventManager->dispatch('controller_action_noroute', ['action' => $this, 'status' => $status]);

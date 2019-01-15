@@ -1,0 +1,9 @@
+sku,tier_price_website,tier_price_customer_group,tier_price_qty,tier_price,tier_price_value_type
+"AdvancedPricingSimple 1","All Websites [USD]","ALL GROUPS",10.0000,300.0000,Fixed
+"AdvancedPricingSimple 2","All Websites [USD]","ALL GROUPS",100.0000,1000000.0000,Fixed
+"AdvancedPricingSimple 1","All Websites [USD]",General,11.0000,11.0000,Fixed
+"AdvancedPricingSimple 2","All Websites [USD]","NOT LOGGED IN",12.0000,12.0000,Fixed
+"AdvancedPricingSimple 1","All Websites [USD]",Retailer,14.0000,14.0000,Fixed
+"AdvancedPricingSimple 2","All Websites [USD]",Wholesale,13.0000,13.0000,Fixed
+"AdvancedPricingSimple 1","All Websites [USD]","ALL GROUPS",20.0000,50,Discount
+"AdvancedPricingSimple 2","All Websites [USD]","ALL GROUPS",200.0000,50,Discount

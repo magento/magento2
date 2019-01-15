@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -9,6 +9,13 @@ use Magento\Backend\App\Action;
 
 class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::review_payment';
+
     /**
      * Manage payment state
      *
@@ -36,7 +43,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         $order->getPayment()->update();
                         if ($order->getPayment()->getIsTransactionApproved()) {
                             $message = __('Transaction has been approved.');
-                        } else if ($order->getPayment()->getIsTransactionDenied()) {
+                        } elseif ($order->getPayment()->getIsTransactionDenied()) {
                             $message = __('Transaction has been voided/declined.');
                         } else {
                             $message = __('There is no update for the transaction.');
@@ -45,27 +52,19 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                     default:
                         throw new \Exception(sprintf('Action "%s" is not supported.', $action));
                 }
-                $order->save();
-                $this->messageManager->addSuccess($message);
+                $this->orderRepository->save($order);
+                $this->messageManager->addSuccessMessage($message);
             } else {
                 $resultRedirect->setPath('sales/*/');
                 return $resultRedirect;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update the payment right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addErrorMessage(__('We can\'t update the payment right now.'));
+            $this->logger->critical($e);
         }
-        $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
+        $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
         return $resultRedirect;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::review_payment');
     }
 }

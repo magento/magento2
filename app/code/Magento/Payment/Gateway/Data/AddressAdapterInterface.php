@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Data;
 
 /**
  * Interface AddressAdapterInterface
+ * @api
+ * @since 100.0.2
  */
 interface AddressAdapterInterface
 {
@@ -107,4 +109,11 @@ interface AddressAdapterInterface
      * @return string
      */
     public function getSuffix();
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany();
 }

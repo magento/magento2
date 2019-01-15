@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\RequireJs\Model;
@@ -83,9 +83,7 @@ class FileManager
      */
     public function createRequireJsMixinsAsset()
     {
-        $relPath = $this->config->getMixinsFileRelativePath();
-        $this->ensureSourceFile($relPath);
-        return $this->assetRepo->createArbitrary($relPath, '');
+        return $this->assetRepo->createArbitrary($this->config->getMixinsFileRelativePath(), '');
     }
 
     /**
@@ -99,9 +97,33 @@ class FileManager
     }
 
     /**
+     * Create a view asset representing the theme fallback mapping resolver file.
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createUrlResolverAsset()
+    {
+        return $this->assetRepo->createArbitrary($this->config->getUrlResolverFileRelativePath(), '');
+    }
+
+    /**
+     * Create a view asset representing the theme fallback mapping configuration file.
+     *
+     * @return \Magento\Framework\View\Asset\File|null
+     */
+    public function createRequireJsMapConfigAsset()
+    {
+        if ($this->checkIfExist($this->config->getMapFileRelativePath())) {
+            return $this->assetRepo->createArbitrary($this->config->getMapFileRelativePath(), '');
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Make sure the aggregated configuration is materialized
      *
-     * By default write the file if it doesn't exist, but in developer mode always do it.
+     * By default write the file if it doesn't exist, but in developer mode always do it
      *
      * @param string $relPath
      * @return void
@@ -131,19 +153,14 @@ class FileManager
     /**
      * Create a view asset representing the static js functionality
      *
-     * @return \Magento\Framework\View\Asset\File
+     * @return \Magento\Framework\View\Asset\File|false
      */
     public function createStaticJsAsset()
     {
         if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
             return false;
         }
-        $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        $relPath = $libDir->getRelativePath(Config::STATIC_FILE_NAME);
-        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
-        $context = $this->assetRepo->getStaticViewFileContext();
-
-        return $this->assetRepo->createArbitrary($relPath, $context->getPath());
+        return $this->assetRepo->createAsset(Config::STATIC_FILE_NAME);
     }
 
     /**
@@ -166,11 +183,41 @@ class FileManager
             }
 
             foreach ($libDir->read($bundleDir) as $bundleFile) {
+                if (pathinfo($bundleFile, PATHINFO_EXTENSION) !== 'js') {
+                    continue;
+                }
                 $relPath = $libDir->getRelativePath($bundleFile);
                 $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
             }
         }
 
         return $bundles;
+    }
+
+    /**
+     * Remove all bundles from pool
+     * @deprecated 100.1.1
+     *
+     * @return bool
+     */
+    public function clearBundleJsPool()
+    {
+        $dirWrite = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+        $context = $this->assetRepo->getStaticViewFileContext();
+        $bundleDir = $context->getPath() . '/' . Config::BUNDLE_JS_DIR;
+        return $dirWrite->delete($bundleDir);
+    }
+
+    /**
+     * Check if file exist
+     *
+     * @param string $relPath
+     * @return bool
+     */
+    private function checkIfExist($relPath)
+    {
+        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        return $dir->isExist($relPath);
     }
 }

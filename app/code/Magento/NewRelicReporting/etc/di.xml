@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\NewRelicReporting\Model\Module\Collect">
+        <arguments>
+            <argument name="fullModuleList" xsi:type="object">Magento\Framework\Module\FullModuleList</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="newrelicreporting/general/account_id" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/app_id" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/api" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/insights_insert_key" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/insights_api_url" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/api_url" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="newrelicreporting/general/api_url" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/insights_api_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Http">
+        <plugin name="framework-http-newrelic" type="Magento\NewRelicReporting\Plugin\HttpPlugin"/>
+    </type>
+    <type name="Magento\Framework\App\State">
+        <plugin name="framework-state-newrelic" type="Magento\NewRelicReporting\Plugin\StatePlugin"/>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="newrelicreporting_deploy_marker" xsi:type="object">Magento\NewRelicReporting\Console\Command\DeployMarker</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

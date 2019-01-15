@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Model;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Eav\AttributeFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
 class Msrp
 {
@@ -39,7 +39,7 @@ class Msrp
     public function canApplyToProduct($product)
     {
         if ($this->mapApplyToProductType === null) {
-            /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             $attribute = $this->eavAttributeFactory->create()->loadByCode(Product::ENTITY, 'msrp');
             $this->mapApplyToProductType = $attribute->getApplyTo();
         }

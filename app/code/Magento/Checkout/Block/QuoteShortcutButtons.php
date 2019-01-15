@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
 {
     /**
@@ -18,6 +21,7 @@ class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
      * @param Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,

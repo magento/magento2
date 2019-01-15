@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,7 +62,7 @@ class AssertProductDuplicateForm extends AssertProductForm
         $fixtureData = $this->prepareFixtureData($product->getData());
 
         $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        \PHPUnit\Framework\Assert::assertEmpty($errors, $errors);
     }
 
     /**
@@ -92,7 +92,7 @@ class AssertProductDuplicateForm extends AssertProductForm
         );
 
         if (isset($compareData['status'])) {
-            $compareData['status'] = 'Product offline';
+            $compareData['status'] = 'No';
         }
         if (isset($compareData['quantity_and_stock_status']['qty'])) {
             $compareData['quantity_and_stock_status']['qty'] = '';
@@ -116,7 +116,7 @@ class AssertProductDuplicateForm extends AssertProductForm
     protected function prepareUrlKey($urlKey)
     {
         preg_match("~\d+$~", $urlKey, $matches);
-        $key = intval($matches[0]) + 1;
+        $key = (int)$matches[0] + 1;
         return str_replace($matches[0], $key, $urlKey);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,12 +21,12 @@ class ZendClient extends \Zend_Http_Client
     protected $_urlEncodeBody = true;
 
     /**
-     * @param null|\Zend_Uri_Http|string $uri
+     * @param null|string $uri
      * @param null|array $config
      */
     public function __construct($uri = null, $config = null)
     {
-        $this->config['useragent'] = 'Magento\Framework\HTTP\ZendClient';
+        $this->config['useragent'] = \Magento\Framework\HTTP\ZendClient::class;
 
         parent::__construct($uri, $config);
     }

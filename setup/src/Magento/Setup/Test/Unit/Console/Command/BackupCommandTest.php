@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\BackupCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class BackupCommandTest extends \PHPUnit_Framework_TestCase
+class BackupCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -37,34 +38,44 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManagerInterface',
+            \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
         );
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->backupRollback = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
-        $this->backupRollbackFactory = $this->getMock(
-            'Magento\Framework\Setup\BackupRollbackFactory',
-            [],
+        $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
+        $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
+        $this->backupRollbackFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->backupRollback);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $appState = $this->createMock(\Magento\Framework\App\State::class);
+        $configLoader = $this->getMockForAbstractClass(
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class,
             [],
             '',
             false
         );
-        $this->backupRollbackFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->backupRollback);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
+
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->backupRollbackFactory));
+            ->will(
+                $this->returnValueMap([
+                    [\Magento\Framework\Setup\BackupRollbackFactory::class, $this->backupRollbackFactory],
+                    [\Magento\Framework\App\State::class, $appState],
+                    [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
+                ])
+            );
         $command = new BackupCommand(
             $objectManagerProvider,
             $maintenanceMode,
-            $this->deploymentConfig
+            $this->deploymentConfig,
+            new MaintenanceModeEnabler($maintenanceMode)
         );
         $this->tester = new CommandTester($command);
     }
@@ -121,8 +132,8 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->tester->execute([]);
         $expected = 'Enabling maintenance mode' . PHP_EOL
-            . 'Not enough information provided to take backup.'  . PHP_EOL
-            . 'Disabling maintenance mode';
-        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
+            . 'Not enough information provided to take backup.' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
+        $this->assertSame($expected, $this->tester->getDisplay());
     }
 }

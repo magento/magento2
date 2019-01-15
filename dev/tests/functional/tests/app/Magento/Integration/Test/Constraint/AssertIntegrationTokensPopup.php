@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,7 +56,7 @@ class AssertIntegrationTokensPopup extends AbstractConstraint
                 $errors[] = 'Field with key: ' . $key . '" is empty in integration tokens.';
             }
         }
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $errors,
             "Integration tokens is not correct.\nLog:\n" . implode(";\n", $errors)
         );

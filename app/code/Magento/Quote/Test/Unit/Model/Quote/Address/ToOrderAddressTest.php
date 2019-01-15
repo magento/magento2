@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
@@ -10,17 +10,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Tests Address convert to order
  */
-class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
+class ToOrderAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderAddressInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\AddressRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderAddressFactoryMock;
+    protected $orderAddressRepositoryMock;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -39,21 +39,18 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderAddressFactoryMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderAddressInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->orderAddressRepositoryMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\AddressRepository::class,
+            ['create']
         );
-        $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
-        $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderAddressInterface', [], [], '', false);
-        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
+        $this->orderInterfaceMock = $this->createMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Address\ToOrderAddress',
+            \Magento\Quote\Model\Quote\Address\ToOrderAddress::class,
             [
-                'orderAddressFactory' => $this->orderAddressFactoryMock,
+                'orderAddressRepository' => $this->orderAddressRepositoryMock,
                 'objectCopyService' => $this->objectCopyMock,
                 'dataObjectHelper' => $this->dataObjectHelper
             ]
@@ -67,16 +64,16 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Quote\Model\Quote\Address $object
          */
-        $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $object = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order_address',
             $object
         )->willReturn($orderData);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
-            ->with($this->orderInterfaceMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderAddressInterface')
+            ->with($this->orderInterfaceMock, ['test' => 'beer'], \Magento\Sales\Api\Data\OrderAddressInterface::class)
             ->willReturnSelf();
-        $this->orderAddressFactoryMock->expects($this->once())
+        $this->orderAddressRepositoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderInterfaceMock);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));

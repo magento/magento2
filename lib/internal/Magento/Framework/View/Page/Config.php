@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page;
 
 use Magento\Framework\App;
+use Magento\Framework\App\Area;
 use Magento\Framework\View;
 
 /**
@@ -21,6 +22,8 @@ use Magento\Framework\View;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
  */
 class Config
 {
@@ -32,10 +35,24 @@ class Config
     const ELEMENT_TYPE_HEAD = 'head';
     /**#@-*/
 
+    const META_DESCRIPTION = 'description';
+    const META_CONTENT_TYPE = 'content_type';
+    const META_MEDIA_TYPE = 'media_type';
+    const META_CHARSET = 'charset';
+    const META_TITLE = 'title';
+    const META_KEYWORDS = 'keywords';
+    const META_ROBOTS = 'robots';
+    const META_X_UI_COMPATIBLE = 'x_ua_compatible';
+
     /**
      * Constant body attribute class
      */
     const BODY_ATTRIBUTE_CLASS = 'class';
+
+    /**
+     * Constant html language attribute
+     */
+    const HTML_ATTRIBUTE_LANG = 'lang';
 
     /**
      * Allowed group of types
@@ -86,6 +103,11 @@ class Config
     protected $favicon;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $localeResolver;
+
+    /**
      * @var \Magento\Framework\View\Layout\BuilderInterface
      */
     protected $builder;
@@ -105,7 +127,34 @@ class Config
         'description' => null,
         'keywords' => null,
         'robots' => null,
+        'title' => null,
     ];
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    private $areaResolver;
+
+    /**
+     * @var bool
+     */
+    private $isIncludesAvailable;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return \Magento\Framework\App\State
+     *
+     * @deprecated 100.0.7
+     */
+    private function getAreaResolver()
+    {
+        if ($this->areaResolver === null) {
+            $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\State::class);
+        }
+        return $this->areaResolver;
+    }
 
     /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -113,22 +162,35 @@ class Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\Page\FaviconInterface $favicon
      * @param Title $title
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param bool $isIncludesAvailable
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
         View\Asset\GroupedCollection $pageAssets,
         App\Config\ScopeConfigInterface $scopeConfig,
         View\Page\FaviconInterface $favicon,
-        Title $title
+        Title $title,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $isIncludesAvailable = true
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
         $this->scopeConfig = $scopeConfig;
         $this->favicon = $favicon;
         $this->title = $title;
+        $this->localeResolver = $localeResolver;
+        $this->isIncludesAvailable = $isIncludesAvailable;
+        $this->setElementAttribute(
+            self::ELEMENT_TYPE_HTML,
+            self::HTML_ATTRIBUTE_LANG,
+            strstr($this->localeResolver->getLocale(), '_', true)
+        );
     }
 
     /**
+     * Set builder.
+     *
      * @param View\Layout\BuilderInterface $builder
      * @return $this
      */
@@ -140,6 +202,7 @@ class Config
 
     /**
      * Build page config from page configurations
+     *
      * @return void
      */
     protected function build()
@@ -150,9 +213,10 @@ class Config
     }
 
     /**
+     * Public build action
+     *
      * TODO Will be eliminated in MAGETWO-28359
      *
-     * @deprecated
      * @return void
      */
     public function publicBuild()
@@ -172,6 +236,8 @@ class Config
     }
 
     /**
+     * Set metadata.
+     *
      * @param string $name
      * @param string $content
      * @return void
@@ -179,10 +245,12 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = $content;
+        $this->metadata[$name] = htmlspecialchars($content);
     }
 
     /**
+     * Returns metadata
+     *
      * @return array
      */
     public function getMetadata()
@@ -192,12 +260,14 @@ class Config
     }
 
     /**
+     * Set content type
+     *
      * @param string $contentType
      * @return void
      */
     public function setContentType($contentType)
     {
-        $this->setMetadata('content_type', $contentType);
+        $this->setMetadata(self::META_CONTENT_TYPE, $contentType);
     }
 
     /**
@@ -208,19 +278,21 @@ class Config
     public function getContentType()
     {
         $this->build();
-        if (empty($this->metadata['content_type'])) {
-            $this->metadata['content_type'] = $this->getMediaType() . '; charset=' . $this->getCharset();
+        if (strtolower($this->metadata[self::META_CONTENT_TYPE]) === 'auto') {
+            $this->metadata[self::META_CONTENT_TYPE] = $this->getMediaType() . '; charset=' . $this->getCharset();
         }
-        return $this->metadata['content_type'];
+        return $this->metadata[self::META_CONTENT_TYPE];
     }
 
     /**
+     * Set media type
+     *
      * @param string $mediaType
      * @return void
      */
     public function setMediaType($mediaType)
     {
-        $this->setMetadata('media_type', $mediaType);
+        $this->setMetadata(self::META_MEDIA_TYPE, $mediaType);
     }
 
     /**
@@ -231,22 +303,24 @@ class Config
     public function getMediaType()
     {
         $this->build();
-        if (empty($this->metadata['media_type'])) {
-            $this->metadata['media_type'] = $this->scopeConfig->getValue(
+        if (empty($this->metadata[self::META_MEDIA_TYPE])) {
+            $this->metadata[self::META_MEDIA_TYPE] = $this->scopeConfig->getValue(
                 'design/head/default_media_type',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata['media_type'];
+        return $this->metadata[self::META_MEDIA_TYPE];
     }
 
     /**
+     * Set charset
+     *
      * @param string $charset
      * @return void
      */
     public function setCharset($charset)
     {
-        $this->setMetadata('charset', $charset);
+        $this->setMetadata(self::META_CHARSET, $charset);
     }
 
     /**
@@ -257,22 +331,24 @@ class Config
     public function getCharset()
     {
         $this->build();
-        if (empty($this->metadata['charset'])) {
-            $this->metadata['charset'] = $this->scopeConfig->getValue(
+        if (empty($this->metadata[self::META_CHARSET])) {
+            $this->metadata[self::META_CHARSET] = $this->scopeConfig->getValue(
                 'design/head/default_charset',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata['charset'];
+        return $this->metadata[self::META_CHARSET];
     }
 
     /**
+     * Set description
+     *
      * @param string $description
      * @return void
      */
     public function setDescription($description)
     {
-        $this->setMetadata('description', $description);
+        $this->setMetadata(self::META_DESCRIPTION, $description);
     }
 
     /**
@@ -283,22 +359,49 @@ class Config
     public function getDescription()
     {
         $this->build();
-        if (empty($this->metadata['description'])) {
-            $this->metadata['description'] = $this->scopeConfig->getValue(
+        if (empty($this->metadata[self::META_DESCRIPTION])) {
+            $this->metadata[self::META_DESCRIPTION] = $this->scopeConfig->getValue(
                 'design/head/default_description',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata['description'];
+        return $this->metadata[self::META_DESCRIPTION];
     }
 
     /**
+     * Set meta title
+     *
+     * @param string $title
+     */
+    public function setMetaTitle($title)
+    {
+        $this->setMetadata(self::META_TITLE, $title);
+    }
+
+    /**
+     * Retrieve meta title
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        $this->build();
+        if (empty($this->metadata[self::META_TITLE])) {
+            return '';
+        }
+
+        return $this->metadata[self::META_TITLE];
+    }
+
+    /**
+     * Set keywords
+     *
      * @param string $keywords
      * @return void
      */
     public function setKeywords($keywords)
     {
-        $this->setMetadata('keywords', $keywords);
+        $this->setMetadata(self::META_KEYWORDS, $keywords);
     }
 
     /**
@@ -309,42 +412,50 @@ class Config
     public function getKeywords()
     {
         $this->build();
-        if (empty($this->metadata['keywords'])) {
-            $this->metadata['keywords'] = $this->scopeConfig->getValue(
+        if (empty($this->metadata[self::META_KEYWORDS])) {
+            $this->metadata[self::META_KEYWORDS] = $this->scopeConfig->getValue(
                 'design/head/default_keywords',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata['keywords'];
+        return $this->metadata[self::META_KEYWORDS];
     }
 
     /**
+     * Set robots content
+     *
      * @param string $robots
      * @return void
      */
     public function setRobots($robots)
     {
-        $this->setMetadata('robots', $robots);
+        $this->setMetadata(self::META_ROBOTS, $robots);
     }
 
     /**
      * Retrieve URL to robots file
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRobots()
     {
+        if ($this->getAreaResolver()->getAreaCode() !== Area::AREA_FRONTEND) {
+            return 'NOINDEX,NOFOLLOW';
+        }
         $this->build();
-        if (empty($this->metadata['robots'])) {
-            $this->metadata['robots'] = $this->scopeConfig->getValue(
+        if (empty($this->metadata[self::META_ROBOTS])) {
+            $this->metadata[self::META_ROBOTS] = $this->scopeConfig->getValue(
                 'design/search_engine_robots/default_robots',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata['robots'];
+        return $this->metadata[self::META_ROBOTS];
     }
 
     /**
+     * Returns collection of the assets
+     *
      * @return \Magento\Framework\View\Asset\GroupedCollection
      */
     public function getAssetCollection()
@@ -354,6 +465,8 @@ class Config
     }
 
     /**
+     * Add asset to page content
+     *
      * @param string $file
      * @param array $properties
      * @param string|null $name
@@ -413,7 +526,7 @@ class Config
      */
     public function addBodyClass($className)
     {
-        $className = preg_replace('#[^a-z0-9]+#', '-', strtolower($className));
+        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
         $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;
@@ -457,17 +570,19 @@ class Config
     public function getElementAttribute($elementType, $attribute)
     {
         $this->build();
-        return isset($this->elements[$elementType][$attribute]) ? $this->elements[$elementType][$attribute] : null;
+        return $this->elements[$elementType][$attribute] ?? null;
     }
 
     /**
+     * Returns element attributes
+     *
      * @param string $elementType
      * @return string[]
      */
     public function getElementAttributes($elementType)
     {
         $this->build();
-        return isset($this->elements[$elementType]) ? $this->elements[$elementType] : [];
+        return $this->elements[$elementType] ?? [];
     }
 
     /**
@@ -493,6 +608,8 @@ class Config
     }
 
     /**
+     * Returns favicon file
+     *
      * @return string
      */
     public function getFaviconFile()
@@ -501,6 +618,8 @@ class Config
     }
 
     /**
+     * Returns default favicon
+     *
      * @return string
      */
     public function getDefaultFavicon()
@@ -515,7 +634,7 @@ class Config
      */
     public function getIncludes()
     {
-        if (empty($this->includes)) {
+        if (empty($this->includes) && $this->isIncludesAvailable) {
             $this->includes = $this->scopeConfig->getValue(
                 'design/head/includes',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,6 +28,23 @@ class ExpressMainLogin extends Form
     protected $expressOldLogin = '#loginBox';
 
     /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
+    {
+        $this->waitForElementNotVisible($this->preloaderSpinner);
+    }
+
+    /**
      * Determines whether new login form or old is shown.
      *
      * @return \Magento\Paypal\Test\Block\Sandbox\ExpressLogin|\Magento\Paypal\Test\Block\Sandbox\ExpressOldLogin
@@ -36,12 +53,12 @@ class ExpressMainLogin extends Form
     {
         if ($this->_rootElement->find($this->expressLogin)->isVisible()) {
             return $this->blockFactory->create(
-                'Magento\Paypal\Test\Block\Sandbox\ExpressLogin',
+                \Magento\Paypal\Test\Block\Sandbox\ExpressLogin::class,
                 ['element' => $this->_rootElement->find($this->expressLogin)]
             );
         }
         return $this->blockFactory->create(
-            'Magento\Paypal\Test\Block\Sandbox\ExpressOldLogin',
+            \Magento\Paypal\Test\Block\Sandbox\ExpressOldLogin::class,
             ['element' => $this->_rootElement->find($this->expressOldLogin)]
         );
     }

@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,9 +30,9 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
     protected function configure()
     {
         $this->setName('indexer:set-mode')
-            ->setDescription(
-                'Sets index mode type'
-            )->setDefinition($this->getInputList());
+            ->setDescription('Sets index mode type')
+            ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 
@@ -45,8 +46,9 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
             throw new \InvalidArgumentException(implode("\n", $errors));
         }
 
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
 
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         foreach ($indexers as $indexer) {
             try {
                 $previousStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
@@ -60,15 +62,19 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
                 } else {
                     $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' has not been changed');
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
 
-        return $this;
+        return $returnValue;
     }
 
     /**

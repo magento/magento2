@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Product;
@@ -22,7 +22,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     /**
      * Product Index Collection
      *
-     * @var \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @var \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
      */
     protected $_collection;
 
@@ -82,7 +82,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
-     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     public function getModel()
@@ -90,7 +90,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
         try {
             $model = $this->_indexFactory->get($this->_indexType);
         } catch (\InvalidArgumentException $e) {
-            new \Magento\Framework\Exception\LocalizedException(__('Index type is not valid'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Index type is not valid'));
         }
 
         return $model;
@@ -99,7 +99,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     /**
      * Retrieve Index Product Collection
      *
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {

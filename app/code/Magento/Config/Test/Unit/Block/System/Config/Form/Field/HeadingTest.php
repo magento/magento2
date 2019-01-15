@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,14 +9,14 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class HeadingTest extends \PHPUnit_Framework_TestCase
+class HeadingTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {
         $htmlId = 'test_HTML_id';
         $label  = 'test_label';
 
-        $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
+        $elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHtmlId', 'getLabel'])
             ->getMock();
@@ -25,7 +25,7 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $heading = $objectManager->getObject('Magento\Config\Block\System\Config\Form\Field\Heading', []);
+        $heading = $objectManager->getObject(\Magento\Config\Block\System\Config\Form\Field\Heading::class, []);
 
         $html = $heading->render($elementMock);
 

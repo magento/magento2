@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class AssertStoreNotInGrid extends AbstractConstraint
     {
         $storeName = $store->getName();
         $storeIndex->open()->getStoreGrid()->search(['store_title' => $storeName]);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $storeIndex->getStoreGrid()->isStoreExists($storeName),
             'Store \'' . $storeName . '\' is present in grid.'
         );

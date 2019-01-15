@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url;
@@ -64,7 +64,7 @@ interface QueryParamsResolverInterface
      * Unset data from the object.
      *
      * @param null|string|array $key
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function unsetData($key = null);
 }

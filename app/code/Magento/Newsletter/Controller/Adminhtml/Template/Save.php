@@ -1,12 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
+
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpPostActionInterface
 {
     /**
      * Save Newsletter Template
@@ -18,8 +22,9 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
         $request = $this->getRequest();
         if (!$request->isPost()) {
             $this->getResponse()->setRedirect($this->getUrl('*/template'));
+            return;
         }
-        $template = $this->_objectManager->create('Magento\Newsletter\Model\Template');
+        $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
 
         $id = (int)$request->getParam('id');
         if ($id) {
@@ -42,14 +47,14 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
             )->setTemplateStyles(
                 $request->getParam('styles')
             )->setModifiedAt(
-                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate()
             );
 
             if (!$template->getId()) {
-                $template->setTemplateType(\Magento\Newsletter\Model\Template::TYPE_HTML);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_HTML);
             }
             if ($this->getRequest()->getParam('_change_type_flag')) {
-                $template->setTemplateType(\Magento\Newsletter\Model\Template::TYPE_TEXT);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_TEXT);
                 $template->setTemplateStyles('');
             }
             if ($this->getRequest()->getParam('_save_as_flag')) {
@@ -60,10 +65,10 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 
             $this->messageManager->addSuccess(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
-
+            $this->_getSession()->unsPreviewData();
             $this->_redirect('*/template');
             return;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {

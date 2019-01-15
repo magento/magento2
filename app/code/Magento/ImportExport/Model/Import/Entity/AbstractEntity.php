@@ -1,17 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -26,6 +36,41 @@ abstract class AbstractEntity
 
     const DB_MAX_TEXT_LENGTH = 65536;
 
+    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+    const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
+    const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
+    const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
+    const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
+    const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
+    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
+
+    /**
+     * @var array
+     */
+    protected $errorMessageTemplates = [
+        self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
+        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
+        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%s" have empty headers',
+        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%s" are invalid',
+        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
+        self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
+        self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
+        self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
+        self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
+    ];
+
+    /**
+     * Validation failure message template definitions
+     *
+     * @var array
+     */
+    protected $_messageTemplates = [];
+
     /**
      * DB connection.
      *
@@ -34,16 +79,30 @@ abstract class AbstractEntity
     protected $_connection;
 
     /**
-     * Has data process validation done?
+     * Has data process validation done?8
      *
      * @var bool
      */
     protected $_dataValidated = false;
 
     /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [];
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = false;
+
+    /**
      * DB data source model.
      *
-     * @var \Magento\ImportExport\Model\Resource\Import\Data
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     protected $_dataSourceModel;
 
@@ -62,20 +121,6 @@ abstract class AbstractEntity
     protected $_errors = [];
 
     /**
-     * Error counter.
-     *
-     * @var int
-     */
-    protected $_errorsCount = 0;
-
-    /**
-     * Limit of errors after which pre-processing will exit.
-     *
-     * @var int
-     */
-    protected $_errorsLimit = 100;
-
-    /**
      * Flag to disable import.
      *
      * @var bool
@@ -88,27 +133,6 @@ abstract class AbstractEntity
      * @var array
      */
     protected $_indexValueAttributes = [];
-
-    /**
-     * Array of invalid rows numbers.
-     *
-     * @var array
-     */
-    protected $_invalidRows = [];
-
-    /**
-     * Validation failure message template definitions.
-     *
-     * @var array
-     */
-    protected $_messageTemplates = [];
-
-    /**
-     * Notice messages.
-     *
-     * @var string[]
-     */
-    protected $_notices = [];
 
     /**
      * Entity model parameters.
@@ -144,17 +168,6 @@ abstract class AbstractEntity
      * @var int
      */
     protected $_processedRowsCount = 0;
-
-    /**
-     * Rows to skip. Valid rows but we have some reasons to skip them.
-     *
-     * [Row number 1] => true,
-     * ...
-     * [Row number N] => true
-     *
-     * @var array
-     */
-    protected $_rowsToSkip = [];
 
     /**
      * Array of numbers of validated rows as keys and boolean TRUE as values.
@@ -194,12 +207,12 @@ abstract class AbstractEntity
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -232,33 +245,61 @@ abstract class AbstractEntity
     protected $logInHistory = false;
 
     /**
+     * @var ProcessingErrorAggregatorInterface
+     */
+    protected $errorAggregator;
+
+    /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
+     */
+    protected $metadataPool;
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param ResourceConnection $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\String $string
+        ResourceConnection $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->string = $string;
+        $this->errorAggregator = $errorAggregator;
+
+        foreach ($this->errorMessageTemplates as $errorCode => $message) {
+            $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
+        }
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
         $this->_entityTypeId = $entityType->getEntityTypeId();
         $this->_dataSourceModel = $importData;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
     }
 
     /**
@@ -270,7 +311,7 @@ abstract class AbstractEntity
     protected function _getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a source.'));
+            throw new LocalizedException(__('Please specify a source.'));
         }
         return $this->_source;
     }
@@ -317,9 +358,28 @@ abstract class AbstractEntity
     }
 
     /**
+     * Add errors to error aggregator
+     *
+     * @param string $code
+     * @param array|mixed $errors
+     * @return void
+     */
+    protected function addErrors($code, $errors)
+    {
+        if ($errors) {
+            $this->getErrorAggregator()->addError(
+                $code,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                implode('", "', $errors)
+            );
+        }
+    }
+
+    /**
      * Validate data rows and save bunches to DB.
      *
-     * @return $this|void
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValidatedBunches()
@@ -331,6 +391,7 @@ abstract class AbstractEntity
         $nextRowBackup = [];
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
+        $skuSet = [];
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
@@ -340,16 +401,20 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen(serialize($bunchRows));
+                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
-                if ($this->_errorsCount >= $this->_errorsLimit) {
-                    // errors limit check
-                    return;
+                try {
+                    $rowData = $source->current();
+                    $skuSet[$rowData['sku']] = true;
+                } catch (\InvalidArgumentException $e) {
+                    $this->addRowError($e->getMessage(), $this->_processedRowsCount);
+                    $this->_processedRowsCount++;
+                    $source->next();
+                    continue;
                 }
-                $rowData = $source->current();
 
                 $this->_processedRowsCount++;
 
@@ -371,7 +436,25 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
+        $this->_processedEntitiesCount = count($skuSet);
+
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**
@@ -380,15 +463,28 @@ abstract class AbstractEntity
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number.
      * @param string $colName OPTIONAL Column name.
+     * @param string $errorMessage OPTIONAL Column name.
+     * @param string $errorLevel
+     * @param string $errorDescription
      * @return $this
      */
-    public function addRowError($errorCode, $errorRowNum, $colName = null)
-    {
+    public function addRowError(
+        $errorCode,
+        $errorRowNum,
+        $colName = null,
+        $errorMessage = null,
+        $errorLevel = ProcessingError::ERROR_LEVEL_CRITICAL,
+        $errorDescription = null
+    ) {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = [$errorRowNum + 1, $colName];
-        // one added for human readability
-        $this->_invalidRows[$errorRowNum] = true;
-        $this->_errorsCount++;
+        $this->getErrorAggregator()->addError(
+            $errorCode,
+            $errorLevel,
+            $errorRowNum,
+            $colName,
+            $errorMessage,
+            $errorDescription
+        );
 
         return $this;
     }
@@ -402,7 +498,7 @@ abstract class AbstractEntity
      */
     public function addMessageTemplate($errorCode, $message)
     {
-        $this->_messageTemplates[$errorCode] = $message;
+        $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
 
         return $this;
     }
@@ -457,11 +553,13 @@ abstract class AbstractEntity
         if (!isset(
             $this->_parameters['behavior']
         ) ||
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_APPEND &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_ADD_UPDATE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_CUSTOM &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_DELETE
         ) {
-            return \Magento\ImportExport\Model\Import::getDefaultBehavior();
+            return ImportExport::getDefaultBehavior();
         }
         return $this->_parameters['behavior'];
     }
@@ -482,66 +580,6 @@ abstract class AbstractEntity
     public function getEntityTypeId()
     {
         return $this->_entityTypeId;
-    }
-
-    /**
-     * Returns error information grouped by error types and translated (if possible).
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $messages = [];
-        foreach ($this->_errors as $errorCode => $errorRows) {
-            if (isset($this->_messageTemplates[$errorCode])) {
-                $errorCode = (string)__($this->_messageTemplates[$errorCode]);
-            }
-            foreach ($errorRows as $errorRowData) {
-                $key = $errorRowData[1] ? sprintf($errorCode, $errorRowData[1]) : $errorCode;
-                $messages[$key][] = $errorRowData[0];
-            }
-        }
-        return $messages;
-    }
-
-    /**
-     * Returns error counter value.
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_errorsCount;
-    }
-
-    /**
-     * Returns error limit value.
-     *
-     * @return int
-     */
-    public function getErrorsLimit()
-    {
-        return $this->_errorsLimit;
-    }
-
-    /**
-     * Returns invalid rows count.
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return count($this->_invalidRows);
-    }
-
-    /**
-     * Returns model notices.
-     *
-     * @return string[]
-     */
-    public function getNotices()
-    {
-        return $this->_notices;
     }
 
     /**
@@ -573,7 +611,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
+            throw new LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -642,26 +680,15 @@ abstract class AbstractEntity
         }
 
         if (!$valid) {
-            $this->addRowError(__("Please correct the value for '%s'."), $rowNum, $attrCode);
+            $this->addRowError(self::ERROR_CODE_ATTRIBUTE_NOT_VALID, $rowNum, $attrCode);
         } elseif (!empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])) {
-                $this->addRowError(__("Duplicate Unique Attribute for '%s'"), $rowNum, $attrCode);
+                $this->addRowError(self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE, $rowNum, $attrCode);
                 return false;
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = true;
         }
         return (bool)$valid;
-    }
-
-    /**
-     * Is all of data valid?
-     *
-     * @return bool
-     */
-    public function isDataValid()
-    {
-        $this->validateData();
-        return 0 == $this->_errorsCount;
     }
 
     /**
@@ -683,7 +710,22 @@ abstract class AbstractEntity
      */
     public function isRowAllowedToImport(array $rowData, $rowNum)
     {
-        return $this->validateRow($rowData, $rowNum) && !isset($this->_rowsToSkip[$rowNum]);
+        $this->validateRow($rowData, $rowNum);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNum);
+    }
+
+    /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
     }
 
     /**
@@ -718,6 +760,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get data from outside to change behavior. I.e. for setting some default parameters etc.
+     *
+     * @return array $params
+     */
+    public function getParameters()
+    {
+        return $this->_parameters;
+    }
+
+    /**
      * Source model setter.
      *
      * @param AbstractSource $source
@@ -734,25 +786,24 @@ abstract class AbstractEntity
     /**
      * Validate data.
      *
-     * @return $this
+     * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
         if (!$this->_dataValidated) {
+            $this->getErrorAggregator()->clear();
             // do all permanent columns exist?
-            if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
-                );
-            }
+            $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
+            $this->addErrors(self::ERROR_CODE_COLUMN_NOT_FOUND, $absentColumns);
 
             if (ImportExport::BEHAVIOR_DELETE != $this->getBehavior()) {
                 // check attribute columns names validity
                 $columnNumber = 0;
                 $emptyHeaderColumns = [];
                 $invalidColumns = [];
+                $invalidAttributes = [];
                 foreach ($this->getSource()->getColNames() as $columnName) {
                     $columnNumber++;
                     if (!$this->isAttributeParticular($columnName)) {
@@ -760,29 +811,32 @@ abstract class AbstractEntity
                             $emptyHeaderColumns[] = $columnNumber;
                         } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
+                        } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
+                            $invalidAttributes[] = $columnName;
                         }
                     }
                 }
-
-                if ($emptyHeaderColumns) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
-                    );
-                }
-                if ($invalidColumns) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
-                    );
-                }
+                $this->addErrors(self::ERROR_CODE_INVALID_ATTRIBUTE, $invalidAttributes);
+                $this->addErrors(self::ERROR_CODE_COLUMN_EMPTY_HEADER, $emptyHeaderColumns);
+                $this->addErrors(self::ERROR_CODE_COLUMN_NAME_INVALID, $invalidColumns);
             }
 
-            // initialize validation related attributes
-            $this->_errors = [];
-            $this->_invalidRows = [];
-            $this->_saveValidatedBunches();
-            $this->_dataValidated = true;
+            if (!$this->getErrorAggregator()->getErrorsCount()) {
+                $this->_saveValidatedBunches();
+                $this->_dataValidated = true;
+            }
         }
-        return $this;
+        return $this->getErrorAggregator();
+    }
+
+    /**
+     * Get error aggregator object
+     *
+     * @return ProcessingErrorAggregatorInterface
+     */
+    public function getErrorAggregator()
+    {
+        return $this->errorAggregator;
     }
 
     /**
@@ -813,5 +867,30 @@ abstract class AbstractEntity
     public function getDeletedItemsCount()
     {
         return $this->countItemsDeleted;
+    }
+
+    /**
+     * Retrieve valid column names
+     *
+     * @return array
+     */
+    public function getValidColumnNames()
+    {
+        return $this->validColumnNames;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

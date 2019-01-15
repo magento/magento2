@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Model\Oauth\Token;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Oauth\TokenProviderInterface;
 use Magento\Integration\Model\Oauth\Token;
 
@@ -216,7 +217,7 @@ class Provider implements TokenProviderInterface
                 __('Verifier is not the correct length')
             );
         }
-        if ($tokenVerifier != $oauthVerifier) {
+        if (!Security::compareStrings($tokenVerifier, $oauthVerifier)) {
             throw new \Magento\Framework\Oauth\Exception(
                 __('Token verifier and verifier token do not match')
             );
@@ -257,7 +258,7 @@ class Provider implements TokenProviderInterface
     {
         if (!$this->validateOauthToken($token)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not the correct length')
+                __('The token length is invalid. Check the length and try again.')
             );
         }
 

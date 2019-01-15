@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentSearchResultInterface extends SearchResultsInterface
 {

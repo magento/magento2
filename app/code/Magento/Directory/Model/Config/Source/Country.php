@@ -1,26 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Config\Source;
 
+/**
+ * Options provider for countries list
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Country implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Countries
      *
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_countryCollection;
-
-    /**
-     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
-     */
-    public function __construct(\Magento\Directory\Model\Resource\Country\Collection $countryCollection)
-    {
-        $this->_countryCollection = $countryCollection;
-    }
 
     /**
      * Options array
@@ -28,6 +26,14 @@ class Country implements \Magento\Framework\Option\ArrayInterface
      * @var array
      */
     protected $_options;
+
+    /**
+     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     */
+    public function __construct(\Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection)
+    {
+        $this->_countryCollection = $countryCollection;
+    }
 
     /**
      * Return options array

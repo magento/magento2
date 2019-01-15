@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,16 +10,18 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  * Adminhtml grid item renderer currency
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
 {
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $data = $row->getData($this->getColumn()->getIndex());
         $currencyCode = $this->_getCurrencyCode($row);
@@ -28,7 +30,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Curren
             return $data;
         }
 
-        $data = floatval($data) * $this->_getRate($row);
+        $data = (float)$data * $this->_getRate($row);
         $data = sprintf("%f", $data);
         $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
         return $data;

@@ -1,35 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
-$storeCode = 'fixturestore';
-if (!$store->load($storeCode)->getId()) {
-    $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
-    )->getWebsite()->getId();
-    $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
-    )->getWebsite()->getDefaultGroupId();
-    $store->setCode(
-        $storeCode
-    )->setWebsiteId(
-        $websiteId
-    )->setGroupId(
-        $groupId
-    )->setName(
-        'Fixture Store'
-    )->setSortOrder(
-        10
-    )->setIsActive(
-        1
-    );
-    $store->save();
+use Magento\TestFramework\Helper\Bootstrap;
 
-    /* Refresh stores memory cache */
-    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
-    )->reinitStores();
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+
+/** @var \Magento\Store\Model\Store $store */
+$store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$storeCode = 'fixturestore';
+
+if (!$store->load($storeCode)->getId()) {
+    $store->setCode($storeCode)
+        ->setWebsiteId($storeManager->getWebsite()->getId())
+        ->setGroupId($storeManager->getWebsite()->getDefaultGroupId())
+        ->setName('Fixture Store')
+        ->setSortOrder(10)
+        ->setIsActive(1);
+    $store->save();
 }
+
+//if test using this fixture relies on full text functionality it is required to explicitly perform re-indexation

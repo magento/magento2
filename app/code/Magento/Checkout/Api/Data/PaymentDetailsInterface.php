@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Api\Data;
 
-interface PaymentDetailsInterface
+/**
+ * Interface PaymentDetailsInterface
+ * @api
+ */
+interface PaymentDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

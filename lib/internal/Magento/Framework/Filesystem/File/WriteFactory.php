@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\File;
@@ -8,7 +8,11 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-class WriteFactory
+/**
+ * Opens a file for reading and/or writing
+ * @api
+ */
+class WriteFactory extends ReadFactory
 {
     /**
      * Pool of filesystem drivers
@@ -24,16 +28,17 @@ class WriteFactory
      */
     public function __construct(DriverPool $driverPool)
     {
+        parent::__construct($driverPool);
         $this->driverPool = $driverPool;
     }
 
     /**
-     * Create a readable file.
+     * Create a {@see WriterInterface}
      *
      * @param string $path
      * @param DriverInterface|string $driver Driver or driver code
      * @param string $mode [optional]
-     * @return Write
+     * @return WriteInterface
      */
     public function create($path, $driver, $mode = 'r')
     {

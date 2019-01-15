@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -40,14 +40,14 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     {
         try {
             /** @var $cart \Magento\Quote\Model\Quote */
-            $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
+            $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
             $cart->load($reservedOrderId, 'reserved_order_id');
             if (!$cart->getId()) {
                 throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
             }
             $cart->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-            $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
+            $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
             $quoteIdMask->load($cart->getId(), 'quote_id');
             $quoteIdMask->delete();
         } catch (\InvalidArgumentException $e) {
@@ -61,7 +61,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -81,11 +81,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => null,
-                'cc_owner' => 'John',
-                'cc_type' => null,
-                'cc_exp_year' => null,
-                'cc_exp_month' => null,
+                'po_number' => null
             ],
         ];
 
@@ -98,7 +94,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testSetPaymentWithVirtualProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -118,11 +114,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -134,7 +126,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testSetPaymentWithSimpleProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -154,11 +146,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
 
@@ -168,12 +156,12 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -193,11 +181,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200',
-                'cc_owner' => 'tester',
-                'cc_type' => 'test',
-                'cc_exp_year' => '2014',
-                'cc_exp_month' => '1',
+                'po_number' => '200'
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -209,7 +193,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -243,7 +227,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testGet()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -275,7 +259,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
      */
     protected function getPaymentMethodFieldsForAssert()
     {
-        return ['method', 'po_number', 'cc_owner', 'cc_type', 'cc_exp_year', 'cc_exp_month', 'additional_data'];
+        return ['method', 'po_number', 'additional_data'];
     }
 
     /**
@@ -288,7 +272,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         return $quoteIdMask->getMaskedId();

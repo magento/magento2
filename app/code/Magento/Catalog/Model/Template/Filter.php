@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Catalog Template Filter Model
@@ -14,6 +12,11 @@
  */
 namespace Magento\Catalog\Model\Template;
 
+/**
+ * Work with catalog(store, website) urls
+ *
+ * @package Magento\Catalog\Model\Template
+ */
 class Filter extends \Magento\Framework\Filter\Template
 {
     /**
@@ -43,13 +46,13 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $variables
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         $variables = []
@@ -122,8 +125,9 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
-        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
+        return $this->_storeManager->getStore()
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**

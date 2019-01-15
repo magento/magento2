@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,6 @@ class Pool
      */
     public function get($type)
     {
-        return isset($this->validators[$type]) ? $this->validators[$type] : $this->validators['default'];
+        return $this->validators[$type] ?? $this->validators['default'];
     }
 }

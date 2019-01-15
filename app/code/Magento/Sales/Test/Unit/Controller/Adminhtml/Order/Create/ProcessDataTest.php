@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
-use \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
+use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
 
 /**
  * Class ProcessDataTest
  *
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessDataTest extends \PHPUnit_Framework_TestCase
+class ProcessDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProcessData
@@ -61,13 +63,16 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardFactory;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $context = $this->createMock(\Magento\Backend\App\Action\Context::class);
 
         $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -89,7 +94,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $response = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [],
             '',
             false,
@@ -100,23 +105,23 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getResponse')->willReturn($response);
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
-        $this->messageManager = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
 
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $this->session = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
+        $this->session = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
-        $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
 
-        $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+        $this->resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+        $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -126,7 +131,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultForward);
 
         $this->processData = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData',
+            \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData::class,
             [
                 'context' => $context,
                 'escaper' => $this->escaper,
@@ -144,14 +149,11 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
     {
-        $quote = $this->getMock(
-            'Magento\Quote\Model\Quote',
-            ['getCouponCode', 'isVirtual', 'getAllItems'],
-            [],
-            '',
-            false
+        $quote = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getCouponCode', 'isVirtual', 'getAllItems']
         );
-        $create = $this->getMock('Magento\Sales\Model\AdminOrder\Create', [], [], '', false);
+        $create = $this->createMock(\Magento\Sales\Model\AdminOrder\Create::class);
 
         $paramReturnMap = [
             ['customer_id', null, null],
@@ -161,8 +163,8 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->atLeastOnce())->method('getParam')->willReturnMap($paramReturnMap);
 
         $objectManagerParamMap = [
-            ['Magento\Sales\Model\AdminOrder\Create', $create],
-            ['Magento\Backend\Model\Session\Quote', $this->session]
+            [\Magento\Sales\Model\AdminOrder\Create::class, $create],
+            [\Magento\Backend\Model\Session\Quote::class, $this->session]
         ];
         $this->objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($objectManagerParamMap);
 
@@ -196,7 +198,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $create->expects($this->once())->method('initRuleData')->willReturnSelf();
         $create->expects($this->any())->method('getQuote')->willReturn($quote);
 
-        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $address = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $create->expects($this->once())->method('getBillingAddress')->willReturn($address);
 
         $quote->expects($this->any())->method('isVirtual')->willReturn(true);
@@ -207,7 +209,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
 
         $this->session->expects($this->any())->method('getQuote')->willReturn($quote);
         $item = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
             [],
             '',
             false,
@@ -227,20 +229,27 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         );
         $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
 
-        $this->messageManager->expects($this->once())->method('addError')->with($errorMessageManager)->willReturnSelf();
+        $this->messageManager
+            ->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($errorMessageManager)
+            ->willReturnSelf();
 
         $this->resultForward->expects($this->once())
             ->method('forward')
             ->with('index')
             ->willReturnSelf();
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->processData->execute());
+        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->processData->execute());
     }
 
+    /**
+     * @return array
+     */
     public function isApplyDiscountDataProvider()
     {
         return [
             [true, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
-            [false, '123', '"%1" coupon code is not valid.', '132'],
+            [false, '123', 'The "%1" coupon code isn\'t valid. Verify the code and try again.', '132'],
         ];
     }
 }

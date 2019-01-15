@@ -2,7 +2,7 @@
 /**
  * Route to services available via REST API.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Router;
@@ -240,5 +240,15 @@ class Route implements RouterInterface
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Get route path.
+     *
+     * @return string
+     */
+    public function getRoutePath()
+    {
+        return $this->route;
     }
 }

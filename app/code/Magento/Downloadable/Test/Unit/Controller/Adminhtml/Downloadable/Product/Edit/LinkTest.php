@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Produ
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link */
     protected $link;
@@ -22,7 +22,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $response;
 
@@ -50,10 +50,10 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface',
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -62,31 +62,19 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 'setHeader'
             ]
         );
-        $this->fileHelper = $this->getMock(
-            '\Magento\Downloadable\Helper\File',
-            [
+        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
                 'getFilePath'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->downloadHelper = $this->getMock(
-            'Magento\Downloadable\Helper\Download',
-            [
+            ]);
+        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
                 'setResource',
                 'getFilename',
                 'getContentType',
                 'output',
                 'getFileSize',
                 'getContentDisposition'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->linkModel = $this->getMock(
-            '\Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link',
+            ]);
+        $this->linkModel = $this->createPartialMock(
+            \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link::class,
             [
                 'load',
                 'getId',
@@ -98,24 +86,15 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 'getBaseSamplePath',
                 'getLinkFile',
                 'getSampleFile'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
-            [
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
                 'create',
                 'get'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $this->link = $this->objectManagerHelper->getObject(
-            'Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link',
+            \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -130,6 +109,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteFile($fileType)
     {
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
             ->will($this->returnValue(1));
         $this->request->expects($this->at(1))->method('getParam')->with('type', 0)
@@ -138,28 +119,41 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->response->expects($this->once())->method('clearBody')
             ->will($this->returnSelf());
-        $this->response->expects($this->any())->method('setHeader')
+        $this->response
+            ->expects($this->any())
+            ->method('setHeader')
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                [
+                    'Cache-Control',
+                    'must-revalidate, post-check=0, pre-check=0',
+                    true,
+                ],
+                ['Content-type', 'text/html'],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', 'attachment; filename=' . $fileName]
+            )
             ->will($this->returnSelf());
         $this->response->expects($this->once())->method('sendHeaders')
             ->will($this->returnSelf());
-        $this->objectManager->expects($this->at(1))->method('get')->with('Magento\Downloadable\Helper\File')
+        $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\File::class)
             ->will($this->returnValue($this->fileHelper));
-        $this->objectManager->expects($this->at(2))->method('get')->with('Magento\Downloadable\Model\Link')
+        $this->objectManager->expects($this->at(2))->method('get')->with(\Magento\Downloadable\Model\Link::class)
             ->will($this->returnValue($this->linkModel));
-        $this->objectManager->expects($this->at(3))->method('get')->with('Magento\Downloadable\Helper\Download')
+        $this->objectManager->expects($this->at(3))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
             ->will($this->returnValue($this->downloadHelper));
         $this->fileHelper->expects($this->once())->method('getFilePath')
             ->will($this->returnValue('filepath/' . $fileType . '.jpg'));
         $this->downloadHelper->expects($this->once())->method('setResource')
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue('link.jpg'));
+            ->will($this->returnValue($fileName));
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->will($this->returnSelf('file'));
+            ->willReturn('text/html');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue($fileSize));
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue('inline'));
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());
         $this->linkModel->expects($this->once())->method('load')
@@ -192,7 +186,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->response->expects($this->once())->method('sendHeaders')
             ->will($this->returnSelf());
-        $this->objectManager->expects($this->at(1))->method('get')->with('Magento\Downloadable\Helper\Download')
+        $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
             ->will($this->returnValue($this->downloadHelper));
         $this->downloadHelper->expects($this->once())->method('setResource')
             ->will($this->returnSelf());

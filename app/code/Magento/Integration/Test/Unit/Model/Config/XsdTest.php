@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Config;
@@ -8,16 +8,22 @@ namespace Magento\Integration\Test\Unit\Model\Config;
 /**
  * Test for validation rules implemented by XSD schema for integration configuration.
  */
-class XsdTest extends \PHPUnit_Framework_TestCase
+class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
      */
-    protected $_schemaFile;
+    protected $schemaFile;
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . '/app/code/Magento/Integration/etc/integration/config.xsd';
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schemaFile = $urnResolver->getRealPath(
+            'urn:magento:module:Magento_Integration:etc/integration/config.xsd'
+        );
     }
 
     /**
@@ -27,9 +33,12 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, [], null, null, $messageFormat);
-        $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
+        $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
     }

@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Stdlib\DateTime;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
+ * Timezone Interface
  * @api
  */
 interface TimezoneInterface
@@ -61,12 +62,13 @@ interface TimezoneInterface
     /**
      * Create \DateTime object for current locale
      *
-     * @param mixed              $date
+     * @param mixed $date
      * @param string $locale
-     * @param bool               $useTimezone
+     * @param bool $useTimezone
+     * @param bool $includeTime
      * @return \DateTime
      */
-    public function date($date = null, $locale = null, $useTimezone = true);
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true);
 
     /**
      * Create \DateTime object with date converted to scope timezone and scope Locale
@@ -80,6 +82,7 @@ interface TimezoneInterface
 
     /**
      * Get scope timestamp
+     *
      * Timestamp will be built with scope timezone settings
      *
      * @param   mixed $scope
@@ -104,9 +107,11 @@ interface TimezoneInterface
     /**
      * Gets the scope config timezone
      *
+     * @param string $scopeType
+     * @param string $scopeCode
      * @return string
      */
-    public function getConfigTimezone();
+    public function getConfigTimezone($scopeType = null, $scopeCode = null);
 
     /**
      * Checks if current date of the given scope (in the scope timezone) is within the range
@@ -119,20 +124,35 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
-     * @param \DateTimeInterface $date
+     * Format date according to date and time formats, locale, timezone and pattern.
+     *
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
-     * @param null $locale
-     * @param null $timezone
+     * @param string|null $locale
+     * @param string|null $timezone
      * @param string|null $pattern
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
         $timezone = null,
         $pattern = null
     );
+
+    /**
+     * Convert date from config timezone to UTC.
+     *
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @return string
+     * @throws LocalizedException
+     * @since 100.1.0
+     */
+    public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
 }

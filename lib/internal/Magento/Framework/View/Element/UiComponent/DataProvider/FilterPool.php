@@ -1,23 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Class FilterPool
+ *
+ * @api
  */
 class FilterPool
 {
-    /**
-     * @var array
-     */
-    protected $filters = [];
-
     /**
      * @var array
      */
@@ -32,29 +30,20 @@ class FilterPool
     }
 
     /**
-     * @param string|int|array|null $condition
-     * @param string|null|array $field
-     * @param string $type
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $criteria
      * @return void
      */
-    public function registerNewFilter($condition, $field, $type)
+    public function applyFilters(Collection $collection, SearchCriteriaInterface $criteria)
     {
-        $this->filters[$type][sha1($field . serialize($condition))] = [
-            'field' => $field,
-            'condition' => $condition
-        ];
-    }
-
-    /**
-     * @param AbstractDb $collection
-     * @return void
-     */
-    public function applyFilters(AbstractDb $collection)
-    {
-        foreach ($this->filters as $type => $filter) {
-            if (isset($this->appliers[$type])) {
+        foreach ($criteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
                 /** @var $filterApplier FilterApplierInterface*/
-                $filterApplier = $this->appliers[$type];
+                if (isset($this->appliers[$filter->getConditionType()])) {
+                    $filterApplier = $this->appliers[$filter->getConditionType()];
+                } else {
+                    $filterApplier = $this->appliers['regular'];
+                }
                 $filterApplier->apply($collection, $filter);
             }
         }

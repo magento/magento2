@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,9 @@
         </label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -26,7 +29,7 @@
                 allowtransparency="true"
                 frameborder="0"
                 name="iframeTransparent"
-                style="display:none;width:100%;background-color:transparent">
+                class="payment-method-iframe">
 
         </iframe>
         <form class="form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
@@ -40,31 +43,29 @@
                 'cardFieldsMap': getCardFieldsMap(),
                 'nativeAction': getSaveOrderUrl()
             }, 'validation':[]}">
-
             <!-- ko template: 'Magento_Payment/payment/cc-form' --><!-- /ko -->
-
-            <div class="checkout-agreements-block">
-                <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!--/ko-->
-            </div>
-
-            <div class="actions-toolbar">
-                <div class="primary">
-                    <button data-role="review-save"
-                            type="submit"
-                            data-bind="
-                            attr: {title: $t('Place Order')},
-                            enable: (getCode() == isChecked()),
-                            click: placeOrder,
-                            css: {disabled: !isPlaceOrderActionAllowed()}
-                            "
-                            class="action primary checkout"
-                            disabled>
-                        <span data-bind="text: $t('Place Order')"></span>
-                    </button>
-                </div>
-            </div>
         </form>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button data-role="review-save"
+                        type="submit"
+                        data-bind="
+                        attr: {title: $t('Place Order')},
+                        enable: (getCode() == isChecked()),
+                        click: placeOrder,
+                        css: {disabled: !isPlaceOrderActionAllowed()}
+                        "
+                        class="action primary checkout"
+                        disabled>
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

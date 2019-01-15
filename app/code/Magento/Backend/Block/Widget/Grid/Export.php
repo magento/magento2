@@ -1,24 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
      * Grid export types
      *
-     * @var  \Magento\Framework\Object[]
+     * @var  \Magento\Framework\DataObject[]
      */
     protected $_exportTypes = [];
 
@@ -100,7 +101,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve totals
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getTotals()
     {
@@ -131,7 +132,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve grid export types
      *
-     * @return  \Magento\Framework\Object[]|false
+     * @return  \Magento\Framework\DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -158,7 +159,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $this->setChild(
             'export_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Export'),
@@ -189,7 +190,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new \Magento\Framework\Object(
+        $this->_exportTypes[] = new \Magento\Framework\DataObject(
             ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
@@ -257,10 +258,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $break = false;
 
         while ($break !== true) {
+            $originalCollection->clear();
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $originalCollection->getSize();
                 $lPage = $originalCollection->getLastPageNumber();
             }
@@ -279,12 +281,14 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Write item data to csv export file
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
-    protected function _exportCsvItem(\Magento\Framework\Object $item, \Magento\Framework\Filesystem\File\WriteInterface $stream)
-    {
+    protected function _exportCsvItem(
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
+    ) {
         $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
@@ -404,10 +408,10 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      *  Get a row data of the particular columns
      *
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return string[]
      */
-    public function getRowRecord(\Magento\Framework\Object $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data)
     {
         $row = [];
         foreach ($this->_getColumns() as $column) {
@@ -510,13 +514,13 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         }
         $collection = $this->_collectionFactory->create();
 
-        /** @var $item \Magento\Framework\Object */
+        /** @var $item \Magento\Framework\DataObject */
         foreach ($baseCollection as $item) {
             if ($item->getIsEmpty()) {
                 continue;
             }
             if ($item->hasChildren() && count($item->getChildren()) > 0) {
-                /** @var $subItem \Magento\Framework\Object */
+                /** @var $subItem \Magento\Framework\DataObject */
                 foreach ($item->getChildren() as $subItem) {
                     $tmpItem = clone $item;
                     $tmpItem->unsChildren();

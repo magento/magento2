@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
@@ -8,8 +8,6 @@ namespace Magento\Reports\Model;
 /**
  * Events model
  *
- * @method \Magento\Reports\Model\Resource\Event _getResource()
- * @method \Magento\Reports\Model\Resource\Event getResource()
  * @method string getLoggedAt()
  * @method \Magento\Reports\Model\Event setLoggedAt(string $value)
  * @method int getEventTypeId()
@@ -24,6 +22,8 @@ namespace Magento\Reports\Model;
  * @method \Magento\Reports\Model\Event setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {
@@ -54,7 +54,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -63,7 +63,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -79,7 +79,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Resource\Event');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Event::class);
     }
 
     /**

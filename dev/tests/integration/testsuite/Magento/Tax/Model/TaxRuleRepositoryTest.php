@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Filter;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -70,10 +74,10 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->taxRuleRepository = $this->objectManager->get('Magento\Tax\Api\TaxRuleRepositoryInterface');
-        $this->taxRateRepository = $this->objectManager->get('Magento\Tax\Api\TaxRateRepositoryInterface');
-        $this->taxRuleFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxRuleInterfaceFactory');
-        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
+        $this->taxRuleRepository = $this->objectManager->get(\Magento\Tax\Api\TaxRuleRepositoryInterface::class);
+        $this->taxRateRepository = $this->objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);
+        $this->taxRuleFactory = $this->objectManager->create(\Magento\Tax\Api\Data\TaxRuleInterfaceFactory::class);
+        $this->dataObjectHelper = $this->objectManager->create(\Magento\Framework\Api\DataObjectHelper::class);
         $this->taxRuleFixtureFactory = new TaxRuleFixtureFactory();
     }
 
@@ -88,7 +92,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $taxRule = $this->taxRuleRepository->save($taxRuleDataObject);
 
         //Assertions
-        $this->assertInstanceOf('\Magento\Tax\Api\Data\TaxRuleInterface', $taxRule);
+        $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxRuleInterface::class, $taxRule);
         $this->assertEquals($taxRuleDataObject->getCode(), $taxRule->getCode());
         $this->assertEquals(
             $taxRuleDataObject->getCustomerTaxClassIds(),
@@ -105,7 +109,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionMessage No such entity with taxRuleId = 9999
      * @magentoDbIsolation enabled
      */
-    public function testSaveThrowsExceptionIdTargetTaxRulDoesNotExist()
+    public function testSaveThrowsExceptionIdIfTargetTaxRuleDoesNotExist()
     {
         $taxRuleDataObject = $this->taxRuleFactory->create();
         $taxRuleDataObject->setId(9999)
@@ -140,7 +144,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray(
             $taxRule,
             $taxRuleData,
-            '\Magento\Tax\Api\Data\TaxRuleInterface'
+            \Magento\Tax\Api\Data\TaxRuleInterface::class
         );
 
         $this->taxRuleRepository->save($taxRule);
@@ -166,7 +170,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray(
             $taxRule,
             $taxRuleData,
-            '\Magento\Tax\Api\Data\TaxRuleInterface'
+            \Magento\Tax\Api\Data\TaxRuleInterface::class
         );
 
         //Tax rule service call
@@ -193,13 +197,14 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $taxRule->getPriority());
         $this->assertEquals(1, $taxRule->getPosition());
     }
+
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
      */
     public function testGetReturnsTaxRuleCreatedFromModel()
     {
         /** @var $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get('Magento\Framework\Registry');
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         /** @var $taxRuleModel \Magento\Tax\Model\Calculation\Rule */
         $taxRuleModel = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $this->assertNotNull($taxRuleModel);
@@ -222,7 +227,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteById()
     {
         /** @var $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get('Magento\Framework\Registry');
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $this->assertNotNull($taxRule);
@@ -243,7 +248,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteByIdThrowsExceptionIfTargetTaxRuleDoesNotExist()
     {
         /** @var $registry \Magento\Framework\Registry */
-        $registry = $this->objectManager->get('Magento\Framework\Registry');
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $this->assertNotNull($taxRule);
@@ -273,7 +278,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage code is a required field
+     * @expectedExceptionMessage "code" is required. Enter and try again.
      */
     public function testSaveThrowsExceptionIsRequiredFieldsAreMissing()
     {
@@ -298,7 +303,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         foreach ($filters as $filter) {
             $searchBuilder->addFilters([$filter]);
         }
@@ -325,7 +330,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function searchTaxRulesDataProvider()
     {
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
 
         return [
             'code eq "Default Rule"' => [

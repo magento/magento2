@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
 /**
  * Adminhtml shipment packaging
+ *
+ * @api
+ * @since 100.0.2
  */
 class Packaging extends \Magento\Backend\Block\Template
 {
@@ -71,6 +74,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getConfigDataJson()
     {
@@ -83,7 +87,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
-
+        $itemsOrderItemId = [];
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);
@@ -148,7 +152,7 @@ class Packaging extends \Magento\Backend\Block\Template
             $storeId
         );
         if ($carrier) {
-            $params = new \Magento\Framework\Object(
+            $params = new \Magento\Framework\DataObject(
                 [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,
@@ -205,7 +209,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if ($carrier) {
-            $params = new \Magento\Framework\Object(['country_recipient' => $countryId]);
+            $params = new \Magento\Framework\DataObject(['country_recipient' => $countryId]);
             $confirmationTypes = $carrier->getDeliveryConfirmationTypes($params);
             $confirmationType = !empty($confirmationTypes[$code]) ? $confirmationTypes[$code] : '';
             return $confirmationType;
@@ -243,7 +247,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param string $itemId
      * @param string $itemsOf
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getShipmentItem($itemId, $itemsOf)
     {
@@ -257,7 +261,7 @@ class Packaging extends \Magento\Backend\Block\Template
                 }
             }
         }
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 
     /**
@@ -292,7 +296,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $countryId = $this->getShipment()->getOrder()->getShippingAddress()->getCountryId();
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
-        $params = new \Magento\Framework\Object(['country_recipient' => $countryId]);
+        $params = new \Magento\Framework\DataObject(['country_recipient' => $countryId]);
         if ($carrier && is_array($carrier->getDeliveryConfirmationTypes($params))) {
             return $carrier->getDeliveryConfirmationTypes($params);
         }
@@ -307,12 +311,7 @@ class Packaging extends \Magento\Backend\Block\Template
     public function getPrintButton()
     {
         $data['shipment_id'] = $this->getShipment()->getId();
-        $url = $this->getUrl('adminhtml/order_shipment/printPackage', $data);
-        return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
-        )->setData(
-            ['label' => __('Print'), 'onclick' => 'setLocation(\'' . $url . '\')']
-        )->toHtml();
+        return $this->getUrl('adminhtml/order_shipment/printPackage', $data);
     }
 
     /**
@@ -354,7 +353,7 @@ class Packaging extends \Magento\Backend\Block\Template
             $storeId
         );
         if ($carrier) {
-            $params = new \Magento\Framework\Object(
+            $params = new \Magento\Framework\DataObject(
                 [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,

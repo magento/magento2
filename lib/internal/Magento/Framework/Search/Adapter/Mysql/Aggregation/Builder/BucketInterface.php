@@ -1,27 +1,36 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * MySQL search aggregation bucket builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface BucketInterface
 {
     /**
+     * Build bucket.
+     *
      * @param DataProviderInterface $dataProvider
      * @param Dimension[] $dimensions
      * @param RequestBucketInterface $bucket
-     * @param array $entityIds
+     * @param Table $entityIdsTable
      * @return array
      */
     public function build(
         DataProviderInterface $dataProvider,
         array $dimensions,
         RequestBucketInterface $bucket,
-        array $entityIds
+        Table $entityIdsTable
     );
 }

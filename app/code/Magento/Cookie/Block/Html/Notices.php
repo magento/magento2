@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,17 @@
  */
 namespace Magento\Cookie\Block\Html;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Notices extends \Magento\Framework\View\Element\Template
 {
     /**
      * Get Link to cookie restriction privacy policy page
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getPrivacyPolicyLink()
     {

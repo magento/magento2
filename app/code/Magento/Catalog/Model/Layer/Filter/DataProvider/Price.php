@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
@@ -55,7 +55,7 @@ class Price
     private $rangeItemCounts = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     private $resource;
 
@@ -88,13 +88,13 @@ class Price
      * @param Layer $layer
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
      */
     public function __construct(
         Layer $layer,
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
+        \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
     ) {
         $this->layer = $layer;
         $this->coreRegistry = $coreRegistry;
@@ -282,7 +282,8 @@ class Price
     public function getPriorFilters($filterParams)
     {
         $priorFilters = [];
-        for ($i = 1; $i < count($filterParams); ++$i) {
+        $count = count($filterParams);
+        for ($i = 1; $i < $count; ++$i) {
             $priorFilter = $this->validateFilter($filterParams[$i]);
             if ($priorFilter) {
                 $priorFilters[] = $priorFilter;
@@ -355,7 +356,7 @@ class Price
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
     {

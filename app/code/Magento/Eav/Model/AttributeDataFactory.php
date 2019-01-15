@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Eav\Model;
 
@@ -16,24 +14,15 @@ namespace Magento\Eav\Model;
 class AttributeDataFactory
 {
     const OUTPUT_FORMAT_JSON = 'json';
-
     const OUTPUT_FORMAT_TEXT = 'text';
-
     const OUTPUT_FORMAT_HTML = 'html';
-
     const OUTPUT_FORMAT_PDF = 'pdf';
-
     const OUTPUT_FORMAT_ONELINE = 'oneline';
-
     const OUTPUT_FORMAT_ARRAY = 'array';
 
     // available only for multiply attributes
 
-    /**
-     * Array of attribute data models by input type
-     *
-     * @var array
-     */
+    // available only for multiply attributes
     protected $_dataModels = [];
 
     /**
@@ -42,16 +31,19 @@ class AttributeDataFactory
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @codeCoverageIgnore
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\Stdlib\String $string)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Stdlib\StringUtils $string
+    ) {
         $this->_objectManager = $objectManager;
         $this->string = $string;
     }

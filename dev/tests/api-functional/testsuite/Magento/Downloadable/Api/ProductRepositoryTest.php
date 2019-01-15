@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,7 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * Class ProductRepositoryTest for testing ProductRepository interface with Downloadable Product
@@ -224,15 +222,12 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file',
-            'link_file' =>  'http://www.example.com/invalid', //this field will be overridden
-            'sample_file' => 'http://www.example.com/invalid', //this field will be overridden
+            'sample_type' => 'file'
         ];
         $linkData = $this->getLinkData();
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
             [$updatedLink1Data, $linkData['link1'], $linkData['link2']];
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"]);
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
@@ -293,8 +288,9 @@ class ProductRepositoryTest extends WebapiAbstract
         $link1Id = $resultLinks[0]['id'];
         $link2Id = $resultLinks[1]['id'];
 
-        $linkFile = 'link1_content_updated.jpg';
-        $sampleFile = 'link1_sample_updated.jpg';
+        $linkFile = 'link1_content_updated';
+        $sampleFile = 'link1_sample_updated';
+        $extension = '.jpg';
         $updatedLink1Data = [
             'id' => $link1Id,
             'title' => 'link1_updated',
@@ -304,12 +300,12 @@ class ProductRepositoryTest extends WebapiAbstract
             'number_of_downloads' => 999,
             'link_type' => 'file',
             'link_file_content' => [
-                'name' => $linkFile,
+                'name' => $linkFile . $extension,
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
-                'name' => $sampleFile,
+                'name' => $sampleFile . $extension,
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -334,7 +330,6 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
             [$updatedLink1Data, $updatedLink2Data];
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"]);
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
@@ -351,8 +346,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['link_file'], $linkFile));
+        $this->assertStringEndsWith($extension, $resultLinks[0]['link_file']);
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['sample_file'], $sampleFile));
+        $this->assertStringEndsWith($extension, $resultLinks[0]['sample_file']);
         unset($resultLinks[0]['id']);
         unset($resultLinks[0]['link_file']);
         unset($resultLinks[0]['sample_file']);
@@ -410,7 +407,6 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
         $sampleData = $this->getSampleData();
 
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"]);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
             [$updatedSample1Data, $sampleData['sample1'], $sampleData['sample2']];
 
@@ -478,7 +474,6 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
         ];
 
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"]);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
             [$updatedSample1Data, $updatedSamp2e1Data];
 
@@ -500,13 +495,15 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
-        $this->assertContains('sample1.jpg', $resultSamples[0]['sample_file']);
+        $this->assertContains('sample1', $resultSamples[0]['sample_file']);
+        $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertEquals($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        $this->assertContains('sample2.jpg', $resultSamples[1]['sample_file']);
+        $this->assertContains('sample2', $resultSamples[1]['sample_file']);
+        $this->assertStringEndsWith('.jpg', $resultSamples[1]['sample_file']);
         unset($resultSamples[1]['sample_file']);
 
         $expectedSampleData = [
@@ -608,6 +605,15 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     protected function saveProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $resourcePath = self::RESOURCE_PATH . '/' . $product['sku'];
         $serviceInfo = [
             'rest' => [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Customer/_files/three_customers.php
  * @magentoDataFixture Magento/Customer/_files/customer_address.php
  */
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider loadDataProvider
@@ -23,7 +23,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Backend\Model\Search\Customer $customerSearch */
-        $customerSearch = $objectManager->create('Magento\Backend\Model\Search\Customer');
+        $customerSearch = $objectManager->create(\Magento\Backend\Model\Search\Customer::class);
         $customerSearch->setQuery($query);
         $customerSearch->setLimit($limit);
         $customerSearch->setStart($start);

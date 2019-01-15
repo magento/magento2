@@ -1,25 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Stock
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 class Stock
 {
-    /**
-     * @var StockRegistryInterface
-     */
-    protected $stockRegistry;
-
     /**
      * Store model manager
      *
@@ -35,45 +40,55 @@ class Stock
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @var Status
      */
     protected $stockStatusResource;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var StatusFactory
      */
-    protected $objectManger;
+    protected $stockStatusFactory;
 
     /**
-     * @param StockRegistryInterface $stockRegistry
+     * @var StockRegistryProviderInterface
+     */
+    private $stockRegistryProvider;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param ObjectManagerInterface $objectManager
+     * @param StatusFactory $stockStatusFactory
+     * @param StockRegistryProviderInterface $stockRegistryProvider
      */
     public function __construct(
-        StockRegistryInterface $stockRegistry,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        ObjectManagerInterface $objectManager
+        StatusFactory $stockStatusFactory,
+        StockRegistryProviderInterface $stockRegistryProvider
     ) {
-        $this->stockRegistry = $stockRegistry;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->objectManger = $objectManager;
+        $this->stockStatusFactory  = $stockStatusFactory;
+        $this->stockRegistryProvider = $stockRegistryProvider;
     }
 
     /**
      * Assign stock status information to product
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int $stockStatus
+     * @param Product $product
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(\Magento\Catalog\Model\Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
-            $websiteId = $product->getStore()->getWebsiteId();
-            $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $websiteId);
+        if ($status === null) {
+            $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $scopeId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -82,18 +97,16 @@ class Stock
     /**
      * Add stock status information to products
      *
-     * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
+     * @param AbstractCollection $productCollection
+     * @deprecated 100.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function addStockStatusToProducts(
-        \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
-    ) {
-        $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
-        $productIds = [];
+    public function addStockStatusToProducts(AbstractCollection $productCollection)
+    {
+        $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistry->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -102,7 +115,7 @@ class Stock
     /**
      * Adds filtering for collection to return only in stock products
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @return void
      */
     public function addInStockFilterToCollection($collection)
@@ -132,40 +145,50 @@ class Stock
     }
 
     /**
-     * Add stock status to prepare index select
-     *
-     * @param \Magento\Framework\DB\Select $select
-     * @param \Magento\Store\Model\Website $website
-     * @return void
-     */
-    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
-    {
-        $resource = $this->getStockStatusResource();
-        $resource->addStockStatusToSelect($select, $website);
-    }
-
-    /**
      * Add only is in stock products filter to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return void
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $resource = $this->getStockStatusResource();
-        $resource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $isShowOutOfStock = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $resource = $this->getStockStatusResource();
+            $resource->addStockDataToCollection(
+                $collection,
+                !$isShowOutOfStock
+            );
+            $collection->setFlag($stockFlag, true);
+        }
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return Status
      */
     protected function getStockStatusResource()
     {
         if (empty($this->stockStatusResource)) {
-            $this->stockStatusResource = $this->objectManger->get(
-                'Magento\CatalogInventory\Model\Resource\Stock\Status'
-            );
+            $this->stockStatusResource = $this->stockStatusFactory->create();
         }
         return $this->stockStatusResource;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated 100.1.0
+     */
+    private function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        }
+        return $this->stockConfiguration;
     }
 }

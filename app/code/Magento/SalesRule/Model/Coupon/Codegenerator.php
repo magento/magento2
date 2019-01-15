@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Coupon;
 
-class Codegenerator extends \Magento\Framework\Object implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+class Codegenerator extends \Magento\Framework\DataObject implements CodegeneratorInterface
 {
     /**
      * The minimum length of the default
@@ -38,7 +38,7 @@ class Codegenerator extends \Magento\Framework\Object implements \Magento\SalesR
         $length = $this->getActualLength();
         $code = '';
         for ($i = 0, $indexMax = strlen($alphabet) - 1; $i < $length; ++$i) {
-            $code .= substr($alphabet, mt_rand(0, $indexMax), 1);
+            $code .= substr($alphabet, random_int(0, $indexMax), 1);
         }
 
         return $code;
@@ -54,7 +54,7 @@ class Codegenerator extends \Magento\Framework\Object implements \Magento\SalesR
         $lengthMin = $this->getLengthMin() ? $this->getLengthMin() : static::DEFAULT_LENGTH_MIN;
         $lengthMax = $this->getLengthMax() ? $this->getLengthMax() : static::DEFAULT_LENGTH_MAX;
 
-        return $this->getLength() ? $this->getLength() : mt_rand($lengthMin, $lengthMax);
+        return $this->getLength() ? $this->getLength() : random_int($lengthMin, $lengthMax);
     }
 
     /**

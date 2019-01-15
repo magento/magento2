@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
  * Customer edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
@@ -16,7 +17,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
      * Core registry
@@ -94,7 +95,7 @@ class Edit extends \Magento\Backend\Block\Widget
             if ($this->getToolbar()) {
                 $this->getToolbar()->addChild(
                     'back_button',
-                    'Magento\Backend\Block\Widget\Button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Back'),
                         'title' => __('Back'),
@@ -109,7 +110,7 @@ class Edit extends \Magento\Backend\Block\Widget
         } else {
             $this->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Close Window'), 'onclick' => 'window.close()', 'class' => 'cancel']
             );
         }
@@ -117,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly()) {
             $this->addChild(
                 'reset_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Reset'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', ['_current' => true]) . '\')'
@@ -128,11 +129,11 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly() && $this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save-split-button',
-                'Magento\Backend\Block\Widget\Button\SplitButton',
+                \Magento\Backend\Block\Widget\Button\SplitButton::class,
                 [
                     'id' => 'save-split-button',
                     'label' => __('Save'),
-                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
                     'button_class' => 'widget-button-save',
                     'options' => $this->_getSaveSplitButtonOptions()
                 ]
@@ -248,6 +249,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @deprecated 101.1.0
      * @return string
      */
     public function getHeader()
@@ -298,24 +300,6 @@ class Edit extends \Magento\Backend\Block\Widget
     public function getAttributesAllowedForAutogeneration()
     {
         return $this->_productHelper->getAttributesAllowedForAutogeneration();
-    }
-
-    /**
-     * Get data for JS (product type transition)
-     *
-     * @return string
-     */
-    public function getTypeSwitcherData()
-    {
-        return $this->jsonEncoder->encode(
-            [
-                'tab_id' => 'product_info_tabs_downloadable_items',
-                'is_virtual_id' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::VIRTUAL_FIELD_HTML_ID,
-                'weight_id' => 'weight',
-                'current_type' => $this->getProduct()->getTypeId(),
-                'attributes' => $this->_getAttributes(),
-            ]
-        );
     }
 
     /**

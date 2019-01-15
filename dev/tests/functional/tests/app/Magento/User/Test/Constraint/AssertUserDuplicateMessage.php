@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,8 @@ class AssertUserDuplicateMessage extends AbstractConstraint
      */
     public function processAssert(UserEdit $userEdit)
     {
-        $failedMessage = $userEdit->getMessagesBlock()->getErrorMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $failedMessage = $userEdit->getMessagesBlock()->getErrorMessage();
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $failedMessage,
             'Wrong success message is displayed.'

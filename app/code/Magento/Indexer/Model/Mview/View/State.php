@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Mview\View;
@@ -27,15 +27,15 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Indexer\Model\Resource\Mview\View\State $resource
-     * @param \Magento\Indexer\Model\Resource\Mview\View\State\Collection $resourceCollection
+     * @param \Magento\Indexer\Model\ResourceModel\Mview\View\State $resource
+     * @param \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Indexer\Model\Resource\Mview\View\State $resource,
-        \Magento\Indexer\Model\Resource\Mview\View\State\Collection $resourceCollection,
+        \Magento\Indexer\Model\ResourceModel\Mview\View\State $resource,
+        \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection $resourceCollection,
         array $data = []
     ) {
         if (!isset($data['mode'])) {
@@ -140,7 +140,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * Set state updated time
      *
-     * @param string|int|\DateTime $updated
+     * @param string|int|\DateTimeInterface $updated
      * @return $this
      */
     public function setUpdated($updated)

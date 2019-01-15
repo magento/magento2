@@ -1,17 +1,56 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
 
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class AttributeMerger
 {
+    /**
+     * Map form element
+     *
+     * @var array
+     */
+    protected $formElementMap = [
+        'checkbox'    => 'Magento_Ui/js/form/element/select',
+        'select'      => 'Magento_Ui/js/form/element/select',
+        'textarea'    => 'Magento_Ui/js/form/element/textarea',
+        'multiline'   => 'Magento_Ui/js/form/components/group',
+        'multiselect' => 'Magento_Ui/js/form/element/multiselect',
+        'image' => 'Magento_Ui/js/form/element/media',
+        'file' => 'Magento_Ui/js/form/element/media',
+    ];
+
+    /**
+     * Map template
+     *
+     * @var array
+     */
+    protected $templateMap = [
+        'image' => 'media',
+        'file' => 'media',
+    ];
+
+    /**
+     * Map input_validation and validation rule from js
+     *
+     * @var array
+     */
+    protected $inputValidationMap = [
+        'alpha' => 'validate-alpha',
+        'numeric' => 'validate-number',
+        'alphanumeric' => 'validate-alphanum',
+        'url' => 'validate-url',
+        'email' => 'email2',
+        'length' => 'validate-length',
+    ];
+
     /**
      * @var AddressHelper
      */
@@ -38,6 +77,13 @@ class AttributeMerger
     private $directoryHelper;
 
     /**
+     * List of codes of countries that must be shown on the top of country list
+     *
+     * @var array
+     */
+    private $topCountryCodes;
+
+    /**
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
@@ -53,6 +99,7 @@ class AttributeMerger
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
         $this->directoryHelper = $directoryHelper;
+        $this->topCountryCodes = $directoryHelper->getTopCountryCodes();
     }
 
     /**
@@ -102,33 +149,38 @@ class AttributeMerger
         $dataScopePrefix
     ) {
         // street attribute is unique in terms of configuration, so it has its own configuration builder
-        if ($attributeCode == 'street') {
-            return $this->getStreetFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
+        if (isset($attributeConfig['validation']['input_validation'])) {
+            $validationRule = $attributeConfig['validation']['input_validation'];
+            $attributeConfig['validation'][$this->inputValidationMap[$validationRule]] = true;
+            unset($attributeConfig['validation']['input_validation']);
         }
 
-        $uiComponent = $attributeConfig['formElement'] == 'select'
-            ? 'Magento_Ui/js/form/element/select'
+        if ($attributeConfig['formElement'] == 'multiline') {
+            return $this->getMultilineFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
+        }
+
+        $uiComponent = isset($this->formElementMap[$attributeConfig['formElement']])
+            ? $this->formElementMap[$attributeConfig['formElement']]
             : 'Magento_Ui/js/form/element/abstract';
-        $elementTemplate = $attributeConfig['formElement'] == 'select'
-            ? 'ui/form/element/select'
-            : 'ui/form/element/input';
+        $elementTemplate = isset($this->templateMap[$attributeConfig['formElement']])
+            ? 'ui/form/element/' . $this->templateMap[$attributeConfig['formElement']]
+            : 'ui/form/element/' . $attributeConfig['formElement'];
 
         $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
-            'config' => [
-                // customScope is used to group elements within a single form (e.g. they can be validated separately)
-                'customScope' => $dataScopePrefix,
-                'customEntry' => isset($additionalConfig['config']['customEntry'])
-                    ? $additionalConfig['config']['customEntry']
-                    : null,
-                'template' => 'ui/form/field',
-                'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
-                    ? $additionalConfig['config']['elementTmpl']
-                    : $elementTemplate,
-                'tooltip' => isset($additionalConfig['config']['tooltip'])
-                    ? $additionalConfig['config']['tooltip']
-                    : null
-            ],
+            'config' => $this->mergeConfigurationNode(
+                'config',
+                $additionalConfig,
+                [
+                    'config' => [
+                        // customScope is used to group elements within a single
+                        // form (e.g. they can be validated separately)
+                        'customScope' => $dataScopePrefix,
+                        'template' => 'ui/form/field',
+                        'elementTmpl' => $elementTemplate,
+                    ],
+                ]
+            ),
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
@@ -136,15 +188,30 @@ class AttributeMerger
                 ? $additionalConfig['sortOrder']
                 : $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
-            'options' => isset($attributeConfig['options']) ? $attributeConfig['options'] : [],
+            'options' => $this->getFieldOptions($attributeCode, $attributeConfig),
             'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
         ];
 
-        $defaultValue = $this->getDefaultValue($attributeCode);
-        if (null !== $defaultValue) {
-            $element['value'] = $defaultValue;
+        if ($attributeCode === 'region_id' || $attributeCode === 'country_id') {
+            unset($element['options']);
+            $element['deps'] = [$providerName];
+            $element['imports'] = [
+                'initialOptions' => 'index = ' . $providerName . ':dictionaries.' . $attributeCode,
+                'setOptions' => 'index = ' . $providerName . ':dictionaries.' . $attributeCode
+            ];
+        }
+
+        if (isset($attributeConfig['value']) && $attributeConfig['value'] != null) {
+            $element['value'] = $attributeConfig['value'];
+        } elseif (isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+            $element['value'] = $attributeConfig['default'];
+        } else {
+            $defaultValue = $this->getDefaultValue($attributeCode);
+            if (null !== $defaultValue) {
+                $element['value'] = $defaultValue;
+            }
         }
         return $element;
     }
@@ -195,12 +262,13 @@ class AttributeMerger
      * @param string $dataScopePrefix
      * @return array
      */
-    protected function getStreetFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
+    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
-        $streetLines = [];
-        for ($lineIndex = 0; $lineIndex < $this->addressHelper->getStreetLines(); $lineIndex++) {
+        $lines = [];
+        unset($attributeConfig['validation']['required-entry']);
+        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
-            $streetLines[] = [
+            $line = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -210,23 +278,33 @@ class AttributeMerger
                 ],
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
-                'validation' => $isFirstLine ? ['required-entry' => true] : [],
-                'additionalClasses' => $isFirstLine ? : 'additional'
+                'validation' => $isFirstLine
+                    ? array_merge(
+                        ['required-entry' => (bool)$attributeConfig['required']],
+                        $attributeConfig['validation']
+                    )
+                    : $attributeConfig['validation'],
+                'additionalClasses' => $isFirstLine ? 'field' : 'additional'
+
             ];
+            if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+                $line['value'] = $attributeConfig['default'];
+            }
+            $lines[] = $line;
         }
         return [
             'component' => 'Magento_Ui/js/form/components/group',
-            'label' => __('Address'),
-            'required' => true,
+            'label' => $attributeConfig['label'],
+            'required' => (bool)$attributeConfig['required'],
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],
             'type' => 'group',
             'config' => [
                 'template' => 'ui/group/group',
-                'additionalClasses' => 'street'
+                'additionalClasses' => $attributeCode
             ],
-            'children' => $streetLines,
+            'children' => $lines,
         ];
     }
 
@@ -236,21 +314,35 @@ class AttributeMerger
      */
     protected function getDefaultValue($attributeCode)
     {
+        if ($attributeCode === 'country_id') {
+            return $this->directoryHelper->getDefaultCountry();
+        }
+
+        $customer = $this->getCustomer();
+        if ($customer === null) {
+            return null;
+        }
+
+        $attributeValue = null;
         switch ($attributeCode) {
+            case 'prefix':
+                $attributeValue = $customer->getPrefix();
+                break;
             case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
+                $attributeValue = $customer->getFirstname();
+                break;
+            case 'middlename':
+                $attributeValue = $customer->getMiddlename();
                 break;
             case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
+                $attributeValue = $customer->getLastname();
                 break;
-            case 'country_id':
-                return $this->directoryHelper->getDefaultCountry();
+            case 'suffix':
+                $attributeValue = $customer->getSuffix();
+                break;
         }
-        return null;
+
+        return $attributeValue;
     }
 
     /**
@@ -266,5 +358,47 @@ class AttributeMerger
             }
         }
         return $this->customer;
+    }
+
+    /**
+     * Retrieve field options from attribute configuration
+     *
+     * @param string $attributeCode
+     * @param array $attributeConfig
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function getFieldOptions($attributeCode, array $attributeConfig)
+    {
+        return isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+    }
+
+    /**
+     * Order country options. Move top countries to the beginning of the list.
+     *
+     * @param array $countryOptions
+     * @return array
+     * @deprecated 100.2.0
+     */
+    protected function orderCountryOptions(array $countryOptions)
+    {
+        if (empty($this->topCountryCodes)) {
+            return $countryOptions;
+        }
+
+        $headOptions = [];
+        $tailOptions = [[
+            'value' => 'delimiter',
+            'label' => '──────────',
+            'disabled' => true,
+        ]];
+        foreach ($countryOptions as $countryOption) {
+            if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
+                $headOptions[] = $countryOption;
+            } else {
+                $tailOptions[] = $countryOption;
+            }
+        }
+        return array_merge($headOptions, $tailOptions);
     }
 }

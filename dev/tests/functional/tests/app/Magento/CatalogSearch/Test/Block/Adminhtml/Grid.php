@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,9 +32,6 @@ class Grid extends WidgetGrid
         ],
         'popularity_from' => [
             'selector' => 'input[name="popularity[from]"]',
-        ],
-        'synonym_for' => [
-            'selector' => 'input[name="synonym_for"]',
         ],
         'redirect' => [
             'selector' => 'input[name="redirect"]',

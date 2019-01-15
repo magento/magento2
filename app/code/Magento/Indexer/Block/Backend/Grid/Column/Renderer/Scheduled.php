@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
@@ -10,10 +10,10 @@ class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
     /**
      * Render whether indexer is scheduled
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($this->_getValue($row)) {
             $class = 'grid-severity-notice';

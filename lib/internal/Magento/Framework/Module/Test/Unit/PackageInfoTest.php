@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\PackageInfo;
 
-class PackageInfoTest extends \PHPUnit_Framework_TestCase
+class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $loader;
+    private $componentRegistrar;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -24,13 +24,18 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
      */
     private $packageInfo;
 
-    public function setUp()
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp()
     {
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->loader->expects($this->once())
-            ->method('load')
-            ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
+        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $this->reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPaths')
+            ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
 
         $composerData = [
             'A/composer.json' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
@@ -39,7 +44,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             'D/composer.json' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.3"}',
             'E/composer.json' => '{"name":"e", "version":"0.4"}',
         ];
-        $fileIteratorMock = $this->getMock('Magento\Framework\Config\FileIterator', [], [], '', false);
+        $fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
         $fileIteratorMock->expects($this->once())
             ->method('toArray')
             ->will($this->returnValue($composerData));
@@ -47,7 +52,21 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->loader, $this->reader, new \Magento\Framework\Stdlib\String());
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_decode($serializedData, true);
+                }
+            );
+        $this->packageInfo = new PackageInfo(
+            $this->reader,
+            $this->componentRegistrar,
+            $this->serializerMock
+        );
     }
 
     public function testGetModuleName()
@@ -57,6 +76,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('C', $this->packageInfo->getModuleName('c'));
         $this->assertEquals('D', $this->packageInfo->getModuleName('d'));
         $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
+        $this->assertEquals(
+            'Magento_TestModuleName',
+            $this->packageInfo->getModuleName('magento/module-test-module-name')
+        );
+        $this->assertArrayHasKey('Magento_TestModuleName', $this->packageInfo->getNonExistingDependencies());
     }
 
     public function testGetPackageName()
@@ -94,5 +118,10 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0.3', $this->packageInfo->getVersion('D'));
         $this->assertEquals('0.4', $this->packageInfo->getVersion('E'));
         $this->assertEquals('', $this->packageInfo->getVersion('F'));
+    }
+
+    public function testGetRequiredBy()
+    {
+        $this->assertEquals(['A'], $this->packageInfo->getRequiredBy('b'));
     }
 }

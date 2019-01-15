@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shopping cart.
@@ -35,15 +35,15 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('adminhtml');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
 
-        $this->coreRegistry = $objectManager->get('Magento\Framework\Registry');
+        $this->coreRegistry = $objectManager->get(\Magento\Framework\Registry::class);
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
         $this->block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Cart',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Cart::class,
             '',
             ['coreRegistry' => $this->coreRegistry, 'data' => ['website_id' => 1]]
         );
@@ -63,7 +63,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRowUrl()
     {
-        $row = new \Magento\Framework\Object(['product_id' => 1]);
+        $row = new \Magento\Framework\DataObject(['product_id' => 1]);
         $this->assertContains('catalog/product/edit/id/1', $this->block->getRowUrl($row));
     }
 

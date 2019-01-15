@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Class RowTest
  */
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -18,7 +18,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Model\Indexer\Stock\Processor'
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
         );
     }
 
@@ -29,31 +29,38 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function testProductUpdate()
     {
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Framework\Api\DataObjectHelper'
+            \Magento\Framework\Api\DataObjectHelper::class
         );
 
         /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
         $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Api\StockRegistryInterface'
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class
         );
         /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+            \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
         );
+
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+
+        $product = $productRepository->get('simple');
 
         $this->_processor->getIndexer()->setScheduled(false);
         $this->assertFalse($this->_processor->getIndexer()->isScheduled());
 
-        $stockItem = $stockRegistry->getStockItem(1, 1);
+        $stockItem = $stockRegistry->getStockItem($product->getId(), 1);
 
         $this->assertNotNull($stockItem->getItemId());
 
@@ -64,7 +71,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $dataObjectHelper->populateWithArray(
             $stockItem,
             $stockItemData,
-            '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+            \Magento\CatalogInventory\Api\Data\StockItemInterface::class
         );
         $stockItemRepository->save($stockItem);
 

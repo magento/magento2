@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
@@ -8,7 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 /**
  * Adminhtml abandoned shopping carts report grid block
  *
- * @method \Magento\Reports\Model\Resource\Quote\Collection getCollection
+ * @method \Magento\Reports\Model\ResourceModel\Quote\Collection getCollection()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
@@ -16,20 +16,20 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Quote\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $_quotesFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Quote\CollectionFactory $quotesFactory
+     * @param \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Quote\CollectionFactory $quotesFactory,
+        \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory,
         array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;
@@ -37,6 +37,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Grid constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -46,11 +48,13 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare collection
+     *
      * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\Reports\Model\Resource\Quote\Collection */
+        /** @var $collection \Magento\Reports\Model\ResourceModel\Quote\Collection */
         $collection = $this->_quotesFactory->create();
 
         $filter = $this->getParam($this->getVarNameFilter(), []);
@@ -67,11 +71,16 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $this->setCollection($collection);
         parent::_prepareCollection();
+        if ($this->_isExport) {
+            $collection->setPageSize(null);
+        }
         $this->getCollection()->resolveCustomerNames();
         return $this;
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param array $column
      *
      * @return $this
@@ -90,6 +99,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -161,7 +172,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'currency_code' => $currencyCode,
                 'index' => 'subtotal',
                 'sortable' => false,
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency::class,
                 'rate' => $this->getRate($currencyCode),
                 'header_css_class' => 'col-subtotal',
                 'column_css_class' => 'col-subtotal'
@@ -223,7 +234,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * Get rows url
+     *
+     * @param \Magento\Framework\DataObject $row
      *
      * @return string
      */

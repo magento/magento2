@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\CustomerData;
 
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Wishlist section
@@ -23,10 +24,14 @@ class Wishlist implements SectionSourceInterface
      */
     protected $wishlistHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\View */
-    protected $productImageView;
+    /**
+     * @var \Magento\Catalog\Helper\ImageFactory
+     */
+    protected $imageHelperFactory;
 
-    /** @var \Magento\Framework\App\ViewInterface */
+    /**
+     * @var \Magento\Framework\App\ViewInterface
+     */
     protected $view;
 
     /**
@@ -35,21 +40,31 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
-     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
+     * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
-        \Magento\Catalog\Model\Product\Image\View $productImageView,
-        \Magento\Framework\App\ViewInterface $view
+        \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
+        \Magento\Framework\App\ViewInterface $view,
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
-        $this->productImageView = $productImageView;
+        $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
     }
 
     /**
@@ -96,35 +111,81 @@ class Wishlist implements SectionSourceInterface
     protected function getItems()
     {
         $this->view->loadLayout();
+
         $collection = $this->wishlistHelper->getWishlistItemCollection();
         $collection->clear()->setPageSize(self::SIDEBAR_ITEMS_NUMBER)
             ->setInStockFilter(true)->setOrder('added_at');
+
         $items = [];
         foreach ($collection as $wishlistItem) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $product = $wishlistItem->getProduct();
-            $this->productImageView->init($product, 'wishlist_sidebar_block', 'Magento_Catalog');
-            $items[] = [
-                'image' => [
-                    'src' => $this->productImageView->getUrl(),
-                    'alt' => $this->productImageView->getLabel(),
-                    'width' => $this->productImageView->getWidth(),
-                    'height' => $this->productImageView->getHeight(),
-                ],
-                'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
-                'product_name' => $product->getName(),
-                'product_price' => $this->block->getProductPriceHtml(
-                    $product,
-                    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
-                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
-                    ['item' => $wishlistItem]
-                ),
-                'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
-                'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
-                'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
-                'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
-            ];
+            $items[] = $this->getItemData($wishlistItem);
         }
         return $items;
+    }
+
+    /**
+     * Retrieve wishlist item data
+     *
+     * @param \Magento\Wishlist\Model\Item $wishlistItem
+     * @return array
+     */
+    protected function getItemData(\Magento\Wishlist\Model\Item $wishlistItem)
+    {
+        $product = $wishlistItem->getProduct();
+        return [
+            'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
+            'product_sku' => $product->getSku(),
+            'product_id' => $product->getId(),
+            'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
+            'product_name' => $product->getName(),
+            'product_price' => $this->block->getProductPriceHtml(
+                $product,
+                'wishlist_configured_price',
+                \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                ['item' => $wishlistItem]
+            ),
+            'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
+            'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
+            'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
+            'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
+        ];
+    }
+
+    /**
+     * Retrieve product image data
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function getImageData($product)
+    {
+        /** @var \Magento\Catalog\Helper\Image $helper */
+        $helper = $this->imageHelperFactory->create()
+            ->init($product, 'wishlist_sidebar_block');
+
+        $template = 'Magento_Catalog/product/image_with_borders';
+
+        try {
+            $imagesize = $helper->getResizedImageInfo();
+        } catch (NotLoadInfoImageException $exception) {
+            $imagesize = [$helper->getWidth(), $helper->getHeight()];
+        }
+
+        $width = $helper->getFrame()
+            ? $helper->getWidth()
+            : $imagesize[0];
+
+        $height = $helper->getFrame()
+            ? $helper->getHeight()
+            : $imagesize[1];
+
+        return [
+            'template' => $template,
+            'src' => $helper->getUrl(),
+            'width' => $width,
+            'height' => $height,
+            'alt' => $helper->getLabel(),
+        ];
     }
 }

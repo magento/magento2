@@ -1,21 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Newsletter\Test\Block\Adminhtml\Subscriber;
 
-use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
-
 /**
- * Newsletter subscribers grid
- *
+ * Newsletter subscribers grid.
  */
-class Grid extends AbstractGrid
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */

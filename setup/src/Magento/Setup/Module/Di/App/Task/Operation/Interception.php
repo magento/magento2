@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
@@ -75,8 +75,13 @@ class Interception implements OperationInterface
         }
 
         $classesList = [];
-        foreach ($this->data['intercepted_paths'] as $path) {
-            $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+        foreach ($this->data['intercepted_paths'] as $paths) {
+            if (!is_array($paths)) {
+                $paths = (array)$paths;
+            }
+            foreach ($paths as $path) {
+                $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+            }
         }
 
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
@@ -87,7 +92,7 @@ class Interception implements OperationInterface
             [
                 'ioObject' => $generatorIo,
                 'generatedEntities' => [
-                    Interceptor::ENTITY_TYPE => 'Magento\Setup\Module\Di\Code\Generator\Interceptor',
+                    Interceptor::ENTITY_TYPE => \Magento\Setup\Module\Di\Code\Generator\Interceptor::class,
                 ]
             ]
         );

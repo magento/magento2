@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rss\Grid;
 
 /**
  * Class Link
+ * @api
  * @package Magento\Review\Block\Adminhtml\Grid\Rss
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'rss/grid/link.phtml';
+    protected $_template = 'Magento_Review::rss/grid/link.phtml';
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface

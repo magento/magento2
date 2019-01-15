@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
@@ -23,6 +27,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         parent::_construct();
         $this->setId('widget_instace_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Frontend App'));
+        $this->setTitle(__('Widget'));
     }
 }

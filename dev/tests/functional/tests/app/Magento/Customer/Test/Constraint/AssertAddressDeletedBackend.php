@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,11 +39,11 @@ class AssertAddressDeletedBackend extends AbstractConstraint
         $orderCreateIndex->getStoreBlock()->selectStoreView();
         $actualAddresses = $orderCreateIndex->getCreateBlock()->getBillingAddressBlock()->getExistingAddresses();
         $addressRenderer = $this->objectManager->create(
-            'Magento\Customer\Test\Block\Address\Renderer',
+            \Magento\Customer\Test\Block\Address\Renderer::class,
             ['address' => $deletedAddress]
         );
         $addressToSearch = $addressRenderer->render();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             in_array($addressToSearch, $actualAddresses),
             'Deleted address is present on backend during order creation'
         );

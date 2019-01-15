@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Library;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
@@ -16,7 +17,7 @@ use Zend\Code\Reflection\FileReflection;
  * Test check if Magento library components contain incorrect dependencies to application layer
  *
  */
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Collect errors
@@ -26,13 +27,33 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected $errors = [];
 
     /**
-     * Forbidden base namespaces
+     * Allowed sub namespaces
      *
      * @return array
      */
-    protected function getForbiddenNamespaces()
+    protected function getAllowedNamespaces()
     {
-        return ['Magento'];
+        return [
+            'Framework',
+            'SomeModule',
+            'ModuleName',
+            'Setup\Console\CommandList',
+            'Setup\Console\CompilerPreparation',
+            'Setup\Model\ObjectManagerProvider',
+            'Setup\Mvc\Bootstrap\InitParamListener',
+            'Store\Model\ScopeInterface',
+            'Store\Model\StoreManagerInterface',
+            'Directory\Model\CurrencyFactory',
+            'PageCache\Model\Cache\Type',
+            'Backup\Model\ResourceModel\Db',
+            'Backend\Block\Widget\Button',
+            'Ui\Component\Container',
+            'SalesRule\Model\Rule',
+            'SalesRule\Api\Data\RuleInterface',
+            'SalesRule\Model\Rule\Interceptor',
+            'SalesRule\Model\Rule\Proxy',
+            'Theme\Model\View\Design'
+        ];
     }
 
     public function testCheckDependencies()
@@ -43,6 +64,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
+                $componentRegistrar = new ComponentRegistrar();
                 $fileReflection = new FileReflection($file);
                 $tokens = new Tokens($fileReflection->getContents(), new ParserFactory());
                 $tokens->parseContent();
@@ -51,12 +73,18 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     (new Injectable())->getDependencies($fileReflection),
                     $tokens->getDependencies()
                 );
-
-                $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
+                $allowedNamespaces = str_replace('\\', '\\\\', implode('|', $this->getAllowedNamespaces()));
+                $pattern = '#Magento\\\\(?!' . $allowedNamespaces . ').*#';
                 foreach ($dependencies as $dependency) {
-                    $filePath = BP . '/lib/internal/' . str_replace('\\', '/', $dependency) . '.php';
-                    if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
-                        $this->errors[$fileReflection->getFileName()][] = $dependency;
+                    $dependencyPaths = explode('\\', $dependency);
+                    $dependencyPaths = array_slice($dependencyPaths, 2);
+                    $dependencyPath = implode('\\', $dependencyPaths);
+                    $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+                    foreach ($libraryPaths as $libraryPath) {
+                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependencyPath . '.php');
+                        if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
+                            $this->errors[$fileReflection->getFileName()][] = $dependency;
+                        }
                     }
                 }
 
@@ -65,27 +93,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 }
             },
             $this->libraryDataProvider()
-        );
-    }
-
-    public function testAppCodeUsage()
-    {
-        $files = Files::init();
-        $path = $files->getPathToSource();
-        $invoker = new AggregateInvoker($this);
-        $invoker(
-            function ($file) use ($path) {
-                $content = file_get_contents($file);
-                if (strpos($file, $path . '/lib/') === 0) {
-                    $this->assertSame(
-                        0,
-                        preg_match('~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS', $content),
-                        'Function __() is defined outside of the library and must not be used there. ' .
-                        'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
-                    );
-                }
-            },
-            $files->getPhpFiles(false, true, false, true, false)
         );
     }
 
@@ -123,13 +130,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function libraryDataProvider()
     {
         // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
-        include_once BP . '/lib/internal/Magento/Framework/Option/ArrayInterface.php';
-        $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
-        $dataProvider = Files::init()->getClassFiles(false, false, false, true, true);
+        $componentRegistrar = new ComponentRegistrar();
+        include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+            . '/Option/ArrayInterface.php';
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist*.txt');
+        $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {
-            $file = str_replace(BP . '/', '', $data[0]);
-            if (in_array($file, $blackList)) {
+            if (in_array($data[0], $blackList)) {
                 unset($dataProvider[$key]);
             } else {
                 include_once $data[0];

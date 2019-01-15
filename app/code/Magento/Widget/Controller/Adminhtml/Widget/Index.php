@@ -1,13 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
-class Index extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Index extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
     /**
      * Core registry
      *
@@ -36,7 +43,7 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Wisywyg widget plugin main page
+     * Wysiwyg widget plugin main page
      *
      * @return void
      */

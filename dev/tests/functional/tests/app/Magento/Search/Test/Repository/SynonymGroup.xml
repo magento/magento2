@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Search\Test\Repository\SynonymGroup">
+        <dataset name="prepareMerge">
+            <field name="scope_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="synonyms" xsi:type="string">test_synonym_%isolation%,test_synonym_2_test_synonym_%isolation%</field>
+            <field name="mergeOnConflict" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="synonym_group_1">
+            <field name="scope_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="synonyms" xsi:type="string">synonym_1_group_1,synonym_2_group_1</field>
+            <field name="mergeOnConflict" xsi:type="string">No</field>
+        </dataset>
+
+        <dataset name="synonym_group_2">
+            <field name="scope_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="synonyms" xsi:type="string">synonym_1_group_2,synonym_2_group_2,synonym_3_group_2</field>
+            <field name="mergeOnConflict" xsi:type="string">No</field>
+        </dataset>
+
+        <dataset name="synonym_group_3">
+            <field name="scope_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="synonyms" xsi:type="string">synonym_1_group_3,synonym_2_group_3</field>
+            <field name="mergeOnConflict" xsi:type="string">No</field>
+        </dataset>
+    </repository>
+</config>

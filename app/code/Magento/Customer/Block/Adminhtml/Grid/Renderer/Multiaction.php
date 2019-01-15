@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Grid\Renderer;
@@ -15,10 +15,10 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
     /**
      * Renders column
      *
-     * @param  \Magento\Framework\Object $row
+     * @param  \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $html = '';
         $actions = $this->getColumn()->getActions();
@@ -46,10 +46,10 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
      * Render single action as link html
      *
      * @param  array $action
-     * @param  \Magento\Framework\Object $row
+     * @param  \Magento\Framework\DataObject $row
      * @return string|false
      */
-    protected function _toLinkHtml($action, \Magento\Framework\Object $row)
+    protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
         $product = $row->getProduct();
 

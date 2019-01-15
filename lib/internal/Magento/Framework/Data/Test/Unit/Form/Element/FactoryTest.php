@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,13 +23,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->_objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $this->_factory = new \Magento\Framework\Data\Form\Element\Factory($this->_objectManagerMock);
     }
 
@@ -40,7 +35,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreatePositive($type)
     {
         $className = 'Magento\Framework\Data\Form\Element\\' . ucfirst($type);
-        $elementMock = $this->getMock($className, [], [], '', false);
+        $elementMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -51,7 +46,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($elementMock)
         );
-        $this->assertSame($elementMock, $this->_factory->create($type));
+        $element = $this->_factory->create($type);
+        $this->assertSame($elementMock, $element);
+        unset($elementMock, $element);
     }
 
     /**
@@ -62,7 +59,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = ['data' => ['attr1' => 'attr1', 'attr2' => 'attr2']];
         $className = 'Magento\Framework\Data\Form\Element\\' . ucfirst($type);
-        $elementMock = $this->getMock($className, [], [], '', false);
+        $elementMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -73,7 +70,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($elementMock)
         );
-        $this->assertSame($elementMock, $this->_factory->create($type, $config));
+        $element = $this->_factory->create($type, $config);
+        $this->assertSame($elementMock, $element);
+        unset($elementMock, $element);
     }
 
     /**
@@ -152,7 +151,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateExceptionInvalidArgument($type)
     {
-        $elementMock = $this->getMock($type, [], [], '', false);
+        $elementMock = $this->createMock($type);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -172,8 +171,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createExceptionInvalidArgumentDataProvider()
     {
         return [
-            'Magento\Framework\Data\Form\Element\Factory' => ['Magento\Framework\Data\Form\Element\Factory'],
-            'Magento\Framework\Data\Form\Element\Collection' => ['Magento\Framework\Data\Form\Element\Collection']
+            \Magento\Framework\Data\Form\Element\Factory::class => [
+                \Magento\Framework\Data\Form\Element\Factory::class
+            ],
+            \Magento\Framework\Data\Form\Element\Collection::class => [
+                \Magento\Framework\Data\Form\Element\Collection::class
+            ]
         ];
     }
 }

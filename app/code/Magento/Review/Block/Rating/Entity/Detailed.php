@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Rating\Entity;
@@ -15,7 +15,7 @@ class Detailed extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'detailed.phtml';
+    protected $_template = 'Magento_Review::detailed.phtml';
 
     /**
      * @var \Magento\Review\Model\RatingFactory
@@ -37,19 +37,21 @@ class Detailed extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns block html
+     *
      * @return string
      */
     protected function _toHtml()
     {
         $entityId = $this->_request->getParam('id');
-        if (intval($entityId) <= 0) {
+        if ((int)$entityId <= 0) {
             return '';
         }
 
         $reviewsCount = $this->_ratingFactory->create()->getTotalReviews($entityId, true);
         if ($reviewsCount == 0) {
             #return __('Be the first to review this product');
-            $this->setTemplate('empty.phtml');
+            $this->setTemplate('Magento_Review::empty.phtml');
             return parent::_toHtml();
         }
 

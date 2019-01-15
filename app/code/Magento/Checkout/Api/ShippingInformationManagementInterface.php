@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Api;
 
+/**
+ * Interface for managing customer shipping address information
+ * @api
+ */
 interface ShippingInformationManagementInterface
 {
     /**

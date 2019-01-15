@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Action;
@@ -11,8 +11,13 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * Default implementation of application action controller
+ * Extend from this class to create actions controllers in frontend area of your application.
+ * It contains standard action behavior (event dispatching, flag checks)
+ * Action classes that do not extend from this class will lose this behavior and might not function correctly
  *
+ * TODO: Remove this class. Allow implementation of Action Controllers by just implementing Action Interface.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -47,7 +52,6 @@ abstract class Action extends AbstractAction
     protected $_redirect;
 
     /**
-     * @deprecated
      * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
@@ -119,11 +123,6 @@ abstract class Action extends AbstractAction
         \Magento\Framework\Profiler::stop($profilerKey);
         return $result ?: $this->_response;
     }
-
-    /**
-     * @return ResultInterface
-     */
-    abstract protected function execute();
 
     /**
      * Throw control to different action (control and module if was specified).

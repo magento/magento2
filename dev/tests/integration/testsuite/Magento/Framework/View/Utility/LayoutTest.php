@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Utility;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Utility;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Utility\Layout
@@ -35,10 +35,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertLayoutUpdate($expectedUpdateFile, $actualUpdate)
     {
-        $this->assertInstanceOf('Magento\Framework\View\Layout\ProcessorInterface', $actualUpdate);
+        $this->assertInstanceOf(\Magento\Framework\View\Layout\ProcessorInterface::class, $actualUpdate);
 
         $layoutUpdateXml = $actualUpdate->getFileLayoutUpdatesXml();
-        $this->assertInstanceOf('Magento\Framework\View\Layout\Element', $layoutUpdateXml);
+        $this->assertInstanceOf(\Magento\Framework\View\Layout\Element::class, $layoutUpdateXml);
         $this->assertXmlStringEqualsXmlFile($expectedUpdateFile, $layoutUpdateXml->asNiceXml());
     }
 
@@ -63,7 +63,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetLayoutFromFixture($inputFiles, $expectedFile)
     {
         $layout = $this->_utility->getLayoutFromFixture($inputFiles, $this->_utility->getLayoutDependencies());
-        $this->assertInstanceOf('Magento\Framework\View\LayoutInterface', $layout);
+        $this->assertInstanceOf(\Magento\Framework\View\LayoutInterface::class, $layout);
         $this->_assertLayoutUpdate($expectedFile, $layout->getUpdate());
     }
 

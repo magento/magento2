@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
@@ -25,7 +29,9 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_helperPool;
 
-    /** @var \Magento\Customer\Helper\Session\CurrentCustomer */
+    /**
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     */
     protected $currentCustomer;
 
     /**
@@ -62,7 +68,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Add wishlist conditions to collection
      *
-     * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return $this
      */
     protected function _prepareCollection($collection)
@@ -97,8 +103,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param null|array $optionCfg
      * @return $this
-     *
-     * @deprecated after 1.6.2.0
      */
     public function setOptionsRenderCfgs($optionCfg)
     {
@@ -109,7 +113,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Returns all options render configurations
      *
-     * @deprecated after 1.6.2.0
      * @return array
      */
     public function getOptionsRenderCfgs()
@@ -124,8 +127,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $helperName
      * @param null|string $template
      * @return $this
-     *
-     * @deprecated after 1.6.2.0
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {
@@ -138,8 +139,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param string $productType
      * @return array|null
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getOptionsRenderCfg($productType)
     {
@@ -157,8 +156,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return string
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getDetailsHtml(\Magento\Wishlist\Model\Item $item)
     {
@@ -192,8 +189,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return float
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getAddToCartQty(\Magento\Wishlist\Model\Item $item)
     {

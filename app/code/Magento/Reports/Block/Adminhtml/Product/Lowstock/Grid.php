@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
@@ -8,25 +8,27 @@ namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
 /**
  * Adminhtml low stock products report grid block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory
      */
     protected $_lowstocksFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory $lowstocksFactory
+     * @param \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Product\Lowstock\CollectionFactory $lowstocksFactory,
+        \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory,
         array $data = []
     ) {
         $this->_lowstocksFactory = $lowstocksFactory;
@@ -51,14 +53,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         } elseif ($store) {
             $storeId = (int)$store;
         } else {
-            $storeId = '';
+            $storeId = null;
         }
 
-        /** @var $collection \Magento\Reports\Model\Resource\Product\Lowstock\Collection  */
+        /** @var $collection \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection  */
         $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
             '*'
-        )->setStoreId(
-            $storeId
         )->filterByIsQtyProductTypes()->joinInventoryItem(
             'qty'
         )->useManageStockFilter(

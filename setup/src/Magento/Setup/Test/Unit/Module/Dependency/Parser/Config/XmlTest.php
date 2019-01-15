@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Parser\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Dependency\Parser\Config\Xml
@@ -17,7 +17,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->parser = $objectManagerHelper->getObject('Magento\Setup\Module\Dependency\Parser\Config\Xml');
+        $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Config\Xml::class);
     }
 
     /**

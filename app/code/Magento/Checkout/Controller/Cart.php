@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Shopping cart controller
@@ -46,6 +45,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -77,7 +77,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $resultRedirect->setUrl($backUrl);
         }
-        
+
         return $resultRedirect;
     }
 
@@ -106,8 +106,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     /**
      * Get resolved back url
      *
-     * @param null $defaultUrl
-     *
+     * @param string|null $defaultUrl
      * @return mixed|null|string
      */
     protected function getBackUrl($defaultUrl = null)
@@ -118,12 +117,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
             return $returnUrl;
         }
 
-        $shouldRedirectToCart = $this->_scopeConfig->getValue(
-            'checkout/cart/redirect_to_cart',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
-        if ($shouldRedirectToCart || $this->getRequest()->getParam('in_cart')) {
+        if ($this->shouldRedirectToCart() || $this->getRequest()->getParam('in_cart')) {
             if ($this->getRequest()->getActionName() == 'add' && !$this->getRequest()->getParam('in_cart')) {
                 $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
             }
@@ -131,5 +125,18 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         }
 
         return $defaultUrl;
+    }
+
+    /**
+     * Is redirect should be performed after the product was added to cart.
+     *
+     * @return bool
+     */
+    private function shouldRedirectToCart()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

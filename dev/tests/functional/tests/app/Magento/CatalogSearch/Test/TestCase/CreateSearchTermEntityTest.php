@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Save the Search Term.
  * 8. Perform all assertions.
  *
- * @group Search_Terms_(MX)
+ * @group Search_Terms
  * @ZephyrId MAGETWO-26165
  */
 class CreateSearchTermEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

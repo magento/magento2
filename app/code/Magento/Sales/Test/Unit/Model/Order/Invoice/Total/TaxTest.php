@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
-
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice\Total\Tax
@@ -28,36 +27,24 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $invoice;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
-        $this->model = $this->objectManager->getObject('Magento\Sales\Model\Order\Invoice\Total\Tax');
+        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Invoice\Total\Tax::class);
 
-        $this->order = $this->getMock(
-            '\Magento\Sales\Model\Order',
-            [
+        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
                 'getInvoiceCollection',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->invoice = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice',
-            [
+        $this->invoice = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
@@ -78,7 +65,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Order\Invoice[] $previousInvoices */
         $previousInvoices = [];
         foreach ($orderData['previous_invoices'] as $previousInvoiceData) {
-            $previousInvoice = $this->getMockBuilder('\Magento\Sales\Model\Order\Invoice')
+            $previousInvoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['isCanceled', '__wakeup'])
                 ->getMock();
@@ -367,32 +354,20 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected function getInvoiceItem($invoiceItemData)
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
-        $orderItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Item',
-            [
+        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         foreach ($invoiceItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
 
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
-        $invoiceItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice\Item',
-            [
+        $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
         $invoiceItem->expects($this->any())
             ->method('isLast')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -90,7 +90,7 @@ class ModuleList implements ModuleListInterface
     public function getOne($name)
     {
         $enabled = $this->getAll();
-        return isset($enabled[$name]) ? $enabled[$name] : null;
+        return $enabled[$name] ?? null;
     }
 
     /**
@@ -139,7 +139,8 @@ class ModuleList implements ModuleListInterface
      */
     private function loadConfigData()
     {
-        if (null === $this->configData && ($this->config->isAvailable())) {
+        $this->config->resetData();
+        if (null === $this->configData && null !== $this->config->get(ConfigOptionsListConstants::KEY_MODULES)) {
             $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
         }
     }

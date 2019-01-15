@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Registration extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -48,6 +51,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Order\Address\Validator $addressValidator
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,
@@ -72,6 +76,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * Retrieve current email address
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getEmailAddress()
     {
@@ -82,10 +87,11 @@ class Registration extends \Magento\Framework\View\Element\Template
      * Retrieve account creation url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getCreateAccountUrl()
     {
-        return $this->getUrl('checkout/account/create');
+        return $this->getUrl('checkout/account/delegateCreate');
     }
 
     /**
@@ -93,8 +99,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      */
     public function toHtml()
     {
-        if (
-            $this->customerSession->isLoggedIn()
+        if ($this->customerSession->isLoggedIn()
             || !$this->registration->isAllowed()
             || !$this->accountManagement->isEmailAvailable($this->getEmailAddress())
             || !$this->validateAddresses()

@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Model\Method;
 
-class FreeTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FreeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\Method\Free */
     protected $methodFree;
@@ -21,26 +22,21 @@ class FreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $paymentData  = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $this->currencyPrice = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $paymentData  = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->currencyPrice = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+            ->getMock();
 
-        $context = $this->getMock('\Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
-        $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
+        $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
-        $registry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $extensionAttributesFactory = $this->getMock(
-            'Magento\Framework\Api\ExtensionAttributesFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $customAttributeFactory = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $extensionAttributesFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+        $customAttributeFactory = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
 
-        $loggerMock = $this->getMockBuilder('\Magento\Payment\Model\Method\Logger')
-            ->setConstructorArgs([$this->getMockForAbstractClass('Psr\Log\LoggerInterface')])
+        $loggerMock = $this->getMockBuilder(\Magento\Payment\Model\Method\Logger::class)
+            ->setConstructorArgs([$this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class)])
             ->getMock();
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
@@ -86,7 +82,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
     {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+            $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))

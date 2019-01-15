@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class Create extends \Magento\Sales\Test\Block\Adminhtml\Order\Create
         $this->_rootElement->click();
         /** @var \Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items $items */
         $items = $this->blockFactory->create(
-            'Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items',
+            \Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items::class,
             ['element' => $this->_rootElement->find($this->itemsBlock)]
         );
         foreach ($giftMessage->getItems() as $key => $giftMessageItem) {

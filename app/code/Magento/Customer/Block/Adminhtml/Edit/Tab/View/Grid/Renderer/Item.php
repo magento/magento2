@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
@@ -71,7 +71,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         } elseif (isset($productHelpers['default'])) {
             $helperName = $productHelpers['default'];
         } else {
-            $helperName = 'Magento\Catalog\Helper\Product\Configuration';
+            $helperName = \Magento\Catalog\Helper\Product\Configuration::class;
         }
 
         return $this->_productConfigPool->get($helperName);
@@ -115,10 +115,10 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Renders item product name and its configuration
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\Object $item
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\DataObject $item
      * @return string
      */
-    public function render(\Magento\Framework\Object $item)
+    public function render(\Magento\Framework\DataObject $item)
     {
         $this->setItem($item);
         $product = $this->getProduct();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,14 +46,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Frontend App')]);
+        // Add messages container to fieldset
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => '<div data-role="messages"></div>',
+            'comment' => __('Inserting a widget does not create a widget instance.')]);
 
         $fieldset->addField(
             'select_widget_type',
             'select',
             [
-                'label' => __('Frontend App Type'),
-                'title' => __('Frontend App Type'),
+                'label' => __('Widget Type'),
+                'title' => __('Widget Type'),
                 'name' => 'widget_type',
                 'required' => true,
                 'onchange' => "wWidget.validateField()",

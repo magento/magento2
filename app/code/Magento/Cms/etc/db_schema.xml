@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cms_block" resource="default" engine="innodb" comment="CMS Block Table">
+        <column xsi:type="smallint" name="block_id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Block Title"/>
+        <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Block String Identifier"/>
+        <column xsi:type="mediumtext" name="content" nullable="true" comment="Block Content"/>
+        <column xsi:type="timestamp" name="creation_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Block Creation Time"/>
+        <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Block Modification Time"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="1" comment="Is Block Active"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="block_id"/>
+        </constraint>
+        <index referenceId="CMS_BLOCK_TITLE_IDENTIFIER_CONTENT" indexType="fulltext">
+            <column name="title"/>
+            <column name="identifier"/>
+            <column name="content"/>
+        </index>
+    </table>
+    <table name="cms_block_store" resource="default" engine="innodb" comment="CMS Block To Store Linkage Table">
+        <column xsi:type="smallint" name="block_id" padding="6" unsigned="false" nullable="false" identity="false"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="block_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CMS_BLOCK_STORE_BLOCK_ID_CMS_BLOCK_BLOCK_ID" table="cms_block_store"
+                    column="block_id" referenceTable="cms_block" referenceColumn="block_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CMS_BLOCK_STORE_STORE_ID_STORE_STORE_ID" table="cms_block_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="CMS_BLOCK_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="cms_page" resource="default" engine="innodb" comment="CMS Page Table">
+        <column xsi:type="smallint" name="page_id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Page Title"/>
+        <column xsi:type="varchar" name="page_layout" nullable="true" length="255" comment="Page Layout"/>
+        <column xsi:type="text" name="meta_keywords" nullable="true" comment="Page Meta Keywords"/>
+        <column xsi:type="text" name="meta_description" nullable="true" comment="Page Meta Description"/>
+        <column xsi:type="varchar" name="identifier" nullable="true" length="100" comment="Page String Identifier"/>
+        <column xsi:type="varchar" name="content_heading" nullable="true" length="255" comment="Page Content Heading"/>
+        <column xsi:type="mediumtext" name="content" nullable="true" comment="Page Content"/>
+        <column xsi:type="timestamp" name="creation_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Page Creation Time"/>
+        <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Page Modification Time"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="1" comment="Is Page Active"/>
+        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Page Sort Order"/>
+        <column xsi:type="text" name="layout_update_xml" nullable="true" comment="Page Layout Update Content"/>
+        <column xsi:type="varchar" name="custom_theme" nullable="true" length="100" comment="Page Custom Theme"/>
+        <column xsi:type="varchar" name="custom_root_template" nullable="true" length="255"
+                comment="Page Custom Template"/>
+        <column xsi:type="text" name="custom_layout_update_xml" nullable="true"
+                comment="Page Custom Layout Update Content"/>
+        <column xsi:type="date" name="custom_theme_from" comment="Page Custom Theme Active From Date"/>
+        <column xsi:type="date" name="custom_theme_to" comment="Page Custom Theme Active To Date"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Page Meta Title"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="page_id"/>
+        </constraint>
+        <index referenceId="CMS_PAGE_IDENTIFIER" indexType="btree">
+            <column name="identifier"/>
+        </index>
+        <index referenceId="CMS_PAGE_TITLE_META_KEYWORDS_META_DESCRIPTION_IDENTIFIER_CONTENT" indexType="fulltext">
+            <column name="title"/>
+            <column name="meta_keywords"/>
+            <column name="meta_description"/>
+            <column name="identifier"/>
+            <column name="content"/>
+        </index>
+    </table>
+    <table name="cms_page_store" resource="default" engine="innodb" comment="CMS Page To Store Linkage Table">
+        <column xsi:type="smallint" name="page_id" padding="6" unsigned="false" nullable="false" identity="false"
+                comment="Entity ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="page_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CMS_PAGE_STORE_PAGE_ID_CMS_PAGE_PAGE_ID" table="cms_page_store"
+                    column="page_id" referenceTable="cms_page" referenceColumn="page_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CMS_PAGE_STORE_STORE_ID_STORE_STORE_ID" table="cms_page_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="CMS_PAGE_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

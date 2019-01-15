@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
-class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
+class ViewConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
@@ -15,14 +13,13 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom($file);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
-                ->getAbsolutePath('Magento/Framework/Config/etc/view.xsd'),
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
         $message = "Invalid XML-file: {$file}\n";
@@ -39,7 +36,7 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Module\Dir\Reader'
+            \Magento\Framework\Module\Dir\Reader::class
         )->getConfigurationFiles(
             'view.xml'
         );

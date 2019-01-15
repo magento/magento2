@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -9,12 +9,15 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
-use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 
 /**
  * Customer session model
+ *
+ * @api
  * @method string getNoReferer()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -24,6 +27,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var CustomerData
      */
     protected $_customer;
+
+    /**
+     * @var ResourceCustomer
+     */
+    protected $_customerResource;
 
     /**
      * Customer model
@@ -94,6 +102,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $groupManagement;
 
     /**
+     * @var \Magento\Framework\App\Response\Http
+     */
+    protected $response;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -114,6 +127,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerRepositoryInterface $customerRepository
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\App\Response\Http $response
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -130,14 +144,15 @@ class Session extends \Magento\Framework\Session\SessionManager
         Config\Share $configShare,
         \Magento\Framework\Url\Helper\Data $coreUrl,
         \Magento\Customer\Model\Url $customerUrl,
-        Resource\Customer $customerResource,
+        ResourceCustomer $customerResource,
         CustomerFactory $customerFactory,
         \Magento\Framework\UrlFactory $urlFactory,
         \Magento\Framework\Session\Generic $session,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Http\Context $httpContext,
         CustomerRepositoryInterface $customerRepository,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\App\Response\Http $response
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -161,6 +176,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $appState
         );
         $this->groupManagement = $groupManagement;
+        $this->response = $response;
         $this->_eventManager->dispatch('customer_session_init', ['customer_session' => $this]);
     }
 
@@ -199,7 +215,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve customer model object
      *
-     * @deprecated
      * @return CustomerData
      */
     public function getCustomerData()
@@ -240,7 +255,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param   Customer $customerModel
      * @return  $this
-     * @deprecated use setCustomerId() instead
+     * use setCustomerId() instead
      */
     public function setCustomer(Customer $customerModel)
     {
@@ -268,7 +283,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Retrieve customer model object
      *
      * @return Customer
-     * @deprecated use getCustomerId() instead
+     * use getCustomerId() instead
      */
     public function getCustomer()
     {
@@ -459,28 +474,27 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   \Magento\Framework\App\Action\Action $action
      * @param   bool|null $loginUrl
      * @return  bool
      */
-    public function authenticate(\Magento\Framework\App\Action\Action $action, $loginUrl = null)
+    public function authenticate($loginUrl = null)
     {
         if ($this->isLoggedIn()) {
             return true;
         }
         $this->setBeforeAuthUrl($this->_createUrl()->getUrl('*/*/*', ['_current' => true]));
         if (isset($loginUrl)) {
-            $action->getResponse()->setRedirect($loginUrl);
+            $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
-            if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
+            if ($this->_createUrl()->getUseSession()) {
                 $arguments += [
                     '_query' => [
                         $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
                     ]
                 ];
             }
-            $action->getResponse()->setRedirect(
+            $this->response->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
         }
@@ -541,7 +555,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Reset core session hosts after reseting session ID
+     * Reset core session hosts after resetting session ID
      *
      * @return $this
      */

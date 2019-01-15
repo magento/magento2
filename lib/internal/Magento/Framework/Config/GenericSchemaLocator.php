@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 
 /**
@@ -54,7 +55,7 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->schema;
+        return $this->moduleDirReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->moduleName) . '/' . $this->schema;
     }
 
     /**
@@ -65,7 +66,8 @@ class GenericSchemaLocator implements SchemaLocatorInterface
     public function getPerFileSchema()
     {
         if ($this->perFileSchema !== null) {
-            return $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->perFileSchema;
+            return $this->moduleDirReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->moduleName)
+            . '/' . $this->perFileSchema;
         }
     }
 }

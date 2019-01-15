@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block\Product;
 /**
  * Class ContextTest
  */
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -21,6 +21,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageBuilder;
+
+    /**
      * Set up
      *
      * @return void
@@ -30,16 +35,21 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->stockRegistryMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockRegistryInterface',
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             [],
             '',
             false
         );
 
+        $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context = $objectManager->getObject(
-            'Magento\Catalog\Block\Product\Context',
+            \Magento\Catalog\Block\Product\Context::class,
             [
-                'stockRegistry' => $this->stockRegistryMock
+                'stockRegistry' => $this->stockRegistryMock,
+                'imageBuilder' => $this->imageBuilder,
             ]
         );
     }
@@ -52,5 +62,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetStockRegistry()
     {
         $this->assertEquals($this->stockRegistryMock, $this->context->getStockRegistry());
+    }
+
+    public function testGetImageBuilder()
+    {
+        $this->assertInstanceOf(\Magento\Catalog\Block\Product\ImageBuilder::class, $this->context->getImageBuilder());
     }
 }

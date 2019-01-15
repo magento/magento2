@@ -1,22 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\File\ReadInterface;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Js\Config;
+use Magento\Framework\Phrase\Renderer\Translate;
 
 /**
  * Class DataProviderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -41,27 +44,41 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rootDirectoryMock;
+    protected $fileReadMock;
+
+    /**
+     * @var Translate|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translateMock;
 
     /**
      * @return void
      */
     protected function setUp()
     {
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
-        $this->filesUtilityMock = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->rootDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->rootDirectoryMock);
-        $this->model = new DataProvider(
-            $this->appStateMock,
-            $this->configMock,
-            $filesystem,
-            $this->filesUtilityMock
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
+        $this->filesUtilityMock = $this->createMock(\Magento\Framework\App\Utility\Files::class);
+        $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->fileReadMock = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
+        $this->translateMock = $this->createMock(\Magento\Framework\Phrase\Renderer\Translate::class);
+        $fileReadFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->fileReadMock);
+        $dirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            \Magento\Translation\Model\Js\DataProvider::class,
+            [
+                'appState' => $this->appStateMock,
+                'config' => $this->configMock,
+                'fileReadFactory' => $fileReadFactory,
+                'translate' => $this->translateMock,
+                'dirSearch' => $dirSearch,
+                'filesUtility' => $this->filesUtilityMock,
+                'componentRegistrar' =>
+                    $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class)
+            ]
         );
     }
 
@@ -72,37 +89,99 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $themePath = 'blank';
         $areaCode = 'adminhtml';
-        $files = [['path1'], ['path2']];
 
-        $relativePathMap = [
-            ['path1' => 'relativePath1'],
-            ['path2' => 'relativePath2']
+        $filePaths = [['path1'], ['path2'], ['path3'], ['path4']];
+
+        $jsFilesMap = [
+            ['base', $themePath, '*', '*', [$filePaths[0]]],
+            [$areaCode, $themePath, '*', '*', [$filePaths[1]]]
         ];
+        $staticFilesMap = [
+            ['base', $themePath, '*', '*', [$filePaths[2]]],
+            [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
+        ];
+
+        $expectedResult = [
+            'hello1' => 'hello1translated',
+            'hello2' => 'hello2translated',
+            'hello3' => 'hello3translated',
+            'hello4' => 'hello4translated'
+        ];
+
         $contentsMap = [
-            ['relativePath1' => 'content1$.mage.__("hello1")content1'],
-            ['relativePath2' => 'content2$.mage.__("hello2")content2']
+            'content1$.mage.__("hello1")content1',
+            'content2$.mage.__("hello2")content2',
+            'content2$.mage.__("hello3")content3',
+            'content2$.mage.__("hello4")content4'
         ];
 
-        $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
+        $translateMap = [
+            [['hello1'], [], 'hello1translated'],
+            [['hello2'], [], 'hello2translated'],
+            [['hello3'], [], 'hello3translated'],
+            [['hello4'], [], 'hello4translated']
+        ];
+
+        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
-        $this->filesUtilityMock->expects($this->once())
+        $this->filesUtilityMock->expects($this->any())
             ->method('getJsFiles')
-            ->with($areaCode, $themePath)
-            ->willReturn($files);
+            ->willReturnMap($jsFilesMap);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getStaticHtmlFiles')
+            ->willReturnMap($staticFilesMap);
 
-        $this->rootDirectoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->willReturnMap($relativePathMap);
-        $this->rootDirectoryMock->expects($this->any())
-            ->method('readFile')
-            ->willReturnMap($contentsMap);
+        foreach ($contentsMap as $index => $content) {
+            $this->fileReadMock->expects($this->at($index))
+                ->method('readAll')
+                ->willReturn($content);
+        }
+
+        $this->configMock->expects($this->any())
+            ->method('getPatterns')
+            ->willReturn($patterns);
+        $this->translateMock->expects($this->any())
+            ->method('render')
+            ->willReturnMap($translateMap);
+
+        $this->assertEquals($expectedResult, $this->model->getData($themePath));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testGetDataThrowingException()
+    {
+        $themePath = 'blank';
+        $areaCode = 'adminhtml';
+
+        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+
+        $this->fileReadMock->expects($this->once())
+            ->method('readAll')
+            ->willReturn('content1$.mage.__("hello1")content1');
+
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getJsFiles')
+            ->willReturn(['test']);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getStaticHtmlFiles')
+            ->willReturn(['test']);
+
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn($patterns);
 
-        $this->assertEquals([], $this->model->getData($themePath));
+        $this->translateMock->expects($this->once())
+            ->method('render')
+            ->willThrowException(new \Exception('Test exception'));
+
+        $this->model->getData($themePath);
     }
 }

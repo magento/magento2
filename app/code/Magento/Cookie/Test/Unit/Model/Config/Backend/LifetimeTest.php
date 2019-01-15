@@ -2,40 +2,39 @@
 /**
  * Unit test for Magento\Cookie\Model\Config\Backend\Lifetime
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class LifetimeTest extends \PHPUnit_Framework_TestCase
+class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Resource */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Lifetime */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->validatorMock = $this->getMockBuilder(
-            'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
+            \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\Resource')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
             ->disableOriginalConstructor('delete')
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Cookie\Model\Config\Backend\Lifetime',
+        $this->model = $objectManager->getObject(
+            \Magento\Cookie\Model\Config\Backend\Lifetime::class,
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock

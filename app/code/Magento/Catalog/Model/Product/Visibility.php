@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Catalog Product visibilite model and attribute source model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DB\Ddl\Table;
 
-class Visibility extends \Magento\Framework\Object implements OptionSourceInterface
+/**
+ * Catalog Product visibility model and attribute source model
+ *
+ * @api
+ * @since 100.0.2
+ */
+class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
     const VISIBILITY_NOT_VISIBLE = 1;
 
@@ -27,25 +27,25 @@ class Visibility extends \Magento\Framework\Object implements OptionSourceInterf
     /**
      * Reference to the attribute instance
      *
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     protected $_attribute;
 
     /**
      * Eav entity attribute
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $_eavEntityAttribute;
 
     /**
      * Construct
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute
      * @param array $data
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavEntityAttribute,
         array $data = []
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;
@@ -180,7 +180,7 @@ class Visibility extends \Magento\Framework\Object implements OptionSourceInterf
     /**
      * Set attribute instance
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setAttribute($attribute)
@@ -192,7 +192,7 @@ class Visibility extends \Magento\Framework\Object implements OptionSourceInterf
     /**
      * Get attribute instance
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttribute()
     {
@@ -211,12 +211,13 @@ class Visibility extends \Magento\Framework\Object implements OptionSourceInterf
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $attributeId = $this->getAttribute()->getId();
         $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        $linkField = $this->getAttribute()->getEntity()->getLinkField();
 
         if ($this->getAttribute()->isScopeGlobal()) {
             $tableName = $attributeCode . '_t';
             $collection->getSelect()->joinLeft(
                 [$tableName => $attributeTable],
-                "e.entity_id={$tableName}.entity_id" .
+                "e.{$linkField}={$tableName}.{$linkField}" .
                 " AND {$tableName}.attribute_id='{$attributeId}'" .
                 " AND {$tableName}.store_id='0'",
                 []
@@ -227,13 +228,13 @@ class Visibility extends \Magento\Framework\Object implements OptionSourceInterf
             $valueTable2 = $attributeCode . '_t2';
             $collection->getSelect()->joinLeft(
                 [$valueTable1 => $attributeTable],
-                "e.entity_id={$valueTable1}.entity_id" .
+                "e.{$linkField}={$valueTable1}.{$linkField}" .
                 " AND {$valueTable1}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable1}.store_id='0'",
                 []
             )->joinLeft(
                 [$valueTable2 => $attributeTable],
-                "e.entity_id={$valueTable2}.entity_id" .
+                "e.{$linkField}={$valueTable2}.{$linkField}" .
                 " AND {$valueTable2}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                 []

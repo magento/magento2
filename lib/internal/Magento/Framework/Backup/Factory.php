@@ -1,21 +1,27 @@
 <?php
 /**
- * Backup object factory.
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/**
+ * Backup object factory.
+ */
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+
+/**
+ * @api
+ */
 class Factory
 {
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $_objectManager;
 
@@ -52,9 +58,9 @@ class Factory
     protected $_allowedTypes;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
         $this->_allowedTypes = [
@@ -71,13 +77,13 @@ class Factory
      *
      * @param string $type
      * @return BackupInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function create($type)
     {
         if (!in_array($type, $this->_allowedTypes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase(
+            throw new LocalizedException(
+                new Phrase(
                     'Current implementation not supported this type (%1) of backup.',
                     [$type]
                 )

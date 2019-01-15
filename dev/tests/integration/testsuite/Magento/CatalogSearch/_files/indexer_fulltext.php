@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productFirst = $objectManager->create('Magento\Catalog\Model\Product');
+$productFirst = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFirst->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -24,7 +24,7 @@ $productFirst->setTypeId('simple')
     ->save();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productSecond = $objectManager->create('Magento\Catalog\Model\Product');
+$productSecond = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productSecond->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -40,7 +40,7 @@ $productSecond->setTypeId('simple')
     ->save();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productThird = $objectManager->create('Magento\Catalog\Model\Product');
+$productThird = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productThird->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -56,7 +56,7 @@ $productThird->setTypeId('simple')
     ->save();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productFourth = $objectManager->create('Magento\Catalog\Model\Product');
+$productFourth = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFourth->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -72,7 +72,7 @@ $productFourth->setTypeId('simple')
     ->save();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productFifth = $objectManager->create('Magento\Catalog\Model\Product');
+$productFifth = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFifth->setTypeId('simple')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])

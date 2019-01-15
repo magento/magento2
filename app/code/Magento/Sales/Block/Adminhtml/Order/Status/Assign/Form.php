@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Status\Assign;
@@ -13,7 +13,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Collection factory
      *
-     * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -29,7 +29,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
@@ -37,7 +37,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_orderConfig = $orderConfig;
@@ -107,7 +107,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'visible_on_front',
             'checkbox',
-            ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1]
+            ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'checked' => true, 'value' => 1]
         );
 
         $form->setAction($this->getUrl('sales/order_status/assignPost'));

@@ -1,12 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Helper;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Framework\DataObject;
 
+/**
+ * This class encapsulates implicit interfaces (array structures) used in payments implementation.
+ * This class was introduced for backward compatibility with legacy implementation.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class SubjectReader
 {
     /**
@@ -69,5 +77,20 @@ class SubjectReader
         }
 
         return $subject['response'];
+    }
+
+    /**
+     * Read state object from subject
+     *
+     * @param array $subject
+     * @return DataObject
+     */
+    public static function readStateObject(array $subject)
+    {
+        if (!isset($subject['stateObject']) || !$subject['stateObject'] instanceof DataObject) {
+            throw new \InvalidArgumentException('State object does not exist');
+        }
+
+        return $subject['stateObject'];
     }
 }

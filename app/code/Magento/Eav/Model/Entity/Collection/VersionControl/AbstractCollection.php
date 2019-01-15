@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 
 /**
  * Class Abstract Collection
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
      */
     protected $entitySnapshot;
 
@@ -21,13 +23,14 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
      * @param mixed $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -35,12 +38,12 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        $connection = null
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
 
@@ -72,8 +75,9 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         $this->entitySnapshot->registerSnapshot($item);
         return $item;

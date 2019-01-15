@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,7 @@ class DeleteAllSalesRuleStep implements TestStepInterface
         while ($this->promoQuoteIndex->getPromoQuoteGrid()->isFirstRowVisible()) {
             $this->promoQuoteIndex->getPromoQuoteGrid()->openFirstRow();
             $this->promoQuoteEdit->getFormPageActions()->delete();
+            $this->promoQuoteEdit->getModalBlock()->acceptAlert();
             $this->promoQuoteIndex->getSystemMessageDialog()->closePopup();
         }
     }

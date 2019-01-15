@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,18 +9,15 @@
  */
 namespace Magento\Test\Legacy;
 
-class ObsoleteThemeLocalXmlTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+class ObsoleteThemeLocalXmlTest extends \PHPUnit\Framework\TestCase
 {
     public function testLocalXmlFilesAbsent()
     {
-        $area = '*';
-        $package = '*';
-        $theme = '*';
-        $this->assertEmpty(
-            glob(
-                \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                "/app/design/{$area}/{$package}/{$theme}/local.xml"
-            )
-        );
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $this->assertEmpty(glob($themeDir . '/local.xml'));
+        }
     }
 }

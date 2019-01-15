@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__control-support-text">
+    <!-- ko if: totalRecords -->
+        <strong>
+            <text args="getFirstItemIndex()"/> -
+            <text args="getLastItemIndex()"/>
+        </strong>
+        <!-- ko i18n: 'of' --><!-- /ko -->
+    <!-- /ko -->
+    <strong text="totalRecords"/>
+    <!-- ko i18n: 'records found' --><!-- /ko -->
+    <!-- ko if: totalSelected -->
+        (<text args="totalSelected"/> <!-- ko i18n: 'selected' --><!-- /ko -->)
+    <!-- /ko -->
+</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
         $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
 
-        if ($product->hasData('checkout_data')) {
+        if ($product->hasData('checkout_data') || $product->getMsrpDisplayActualPriceType() === 'In Cart') {
             $catalogProductView->getViewBlock()->addToCart($product);
         } else {
             $catalogProductView->getMsrpViewBlock()->openMapBlock();
@@ -50,10 +50,11 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCart->open();
-        // TODO: adopt fixture - price is moved to child product from attributes options.
-        $productPrice =  $product->getPrice();
+
+        $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
+        $productPrice = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
         $unitPrice = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
-        \PHPUnit_Framework_Assert::assertEquals($productPrice, $unitPrice, 'Incorrect unit price is displayed in Cart');
+        \PHPUnit\Framework\Assert::assertEquals($productPrice, $unitPrice, 'Incorrect unit price is displayed in Cart');
     }
 
     /**

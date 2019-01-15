@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
@@ -28,6 +28,8 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Selection setSelectionQty(float $value)
  * @method int getSelectionCanChangeQty()
  * @method \Magento\Bundle\Model\Selection setSelectionCanChangeQty(int $value)
+ * @api
+ * @since 100.0.2
  */
 class Selection extends \Magento\Framework\Model\AbstractModel
 {
@@ -42,7 +44,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Bundle\Model\Resource\Selection $resource
+     * @param \Magento\Bundle\Model\ResourceModel\Selection $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -50,7 +52,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Bundle\Model\Resource\Selection $resource,
+        \Magento\Bundle\Model\ResourceModel\Selection $resource,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -65,7 +67,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\Resource\Selection');
+        $this->_init(\Magento\Bundle\Model\ResourceModel\Selection::class);
         parent::_construct();
     }
 

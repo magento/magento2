@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -9,6 +9,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
@@ -43,8 +47,9 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * {@inheritdoc}
+     * @deprecated 101.0.0
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         $websiteNames = [];
         foreach ($this->getData('options') as $website) {
@@ -55,21 +60,27 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $websites = [];
                 foreach ($item[$fieldName] as $websiteId) {
+                    if (!isset($websiteNames[$websiteId])) {
+                        continue;
+                    }
                     $websites[] = $websiteNames[$websiteId];
                 }
                 $item[$fieldName] = implode(', ', $websites);
             }
         }
-    }
 
+        return $dataSource;
+    }
+    
     /**
      * Prepare component configuration
      * @return void
      */
     public function prepare()
     {
-        if (!$this->storeManager->isSingleStoreMode()) {
-            parent::prepare();
+        parent::prepare();
+        if ($this->storeManager->isSingleStoreMode()) {
+            $this->_data['config']['componentDisabled'] = true;
         }
     }
 }

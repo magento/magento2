@@ -1,25 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\PackageInfoFactory;
 
-class PackageInfoFactoryTest extends \PHPUnit_Framework_TestCase
+class PackageInfoFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
-        $fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
-        $reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
+        $reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $packageInfo = $this->createMock(\Magento\Framework\Module\PackageInfo::class);
         $returnValueMap = [
-            ['Magento\Framework\Module\FullModuleList', [], $fullModuleList],
-            ['Magento\Framework\Module\Dir\Reader', ['moduleList' => $fullModuleList], $reader],
-            ['Magento\Framework\Module\PackageInfo', ['reader' => $reader], $packageInfo],
+            [\Magento\Framework\Module\FullModuleList::class, [], $fullModuleList],
+            [\Magento\Framework\Module\Dir\Reader::class, ['moduleList' => $fullModuleList], $reader],
+            [\Magento\Framework\Module\PackageInfo::class, ['reader' => $reader], $packageInfo],
         ];
-        $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap($returnValueMap));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\Price;
 /**
  * Class PriceTest
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Price
@@ -24,13 +24,21 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceFormatterMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->priceFormatterMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\PriceCurrencyInterface');
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
+        $this->priceFormatterMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        );
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\Price',
-            ['priceFormatter' => $this->priceFormatterMock]
+            \Magento\Sales\Ui\Component\Listing\Column\Price::class,
+            ['priceFormatter' => $this->priceFormatterMock, 'context' => $contextMock]
         );
     }
 
@@ -53,7 +61,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($newItemValue);
 
         $this->model->setData('name', $itemName);
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

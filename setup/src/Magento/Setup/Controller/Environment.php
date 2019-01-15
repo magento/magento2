@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
 
-use Composer\Package\Version\VersionParser;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Setup\Model\Cron\ReadinessCheck;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Model\PhpInformation;
-use Magento\Setup\Model\FilePermissions;
 
 /**
  * Class Environment
@@ -20,202 +18,220 @@ use Magento\Setup\Model\FilePermissions;
 class Environment extends AbstractActionController
 {
     /**
-     * Model to determine PHP version, currently installed and required PHP extensions.
-     *
-     * @var \Magento\Setup\Model\PhpInformation
+     * Path to updater application
      */
-    protected $phpInformation;
+    const UPDATER_DIR = 'update';
 
     /**
-     * Version parser
+     * File system
      *
-     * @var VersionParser
+     * @var \Magento\Framework\Filesystem
      */
-    protected $versionParser;
+    protected $filesystem;
+
+    /**
+     * Cron Script Readiness Check
+     *
+     * @var \Magento\Setup\Model\CronScriptReadinessCheck
+     */
+    protected $cronScriptReadinessCheck;
+
+    /**
+     * PHP Readiness Check
+     *
+     * @var \Magento\Setup\Model\PhpReadinessCheck
+     */
+    protected $phpReadinessCheck;
 
     /**
      * Constructor
      *
-     * @param PhpInformation $phpInformation
-     * @param FilePermissions $permissions
-     * @param VersionParser $versionParser
-     * @param ComposerInformation $composerInformation
+     * @param \Magento\Framework\Setup\FilePermissions $permissions
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck
+     * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
-        PhpInformation $phpInformation,
-        FilePermissions $permissions,
-        VersionParser $versionParser,
-        ComposerInformation $composerInformation
+        \Magento\Framework\Setup\FilePermissions $permissions,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck,
+        \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
     ) {
-        $this->phpInformation = $phpInformation;
         $this->permissions = $permissions;
-        $this->versionParser = $versionParser;
-        $this->composerInformation = $composerInformation;
+        $this->filesystem = $filesystem;
+        $this->cronScriptReadinessCheck = $cronScriptReadinessCheck;
+        $this->phpReadinessCheck = $phpReadinessCheck;
+    }
+
+    /**
+     * No index action, return 404 error page
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function indexAction()
+    {
+        $view = new \Zend\View\Model\JsonModel([]);
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**
      * Verifies php version
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function phpVersionAction()
     {
-        try {
-            $requiredVersion = $this->composerInformation->getRequiredPhpVersion();
-        } catch (\Exception $e) {
-            return new JsonModel(
-                [
-                    'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                    'data' => [
-                        'error' => 'phpVersionError',
-                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage()
-                    ],
-                ]
-            );
+        $type = $this->getRequest()->getQuery('type');
+
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpVersion();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
         }
-        $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        try {
-            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
-        } catch (\UnexpectedValueException $e) {
-            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
-            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
-        }
-        $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if (!$multipleConstraints->matches($currentPhpVersion)) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
-        $data = [
-            'responseType' => $responseType,
-            'data' => [
-                'required' => $requiredVersion,
-                'current' => PHP_VERSION,
-            ],
-        ];
-        return new JsonModel($data);
+        return new \Zend\View\Model\JsonModel($data);
     }
 
     /**
      * Checks PHP settings
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function phpSettingsAction()
     {
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $type = $this->getRequest()->getQuery('type');
 
-        $settings = array_merge(
-            $this->checkXDebugNestedLevel()
-        );
-
-        foreach ($settings as $setting) {
-            if ($setting['error']) {
-                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            }
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpSettings();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED);
         }
-
-        $data = [
-            'responseType' => $responseType,
-            'data' => $settings
-        ];
-
-        return new JsonModel($data);
+        return new \Zend\View\Model\JsonModel($data);
     }
 
     /**
      * Verifies php verifications
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function phpExtensionsAction()
     {
+        $type = $this->getRequest()->getQuery('type');
+
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpExtensions();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED);
+        }
+        return new \Zend\View\Model\JsonModel($data);
+    }
+
+    /**
+     * Gets the PHP check info from Cron status file
+     *
+     * @param string $type
+     * @return array
+     */
+    private function getPhpChecksInfo($type)
+    {
+        $read = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
         try {
-            $required = $this->composerInformation->getRequiredExtensions();
-            $current = $this->phpInformation->getCurrent();
-
+            $jsonData = json_decode($read->readFile(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE), true);
+            if (isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS])
+                && isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type])
+            ) {
+                return  $jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type];
+            }
+            return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
         } catch (\Exception $e) {
-            return new JsonModel(
-                [
-                    'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                    'data' => [
-                        'error' => 'phpExtensionError',
-                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage()
-                    ],
-                ]
-            );
+            return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
         }
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        $missing = array_values(array_diff($required, $current));
-        if ($missing) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
-        $data = [
-            'responseType' => $responseType,
-            'data' => [
-                'required' => $required,
-                'missing' => $missing,
-            ],
-        ];
-
-        return new JsonModel($data);
     }
 
     /**
      * Verifies file permissions
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function filePermissionsAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if ($this->permissions->getMissingWritableDirectoriesForInstallation()) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
+        $missingWritePermissionPaths = $this->permissions->getMissingWritablePathsForInstallation(true);
 
+        $currentPaths = [];
+        $requiredPaths = [];
+        if ($missingWritePermissionPaths) {
+            foreach ($missingWritePermissionPaths as $key => $value) {
+                if (is_array($value)) {
+                    $requiredPaths[] = ['path' => $key, 'missing' => $value];
+                    $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+                } else {
+                    $requiredPaths[] = ['path' => $key];
+                    $currentPaths[] = $key;
+                }
+            }
+        }
         $data = [
             'responseType' => $responseType,
             'data' => [
-                'required' => $this->permissions->getInstallationWritableDirectories(),
-                'current' => $this->permissions->getInstallationCurrentWritableDirectories(),
+                'required' => $requiredPaths,
+                'current' => $currentPaths,
             ],
         ];
 
-        return new JsonModel($data);
+        return new \Zend\View\Model\JsonModel($data);
     }
 
     /**
-     * Checks if xdebug.max_nesting_level is set 200 or more
-     * @return array
+     * Verifies updater application exists
+     *
+     * @return \Zend\View\Model\JsonModel
      */
-    private function checkXDebugNestedLevel()
+    public function updaterApplicationAction()
     {
-        $data = [];
-        $error = false;
-    
-        $currentExtensions = $this->phpInformation->getCurrent();
-        if (in_array('xdebug', $currentExtensions)) {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
 
-            $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
-            $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
-
-            if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
-                $error = true;
-            }
-
-            $message = sprintf(
-                'Your current setting of xdebug.max_nesting_level=%d.
-                 Magento 2 requires it to be set to %d or more.
-                 Edit your config, restart web server, and try again.',
-                $currentXDebugNestingLevel,
-                $minimumRequiredXDebugNestedLevel
-            );
-
-            $data['xdebug_max_nesting_level'] = [
-                'message' => $message,
-                'error' => $error
-            ];
+        if (!$this->filesystem->getDirectoryRead(DirectoryList::ROOT)->isExist(self::UPDATER_DIR)) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
+        $data = [
+            'responseType' => $responseType
+        ];
+        return new \Zend\View\Model\JsonModel($data);
+    }
 
-        return $data;
+    /**
+     * Verifies Setup and Updater Cron status
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function cronScriptAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        $setupCheck = $this->cronScriptReadinessCheck->checkSetup();
+        $updaterCheck = $this->cronScriptReadinessCheck->checkUpdater();
+        $data = [];
+        if (!$setupCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['setupErrorMessage'] = 'Error from Setup Application Cron Script:<br/>' . $setupCheck['error'];
+        }
+        if (!$updaterCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['updaterErrorMessage'] = 'Error from Updater Application Cron Script:<br/>' . $updaterCheck['error'];
+        }
+        if (isset($setupCheck['notice'])) {
+            $data['setupNoticeMessage'] = 'Notice from Setup Application Cron Script:<br/>' . $setupCheck['notice'];
+        }
+        if (isset($updaterCheck['notice'])) {
+            $data['updaterNoticeMessage'] = 'Notice from Updater Application Cron Script:<br/>' .
+                $updaterCheck['notice'];
+        }
+        $data['responseType'] = $responseType;
+        return new \Zend\View\Model\JsonModel($data);
     }
 }

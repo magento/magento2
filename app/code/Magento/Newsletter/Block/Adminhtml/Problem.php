@@ -1,26 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
-use Magento\Newsletter\Model\Resource\Problem\Collection;
+use Magento\Newsletter\Model\ResourceModel\Problem\Collection;
 
 /**
  * Newsletter problem block template.
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Problem extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'problem/list.phtml';
+    protected $_template = 'Magento_Newsletter::problem/list.phtml';
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Problem\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection
      */
     protected $_problemCollection;
 
@@ -59,7 +61,7 @@ class Problem extends \Magento\Backend\Block\Template
         $this->setChild(
             'deleteButton',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 'del.button'
             )->setData(
                 ['label' => __('Delete Selected Problems'), 'onclick' => 'problemController.deleteSelected();']
@@ -69,7 +71,7 @@ class Problem extends \Magento\Backend\Block\Template
         $this->setChild(
             'unsubscribeButton',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 'unsubscribe.button'
             )->setData(
                 ['label' => __('Unsubscribe Selected'), 'onclick' => 'problemController.unsubscribe();']

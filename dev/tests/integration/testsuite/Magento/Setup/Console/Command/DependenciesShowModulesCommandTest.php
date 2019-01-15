@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
+class DependenciesShowModulesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DependenciesShowModulesCommand
@@ -21,7 +22,27 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->command = new DependenciesShowModulesCommand();
+
+        $modules = [
+            'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
+            'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
+        ];
+
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+
+        $themePackageListMock = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
+        $componentRegistrarMock = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
+        $dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
+            [\Magento\Framework\View\Design\Theme\ThemePackageList::class, $themePackageListMock],
+            [\Magento\Framework\Component\ComponentRegistrar::class, $componentRegistrarMock],
+            [\Magento\Framework\Component\DirSearch::class, $dirSearchMock]
+        ]));
+
+        $this->command = new DependenciesShowModulesCommand($objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
     }
 
@@ -35,31 +56,22 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->commandTester->execute(
-            ['--directory' => __DIR__ . '/_files/root', '--output' => __DIR__ . '/_files/output/modules.csv']
+            ['--output' => __DIR__ . '/_files/output/modules.csv']
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/modules.csv');
         $this->assertContains(
-            '"","All","Hard","Soft"' . PHP_EOL . '"Total number of dependencies","2","2","0"' . PHP_EOL,
+            ',All,Hard,Soft' . PHP_EOL . '"Total number of dependencies",2,2,0' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains('"Dependencies for each module:","All","Hard","Soft"'. PHP_EOL, $fileContents);
+        $this->assertContains('"Dependencies for each module:",All,Hard,Soft'. PHP_EOL, $fileContents);
         $this->assertContains(
-            '"magento/module-a","1","1","0"' . PHP_EOL . '" -- magento/module-b","","1","0"' . PHP_EOL,
+            'magento/module-a,1,1,0' . PHP_EOL . '" -- magento/module-b",,1,0' . PHP_EOL,
             $fileContents
         );
         $this->assertContains(
-            '"magento/module-b","1","1","0"' . PHP_EOL . '" -- magento/module-a","","1","0"' . PHP_EOL,
+            'magento/module-b,1,1,0' . PHP_EOL . '" -- magento/module-a",,1,0' . PHP_EOL,
             $fileContents
-        );
-    }
-
-    public function testExecuteInvalidDirectory()
-    {
-        $this->commandTester->execute(['--directory' => '/invalid/path']);
-        $this->assertContains(
-            'Please check the path you provided. Dependencies report generator failed with error:',
-            $this->commandTester->getDisplay()
         );
     }
 }

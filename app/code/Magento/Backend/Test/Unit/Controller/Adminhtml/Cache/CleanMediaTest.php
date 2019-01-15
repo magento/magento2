@@ -1,55 +1,67 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
-class CleanMediaTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CleanMediaTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
         // Wire object with mocks
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $backendHelper = $this->createMock(\Magento\Backend\Helper\Data::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $session = $this->getMock(
-            'Magento\Backend\Model\Session',
-            ['setIsUrlNotice'],
-            $helper->getConstructArguments('Magento\Backend\Model\Session')
-        );
-        $messageManager = $this->getMock(
-            'Magento\Framework\Message\Manager',
-            ['addSuccess'],
-            $helper->getConstructArguments('Magento\Framework\Message\Manager')
-        );
-        $context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'],
-            $helper->getConstructArguments(
-                'Magento\Backend\App\Action\Context',
-                [
-                    'session' => $session,
-                    'response' => $response,
-                    'objectManager' => $objectManager,
-                    'helper' => $backendHelper,
-                    'request' => $request,
-                    'messageManager' => $messageManager
-                ]
+        $session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+            ->setMethods(['setIsUrlNotice'])
+            ->setConstructorArgs($helper->getConstructArguments(\Magento\Backend\Model\Session::class))
+            ->getMock();
+
+        $exceptionMessageFactory = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessageLookupFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getMessageGenerator']
             )
+            ->getMock();
+
+        $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
+        $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
+        $messageManager = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
+            ->setMethods(['addSuccessMessage'])
+            ->setConstructorArgs($messageManagerParams)
+            ->getMock();
+
+        $args = $helper->getConstructArguments(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'session' => $session,
+                'response' => $response,
+                'objectManager' => $objectManager,
+                'helper' => $backendHelper,
+                'request' => $request,
+                'messageManager' => $messageManager
+            ]
         );
-        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'])
+            ->setConstructorArgs($args)
+            ->getMock();
+        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultFactory->expects($this->atLeastOnce())
@@ -63,24 +75,23 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $controller = $helper->getObject(
-            'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia',
+            \Magento\Backend\Controller\Adminhtml\Cache\CleanMedia::class,
             [
                 'context' => $context
             ]
         );
 
         // Setup expectations
-        $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', [], [], '', false);
+        $mergeService = $this->createMock(\Magento\Framework\View\Asset\MergeService::class);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $messageManager->expects($this->once())
-            ->method('addSuccess')
-            ->with('The JavaScript/CSS cache has been cleaned.'
-        );
+            ->method('addSuccessMessage')
+            ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [
-            ['Magento\Framework\View\Asset\MergeService', $mergeService],
-            ['Magento\Framework\Session\SessionManager', $session],
+            [\Magento\Framework\View\Asset\MergeService::class, $mergeService],
+            [\Magento\Framework\Session\SessionManager::class, $session],
         ];
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 

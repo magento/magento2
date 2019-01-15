@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Ui\DataProvider\Mapper\FormElement">
+        <arguments>
+            <argument name="mappings" xsi:type="array">
+                <item name="text" xsi:type="string">input</item>
+                <item name="hidden" xsi:type="string">input</item>
+                <item name="boolean" xsi:type="string">checkbox</item>
+                <item name="media_image" xsi:type="string">image</item>
+                <item name="price" xsi:type="string">input</item>
+                <item name="weight" xsi:type="string">input</item>
+                <item name="gallery" xsi:type="string">image</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\DataProvider\Mapper\MetaProperties">
+        <arguments>
+            <argument name="mappings" xsi:type="array">
+                <item name="dataType" xsi:type="string">frontend_input</item>
+                <item name="visible" xsi:type="string">is_visible</item>
+                <item name="required" xsi:type="string">is_required</item>
+                <item name="label" xsi:type="string">frontend_label</item>
+                <item name="sortOrder" xsi:type="string">sort_order</item>
+                <item name="notice" xsi:type="string">note</item>
+                <item name="default" xsi:type="string">default_value</item>
+                <item name="size" xsi:type="string">multiline_count</item>
+                <item name="scope" xsi:type="string">is_global</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="adminSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\User\Model\Authorization\AdminSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">30</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Model\ColorPicker\ColorModesProvider">
+        <arguments>
+            <argument name="colorModesPool" xsi:type="array">
+                <item name="full" xsi:type="string">Magento\Ui\Model\ColorPicker\FullMode</item>
+                <item name="simple" xsi:type="string">Magento\Ui\Model\ColorPicker\SimpleMode</item>
+                <item name="noalpha" xsi:type="string">Magento\Ui\Model\ColorPicker\NoAlphaMode</item>
+                <item name="palette" xsi:type="string">Magento\Ui\Model\ColorPicker\PaletteOnlyMode</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Model\UrlInput\LinksConfigProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Ui\Model\UrlInput\Url</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

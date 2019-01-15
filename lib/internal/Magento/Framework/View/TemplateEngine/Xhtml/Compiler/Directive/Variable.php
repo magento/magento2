@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class Variable
@@ -16,10 +16,10 @@ class Variable implements DirectiveInterface
      * Execute directive
      *
      * @param array $directive
-     * @param Object $processedObject
+     * @param DataObject $processedObject
      * @return string
      */
-    public function execute($directive, Object $processedObject)
+    public function execute($directive, DataObject $processedObject)
     {
         return $processedObject->getData($directive[1]);
     }

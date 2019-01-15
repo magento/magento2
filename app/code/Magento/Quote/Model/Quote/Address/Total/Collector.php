@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model\Quote\Address\Total;
+
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Address Total Collector model
@@ -70,8 +69,9 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
-     * @param mixed $sourceData
+     * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param mixed $store
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
@@ -81,11 +81,12 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
-        $store = null
+        $store = null,
+        SerializerInterface $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_totalFactory = $totalFactory;
-        parent::__construct($configCacheType, $logger, $salesConfig, $sourceData);
+        parent::__construct($configCacheType, $logger, $salesConfig, $sourceData, $serializer);
         $this->_store = $store ?: $storeManager->getStore();
         $this->_initModels()->_initCollectors()->_initRetrievers();
     }
@@ -103,7 +104,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     /**
      * Get total models array ordered for right display sequence
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
      */
     public function getRetrievers()
     {
@@ -125,7 +126,8 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
+                    'The address total model should be extended from
+                    \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )
             );
         }

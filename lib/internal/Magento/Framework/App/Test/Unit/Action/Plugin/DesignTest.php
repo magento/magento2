@@ -1,22 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Action\Plugin;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     public function testAroundDispatch()
     {
-        $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
-        $designLoaderMock = $this->getMock('Magento\Framework\View\DesignLoader', [], [], '', false);
-        $closureMock = function () {
-            return 'Expected';
-        };
-        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $plugin = new \Magento\Framework\App\Action\Plugin\Design($designLoaderMock);
+        $subjectMock = $this->createMock(\Magento\Framework\App\Action\Action::class);
+        $designLoaderMock = $this->createMock(\Magento\Framework\View\DesignLoader::class);
+        $messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $plugin = new \Magento\Framework\App\Action\Plugin\Design($designLoaderMock, $messageManagerMock);
         $designLoaderMock->expects($this->once())->method('load');
-        $this->assertEquals('Expected', $plugin->aroundDispatch($subjectMock, $closureMock, $requestMock));
+        $plugin->beforeDispatch($subjectMock, $requestMock);
     }
 }

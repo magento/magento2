@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('catalog/category/checkboxes/tree.phtml');
+        $this->setTemplate('Magento_Catalog::catalog/category/checkboxes/tree.phtml');
     }
 
     /**

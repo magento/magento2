@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit;
 
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $server
@@ -15,9 +15,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $request->expects($this->once())->method('getServerValue')->will($this->returnValue($server));
-        $response = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $authentication = new \Magento\Framework\HTTP\Authentication($request, $response);
         $this->assertSame([$expectedLogin, $expectedPass], $authentication->getCredentials());
     }
@@ -70,11 +70,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $request = $objectManager->getObject('Magento\Framework\App\Request\Http');
-        $response = $objectManager->getObject('Magento\Framework\App\Response\Http');
+        $request = $objectManager->getObject(\Magento\Framework\App\Request\Http::class);
+        $response = $objectManager->getObject(\Magento\Framework\App\Response\Http::class);
 
         $authentication = $objectManager->getObject(
-            'Magento\Framework\HTTP\Authentication',
+            \Magento\Framework\HTTP\Authentication::class,
             [
                 'httpRequest' => $request,
                 'httpResponse' => $response

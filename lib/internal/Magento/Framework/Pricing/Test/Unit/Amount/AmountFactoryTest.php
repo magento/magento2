@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Amount;
 /**
  * Class AmountFactoryTest
  */
-class AmountFactoryTest extends \PHPUnit_Framework_TestCase
+class AmountFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountFactory
@@ -29,10 +29,10 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $this->amountMock = $this->getMock('Magento\Framework\Pricing\Amount\Base', [], [], '', false);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $this->amountMock = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
         $this->factory = new \Magento\Framework\Pricing\Amount\AmountFactory($this->objectManagerMock);
     }
 
@@ -44,7 +44,7 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Pricing\Amount\AmountInterface'),
+                $this->equalTo(\Magento\Framework\Pricing\Amount\AmountInterface::class),
                 $this->equalTo(
                     [
                         'amount' => 'this-is-float-amount',
@@ -69,7 +69,7 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Pricing\Amount\AmountInterface'),
+                $this->equalTo(\Magento\Framework\Pricing\Amount\AmountInterface::class),
                 $this->equalTo(
                     [
                         'amount' => 'this-is-float-amount',

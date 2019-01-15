@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Backend\CreateAccount;
 
-class DisableAutoGroupAssignDefaultTest extends \PHPUnit_Framework_TestCase
+class DisableAutoGroupAssignDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault
@@ -19,13 +19,13 @@ class DisableAutoGroupAssignDefaultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault',
+            \Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault::class,
             [
                 'eavConfig' => $this->eavConfigMock,
             ]
@@ -36,7 +36,7 @@ class DisableAutoGroupAssignDefaultTest extends \PHPUnit_Framework_TestCase
     {
         $value = true;
 
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['save', 'setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

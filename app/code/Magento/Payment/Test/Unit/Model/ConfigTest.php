@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Model;
 
-use \Magento\Payment\Model\Config;
-
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\ScopeInterface;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ConfigTest
+ */
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\Config */
     protected $config;
@@ -43,7 +44,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $paymentMethodsList = [
+    private $paymentMethodsList = [
         'not_active_method' => ['active' => 0],
         'active_method_no_model' => ['active' => 1],
         'active_method' => ['active' => 1, 'model' => 'model_name'],
@@ -96,21 +97,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->paymentMethodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
-        $this->dataStorage = $this->getMock('Magento\Framework\Config\DataInterface', [], [], '', false);
-        $this->date = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->paymentMethodFactory = $this->createMock(\Magento\Payment\Model\Method\Factory::class);
+        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->dataStorage = $this->createMock(\Magento\Framework\Config\DataInterface::class);
+        $this->date = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
-            'Magento\Payment\Model\Config',
+            \Magento\Payment\Model\Config::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'paymentMethodFactory' => $this->paymentMethodFactory,
@@ -122,31 +117,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Payment\Model\Config::getActiveMethods
      * @param bool $isActive
      * @dataProvider getActiveMethodsDataProvider
      */
     public function testGetActiveMethods($isActive)
     {
-        $abstractMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Method\AbstractMethod'
-        )->disableOriginalConstructor()->setMethods(['setId', 'setStore', 'getConfigData'])->getMock();
-        $this->scopeConfig->expects($this->once())->method('getValue')->with(
-            'payment', ScopeInterface::SCOPE_STORE, null
-        )->will($this->returnValue($this->paymentMethodsList));
-        $this->paymentMethodFactory->expects($this->once())->method('create')->with(
-            $this->paymentMethodsList['active_method']['model']
-        )->will($this->returnValue($abstractMethod));
-        $abstractMethod->expects($this->any())->method('setId')->with('active_method')->will(
-            $this->returnValue($abstractMethod)
-        );
-        $abstractMethod->expects($this->any())->method('setStore')->with(null);
-        $abstractMethod->expects($this->any())
+        $adapter = $this->createMock(MethodInterface::class);
+        $this->scopeConfig->expects(static::once())
+            ->method('getValue')
+            ->with('payment', ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($this->paymentMethodsList);
+        $this->paymentMethodFactory->expects(static::once())
+            ->method('create')
+            ->with($this->paymentMethodsList['active_method']['model'])
+            ->willReturn($adapter);
+        $adapter->expects(static::once())
+            ->method('setStore')
+            ->with(null);
+        $adapter->expects(static::once())
             ->method('getConfigData')
-            ->with('active', $this->isNull())
-            ->will($this->returnValue($isActive));
-        $this->assertEquals($isActive ? ['active_method' => $abstractMethod] : [], $this->config->getActiveMethods());
+            ->with('active', static::isNull())
+            ->willReturn($isActive);
+        static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
+    /**
+     * @return array
+     */
     public function getActiveMethodsDataProvider()
     {
         return [[true], [false]];

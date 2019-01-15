@@ -1,67 +1,68 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Quote;
 
-use Magento\Quote\Model\Cart\CartTotalRepository;
-use Magento\Quote\Api\Data\TotalsExtensionFactory;
+use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class GrandTotalDetailsPlugin
 {
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
      */
-    protected $detailsFactory;
+    private $detailsFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory
      */
-    protected $ratesFactory;
+    private $ratesFactory;
 
     /**
-     * @var TotalsExtensionFactory
+     * @var TotalSegmentExtensionFactory
      */
-    protected $extensionFactory;
-
-    /**
-     * @var \Magento\Quote\Model\QuoteRepository
-     */
-    protected $quoteRepository;
+    private $totalSegmentExtensionFactory;
 
     /**
      * @var \Magento\Tax\Model\Config
      */
-    protected $taxConfig;
+    private $taxConfig;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\Total\Tax
+     * @var string
      */
-    protected $taxTotal;
+    private $code;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
-     * @param TotalsExtensionFactory $extensionFactory
+     * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
-        TotalsExtensionFactory $extensionFactory,
+        TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        Json $serializer
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
-        $this->extensionFactory = $extensionFactory;
+        $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
-        $this->taxTotal = $taxTotal;
-        $this->quoteRepository = $quoteRepository;
+        $this->serializer = $serializer;
+        $this->code = 'tax';
     }
 
     /**
@@ -81,31 +82,35 @@ class GrandTotalDetailsPlugin
     }
 
     /**
-     * @param CartTotalRepository $subject
-     * @param \Closure $proceed
-     * @param int $cartId
-     * @return \Magento\Quote\Model\Cart\Totals
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param \Magento\Quote\Model\Cart\TotalsConverter $subject
+     * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totalSegments
+     * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
+     * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundGet(CartTotalRepository $subject, \Closure $proceed, $cartId)
-    {
-        $result = $proceed($cartId);
-        $quote = $this->quoteRepository->getActive($cartId);
-        $totals = $quote->getTotals();
+    public function afterProcess(
+        \Magento\Quote\Model\Cart\TotalsConverter $subject,
+        array $totalSegments,
+        array $addressTotals = []
+    ) {
 
-        if (!array_key_exists('tax', $totals)) {
-            return $result;
+        if (!array_key_exists($this->code, $addressTotals)) {
+            return $totalSegments;
         }
 
-        $taxes = $totals['tax']->getData();
+        $taxes = $addressTotals['tax']->getData();
         if (!array_key_exists('full_info', $taxes)) {
-            return $result;
+            return $totalSegments;
         }
 
         $detailsId = 1;
         $finalData = [];
-        foreach ($taxes['full_info'] as $info) {
+        $fullInfo = $taxes['full_info'];
+        if (is_string($fullInfo)) {
+            $fullInfo = $this->serializer->unserialize($fullInfo);
+        }
+        foreach ($fullInfo as $info) {
             if ((array_key_exists('hidden', $info) && $info['hidden'])
                 || ($info['amount'] == 0 && $this->taxConfig->displayCartZeroTax())
             ) {
@@ -120,13 +125,12 @@ class GrandTotalDetailsPlugin
             $finalData[] = $taxDetails;
             $detailsId++;
         }
-        $attributes = $result->getExtensionAttributes();
+        $attributes = $totalSegments[$this->code]->getExtensionAttributes();
         if ($attributes === null) {
-            $attributes = $this->extensionFactory->create();
+            $attributes = $this->totalSegmentExtensionFactory->create();
         }
         $attributes->setTaxGrandtotalDetails($finalData);
-        /** @var $result \Magento\Quote\Model\Cart\Totals */
-        $result->setExtensionAttributes($attributes);
-        return $result;
+        $totalSegments[$this->code]->setExtensionAttributes($attributes);
+        return $totalSegments;
     }
 }

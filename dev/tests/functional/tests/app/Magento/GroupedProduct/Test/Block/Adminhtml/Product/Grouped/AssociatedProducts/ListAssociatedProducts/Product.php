@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,13 +9,19 @@ namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\Associated
 use Magento\Mtf\Block\Form;
 
 /**
- * Class Product
- * Assigned product row to grouped option
+ * Assigned product row to grouped option.
  */
 class Product extends Form
 {
     /**
-     * Fill product options
+     * Selector for product sku field.
+     *
+     * @var string
+     */
+    private $productSku = 'span[data-index="sku"]';
+
+    /**
+     * Fill product options.
      *
      * @param string $qtyValue
      * @return void
@@ -27,7 +33,7 @@ class Product extends Form
     }
 
     /**
-     * Get product options
+     * Get product options.
      *
      * @param array $fields
      * @return array
@@ -36,7 +42,17 @@ class Product extends Form
     {
         $mapping = $this->dataMapping($fields);
         $newFields = $this->_getData($mapping);
-        $newFields['name'] = $this->_rootElement->find('td.col-name')->getText();
+        $newFields['name'] = $this->_rootElement->find('[data-index="name"]')->getText();
         return $newFields;
+    }
+
+    /**
+     * Get product sku.
+     *
+     * @return string
+     */
+    public function getProductSku()
+    {
+        return $this->_rootElement->find($this->productSku)->getText();
     }
 }

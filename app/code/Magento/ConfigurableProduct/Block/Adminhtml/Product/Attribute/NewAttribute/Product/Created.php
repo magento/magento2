@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
 /**
  * New product attribute created on product edit page
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
-
 class Created extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/new/created.phtml';
+    protected $_template = 'Magento_ConfigurableProduct::catalog/product/attribute/new/created.phtml';
 
     /**
      * Core registry

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class AssertShippingTotalOrderReview extends AbstractConstraint
     {
         $reviewShippingTotal = $checkoutOnepage->getReviewBlock()->getShippingExclTax();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $reviewShippingTotal,
             number_format($shippingTotal, 2),
             'Shipping price: \'' . $reviewShippingTotal

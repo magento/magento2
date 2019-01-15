@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ class AssertCustomerRedirectToDashboard extends AbstractConstraint
     /**
      * Dashboard Message on account index page.
      */
-    const DASHBOARD_MESSAGE = 'My Dashboard';
+    const DASHBOARD_MESSAGE = 'My Account';
 
     /**
      * Constraint severeness
@@ -34,7 +34,7 @@ class AssertCustomerRedirectToDashboard extends AbstractConstraint
      */
     public function processAssert(CustomerAccountIndex $accountIndexPage)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::DASHBOARD_MESSAGE,
             $accountIndexPage->getTitleBlock()->getTitle(),
             'Wrong dashboard title is displayed.'

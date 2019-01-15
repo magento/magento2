@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 
-class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
+class Edit extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * Edit integration action.
@@ -36,7 +37,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
                 return;
             }
             $restoredIntegration = $this->_getSession()->getIntegrationData();
-            if (isset($restoredIntegration[Info::DATA_ID]) && $integrationId == $restoredIntegration[Info::DATA_ID]) {
+            if ($restoredIntegration) {
                 $integrationData = array_merge($integrationData, $restoredIntegration);
             }
         } else {
@@ -45,6 +46,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
             return;
         }
         $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
+        $this->restoreResourceAndSaveToRegistry();
         $this->_view->loadLayout();
         $this->_getSession()->setIntegrationData([]);
         $this->_setActiveMenu('Magento_Integration::system_integrations');

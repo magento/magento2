@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
@@ -22,6 +26,11 @@ class Preview extends \Magento\Backend\Block\Widget
      * @var \Magento\Email\Model\TemplateFactory
      */
     protected $_emailFactory;
+
+    /**
+     * @var string
+     */
+    protected $profilerName = 'email_template_proccessing';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -48,16 +57,10 @@ class Preview extends \Magento\Backend\Block\Widget
     protected function _toHtml()
     {
         $storeId = $this->getAnyStoreView()->getId();
-
         /** @var $template \Magento\Email\Model\Template */
-        $template = $this->_emailFactory->create(
-            ['data' => [
-                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $storeId
-            ]]
-        );
-        $id = (int) $this->getRequest()->getParam('id');
-        if ($id) {
+        $template = $this->_emailFactory->create();
+
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $template->load($id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));
@@ -67,7 +70,7 @@ class Preview extends \Magento\Backend\Block\Widget
 
         $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
 
-        \Magento\Framework\Profiler::start("email_template_proccessing");
+        \Magento\Framework\Profiler::start($this->profilerName);
 
         $template->emulateDesign($storeId);
         $templateProcessed = $this->_appState->emulateAreaCode(
@@ -80,7 +83,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Framework\Profiler::stop("email_template_proccessing");
+        \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
     }

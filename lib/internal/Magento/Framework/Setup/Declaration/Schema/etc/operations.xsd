@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:attributeGroup name="basicOperations">
+        <xs:annotation>
+            <xs:documentation>
+                `renameTo`: This operation allow to rename columns from 3-rd party module.
+                As you can not affect original declaration from 3-rd party module,
+                you can only extend it. So in order to rename external column, table, index or constraint
+                you need to specify additional param. Value of which will be desired name.
+                `disabled`: Allows to remove external column (created by external module).
+
+                Note: in order to remove or rename schema entity that comes with your module, you can
+                easily do it in your declaration, by removing schema entity declaration or renaming name attribute
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="disabled" type="xs:boolean" />
+    </xs:attributeGroup>
+</xs:schema>

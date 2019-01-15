@@ -1,34 +1,36 @@
 {
     "name": "magento/module-review",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/module-customer": "1.0.0-beta",
-        "magento/module-eav": "1.0.0-beta",
-        "magento/module-theme": "1.0.0-beta",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-newsletter": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/module-ui": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-newsletter": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-cookie": "1.0.0-beta"
+        "magento/module-cookie": "*",
+        "magento/module-review-sample-data": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Review"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Review\\": ""
+        }
     }
 }

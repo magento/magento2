@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,24 +12,25 @@
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget\Grid as WidgetGrid;
+use Magento\Framework\App\TemplateTypesInterface;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Newsletter\Model\Resource\Template\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Template\Collection
      */
     protected $_templateCollection;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection
+     * @param \Magento\Newsletter\Model\ResourceModel\Template\Collection $templateCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection,
+        \Magento\Newsletter\Model\ResourceModel\Template\Collection $templateCollection,
         array $data = []
     ) {
         $this->_templateCollection = $templateCollection;
@@ -114,7 +115,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Sender'),
                 'index' => 'template_sender_email',
-                'renderer' => 'Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender',
+                'renderer' => \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender::class,
                 'header_css_class' => 'col-sender',
                 'column_css_class' => 'col-sender'
             ]
@@ -127,8 +128,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'template_type',
                 'type' => 'options',
                 'options' => [
-                    \Magento\Newsletter\Model\Template::TYPE_HTML => 'html',
-                    \Magento\Newsletter\Model\Template::TYPE_TEXT => 'text',
+                    TemplateTypesInterface::TYPE_HTML => 'html',
+                    TemplateTypesInterface::TYPE_TEXT => 'text',
                 ],
                 'header_css_class' => 'col-type',
                 'column_css_class' => 'col-type'
@@ -143,7 +144,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
                 'filter' => false,
                 'no_link' => true,
-                'renderer' => 'Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Action',
+                'renderer' => \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Action::class,
                 'header_css_class' => 'col-actions',
                 'column_css_class' => 'col-actions'
             ]
@@ -155,7 +156,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get row url
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

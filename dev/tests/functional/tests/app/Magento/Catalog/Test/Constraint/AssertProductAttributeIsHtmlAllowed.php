@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertProductAttributeIsHtmlAllowed extends AbstractConstraint
 
     /**
      * Check whether html tags are using in attribute value.
-     * Checked tag structure <b><i>atttribute_default_value</p></i></b>
+     * Checked tag structure <b><i>attribute_default_value</p></i></b>
      *
      * @param InjectableFixture $product
      * @param CatalogProductAttribute $attribute
@@ -40,7 +40,7 @@ class AssertProductAttributeIsHtmlAllowed extends AbstractConstraint
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getAdditionalInformationBlock()->hasHtmlTagInAttributeValue($attribute),
             'Attribute is not visible with HTML tags on frontend.'
         );

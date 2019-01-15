@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,20 +51,19 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
      */
     public function loadByNamespace($namespace)
     {
-        $this->searchCriteriaBuilder->addFilters(
-            [
-                $this->filterBuilder
-                    ->setField('user_id')
-                    ->setConditionType('eq')
-                    ->setValue($this->userContext->getUserId())
-                    ->create(),
-                $this->filterBuilder
-                    ->setField('namespace')
-                    ->setConditionType('eq')
-                    ->setValue($namespace)
-                    ->create(),
-            ]
-        );
+        $userIdFilter = $this->filterBuilder
+            ->setField('user_id')
+            ->setConditionType('eq')
+            ->setValue($this->userContext->getUserId())
+            ->create();
+        $namespaceFilter = $this->filterBuilder
+            ->setField('namespace')
+            ->setConditionType('eq')
+            ->setValue($namespace)
+            ->create();
+
+        $this->searchCriteriaBuilder->addFilters([$userIdFilter]);
+        $this->searchCriteriaBuilder->addFilters([$namespaceFilter]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchResults = $this->bookmarkRepository->getList($searchCriteria);
@@ -77,25 +76,25 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
      */
     public function getByIdentifierNamespace($identifier, $namespace)
     {
-        $this->searchCriteriaBuilder->addFilters(
-            [
-                $this->filterBuilder
-                    ->setField('user_id')
-                    ->setConditionType('eq')
-                    ->setValue($this->userContext->getUserId())
-                    ->create(),
-                $this->filterBuilder
-                    ->setField('identifier')
-                    ->setConditionType('eq')
-                    ->setValue($identifier)
-                    ->create(),
-                $this->filterBuilder
-                    ->setField('namespace')
-                    ->setConditionType('eq')
-                    ->setValue($namespace)
-                    ->create(),
-            ]
-        );
+        $userIdFilter = $this->filterBuilder
+            ->setField('user_id')
+            ->setConditionType('eq')
+            ->setValue($this->userContext->getUserId())
+            ->create();
+        $identifierFilter = $this->filterBuilder
+            ->setField('identifier')
+            ->setConditionType('eq')
+            ->setValue($identifier)
+            ->create();
+        $namespaceFilter = $this->filterBuilder
+            ->setField('namespace')
+            ->setConditionType('eq')
+            ->setValue($namespace)
+            ->create();
+
+        $this->searchCriteriaBuilder->addFilters([$userIdFilter]);
+        $this->searchCriteriaBuilder->addFilters([$identifierFilter]);
+        $this->searchCriteriaBuilder->addFilters([$namespaceFilter]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchResults = $this->bookmarkRepository->getList($searchCriteria);

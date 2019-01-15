@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class AssertDownloadsReportResult extends AbstractConstraint
                 ];
                 $downloadsReport->getGridBlock()->search($filter);
                 $filter[] = $downloads;
-                \PHPUnit_Framework_Assert::assertTrue(
+                \PHPUnit\Framework\Assert::assertTrue(
                     $downloadsReport->getGridBlock()->isRowVisible($filter, false),
                     "Downloads report link {$link['title']} is not present in reports grid."
                 );

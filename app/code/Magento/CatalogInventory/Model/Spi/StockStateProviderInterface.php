@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Spi;
@@ -56,7 +56,7 @@ interface StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @param int|float $qty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQtyIncrements(StockItemInterface $stockItem, $qty);
 

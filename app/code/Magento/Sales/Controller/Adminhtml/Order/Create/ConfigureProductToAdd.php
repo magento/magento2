@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
@@ -17,16 +17,16 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
         // Prepare data
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true);
         $configureResult->setProductId($productId);
-        $sessionQuote = $this->_objectManager->get('Magento\Backend\Model\Session\Quote');
+        $sessionQuote = $this->_objectManager->get(\Magento\Backend\Model\Session\Quote::class);
         $configureResult->setCurrentStoreId($sessionQuote->getStore()->getId());
         $configureResult->setCurrentCustomerId($sessionQuote->getCustomerId());
 
         // Render page
         /** @var \Magento\Catalog\Helper\Product\Composite $helper */
-        $helper = $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite');
+        $helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Composite::class);
         return $helper->renderConfigureResult($configureResult);
     }
 }

@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
@@ -28,21 +30,21 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         switch ($this->_coreRegistry->registry('store_type')) {
             case 'website':
                 $itemId = $this->getRequest()->getParam('website_id', null);
-                $model = $this->_objectManager->create('Magento\Store\Model\Website');
+                $model = $this->_objectManager->create(\Magento\Store\Model\Website::class);
                 $title = __("Web Site");
                 $notExists = __("The website does not exist.");
                 $codeBase = __('Before modifying the website code please make sure it is not used in index.php.');
                 break;
             case 'group':
                 $itemId = $this->getRequest()->getParam('group_id', null);
-                $model = $this->_objectManager->create('Magento\Store\Model\Group');
+                $model = $this->_objectManager->create(\Magento\Store\Model\Group::class);
                 $title = __("Store");
                 $notExists = __("The store does not exist");
                 $codeBase = false;
                 break;
             case 'store':
                 $itemId = $this->getRequest()->getParam('store_id', null);
-                $model = $this->_objectManager->create('Magento\Store\Model\Store');
+                $model = $this->_objectManager->create(\Magento\Store\Model\Store::class);
                 $title = __("Store View");
                 $notExists = __("Store view doesn't exist");
                 $codeBase = __('Before modifying the store view code please make sure it is not used in index.php.');
@@ -57,7 +59,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         if ($model->getId() || $this->_coreRegistry->registry('store_action') == 'add') {
             $this->_coreRegistry->register('store_data', $model);
             if ($this->_coreRegistry->registry('store_action') == 'edit' && $codeBase && !$model->isReadOnly()) {
-                $this->messageManager->addNotice($codeBase);
+                $this->messageManager->addNoticeMessage($codeBase);
             }
             $resultPage = $this->createPage();
             if ($this->_coreRegistry->registry('store_action') == 'add') {
@@ -66,10 +68,12 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $resultPage->getConfig()->getTitle()->prepend($model->getName());
             }
             $resultPage->getConfig()->getTitle()->prepend(__('Stores'));
-            $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'));
+            $resultPage->addContent($resultPage->getLayout()->createBlock(
+                \Magento\Backend\Block\System\Store\Edit::class
+            ));
             return $resultPage;
         } else {
-            $this->messageManager->addError($notExists);
+            $this->messageManager->addErrorMessage($notExists);
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('adminhtml/*/');

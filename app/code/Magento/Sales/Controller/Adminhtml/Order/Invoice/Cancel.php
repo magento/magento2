@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -25,17 +25,17 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
             $invoice->cancel();
             $invoice->getOrder()->setIsInProcess(true);
             $this->_objectManager->create(
-                'Magento\Framework\DB\Transaction'
+                \Magento\Framework\DB\Transaction::class
             )->addObject(
                 $invoice
             )->addObject(
                 $invoice->getOrder()
             )->save();
-            $this->messageManager->addSuccess(__('You canceled the invoice.'));
+            $this->messageManager->addSuccessMessage(__('You canceled the invoice.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Invoice canceling error'));
+            $this->messageManager->addErrorMessage(__('Invoice canceling error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

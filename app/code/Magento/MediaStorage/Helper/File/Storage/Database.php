@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Database saving file helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\MediaStorage\Helper\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Database saving file helper
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -24,7 +25,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Storage resource model
-     * @var null|\Magento\MediaStorage\Model\Resource\File\Storage\Database
+     * @var null|\Magento\MediaStorage\Model\ResourceModel\File\Storage\Database
      */
     protected $_resourceModel = null;
 
@@ -77,7 +78,6 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if we use DB storage
-     * Note: Disabled as not completed feature
      *
      * @return bool
      */
@@ -121,7 +121,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get storage model
      *
-     * @return \Magento\MediaStorage\Model\Resource\File\Storage\Database
+     * @return \Magento\MediaStorage\Model\ResourceModel\File\Storage\Database
      */
     public function getResourceStorageModel()
     {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,7 +10,7 @@
              module="Magento_Customer"
              type="eav"
              entity_type="customer"
-             collection="Magento\Customer\Model\Resource\Customer\Collection"
+             collection="Magento\Customer\Model\ResourceModel\Customer\Collection"
              identifier="email"
              repository_class="Magento\Customer\Test\Repository\Customer"
              handler_interface="Magento\Customer\Test\Handler\Customer\CustomerInterface"
@@ -37,7 +37,7 @@
         <field name="store_id" is_required="1" group="account_information" />
         <field name="suffix" is_required="0" group="account_information" />
         <field name="taxvat" is_required="0" group="account_information" />
-        <field name="website_id" is_required="1" group="account_information" />
+        <field name="website_id" is_required="1" group="account_information" source="Magento\Customer\Test\Fixture\Customer\WebsiteId" />
         <field name="amount_delta" is_required="1" group="store_credit" />
         <field name="is_subscribed" />
         <field name="password" group="null" />

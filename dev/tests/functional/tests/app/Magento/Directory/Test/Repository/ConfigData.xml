@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="config_base_currency_us_display_currency_uah">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="Ukrainian Hryvnia" xsi:type="string">UAH</item>
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Ukrainian Hryvnia</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">UAH</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

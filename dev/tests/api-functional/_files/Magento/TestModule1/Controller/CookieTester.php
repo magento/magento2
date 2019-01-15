@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule1\Controller;
@@ -13,13 +13,23 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
  * Controller for testing the CookieManager.
  *
  */
-abstract class CookieTester extends \Magento\Framework\App\Action\Action
+abstract class CookieTester implements \Magento\Framework\App\ActionInterface
 {
     /** @var PhpCookieManager */
     protected $cookieManager;
 
     /** @var  CookieMetadataFactory */
     protected $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\App\ResponseInterface
+     */
+    protected $_response;
+
+    /**
+     * @var
+     */
+    protected $request;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -32,8 +42,9 @@ abstract class CookieTester extends \Magento\Framework\App\Action\Action
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFacory = $cookieMetadataFactory;
-        parent::__construct($context);
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->_response = $context->getResponse();
+        $this->request = $context->getRequest();
     }
 
     /**
@@ -41,7 +52,7 @@ abstract class CookieTester extends \Magento\Framework\App\Action\Action
      */
     protected function getCookieMetadataFactory()
     {
-        return $this->cookieMetadataFacory;
+        return $this->cookieMetadataFactory;
     }
 
     /**
@@ -60,11 +71,8 @@ abstract class CookieTester extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->getRequest()->isDispatched()) {
-            parent::dispatch($request);
-        }
-
-        $result = parent::dispatch($request);
-        return $result;
+        $this->request = $request;
+        $result = $this->execute();
+        return $result ? $result : $this->_response;
     }
 }

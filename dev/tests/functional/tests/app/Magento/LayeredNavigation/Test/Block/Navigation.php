@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\LayeredNavigation\Test\Block;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
@@ -15,63 +16,96 @@ use Magento\Mtf\Client\Locator;
 class Navigation extends Block
 {
     /**
-     * 'Clear All' link.
+     * Locator for loaded "narrow-by-list" block.
+     *
+     * @var string
+     */
+    protected $loadedNarrowByList = '#narrow-by-list[role="tablist"]';
+
+    /**
+     * Locator value for "Clear All" link.
      *
      * @var string
      */
     protected $clearAll = '.action.clear';
 
     /**
-     * Attribute option title selector.
+     * Locator value for correspondent Attribute filter option.
      *
      * @var string
      */
-    protected $optionTitle = '.filter-options-title';
+    protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
     /**
-     * Filter link locator.
+     * Locator value for correspondent "Filter" link.
      *
      * @var string
      */
-    protected $filterLink = './/dt[contains(text(),"%s")]/following-sibling::dd//a';
+    protected $filterLink = './/div[@class="filter-options-title" and contains(text(),"%s")]/following-sibling::div//a';
 
     /**
-     * Click on 'Clear All' link.
+     * Locator value for "Expand Filter" button.
+     *
+     * @var string
+     */
+    protected $expandFilterButton = '[data]';
+
+    /**
+     * Locator for category name.
+     *
+     * @var string
+     */
+    private $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
+
+    /**
+     * Locator for element with product quantity.
+     *
+     * @var string
+     */
+    private $productQty = '/following-sibling::span[contains(text(), "%s")]';
+
+    /**
+     * Remove all applied filters.
      *
      * @return void
      */
     public function clearAll()
     {
-        $this->_rootElement->find($this->clearAll, locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->clearAll)->click();
     }
 
     /**
-     * Get array of available filters.
+     * Get all available filters.
      *
      * @return array
      */
     public function getFilters()
     {
-        $options = $this->_rootElement->getElements($this->optionTitle);
+        $this->waitForElementVisible($this->loadedNarrowByList);
+
+        $options = $this->_rootElement->getElements(sprintf($this->optionTitle, ''), Locator::SELECTOR_XPATH);
         $data = [];
         foreach ($options as $option) {
-            $data[] = $option->getText();
+            $data[] = strtoupper($option->getText());
         }
+
         return $data;
     }
 
     /**
-     * Click filter link.
+     * Apply Layered Navigation filter.
      *
      * @param string $filter
      * @param string $linkPattern
      * @return void
      * @throws \Exception
      */
-    public function clickFilterLink($filter, $linkPattern)
+    public function applyFilter($filter, $linkPattern)
     {
-        $links = $this->_rootElement->getElements(sprintf($this->filterLink, $filter), Locator::SELECTOR_XPATH);
+        $links = sprintf($this->filterLink, $filter);
+        $this->openFilterContainer($filter, $links);
 
+        $links = $this->_rootElement->getElements($links, Locator::SELECTOR_XPATH);
         foreach ($links as $link) {
             if (preg_match($linkPattern, trim($link->getText()))) {
                 $link->click();
@@ -79,5 +113,63 @@ class Navigation extends Block
             }
         }
         throw new \Exception("Can't find {$filter} filter link by pattern: {$linkPattern}");
+    }
+
+    /**
+     * Check that category with product quantity can be displayed on layered navigation.
+     *
+     * @param Category $category
+     * @param int $qty
+     * @return bool
+     */
+    public function isCategoryVisible(Category $category, $qty)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
+    }
+
+    /**
+     * Get Layered Navigation filter options.
+     *
+     * @param string $attributeLabel
+     * @return array
+     */
+    public function getFilterContents($attributeLabel)
+    {
+        $data = [];
+
+        if (trim($attributeLabel) === '') {
+            return $data;
+        }
+
+        $link = sprintf($this->filterLink, $attributeLabel);
+        $this->openFilterContainer($attributeLabel, $link);
+
+        $optionContents = $this->_rootElement->getElements($link, Locator::SELECTOR_XPATH);
+
+        foreach ($optionContents as $optionContent) {
+            $data[] = trim(strtoupper($optionContent->getText()));
+        }
+
+        return $data;
+    }
+
+    /**
+     * Open filter container.
+     *
+     * @param string $filter
+     * @param string $link
+     * @return void
+     */
+    private function openFilterContainer($filter, $link)
+    {
+        $expandFilterButton = sprintf($this->optionTitle, $filter);
+
+        $this->waitForElementVisible($this->loadedNarrowByList);
+        if (!$this->_rootElement->find($link, Locator::SELECTOR_XPATH)->isVisible()) {
+            $this->_rootElement->find($expandFilterButton, Locator::SELECTOR_XPATH)->click();
+        }
     }
 }

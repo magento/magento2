@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Widget;
@@ -16,7 +16,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_blockFactory;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -24,14 +24,14 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
-     * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\BlockFactory $blockFactory,
-        \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory,
+        \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_blockFactory = $blockFactory;
@@ -65,7 +65,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $sourceUrl = $this->getUrl('cms/block_widget/chooser', ['uniq_id' => $uniqId]);
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(

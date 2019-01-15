@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Setup;
 
-class TaxSetupTest extends \PHPUnit_Framework_TestCase
+class TaxSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Setup\TaxSetup
@@ -19,11 +19,19 @@ class TaxSetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
+
+        $salesSetup = $this->createMock(\Magento\Sales\Setup\SalesSetup::class);
+        $salesSetupFactory = $this->createPartialMock(\Magento\Sales\Setup\SalesSetupFactory::class, ['create']);
+        $salesSetupFactory->expects($this->any())->method('create')->will($this->returnValue($salesSetup));
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
         $this->taxSetup = $helper->getObject(
-            'Magento\Tax\Setup\TaxSetup',
-            ['productTypeConfig' => $this->typeConfigMock]
+            \Magento\Tax\Setup\TaxSetup::class,
+            [
+                'productTypeConfig' => $this->typeConfigMock,
+                'salesSetupFactory' => $salesSetupFactory,
+            ]
         );
     }
 

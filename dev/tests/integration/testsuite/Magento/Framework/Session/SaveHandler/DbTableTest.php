@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\SaveHandler;
 
-class DbTableTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\ResourceConnection;
+
+class DbTableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test session ID
@@ -75,36 +77,48 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      */
     protected $_sessionTable;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->get('Magento\Framework\Session\SaveHandler\DbTable');
+        $this->_model = $this->_objectManager->get(\Magento\Framework\Session\SaveHandler\DbTable::class);
 
-        /** @var $resource \Magento\Framework\App\Resource */
-        $resource = $this->_objectManager->get('Magento\Framework\App\Resource');
-        $this->_connection = $resource->getConnection('core_write');
+        /** @var $resource \Magento\Framework\App\ResourceConnection */
+        $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $this->_connection = $resource->getConnection();
         $this->_sessionTable = $resource->getTableName('session');
 
         // session stores serialized objects with protected properties
         // we need to test this case to ensure that DB adapter successfully processes "\0" symbols in serialized data
         foreach ($this->_sourceData as $key => $data) {
-            $this->_sessionData[$key] = new \Magento\Framework\Object($data);
+            $this->_sessionData[$key] = new \Magento\Framework\DataObject($data);
         }
     }
 
+    /**
+     * @return void
+     */
     public function testCheckConnection()
     {
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
+    /**
+     * @return void
+     */
     public function testOpenAndClose()
     {
         $this->assertTrue($this->_model->open('', 'test'));
         $this->assertTrue($this->_model->close());
     }
 
+    /**
+     * @return void
+     */
     public function testWriteReadDestroy()
     {
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
@@ -119,6 +133,9 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->read(self::SESSION_ID));
     }
 
+    /**
+     * @return void
+     */
     public function testGc()
     {
         $this->_model->write('test', 'test');
@@ -129,6 +146,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Assert that session data writes to DB in base64 encoding
+     *
+     * @return void
      */
     public function testWriteEncoded()
     {
@@ -173,6 +192,8 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
      * @param string $sessionData
      *
      * @dataProvider readEncodedDataProvider
+     *
+     * @return void
      */
     public function testReadEncoded($sessionData)
     {

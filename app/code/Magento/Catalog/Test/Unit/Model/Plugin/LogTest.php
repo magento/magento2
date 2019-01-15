@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Plugin;
 
-class LogTest extends \PHPUnit_Framework_TestCase
+class LogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Plugin\Log
@@ -18,26 +18,20 @@ class LogTest extends \PHPUnit_Framework_TestCase
     protected $compareItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
     protected function setUp()
     {
-        $this->logResourceMock = $this->getMock('Magento\Log\Model\Resource\Log', [], [], '', false);
-        $this->compareItemMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Compare\Item',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->subjectMock = $this->getMock('Magento\Log\Model\Resource\Log', [], [], '', false);
+        $this->logResourceMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Visitor::class);
+        $this->compareItemMock = $this->createMock(\Magento\Catalog\Model\Product\Compare\Item::class);
+        $this->subjectMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Visitor::class);
         $this->model = new \Magento\Catalog\Model\Plugin\Log($this->compareItemMock);
     }
 

@@ -2,18 +2,24 @@
 /**
  * Abstract helper context
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Helper;
 
+/**
+ * Constructor modification point for Magento\Framework\App\Helper.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
-    /**
-     * @var \Magento\Framework\Translate\InlineInterface
-     */
-    protected $translateInline;
-
     /**
      * @var \Magento\Framework\Module\Manager
      */
@@ -73,7 +79,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Cache\ConfigInterface $cacheConfig
@@ -89,7 +94,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
         \Magento\Framework\Cache\ConfigInterface $cacheConfig,
@@ -99,7 +103,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->translateInline = $translateInline;
         $this->_moduleManager = $moduleManager;
         $this->_httpRequest = $httpRequest;
         $this->_cacheConfig = $cacheConfig;
@@ -111,14 +114,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->urlEncoder = $urlEncoder;
         $this->urlDecoder = $urlDecoder;
         $this->scopeConfig = $scopeConfig;
-    }
-
-    /**
-     * @return \Magento\Framework\Translate\InlineInterface
-     */
-    public function getTranslateInline()
-    {
-        return $this->translateInline;
     }
 
     /**

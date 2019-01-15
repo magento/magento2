@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<ruleset name="Magento Specific Design Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <rule name="FinalImplementation"
+          class="Magento\CodeMessDetector\Rule\Design\FinalImplementation"
+          message= "The {0} {1} declared as final.">
+        <description>
+            <![CDATA[
+Final keyword is prohibited in Magento as this decreases extensibility and customizability.
+Final classes and method are not compatible with plugins and proxies.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+final class Foo
+{
+    public function bar() {}
+}
+class Baz {
+    final public function bad() {}
+}
+            ]]>
+        </example>
+    </rule>
+    <rule name="AllPurposeAction"
+          class="Magento\CodeMessDetector\Rule\Design\AllPurposeAction"
+          message= "The class {0} does not restrict processed HTTP methods by implementing a Http*Method name*ActionInterface">
+        <description>
+            <![CDATA[
+Controllers (classes implementing ActionInterface) have to implement marker Http<Method>ActionInterface
+to restrict incoming requests by methods.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class PostOrder implements ActionInterface
+{
+    public function execute()
+    {
+        //I process GET, POST, PATCH etc. while only intended for POST
+        ...
+        return $response;
+    }
+}
+            ]]>
+        </example>
+    </rule>
+    <rule name="RequestAwareBlockMethod"
+          class="Magento\CodeMessDetector\Rule\Design\RequestAwareBlockMethod"
+          message="{0} uses request object directly. Add user input validation and suppress this warning.">
+        <description>
+            <![CDATA[
+Blocks must not depend on being used with certain controllers.
+If you use request object in a block directly you must validate all user input inside the block.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class MyOrder extends AbstractBlock
+{
+
+    .......
+
+    public function getOrder()
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        //Validate customer having such order.
+        if (!$this->hasOrder($this->getCustomerId(), $orderId)) {
+            ...deny access...
+        }
+        .....
+    }
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>

@@ -1,21 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+/**
+ * Class ObjectRegistry
+ */
 class ObjectRegistry
 {
     /**
      * Key is id of entity, value is entity
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $entitiesMap;
 
     /**
-     * @param \Magento\Framework\Object[] $entities
+     * @param \Magento\Framework\DataObject[] $entities
      */
     public function __construct($entities)
     {
@@ -26,16 +29,20 @@ class ObjectRegistry
     }
 
     /**
+     * Get Entity
+     *
      * @param int $entityId
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function get($entityId)
     {
-        return isset($this->entitiesMap[$entityId]) ? $this->entitiesMap[$entityId] : null;
+        return $this->entitiesMap[$entityId] ?? null;
     }
 
     /**
-     * @return \Magento\Framework\Object[]
+     * List Entities
+     *
+     * @return \Magento\Framework\DataObject[]
      */
     public function getList()
     {

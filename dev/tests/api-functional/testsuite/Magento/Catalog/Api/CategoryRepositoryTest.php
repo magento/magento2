@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -75,34 +75,26 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
     }
-    /**
-     * @return array
-     */
-    public function categoryCreationProvider()
-    {
-        return [
-            [
-                $this->getSimpleCategoryData(
-                    [
-                        'name' => 'Test Category Name',
-                    ]
-                ),
-            ]
-        ];
-    }
 
     /**
      * Test for create category process
      *
      * @magentoApiDataFixture Magento/Catalog/Model/Category/_files/service_category_create.php
-     * @dataProvider categoryCreationProvider
      */
-    public function testCreate($category)
+    public function testCreate()
     {
-        $category = $this->createCategory($category);
-        $this->assertGreaterThan(0, $category['id']);
+        $categoryData = $this->getSimpleCategoryData(['name' => 'Test Category Name']);
+        $result = $this->createCategory($categoryData);
+        $this->assertGreaterThan(0, $result['id']);
+        foreach (['name', 'parent_id', 'available_sort_by'] as $fieldName) {
+            $this->assertEquals(
+                $categoryData[$fieldName],
+                $result[$fieldName],
+                sprintf('"%s" field value is invalid', $fieldName)
+            );
+        }
         // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($category['id']);
+        $this->deleteCategory($result['id']);
     }
 
     /**
@@ -111,7 +103,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function testDelete()
     {
         /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get('Magento\UrlRewrite\Model\Storage\DbStorage');
+        $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
@@ -165,7 +157,8 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $categoryId = 333;
         $categoryData = [
-            'name' => "Update Category Test",
+            'name' => 'Update Category Test',
+            'is_active' => false,
             'custom_attributes' => [
                 [
                     'attribute_code' => 'description',
@@ -176,8 +169,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
         /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Category');
+        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
+        $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
         // delete category to clean up auto-generated url rewrites
@@ -187,12 +181,12 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function getSimpleCategoryData($categoryData = [])
     {
         return [
-            'path' => '2',
             'parent_id' => '2',
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
-            'include_in_menu' => "1",
+            'include_in_menu' => '1',
+            'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Custom description'],
@@ -200,7 +194,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 ['attribute_code' => 'meta_keywords', 'value' => ''],
                 ['attribute_code' => 'meta_description', 'value' => ''],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
-                ['attribute_code' => 'landing_page', 'value' => ''],
+                ['attribute_code' => 'landing_page', 'value' => '0'],
                 ['attribute_code' => 'is_anchor', 'value' => '0'],
                 ['attribute_code' => 'custom_use_parent_settings', 'value' => '0'],
                 ['attribute_code' => 'custom_apply_to_products', 'value' => '0'],

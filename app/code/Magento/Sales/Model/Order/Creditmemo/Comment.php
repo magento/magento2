@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment getResource()
+ * @api
+ * @since 100.0.2
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {
@@ -33,7 +33,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -44,7 +44,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -67,7 +67,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Creditmemo\Comment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment::class);
     }
 
     /**
@@ -110,6 +110,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns comment
      *
@@ -221,5 +222,6 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

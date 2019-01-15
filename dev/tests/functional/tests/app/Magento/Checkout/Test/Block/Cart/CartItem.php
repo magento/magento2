@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $edit = '.action.edit';
+    protected $edit = '.action-edit';
 
     /**
      * Selector for "Remove item" button
@@ -40,7 +40,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $wishlistButton = '.action-towishlist';
+    protected $wishlistButton = '.towishlist';
 
     /**
      * Quantity input selector

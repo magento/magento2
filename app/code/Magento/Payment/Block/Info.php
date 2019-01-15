@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block;
 
 /**
- * Base payment iformation block
+ * Base payment information block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
     /**
      * Payment rendered specific information
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_paymentSpecificInformation;
 
@@ -141,16 +144,16 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Prepare information specific to current payment method
      *
-     * @param null|\Magento\Framework\Object|array $transport
-     * @return \Magento\Framework\Object
+     * @param null|\Magento\Framework\DataObject|array $transport
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareSpecificInformation($transport = null)
     {
         if (null === $this->_paymentSpecificInformation) {
             if (null === $transport) {
-                $transport = new \Magento\Framework\Object();
+                $transport = new \Magento\Framework\DataObject();
             } elseif (is_array($transport)) {
-                $transport = new \Magento\Framework\Object($transport);
+                $transport = new \Magento\Framework\DataObject($transport);
             }
             $this->_paymentSpecificInformation = $transport;
         }

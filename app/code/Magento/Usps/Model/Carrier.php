@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Usps\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Xml\Security;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
+use Magento\Usps\Helper\Data as DataHelper;
 
 /**
  * USPS shipping
@@ -20,17 +21,19 @@ use Magento\Framework\Xml\Security;
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-    /**
-     * USPS containers
-     */
+    /** @deprecated */
     const CONTAINER_VARIABLE = 'VARIABLE';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
 
+    /** @deprecated */
     const CONTAINER_RECTANGULAR = 'RECTANGULAR';
 
+    /** @deprecated */
     const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
 
     /**
@@ -65,6 +68,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var string
      */
     protected $_code = self::CODE;
+
+    /**
+     * Weight precision
+     *
+     * @var int
+     */
+    private static $weightPrecision = 10;
 
     /**
      * Rate request data
@@ -102,7 +112,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_carrierHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -110,6 +120,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var \Magento\Framework\HTTP\ZendClientFactory
      */
     protected $_httpClientFactory;
+
+    /**
+     * @inheritdoc
+     */
+    protected $_debugReplacePrivateDataKeys = [
+        'USERID'
+    ];
+
+    /**
+     * @var DataHelper
+     */
+    private $dataHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -128,7 +150,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      *
@@ -151,7 +173,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         CarrierHelper $carrierHelper,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = []
     ) {
@@ -181,19 +203,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\Object $request
-     * @return Result|bool|null
+     * @param RateRequest $request
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Error|bool|Result
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag($this->_activeFlag)) {
-            return false;
+        if (!$this->canCollectRates()) {
+            return $this->getErrorMessage();
         }
 
         $this->setRequest($request);
-
         $this->_result = $this->_getQuotes();
-
         $this->_updateFreeMethodQuote($request);
 
         return $this->getResult();
@@ -212,7 +232,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $this->_request = $request;
 
-        $r = new \Magento\Framework\Object();
+        $r = new \Magento\Framework\DataObject();
 
         if ($request->getLimitMethod()) {
             $r->setService($request->getLimitMethod());
@@ -318,7 +338,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, 1));
+        $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
+        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
@@ -344,6 +365,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * @inheritdoc
+     *
+     * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
+     */
+    public function isShippingLabelsAvailable()
+    {
+        return false;
+    }
+
+    /**
      * Get quotes
      *
      * @return Result
@@ -365,7 +396,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, 1));
+        $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
+        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         $r->setService($freeMethod);
     }
 
@@ -385,6 +417,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // The origin address(shipper) must be only in USA
         if (!$this->_isUSCountry($r->getOrigCountryId())) {
             $responseBody = '';
+
             return $this->_parseXmlResponse($responseBody);
         }
 
@@ -402,9 +435,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if (!$service) {
                 $service = $r->getService();
             }
-            if ($r->getContainer() == 'FLAT RATE BOX' || $r->getContainer() == 'FLAT RATE ENVELOPE') {
+
+            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
+            ) {
                 $service = 'Priority';
             }
+
             $package->addChild('Service', $service);
 
             // no matter Letter, Flat or Parcel, use Parcel
@@ -412,7 +449,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $package->addChild('FirstClassMailType', 'PARCEL');
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars avaialble
+            //only 5 chars available
             $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
@@ -461,13 +498,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $package->addChild('Height', $height);
             $package->addChild('Girth', $girth);
 
+            $package->addChild('OriginZip', $r->getOrigPostal());
+            $package->addChild('AcceptanceDateTime', date('c'));
+            $package->addChild('DestinationPostalCode', $r->getDestPostal());
+
             $api = 'IntlRateV2';
         }
         $request = $xml->asXML();
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
@@ -550,6 +591,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
                                 $serviceCode = 'INT_' . (string)$service->attributes()->ID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                                if (!$this->isServiceAvailable($service)) {
+                                    continue;
+                                }
                                 if (in_array($serviceCode, $allowedMethods)) {
                                     $costArr[$serviceCode] = (string)$service->Postage;
                                     $priceArr[$serviceCode] = $this->getMethodPrice(
@@ -609,12 +653,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'method' => [
                 '0_FCLE' => __('First-Class Mail Large Envelope'),
                 '0_FCL' => __('First-Class Mail Letter'),
-                '0_FCP' => __('First-Class Mail Parcel'),
+                '0_FCP' => __('First-Class Package Service - Retail'),
                 '0_FCPC' => __('First-Class Mail Postcards'),
                 '1' => __('Priority Mail'),
                 '2' => __('Priority Mail Express Hold For Pickup'),
                 '3' => __('Priority Mail Express'),
-                '4' => __('Standard Post'),
+                '4' => __('Retail Ground'),
                 '6' => __('Media Mail'),
                 '7' => __('Library Mail'),
                 '13' => __('Priority Mail Express Flat Rate Envelope'),
@@ -649,8 +693,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '49' => __('Priority Mail Regional Rate Box B'),
                 '50' => __('Priority Mail Regional Rate Box B Hold For Pickup'),
                 '53' => __('First-Class Package Service Hold For Pickup'),
-                '55' => __('Priority Mail Express Flat Rate Boxes'),
-                '56' => __('Priority Mail Express Flat Rate Boxes Hold For Pickup'),
                 '57' => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes'),
                 '58' => __('Priority Mail Regional Rate Box C'),
                 '59' => __('Priority Mail Regional Rate Box C Hold For Pickup'),
@@ -682,7 +724,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
-                'INT_26' => __('Priority Mail Express International Flat Rate Boxes'),
                 'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
             ],
             'service_to_code' => [
@@ -693,7 +734,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '1' => 'Priority',
                 '2' => 'Priority Express',
                 '3' => 'Priority Express',
-                '4' => 'Standard Post',
+                '4' => 'Retail Ground',
                 '6' => 'Media',
                 '7' => 'Library',
                 '13' => 'Priority Express',
@@ -728,8 +769,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '49' => 'Priority',
                 '50' => 'Priority',
                 '53' => 'First Class',
-                '55' => 'Priority Express',
-                '56' => 'Priority Express',
                 '57' => 'Priority Express',
                 '58' => 'Priority',
                 '59' => 'Priority',
@@ -761,19 +800,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => 'Priority',
                 'INT_24' => 'Priority',
                 'INT_25' => 'Priority',
-                'INT_26' => 'Priority Express',
                 'INT_27' => 'Priority Express',
             ],
             'method_to_code' => [
                 'First-Class Mail Large Envelope' => '0_FCLE',
                 'First-Class Mail Letter' => '0_FCL',
-                'First-Class Mail Parcel' => '0_FCP',
+                'First-Class Package Service - Retail' => '0_FCP',
             ],
             'first_class_mail_type' => ['LETTER' => __('Letter'), 'FLAT' => __('Flat'), 'PARCEL' => __('Parcel')],
             'container' => [
                 'VARIABLE' => __('Variable'),
-                'FLAT RATE BOX' => __('Flat-Rate Box'),
+                'SM FLAT RATE BOX' => __('Small Flat-Rate Box'),
+                'MD FLAT RATE BOX' => __('Medium Flat-Rate Box'),
+                'LG FLAT RATE BOX' => __('Large Flat-Rate Box'),
                 'FLAT RATE ENVELOPE' => __('Flat-Rate Envelope'),
+                'SM FLAT RATE ENVELOPE' => __('Small Flat-Rate Envelope'),
+                'WINDOW FLAT RATE ENVELOPE' => __('Window Flat-Rate Envelope'),
+                'GIFT CARD FLAT RATE ENVELOPE' => __('Gift Card Flat-Rate Envelope'),
+                'LEGAL FLAT RATE ENVELOPE' => __('Legal Flat-Rate Envelope'),
+                'PADDED FLAT RATE ENVELOPE' => __('Padded Flat-Rate Envelope'),
                 'RECTANGULAR' => __('Rectangular'),
                 'NONRECTANGULAR' => __('Non-rectangular'),
             ],
@@ -783,75 +828,103 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'filters' => [
                         'within_us' => [
                             'method' => [
-                                'Priority Mail Express Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope',
-                                'Priority Mail Large Flat Rate Box',
-                                'Priority Mail Medium Flat Rate Box',
-                                'Priority Mail Small Flat Rate Box',
-                                'Priority Mail Express Hold For Pickup',
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Priority Mail Hold For Pickup',
-                                'Priority Mail Large Flat Rate Box Hold For Pickup',
-                                'Priority Mail Medium Flat Rate Box Hold For Pickup',
-                                'Priority Mail Small Flat Rate Box Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Small Flat Rate Envelope',
-                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
-                                'First-Class Package Service Hold For Pickup',
-                                'Priority Mail Express Flat Rate Boxes',
-                                'Priority Mail Express Flat Rate Boxes Hold For Pickup',
-                                'Standard Post',
-                                'Media Mail',
-                                'First-Class Mail Large Envelope',
-                                'Priority Mail Express Sunday/Holiday Delivery',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
+                                '13', '27', '16', '22', '17', '28', '2', '3', '1', '33', '34', '35',
+                                '36', '37', '42', '43', '53', '4', '6', '15', '23', '25', '57'
                             ],
                         ],
                         'from_us' => [
                             'method' => [
-                                'Priority Mail Express International Flat Rate Envelope',
-                                'Priority Mail International Flat Rate Envelope',
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Envelope',
-                                'Priority Mail Express International Flat Rate Boxes',
-                                'Global Express Guaranteed (GXG)',
-                                'USPS GXG Envelopes',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Mail International Letter',
-                                'First-Class Mail International Large Envelope',
-                                'First-Class Package International Service',
+                                'INT_10', 'INT_8', 'INT_11', 'INT_9', 'INT_16', 'INT_20', 'INT_4',
+                                'INT_12', 'INT_1', 'INT_2', 'INT_13', 'INT_14', 'INT_15'
                             ],
                         ],
                     ],
                 ],
                 [
-                    'containers' => ['FLAT RATE BOX'],
+                    'containers' => ['SM FLAT RATE BOX'],
                     'filters' => [
                         'within_us' => [
-                            'method' => [
-                                'Priority Mail Large Flat Rate Box',
-                                'Priority Mail Medium Flat Rate Box',
-                                'Priority Mail Small Flat Rate Box',
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
-                            ],
+                            'method' => ['28', '57'],
                         ],
                         'from_us' => [
-                            'method' => [
-                                'Priority Mail International Large Flat Rate Box',
-                                'Priority Mail International Medium Flat Rate Box',
-                                'Priority Mail International Small Flat Rate Box',
-                                'Priority Mail International DVD Flat Rate priced box',
-                                'Priority Mail International Large Video Flat Rate priced box',
-                            ],
+                            'method' => ['INT_16', 'INT_24'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['MD FLAT RATE BOX'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['17', '57'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_9', 'INT_24'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['LG FLAT RATE BOX'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['22', '57'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_11', 'INT_24', 'INT_25'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['SM FLAT RATE ENVELOPE'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['42', '43'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_20'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['WINDOW FLAT RATE ENVELOPE'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['40', '41'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_19'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['GIFT CARD FLAT RATE ENVELOPE'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['38', '39'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_18'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['PADDED FLAT RATE ENVELOPE'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['62', '63', '64', '46', '29'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_27', 'INT_23'],
+                        ],
+                    ]
+                ],
+                [
+                    'containers' => ['LEGAL FLAT RATE ENVELOPE'],
+                    'filters' => [
+                        'within_us' => [
+                            'method' => ['44', '45', '30', '31', '32'],
+                        ],
+                        'from_us' => [
+                            'method' => ['INT_17', 'INT_22'],
                         ],
                     ]
                 ],
@@ -859,30 +932,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'containers' => ['FLAT RATE ENVELOPE'],
                     'filters' => [
                         'within_us' => [
-                            'method' => [
-                                'Priority Mail Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope',
-                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Flat Rate Envelope',
-                                'First-Class Mail Large Envelope',
-                                'Priority Mail Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Small Flat Rate Envelope',
-                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
-                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
-                                'Priority Mail Express Padded Flat Rate Envelope',
-                            ],
+                            'method' => ['16', '13', '27', '16', '15', '37', '42', '43', '25', '62'],
                         ],
                         'from_us' => [
                             'method' => [
-                                'Priority Mail Express International Flat Rate Envelope',
-                                'Priority Mail International Flat Rate Envelope',
-                                'First-Class Mail International Large Envelope',
-                                'Priority Mail International Small Flat Rate Envelope',
-                                'Priority Mail Express International Legal Flat Rate Envelope',
-                                'Priority Mail International Gift Card Flat Rate Envelope',
-                                'Priority Mail International Window Flat Rate Envelope',
-                                'Priority Mail International Legal Flat Rate Envelope',
-                                'Priority Mail Express International Padded Flat Rate Envelope',
+                                'INT_10', 'INT_8', 'INT_14', 'INT_20', 'INT_17', 'INT_18', 'INT_19', 'INT_22', 'INT_27'
                             ],
                         ],
                     ]
@@ -891,22 +945,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'containers' => ['RECTANGULAR'],
                     'filters' => [
                         'within_us' => [
-                            'method' => [
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Standard Post',
-                                'Media Mail',
-                                'Library Mail',
-                                'First-Class Package Service',
-                            ],
+                            'method' => ['3', '1', '4', '6', '7', '61'],
                         ],
                         'from_us' => [
-                            'method' => [
-                                'USPS GXG Envelopes',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Package International Service',
-                            ],
+                            'method' => ['INT_12', 'INT_1', 'INT_2', 'INT_15'],
                         ],
                     ]
                 ],
@@ -914,21 +956,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'containers' => ['NONRECTANGULAR'],
                     'filters' => [
                         'within_us' => [
-                            'method' => [
-                                'Priority Mail Express',
-                                'Priority Mail',
-                                'Standard Post',
-                                'Media Mail',
-                                'Library Mail',
-                            ],
+                            'method' => ['3', '1', '4', '6', '7'],
                         ],
                         'from_us' => [
-                            'method' => [
-                                'Global Express Guaranteed (GXG)',
-                                'Priority Mail Express International',
-                                'Priority Mail International',
-                                'First-Class Package International Service',
-                            ],
+                            'method' => ['INT_4', 'INT_1', 'INT_2', 'INT_15'],
                         ],
                     ]
                 ],
@@ -977,7 +1008,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function setTrackingReqeust()
     {
-        $r = new \Magento\Framework\Object();
+        $r = new \Magento\Framework\DataObject();
 
         $userId = $this->getConfigData('userid');
         $r->setUserId($userId);
@@ -1006,7 +1037,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $api = 'TrackV2';
             $request = $xml->asXML();
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
 
             try {
                 $url = $this->getConfigData('gateway_url');
@@ -1050,13 +1081,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 if (is_object($xml)) {
                     if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
-                    } elseif (isset(
-                        $xml->TrackInfo
-                    ) && isset(
-                        $xml->TrackInfo->Error
-                    ) && isset(
-                        $xml->TrackInfo->Error->Description
-                    ) && (string)$xml->TrackInfo->Error->Description != ''
+                    } elseif (isset($xml->TrackInfo)
+                        && isset($xml->TrackInfo->Error)
+                        && isset($xml->TrackInfo->Error->Description)
+                        && (string)$xml->TrackInfo->Error->Description != ''
                     ) {
                         $errorTitle = (string)$xml->TrackInfo->Error->Description;
                     } else {
@@ -1118,6 +1146,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
+
         return $statuses;
     }
 
@@ -1133,11 +1162,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
         }
+
         return $arr;
     }
 
     /**
      * Return USPS county name by country ISO 3166-1-alpha-2 code
+     *
      * Return false for unknown countries
      *
      * @param string $countryId
@@ -1217,7 +1248,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'FO' => 'Faroe Islands',
             'FR' => 'France',
             'GA' => 'Gabon',
-            'GB' => 'Great Britain and Northern Ireland',
+            'GB' => 'United Kingdom of Great Britain and Northern Ireland',
             'GD' => 'Grenada',
             'GE' => 'Georgia, Republic of',
             'GF' => 'French Guiana',
@@ -1335,7 +1366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'ST' => 'Sao Tome and Principe',
             'SV' => 'El Salvador',
             'SY' => 'Syrian Arab Republic',
-            'SZ' => 'Swaziland',
+            'SZ' => 'Eswatini',
             'TC' => 'Turks and Caicos Islands',
             'TD' => 'Chad',
             'TG' => 'Togo',
@@ -1401,10 +1432,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return string
+     * @deprecated This method should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
-    protected function _formUsExpressShipmentRequest(\Magento\Framework\Object $request)
+    protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $packageParams = $request->getPackageParams();
 
@@ -1412,7 +1445,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    $request->getPackageWeight(),
+                    (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1459,6 +1492,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('ImageType', 'PDF');
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
@@ -1467,13 +1501,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @param string $serviceType
      * @return string
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\Object $request, $serviceType)
+    protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\DataObject $request, $serviceType)
     {
         switch ($serviceType) {
             case 'PRIORITY':
@@ -1486,7 +1520,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 break;
             case 'STANDARD':
             case 'Standard Post':
-                $serviceType = 'Standard Post';
+            case 'Retail Ground':
+                $serviceType = 'Retail Ground';
                 break;
             case 'MEDIA':
             case 'Media':
@@ -1504,7 +1539,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
                 $this->_carrierHelper->convertMeasureWeight(
-                    $request->getPackageWeight(),
+                    (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
                 )
@@ -1547,6 +1582,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $xml->addChild('ImageType', 'PDF');
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
@@ -1561,6 +1597,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $weightInOunces = ceil($weightInPounds * self::OUNCES_POUND);
         $pounds = floor($weightInOunces / self::OUNCES_POUND);
         $ounces = $weightInOunces % self::OUNCES_POUND;
+
         return [$pounds, $ounces];
     }
 
@@ -1569,13 +1606,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @deprecated Should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
-    protected function _formIntlShipmentRequest(\Magento\Framework\Object $request)
+    protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $packageParams = $request->getPackageParams();
         $height = $packageParams->getHeight();
@@ -1585,7 +1624,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
-                $request->getPackageWeight(),
+                (float)$request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
                 \Zend_Measure_Weight::POUND
             );
@@ -1593,21 +1632,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getLength(),
+                    (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getWidth(),
+                    (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getHeight(),
+                    (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -1616,7 +1655,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
                 $this->_carrierHelper->convertMeasureDimension(
-                    $packageParams->getGirth(),
+                    (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
@@ -1727,7 +1766,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $countriesOfManufacture = [];
         $productIds = [];
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\Object();
+            $item = new \Magento\Framework\DataObject();
             $item->setData($itemShipment);
 
             $productIds[] = $item->getProductId();
@@ -1747,7 +1786,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packagePoundsWeight = $packageOuncesWeight = 0;
         // for ItemDetail
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\Object();
+            $item = new \Magento\Framework\DataObject();
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
@@ -1771,10 +1810,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $individualItemWeight = $itemWeight / $ceiledQty;
             $itemDetail->addChild('Quantity', $ceiledQty);
-            $itemDetail->addChild('Value', $item->getCustomsValue() * $item->getQty());
+            $itemDetail->addChild('Value', sprintf('%.2F', $item->getCustomsValue() * $item->getQty()));
             list($individualPoundsWeight, $individualOuncesWeight) = $this->_convertPoundOunces($individualItemWeight);
             $itemDetail->addChild('NetPounds', $individualPoundsWeight);
-            $itemDetail->addChild('NetOunces', $individualOuncesWeight);
+            $itemDetail->addChild('NetOunces', sprintf('%.2F', $individualOuncesWeight));
             $itemDetail->addChild('HSTariffNumber', 0);
             $itemDetail->addChild('CountryOfOrigin', $countryOfManufacture);
 
@@ -1817,20 +1856,23 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $xml = $xmlWrap->{$rootNode}->asXML();
+
         return $xml;
     }
 
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * free shipping labels generating.
      */
-    protected function _doShipmentRequest(\Magento\Framework\Object $request)
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         $service = $this->getCode('service_to_code', $request->getShippingMethod());
         $recipientUSCountry = $this->_isUSCountry($request->getRecipientAddressCountryCode());
 
@@ -1861,7 +1903,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
 
-        $debugData = ['request' => $requestXml];
+        $debugData = ['request' => $this->filterDebugData($requestXml)];
         $url = $this->getConfigData('gateway_secure_url');
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
@@ -1874,46 +1916,51 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $response = $client->request()->getBody();
 
         $response = $this->parseXml($response);
-        if ($response === false || $response->getName() == 'Error') {
-            $debugData['result'] = [
-                'error' => $response->Description,
-                'code' => $response->Number,
-                'xml' => $response->asXML(),
-            ];
-            $this->_debug($debugData);
-            $result->setErrors($debugData['result']['error']);
-        } else {
-            if ($recipientUSCountry && $service == 'Priority Express') {
-                $labelContent = base64_decode((string)$response->EMLabel);
-                $trackingNumber = (string)$response->EMConfirmationNumber;
-            } elseif ($recipientUSCountry) {
-                $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
-                $trackingNumber = (string)$response->SignatureConfirmationNumber;
+
+        if ($response !== false) {
+            if ($response->getName() == 'Error') {
+                $debugData['result'] = [
+                    'error' => $response->Description,
+                    'code' => $response->Number,
+                    'xml' => $response->asXML(),
+                ];
+                $this->_debug($debugData);
+                $result->setErrors($debugData['result']['error']);
             } else {
-                $labelContent = base64_decode((string)$response->LabelImage);
-                $trackingNumber = (string)$response->BarcodeNumber;
+                if ($recipientUSCountry && $service == 'Priority Express') {
+                    $labelContent = base64_decode((string)$response->EMLabel);
+                    $trackingNumber = (string)$response->EMConfirmationNumber;
+                } elseif ($recipientUSCountry) {
+                    $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
+                    $trackingNumber = (string)$response->SignatureConfirmationNumber;
+                } else {
+                    $labelContent = base64_decode((string)$response->LabelImage);
+                    $trackingNumber = (string)$response->BarcodeNumber;
+                }
+                $result->setShippingLabelContent($labelContent);
+                $result->setTrackingNumber($trackingNumber);
             }
-            $result->setShippingLabelContent($labelContent);
-            $result->setTrackingNumber($trackingNumber);
         }
 
         $result->setGatewayResponse($response);
         $debugData['result'] = $response;
         $this->_debug($debugData);
+
         return $result;
     }
 
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      */
-    public function getContainerTypes(\Magento\Framework\Object $params = null)
+    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             return $this->_getAllowedContainers();
         }
+
         return $this->_isUSCountry($params->getCountryRecipient()) ? [] : $this->_getAllowedContainers($params);
     }
 
@@ -1940,10 +1987,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
         if ($params == null) {
             return [];
@@ -1960,20 +2007,22 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Check whether girth is allowed for the USPS
      *
      * @param null|string $countyDest
+     * @param null|string $carrierMethodCode
      * @return bool
      */
-    public function isGirthAllowed($countyDest = null)
+    public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest) ? false : true;
+        return $this->_isUSCountry($countyDest)
+            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
     }
 
     /**
      * Return content types of package
      *
-     * @param \Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $params
      * @return array
      */
-    public function getContentTypes(\Magento\Framework\Object $params)
+    public function getContentTypes(\Magento\Framework\DataObject $params)
     {
         $countryShipper = $params->getCountryShipper();
         $countryRecipient = $params->getCountryRecipient();
@@ -1988,6 +2037,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'OTHER' => __('Other')
             ];
         }
+
         return [];
     }
 
@@ -2006,7 +2056,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
-        for ($i = 0; $i < count($zip); ++$i) {
+        $count = count($zip);
+        for ($i = 0; $i < $count; ++$i) {
             if (strlen($zip[$i]) == 5) {
                 $zip5 = $zip[$i];
             } elseif (strlen($zip[$i]) == 4) {
@@ -2018,5 +2069,75 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return [$zip5, $zip4];
+    }
+
+    /**
+     * Check availability of post service
+     *
+     * @param \SimpleXMLElement $service
+     * @return boolean
+     */
+    private function isServiceAvailable(\SimpleXMLElement $service)
+    {
+        // Allow services which which don't provide any ExtraServices
+        if (empty($service->ExtraServices->children()->count())) {
+            return true;
+        }
+
+        foreach ($service->ExtraServices->children() as $child) {
+            if (filter_var($child->Available, FILTER_VALIDATE_BOOLEAN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Replace sensitive fields.
+     *
+     * Replace sensitive fields, which specified as attributes of xml node.
+     * For followed xml:
+     * ```xml
+     * <RateV4Request USERID="1">
+     *     <Revision>2</Revision>
+     * </RateV4Request>
+     * ```xml
+     * the `USERID` attribute value will be replaced by specified mask
+     *
+     * @param string $data
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function filterDebugData($data)
+    {
+        try {
+            $xml = new \SimpleXMLElement($data);
+            $attributes = $xml->attributes();
+            /** @var \SimpleXMLElement $attribute */
+            foreach ($attributes as $key => $attribute) {
+                if (in_array((string) $key, $this->_debugReplacePrivateDataKeys)) {
+                    $attributes[$key] = self::DEBUG_KEYS_MASK;
+                }
+            }
+            $data = $xml->asXML();
+        } catch (\Exception $e) {
+        }
+
+        return $data;
+    }
+
+    /**
+     * Gets Data helper object
+     *
+     * @return DataHelper
+     * @deprecated 100.2.0
+     */
+    private function getDataHelper()
+    {
+        if (!$this->dataHelper) {
+            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
+        }
+
+        return $this->dataHelper;
     }
 }

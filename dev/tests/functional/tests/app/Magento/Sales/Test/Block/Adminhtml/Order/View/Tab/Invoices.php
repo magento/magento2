@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class Invoices extends Tab
      *
      * @var string
      */
-    protected $grid = '#order_invoices';
+    protected $grid = '#sales_order_view_tabs_order_invoices_content';
 
     /**
      * Get grid block
@@ -30,7 +30,7 @@ class Invoices extends Tab
     public function getGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid',
+            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid::class,
             ['element' => $this->_rootElement->find($this->grid)]
         );
     }

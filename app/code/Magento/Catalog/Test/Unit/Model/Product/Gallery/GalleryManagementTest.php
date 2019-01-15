@@ -1,25 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
-class GalleryManagementTest extends \PHPUnit_Framework_TestCase
+class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\GalleryManagement
      */
     protected $model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -48,12 +41,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->contentValidatorMock = $this->getMock('\Magento\Framework\Api\ImageContentValidatorInterface');
-        $this->productMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            [
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->contentValidatorMock = $this->createMock(\Magento\Framework\Api\ImageContentValidatorInterface::class);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'setStoreId',
                 'getData',
                 'getStoreId',
@@ -61,90 +51,66 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
                 'getCustomAttribute',
                 'getMediaGalleryEntries',
                 'setMediaGalleryEntries',
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->mediaGalleryEntryMock =
-            $this->getMock('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+            $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\Gallery\GalleryManagement(
-            $this->storeManagerMock,
             $this->productRepositoryMock,
             $this->contentValidatorMock
         );
-        $this->attributeValueMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValue')
+        $this->attributeValueMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no store with provided ID.
-     */
-    public function testCreateWithNoStoreException()
-    {
-        $this->storeManagerMock->expects($this->once())->method('getStore')
-            ->willThrowException(new \Exception());
-        $this->model->create('sku', $this->mediaGalleryEntryMock);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The image content is not valid.
+     * @expectedExceptionMessage The image content is invalid. Verify the content and try again.
      */
     public function testCreateWithInvalidImageException()
     {
-        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
+        $entryContentMock = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
-        $storeId = 0;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(false);
 
-        $this->model->create("sku", $this->mediaGalleryEntryMock, $storeId);
+        $this->model->create("sku", $this->mediaGalleryEntryMock);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot save product.
+     * @expectedExceptionMessage The product can't be saved.
      */
     public function testCreateWithCannotSaveException()
     {
         $productSku = 'mediaProduct';
-        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
+        $entryContentMock = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();;
+            ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
-
-        $storeId = 0;
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(true);
 
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Exception());
-        $this->model->create($productSku, $this->mediaGalleryEntryMock, $storeId);
+        $this->model->create($productSku, $this->mediaGalleryEntryMock);
     }
 
     public function testCreate()
     {
         $productSku = 'mediaProduct';
-        $entryContentMock = $this->getMock(
-            'Magento\Framework\Api\Data\ImageContentInterface'
+        $entryContentMock = $this->createMock(
+            \Magento\Framework\Api\Data\ImageContentInterface::class
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
-
-        $storeId = 0;
 
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
@@ -155,104 +121,102 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->willReturn($this->productMock);
 
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(true);
 
-        $newEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $newEntryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $newEntryMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->productMock->expects($this->at(2))->method('getMediaGalleryEntries')
             ->willReturn([$newEntryMock]);
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$this->mediaGalleryEntryMock]);
 
-        $this->assertEquals(42, $this->model->create($productSku, $this->mediaGalleryEntryMock, $storeId));
+        $this->assertEquals(42, $this->model->create($productSku, $this->mediaGalleryEntryMock));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no store with provided ID.
-     */
-    public function testUpdateWithNonExistingStore()
-    {
-        $productSku = 'testProduct';
-        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
-        $storeId = 0;
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)
-            ->willThrowException(new \Exception());
-        $this->model->update($productSku, $entryMock, $storeId);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateWithNonExistingImage()
     {
         $productSku = 'testProduct';
-        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
-        $storeId = 0;
+        $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(43);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
-        $this->model->update($productSku, $entryMock, $storeId);
+        $this->model->update($productSku, $entryMock);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot save product.
+     * @expectedExceptionMessage The product can't be saved.
      */
     public function testUpdateWithCannotSaveException()
     {
         $productSku = 'testProduct';
-        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
-        $storeId = 0;
+        $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
-        $this->productMock->expects($this->once())->method('setStoreId')->with($storeId);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Exception());
-        $this->model->update($productSku, $entryMock, $storeId);
+        $this->model->update($productSku, $entryMock);
     }
 
     public function testUpdate()
     {
         $productSku = 'testProduct';
-        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
-        $storeId = 0;
+        $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
-        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId);
+        $entrySecondId = 43;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
+        $existingSecondEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
+
         $existingEntryMock->expects($this->once())->method('getId')->willReturn($entryId);
+        $existingEntryMock->expects($this->once())->method('getTypes')->willReturn(['small_image']);
+        $existingEntryMock->expects($this->once())->method('setTypes')->with(['small_image']);
+        $existingSecondEntryMock->expects($this->once())->method('getId')->willReturn($entrySecondId);
+        $existingSecondEntryMock->expects($this->once())->method('getTypes')->willReturn(['image']);
+        $existingSecondEntryMock->expects($this->once())->method('setTypes')->with([]);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
-            ->willReturn([$existingEntryMock]);
-        $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
+            ->willReturn([$existingEntryMock, $existingSecondEntryMock]);
+
+        $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
+        $entryMock->expects($this->once())->method('getFile')->willReturn("base64");
+        $entryMock->expects($this->once())->method('setId')->with(null);
+        $entryMock->expects($this->exactly(2))->method('getTypes')->willReturn(['image']);
 
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
-            ->willReturn([$entryMock]);
-        $this->productMock->expects($this->once())->method('setStoreId')->with($storeId);
+            ->with([$entryMock, $existingSecondEntryMock])
+            ->willReturnSelf();
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
-        $this->assertTrue($this->model->update($productSku, $entryMock, $storeId));
+        $this->assertTrue($this->model->update($productSku, $entryMock));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testRemoveWithNonExistingImage()
     {
@@ -260,7 +224,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $entryId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(43);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
@@ -273,7 +239,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $entryId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(42);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
@@ -285,7 +253,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Such product doesn't exist
+     * @expectedExceptionMessage The product doesn't exist. Verify and try again.
      */
     public function testGetWithNonExistingProduct()
     {
@@ -298,7 +266,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionText Such image doesn't exist
+     * @expectedExceptionMessage The image doesn't exist. Verify and try again.
      */
     public function testGetWithNonExistingImage()
     {
@@ -306,7 +274,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $imageId = 43;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(44);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
@@ -319,7 +289,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $imageId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $existingEntryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $existingEntryMock = $this->createMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(42);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
@@ -331,7 +303,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'testProductSku';
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $entryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$entryMock]);
         $this->assertEquals([$entryMock], $this->model->getList($productSku));

@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpGetActionInterface
 {
     /**#@+
      * Modes
@@ -33,7 +35,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
         } elseif ($this->getRequest()->has('id')) {
             $mode = self::ID_MODE;
         } else {
-            $mode = $this->_objectManager->get('Magento\UrlRewrite\Block\Selector')->getDefaultMode();
+            $mode = $this->_objectManager->get(\Magento\UrlRewrite\Block\Selector::class)->getDefaultMode();
         }
         return $mode;
     }
@@ -52,7 +54,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
         switch ($mode) {
             case self::PRODUCT_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Catalog\Product\Edit',
+                    \Magento\UrlRewrite\Block\Catalog\Product\Edit::class,
                     '',
                     [
                         'data' => [
@@ -66,7 +68,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 break;
             case self::CATEGORY_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Catalog\Category\Edit',
+                    \Magento\UrlRewrite\Block\Catalog\Category\Edit::class,
                     '',
                     [
                         'data' => ['category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()]
@@ -75,7 +77,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 break;
             case self::CMS_PAGE_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Cms\Page\Edit',
+                    \Magento\UrlRewrite\Block\Cms\Page\Edit::class,
                     '',
                     [
                         'data' => ['cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite()]
@@ -85,7 +87,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
             case self::ID_MODE:
             default:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Edit',
+                    \Magento\UrlRewrite\Block\Edit::class,
                     '',
                     ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
                 );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
@@ -9,8 +9,8 @@ use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
 use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
 
@@ -29,11 +29,7 @@ abstract class AbstractCalculator
     const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
-    /**
-     * Tax details item data object factory
-     *
-     * @var TaxDetailsItemInterfaceFactory
-     */
+    /**#@-*/
     protected $taxDetailsItemDataObjectFactory;
 
     /**
@@ -95,7 +91,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     private $addressRateRequest = null;
 
@@ -139,7 +135,7 @@ abstract class AbstractCalculator
      * @param Calculation $calculationTool
      * @param \Magento\Tax\Model\Config $config
      * @param int $storeId
-     * @param \Magento\Framework\Object $addressRateRequest
+     * @param \Magento\Framework\DataObject $addressRateRequest
      */
     public function __construct(
         TaxClassManagementInterface $taxClassService,
@@ -149,7 +145,7 @@ abstract class AbstractCalculator
         Calculation $calculationTool,
         \Magento\Tax\Model\Config $config,
         $storeId,
-        \Magento\Framework\Object $addressRateRequest = null
+        \Magento\Framework\DataObject $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
         $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
@@ -205,6 +201,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+
     // @codeCoverageIgnoreEnd
 
     /**
@@ -254,7 +251,7 @@ abstract class AbstractCalculator
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getAddressRateRequest()
     {
@@ -433,14 +430,18 @@ abstract class AbstractCalculator
      * @param float $storePriceInclTax
      * @param float $storeRate
      * @param float $customerRate
+     * @param boolean $round
      * @return float
      */
-    protected function calculatePriceInclTax($storePriceInclTax, $storeRate, $customerRate)
+    protected function calculatePriceInclTax($storePriceInclTax, $storeRate, $customerRate, $round = true)
     {
         $storeTax = $this->calculationTool->calcTaxAmount($storePriceInclTax, $storeRate, true, false);
         $priceExclTax = $storePriceInclTax - $storeTax;
         $customerTax = $this->calculationTool->calcTaxAmount($priceExclTax, $customerRate, false, false);
-        $customerPriceInclTax = $this->calculationTool->round($priceExclTax + $customerTax);
+        $customerPriceInclTax = $priceExclTax + $customerTax;
+        if ($round) {
+            $customerPriceInclTax = $this->calculationTool->round($customerPriceInclTax);
+        }
         return $customerPriceInclTax;
     }
 }

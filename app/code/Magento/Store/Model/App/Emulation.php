@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Emulation model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Store\Model\App;
 
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
-class Emulation extends \Magento\Framework\Object
+/**
+ * @api
+ * @since 100.0.2
+ */
+class Emulation extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -55,7 +57,7 @@ class Emulation extends \Magento\Framework\Object
     /**
      * Ini
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     private $initialEnvironmentInfo;
 
@@ -188,7 +190,7 @@ class Emulation extends \Magento\Framework\Object
      */
     public function storeCurrentEnvironmentInfo()
     {
-        $this->initialEnvironmentInfo = new \Magento\Framework\Object();
+        $this->initialEnvironmentInfo = new \Magento\Framework\DataObject();
         $this->initialEnvironmentInfo->setInitialTranslateInline(
             $this->inlineTranslation->isEnabled()
         )->setInitialDesign(
@@ -235,7 +237,7 @@ class Emulation extends \Magento\Framework\Object
      */
     protected function _restoreInitialLocale(
         $initialLocaleCode,
-        $initialArea = \Magento\Framework\App\Area::AREA_ADMIN
+        $initialArea = \Magento\Framework\App\Area::AREA_ADMINHTML
     ) {
         $this->_localeResolver->setLocale($initialLocaleCode);
         $this->_translate->setLocale($initialLocaleCode);

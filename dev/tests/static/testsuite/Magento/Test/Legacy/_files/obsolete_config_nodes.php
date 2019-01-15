@@ -4,11 +4,11 @@
  *
  * Format: <class_name> => <replacement>
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     '/config/global/fieldsets' => '',
@@ -55,8 +55,8 @@ return [
     '/config/global/cms' => 'This configuration moved to Di configuration of \Magento\Cms\Model\Wysiwyg\Images\Storage' .
     ' and \Magento\Cms\Model\Wysiwyg\Config',
     '/config/global/widget' => 'This configuration moved to Di configuration of \Magento\Cms\Model\Template\FilterProvider',
-    '/config/global/catalog/product/flat/max_index_count' => 'This configuration moved to Di configuration of \Magento\Catalog\Model\Resource\Product\Flat\Indexer',
-    '/config/global/catalog/product/flat/attribute_groups' => 'This configuration moved to Di configuration of \Magento\Catalog\Model\Resource\Product\Flat\Indexer',
+    '/config/global/catalog/product/flat/max_index_count' => 'This configuration moved to Di configuration of \Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer',
+    '/config/global/catalog/product/flat/attribute_groups' => 'This configuration moved to Di configuration of \Magento\Catalog\Model\ResourceModel\Product\Flat\Indexer',
     '/config/global/catalog/product/flat/add_filterable_attributes' => 'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat\Indexer',
     '/config/global/catalog/product/flat/add_child_data' => 'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat\Indexer',
     '/config/global/catalog/content/template_filter' => 'This configuration moved to Di configuration of \Magento\Catalog\Helper\Data',
@@ -67,8 +67,8 @@ return [
     '/config/global/catalog/product/attributes' => 'This configuration moved catalog_attributes.xml',
     '/config/global/eav_frontendclasses' => 'This configuration was removed. ' .
     'Please pluginize \Magento\Eav\Helper\Data::getFrontendClasses to extend frontend classes list',
-    '/config/global/resources' => 'This configuration moved to Di configuration of \Magento\Framework\App\Resource',
-    '/config/global/resource' => 'This configuration moved to Di configuration of \Magento\Framework\App\Resource',
+    '/config/global/resources' => 'This configuration moved to Di configuration of \Magento\Framework\App\ResourceConnection',
+    '/config/global/resource' => 'This configuration moved to Di configuration of \Magento\Framework\App\ResourceConnection',
     '/config/*/events/core_block_abstract_to_html_after' => 'Event has been replaced with "core_layout_render_element"',
     '/config/*/events/catalog_controller_product_delete' => '',
     '/config//observers/*/args' => 'This was an undocumented and unused feature in event subscribers',
@@ -94,7 +94,6 @@ return [
     '/config/frontend/design' => 'Configurations moved to DI file settings',
     '/config/crontab' => 'All cron configurations moved to crontab.xml',
     '/config/global/areas' => 'Configurations moved to DI file settings',
-    '/config/global/configurators' => 'Solr proxy classes uses instead',
     '/config/vde' => 'Was moved to di',
     '/config/global/ignoredModules' => 'Was replaced using di',
     '/config/global/helpers' => 'Was replaced using di',

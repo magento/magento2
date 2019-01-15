@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+
+<?= /* @escapeNotVerified */ $block->getSomeData() ?>
+<?= /* @noEscape */ $block->getSomeData() ?>
+<input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
+<?= $block->escapeCss('value') ?>
+echo $var;
+<?= $block->getHtmlId("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= "\$var1" ?>
+<?= '$var' ?>
+<?= "value" ?>
+<?= 'value' ?>
+<?= (int)$var ?>
+<?= (bool)$var ?>
+<?= count($var) ?>
+<?= $object->methodHtml() ?>
+<?php pecho($var);?>
+<?= $object->methodHtml() .
+    (bool)$var .
+    $block->escapeUrl("some value");
+?>
+<?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
+<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
+<?php
+/**
+ * echo $someVar;
+ */
+?>
+
+<?php
+/* This part is commented to remove all <col> tags from the code. */
+/* foreach ($block->getColumns() as $_column): ?>
+    <col <?= $_column->getProperty() ?> />
+<?php endforeach; */ ?>
+
+<?= $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])) ?>

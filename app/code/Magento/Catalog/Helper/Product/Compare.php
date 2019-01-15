@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 
 /**
  * Catalog Product Compare Helper
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Compare extends \Magento\Framework\Url\Helper\Data
 {
@@ -75,7 +77,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * Product compare item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -94,13 +96,15 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     protected $postHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
@@ -113,7 +117,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
@@ -148,7 +152,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
 
         $params = [
             'items' => implode(',', $itemIds),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ];
 
         return $this->_getUrl('catalog/product_compare', $params);
@@ -162,7 +166,15 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataParams($product)
     {
-        return $this->postHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
+        $params = ['product' => $product->getId()];
+        $requestingPageUrl = $this->_getRequest()->getParam('requesting_page_url');
+
+        if (!empty($requestingPageUrl)) {
+            $encodedUrl = $this->urlEncoder->encode($requestingPageUrl);
+            $params[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $encodedUrl;
+        }
+
+        return $this->postHelper->getPostData($this->getAddUrl(), $params);
     }
 
     /**
@@ -186,7 +198,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
 
         $encodedUrl = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
         ];
 
         return $this->_wishlistHelper->getAddParams($product, $encodedUrl);
@@ -203,7 +215,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
         $params = [
             'product' => $product->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
             '_secure' => $this->_getRequest()->isSecure()
         ];
 
@@ -228,10 +240,11 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataRemove($product)
     {
-        $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
         $data = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $listCleanUrl,
-            'product' => $product->getId()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'product' => $product->getId(),
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove this item from your Compare Products list?')
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
@@ -253,9 +266,10 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataClearList()
     {
-        $refererUrl = $this->_getRequest()->getServer('HTTP_REFERER');
         $params = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

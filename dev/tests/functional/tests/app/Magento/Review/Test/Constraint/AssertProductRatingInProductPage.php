@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class AssertProductRatingInProductPage extends AbstractConstraint
         }
         $rating = $productRating ? $productRating : $review->getDataFieldConfig('ratings')['source']->getRatings()[0];
         $reviewForm = $catalogProductView->getReviewFormBlock();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $reviewForm->isVisibleRating($rating),
             'Product rating "' . $rating->getRatingCode() . '" is not displayed.'
         );

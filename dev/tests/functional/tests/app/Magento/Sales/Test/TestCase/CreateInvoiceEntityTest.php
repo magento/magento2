@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
- * 1. Enable payment method "Check/Money Order".
+ * 1. Enable payment method: "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order/Zero Subtotal Checkout".
  * 2. Enable shipping method one of "Flat Rate/Free Shipping".
  * 3. Create order.
  *
@@ -23,62 +21,22 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Submit Invoice' button.
  * 6. Perform assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28209
  */
-class CreateInvoiceEntityTest extends Injectable
+class CreateInvoiceEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
-     * Set up configuration.
+     * Runs test for invoice creation for order placed with offline payment method.
      *
      * @return void
      */
-    public function __prepare()
+    public function test()
     {
-        $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'checkmo, flatrate']
-        )->run();
-    }
-
-    /**
-     * Create invoice.
-     *
-     * @param OrderInjectable $order
-     * @param array $data
-     * @return array
-     */
-    public function test(OrderInjectable $order, array $data)
-    {
-        // Preconditions
-        $order->persist();
-
-        // Steps
-        $result = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateInvoiceStep',
-            ['order' => $order, 'data' => $data]
-        )->run();
-
-        return [
-            'ids' => [
-                'invoiceIds' => $result['invoiceIds'],
-                'shipmentIds' => isset($result['shipmentIds']) ? $result['shipmentIds'] : null,
-            ]
-        ];
-    }
-
-    /**
-     * Log out.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+        $this->executeScenario();
     }
 }

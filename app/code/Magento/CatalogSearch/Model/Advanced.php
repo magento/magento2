@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model;
@@ -8,11 +8,11 @@ namespace Magento\CatalogSearch\Model;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\Resource\Eav\Attribute;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory as ProductCollectionFactory;
-use Magento\CatalogSearch\Model\Resource\Advanced\Collection as ProductCollection;
-use Magento\CatalogSearch\Model\Resource\AdvancedFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection as ProductCollection;
+use Magento\CatalogSearch\Model\ResourceModel\AdvancedFactory;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
@@ -22,7 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
- * @method \Magento\CatalogSearch\Model\Resource\Advanced getResource()
+ *
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()
@@ -42,6 +42,8 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
@@ -166,7 +168,6 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function addFilters($values)
     {
         $attributes = $this->getAttributes();
-        $hasConditions = false;
         $allConditions = [];
 
         foreach ($attributes as $attribute) {
@@ -225,8 +226,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         if ($allConditions) {
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
-        } elseif (!$hasConditions) {
-            throw new LocalizedException(__('Please specify at least one search term.'));
+        } else {
+            throw new LocalizedException(__('Enter a search term and try again.'));
         }
 
         return $this;
@@ -235,7 +236,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve array of attributes used in advanced search
      *
-     * @return array|\Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getAttributes()
     {
@@ -296,6 +297,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Add search criteria.
+     *
      * @param EntityAttribute $attribute
      * @param mixed $value
      * @return void
@@ -369,9 +372,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 $value = $value['label'];
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
-            $value = $value == 1
-                ? __('Yes')
-                : __('No');
+            if (is_numeric($value)) {
+                $value = $value == 1 ? __('Yes') : __('No');
+            } else {
+                $value = false;
+            }
         }
 
         return $value;

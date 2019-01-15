@@ -1,27 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class ValidationStateTest extends \PHPUnit_Framework_TestCase
+class ValidationStateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $appMode
      * @param boolean $expectedResult
-     * @dataProvider isValidatedDataProvider
+     * @dataProvider isValidationRequiredDataProvider
      */
-    public function testIsValidated($appMode, $expectedResult)
+    public function testIsValidationRequired($appMode, $expectedResult)
     {
         $model = new \Magento\Framework\App\Arguments\ValidationState($appMode);
-        $this->assertEquals($model->isValidated(), $expectedResult);
+        $this->assertEquals($model->isValidationRequired(), $expectedResult);
     }
 
     /**
      * @return array
      */
-    public function isValidatedDataProvider()
+    public function isValidationRequiredDataProvider()
     {
         return [
             [\Magento\Framework\App\State::MODE_DEVELOPER, true],

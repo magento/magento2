@@ -1,142 +1,173 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Console\Command;
 
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Console\ConsoleLoggerFactory;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Symfony\Component\Console\Input\InputArgument;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Validator\Locale;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Deploy\Service\DeployStaticContent;
 
 /**
- * Command for deploy static content
+ * Deploy static content command
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContentCommand extends Command
 {
     /**
-     * Key for dry-run option
+     * Default language value
      */
-    const DRY_RUN_OPTION = 'dry-run';
+    const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
     /**
-     * Key for languages parameter
+     * @var InputValidator
      */
-    const LANGUAGE_OPTION = 'languages';
+    private $inputValidator;
 
     /**
-     * Object manager provider
+     * @var ConsoleLoggerFactory
+     */
+    private $consoleLoggerFactory;
+
+    /**
+     * @var Options
+     */
+    private $options;
+
+    /**
+     * Object manager to create various objects
      *
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
-     * Deployment configuration
+     * @var ObjectManagerInterface
      *
-     * @var DeploymentConfig
      */
-    private $deploymentConfig;
+    private $objectManager;
 
     /**
-     * @var Locale
+     * @var \Magento\Framework\App\State
      */
-    private $validator;
+    private $appState;
 
     /**
-     * Inject dependencies
+     * StaticContentCommand constructor
      *
+     * @param InputValidator        $inputValidator
+     * @param ConsoleLoggerFactory  $consoleLoggerFactory
+     * @param Options               $options
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param DeploymentConfig $deploymentConfig
-     * @param Locale $validator
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        DeploymentConfig $deploymentConfig,
-        Locale $validator
+        InputValidator $inputValidator,
+        ConsoleLoggerFactory $consoleLoggerFactory,
+        Options $options,
+        ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->validator = $validator;
+        $this->inputValidator = $inputValidator;
+        $this->consoleLoggerFactory = $consoleLoggerFactory;
+        $this->options = $options;
+        $this->objectManager = $objectManagerProvider->get();
+
         parent::__construct();
     }
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configure()
     {
         $this->setName('setup:static-content:deploy')
             ->setDescription('Deploys static view files')
-            ->setDefinition([
-                new InputOption(
-                    self::DRY_RUN_OPTION,
-                    '-d',
-                    InputOption::VALUE_NONE,
-                    'If specified, then no files will be actually deployed.'
-                ),
-                new InputArgument(
-                    self::LANGUAGE_OPTION,
-                    InputArgument::IS_ARRAY,
-                    'List of languages you want the tool populate files for.',
-                    ['en_US']
-                ),
-            ]);
+            ->setDefinition($this->options->getOptionsList());
+
         parent::configure();
     }
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     * @throws LocalizedException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>You need to install the Magento application before running this utility.</info>");
-            return;
+        $time = microtime(true);
+
+        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+            throw new LocalizedException(
+                __(
+                    'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
+                    . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
+                    . 'automatically on demand.'
+                    . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
+                    . "'bin/magento setup:static-content:deploy -f'"
+                )
+            );
         }
+
+        $this->inputValidator->validate($input);
 
         $options = $input->getOptions();
+        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
+        $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
+            && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 
-        $languages = $input->getArgument(self::LANGUAGE_OPTION);
-        foreach ($languages as $lang) {
+        $verbose = $output->getVerbosity() > 1 ? $output->getVerbosity() : OutputInterface::VERBOSITY_VERBOSE;
 
-            if (!$this->validator->isValid($lang)) {
-                throw new \InvalidArgumentException(
-                    $lang . ' argument has invalid value, please run info:language:list for list of available locales'
-                );
-            }
+        $logger = $this->consoleLoggerFactory->getLogger($output, $verbose);
+        if (!$refreshOnly) {
+            $logger->notice(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
         }
 
-        try {
-            $objectManager = $this->objectManagerProvider->get();
+        $this->mockCache();
 
-            // run the deployment logic
-            $filesUtil = $objectManager->create(
-                '\Magento\Framework\App\Utility\Files',
-                ['pathToSource' => BP]
-            );
+        /** @var DeployStaticContent $deployService */
+        $deployService = $this->objectManager->create(DeployStaticContent::class, [
+            'logger' => $logger
+        ]);
 
-            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory();
+        $deployService->deploy($options);
 
-            /** @var \Magento\Setup\Model\Deployer $deployer */
-            $deployer = $objectManager->create(
-                'Magento\Setup\Model\Deployer',
-                ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
-            );
-            $deployer->deploy($objectManagerFactory, $languages);
-
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>>');
-            if ($output->isVerbose()) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return;
+        if (!$refreshOnly) {
+            $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Mock Cache class with dummy implementation
+     *
+     * @return void
+     */
+    private function mockCache()
+    {
+        $this->objectManager->configure([
+            'preferences' => [
+                Cache::class => DummyCache::class
+            ]
+        ]);
+    }
+
+    /**
+     * @return State
+     */
+    private function getAppState()
+    {
+        if (null === $this->appState) {
+            $this->appState = $this->objectManager->get(State::class);
+        }
+        return $this->appState;
     }
 }

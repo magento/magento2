@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test Composite
  */
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Composite
@@ -27,8 +27,8 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = Bootstrap::getObjectManager()->get('Magento\Catalog\Helper\Product\Composite');
-        $this->registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $this->helper = Bootstrap::getObjectManager()->get(\Magento\Catalog\Helper\Product\Composite::class);
+        $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
     protected function tearDown()
@@ -45,9 +45,16 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderConfigureResult()
     {
-        $configureResult = new \Magento\Framework\Object();
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = $productRepository->get('simple');
+
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true)
-            ->setProductId(1)
+            ->setProductId($product->getId())
             ->setCurrentCustomerId(1);
 
         $this->helper->renderConfigureResult($configureResult);
@@ -60,7 +67,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderConfigureResultNotOK()
     {
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setError(true)
             ->setMessage('Test Message');
 

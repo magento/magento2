@@ -2,11 +2,15 @@
 /**
  * Action Factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App;
 
+/**
+ * @api
+ */
 class ActionFactory
 {
     /**
@@ -26,17 +30,16 @@ class ActionFactory
      * Create action
      *
      * @param string $actionName
-     * @param array $arguments
      * @return ActionInterface
      * @throws \InvalidArgumentException
      */
-    public function create($actionName, array $arguments = [])
+    public function create($actionName)
     {
-        if (!is_subclass_of($actionName, '\Magento\Framework\App\ActionInterface')) {
-            throw new \InvalidArgumentException('Invalid action name provided');
+        if (!is_subclass_of($actionName, \Magento\Framework\App\ActionInterface::class)) {
+            throw new \InvalidArgumentException(
+                'The action name provided is invalid. Verify the action name and try again.'
+            );
         }
-        $context = $this->_objectManager->create('Magento\Framework\App\Action\Context', $arguments);
-        $arguments['context'] = $context;
-        return $this->_objectManager->create($actionName, $arguments);
+        return $this->_objectManager->create($actionName);
     }
 }

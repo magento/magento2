@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Ui\Test\TestCase\GridFullTextSearchTest" summary="Grid UI Component Full Text Search" ticketId="MAGETWO-41023">
+        <variation name="SalesOrderGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S2, stable:no</data>
+            <data name="description" xsi:type="string">Verify sales order grid full text search</data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="string">-</item>
+                <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\OnHoldStep</item>
+            </data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">orderInjectable</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\OrderIndex</data>
+            <data name="gridRetriever" xsi:type="string">getSalesOrderGrid</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+        <variation name="SalesInvoiceGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S3, stable:no</data>
+            <data name="description" xsi:type="string">Verify sales invoice grid full text search</data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
+                <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
+            </data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">orderInjectable</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\InvoiceIndex</data>
+            <data name="gridRetriever" xsi:type="string">getInvoicesGrid</data>
+            <data name="idColumn" xsi:type="string">Order #</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+        <variation name="SalesShipmentGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="description" xsi:type="string">Verify sales shipment grid full text search</data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
+                <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
+            </data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">orderInjectable</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="pageClass" xsi:type="string">Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex</data>
+            <data name="gridRetriever" xsi:type="string">getShipmentsGrid</data>
+            <data name="idColumn" xsi:type="string">Order</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+        <variation name="SalesCreditMemoGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S3, stable:no</data>
+            <data name="description" xsi:type="string">Verify sales credit memo grid full text search</data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
+                    <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\CreateCreditMemoStep</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
+                    <item name="1" xsi:type="string">Magento\Sales\Test\TestStep\CreateCreditMemoStep</item>
+                </item>
+            </data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">orderInjectable</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\CreditMemoIndex</data>
+            <data name="gridRetriever" xsi:type="string">getCreditMemoGrid</data>
+            <data name="idColumn" xsi:type="string">Order</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+    </testCase>
+</config>

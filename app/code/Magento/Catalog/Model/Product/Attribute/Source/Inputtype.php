@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Product attribute source input types
@@ -30,11 +28,16 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param array $optionsArray
      */
-    public function __construct(\Magento\Framework\Event\ManagerInterface $eventManager, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Registry $coreRegistry,
+        array $optionsArray = []
+    ) {
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
+        parent::__construct($optionsArray);
     }
 
     /**
@@ -50,7 +53,7 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
             ['value' => 'media_image', 'label' => __('Media Image')],
         ];
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', ['response' => $response]);
         $_hiddenFields = [];

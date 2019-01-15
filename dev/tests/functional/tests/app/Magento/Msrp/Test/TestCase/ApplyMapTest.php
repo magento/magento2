@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,15 +13,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Create product.
  * 2. Perform all assertions.
  *
- * @group MAP_(MX)
+ * @group MAP
  * @ZephyrId MAGETWO-12430, MAGETWO-12847
  */
 class ApplyMapTest extends Injectable
 {
     /* tags */
-    const DOMAIN = 'MX';
     const MVP = 'yes';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -34,11 +33,11 @@ class ApplyMapTest extends Injectable
     {
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'msrp']
         )->run();
         $product = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductStep',
+            \Magento\Catalog\Test\TestStep\CreateProductStep::class,
             ['product' => $product]
         )->run();
 
@@ -53,7 +52,7 @@ class ApplyMapTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'msrp', 'rollback' => true]
         )->run();
     }

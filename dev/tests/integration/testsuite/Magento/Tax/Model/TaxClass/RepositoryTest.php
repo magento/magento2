@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\TaxClass;
@@ -11,7 +11,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Repository
@@ -43,9 +43,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->taxClassRepository = $this->objectManager->create('Magento\Tax\Api\TaxClassRepositoryInterface');
-        $this->taxClassFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassInterfaceFactory');
-        $this->taxClassModel = $this->objectManager->create('Magento\Tax\Model\ClassModel');
+        $this->taxClassRepository = $this->objectManager->create(\Magento\Tax\Api\TaxClassRepositoryInterface::class);
+        $this->taxClassFactory = $this->objectManager->create(\Magento\Tax\Api\Data\TaxClassInterfaceFactory::class);
+        $this->taxClassModel = $this->objectManager->create(\Magento\Tax\Model\ClassModel::class);
         $this->predefinedTaxClasses = [
             TaxClassManagementInterface::TYPE_PRODUCT => 'Taxable Goods',
             TaxClassManagementInterface::TYPE_CUSTOMER => 'Retail Customer',
@@ -91,8 +91,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->taxClassRepository->save($taxClassDataObject);
         } catch (InputException $e) {
             $errors = $e->getErrors();
-            $this->assertEquals('class_name is a required field.', $errors[0]->getMessage());
-            $this->assertEquals('class_type is a required field.', $errors[1]->getMessage());
+            $this->assertEquals('"class_name" is required. Enter and try again.', $errors[0]->getMessage());
+            $this->assertEquals('"class_type" is required. Enter and try again.', $errors[1]->getMessage());
         }
     }
 
@@ -123,13 +123,15 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
         /** @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterface */
         $searchResult = $this->taxClassRepository->getList($searchCriteriaBuilder->create());
         $items = $searchResult->getItems();
         /** @var \Magento\Tax\Api\Data\TaxClassInterface */
         $taxClass = array_pop($items);
-        $this->assertInstanceOf('Magento\Tax\Api\Data\TaxClassInterface', $taxClass);
+        $this->assertInstanceOf(\Magento\Tax\Api\Data\TaxClassInterface::class, $taxClass);
         $this->assertEquals($taxClassName, $taxClass->getClassName());
         $this->assertEquals($taxClassId, $taxClass->getClassId());
         $this->assertEquals(TaxClassManagementInterface::TYPE_CUSTOMER, $taxClass->getClassType());
@@ -158,10 +160,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->taxClassRepository->deleteById($taxClassId));
 
         // Verify if the tax class is deleted
-        $this->setExpectedException(
-            'Magento\Framework\Exception\NoSuchEntityException',
-            "No such entity with class_id = $taxClassId"
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage("No such entity with class_id = $taxClassId");
         $this->taxClassRepository->deleteById($taxClassId);
     }
 

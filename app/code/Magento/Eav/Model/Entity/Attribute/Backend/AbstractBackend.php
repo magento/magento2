@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -60,6 +65,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttribute($attribute)
     {
@@ -71,6 +77,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Get attribute instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     public function getAttribute()
     {
@@ -81,6 +88,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Get backend type of the attribute
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -91,6 +99,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Check whether the attribute is a real field in the entity table
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isStatic()
     {
@@ -142,6 +151,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param int $valueId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setValueId($valueId)
     {
@@ -152,7 +162,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Set entity value id
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @param int $valueId
      * @return $this
      */
@@ -170,6 +180,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Retrieve value id
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getValueId()
     {
@@ -179,7 +190,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Get entity value id
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return int
      */
     public function getEntityValueId($entity)
@@ -194,12 +205,12 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Retrieve default value
      *
-     * @return mixed
+     * @return string
      */
     public function getDefaultValue()
     {
         if ($this->_defaultValue === null) {
-            if ($this->getAttribute()->getDefaultValue()) {
+            if ($this->getAttribute()->getDefaultValue() !== null) {
                 $this->_defaultValue = $this->getAttribute()->getDefaultValue();
             } else {
                 $this->_defaultValue = "";
@@ -212,7 +223,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Validate object
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -222,8 +233,16 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         $attribute = $this->getAttribute();
         $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
-        if ($attribute->getIsVisible() && $attribute->getIsRequired() && $attribute->isValueEmpty($value)) {
-            throw new LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
+
+        if ($attribute->getIsVisible()
+            && $attribute->getIsRequired()
+            && $attribute->isValueEmpty($value)
+            && $attribute->isValueEmpty($attribute->getDefaultValue())
+        ) {
+            $label = $attribute->getFrontend()->getLabel();
+            throw new LocalizedException(
+                __('The "%1" attribute value is empty. Set the attribute and try again.', $label)
+            );
         }
 
         if ($attribute->getIsUnique()
@@ -236,7 +255,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         if ($attribute->getIsUnique()) {
             if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 $label = $attribute->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 
@@ -246,9 +267,10 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After load method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function afterLoad($object)
     {
@@ -258,13 +280,13 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before save method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if (!$object->hasData($attrCode) && $this->getDefaultValue()) {
+        if (!$object->hasData($attrCode) && $this->getDefaultValue() !== '') {
             $object->setData($attrCode, $this->getDefaultValue());
         }
 
@@ -274,9 +296,10 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After save method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function afterSave($object)
     {
@@ -286,9 +309,10 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before delete method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function beforeDelete($object)
     {
@@ -298,9 +322,10 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After delete method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function afterDelete($object)
     {
@@ -310,7 +335,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Retrieve data for update attribute
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return array
      */
     public function getAffectedFields($object)
@@ -324,9 +349,9 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     }
 
     /**
-     * By default attribute value is considered scalar that can be stored in a generic way
+     * By default attribute value is considered scalar that can be stored in a generic way {@inheritdoc}
      *
-     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isScalar()
     {

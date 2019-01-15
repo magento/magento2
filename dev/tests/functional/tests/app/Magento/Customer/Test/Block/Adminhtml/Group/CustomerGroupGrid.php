@@ -1,19 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Group;
 
-use Magento\Backend\Test\Block\Widget\Grid;
+use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class CustomerGroupGrid
  * Adminhtml customer group grid
  */
-class CustomerGroupGrid extends Grid
+class CustomerGroupGrid extends DataGrid
 {
+    /**
+     * Select action toggle.
+     *
+     * @var string
+     */
+    protected $selectAction = '.action-select';
+
     /**
      * Initialize block elements
      *
@@ -21,14 +29,25 @@ class CustomerGroupGrid extends Grid
      */
     protected $filters = [
         'code' => [
-            'selector' => '#customerGroupGrid_filter_type',
+            'selector' => '.admin__data-grid-filters input[name*=customer_group_code]',
+        ],
+        'tax_class_id' => [
+            'selector' => '.admin__data-grid-filters select[name*=tax_class_id]',
+            'input' => 'select'
         ],
     ];
 
     /**
-     * Locator value for grid to click
+     * Click on "Edit" link.
      *
-     * @var string
+     * @param SimpleElement $rowItem
+     * @return void
      */
-    protected $editLink = 'td[data-column="time"]';
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        if ($rowItem->find($this->selectAction)->isVisible()) {
+            $rowItem->find($this->selectAction)->click();
+        }
+        $rowItem->find($this->editLink)->click();
+    }
 }

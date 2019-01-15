@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Invoker;
 
-class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
+class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,22 +34,13 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_observerFactoryMock = $this->getMock(
-            'Magento\Framework\Event\ObserverFactory',
-            [],
-            [],
-            '',
-            false
+        $this->_observerFactoryMock = $this->createMock(\Magento\Framework\Event\ObserverFactory::class);
+        $this->_observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_listenerMock = $this->createPartialMock(
+            \Magento\Framework\Event\Test\Unit\Invoker\ObserverExample::class,
+            ['execute']
         );
-        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->_listenerMock = $this->getMock(
-            'Magento_Some_Model_Observer_Some',
-            ['method_name'],
-            [],
-            '',
-            false
-        );
-        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->_invokerDefault = new \Magento\Framework\Event\Invoker\InvokerDefault(
             $this->_observerFactoryMock,
@@ -67,7 +58,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithNonSharedInstance()
     {
-        $this->_listenerMock->expects($this->once())->method('method_name');
+        $this->_listenerMock->expects($this->once())->method('execute');
         $this->_observerFactoryMock->expects($this->never())->method('get');
         $this->_observerFactoryMock->expects(
             $this->once()
@@ -80,14 +71,14 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_invokerDefault->dispatch(
-            ['shared' => false, 'instance' => 'class_name', 'method' => 'method_name', 'name' => 'observer'],
+            ['shared' => false, 'instance' => 'class_name', 'name' => 'observer'],
             $this->_observerMock
         );
     }
 
     public function testDispatchWithSharedInstance()
     {
-        $this->_listenerMock->expects($this->once())->method('method_name');
+        $this->_listenerMock->expects($this->once())->method('execute');
         $this->_observerFactoryMock->expects($this->never())->method('create');
         $this->_observerFactoryMock->expects(
             $this->once()
@@ -110,8 +101,9 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
      * @dataProvider dataProviderForMethodIsNotDefined
      * @expectedException \LogicException
      */
-    public function testMethodIsNotDefinedExceptionWithEnabledDeveloperMode($shared)
+    public function testWrongInterfaceCallWithEnabledDeveloperMode($shared)
     {
+        $notObserver = $this->getMockBuilder('NotObserver')->getMock();
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(
@@ -119,7 +111,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
         )->with(
             'class_name'
         )->will(
-            $this->returnValue($this->_listenerMock)
+            $this->returnValue($notObserver)
         );
         $this->_observerFactoryMock->expects(
             $this->any()
@@ -128,7 +120,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
         )->with(
             'class_name'
         )->will(
-            $this->returnValue($this->_listenerMock)
+            $this->returnValue($notObserver)
         );
         $this->_appStateMock->expects(
             $this->once()
@@ -142,7 +134,6 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
             [
                 'shared' => $shared,
                 'instance' => 'class_name',
-                'method' => 'unknown_method_name',
                 'name' => 'observer',
             ],
             $this->_observerMock
@@ -153,8 +144,9 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
      * @param string $shared
      * @dataProvider dataProviderForMethodIsNotDefined
      */
-    public function testMethodIsNotDefinedWithDisabledDeveloperMode($shared)
+    public function testWrongInterfaceCallWithDisabledDeveloperMode($shared)
     {
+        $notObserver = $this->getMockBuilder('NotObserver')->getMock();
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(
@@ -162,7 +154,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
         )->with(
             'class_name'
         )->will(
-            $this->returnValue($this->_listenerMock)
+            $this->returnValue($notObserver)
         );
         $this->_observerFactoryMock->expects(
             $this->any()
@@ -171,7 +163,7 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
         )->with(
             'class_name'
         )->will(
-            $this->returnValue($this->_listenerMock)
+            $this->returnValue($notObserver)
         );
         $this->_appStateMock->expects(
             $this->once()

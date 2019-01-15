@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,11 +19,18 @@ class SuggestElement extends SimpleElement
     const BACKSPACE = "\xEE\x80\x83";
 
     /**
-     * Selector suggest input.
+     * Selector for advanced select element.
      *
      * @var string
      */
-    protected $suggest = '.mage-suggest-inner > .search';
+    protected $advancedSelect = '[data-role="advanced-select"]';
+
+    /**
+     * Selector for select input element.
+     *
+     * @var string
+     */
+    protected $selectInput = '[data-role="advanced-select-text"]';
 
     /**
      * Selector search result.
@@ -40,11 +47,25 @@ class SuggestElement extends SimpleElement
     protected $resultItem = './/ul/li/a[text()="%s"]';
 
     /**
-     * Suggest state loader.
+     * Search label.
      *
      * @var string
      */
-    protected $suggestStateLoader = '.mage-suggest-state-loading';
+    protected $searchLabel = '[data-action="advanced-select-search"]';
+
+    /**
+     * Close button.
+     *
+     * @var string
+     */
+    protected $closeButton = '[data-action="close-advanced-select"]';
+
+    /**
+     * Searched count.
+     *
+     * @var string
+     */
+    protected $searchedCount = '[class*=search-count]';
 
     /**
      * Set value.
@@ -61,18 +82,18 @@ class SuggestElement extends SimpleElement
         if ($value == '') {
             return;
         }
-        foreach (str_split($value) as $symbol) {
-            $this->keys([$symbol]);
-            $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
-            if ($searchedItem->isVisible()) {
-                try {
-                    $searchedItem->click();
-                    break;
-                } catch (\Exception $e) {
-                    // In parallel run on windows change the focus is lost on element
-                    // that causes disappearing of category suggest list.
-                }
+        $this->keys([$value]);
+        $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        $searchedCountElements = $this->find($this->searchedCount);
+        $this->waitUntil(
+            function () use ($searchedCountElements) {
+                return $searchedCountElements->isVisible() ? true : null;
             }
+        );
+        $searchedItem->click();
+        $closeButton = $this->find($this->closeButton);
+        if ($closeButton->isVisible()) {
+            $closeButton->click();
         }
     }
 
@@ -84,10 +105,13 @@ class SuggestElement extends SimpleElement
      */
     public function keys(array $keys)
     {
-        $input = $this->find($this->suggest);
+        if (!$this->find($this->selectInput)->isVisible()) {
+            $this->find($this->advancedSelect)->click();
+        }
+        $input = $this->find($this->selectInput);
         $input->click();
         $input->keys($keys);
-        $this->waitResult();
+        $this->searchResult();
     }
 
     /**
@@ -97,27 +121,20 @@ class SuggestElement extends SimpleElement
      */
     protected function clear()
     {
-        $element = $this->find($this->suggest);
+        $element = $this->find($this->advancedSelect);
         while ($element->getValue() != '') {
             $element->keys([self::BACKSPACE]);
         }
     }
 
     /**
-     * Wait for search result is visible.
+     * Search category result.
      *
      * @return void
      */
-    public function waitResult()
+    public function searchResult()
     {
-        $browser = $this;
-        $selector = $this->suggestStateLoader;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
+        $this->find($this->searchLabel)->click();
     }
 
     /**
@@ -129,7 +146,7 @@ class SuggestElement extends SimpleElement
     {
         $this->eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
-        return $this->find($this->suggest)->getValue();
+        return $this->find($this->advancedSelect)->getValue();
     }
 
     /**

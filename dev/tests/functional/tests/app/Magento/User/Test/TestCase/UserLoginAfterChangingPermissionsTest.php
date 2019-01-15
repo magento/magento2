@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,14 +35,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 13. Log in using new admin user (before the bug was fixed, it was impossible to log in from the first attempt)
  * 14. Perform assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-28828
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserLoginAfterChangingPermissionsTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -136,7 +136,7 @@ class UserLoginAfterChangingPermissionsTest extends Injectable
         $role->persist();
         /** @var User $user */
         $user = $this->fixtureFactory->create(
-            'Magento\User\Test\Fixture\User',
+            \Magento\User\Test\Fixture\User::class,
             ['data' => array_merge($user->getData(), ['role_id' => ['role' => $role]])]
         );
         $user->persist();

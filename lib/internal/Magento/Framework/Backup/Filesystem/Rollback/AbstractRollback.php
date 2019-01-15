@@ -1,30 +1,32 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
+use Magento\Framework\Backup\Filesystem;
+
 /**
  * Filesystem rollback workers abstract class
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class AbstractRollback
 {
     /**
      * Snapshot object
      *
-     * @var \Magento\Framework\Backup\Filesystem
+     * @var Filesystem
      */
     protected $_snapshot;
 
     /**
      * Default worker constructor
      *
-     * @param \Magento\Framework\Backup\Filesystem $snapshotObject
+     * @param Filesystem $snapshotObject
      */
-    public function __construct(\Magento\Framework\Backup\Filesystem $snapshotObject)
+    public function __construct(Filesystem $snapshotObject)
     {
         $this->_snapshot = $snapshotObject;
     }

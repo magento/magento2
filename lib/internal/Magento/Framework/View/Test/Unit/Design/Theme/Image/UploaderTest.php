@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
-class UploaderTest extends \PHPUnit_Framework_TestCase
+class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit_Framework_MockObject_MockObject
@@ -38,11 +38,11 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->_transferAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', [], [], '', false);
-        $this->_fileUploader = $this->getMock('Magento\Framework\File\Uploader', [], [], '', false);
+        $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
+        $this->_fileUploader = $this->createMock(\Magento\Framework\File\Uploader::class);
 
-        $adapterFactory = $this->getMock('Magento\Framework\HTTP\Adapter\FileTransferFactory');
+        $adapterFactory = $this->createMock(\Magento\Framework\HTTP\Adapter\FileTransferFactory::class);
         $adapterFactory->expects(
             $this->once()
         )->method(
@@ -51,13 +51,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_transferAdapterMock)
         );
 
-        $uploaderFactory = $this->getMock(
-            'Magento\Framework\File\UploaderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $uploaderFactory = $this->createPartialMock(\Magento\Framework\File\UploaderFactory::class, ['create']);
         $uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_fileUploader));
 
         $this->_model = new \Magento\Framework\View\Design\Theme\Image\Uploader(
@@ -102,7 +96,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -110,7 +104,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => false,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -118,7 +112,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => false,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ]
         ];
     }
@@ -130,7 +124,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
     public function testUploadPreviewImage($isUploaded, $isValid, $checkExtension, $save, $result, $exception)
     {
         if ($exception) {
-            $this->setExpectedException($exception);
+            $this->expectException($exception);
         }
         $testScope = 'scope';
         $this->_transferAdapterMock->expects(

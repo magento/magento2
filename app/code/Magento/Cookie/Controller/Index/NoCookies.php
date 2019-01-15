@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Controller\Index;
@@ -15,7 +15,7 @@ class NoCookies extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $redirect = new \Magento\Framework\Object();
+        $redirect = new \Magento\Framework\DataObject();
         $this->_eventManager->dispatch(
             'controller_action_nocookies',
             ['action' => $this, 'redirect' => $redirect]

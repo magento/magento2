@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,6 +75,13 @@ class IntegrationGrid extends Grid
     protected $tokensPopupSelector = './/ancestor::body/div[descendant::fieldset[contains(@id,"integration_token")]]';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Search and delete current item
      *
      * @param array $item
@@ -84,13 +91,10 @@ class IntegrationGrid extends Grid
     {
         $this->search($item);
         $this->_rootElement->find($this->deleteLink)->click();
-
-        /** @var \Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\DeleteDialog $deleteDialog */
-        $deleteDialog = $this->blockFactory->create(
-            'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\DeleteDialog',
-            ['element' => $this->_rootElement->find($this->deleteBlockSelector, Locator::SELECTOR_XPATH)]
-        );
-        $deleteDialog->acceptDeletion();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
     }
 
     /**
@@ -126,7 +130,7 @@ class IntegrationGrid extends Grid
     {
         /** @var ResourcesPopup $resourcesPopup */
         $resourcesPopup = $this->blockFactory->create(
-            'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup',
+            \Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup::class,
             ['element' => $this->_rootElement->find($this->resourcesPopupSelector, Locator::SELECTOR_XPATH)]
         );
 
@@ -141,7 +145,7 @@ class IntegrationGrid extends Grid
     public function getTokensPopup()
     {
         $tokensPopup = $this->blockFactory->create(
-            'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\TokensPopup',
+            \Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\TokensPopup::class,
             ['element' => $this->_rootElement->find($this->tokensPopupSelector, Locator::SELECTOR_XPATH)]
         );
         $this->waitForElementVisible($this->tokensPopupSelector, Locator::SELECTOR_XPATH);

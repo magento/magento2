@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
@@ -8,7 +8,7 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 /**
  * @covers Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type
@@ -18,7 +18,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->type = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type');
+        $this->type = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type::class);
     }
 
     /**
@@ -26,7 +26,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderHtml()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_HTML);
         $this->assertEquals('HTML', $this->type->render($row));
     }
@@ -36,7 +36,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderText()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
         $this->assertEquals('Text', $this->type->render($row));
     }
@@ -46,7 +46,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderUnknown()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setTemplateType('xx');
         $this->assertEquals('Unknown', $this->type->render($row));
     }

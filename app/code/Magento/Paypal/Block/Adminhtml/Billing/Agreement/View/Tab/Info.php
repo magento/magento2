@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
@@ -15,7 +15,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     /**
      * @var string
      */
-    protected $_template = 'billing/agreement/view/tab/info.phtml';
+    protected $_template = 'Magento_Paypal::billing/agreement/view/tab/info.phtml';
 
     /**
      * Core registry

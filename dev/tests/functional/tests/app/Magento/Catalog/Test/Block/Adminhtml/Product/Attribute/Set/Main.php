@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,6 +49,13 @@ class Main extends Block
      * @var string
      */
     protected $noteBlock = '.attribute-set .title';
+
+    /**
+     * Selector for prompt.
+     *
+     * @var string
+     */
+    protected $promptModal = '.prompt._show[data-role=modal]';
 
     /**
      * Move Attribute to Attribute Group
@@ -123,7 +130,10 @@ class Main extends Block
     public function addAttributeSetGroup($groupName)
     {
         $this->_rootElement->find($this->addGroupButton)->click();
-        $this->browser->setAlertText($groupName);
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->promptModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
+        $modal->setAlertText($groupName);
+        $modal->acceptAlert();
     }
 }

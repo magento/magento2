@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class StockConfigurationTest
  */
-class StockConfigurationTest extends \PHPUnit_Framework_TestCase
+class StockConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
     protected $stockConfiguration;
@@ -37,29 +37,23 @@ class StockConfigurationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->config = $this->getMockForAbstractClass(
-            'Magento\Catalog\Model\ProductTypes\ConfigInterface',
+            \Magento\Catalog\Model\ProductTypes\ConfigInterface::class,
             [],
             '',
             false
         );
         $this->scopeConfig = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             ['isSetFlag'],
             '',
             false
         );
 
-        $this->minsaleqtyHelper = $this->getMock(
-            'Magento\CatalogInventory\Helper\Minsaleqty',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->minsaleqtyHelper = $this->createMock(\Magento\CatalogInventory\Helper\Minsaleqty::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->stockConfiguration = $this->objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Model\Configuration',
+            \Magento\CatalogInventory\Model\Configuration::class,
             [
                 'config' => $this->config,
                 'scopeConfig' => $this->scopeConfig,

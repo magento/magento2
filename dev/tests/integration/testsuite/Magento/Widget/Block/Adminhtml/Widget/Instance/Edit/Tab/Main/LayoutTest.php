@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
@@ -8,7 +8,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 /**
  * @magentoAppArea adminhtml
  */
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout
@@ -20,20 +20,22 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout',
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class,
             '',
             [
                 'data' => [
                     'widget_instance' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                        'Magento\Widget\Model\Widget\Instance'
+                        \Magento\Widget\Model\Widget\Instance::class
                     ),
                 ]
             ]
         );
         $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                \Magento\Framework\View\LayoutInterface::class
+            )
         );
     }
 
@@ -43,12 +45,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetLayoutsChooser()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
+            \Magento\Framework\App\State::class
         )->setAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDefaultDesignTheme();
 
         $actualHtml = $this->_block->getLayoutsChooser();

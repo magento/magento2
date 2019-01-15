@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Group
@@ -15,17 +17,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_cloneFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_iteratorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,42 +26,24 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator\Field',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->_cloneFactoryMock = $this->getMock(
-            'Magento\Config\Model\Config\BackendClone\Factory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_depMapperMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Dependency\Mapper',
-            [],
-            [],
-            '',
-            false
+        $objectManager = new ObjectManager($this);
+        $this->_cloneFactoryMock = $this->createMock(\Magento\Config\Model\Config\BackendClone\Factory::class);
+        $this->_depMapperMock = $this->createMock(
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class
         );
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Group(
-            $this->_storeManagerMock,
-            $this->_iteratorMock,
-            $this->_cloneFactoryMock,
-            $this->_depMapperMock
+        $this->_model = $objectManager->getObject(
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
+            [
+                'cloneModelFactory' => $this->_cloneFactoryMock,
+                'dependencyMapper' => $this->_depMapperMock,
+            ]
         );
     }
 
     protected function tearDown()
     {
         unset($this->_model);
-        unset($this->_iteratorMock);
-        unset($this->_storeManagerMock);
         unset($this->_cloneFactoryMock);
         unset($this->_depMapperMock);
     }
@@ -95,13 +69,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->getMock('Magento\Framework\App\Config\ValueInterface', [], [], '', false);
-        $this->_depMapperMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Dependency\Mapper',
-            [],
-            [],
-            '',
-            false
+        $cloneModel = $this->createMock(\Magento\Framework\App\Config\ValueInterface::class);
+        $this->_depMapperMock = $this->createMock(
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class
         );
         $this->_cloneFactoryMock->expects(
             $this->once()
@@ -118,12 +88,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
-        $fieldsetMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Fieldset',
-            ['setOriginalData'],
-            [],
-            '',
-            false
+        $fieldsetMock = $this->createPartialMock(
+            \Magento\Framework\Data\Form\Element\Fieldset::class,
+            ['setOriginalData']
         );
         $fieldsetMock->expects(
             $this->once()

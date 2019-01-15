@@ -1,24 +1,28 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Transparent;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SessionManager;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class RequestSecureToken
  *
  * @package Magento\Paypal\Controller\Transparent
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestSecureToken extends \Magento\Framework\App\Action\Action
+class RequestSecureToken extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
      * @var JsonFactory
@@ -76,19 +80,43 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $this->sessionTransparent->setQuoteId($this->sessionManager->getQuote()->getId());
+        /** @var Quote $quote */
+        $quote = $this->sessionManager->getQuote();
 
-        $token = $this->secureTokenService->requestToken($this->sessionManager->getQuote());
-
-        $result = [];
-        $result[$this->transparent->getCode()]['fields'] = $token->getData();
-        $result['success'] = $token->getSecuretoken() ? true : false;
-
-        if (!$result['success']) {
-            $result['error'] = true;
-            $result['error_messages'] = __('Secure Token Error. Try again.');
+        if (!$quote or !$quote instanceof Quote) {
+            return $this->getErrorResponse();
         }
 
-        return $this->resultJsonFactory->create()->setData($result);
+        $this->sessionTransparent->setQuoteId($quote->getId());
+        try {
+            $token = $this->secureTokenService->requestToken($quote);
+            if (!$token->getData('securetoken')) {
+                throw new \LogicException();
+            }
+
+            return $this->resultJsonFactory->create()->setData(
+                [
+                    $this->transparent->getCode() => ['fields' => $token->getData()],
+                    'success' => true,
+                    'error' => false
+                ]
+            );
+        } catch (\Exception $e) {
+            return $this->getErrorResponse();
+        }
+    }
+
+    /**
+     * @return Json
+     */
+    private function getErrorResponse()
+    {
+        return $this->resultJsonFactory->create()->setData(
+            [
+                'success' => false,
+                'error' => true,
+                'error_messages' => __('Your payment has been declined. Please try again.')
+            ]
+        );
     }
 }

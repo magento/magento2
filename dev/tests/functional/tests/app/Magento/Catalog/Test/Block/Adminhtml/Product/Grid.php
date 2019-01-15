@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Grid
- * Backend catalog product grid
+ * Backend catalog product grid.
  */
 class Grid extends DataGrid
 {
     /**
+     * Row pattern.
+     *
      * @var string
      */
     protected $rowPattern = './/tr[%s]';
@@ -26,59 +27,89 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'name' => [
-            'selector' => '[name="filters[name]"]',
+            'selector' => '[name="name"]',
         ],
         'sku' => [
-            'selector' => '[name="filters[sku]"]',
+            'selector' => '[name="sku"]',
         ],
         'type' => [
-            'selector' => '[name="filters[type_id]"]',
+            'selector' => '[name="type_id"]',
             'input' => 'select',
         ],
         'price_from' => [
-            'selector' => '[name="filters[price][from]"]',
+            'selector' => '[name="price[from]"]',
         ],
         'price_to' => [
-            'selector' => '[name="filters[price][to]"]',
+            'selector' => '[name="price[to]"]',
         ],
         'qty_from' => [
-            'selector' => '[name="filters[qty][from]"]',
+            'selector' => '[name="qty[from]"]',
         ],
         'qty_to' => [
-            'selector' => '[name="filters[qty][to]"]',
+            'selector' => '[name="qty[to]"]',
         ],
         'visibility' => [
-            'selector' => '[name="filters[visibility]"]',
+            'selector' => '[name="visibility"]',
             'input' => 'select',
         ],
         'status' => [
-            'selector' => '[name="filters[status]"]',
+            'selector' => '[name="status"]',
             'input' => 'select',
         ],
         'set_name' => [
-            'selector' => '[name="filters[attribute_set_id]"]',
+            'selector' => '[name="attribute_set_id"]',
+            'input' => 'select',
+        ],
+        'store_id' => [
+            'selector' => '[name="store_id"]',
             'input' => 'select',
         ],
     ];
 
     /**
-     * Temporary solution for fix grid loader
+     * Product base image.
      *
-     * {@inheritdoc}
+     * @var string
      */
-    public function waitLoader()
-    {
-        parent::waitLoader();
-        sleep(4);
-    }
+    protected $baseImage = '.data-grid-thumbnail-cell img';
+
     /**
-     * Update attributes for selected items
+     * Update attributes for selected items.
      *
      * @param array $items
      * @return void
      */
     public function updateAttributes(array $items = [])
     {
-        $this->massaction($items, 'Update Attributes');
+        $products = [];
+        /** @var FixtureInterface $product */
+        foreach ($items as $product) {
+            $products[] = ["sku" => $product->getSku()];
+        }
+        $this->massaction($products, 'Update attributes');
+    }
+
+    /**
+     * Get base image source link.
+     *
+     * @return string
+     * @deprecated for general get attribute method
+     * @see getBaseImageAttribute
+     */
+    public function getBaseImageSource()
+    {
+        return $this->getBaseImageAttribute('src');
+    }
+
+    /**
+     * Get attribute from base image component
+     *
+     * @param string $attributeName
+     * @return string
+     */
+    public function getBaseImageAttribute($attributeName)
+    {
+        $baseImage = $this->_rootElement->find($this->baseImage);
+        return $baseImage->isVisible() ? $baseImage->getAttribute($attributeName) : '';
     }
 }

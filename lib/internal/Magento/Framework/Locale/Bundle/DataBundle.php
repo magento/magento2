@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale\Bundle;
@@ -28,19 +28,29 @@ class DataBundle
         $locale = $this->cleanLocale($locale);
         $class = get_class($this);
         if (!isset(static::$bundles[$class][$locale])) {
-            try {
-                $bundle = new \ResourceBundle($locale, $this->path);
-                if (!$bundle && $this->path != 'ICUDATA') {
-                    $bundle = new \ResourceBundle($locale, 'ICUDATA');
-                }
-            } catch (\Exception $e) {
-                // HHVM compatibility: constructor throws on invalid resource
-                $bundle = null;
+            $bundle = $this->createResourceBundle($locale, $this->path);
+            if (!$bundle && $this->path != 'ICUDATA') {
+                $bundle = $this->createResourceBundle($locale, 'ICUDATA');
             }
-
             static::$bundles[$class][$locale] = $bundle;
         }
         return static::$bundles[$class][$locale];
+    }
+
+    /**
+     * @param string $locale
+     * @param string $path
+     * @return null|\ResourceBundle
+     */
+    protected function createResourceBundle($locale, $path)
+    {
+        try {
+            $bundle = new \ResourceBundle($locale, $path);
+        } catch (\Exception $e) {
+            // HHVM compatibility: constructor throws on invalid resource
+            $bundle = null;
+        }
+        return $bundle;
     }
 
     /**

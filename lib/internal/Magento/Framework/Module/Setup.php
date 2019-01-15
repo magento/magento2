@@ -2,11 +2,12 @@
 /**
  * Base Resource Setup Model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
 
@@ -15,7 +16,7 @@ class Setup implements SetupInterface
     /**
      * Setup Connection
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $connection = null;
 
@@ -29,7 +30,7 @@ class Setup implements SetupInterface
     /**
      * Modules configuration
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resourceModel;
 
@@ -43,11 +44,11 @@ class Setup implements SetupInterface
     /**
      * Init
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->resourceModel = $resource;
@@ -57,9 +58,27 @@ class Setup implements SetupInterface
     /**
      * Get connection object
      *
+     * @param string|null $connectionName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    public function getConnection()
+    public function getConnection($connectionName = null)
+    {
+        if ($connectionName !== null) {
+            try {
+                return $this->resourceModel->getConnectionByName($connectionName);
+            } catch (\DomainException $exception) {
+                //Fallback to default connection
+            }
+        }
+        return $this->getDefaultConnection();
+    }
+
+    /**
+     * Returns default setup connection instance
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getDefaultConnection()
     {
         if (null === $this->connection) {
             $this->connection = $this->resourceModel->getConnection($this->connectionName);
@@ -81,16 +100,28 @@ class Setup implements SetupInterface
     }
 
     /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName)
+    {
+        return $this->resourceModel->getTablePlaceholder($tableName);
+    }
+
+    /**
      * Get table name (validated by db adapter) by table placeholder
      *
      * @param string|array $tableName
+     * @param string $connectionName
      * @return string
      */
-    public function getTable($tableName)
+    public function getTable($tableName, $connectionName = ResourceConnection::DEFAULT_CONNECTION)
     {
         $cacheKey = $this->_getTableCacheName($tableName);
         if (!isset($this->tables[$cacheKey])) {
-            $this->tables[$cacheKey] = $this->resourceModel->getTableName($tableName);
+            $this->tables[$cacheKey] = $this->resourceModel->getTableName($tableName, $connectionName);
         }
         return $this->tables[$cacheKey];
     }
@@ -113,12 +144,13 @@ class Setup implements SetupInterface
      * Check is table exists
      *
      * @param string $table
+     * @param string $connectionName
      * @return bool
      */
-    public function tableExists($table)
+    public function tableExists($table, $connectionName = ResourceConnection::DEFAULT_CONNECTION)
     {
-        $table = $this->getTable($table);
-        return $this->getConnection()->isTableExists($table);
+        $table = $this->getTable($table, $connectionName);
+        return $this->getConnection($connectionName)->isTableExists($table);
     }
 
     /**

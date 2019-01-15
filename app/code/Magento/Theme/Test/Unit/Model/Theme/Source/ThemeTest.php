@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Source;
 
 use \Magento\Theme\Model\Theme\Source\Theme;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @true
      * @return void
      * @covers \Magento\Theme\Model\Theme\Source\Theme::__construct
      * @covers \Magento\Theme\Model\Theme\Source\Theme::getAllOptions
@@ -18,7 +17,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function testGetAllOptions()
     {
         $expects = ['labels'];
-        $label = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Label')
+        $label = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label::class)
             ->disableOriginalConstructor()
             ->getMock();
         $label->expects($this->once())

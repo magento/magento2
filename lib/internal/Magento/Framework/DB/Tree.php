@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB;
 
-\Zend_Loader::loadClass('\Zend_Db_Select');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\Node');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\NodeSet');
 use Magento\Framework\DB\Tree\Node;
 use Magento\Framework\DB\Tree\NodeSet;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Magento Library
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated Not used anymore.
  */
 class Tree
 {
@@ -64,9 +65,7 @@ class Tree
     private $_extTables = [];
 
     /**
-     * \Zend_Db_Adapter
-     *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $_db;
 
@@ -80,6 +79,8 @@ class Tree
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @deprecated Not used anymore.
      */
     public function __construct($config = [])
     {
@@ -93,10 +94,10 @@ class Tree
                 $connection = \Zend::registry($connection);
             }
 
-            // make sure it's a \Zend_Db_Adapter
-            if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
+            // make sure it's a \Magento\Framework\DB\Adapter\AdapterInterface
+            if (!$connection instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('db object does not implement \Zend_Db_Adapter_Abstract')
+                    new Phrase('db object does not implement \Magento\Framework\DB\Adapter\AdapterInterface')
                 );
             }
 
@@ -107,7 +108,9 @@ class Tree
                 $conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             }
         } else {
-            throw new LocalizedException(new \Magento\Framework\Phrase('db object is not set in config'));
+            throw new LocalizedException(
+                new Phrase('The "db object" isn\'t set in config. Set the "db object" and try again.')
+            );
         }
 
         if (!empty($config['table'])) {
@@ -150,6 +153,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setIdField($name)
     {
@@ -162,6 +167,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setLeftField($name)
     {
@@ -174,6 +181,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setRightField($name)
     {
@@ -186,6 +195,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setLevelField($name)
     {
@@ -198,6 +209,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setPidField($name)
     {
@@ -210,6 +223,8 @@ class Tree
      *
      * @param string $name
      * @return $this
+     *
+     * @deprecated Not used anymore.
      */
     public function setTable($name)
     {
@@ -219,6 +234,8 @@ class Tree
 
     /**
      * @return array
+     *
+     * @deprecated Not used anymore.
      */
     public function getKeys()
     {
@@ -236,6 +253,8 @@ class Tree
      *
      * @param array $data
      * @return string
+     *
+     * @deprecated Not used anymore.
      */
     public function clear($data = [])
     {
@@ -261,6 +280,8 @@ class Tree
      *
      * @param string|int $nodeId
      * @return array
+     *
+     * @deprecated Not used anymore.
      */
     public function getNodeInfo($nodeId)
     {
@@ -280,6 +301,8 @@ class Tree
      * @param array $data
      * @return false|string
      * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @deprecated Not used anymore.
      */
     public function appendChild($nodeId, $data)
     {
@@ -346,6 +369,8 @@ class Tree
 
     /**
      * @return array
+     *
+     * @deprecated Not used anymore.
      */
     public function checkNodes()
     {
@@ -376,6 +401,8 @@ class Tree
     /**
      * @param string|int $nodeId
      * @return bool|Node|void
+     *
+     * @deprecated Not used anymore.
      */
     public function removeNode($nodeId)
     {
@@ -451,6 +478,8 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @deprecated Not used anymore.
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
@@ -786,6 +815,8 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @deprecated Not used anymore.
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
@@ -984,6 +1015,8 @@ class Tree
      * @param string $joinCondition
      * @param string $fields
      * @return void
+     *
+     * @deprecated Not used anymore.
      */
     public function addTable($tableName, $joinCondition, $fields = '*')
     {
@@ -991,10 +1024,12 @@ class Tree
     }
 
     /**
-     * @param \Zend_Db_Select $select
+     * @param Select $select
      * @return void
+     *
+     * @deprecated Not used anymore.
      */
-    protected function _addExtTablesToSelect(\Zend_Db_Select &$select)
+    protected function _addExtTablesToSelect(Select &$select)
     {
         foreach ($this->_extTables as $tableName => $info) {
             $select->joinInner($tableName, $info['joinCondition'], $info['fields']);
@@ -1007,6 +1042,8 @@ class Tree
      * @param int $endLevel
      * @return NodeSet
      * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @deprecated Not used anymore.
      */
     public function getChildren($nodeId, $startLevel = 0, $endLevel = 0)
     {
@@ -1017,7 +1054,7 @@ class Tree
             exit;
         }
 
-        $dbSelect = new \Zend_Db_Select($this->_db);
+        $dbSelect = new Select($this->_db);
         $dbSelect->from(
             $this->_table
         )->where(
@@ -1052,10 +1089,12 @@ class Tree
     /**
      * @param string|int $nodeId
      * @return Node
+     *
+     * @deprecated Not used anymore.
      */
     public function getNode($nodeId)
     {
-        $dbSelect = new \Zend_Db_Select($this->_db);
+        $dbSelect = new Select($this->_db);
         $dbSelect->from($this->_table)->where($this->_table . '.' . $this->_id . ' >= :id');
 
         $this->_addExtTablesToSelect($dbSelect);

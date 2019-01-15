@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Indexer\Model\IndexerFactory;
-use Magento\Indexer\Model\Indexer\CollectionFactory;
-use Magento\Indexer\Model\IndexerInterface;
-use Magento\Indexer\Model\Indexer;
-use Magento\Store\Model\StoreManager;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 
 /**
@@ -18,55 +16,87 @@ use Magento\Framework\App\ObjectManagerFactory;
  */
 abstract class AbstractIndexerCommand extends Command
 {
-    /**#@+
-     * Names of input arguments or options
+    /**
+     * @var ObjectManagerFactory
      */
-    const INPUT_KEY_ALL = 'all';
-    const INPUT_KEY_INDEXERS = 'index';
-    /**#@- */
+    private $objectManagerFactory;
 
     /**
-     * Collection of Indexers factory
-     *
-     * @var CollectionFactory
+     * @var ObjectManagerInterface
      */
-    protected $collectionFactory;
+    private $objectManager;
 
     /**
-     * Indexer factory
-     *
-     * @var IndexerFactory
+     * @var \Magento\Indexer\Model\Indexer\CollectionFactory
      */
-    protected $indexerFactory;
+    private $collectionFactory;
 
     /**
      * Constructor
+     *
      * @param ObjectManagerFactory $objectManagerFactory
+     * @param \Magento\Indexer\Model\Indexer\CollectionFactory|null $collectionFactory
      */
-    public function __construct(ObjectManagerFactory $objectManagerFactory)
-    {
-        $params = $_SERVER;
-        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-        $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $objectManager = $objectManagerFactory->create($params);
-
-
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode('adminmhtml'); //TODO: temporary fix.
-        $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
-        $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
+    public function __construct(
+        ObjectManagerFactory $objectManagerFactory,
+        \Magento\Indexer\Model\Indexer\CollectionFactory $collectionFactory = null
+    ) {
+        $this->objectManagerFactory = $objectManagerFactory;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct();
     }
 
     /**
-     * Returns all indexers
+     * Return the array of all indexers with keys as indexer ids.
      *
      * @return IndexerInterface[]
      */
     protected function getAllIndexers()
     {
-        /** @var Indexer[] $indexers */
-        return $this->collectionFactory->create()->getItems();
+        $indexers = $this->getCollectionFactory()->create()->getItems();
+        return array_combine(
+            array_map(
+                function ($item) {
+                    /** @var IndexerInterface $item */
+                    return $item->getId();
+                },
+                $indexers
+            ),
+            $indexers
+        );
+    }
+
+    /**
+     * Gets initialized object manager
+     *
+     * @return ObjectManagerInterface
+     */
+    protected function getObjectManager()
+    {
+        if (null == $this->objectManager) {
+            $area = FrontNameResolver::AREA_CODE;
+            $this->objectManager = $this->objectManagerFactory->create($_SERVER);
+            /** @var \Magento\Framework\App\State $appState */
+            $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
+            $appState->setAreaCode($area);
+            $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
+            $this->objectManager->configure($configLoader->load($area));
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Get collection factory
+     *
+     * @return \Magento\Indexer\Model\Indexer\CollectionFactory
+     * @deprecated 100.2.0
+     */
+    private function getCollectionFactory()
+    {
+        if (null === $this->collectionFactory) {
+            $this->collectionFactory = $this->getObjectManager()
+                ->get(\Magento\Indexer\Model\Indexer\CollectionFactory::class);
+        }
+        return $this->collectionFactory;
     }
 }

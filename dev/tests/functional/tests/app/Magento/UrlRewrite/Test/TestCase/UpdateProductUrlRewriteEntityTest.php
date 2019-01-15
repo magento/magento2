@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,48 +13,43 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Update Product URL Rewrites Entity
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create custom store view
- * 2. Create simple product
- * 3. Create product UrlRewrite
+ * 1. Create custom store view.
+ * 2. Create simple product.
+ * 3. Create product UrlRewrite.
  *
  * Steps:
- * 1. Open Backend
- * 2. Go to Marketing->Url Redirects
- * 3. Search and open created Url Redirect
- * 4. Fill data according to dataset
- * 5. Perform all assertions
+ * 1. Open Backend.
+ * 2. Go to Marketing > Url Redirects.
+ * 3. Search and open created Url Redirect.
+ * 4. Fill data according to dataset.
+ * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-24819
  */
 class UpdateProductUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Prepare datasets and pages
+     * Prepare datasets and pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -69,7 +64,7 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Update product URL rewrites
+     * Update product URL rewrites.
      *
      * @param UrlRewrite $urlRewrite
      * @param FixtureFactory $fixtureFactory

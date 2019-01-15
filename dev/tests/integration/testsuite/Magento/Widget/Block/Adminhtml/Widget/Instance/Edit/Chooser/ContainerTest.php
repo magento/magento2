@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -8,7 +8,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 /**
  * @magentoAppArea adminhtml
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container
@@ -20,9 +20,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container::class
         );
     }
 
@@ -39,10 +39,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAvailableContainers()
     {
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+        $themeToTest = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Theme\Model\Theme::class
         );
-        $this->block->setTheme($design->getDesignTheme()->getId());
+        $themeId = $themeToTest->load('Magento/blank', 'code')
+            ->getId();
+        $this->block->setTheme($themeId);
         $this->assertContains('<option value="before.body.end" >', $this->block->toHtml());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Io;
@@ -75,6 +75,11 @@ class File extends AbstractIo
      * @var bool
      */
     protected $_streamLocked = false;
+
+    /**
+     * @var \Exception
+     */
+    private $_streamException;
 
     /**
      * Destruct
@@ -187,7 +192,7 @@ class File extends AbstractIo
             if (!is_string($value)) {
                 $value = (string)$value;
             }
-            if (isset($value[0]) && $value[0] === '=') {
+            if (isset($value[0]) && in_array($value[0], ['=', '+', '-'])) {
                 $row[$key] = ' ' . $value;
             }
         }
@@ -228,7 +233,7 @@ class File extends AbstractIo
         }
         $stat = @fstat($this->_streamHandler);
         if ($part !== null) {
-            return isset($stat[$part]) ? $stat[$part] : $default;
+            return $stat[$part] ?? $default;
         }
         return $stat;
     }
@@ -361,7 +366,7 @@ class File extends AbstractIo
             $dirCallback = $fileCallback;
         }
         if (is_dir($dir)) {
-            foreach (scandir($dir) as $item) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }
@@ -460,12 +465,12 @@ class File extends AbstractIo
 
         if (file_exists($filename)) {
             if (!is_writeable($filename)) {
-                printf('File %s don\'t writeable', $filename);
+                printf('The file %s is not writable', $filename);
                 return false;
             }
         } else {
             if (!is_writable(dirname($filename))) {
-                printf('Folder %s don\'t writeable', dirname($filename));
+                printf('The directory %s is not writable', dirname($filename));
                 return false;
             }
         }

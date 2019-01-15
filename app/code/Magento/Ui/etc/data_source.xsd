@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,6 +45,7 @@
             <xs:attribute type="referenceAttributeType" name="name" use="required"/>
             <xs:attribute type="textAttributeType" name="dataType" use="optional"/>
             <xs:attribute type="textAttributeType" name="formElement" use="optional"/>
+            <xs:attribute type="textAttributeType" name="componentType" use="optional"/>
             <xs:attribute type="textAttributeType" name="displayArea" use="optional"/>
             <xs:attribute type="textAttributeType" name="fieldGroup" use="optional"/>
             <xs:attribute type="textAttributeType" name="source" use="optional"/>

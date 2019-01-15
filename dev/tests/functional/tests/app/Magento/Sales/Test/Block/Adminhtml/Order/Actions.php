@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,113 +8,147 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
- * Class Actions
- * Order actions block
+ * Order actions block.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Actions extends Block
 {
     /**
-     * 'Back' button
+     * 'Back' button.
      *
      * @var string
      */
     protected $back = '#back';
 
     /**
-     * 'Edit' button
+     * 'Edit' button.
      *
      * @var string
      */
     protected $edit = '#order_edit';
 
     /**
-     * 'Cancel' button
+     * 'Cancel' button.
      *
      * @var string
      */
-    protected $cancel = '#order_cancel';
+    protected $cancel = '[id$=cancel-button]';
 
     /**
-     * 'Send Email' button
+     * 'Send Email' button.
      *
      * @var string
      */
     protected $sendEmail = '#send_notification';
 
     /**
-     * 'Void' button
+     * 'Void' button.
      *
      * @var string
      */
     protected $void = '#void_payment';
 
     /**
-     * 'Hold' button
+     * 'Hold' button.
      *
      * @var string
      */
-    protected $hold = '#order_hold';
+    protected $hold = '[id$=hold-button]';
 
     /**
-     * 'Invoice' button
+     * 'Unhold' button.
+     *
+     * @var string
+     */
+    protected $unhold = '[id$=unhold-button]';
+
+    /**
+     * 'Invoice' button.
      *
      * @var string
      */
     protected $invoice = '#order_invoice';
 
     /**
-     * 'Reorder' button
+     * 'Reorder' button.
      *
      * @var string
      */
     protected $reorder = '#order_reorder';
 
     /**
-     * 'Ship' button
+     * 'Ship' button.
      *
      * @var string
      */
     protected $ship = '#order_ship';
 
     /**
-     * 'Credit Memo' button on the order page
+     * 'Credit Memo' button on the order page.
      *
      * @var string
      */
     protected $orderCreditMemo = '#order_creditmemo';
 
     /**
-     * 'Credit Memo' button on the order invoice page
+     * 'Get Payment Update' button on the order page.
+     *
+     * @var string
+     */
+    private $getPaymentUpdate = '#get_review_payment_update';
+
+    /**
+     * 'Credit Memo' button on the order invoice page.
      *
      * @var string
      */
     protected $orderInvoiceCreditMemo = '#capture';
 
     /**
-     * 'Refund' button
+     * 'Refund' button.
      *
      * @var string
      */
     protected $refund = '.submit-button.refund';
 
     /**
-     * 'Refund Offline' button
+     * 'Refund Offline' button.
      *
      * @var string
      */
     protected $refundOffline = '.submit-button';
 
     /**
-     * General button selector
+     * General button selector.
      *
      * @var string
      */
-    protected $button = 'button[data-ui-id$="%s-button"]';
+    protected $button = '//button[@title="%s"]';
 
     /**
-     * Ship order
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
+     * Is shipment can be created.
+     *
+     * @return bool
+     */
+    public function canShip()
+    {
+        return $this->_rootElement->find($this->ship)->isVisible();
+    }
+
+    /**
+     * Ship order.
      *
      * @return void
      */
@@ -124,7 +158,7 @@ class Actions extends Block
     }
 
     /**
-     * Invoice order
+     * Invoice order.
      *
      * @return void
      */
@@ -134,7 +168,17 @@ class Actions extends Block
     }
 
     /**
-     * Reorder order
+     * Click 'Get Payment Update' button to fetch updates from 3rd party payment solution.
+     *
+     * @return void
+     */
+    public function paymentUpdate()
+    {
+        $this->_rootElement->find($this->getPaymentUpdate)->click();
+    }
+
+    /**
+     * Reorder order.
      *
      * @return void
      */
@@ -144,7 +188,7 @@ class Actions extends Block
     }
 
     /**
-     * Go back
+     * Go back.
      *
      * @return void
      */
@@ -154,7 +198,7 @@ class Actions extends Block
     }
 
     /**
-     * Edit order
+     * Edit order.
      *
      * @return void
      */
@@ -164,18 +208,18 @@ class Actions extends Block
     }
 
     /**
-     * Cancel order
+     * Cancel order.
      *
      * @return void
      */
     public function cancel()
     {
         $this->_rootElement->find($this->cancel)->click();
-        $this->browser->acceptAlert();
+        $this->acceptAlert();
     }
 
     /**
-     * Send email
+     * Send email.
      *
      * @return void
      */
@@ -185,17 +229,18 @@ class Actions extends Block
     }
 
     /**
-     * Void order
+     * Void order.
      *
      * @return void
      */
     public function void()
     {
         $this->_rootElement->find($this->void)->click();
+        $this->acceptAlert();
     }
 
     /**
-     * Hold order
+     * Hold order.
      *
      * @return void
      */
@@ -205,7 +250,17 @@ class Actions extends Block
     }
 
     /**
-     * Order credit memo
+     * Unhold order.
+     *
+     * @return void
+     */
+    public function unhold()
+    {
+        $this->_rootElement->find($this->unhold)->click();
+    }
+
+    /**
+     * Order credit memo.
      *
      * @return void
      */
@@ -215,7 +270,7 @@ class Actions extends Block
     }
 
     /**
-     * Order invoice credit memo
+     * Order invoice credit memo.
      *
      * @return void
      */
@@ -225,7 +280,7 @@ class Actions extends Block
     }
 
     /**
-     * Refund order
+     * Refund order.
      *
      * @return void
      */
@@ -235,7 +290,7 @@ class Actions extends Block
     }
 
     /**
-     * Refund offline order
+     * Refund offline order.
      *
      * @return void
      */
@@ -245,14 +300,50 @@ class Actions extends Block
     }
 
     /**
-     * Check if action button is visible
+     * Check if action button is visible.
      *
      * @param string $buttonName
      * @return bool
      */
     public function isActionButtonVisible($buttonName)
     {
-        $buttonName = str_replace(' ', '-', strtolower($buttonName));
-        return $this->_rootElement->find(sprintf($this->button, $buttonName))->isVisible();
+        return $this->_rootElement->find(sprintf($this->button, $buttonName), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Accept order.
+     *
+     * @return void
+     */
+    public function accept()
+    {
+        $acceptPayment = '#accept_payment';
+        $this->_rootElement->find($acceptPayment)->click();
+        $this->acceptAlert();
+    }
+
+    /**
+     * Deny order.
+     *
+     * @return void
+     */
+    public function deny()
+    {
+        $denyPayment = '#deny_payment';
+        $this->_rootElement->find($denyPayment)->click();
+        $this->acceptAlert();
+    }
+
+    /**
+     * Accept alert.
+     *
+     * @return void
+     */
+    private function acceptAlert()
+    {
+        $element = $this->browser->find($this->confirmModal);
+        /** @var Modal $modal */
+        $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
     }
 }

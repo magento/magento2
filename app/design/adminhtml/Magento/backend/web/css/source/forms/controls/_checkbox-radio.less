@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,18 +11,20 @@
 .admin__control-radio,
 .admin__control-checkbox {
     cursor: pointer;
-    opacity: 0.01; // hack for successful selenium tests
+    opacity: .01; // hack for successful selenium tests
     overflow: hidden;
     position: absolute;
     vertical-align: top;
+
     &:after { // ToDo UI: Should be deleted with old styles that generate styles for this element
         display: none;
     }
+
     + label {
         cursor: pointer;
         display: inline-block;
+
         &:before {
-            &:extend(.abs-icon all);
             background-color: @control-checkbox-radio__background-color;
             border: 1px solid @field-control__border-color;
             color: transparent;
@@ -33,13 +35,16 @@
             width: @control-checkbox-radio__size;
         }
     }
+
     //  Label with text content
     + .admin__field-label {
         padding-left: @control-checkbox-radio__size + @field-label__indent;
+
         &:before {
             margin: 1px @field-label__indent 0 -(@control-checkbox-radio__size + @field-label__indent);
         }
     }
+
     //  Checked state
     &:checked {
         + label {
@@ -48,20 +53,23 @@
             }
         }
     }
+
     //  Disabled state
     &.disabled,
     &[disabled] {
         + label {
+            color: @field-control__color;
             cursor: default;
+            opacity: .5;
+
             &:before {
                 background-color: @field-control__disabled__background-color;
                 border-color: @field-control__border-color;
                 cursor: default;
             }
-            color: @field-control__color;
-            opacity: .5;
         }
     }
+
     &:not([disabled]),
     &:not(.disabled) {
         //  Focus state
@@ -74,6 +82,7 @@
                 }
             }
         }
+
         //  Hover state
         &:hover {
             + label {
@@ -90,11 +99,11 @@
     + label {
         &:before {
             border-radius: @control-checkbox-radio__size;
-            content: @icon-dot__content;
-            font-size: 1rem;
+            content: '';
             transition: @smooth__border-color, color .1s ease-in;
         }
     }
+
     //  Discard extend line-height 1, to fix animation
     &.admin__control-radio {
         + label {
@@ -103,15 +112,33 @@
             }
         }
     }
+
     //  Radio checked state
     &:checked {
+        + label {
+            position: relative;
+
+            &:after {
+                background-color: @control-checkbox-radio-mark__color;
+                border-radius: 50%;
+                content: '';
+                height: 10px;
+                left: 3px;
+                position: absolute;
+                top: 4px;
+                width: 10px;
+            }
+        }
+
         &:not([disabled]),
         &:not(.disabled) {
             //  Prevent hover effects for checked radio
             &:hover {
                 cursor: default;
+
                 + label {
                     cursor: default;
+
                     &:before {
                         border-color: @field-control__border-color;
                     }
@@ -125,12 +152,14 @@
 .admin__control-checkbox {
     + label {
         &:before {
+            &:extend(.abs-icon all);
             border-radius: 1px;
             content: '';
             font-size: 0;
             transition: font-size .1s ease-out, color .1s ease-out, @smooth__border-color;
         }
     }
+
     &:checked {
         + label {
             &:before {
@@ -140,6 +169,7 @@
             }
         }
     }
+
     &:not(:checked) {
         &._indeterminate,
         &:indeterminate {
@@ -160,10 +190,10 @@
 //  ToDo UI: Delete with old scope
 //  ---------------------------------------------
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
     &.admin__control-checkbox {
-        position: absolute;
         margin: 0;
+        position: absolute;
     }
 }

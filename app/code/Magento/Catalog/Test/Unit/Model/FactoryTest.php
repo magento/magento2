@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
 use \Magento\Catalog\Model\Factory;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -26,7 +26,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf('\Magento\Catalog\Model\Product\Option', $this->factory->create('model', []));
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option::class, $this->factory->create('model', []));
     }
 
     /**
@@ -39,7 +39,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = $this->getMock('Magento\Catalog\Model\Product\Option', [], [], '', false);
+        $this->model = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
 
         $this->setObjectManager();
 
@@ -48,7 +48,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setObjectManager()
     {
-        $this->objectManager = $this->getMock('\Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManager
             ->expects($this->any())

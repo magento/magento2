@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
@@ -20,7 +20,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      *
      * @var string
      */
-    protected $_template = 'order/create/totals/shipping.phtml';
+    protected $_template = 'Magento_Sales::order/create/totals/shipping.phtml';
 
     /**
      * Tax config
@@ -80,8 +80,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      */
     public function getShippingIncludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingAmount() +
-            $this->getTotal()->getAddress()->getShippingTaxAmount();
+        return $this->getTotal()->getShippingInclTax();
     }
 
     /**
@@ -91,7 +90,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      */
     public function getShippingExcludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingAmount();
+        return $this->getTotal()->getValue();
     }
 
     /**
@@ -103,7 +102,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
@@ -116,7 +115,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 }

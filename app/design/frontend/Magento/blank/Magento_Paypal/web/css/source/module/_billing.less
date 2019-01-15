@@ -1,0 +1,31 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    //  Paypal billing agreement
+    .form-new-agreement {
+        .actions-toolbar {
+            &:extend(.abs-reset-left-margin all);
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .form-new-agreement {
+        .fieldset .legend,
+        .actions-toolbar {
+            &:extend(.abs-reset-left-margin-desktop all);
+        }
+    }
+}

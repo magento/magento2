@@ -1,80 +1,73 @@
 <?php
 /**
- * RouterList model test class
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class ActionListTest extends \PHPUnit_Framework_TestCase
+class ActionListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
 
     /**
-     * @var \Magento\Framework\App\Router\ActionList\Reader | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $actionReaderMock;
+    private $readerMock;
 
     /**
      * @var \Magento\Framework\App\Router\ActionList
      */
-    protected $actionList;
+    private $actionList;
 
-    public function setUp()
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->actionReaderMock = $this->getMockBuilder('Magento\Framework\App\Router\ActionList\Reader')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
-    public function testConstructorCachedData()
+    public function testConstructActionsCached()
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(serialize('data')));
+            ->willReturn('"data"');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize');
         $this->cacheMock->expects($this->never())
             ->method('save');
-        $this->actionReaderMock->expects($this->never())
-            ->method('read');
-        $this->actionList = $this->objectManager->getObject(
-            'Magento\Framework\App\Router\ActionList',
-            [
-                'cache' => $this->cacheMock,
-                'actionReader' => $this->actionReaderMock,
-            ]
-        );
+        $this->readerMock->expects($this->never())
+            ->method('getActionFiles');
+        $this->createActionListInstance();
     }
 
-    public function testConstructorNoCachedData()
+    public function testConstructActionsNoCached()
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize');
         $this->cacheMock->expects($this->once())
             ->method('save');
-        $this->actionReaderMock->expects($this->once())
-            ->method('read')
-            ->will($this->returnValue('data'));
-        $this->actionList = $this->objectManager->getObject(
-            'Magento\Framework\App\Router\ActionList',
-            [
-                'cache' => $this->cacheMock,
-                'actionReader' => $this->actionReaderMock,
-            ]
-        );
+        $this->readerMock->expects($this->once())
+            ->method('getActionFiles')
+            ->willReturn('data')
+        ;
+        $this->createActionListInstance();
     }
 
     /**
@@ -88,31 +81,27 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($module, $area, $namespace, $action, $data, $expected)
     {
-
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->will($this->returnValue(false));
         $this->cacheMock->expects($this->once())
             ->method('save');
-        $this->actionReaderMock->expects($this->once())
-            ->method('read')
-            ->will($this->returnValue($data));
-        $this->actionList = $this->objectManager->getObject(
-            'Magento\Framework\App\Router\ActionList',
-            [
-                'cache' => $this->cacheMock,
-                'actionReader' => $this->actionReaderMock,
-            ]
-        );
+        $this->readerMock->expects($this->once())
+            ->method('getActionFiles')
+            ->willReturn($data);
+        $this->createActionListInstance();
         $this->assertEquals($expected, $this->actionList->get($module, $area, $namespace, $action));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $mockClassName = 'Mock_Action_Class';
         $actionClass = $this->getMockClass(
-            'Magento\Framework\App\ActionInterface',
-            ['dispatch', 'getResponse'],
+            \Magento\Framework\App\ActionInterface::class,
+            ['execute', 'getResponse'],
             [],
             $mockClassName
         );
@@ -158,6 +147,26 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 [],
                 null
             ],
+            [
+                'Magento_Module',
+                null,
+                'adminhtml_product',
+                'index',
+                'magento\module\controller\adminhtml\product\index' => '$mockClassName',
+                null
+            ],
         ];
+    }
+
+    private function createActionListInstance()
+    {
+        $this->actionList = $this->objectManager->getObject(
+            \Magento\Framework\App\Router\ActionList::class,
+            [
+                'cache' => $this->cacheMock,
+                'moduleReader' => $this->readerMock,
+                'serializer' => $this->serializerMock,
+            ]
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <repository class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
         <dataset name="default">
             <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
-            <field name="target_path" xsi:type="string">http://www.ebayinc.com/</field>
+            <field name="target_path" xsi:type="string">http://www.example.com/</field>
             <field name="redirect_type" xsi:type="string">Temporary (302)</field>
             <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
         </dataset>

@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
  * Sales Quote Address Total  abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @since 100.0.2
  */
-abstract class AbstractTotal
+abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 {
     /**
      * Total Code name
@@ -79,12 +83,18 @@ abstract class AbstractTotal
     /**
      * Collect totals process.
      *
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
-    {
-        $this->_setAddress($address);
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $this->_setAddress($shippingAssignment->getShipping()->getAddress());
+        $this->_setTotal($total);
         /**
          * Reset amounts
          */
@@ -96,12 +106,13 @@ abstract class AbstractTotal
     /**
      * Fetch (Retrieve data as array)
      *
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
+     * @internal param \Magento\Quote\Model\Quote\Address $address
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $this->_setAddress($address);
         return [];
     }
 
@@ -132,6 +143,29 @@ abstract class AbstractTotal
     }
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\Total
+     */
+    protected $total;
+
+    /**
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
+     */
+    public function _setTotal(\Magento\Quote\Model\Quote\Address\Total $total)
+    {
+        $this->total = $total;
+        return $this;
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Address\Total
+     */
+    protected function _getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
      * Set total model amount value to address
      *
      * @param   float $amount
@@ -140,7 +174,7 @@ abstract class AbstractTotal
     protected function _setAmount($amount)
     {
         if ($this->_canSetAddressAmount) {
-            $this->_getAddress()->setTotalAmount($this->getCode(), $amount);
+            $this->_getTotal()->setTotalAmount($this->getCode(), $amount);
         }
         return $this;
     }
@@ -155,7 +189,7 @@ abstract class AbstractTotal
     protected function _setBaseAmount($baseAmount)
     {
         if ($this->_canSetAddressAmount) {
-            $this->_getAddress()->setBaseTotalAmount($this->getCode(), $baseAmount);
+            $this->_getTotal()->setBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;
     }
@@ -169,7 +203,7 @@ abstract class AbstractTotal
     protected function _addAmount($amount)
     {
         if ($this->_canAddAmountToAddress) {
-            $this->_getAddress()->addTotalAmount($this->getCode(), $amount);
+            $this->_getTotal()->addTotalAmount($this->getCode(), $amount);
         }
         return $this;
     }
@@ -183,7 +217,7 @@ abstract class AbstractTotal
     protected function _addBaseAmount($baseAmount)
     {
         if ($this->_canAddAmountToAddress) {
-            $this->_getAddress()->addBaseTotalAmount($this->getCode(), $baseAmount);
+            $this->_getTotal()->addBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;
     }

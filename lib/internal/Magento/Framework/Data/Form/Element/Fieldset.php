@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 /**
  * Form fieldset
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Fieldset extends AbstractElement
@@ -42,7 +43,8 @@ class Fieldset extends AbstractElement
      */
     public function getElementHtml()
     {
-        $html = '<fieldset id="' . $this->getHtmlId() . '"' . $this->serialize(
+        $html = $this->getBeforeElementHtml();
+        $html .= '<fieldset area-hidden="false" id="' . $this->getHtmlId() . '"' . $this->serialize(
             ['class']
         ) . $this->_getUiId() . '>' . "\n";
         if ($this->getLegend()) {

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+
 
 ?>
-<button type="submit" data-role="review-save" title="<?php echo __('Continue') ?>" class="button action checkout primary">
-    <span><?php echo __('Continue') ?></span></button>
+<button type="submit" data-role="review-save" title="<?= $block->escapeHtml(__('Continue')) ?>"
+        class="button action checkout primary">
+    <span><?= $block->escapeHtml(__('Continue')) ?></span>
+</button>

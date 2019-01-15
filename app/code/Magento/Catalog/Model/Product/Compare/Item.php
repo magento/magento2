@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Compare;
@@ -10,15 +10,16 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Compare Item Model
  *
- * @method \Magento\Catalog\Model\Resource\Product\Compare\Item getResource()
+ * @api
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)
  * @method \Magento\Catalog\Model\Product\Compare\Item setCustomerId(int $value)
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setStoreId(int $value)
+ * @since 100.0.2
  */
-class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Model cache tag
@@ -76,7 +77,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -87,7 +88,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -105,17 +106,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Compare\Item');
-    }
-
-    /**
-     * Retrieve Resource instance
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Compare\Item::class);
     }
 
     /**
@@ -167,8 +158,8 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     {
         if ($product instanceof Product) {
             $this->setProductId($product->getId());
-        } elseif (intval($product)) {
-            $this->setProductId(intval($product));
+        } elseif ((int) $product) {
+            $this->setProductId((int) $product);
         }
 
         return $this;
@@ -224,12 +215,12 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      */
     public function clean()
     {
-        $this->_getResource()->clean($this);
+        $this->_getResource()->clean();
         return $this;
     }
 
     /**
-     * Retrieve Customer Id if loggined
+     * Retrieve Customer Id if logged in
      *
      * @return int
      */

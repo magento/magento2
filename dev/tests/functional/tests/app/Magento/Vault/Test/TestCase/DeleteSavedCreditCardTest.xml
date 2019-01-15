@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Vault\Test\TestCase\DeleteSavedCreditCardTest" summary="Delete saved with Braintree credit card from customer account">
+        <variation name="DeleteSavedCreditCardTestVariation2" summary="Delete saved with Braintree credit card from customer account" ticketId="MAGETWO-38487">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payments" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="method" xsi:type="string">braintree</item>
+                    <item name="arguments" xsi:type="array">
+                        <item name="paymentForm" xsi:type="string">braintree</item>
+                    </item>
+                    <item name="creditCard" xsi:type="array">
+                        <item name="dataset" xsi:type="string">visa_default</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">braintree</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="method" xsi:type="string">payflowpro</item>
+                    <item name="creditCard" xsi:type="array">
+                        <item name="dataset" xsi:type="string">visa_alt</item>
+                        <item name="data" xsi:type="array">
+                        <item name="payment_code" xsi:type="string">payment</item>
+                    </item>
+                    </item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="method" xsi:type="string">braintree</item>
+                    <item name="arguments" xsi:type="array">
+                        <item name="paymentForm" xsi:type="string">braintree</item>
+                    </item>
+                    <item name="creditCard" xsi:type="array">
+                        <item name="dataset" xsi:type="string">visa_default</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">braintree</item>
+                        </item>
+                    </item>
+                    <item name="vault" xsi:type="array">
+                        <item name="method" xsi:type="string">braintree_cc_vault</item>
+                    </item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="method" xsi:type="string">payflowpro</item>
+                    <item name="creditCard" xsi:type="array">
+                        <item name="dataset" xsi:type="string">visa_alt</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">payment</item>
+                        </item>
+                    </item>
+                    <item name="vault" xsi:type="array">
+                        <item name="method" xsi:type="string">payflowpro_cc_vault</item>
+                    </item>
+                </item>
+            </data>
+            <data name="creditCardSave" xsi:type="string">Yes</data>
+            <data name="configData" xsi:type="string">braintree, payflowpro, braintree_use_vault, payflowpro_use_vault</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+        </variation>
+    </testCase>
+</config>

@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\TestFramework\Bootstrap;
+
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Convenient access to the bootstrap settings
  */
-namespace Magento\TestFramework\Bootstrap;
-
 class Settings
 {
     /**
@@ -142,7 +144,7 @@ class Settings
         $allPatterns = preg_split('/\s*;\s*/', trim($pattern), -1, PREG_SPLIT_NO_EMPTY);
         foreach ($allPatterns as $onePattern) {
             $onePattern = $this->_resolvePath($onePattern);
-            $files = glob($onePattern, GLOB_BRACE);
+            $files = Glob::glob($onePattern, Glob::GLOB_BRACE);
             $result = array_merge($result, $files);
         }
         return $result;

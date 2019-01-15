@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -13,7 +13,7 @@ class SaveHandlerFactory
     /**
      * Php native session handler
      */
-    const PHP_NATIVE_HANDLER = 'Magento\Framework\Session\SaveHandler\Native';
+    const PHP_NATIVE_HANDLER = \Magento\Framework\Session\SaveHandler\Native::class;
 
     /**
      * Object manager
@@ -59,8 +59,8 @@ class SaveHandlerFactory
         }
 
         $model = $this->objectManager->create($sessionHandler, $params);
-        if (!$model instanceof \SessionHandler) {
-            throw new \LogicException($sessionHandler . ' doesn\'t implement \SessionHandler');
+        if (!$model instanceof \SessionHandlerInterface) {
+            throw new \LogicException($sessionHandler . ' doesn\'t implement \SessionHandlerInterface');
         }
 
         return $model;

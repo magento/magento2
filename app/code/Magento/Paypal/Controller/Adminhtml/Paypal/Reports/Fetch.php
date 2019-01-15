@@ -1,11 +1,9 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
@@ -13,6 +11,13 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Paypal::fetch';
+
     /**
      * Forced fetch reports action
      *
@@ -34,34 +39,27 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
                     $fetched = $reports->fetchAndSave(
                         \Magento\Paypal\Model\Report\Settlement::createConnection($config)
                     );
-                    $this->messageManager->addSuccess(
-                        __('We fetched %1 report rows from "%2@%3."', $fetched, $config['username'], $config['hostname'])
+                    $this->messageManager->addSuccessMessage(
+                        __(
+                            'We fetched %1 report rows from "%2@%3."',
+                            $fetched,
+                            $config['username'],
+                            $config['hostname']
+                        )
                     );
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addExceptionMessage(
+                        $e,
                         __('We can\'t fetch reports from "%1@%2."', $config['username'], $config['hostname'])
                     );
-                    $this->_logger->critical($e);
                 }
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/index');
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Paypal::fetch');
     }
 }

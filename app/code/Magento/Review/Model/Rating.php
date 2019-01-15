@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
 
+use Magento\Framework\DataObject\IdentityInterface;
+
 /**
  * Rating model
  *
- * @method Resource\Rating getResource()
- * @method Resource\Rating _getResource()
+ * @api
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()
@@ -17,8 +18,9 @@ namespace Magento\Review\Model;
  * @method string getRatingCode()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
-class Rating extends \Magento\Framework\Model\AbstractModel
+class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
     /**
      * rating entity codes
@@ -35,7 +37,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     protected $_ratingOptionFactory;
 
     /**
-     * @var \Magento\Review\Model\Resource\Rating\Option\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
      */
     protected $_ratingCollectionF;
 
@@ -43,8 +45,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory
-     * @param \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -52,8 +54,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
-        \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -69,7 +71,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Rating');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**
@@ -160,5 +162,16 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        // clear cache for all reviews
+        return [Review::CACHE_TAG];
     }
 }

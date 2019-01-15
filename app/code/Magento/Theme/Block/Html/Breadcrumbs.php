@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\Template;
+
 /**
  * Html page breadcrumbs block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
@@ -15,7 +21,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'html/breadcrumbs.phtml';
+    protected $_template = 'Magento_Theme::html/breadcrumbs.phtml';
 
     /**
      * List of available breadcrumb properties
@@ -37,6 +43,26 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      * @var null|array
      */
     protected $_cacheKeyInfo;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param Template\Context $context
+     * @param array $data
+     * @param Json|null $serializer
+     */
+    public function __construct(
+        Template\Context $context,
+        array $data = [],
+        Json $serializer = null
+    ) {
+        parent::__construct($context, $data);
+        $this->serializer =
+            $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+    }
 
     /**
      * Add crumb
@@ -71,8 +97,8 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     {
         if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + [
-                'crumbs' => base64_encode(serialize($this->_crumbs)),
-                'name' => $this->getNameInLayout(),
+                'crumbs' => base64_encode($this->serializer->serialize($this->_crumbs)),
+                'name' => $this->getNameInLayout()
             ];
         }
         return $this->_cacheKeyInfo;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 100.0.2
  */
 interface TransactionSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

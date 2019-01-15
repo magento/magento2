@@ -1,18 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview;
 
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
+use Magento\Framework\Mview\View\SubscriptionFactory;
+
 /**
+ * Mview
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends \Magento\Framework\Object implements ViewInterface
+class View extends \Magento\Framework\DataObject implements ViewInterface
 {
+    /**
+     * Default batch size for partial reindex
+     */
+    const DEFAULT_BATCH_SIZE = 1000;
+
+    /**
+     * Max versions to load from database at a time
+     */
+    private static $maxVersionQueryBatch = 100000;
+
     /**
      * @var string
      */
@@ -44,26 +57,34 @@ class View extends \Magento\Framework\Object implements ViewInterface
     protected $state;
 
     /**
+     * @var array
+     */
+    private $changelogBatchSize;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
      * @param View\ChangelogInterface $changelog
-     * @param View\SubscriptionFactory $subscriptionFactory
+     * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
+     * @param array $changelogBatchSize
      */
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
         View\StateInterface $state,
         View\ChangelogInterface $changelog,
-        View\SubscriptionFactory $subscriptionFactory,
-        array $data = []
+        SubscriptionFactory $subscriptionFactory,
+        array $data = [],
+        array $changelogBatchSize = []
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
         $this->state = $state;
         $this->changelog = $changelog;
         $this->subscriptionFactory = $subscriptionFactory;
+        $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
     }
 
@@ -175,16 +196,19 @@ class View extends \Magento\Framework\Object implements ViewInterface
                 $this->getChangelog()->create();
 
                 // Create subscriptions
-                foreach ($this->getSubscriptions() as $subscription) {
+                foreach ($this->getSubscriptions() as $subscriptionConfig) {
                     /** @var \Magento\Framework\Mview\View\SubscriptionInterface $subscription */
-                    $subscription = $this->subscriptionFactory->create(
+                    $subscriptionInstance = $this->subscriptionFactory->create(
                         [
                             'view' => $this,
-                            'tableName' => $subscription['name'],
-                            'columnName' => $subscription['column'],
+                            'tableName' => $subscriptionConfig['name'],
+                            'columnName' => $subscriptionConfig['column'],
+                            'subscriptionModel' => !empty($subscriptionConfig['subscription_model'])
+                                ? $subscriptionConfig['subscription_model']
+                                : SubscriptionFactory::INSTANCE_NAME,
                         ]
                     );
-                    $subscription->create();
+                    $subscriptionInstance->create();
                 }
 
                 // Update view state
@@ -208,23 +232,23 @@ class View extends \Magento\Framework\Object implements ViewInterface
         if ($this->getState()->getMode() != View\StateInterface::MODE_DISABLED) {
             try {
                 // Remove subscriptions
-                foreach ($this->getSubscriptions() as $subscription) {
+                foreach ($this->getSubscriptions() as $subscriptionConfig) {
                     /** @var \Magento\Framework\Mview\View\SubscriptionInterface $subscription */
-                    $subscription = $this->subscriptionFactory->create(
+                    $subscriptionInstance = $this->subscriptionFactory->create(
                         [
                             'view' => $this,
-                            'tableName' => $subscription['name'],
-                            'columnName' => $subscription['column'],
+                            'tableName' => $subscriptionConfig['name'],
+                            'columnName' => $subscriptionConfig['column'],
+                            'subscriptionModel' => !empty($subscriptionConfig['subscriptionModel'])
+                                ? $subscriptionConfig['subscriptionModel']
+                                : SubscriptionFactory::INSTANCE_NAME,
                         ]
                     );
-                    $subscription->remove();
+                    $subscriptionInstance->remove();
                 }
 
-                // Drop changelog table
-                $this->getChangelog()->drop();
-
                 // Update view state
-                $this->getState()->setVersionId(null)->setMode(View\StateInterface::MODE_DISABLED)->save();
+                $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
             } catch (\Exception $e) {
                 throw $e;
             }
@@ -241,28 +265,48 @@ class View extends \Magento\Framework\Object implements ViewInterface
      */
     public function update()
     {
-        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED &&
-            $this->getState()->getStatus() == View\StateInterface::STATUS_IDLE
-        ) {
-            $currentVersionId = $this->getChangelog()->getVersion();
-            $lastVersionId = $this->getState()->getVersionId();
-            $ids = $this->getChangelog()->getList($lastVersionId, $currentVersionId);
-            if ($ids) {
-                $action = $this->actionFactory->get($this->getActionClass());
+        if ($this->getState()->getStatus() == View\StateInterface::STATUS_IDLE) {
+            try {
+                $currentVersionId = $this->getChangelog()->getVersion();
+            } catch (ChangelogTableNotExistsException $e) {
+                return;
+            }
+            $lastVersionId = (int) $this->getState()->getVersionId();
+            $action = $this->actionFactory->get($this->getActionClass());
+
+            try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
-                try {
-                    $action->execute($ids);
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
-                } catch (\Exception $exception) {
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setStatus($statusToRestore)->save();
-                    throw $exception;
+
+                $versionBatchSize = self::$maxVersionQueryBatch;
+                $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
+                    ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+                    : self::DEFAULT_BATCH_SIZE;
+
+                for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+                    // Don't go past the current version for atomicy.
+                    $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+                    $ids = array_map('intval', $this->getChangelog()->getList($vsFrom, $versionTo));
+
+                    // We run the actual indexer in batches.
+                    // Chunked AFTER loading to avoid duplicates in separate chunks.
+                    $chunks = array_chunk($ids, $batchSize);
+                    foreach ($chunks as $ids) {
+                        $action->execute($ids);
+                    }
                 }
+
+                $this->getState()->loadByView($this->getId());
+                $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                    ? View\StateInterface::STATUS_SUSPENDED
+                    : View\StateInterface::STATUS_IDLE;
+                $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
+            } catch (\Exception $exception) {
+                $this->getState()->loadByView($this->getId());
+                $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                    ? View\StateInterface::STATUS_SUSPENDED
+                    : View\StateInterface::STATUS_IDLE;
+                $this->getState()->setStatus($statusToRestore)->save();
+                throw $exception;
             }
         }
     }

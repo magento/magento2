@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,9 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Composer\Package;
-
+/**
+ * @api
+ */
 class Theme
 {
     /**
@@ -26,12 +27,21 @@ class Theme
     protected $_data;
 
     /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
+    protected $urnResolver;
+
+    /**
      * Constructor
      *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param string $configContent
      */
-    public function __construct($configContent = null)
-    {
+    public function __construct(
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        $configContent = null
+    ) {
+        $this->urnResolver = $urnResolver;
         $this->_data = $this->_extractData($configContent);
     }
 
@@ -42,7 +52,7 @@ class Theme
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/theme.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd');
     }
 
     /**

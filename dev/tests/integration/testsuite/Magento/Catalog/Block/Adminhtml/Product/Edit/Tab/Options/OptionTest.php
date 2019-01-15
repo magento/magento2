@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
@@ -8,18 +8,18 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 /**
  * @magentoAppArea adminhtml
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetOptionValuesCaching()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option'
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class
         );
         /** @var $productWithOptions \Magento\Catalog\Model\Product */
         $productWithOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $productWithOptions->setTypeId(
             'simple'
@@ -50,11 +50,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $product = clone $productWithOptions;
         /** @var $option \Magento\Catalog\Model\Product\Option */
         $option = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Option',
+            \Magento\Catalog\Model\Product\Option::class,
             ['data' => ['id' => 1, 'title' => 'some_title']]
         );
-        $productWithOptions->addOption($option);
-
+        $productWithOptions->setOptions([$option]);
         $block->setProduct($productWithOptions);
         $this->assertNotEmpty($block->getOptionValues());
 

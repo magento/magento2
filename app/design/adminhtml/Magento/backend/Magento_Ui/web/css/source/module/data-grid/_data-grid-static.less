@@ -1,0 +1,57 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Static grid
+//  _____________________________________________
+
+.admin__data-grid-wrap-static {
+    .data-grid {
+        box-sizing: border-box;
+
+        thead {
+            color: @text__color;
+        }
+
+        tr {
+            &:nth-child(even) {
+                td {
+                    background-color: @data-grid-td__even__background-color;
+
+                    &._dragging {
+                        background-color: fade(@data-grid-td__even__background-color, @data-grid-td__dragging__opacity);
+                    }
+                }
+            }
+        }
+
+        ul {
+            margin-left: @data-grid-cell__padding-horizontal;
+            padding-left: @data-grid-cell__padding-horizontal;
+        }
+    }
+
+    .admin__data-grid-loading-mask {
+        background: rgba(255, 255, 255, .5);
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: @data-grid-overlay__z-index;
+
+        .grid-loader {
+            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+            bottom: 0;
+            height: 149px;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 218px;
+        }
+    }
+}

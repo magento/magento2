@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -39,7 +39,7 @@ class QuoteManager
     protected $_setQuotePersistent = true;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -47,13 +47,13 @@ class QuoteManager
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->persistentSession = $persistentSession;
         $this->persistentData = $persistentData;
@@ -62,7 +62,7 @@ class QuoteManager
     }
 
     /**
-     * Make quote to be guest
+     * Clear cart of customer data if exists and reset guest information, remove persistent session
      *
      * @param bool $checkQuote Check quote to be persistent (not stolen)
      * @return void
@@ -96,6 +96,37 @@ class QuoteManager
         }
 
         $this->persistentSession->getSession()->removePersistentCookie();
+    }
+
+    /**
+     * Emulate guest cart with persistent cart
+     *
+     * Converts persistent cart tied to logged out customer to a guest cart, retaining customer information required for
+     * checkout
+     *
+     * @return void
+     */
+    public function convertCustomerCartToGuest()
+    {
+        $quoteId = $this->checkoutSession->getQuoteId();
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->quoteRepository->get($quoteId);
+        if ($quote && $quote->getId()) {
+            $this->_setQuotePersistent = false;
+            $quote->setIsActive(true)
+                ->setCustomerId(null)
+                ->setCustomerEmail(null)
+                ->setCustomerFirstname(null)
+                ->setCustomerLastname(null)
+                ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
+                ->setIsPersistent(false);
+            $quote->getAddressesCollection()->walk('setCustomerAddressId', ['customerAddressId' => null]);
+            $quote->getAddressesCollection()->walk('setCustomerId', ['customerId' => null]);
+            $quote->getAddressesCollection()->walk('setEmail', ['email' => null]);
+            $quote->collectTotals();
+            $this->persistentSession->getSession()->removePersistentCookie();
+            $this->quoteRepository->save($quote);
+        }
     }
 
     /**

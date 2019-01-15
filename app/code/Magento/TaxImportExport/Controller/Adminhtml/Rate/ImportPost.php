@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
@@ -16,11 +16,14 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        if ($this->getRequest()->isPost() && !empty($_FILES['import_rates_file']['tmp_name'])) {
+        $importRatesFile = $this->getRequest()->getFiles('import_rates_file');
+        if ($this->getRequest()->isPost() && isset($importRatesFile['tmp_name'])) {
             try {
                 /** @var $importHandler \Magento\TaxImportExport\Model\Rate\CsvImportHandler */
-                $importHandler = $this->_objectManager->create('Magento\TaxImportExport\Model\Rate\CsvImportHandler');
-                $importHandler->importFromCsvFile($this->getRequest()->getFiles('import_rates_file'));
+                $importHandler = $this->_objectManager->create(
+                    \Magento\TaxImportExport\Model\Rate\CsvImportHandler::class
+                );
+                $importHandler->importFromCsvFile($importRatesFile);
 
                 $this->messageManager->addSuccess(__('The tax rate has been imported.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -47,6 +50,5 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         ) || $this->_authorization->isAllowed(
             'Magento_TaxImportExport::import_export'
         );
-
     }
 }

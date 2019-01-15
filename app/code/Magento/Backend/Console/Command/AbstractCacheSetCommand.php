@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Backend\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
 {
     /**
@@ -24,11 +28,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isEnable = $this->isEnable();
-        if ($input->getOption(self::INPUT_KEY_ALL)) {
-            $types = $this->cacheManager->getAvailableTypes();
-        } else {
-            $types = $this->getRequestedTypes($input);
-        }
+        $types = $this->getRequestedTypes($input);
         $changedTypes = $this->cacheManager->setEnabled($types, $isEnable);
         if ($changedTypes) {
             $output->writeln('Changed cache status:');

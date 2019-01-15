@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow;
@@ -17,14 +17,14 @@ class Pro extends \Magento\Paypal\Model\Pro
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\PayflowNvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\PayflowNvp::class;
 
     /**
      * Config model type
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * Payflow trx_id key in transaction info
@@ -34,11 +34,11 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Refund a capture transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return void
      */
-    public function refund(\Magento\Framework\Object $payment, $amount)
+    public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
         $captureTxnId = $this->_getParentTransactionId($payment);
         if ($captureTxnId) {
@@ -61,14 +61,16 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Get payflow transaction id from parent transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return string
      */
-    protected function _getParentTransactionId(\Magento\Framework\Object $payment)
+    protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {
         if ($payment->getParentTransactionId()) {
-            return $payment->getTransaction(
-                $payment->getParentTransactionId()
+            return $this->transactionRepository->getByTransactionId(
+                $payment->getParentTransactionId(),
+                $payment->getId(),
+                $payment->getOrder()->getId()
             )->getAdditionalInformation(
                 self::TRANSPORT_PAYFLOW_TXN_ID
             );

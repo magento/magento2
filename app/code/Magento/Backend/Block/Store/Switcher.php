@@ -1,25 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Backend\Block\Store;
 
 /**
  * Store switcher block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Backend\Block\Store;
-
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Switcher extends \Magento\Backend\Block\Template
 {
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes';
+    const HINT_URL = 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html';
 
     /**
      * Name of website variable
@@ -132,7 +130,7 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Store\Model\Resource\Website\Collection
+     * @return \Magento\Store\Model\ResourceModel\Website\Collection
      */
     public function getWebsiteCollection()
     {
@@ -155,11 +153,7 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         $websites = $this->_storeManager->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
-            foreach (array_keys($websites) as $websiteId) {
-                if (!in_array($websiteId, $websiteIds)) {
-                    unset($websites[$websiteId]);
-                }
-            }
+            $websites = array_intersect_key($websites, array_flip($websiteIds));
         }
         return $websites;
     }
@@ -211,14 +205,14 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getWebsiteId()
     {
         if (!$this->hasData('website_id')) {
-            $this->setData('website_id', $this->getRequest()->getParam($this->getWebsiteVarName()));
+            $this->setData('website_id', (int)$this->getRequest()->getParam($this->getWebsiteVarName()));
         }
         return $this->getData('website_id');
     }
 
     /**
      * @param int|\Magento\Store\Model\Website $website
-     * @return \Magento\Store\Model\Resource\Group\Collection
+     * @return \Magento\Store\Model\ResourceModel\Group\Collection
      */
     public function getGroupCollection($website)
     {
@@ -289,14 +283,14 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreGroupId()
     {
         if (!$this->hasData('store_group_id')) {
-            $this->setData('store_group_id', $this->getRequest()->getParam($this->getStoreGroupVarName()));
+            $this->setData('store_group_id', (int)$this->getRequest()->getParam($this->getStoreGroupVarName()));
         }
         return $this->getData('store_group_id');
     }
 
     /**
      * @param \Magento\Store\Model\Group|int $group
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection($group)
     {
@@ -339,7 +333,7 @@ class Switcher extends \Magento\Backend\Block\Template
     public function getStoreId()
     {
         if (!$this->hasData('store_id')) {
-            $this->setData('store_id', $this->getRequest()->getParam($this->getStoreVarName()));
+            $this->setData('store_id', (int)$this->getRequest()->getParam($this->getStoreVarName()));
         }
         return $this->getData('store_id');
     }
@@ -548,14 +542,27 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="tooltip">' . '<span class="help"><a' . ' href="' . $this->escapeUrl(
+            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
                 $url
             ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
                 'What is this?'
-            ) . '"' . ' class="link-store-scope"><span>' . __(
+            ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
                 'What is this?'
             ) . '</span></a></span>' . ' </div>';
         }
         return $html;
+    }
+
+    /**
+     * Get whether iframe is being used
+     *
+     * @return bool
+     */
+    public function isUsingIframe()
+    {
+        if ($this->hasData('is_using_iframe')) {
+            return (bool)$this->getData('is_using_iframe');
+        }
+        return false;
     }
 }

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Locale;
 
@@ -26,6 +24,7 @@ class TranslatedLists implements ListsInterface
     protected $localeResolver;
 
     /**
+     * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
      */
@@ -106,11 +105,8 @@ class TranslatedLists implements ListsInterface
         $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL) ?: [];
         foreach ($zones as $code) {
             $options[] = [
-                'label' => \IntlTimeZone::createTimeZone($code)->getDisplayName(
-                        false,
-                        \IntlTimeZone::DISPLAY_LONG,
-                        $locale
-                    ) . ' (' . $code . ')',
+                'label' => \IntlTimeZone::createTimeZone($code)
+                    ->getDisplayName(false, \IntlTimeZone::DISPLAY_LONG, $locale) . ' (' . $code . ')',
                 'value' => $code,
             ];
         }
@@ -168,7 +164,10 @@ class TranslatedLists implements ListsInterface
      */
     public function getOptionAllCurrencies()
     {
-        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'] ?: [];
+        $currencyBundle = new \Magento\Framework\Locale\Bundle\CurrencyBundle();
+        $locale = $this->localeResolver->getLocale();
+        $currencies = $currencyBundle->get($locale)['Currencies'] ?: [];
+
         $options = [];
         foreach ($currencies as $code => $data) {
             $options[] = ['label' => $data[1], 'value' => $code];
@@ -197,8 +196,12 @@ class TranslatedLists implements ListsInterface
     /**
      * @inheritdoc
      */
-    public function getCountryTranslation($value)
+    public function getCountryTranslation($value, $locale = null)
     {
-        return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
+        if ($locale == null) {
+            return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
+        } else {
+            return (new RegionBundle())->get($locale)['Countries'][$value];
+        }
     }
 }

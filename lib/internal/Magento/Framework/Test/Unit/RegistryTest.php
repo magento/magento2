@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -10,7 +10,7 @@ use \Magento\Framework\Registry;
 /**
  * Registry model test. Test cases for managing values in registry
  */
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Registry
@@ -22,12 +22,12 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected $data;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registry = new Registry();
         $this->data = [
             'key' => 'customer',
-            'value' => '\Magento\Customer\Model\Customer',
+            'value' => \Magento\Customer\Model\Customer::class,
         ];
         $this->registry->register($this->data['key'], $this->data['value']);
     }
@@ -65,7 +65,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     public function testUnregister()
     {
         $key = 'csv_adapter';
-        $valueObj = $this->getMock('\Magento\ImportExport\Model\Export\Adapter\Csv', [], [], '', false, false);
+        $valueObj = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class);
         $this->registry->register($key, $valueObj);
         $this->assertEquals($valueObj, $this->registry->registry($key));
         $this->registry->unregister($key);

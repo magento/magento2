@@ -1,12 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Shortcuts container
+ *
+ * Accepts shortcuts on shortcut_buttons_container event and render shortcuts using custom order
+ *
+ * @api
+ * @since 100.0.2
+ */
 class ShortcutButtons extends Template
 {
     /**#@+
@@ -18,9 +26,7 @@ class ShortcutButtons extends Template
 
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_shortcuts = [];
 
     /**

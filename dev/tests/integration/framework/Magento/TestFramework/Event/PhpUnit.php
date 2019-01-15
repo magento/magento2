@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\Event;
 
-class PhpUnit implements \PHPUnit_Framework_TestListener
+class PhpUnit implements \PHPUnit\Framework\TestListener
 {
     /**
      * Used when PHPUnit framework instantiates the class on its own and passes nothing to the constructor
@@ -52,7 +52,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -61,7 +61,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
     {
     }
 
@@ -70,7 +70,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -79,7 +79,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -88,17 +88,17 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         /* PHPUnit runs tests with data provider in own test suite for each test, so just skip such test suites */
-        if ($suite instanceof \PHPUnit_Framework_TestSuite_DataProvider) {
+        if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
         $this->_eventManager->fireEvent('startTestSuite');
@@ -107,9 +107,9 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
-        if ($suite instanceof \PHPUnit_Framework_TestSuite_DataProvider) {
+        if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
         $this->_eventManager->fireEvent('endTestSuite', [$suite], true);
@@ -118,9 +118,9 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      */
-    public function startTest(\PHPUnit_Framework_Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test)
     {
-        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
+        if (!$test instanceof \PHPUnit\Framework\TestCase || $test instanceof \PHPUnit\Framework\Warning) {
             return;
         }
         $this->_eventManager->fireEvent('startTest', [$test]);
@@ -130,11 +130,18 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, $time)
     {
-        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
+        if (!$test instanceof \PHPUnit\Framework\TestCase || $test instanceof \PHPUnit\Framework\Warning) {
             return;
         }
         $this->_eventManager->fireEvent('endTest', [$test], true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, $time)
+    {
     }
 }

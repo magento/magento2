@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,13 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertProductComparePage extends AbstractConstraint
 {
     /**
+     * Price displaying format.
+     *
+     * @var int
+     */
+    private $priceFormat = 2;
+
+    /**
      * Product attribute on compare product page
      *
      * @var array
@@ -30,8 +37,8 @@ class AssertProductComparePage extends AbstractConstraint
     ];
 
     /**
-     * Assert that "Compare Product" page contains product(s) that was added
-     * - Product name
+     * Assert that "Compare Product" Storefront page contains added Products with expected Attribute values:
+     * - Name
      * - Price
      * - SKU
      * - Description (if exists, else text "No")
@@ -56,19 +63,23 @@ class AssertProductComparePage extends AbstractConstraint
                 $value = $attribute;
                 $attribute = is_numeric($attributeKey) ? $attribute : $attributeKey;
 
-                $attributeValue = $attribute != 'price'
+                $expectedAttributeValue = $attribute != 'price'
                     ? ($product->hasData($attribute)
                         ? $product->getData($attribute)
                         : 'N/A')
                     : ($product->getDataFieldConfig('price')['source']->getPriceData() !== null
                         ? $product->getDataFieldConfig('price')['source']->getPriceData()['compare_price']
-                        : number_format($product->getPrice(), 2));
+                        : number_format($product->getPrice(), $this->priceFormat));
 
                 $attribute = is_numeric($attributeKey) ? 'info' : 'attribute';
-                \PHPUnit_Framework_Assert::assertEquals(
-                    $attributeValue,
-                    $comparePage->getCompareProductsBlock()->{'getProduct' . ucfirst($attribute)}($key + 1, $value),
-                    'Product "' . $product->getName() . '" is\'n equals with data from fixture.'
+                $attribute = ucfirst($attribute);
+                $actualAttributeValue =
+                    $comparePage->getCompareProductsBlock()->{'getProduct' . $attribute}($key + 1, $value);
+
+                \PHPUnit\Framework\Assert::assertEquals(
+                    $expectedAttributeValue,
+                    $actualAttributeValue,
+                    'Product "' . $product->getName() . '" has "' . $attribute . '" value different from fixture one.'
                 );
             }
         }

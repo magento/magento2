@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -77,7 +77,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Size for %1', $attribute['title'])
+                __('Size for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             );
@@ -93,7 +93,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Watermark File for %1', $attribute['title'])
+                __('Watermark File for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             );
@@ -109,7 +109,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Position of Watermark for %1', $attribute['title'])
+                __('Position of Watermark for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             )->setValues(

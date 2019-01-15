@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ namespace Magento\Test\Helper;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class BootstrapTest extends \PHPUnit_Framework_TestCase
+class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Helper\Bootstrap
@@ -43,19 +43,13 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_application = $this->getMock(
-            'Magento\TestFramework\Application',
-            ['getTempDir', 'getInitParams', 'reinitialize', 'run'],
-            [],
-            '',
-            false
+        $this->_application = $this->createPartialMock(
+            \Magento\TestFramework\Application::class,
+            ['getTempDir', 'getInitParams', 'reinitialize', 'run']
         );
-        $this->_bootstrap = $this->getMock(
-            'Magento\TestFramework\Bootstrap',
-            ['getApplication', 'getDbVendorName'],
-            [],
-            '',
-            false
+        $this->_bootstrap = $this->createPartialMock(
+            \Magento\TestFramework\Bootstrap::class,
+            ['getApplication', 'getDbVendorName']
         );
         $this->_bootstrap->expects(
             $this->any()

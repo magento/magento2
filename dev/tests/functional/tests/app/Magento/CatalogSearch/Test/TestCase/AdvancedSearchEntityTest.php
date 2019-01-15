@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,15 +23,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Search" button
  * 5. Perform all asserts
  *
- * @group Search_Frontend_(MX)
- * @ZephyrId MAGETWO-24729
+ * @group Search_Frontend
+ * @ZephyrId MAGETWO-24729, MAGETWO-14859
  */
 class AdvancedSearchEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -78,7 +77,7 @@ class AdvancedSearchEntityTest extends Injectable
         AdvancedSearch $searchPage
     ) {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         $searchForm = $searchPage->getForm();
         $searchForm->fill($productSearch);
         $searchForm->submit();

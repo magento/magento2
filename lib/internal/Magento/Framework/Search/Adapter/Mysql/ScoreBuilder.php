@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
 /**
  * Class for generating sql condition for calculating store manager
+ *
+ * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class ScoreBuilder
 {
@@ -63,7 +67,7 @@ class ScoreBuilder
      */
     public function endQuery($boost)
     {
-        if (!empty($this->scoreCondition) && substr($this->scoreCondition, -1) != '(') {
+        if (!empty($this->scoreCondition) && substr($this->scoreCondition, -1) !== '(') {
             $this->scoreCondition .= ") * {$boost}";
         } else {
             $this->scoreCondition .= '0)';
@@ -74,12 +78,17 @@ class ScoreBuilder
      * Add Condition for score calculation
      *
      * @param string $score
+     * @param bool $useWeights
      * @return void
      */
-    public function addCondition($score)
+    public function addCondition($score, $useWeights = true)
     {
         $this->addPlus();
-        $this->scoreCondition .= "{$score} * POW(2, " . self::WEIGHT_FIELD . ')';
+        $condition = "{$score}";
+        if ($useWeights) {
+            $condition = "LEAST(($condition), 1000000) * POW(2, " . self::WEIGHT_FIELD . ')';
+        }
+        $this->scoreCondition .= $condition;
     }
 
     /**
@@ -89,7 +98,7 @@ class ScoreBuilder
      */
     private function addPlus()
     {
-        if (!empty($this->scoreCondition) && substr($this->scoreCondition, -1) != '(') {
+        if (!empty($this->scoreCondition) && substr($this->scoreCondition, -1) !== '(') {
             $this->scoreCondition .= ' + ';
         }
     }

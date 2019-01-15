@@ -1,19 +1,25 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
     var inputNode = {
         parent: '${ $.$data.parentName }',
-        type: 'form.input',
+        component: 'Magento_Ui/js/form/element/abstract',
+        template: '${ $.$data.template }',
+        provider: '${ $.$data.provider }',
         name: '${ $.$data.index }_input',
         dataScope: '${ $.$data.customEntry }',
         customScope: '${ $.$data.customScope }',
@@ -31,14 +37,14 @@ define([
      * @param  {Array} nodes
      * @return {Object}
      */
-    function parseOptions(nodes) {
+    function parseOptions(nodes, captionValue) {
         var caption,
             value;
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value == null || value === '') {
+            if (value === null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
@@ -49,7 +55,7 @@ define([
 
         return {
             options: _.compact(nodes),
-            caption: caption || false
+            caption: _.isString(caption) ? caption : false
         };
     }
 
@@ -75,6 +81,13 @@ define([
         return value;
     }
 
+    /**
+     * Recursively set to object item like value and item.value like key.
+     *
+     * @param {Array} data
+     * @param {Object} result
+     * @returns {Object}
+     */
     function indexOptions(data, result) {
         var value;
 
@@ -95,7 +108,10 @@ define([
 
     return Abstract.extend({
         defaults: {
-            customName: '${ $.parentName }.${ $.index }_input'
+            customName: '${ $.parentName }.${ $.index }_input',
+            elementTmpl: 'ui/form/element/select',
+            caption: '',
+            options: []
         },
 
         /**
@@ -107,7 +123,7 @@ define([
             this._super();
 
             if (this.customEntry) {
-                this.initInput();
+                registry.get(this.name, this.initInput.bind(this));
             }
 
             if (this.filterBy) {
@@ -118,42 +134,27 @@ define([
         },
 
         /**
-         * Parses options and merges the result with instance
-         *
-         * @param  {Object} config
-         * @returns {Select} Chainable.
-         */
-        initConfig: function (config) {
-            var result = parseOptions(config.options);
-
-            if (config.caption) {
-                delete result.caption;
-            }
-
-            _.extend(config, result);
-
-            this._super();
-
-            return this;
-        },
-
-        /**
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         initObservable: function () {
             this._super();
 
             this.initialOptions = this.options;
 
-            this.observe('options')
+            this.observe('options caption')
                 .setOptions(this.options());
 
             return this;
         },
 
+        /**
+         * Set link for filter.
+         *
+         * @returns {Object} Chainable
+         */
         initFilter: function () {
             var filter = this.filterBy;
 
@@ -168,7 +169,7 @@ define([
         /**
          * Creates input from template, renders it via renderer.
          *
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         initInput: function () {
             layout([utils.template(inputNode, this)]);
@@ -177,19 +178,22 @@ define([
         },
 
         /**
-         * Calls 'getInitialValue' of parent and if the result of it is not empty
-         * string, returs it, else returnes caption or first found option's value
+         * Matches specified value with existing options
+         * or, if value is not specified, returns value of the first option.
          *
-         * @returns {Number|String}
+         * @returns {*}
          */
-        getInitialValue: function () {
-            var value = this._super();
+        normalizeData: function () {
+            var value = this._super(),
+                option;
 
             if (value !== '') {
-                return value;
+                option = this.getOption(value);
+
+                return option && option.value;
             }
 
-            if (!this.caption) {
+            if (!this.caption()) {
                 return findFirst(this.options);
             }
         },
@@ -208,12 +212,17 @@ define([
             field = field || this.filterBy.field;
 
             result = _.filter(source, function (item) {
-                return item[field] === value;
+                return item[field] === value || item.value === '';
             });
 
             this.setOptions(result);
         },
 
+        /**
+         * Change visibility for input.
+         *
+         * @param {Boolean} isVisible
+         */
         toggleInput: function (isVisible) {
             registry.get(this.customName, function (input) {
                 input.setVisible(isVisible);
@@ -226,17 +235,23 @@ define([
          *  passing !options.length as a parameter
          *
          * @param {Array} data
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable
          */
         setOptions: function (data) {
-            var isVisible;
+            var captionValue = this.captionValue || '',
+                result = parseOptions(data, captionValue),
+                isVisible;
 
-            this.indexedOptions = indexOptions(data);
+            this.indexedOptions = indexOptions(result.options);
 
-            this.options(data);
+            this.options(result.options);
+
+            if (!this.caption()) {
+                this.caption(result.caption);
+            }
 
             if (this.customEntry) {
-                isVisible = !!data.length;
+                isVisible = !!result.options.length;
 
                 this.setVisible(isVisible);
                 this.toggleInput(!isVisible);
@@ -249,8 +264,7 @@ define([
          * Processes preview for option by it's value, and sets the result
          * to 'preview' observable
          *
-         * @param {String} value
-         * @returns {Select} Chainable.
+         * @returns {Object} Chainable.
          */
         getPreview: function () {
             var value = this.value(),
@@ -260,6 +274,42 @@ define([
             this.preview(preview);
 
             return preview;
+        },
+
+        /**
+         * Get option from indexedOptions list.
+         *
+         * @param {Number} value
+         * @returns {Object} Chainable
+         */
+        getOption: function (value) {
+            return this.indexedOptions[value];
+        },
+
+        /**
+         * Select first available option
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            var value = this.caption() ? '' : findFirst(this.options);
+
+            this.value(value);
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialValue: function () {
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
+            return this._super();
         }
     });
 });

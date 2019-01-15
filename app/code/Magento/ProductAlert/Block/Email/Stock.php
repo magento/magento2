@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Block\Email;
-
 
 /**
  * ProductAlert email back in stock grid
@@ -16,7 +15,7 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
     /**
      * @var string
      */
-    protected $_template = 'email/stock.phtml';
+    protected $_template = 'Magento_ProductAlert::email/stock.phtml';
 
     /**
      * Retrieve unsubscribe url for product

@@ -1,34 +1,44 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Provides indexer configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State\Collection
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection
      */
     protected $stateCollection;
 
     /**
-     * @param \Magento\Indexer\Model\Config\Reader $reader
+     * Constructor
+     *
+     * @param \Magento\Framework\Indexer\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection
-     * @param string $cacheId
+     * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        \Magento\Indexer\Model\Config\Reader $reader,
+        \Magento\Framework\Indexer\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Indexer\Model\Resource\Indexer\State\Collection $stateCollection,
-        $cacheId = 'indexer_config'
+        \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection,
+        $cacheId = 'indexer_config',
+        SerializerInterface $serializer = null
     ) {
         $this->stateCollection = $stateCollection;
 
         $isCacheExists = $cache->test($cacheId);
 
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
 
         if (!$isCacheExists) {
             $this->deleteNonexistentStates();

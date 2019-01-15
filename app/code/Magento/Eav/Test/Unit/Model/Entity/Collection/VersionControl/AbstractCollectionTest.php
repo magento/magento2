@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 
-use Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -21,26 +20,23 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshot;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         $objectManager = new ObjectManager($this);
 
-        $this->entitySnapshot = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
-            ['registerSnapshot'],
-            [],
-            '',
-            false
+        $this->entitySnapshot = $this->createPartialMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
+            ['registerSnapshot']
         );
 
         $this->subject = $objectManager->getObject(
-            'Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub',
+            \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub::class,
             [
                 'entityFactory' => $this->coreEntityFactoryMock,
                 'universalFactory' => $this->validatorFactoryMock,
@@ -72,6 +68,9 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         }
     }
 
+    /**
+     * @return array
+     */
     public static function fetchItemDataProvider()
     {
         return [

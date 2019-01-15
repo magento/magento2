@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
 use \Magento\Payment\Model\Config\Source\Allmethods;
 
-class AllmethodsTest extends \PHPUnit_Framework_TestCase
+class AllmethodsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Payment data
@@ -24,10 +22,10 @@ class AllmethodsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_paymentData = $this->getMockBuilder(
-            'Magento\Payment\Helper\Data'
+            \Magento\Payment\Helper\Data::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->_model = new Allmethods($this->_paymentData);
@@ -36,9 +34,10 @@ class AllmethodsTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $expectedArray = ['key' => 'value'];
-        $this->_paymentData->expects($this->once())->method('getPaymentMethodList')->with(
-            true, true, true
-        )->will($this->returnValue($expectedArray));
+        $this->_paymentData->expects($this->once())
+            ->method('getPaymentMethodList')
+            ->with(true, true, true)
+            ->will($this->returnValue($expectedArray));
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

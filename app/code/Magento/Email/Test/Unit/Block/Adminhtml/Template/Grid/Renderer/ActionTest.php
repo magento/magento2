@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
@@ -8,7 +8,7 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 /**
  * @covers Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action
  */
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action
@@ -23,11 +23,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->columnMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $this->columnMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['setActions', 'getActions'])
             ->getMock();
-        $this->action = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action');
+        $this->action = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action::class);
     }
 
     /**
@@ -41,7 +41,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ->method('getActions')
             ->willReturn('');
         $this->action->setColumn($this->columnMock);
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $this->assertEquals('&nbsp;', $this->action->render($row));
     }
 
@@ -56,7 +56,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ->method('getActions')
             ->willReturn(['url', 'popup', 'caption']);
         $this->action->setColumn($this->columnMock);
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setId(1);
         $this->assertContains('admin__control-select', $this->action->render($row));
     }

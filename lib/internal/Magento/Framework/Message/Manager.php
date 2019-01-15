@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
 
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\Event;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Message manager model
@@ -18,6 +19,7 @@ class Manager implements ManagerInterface
      * Default message group
      */
     const DEFAULT_GROUP = 'default';
+
     /**
      * @var Session
      */
@@ -34,12 +36,12 @@ class Manager implements ManagerInterface
     protected $messagesFactory;
 
     /**
-     * @var EventManagerInterface
+     * @var Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -54,20 +56,27 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
+     * @var ExceptionMessageFactoryInterface
+     */
+    private $exceptionMessageFactory;
+
+    /**
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
-     * @param EventManagerInterface $eventManager
-     * @param Logger $logger
+     * @param Event\ManagerInterface $eventManager
+     * @param LoggerInterface $logger
      * @param string $defaultGroup
+     * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory
      */
     public function __construct(
         Session $session,
         Factory $messageFactory,
         CollectionFactory $messagesFactory,
-        EventManagerInterface $eventManager,
-        Logger $logger,
-        $defaultGroup = self::DEFAULT_GROUP
+        Event\ManagerInterface $eventManager,
+        LoggerInterface $logger,
+        $defaultGroup = self::DEFAULT_GROUP,
+        ExceptionMessageFactoryInterface $exceptionMessageFactory = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -75,10 +84,12 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
+        $this->exceptionMessageFactory = $exceptionMessageFactory ?: ObjectManager::getInstance()
+            ->get(ExceptionMessageLookupFactory::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultGroup()
     {
@@ -99,8 +110,8 @@ class Manager implements ManagerInterface
     /**
      * @inheritdoc
      *
-     * @param string|null $group
      * @param bool $clear
+     * @param string|null $group
      * @return Collection
      */
     public function getMessages($clear = false, $group = null)
@@ -144,7 +155,9 @@ class Manager implements ManagerInterface
     public function addMessages(array $messages, $group = null)
     {
         foreach ($messages as $message) {
-            $this->addMessage($message, $group);
+            if ($message instanceof MessageInterface) {
+                $this->addMessage($message, $group);
+            }
         }
         return $this;
     }
@@ -204,42 +217,18 @@ class Manager implements ManagerInterface
     /**
      * @inheritdoc
      *
-     * @param MessageInterface[]|MessageInterface $messages
+     * @param MessageInterface[] $messages
      * @param string|null $group
      * @return $this
      */
-    public function addUniqueMessages($messages, $group = null)
+    public function addUniqueMessages(array $messages, $group = null)
     {
-        if (!is_array($messages)) {
-            $messages = [$messages];
-        }
-        if (empty($messages)) {
-            return $this;
-        }
-
-        $messagesAlready = [];
         $items = $this->getMessages(false, $group)->getItems();
-        foreach ($items as $item) {
-            if ($item instanceof MessageInterface) {
-                $text = $item->getText();
-                $messagesAlready[$text] = true;
-            }
-        }
 
         foreach ($messages as $message) {
-            if ($message instanceof MessageInterface) {
-                $text = $message->getText();
-            } else {
-                // Some unknown object, add it anyway
-                continue;
+            if ($message instanceof MessageInterface and !in_array($message, $items, false)) {
+                $this->addMessage($message, $group);
             }
-
-            // Check for duplication
-            if (isset($messagesAlready[$text])) {
-                continue;
-            }
-            $messagesAlready[$text] = true;
-            $this->addMessage($message, $group);
         }
 
         return $this;
@@ -253,7 +242,7 @@ class Manager implements ManagerInterface
      * @param string $group
      * @return $this
      */
-    public function addException(\Exception $exception, $alternativeText, $group = null)
+    public function addException(\Exception $exception, $alternativeText = null, $group = null)
     {
         $message = sprintf(
             'Exception message: %s%sTrace: %s',
@@ -263,7 +252,13 @@ class Manager implements ManagerInterface
         );
 
         $this->logger->critical($message);
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
+
+        if ($alternativeText) {
+            $this->addError($alternativeText, $group);
+        } else {
+            $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
+        }
+
         return $this;
     }
 
@@ -275,5 +270,217 @@ class Manager implements ManagerInterface
     public function hasMessages()
     {
         return $this->hasMessages;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param \Exception $exception
+     * @param string $alternativeText
+     * @param string $group
+     * @return $this
+     */
+    public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null)
+    {
+        $message = sprintf(
+            'Exception message: %s%sTrace: %s',
+            $exception->getMessage(),
+            "\n",
+            $exception->getTraceAsString()
+        );
+
+        $this->logger->critical($message);
+
+        if ($alternativeText) {
+            $this->addErrorMessage($alternativeText, $group);
+        } else {
+            $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds new error message
+     *
+     * @param string $message
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    public function addErrorMessage($message, $group = null)
+    {
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_ERROR)
+                ->setText($message),
+            $group
+        );
+        return $this;
+    }
+
+    /**
+     * Adds new warning message
+     *
+     * @param string $message
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    public function addWarningMessage($message, $group = null)
+    {
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_WARNING)
+                ->setText($message),
+            $group
+        );
+        return $this;
+    }
+
+    /**
+     * Adds new notice message
+     *
+     * @param string $message
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    public function addNoticeMessage($message, $group = null)
+    {
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_NOTICE)
+                ->setText($message),
+            $group
+        );
+        return $this;
+    }
+
+    /**
+     * Adds new success message
+     *
+     * @param string $message
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    public function addSuccessMessage($message, $group = null)
+    {
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_SUCCESS)
+                ->setText($message),
+            $group
+        );
+        return $this;
+    }
+
+    /**
+     * Adds new complex error message
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param string|null $group
+     * @return ManagerInterface
+     * @throws \InvalidArgumentException
+     */
+    public function addComplexErrorMessage($identifier, array $data = [], $group = null)
+    {
+        $this->assertNotEmptyIdentifier($identifier);
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
+                ->setData($data),
+            $group
+        );
+
+        return $this;
+    }
+
+    /**
+     * Adds new complex warning message
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param string|null $group
+     * @return ManagerInterface
+     * @throws \InvalidArgumentException
+     */
+    public function addComplexWarningMessage($identifier, array $data = [], $group = null)
+    {
+        $this->assertNotEmptyIdentifier($identifier);
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_WARNING, $identifier)
+                ->setData($data),
+            $group
+        );
+
+        return $this;
+    }
+
+    /**
+     * Adds new complex notice message
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param string|null $group
+     * @return ManagerInterface
+     * @throws \InvalidArgumentException
+     */
+    public function addComplexNoticeMessage($identifier, array $data = [], $group = null)
+    {
+        $this->assertNotEmptyIdentifier($identifier);
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_NOTICE, $identifier)
+                ->setData($data),
+            $group
+        );
+
+        return $this;
+    }
+
+    /**
+     * Adds new complex success message
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param string|null $group
+     * @return ManagerInterface
+     * @throws \InvalidArgumentException
+     */
+    public function addComplexSuccessMessage($identifier, array $data = [], $group = null)
+    {
+        $this->assertNotEmptyIdentifier($identifier);
+        $this->addMessage(
+            $this->createMessage(MessageInterface::TYPE_SUCCESS, $identifier)
+                ->setData($data),
+            $group
+        );
+
+        return $this;
+    }
+
+    /**
+     * Creates identified message
+     *
+     * @param string $type
+     * @param string|null $identifier
+     * @return MessageInterface
+     * @throws \InvalidArgumentException
+     */
+    public function createMessage($type, $identifier = null)
+    {
+        return $this->messageFactory->create($type)
+            ->setIdentifier(
+                empty($identifier)
+                ? MessageInterface::DEFAULT_IDENTIFIER
+                : $identifier
+            );
+    }
+
+    /**
+     * Asserts that identifier is not empty
+     *
+     * @param mixed $identifier
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function assertNotEmptyIdentifier($identifier)
+    {
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Message identifier should not be empty');
+        }
     }
 }

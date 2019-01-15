@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Handler\CatalogProductAttribute;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -18,6 +17,20 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  */
 class Curl extends AbstractCurl implements CatalogProductAttributeInterface
 {
+    /**
+     * Relative action path with parameters.
+     *
+     * @var string
+     */
+    protected $urlActionPath = 'catalog/product_attribute/save/back/edit';
+
+    /**
+     * Message for Exception when was received not successful response.
+     *
+     * @var string
+     */
+    protected $responseExceptionMessage = 'Product Attribute creating by curl handler was not successful!';
+
     /**
      * Mapping values for data.
      *
@@ -39,11 +52,27 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'is_searchable' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
         'is_filterable' => [
             'No' => 0,
             'Filterable (with results)' => 1,
             'Filterable (no results)' => 2
-        ]
+        ],
+        'is_used_for_promo_rules' => [
+            'No' => 0,
+            'Yes' => 1,
+        ],
+        'is_global' => [
+            'Store View' => '0',
+            'Global' => '1',
+        ],
+        'used_in_product_listing' => [
+            'No' => '0',
+            'Yes' => '1',
+        ],
     ];
 
     /**
@@ -55,29 +84,37 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        if ($fixture->hasData('attribute_id')) {
+            return ['attribute_id' => $fixture->getData('attribute_id')];
+        }
         $data = $this->replaceMappingData($fixture->getData());
         $data['frontend_label'] = [0 => $data['frontend_label']];
 
         if (isset($data['options'])) {
+            $optionsData = [];
             foreach ($data['options'] as $key => $values) {
-                if ($values['is_default'] == 'Yes') {
-                    $data['default'][] = $values['view'];
-                }
+                $optionRowData = [];
                 $index = 'option_' . $key;
-                $data['option']['value'][$index] = [$values['admin'], $values['view']];
-                $data['option']['order'][$index] = $key;
+                if ($values['is_default'] == 'Yes') {
+                    $optionRowData['default'][] = $index;
+                }
+                $optionRowData['option']['value'][$index] = [$values['admin'], $values['view']];
+                $optionRowData['option']['order'][$index] = $key;
+                $optionsData[] = $optionRowData;
             }
-            unset($data['options']);
+            $data['options'] = $optionsData;
         }
 
-        $url = $_ENV['app_backend_url'] . 'catalog/product_attribute/save/back/edit';
+        $data = $this->changeStructureOfTheData($data);
+        $url = $_ENV['app_backend_url'] . $this->urlActionPath;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception("Product Attribute creating by curl handler was not successful! \n" . $response);
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
+            throw new \Exception($this->responseExceptionMessage);
         }
 
         $resultData = [];
@@ -97,5 +134,42 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         }
 
         return $resultData;
+    }
+
+    /**
+     * Additional data handling.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function changeStructureOfTheData(array $data): array
+    {
+        if (!isset($data['options'])) {
+            return $data;
+        }
+
+        $serializedOptions = $this->getSerializeOptions($data['options']);
+        if ($serializedOptions) {
+            $data['serialized_options'] = $serializedOptions;
+            unset($data['options']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Provides serialized product attribute options.
+     *
+     * @param array $data
+     * @return string
+     */
+    protected function getSerializeOptions(array $data): string
+    {
+        $options = [];
+        foreach ($data as $optionRowData) {
+            $options[] = http_build_query($optionRowData);
+        }
+
+        return json_encode($options);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product;
@@ -19,16 +19,16 @@ class AddQuantityFilterToCollection implements AddFilterToCollectionInterface
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
-        if (isset($condition['from'])) {
+        if (isset($condition['gteq'])) {
             $collection->getSelect()->where(
                 AbstractCollection::ATTRIBUTE_TABLE_ALIAS_PREFIX . 'qty.qty >= ?',
-                (float)$condition['from']
+                (float)$condition['gteq']
             );
         }
-        if ($condition['to']) {
+        if (isset($condition['lteq'])) {
             $collection->getSelect()->where(
                 AbstractCollection::ATTRIBUTE_TABLE_ALIAS_PREFIX . 'qty.qty <= ?',
-                (float)$condition['to']
+                (float)$condition['lteq']
             );
         }
     }

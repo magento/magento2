@@ -1,16 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
+
 /**
  * Core Email Template Filter Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -64,7 +72,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * @var array
@@ -89,7 +97,7 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * Core store config
@@ -142,11 +150,32 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @var \Pelago\Emogrifier
+     * @deprecated 100.2.0
      */
     protected $emogrifier;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
+     */
+    private $cssInliner;
+
+    /**
+     * @var \Magento\Variable\Model\Source\Variables
+     */
+    protected $configVariables;
+
+    /**
+     * @var \Magento\Email\Model\Template\Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
+     * @var ReadInterface
+     */
+    private $pubDirectory;
+
+    /**
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -158,12 +187,14 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
+     * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
+     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -175,7 +206,9 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
-        $variables = []
+        \Magento\Variable\Model\Source\Variables $configVariables,
+        $variables = [],
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -189,6 +222,9 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
+        $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
+        $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }
 
@@ -206,7 +242,6 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Setter whether SID is allowed in store directive
-     * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
      * @return $this
@@ -225,7 +260,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->plainTemplateMode = (bool) $plainTemplateMode;
+        $this->plainTemplateMode = (bool)$plainTemplateMode;
         return $this;
     }
 
@@ -247,7 +282,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->isChildTemplate = (bool) $isChildTemplate;
+        $this->isChildTemplate = (bool)$isChildTemplate;
         return $this;
     }
 
@@ -283,6 +318,31 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->designParams = $designParams;
         return $this;
+    }
+
+    /**
+     * @deprecated 100.1.2
+     * @return Css\Processor
+     */
+    private function getCssProcessor()
+    {
+        if (!$this->cssProcessor) {
+            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
+        }
+        return $this->cssProcessor;
+    }
+
+    /**
+     * @deprecated 100.1.2
+     * @param string $dirType
+     * @return ReadInterface
+     */
+    private function getPubDirectory($dirType)
+    {
+        if (!$this->pubDirectory) {
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
+        }
+        return $this->pubDirectory;
     }
 
     /**
@@ -325,7 +385,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
-            $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
+            $block = $this->_layout->createBlock(\Magento\Cms\Block\Block::class);
             if ($block) {
                 $block->setBlockId($blockParameters['id']);
             }
@@ -456,7 +516,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->getParameters($construction[2]);
+        $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
@@ -703,7 +763,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
-        if (isset($params['path'])) {
+        if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -711,6 +771,20 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         return $configValue;
+    }
+
+    /**
+     * Check if given variable is available for directive "Config"
+     *
+     * @param string $variable
+     * @return bool
+     */
+    private function isAvailableConfigVariable($variable)
+    {
+        return in_array(
+            $variable,
+            array_column($this->configVariables->getData(), 'value')
+        );
     }
 
     /**
@@ -753,6 +827,10 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function cssDirective($construction)
     {
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
         $params = $this->getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if (!$file) {
@@ -760,10 +838,12 @@ class Filter extends \Magento\Framework\Filter\Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->getCssFilesContent([$params['file']]);
+        $css = $this->getCssProcessor()->process(
+            $this->getCssFilesContent([$params['file']])
+        );
 
-        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
-            // Return LESS compilation error wrapped in CSS comment
+        if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
+            // Return compilation error wrapped in CSS comment
             return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
         } elseif (!empty($css)) {
             return $css;
@@ -858,10 +938,22 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         $css = '';
-        foreach ($files as $file) {
-            $asset = $this->_assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
+        try {
+            foreach ($files as $file) {
+                $asset = $this->_assetRepo->createAsset($file, $designParams);
+                $pubDirectory = $this->getPubDirectory($asset->getContext()->getBaseDirType());
+                if ($pubDirectory->isExist($asset->getPath())) {
+                    $css .= $pubDirectory->readFile($asset->getPath());
+                } else {
+                    $css .= $asset->getContent();
+                }
+            }
+        } catch (ContentProcessorException $exception) {
+            $css = $exception->getMessage();
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+            $css = '';
         }
+
         return $css;
     }
 
@@ -879,26 +971,28 @@ class Filter extends \Magento\Framework\Filter\Template
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
+        $cssToInline = $this->getCssProcessor()->process($cssToInline);
+
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
-                // Don't try to compile CSS that has LESS compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                // Don't try to compile CSS that has compilation errors
+                if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 
-                $emogrifier = $this->emogrifier;
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
+                $this->cssInliner->setHtml($html);
+
+                $this->cssInliner->setCss($cssToInline);
 
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
+                $this->cssInliner->disableStyleBlocksParsing();
 
-                $processedHtml = $emogrifier->emogrify();
+                $processedHtml = $this->cssInliner->process();
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
@@ -936,7 +1030,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

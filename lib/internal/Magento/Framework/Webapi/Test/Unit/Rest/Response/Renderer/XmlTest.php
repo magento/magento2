@@ -2,12 +2,12 @@
 /**
  * Test XML Renderer for REST.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response\Renderer;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Xml */
     protected $_restXmlRenderer;
@@ -77,6 +77,11 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'Invalid XML render with numeric symbol in data index.'
             ],
             [
+                ['key' => 'test & foo'],
+                '<?xml version="1.0"?><response><key>test &amp; foo</key></response>',
+                'Invalid XML render with ampersand symbol in data index.'
+            ],
+            [
                 ['.key' => 'value'],
                 '<?xml version="1.0"?><response><item_key>value</item_key></response>',
                 'Invalid XML render with "." symbol in data index.'
@@ -97,9 +102,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'Invalid XML render with simple data.'
             ],
             [
-                new \Magento\Framework\Object(['key' => 'value']),
+                new \Magento\Framework\DataObject(['key' => 'value']),
                 '<?xml version="1.0"?><response><key>value</key></response>',
-                'Invalid XML render with \Magento\Framework\Object data.'
+                'Invalid XML render with \Magento\Framework\DataObject data.'
             ]
         ];
     }

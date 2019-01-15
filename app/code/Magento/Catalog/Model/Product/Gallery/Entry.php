@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -23,6 +23,16 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     public function getId()
     {
         return $this->getData(self::ID);
+    }
+
+    /**
+     * Get media type
+     *
+     * @return string
+     */
+    public function getMediaType()
+    {
+        return $this->getData(self::MEDIA_TYPE);
     }
 
     /**
@@ -81,6 +91,17 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     public function getContent()
     {
         return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * Set media type
+     *
+     * @param string $mediaType
+     * @return $this
+     */
+    public function setMediaType($mediaType)
+    {
+        return $this->setData(self::MEDIA_TYPE, $mediaType);
     }
 
     /**

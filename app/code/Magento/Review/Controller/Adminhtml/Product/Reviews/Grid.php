@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product\Reviews;
@@ -12,6 +12,11 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Grid extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
      */

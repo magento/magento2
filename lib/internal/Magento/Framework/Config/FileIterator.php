@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
+
 /**
  * Class FileIterator
+ * @api
  */
 class FileIterator implements \Iterator, \Countable
 {
@@ -26,27 +30,27 @@ class FileIterator implements \Iterator, \Countable
     protected $position;
 
     /**
-     * Read directory
+     * File read factory
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadFactory
      */
-    protected $directoryRead;
+    protected $fileReadFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $directory
+     * @param ReadFactory $readFactory
      * @param array $paths
      */
-    public function __construct(\Magento\Framework\Filesystem\Directory\ReadInterface $directory, array $paths)
+    public function __construct(ReadFactory $readFactory, array $paths)
     {
+        $this->fileReadFactory = $readFactory;
         $this->paths = $paths;
         $this->position = 0;
-        $this->directoryRead = $directory;
     }
 
     /**
-     *Rewind
+     * Rewind
      *
      * @return void
      */
@@ -62,7 +66,8 @@ class FileIterator implements \Iterator, \Countable
      */
     public function current()
     {
-        return $this->directoryRead->readFile($this->key());
+        $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
+        return $fileRead->readAll();
     }
 
     /**

@@ -1,11 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Controller\Ajax;
+
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Logout controller
@@ -13,12 +15,12 @@ namespace Magento\Customer\Controller\Ajax;
  * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
-class Logout extends \Magento\Framework\App\Action\Action
+class Logout extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

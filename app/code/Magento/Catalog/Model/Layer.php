@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
  * Catalog view layer model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Layer extends \Magento\Framework\Object
+class Layer extends \Magento\Framework\DataObject
 {
     /**
      * Product collections array
@@ -47,14 +50,14 @@ class Layer extends \Magento\Framework\Object
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_catalogProduct;
 
     /**
      * Attribute collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
@@ -88,8 +91,8 @@ class Layer extends \Magento\Framework\Object
     /**
      * @param Layer\ContextInterface $context
      * @param Layer\StateFactory $layerStateFactory
-     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param Resource\Product $catalogProduct
+     * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
@@ -98,8 +101,8 @@ class Layer extends \Magento\Framework\Object
     public function __construct(
         \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product $catalogProduct,
+        AttributeCollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,
@@ -133,7 +136,7 @@ class Layer extends \Magento\Framework\Object
     /**
      * Retrieve current layer product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductCollection()
     {
@@ -151,7 +154,7 @@ class Layer extends \Magento\Framework\Object
     /**
      * Initialize product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\Layer
      */
     public function prepareProductCollection($collection)
@@ -165,7 +168,7 @@ class Layer extends \Magento\Framework\Object
      * Apply layer
      * Method is colling after apply all filters, can be used
      * for prepare some index data before getting information
-     * about existing intexes
+     * about existing indexes
      *
      * @return \Magento\Catalog\Model\Layer
      */

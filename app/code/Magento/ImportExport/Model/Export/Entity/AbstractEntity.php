@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
  * Export entity abstract model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -33,7 +36,7 @@ abstract class AbstractEntity
     /**
      * DB connection.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -148,20 +151,20 @@ abstract class AbstractEntity
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_localeDate = $localeDate;
         $this->_storeManager = $storeManager;
         $entityCode = $this->getEntityTypeCode();
         $this->_entityTypeId = $config->getEntityType($entityCode)->getEntityTypeId();
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
     }
 
     /**
@@ -274,6 +277,18 @@ abstract class AbstractEntity
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
                         $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
                     }
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {
+                    if (is_array($exportFilter[$attrCode])) {
+                        array_filter($exportFilter[$attrCode]);
+                        if (!empty($exportFilter[$attrCode])) {
+                            foreach ($exportFilter[$attrCode] as $val) {
+                                $collection->addAttributeToFilter(
+                                    $attrCode,
+                                    ['finset' => $val]
+                                );
+                            }
+                        }
+                    }
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT == $attrFilterType) {
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
                         $collection->addAttributeToFilter($attrCode, ['like' => "%{$exportFilter[$attrCode]}%"]);
@@ -346,6 +361,20 @@ abstract class AbstractEntity
     }
 
     /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
+    }
+
+    /**
      * Export process.
      *
      * @return string
@@ -355,10 +384,10 @@ abstract class AbstractEntity
     /**
      * Clean up attribute collection.
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
-    public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
+    public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
         $collection->load();
 
@@ -373,7 +402,7 @@ abstract class AbstractEntity
     /**
      * Entity attributes collection getter.
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     abstract public function getAttributeCollection();
 
@@ -399,7 +428,7 @@ abstract class AbstractEntity
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
                         if (strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
-                            $options[$innerOption['value']] = $innerOption[$index];
+                            $options[$innerOption['value']] = (string)$innerOption[$index];
                         }
                     }
                 }
@@ -528,5 +557,14 @@ abstract class AbstractEntity
         $this->_writer = $writer;
 
         return $this;
+    }
+
+    /**
+     * Clean cached values
+     * @since 100.1.2
+     */
+    public function __destruct()
+    {
+        self::$attrCodes = null;
     }
 }

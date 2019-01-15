@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,5 +24,8 @@ angular.module('success', ['ngStorage'])
             $scope.url.admin = $scope.config.address.actual_base_url + $scope.config.address.admin + '/';
         }
         $scope.messages = $localStorage.messages;
+        $localStorage.$reset();
+        $scope.admin.password = '';
+        $scope.db.password = '';
         $localStorage.$reset();
     }]);

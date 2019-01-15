@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Backend grid item renderer currency
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -23,7 +22,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Currency objects cache
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected static $_currencies = [];
 
@@ -69,24 +68,21 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
         $this->_localeCurrency = $localeCurrency;
-        $defaultBaseCurrencyCode = $this->_scopeConfig->getValue(
-            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-            'default'
-        );
+        $defaultBaseCurrencyCode = $currencyLocator->getDefaultCurrency($this->_request);
         $this->_defaultBaseCurrency = $currencyFactory->create()->load($defaultBaseCurrencyCode);
     }
 
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = (string)$this->_getValue($row)) {
             $currency_code = $this->_getCurrencyCode($row);
-            $data = floatval($data) * $this->_getRate($row);
+            $data = (float)$data * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $data > 0 ? '+' : '';
             $data = sprintf("%f", $data);
             $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
@@ -98,7 +94,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Returns currency code, false on error
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     protected function _getCurrencyCode($row)
@@ -116,16 +112,16 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Get rate for current row, 1 by default
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return float|int
      */
     protected function _getRate($row)
     {
         if ($rate = $this->getColumn()->getRate()) {
-            return floatval($rate);
+            return (float)$rate;
         }
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
-            return floatval($rate);
+            return (float)$rate;
         }
         return $this->_defaultBaseCurrency->getRate($this->_getCurrencyCode($row));
     }

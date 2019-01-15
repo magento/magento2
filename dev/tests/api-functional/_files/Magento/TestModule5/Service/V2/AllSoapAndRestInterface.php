@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule5\Service\V2;
 
+/**
+ * Both SOAP and REST Version TWO
+ * @package Magento\TestModule5\Service\V2
+ */
 interface AllSoapAndRestInterface
 {
     /**

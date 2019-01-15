@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
 
 /**
  * Customer group CRUD interface
+ * @api
+ * @since 100.0.2
  */
 interface GroupRepositoryInterface
 {
     /**
      * Save customer group.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\GroupInterface $group
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
@@ -27,7 +28,6 @@ interface GroupRepositoryInterface
     /**
      * Get customer group by group ID.
      *
-     * @api
      * @param int $id
      * @return \Magento\Customer\Api\Data\GroupInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
@@ -41,7 +41,10 @@ interface GroupRepositoryInterface
      * The list of groups can be filtered to exclude the NOT_LOGGED_IN group using the first parameter and/or it can
      * be filtered by tax class.
      *
-     * @api
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#GroupRepositoryInterface to determine
+     * which call to use to get detailed information about all attributes for an object.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\GroupSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -51,7 +54,6 @@ interface GroupRepositoryInterface
     /**
      * Delete customer group.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\GroupInterface $group
      * @return bool true on success
      * @throws \Magento\Framework\Exception\StateException If customer group cannot be deleted
@@ -62,7 +64,6 @@ interface GroupRepositoryInterface
     /**
      * Delete customer group by ID.
      *
-     * @api
      * @param int $id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException

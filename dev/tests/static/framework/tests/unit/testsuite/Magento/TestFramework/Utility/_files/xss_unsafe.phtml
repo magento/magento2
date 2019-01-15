@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?= $block->getSomeData() ?>
+<?= $block->getTitle() ?>
+<?= $object->getSomeMethod($block->getHtmlId()) ?>
+<?= "Title: $title" ?>
+<?= $block->escapeUrl($var) . $var . 'value' ?>
+<?= $var ?>
+<?= $someVar ?>
+<?= __("value") ?>
+
+<?= $object->methodHtml() .
+    $var .
+    $block->getSomeData();
+?>
+<?= '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?= "\"" . $code . "\",\"" . $block->escapeHtml($data['parentSymbol']) . "\"" ?>
+
+<?php
+/* This part is commented to remove all <col> tags from the code. */
+/* foreach ($block->getColumns() as $_column): ?>
+    <col <?= $_column->getProperty() ?> />
+<?php endforeach; */ ?>

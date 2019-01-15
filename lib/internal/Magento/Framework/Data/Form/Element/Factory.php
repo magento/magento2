@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Form element Factory
+ */
 class Factory
 {
     /**
@@ -81,7 +81,7 @@ class Factory
         $element = $this->_objectManager->create($className, $config);
         if (!$element instanceof AbstractElement) {
             throw new \InvalidArgumentException(
-                $className . ' doesn\'n extend \Magento\Framework\Data\Form\Element\AbstractElement'
+                $className . ' doesn\'t extend \Magento\Framework\Data\Form\Element\AbstractElement'
             );
         }
         return $element;

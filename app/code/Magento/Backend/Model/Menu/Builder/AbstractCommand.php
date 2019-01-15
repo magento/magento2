@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Builder;
 
 /**
  * Menu builder command
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractCommand
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,6 +55,7 @@ class DeleteAllCatalogRulesStep implements TestStepInterface
         while ($this->catalogRuleIndex->getCatalogRuleGrid()->isFirstRowVisible()) {
             $this->catalogRuleIndex->getCatalogRuleGrid()->openFirstRow();
             $this->catalogRuleNew->getFormPageActions()->delete();
+            $this->catalogRuleNew->getModalBlock()->acceptAlert();
             $this->catalogRuleIndex->getSystemMessageDialog()->closePopup();
         }
     }

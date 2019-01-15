@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Grid\Column\Renderer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DownloadTest extends \PHPUnit_Framework_TestCase
+class DownloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Context
@@ -22,34 +22,22 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download
      */
-     protected $download;
+    protected $download;
 
     /**
      * Set up
      */
     protected function setUp()
     {
-        $urlModel = $this->getMock(
-            'Magento\Backend\Model\Url',
-            ['getUrl'],
-            [],
-            '',
-            false
-        );
+        $urlModel = $this->createPartialMock(\Magento\Backend\Model\Url::class, ['getUrl']);
         $urlModel->expects($this->any())->method('getUrl')->willReturn('url');
-        $this->context = $this->getMock(
-            'Magento\Backend\Block\Context',
-            ['getUrlBuilder'],
-            [],
-            '',
-            false
-        );
+        $this->context = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getUrlBuilder']);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($urlModel);
         $data = [];
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->download = $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download',
+            \Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download::class,
             [
                 'context' => $this->context,
                 'data' => $data
@@ -63,7 +51,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     public function testGetValue()
     {
         $data = ['imported_file' => 'file.csv'];
-        $row = new \Magento\Framework\Object($data);
+        $row = new \Magento\Framework\DataObject($data);
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class QueryResultTest extends \PHPUnit_Framework_TestCase
+class QueryResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -27,7 +27,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Search\Model\QueryResult $queryResult */
         $queryResult = $this->objectManager->getObject(
-            'Magento\Search\Model\QueryResult',
+            \Magento\Search\Model\QueryResult::class,
             [
                 'queryText' => $queryText,
                 'resultsCount' => $resultsCount,

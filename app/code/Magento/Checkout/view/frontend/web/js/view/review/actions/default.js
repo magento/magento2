@@ -1,21 +1,27 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
-define(
-    [
-        'uiComponent'
-    ],
-    function (Component) {
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Checkout/review/actions/default'
-            },
-            placeOrder: function(parent) {
-                return parent.placeOrder.bind(parent);
-            }
-        });
-    }
-);
+
+/**
+ * @deprecated since version 2.2.0
+ */
+define([
+    'uiComponent'
+], function (Component) {
+    'use strict';
+
+    return Component.extend({
+        defaults: {
+            template: 'Magento_Checkout/review/actions/default'
+        },
+
+        /**
+         * @param {Object} parent
+         * @return {Function}
+         */
+        placeOrder: function (parent) {
+            return parent.placeOrder.bind(parent);
+        }
+    });
+});

@@ -1,27 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Shipping\Test\Block\Adminhtml\Shipment;
 
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid as GridInterface;
 
 /**
- * Class Grid
- * Shipment grid on shipment index page
+ * Shipment grid on shipment index page.
  */
 class Grid extends GridInterface
 {
     /**
-     * Filters array mapping
+     * Locator value for "View" link inside action column.
+     *
+     * @var string
+     */
+    protected $editLink = '.data-grid-actions-cell a';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_shipment_id"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'order_id' => [
             'selector' => 'input[name="order_increment_id"]',

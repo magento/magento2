@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -25,21 +26,21 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
         array $data = []
     ) {
@@ -64,13 +65,21 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            if ($valuesCollection->count() != count($value)) {
+            $valueCount = is_array($value) ? count($value) : 1;
+            if ($valuesCollection->count() != $valueCount) {
                 $this->setIsValid(false);
-                throw new LocalizedException(__('Please specify product\'s required option(s).'));
+                throw new LocalizedException(
+                    __(
+                        "The product's required option(s) weren't entered. "
+                        . "Make sure the options are entered and try again."
+                    )
+                );
             }
         }
         return $this;
@@ -222,7 +231,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargableOptionPrice(
+                    $result += $this->_getChargeableOptionPrice(
                         $_result->getPrice(),
                         $_result->getPriceType() == 'percent',
                         $basePrice
@@ -237,7 +246,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargableOptionPrice(
+                $result = $this->_getChargeableOptionPrice(
                     $_result->getPrice(),
                     $_result->getPriceType() == 'percent',
                     $basePrice
@@ -302,8 +311,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected function _isSingleSelection()
     {
         $single = [
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
         ];
         return in_array($this->getOption()->getType(), $single);
     }

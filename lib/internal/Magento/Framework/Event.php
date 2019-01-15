@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,10 @@
  */
 namespace Magento\Framework;
 
-class Event extends \Magento\Framework\Object
+/**
+ * @api
+ */
+class Event extends \Magento\Framework\DataObject
 {
     /**
      * Observers collection
@@ -85,7 +88,7 @@ class Event extends \Magento\Framework\Object
      */
     public function getName()
     {
-        return isset($this->_data['name']) ? $this->_data['name'] : null;
+        return $this->_data['name'] ?? null;
     }
 
     /**

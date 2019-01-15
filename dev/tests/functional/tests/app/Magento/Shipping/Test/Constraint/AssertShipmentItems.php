@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,15 +11,15 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Shipping\Test\Page\Adminhtml\SalesShipmentView;
 use Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
- * Class AssertShipmentItems
- * Assert shipment items on shipment view page
+ * Assert shipment items on shipment view page.
  */
 class AssertShipmentItems extends AbstractAssertItems
 {
     /**
-     * Shipment index page
+     * Shipment index page.
      *
      * @var ShipmentIndex
      */
@@ -28,16 +28,20 @@ class AssertShipmentItems extends AbstractAssertItems
     /**
      * @constructor
      * @param ObjectManager $objectManager
+     * @param EventManagerInterface $eventManager
      * @param ShipmentIndex $shipmentIndex
      */
-    public function __construct(ObjectManager $objectManager, ShipmentIndex $shipmentIndex)
-    {
-        parent::__construct($objectManager);
+    public function __construct(
+        ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
+        ShipmentIndex $shipmentIndex
+    ) {
+        parent::__construct($objectManager, $eventManager);
         $this->shipmentPage = $shipmentIndex;
     }
 
     /**
-     * Assert shipped products are represented on shipment view page
+     * Assert shipped products are represented on shipment view page.
      *
      * @param SalesShipmentView $orderShipmentView
      * @param OrderInjectable $order
@@ -56,7 +60,7 @@ class AssertShipmentItems extends AbstractAssertItems
     }
 
     /**
-     * Process assert
+     * Process assert.
      *
      * @param OrderInjectable $order
      * @param array $ids
@@ -80,12 +84,12 @@ class AssertShipmentItems extends AbstractAssertItems
             $this->shipmentPage->getShipmentsGrid()->searchAndOpen($filter);
             $itemsData = $this->preparePageItems($salesShipmentView->getItemsBlock()->getData());
             $error = $this->verifyData($productsData, $itemsData);
-            \PHPUnit_Framework_Assert::assertEmpty($error, $error);
+            \PHPUnit\Framework\Assert::assertEmpty($error, $error);
         }
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -48,10 +48,12 @@ class ContentValidator
         if (!is_numeric($link->getPrice()) || $link->getPrice() < 0) {
             throw new InputException(__('Link price must have numeric positive value.'));
         }
-        if (!is_int($link->getNumberOfDownloads()) || $link->getNumberOfDownloads() < 0) {
+        if (filter_var($link->getNumberOfDownloads(), FILTER_VALIDATE_INT) === false
+            || $link->getNumberOfDownloads() < 0) {
             throw new InputException(__('Number of downloads must be a positive integer.'));
         }
-        if (!is_int($link->getSortOrder()) || $link->getSortOrder() < 0) {
+        if (filter_var($link->getSortOrder(), FILTER_VALIDATE_INT) === false
+            || $link->getSortOrder() < 0) {
             throw new InputException(__('Sort order must be a positive integer.'));
         }
 

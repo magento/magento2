@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Cookie;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test PhpCookieManager
  *
  */
-class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
+class PhpCookieManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
@@ -30,7 +30,7 @@ class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->cookieManager = $this->objectManager->create('Magento\Framework\Stdlib\Cookie\PhpCookieManager');
+        $this->cookieManager = $this->objectManager->create(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class);
     }
 
     public function testGetCookie()
@@ -54,7 +54,7 @@ class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
      * It is not possible to write integration tests for CookieManager::setSensitiveCookie().
      * PHPUnit the following error when calling the function:
      *
-     * PHPUnit_Framework_Error_Warning : Cannot modify header information - headers already sent
+     * PHPUnit\Framework\Error_Warning : Cannot modify header information - headers already sent
      */
     public function testSetSensitiveCookie()
     {
@@ -64,7 +64,7 @@ class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
      * It is not possible to write integration tests for CookieManager::setSensitiveCookie().
      * PHPUnit the following error when calling the function:
      *
-     * PHPUnit_Framework_Error_Warning : Cannot modify header information - headers already sent
+     * PHPUnit\Framework\Error_Warning : Cannot modify header information - headers already sent
      */
     public function testSetPublicCookie()
     {
@@ -74,7 +74,7 @@ class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
      * It is not possible to write integration tests for CookieManager::deleteCookie().
      * PHPUnit the following error when calling the function:
      *
-     * PHPUnit_Framework_Error_Warning : Cannot modify header information - headers already sent
+     * PHPUnit\Framework\Error_Warning : Cannot modify header information - headers already sent
      */
     public function testDeleteCookie()
     {

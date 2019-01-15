@@ -2,7 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Boolean
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -28,6 +28,9 @@ class BooleanTest extends AbstractFormTestCase
         $this->assertSame($expected, (string)$boolean->outputValue());
     }
 
+    /**
+     * @return array
+     */
     public function getOptionTextDataProvider()
     {
         return [

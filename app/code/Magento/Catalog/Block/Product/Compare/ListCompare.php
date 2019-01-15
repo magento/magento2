@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,14 +12,16 @@ use Magento\Framework\App\Action\Action;
 
 /**
  * Catalog products compare block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
      * Product Compare items collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
      */
     protected $_items;
 
@@ -66,7 +68,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -83,7 +85,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Framework\App\Http\Context $httpContext
@@ -93,7 +95,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Framework\App\Http\Context $httpContext,
@@ -120,12 +122,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getAddToWishlistParams($product)
     {
-        $continueUrl = $this->urlEncoder->encode($this->getUrl('customer/account'));
-        $urlParamName = Action::PARAM_NAME_URL_ENCODED;
-
-        $continueUrlParams = [$urlParamName => $continueUrl];
-
-        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
+        return $this->_wishlistHelper->getAddParams($product);
     }
 
     /**
@@ -144,7 +141,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve Product Compare items collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
      */
     public function getItems()
     {
@@ -190,7 +187,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve Product Attribute Value
      *
      * @param Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return \Magento\Framework\Phrase|string
      */
     public function getProductAttributeValue($product, $attribute)
@@ -204,12 +201,27 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             ['select', 'boolean', 'multiselect']
         )
         ) {
-            //$value = $attribute->getSource()->getOptionText($product->getData($attribute->getAttributeCode()));
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());
         }
         return (string)$value == '' ? __('No') : $value;
+    }
+
+    /**
+     * Check if any of the products has a value set for the attribute
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return bool
+     */
+    public function hasAttributeValueForProducts($attribute)
+    {
+        foreach ($this->getItems() as $item) {
+            if ($item->hasData($attribute->getAttributeCode())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -1,23 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
 {
@@ -127,7 +129,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification
         $message = 'Prices from dataset should be equal to prices on frontend.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit\Framework\Assert::assertEquals($prices, $actualPrices, $message);
     }
 
     /**
@@ -142,7 +144,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->cmsIndex->getTopmenu()->selectCategoryByName($productCategory);
     }
 
-
     /**
      * Get cart prices.
      *
@@ -152,7 +153,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
      */
     public function getCartPrices(InjectableFixture $product, $actualPrices)
     {
-        $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceExclTax();
         $actualPrices['cart_item_price_incl_tax'] =

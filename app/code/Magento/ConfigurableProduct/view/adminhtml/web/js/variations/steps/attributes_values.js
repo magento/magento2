@@ -1,29 +1,36 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
     'jquery',
     'ko',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/collapsible'
+    'Magento_Ui/js/lib/collapsible',
+    'mage/translate'
 ], function (Component, $, ko, _, utils, Collapsible) {
     'use strict';
 
     //connect items with observableArrays
     ko.bindingHandlers.sortableList = {
-        init: function(element, valueAccessor) {
+        /** @inheritdoc */
+        init: function (element, valueAccessor) {
             var list = valueAccessor();
+
             $(element).sortable({
                 axis: 'y',
                 handle: '[data-role="draggable"]',
                 tolerance: 'pointer',
-                update: function(event, ui) {
-                    var item = ko.contextFor(ui.item[0]).$data;
-                    var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
-                    if (ko.contextFor(ui.item[0]).$index() != position) {
+
+                /** @inheritdoc */
+                update: function (event, ui) {
+                    var item = ko.contextFor(ui.item[0]).$data,
+                        position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
+
+                    if (ko.contextFor(ui.item[0]).$index() != position) { //eslint-disable-line eqeqeq
                         if (position >= 0) {
                             list.remove(item);
                             list.splice(position, 0, item);
@@ -35,91 +42,183 @@ define([
         }
     };
 
-    var saveAttributes = _.memoize(function (attributes) {
-        return _.map(attributes, this.createAttribute, this);
-    }, function(attributes) {
-        return _.reduce(attributes, function (memo, attribute) {
-            return memo + attribute.id;
-        });
-    });
-
     return Collapsible.extend({
-        attributes: ko.observableArray([]),
+        defaults: {
+            notificationMessage: {
+                text: null,
+                error: null
+            },
+            createOptionsUrl: null,
+            attributes: [],
+            stepInitialized: false
+        },
+
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
+            this.createAttribute = _.wrap(this.createAttribute, function () {
+                var args = _.toArray(arguments),
+                    createAttribute = args.shift();
+
+                return this.doInitSavedOptions(createAttribute.apply(this, args));
+            });
+            this.createAttribute = _.memoize(this.createAttribute.bind(this), _.property('id'));
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super().observe(['attributes']);
+
+            return this;
+        },
+
+        /**
+         * Create option.
+         */
         createOption: function () {
             // this - current attribute
-            this.options.push({value: 0, label: '', id: utils.uniqueid(), attribute_id: this.id, is_new: true});
+            this.options.push({
+                value: 0,
+                label: '',
+                id: utils.uniqueid(),
+                'attribute_id': this.id,
+                'is_new': true
+            });
         },
+
+        /**
+         * @param {Object} option
+         */
         saveOption: function (option) {
-            this.options.remove(option);
-            this.options.push(option);
-            this.chosenOptions.push(option.id);
+            if (!_.isEmpty(option.label)) {
+                this.options.remove(option);
+                this.options.push(option);
+                this.chosenOptions.push(option.id);
+            }
         },
+
+        /**
+         * @param {Object} option
+         */
         removeOption: function (option) {
             this.options.remove(option);
         },
+
+        /**
+         * @param {String} attribute
+         */
         removeAttribute: function (attribute) {
             this.attributes.remove(attribute);
-            this.wizard.notifyMessage(
-                $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.'),
-                false
+            this.wizard.setNotificationMessage(
+                $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.')
             );
         },
+
+        /**
+         * @param {Object} attribute
+         * @param {*} index
+         * @return {Object}
+         */
         createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
             attribute.options = ko.observableArray(_.map(attribute.options, function (option) {
                 option.id = utils.uniqueid();
+
                 return option;
             }));
             attribute.opened = ko.observable(this.initialOpened(index));
             attribute.collapsible = ko.observable(true);
+
             return attribute;
         },
-        //first 3 attribute panels must be open
+
+        /**
+         * First 3 attribute panels must be open.
+         *
+         * @param {Number} index
+         * @return {Boolean}
+         */
         initialOpened: function (index) {
             return index < 3;
         },
+
+        /**
+         * Save attribute.
+         */
         saveAttribute: function () {
-            this.attributes.each(function(attribute) {
+            var errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
+
+            this.attributes.each(function (attribute) {
                 attribute.chosen = [];
+
                 if (!attribute.chosenOptions.getLength()) {
-                    throw new Error($.mage.__('Select options for all attributes or remove unused attributes.'));
+                    throw new Error(errorMessage);
                 }
-                attribute.chosenOptions.each(function(id) {
-                    attribute.chosen.push(attribute.options.findWhere({id:id}));
+                attribute.chosenOptions.each(function (id) {
+                    attribute.chosen.push(attribute.options.findWhere({
+                        id: id
+                    }));
                 });
             });
+
+            if (!this.attributes().length) {
+                throw new Error(errorMessage);
+            }
         },
+
+        /**
+         * @param {Object} attribute
+         */
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'id'));
         },
+
+        /**
+         * @param {Object} attribute
+         */
         deSelectAllAttributes: function (attribute) {
             attribute.chosenOptions.removeAll();
         },
-        saveOptions: function() {
+
+        /**
+         * @return {Boolean}
+         */
+        saveOptions: function () {
             var options = [];
-            this.attributes.each(function(attribute) {
-                attribute.chosenOptions.each(function(id) {
-                    var option = attribute.options.findWhere({id:id, is_new: true});
+
+            this.attributes.each(function (attribute) {
+                attribute.chosenOptions.each(function (id) {
+                    var option = attribute.options.findWhere({
+                        id: id,
+                        'is_new': true
+                    });
+
                     if (option) {
                         options.push(option);
                     }
                 });
             });
+
             if (!options.length) {
                 return false;
             }
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: this.createOptionsUrl,
-                data: {options: options},
+                data: {
+                    options: options
+                },
                 showLoader: true
-            }).done(function(options) {
-                this.attributes.each(function(attribute) {
-                    _.each(options, function(newOptionId, oldOptionId) {
-                        var option = attribute.options.findWhere({id:oldOptionId});
+            }).done(function (savedOptions) {
+                this.attributes.each(function (attribute) {
+                    _.each(savedOptions, function (newOptionId, oldOptionId) {
+                        var option = attribute.options.findWhere({
+                            id: oldOptionId
+                        });
+
                         if (option) {
                             attribute.options.remove(option);
-                            option.is_new = false;
+                            option['is_new'] = false;
                             option.value = newOptionId;
                             attribute.options.push(option);
                         }
@@ -128,27 +227,69 @@ define([
 
             }.bind(this));
         },
+
+        /**
+         * @param {*} attributeIds
+         */
         requestAttributes: function (attributeIds) {
             $.ajax({
-                type: "POST",
+                type: 'GET',
                 url: this.optionsUrl,
-                data: {attributes: attributeIds},
+                data: {
+                    attributes: attributeIds
+                },
                 showLoader: true
-            }).done(function(attributes){
-                this.attributes(saveAttributes.call(this, attributes));
+            }).done(function (attributes) {
+                attributes = _.sortBy(attributes, function (attribute) {
+                    return this.wizard.data.attributesIds.indexOf(attribute.id);
+                }.bind(this));
+                this.attributes(_.map(attributes, this.createAttribute));
             }.bind(this));
         },
-        render: function(wizard) {
+
+        /**
+         * @param {*} attribute
+         * @return {*}
+         */
+        doInitSavedOptions: function (attribute) {
+            var selectedOptions, selectedOptionsIds, selectedAttribute = _.findWhere(this.initData.attributes, {
+                id: attribute.id
+            });
+
+            if (selectedAttribute) {
+                selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
+                selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                    return _.contains(selectedOptions, option.value);
+                }), 'id');
+                attribute.chosenOptions(selectedOptionsIds);
+                this.initData.attributes = _.without(this.initData.attributes, selectedAttribute);
+            }
+
+            return attribute;
+        },
+
+        /**
+         * @param {Object} wizard
+         */
+        render: function (wizard) {
             this.wizard = wizard;
             this.requestAttributes(wizard.data.attributesIds());
         },
-        force: function(wizard) {
+
+        /**
+         * @param {Object} wizard
+         */
+        force: function (wizard) {
             this.saveOptions();
             this.saveAttribute(wizard);
 
             wizard.data.attributes = this.attributes;
         },
-        back: function(wizard) {
+
+        /**
+         * @param {Object} wizard
+         */
+        back: function (wizard) {
             wizard.data.attributesIds(this.attributes().pluck('id'));
         }
     });

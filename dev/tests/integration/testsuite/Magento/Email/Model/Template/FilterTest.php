@@ -1,32 +1,39 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
+use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Phrase;
+use Magento\Setup\Module\I18n\Locale;
+use Magento\Theme\Block\Html\Footer;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+/**
+ * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Filter
      */
-    protected $_model = null;
+    protected $model;
 
     /**
      * @var \Magento\TestFramework\ObjectManager
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     protected function setUp()
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_model = $this->_objectManager->create(
-            'Magento\Email\Model\Template\Filter'
+        $this->model = $this->objectManager->create(
+            \Magento\Email\Model\Template\Filter::class
         );
     }
 
@@ -37,7 +44,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewDirective()
     {
-        $url = $this->_model->viewDirective(
+        $url = $this->model->viewDirective(
             ['{{view url="Magento_Theme::favicon.ico"}}', 'view', ' url="Magento_Theme::favicon.ico"']
         );
         $this->assertStringEndsWith('favicon.ico', $url);
@@ -50,13 +57,13 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBlockDirective()
     {
-        $class = 'Magento\\\\Theme\\\\Block\\\\Html\\\\Footer';
-        $data = ["{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
-                'block',
-                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
-
-            ];
-        $html = $this->_model->blockDirective($data);
+        $class = Footer::class;
+        $data = [
+            "{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
+            'block',
+            " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
+        ];
+        $html = $this->model->blockDirective($data);
         $this->assertContains('<div class="footer-container">', $html);
     }
 
@@ -66,28 +73,29 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testStoreDirective()
     {
-        $url = $this->_model->storeDirective(
+        $url = $this->model->storeDirective(
             ['{{store direct_url="arbitrary_url/"}}', 'store', ' direct_url="arbitrary_url/"']
         );
         $this->assertStringMatchesFormat('http://example.com/%sarbitrary_url/', $url);
 
-        $url = $this->_model->storeDirective(
+        $url = $this->model->storeDirective(
             ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
         $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
 
-        $this->_model->setStoreId(0);
-        $backendUrlModel = $this->_objectManager->create('Magento\Backend\Model\Url');
-        $this->_model->setUrlModel($backendUrlModel);
-        $url = $this->_model->storeDirective(
+        $this->model->setStoreId(0);
+        $backendUrlModel = $this->objectManager->create(\Magento\Backend\Model\Url::class);
+        $this->model->setUrlModel($backendUrlModel);
+        $url = $this->model->storeDirective(
             ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
         $this->assertStringMatchesFormat('http://example.com/index.php/backend/translation/ajax/index/%A', $url);
     }
 
     /**
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider layoutDirectiveDataProvider
      *
      * @param string $area
@@ -96,43 +104,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(__DIR__) . '/_files/design',
-                    ],
-                ],
-            ]
-        );
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Email\Model\Template\Filter'
-        );
-
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $themes = ['frontend' => 'Magento/default', 'adminhtml' => 'Magento/default'];
-        $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
-        $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
-
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(\Magento\Theme\Model\Theme\Registration::class);
+        $registration->register();
+        $this->model = $this->objectManager->create(\Magento\Email\Model\Template\Filter::class);
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
-
-        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
-        $themeId = $collection->getThemeByFullPath('frontend/Magento/default')->getId();
-        $objectManager->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
-        )->setValue(
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
-            $themeId,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $objectManager->create('Magento\Framework\View\Layout');
-        $objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/default');
+        $layout = $this->objectManager->create(\Magento\Framework\View\Layout::class);
+        $this->objectManager->addSharedInstance($layout, \Magento\Framework\View\Layout::class);
+        $this->objectManager->get(\Magento\Framework\View\DesignInterface::class)
+            ->setDesignTheme('Magento_EmailTest/default');
 
-        $actualOutput = $this->_model->layoutDirective(
+        $actualOutput = $this->model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
         );
         $this->assertEquals($expectedOutput, trim($actualOutput));
@@ -147,22 +130,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                'Email content for frontend/Magento/default theme',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                'Email content for frontend/Magento/default theme',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                'Email content for adminhtml/Magento/default theme',
+                '<strong>Email content for adminhtml/Magento/default theme</strong>',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                'Custom Email content for frontend/Magento/default theme',
+                '<strong>Custom Email content for frontend/Magento/default theme</strong>',
             ],
         ];
         return $result;
@@ -179,7 +162,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $renderer = Phrase::getRenderer();
 
-        $translator = $this->getMockBuilder('\Magento\Framework\Translate')
+        $translator = $this->getMockBuilder(\Magento\Framework\Translate::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
@@ -188,11 +171,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($translations));
 
-        $this->_objectManager->addSharedInstance($translator, 'Magento\Framework\Translate');
-        $this->_objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');
-        Phrase::setRenderer($this->_objectManager->create('Magento\Framework\Phrase\RendererInterface'));
+        $this->objectManager->addSharedInstance($translator, \Magento\Framework\Translate::class);
+        $this->objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
+        Phrase::setRenderer($this->objectManager->create(\Magento\Framework\Phrase\RendererInterface::class));
 
-        $this->assertEquals($expectedResult, $this->_model->filter($directive));
+        $this->assertEquals($expectedResult, $this->model->filter($directive));
 
         Phrase::setRenderer($renderer);
     }
@@ -221,21 +204,33 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * as well as supporting loading files from a theme fallback structure.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider cssDirectiveDataProvider
      *
-     * @param $directiveParams
-     * @param $expectedOutput
+     * @param int $templateType
+     * @param string $directiveParams
+     * @param string $expectedOutput
      */
-    public function testCssDirective($directiveParams, $expectedOutput)
+    public function testCssDirective($templateType, $directiveParams, $expectedOutput)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            \Magento\Theme\Model\Theme\Registration::class
+        );
+        $registration->register();
         $this->setUpDesignParams();
-        $this->_model->setStoreId('fixturestore');
+        $this->model->setStoreId('fixturestore')
+            ->setPlainTemplateMode($templateType == TemplateTypesInterface::TYPE_TEXT);
 
-        $this->assertContains($expectedOutput, $this->_model->cssDirective(
-            ['{{css ' . $directiveParams . '}}', 'css', ' ' . $directiveParams]
-        ));
+        $output = $this->model->cssDirective(['{{css ' . $directiveParams . '}}', 'css', ' ' . $directiveParams]);
+
+        if ($expectedOutput !== '') {
+            $this->assertContains($expectedOutput, $output);
+        } else {
+            $this->assertSame($expectedOutput, $output);
+        }
     }
 
     /**
@@ -245,28 +240,39 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'CSS from theme' => [
+                TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-1.css"',
-                'color: #111;'
+                'color: #111'
             ],
             'CSS from parent theme' => [
+                TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-2.css"',
-                'color: #222;'
+                'color: #222'
             ],
             'CSS from grandparent theme' => [
+                TemplateTypesInterface::TYPE_HTML,
                 'file="css/email-3.css"',
-                'color: #333;'
+                'color: #333'
             ],
             'Missing file parameter' => [
+                TemplateTypesInterface::TYPE_HTML,
                 '',
                 '/* "file" parameter must be specified */'
             ],
+            'Plain-text template outputs nothing' => [
+                TemplateTypesInterface::TYPE_TEXT,
+                'file="css/email-1.css"',
+                '',
+            ],
             'Empty or missing file' => [
+                TemplateTypesInterface::TYPE_HTML,
                 'file="css/non-existent-file.css"',
                 '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
             ],
             'File with compilation error results in error message' => [
+                TemplateTypesInterface::TYPE_HTML,
                 'file="css/file-with-error.css"',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                'variable @non-existent-variable is undefined',
             ],
         ];
     }
@@ -276,8 +282,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * as well as supporting loading files from a theme fallback structure.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture default_store dev/static/sign 0
      * @dataProvider inlinecssDirectiveDataProvider
      *
      * @param string $templateText
@@ -293,17 +301,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $plainTemplateMode = false,
         $isChildTemplateMode = false
     ) {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            \Magento\Theme\Model\Theme\Registration::class
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
-        $this->_model->setPlainTemplateMode($plainTemplateMode);
-        $this->_model->setIsChildTemplate($isChildTemplateMode);
+        $this->model->setPlainTemplateMode($plainTemplateMode);
+        $this->model->setIsChildTemplate($isChildTemplateMode);
 
-        if ($productionMode) {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
-                ->setMode(\Magento\Framework\App\State::MODE_PRODUCTION);
-        }
+        $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
+        $this->objectManager->get(\Magento\Framework\App\State::class)->setMode($appMode);
 
-        $this->assertContains($expectedOutput, $this->_model->filter($templateText));
+        $this->assertContains($expectedOutput, $this->model->filter($templateText));
     }
 
     /**
@@ -341,14 +352,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 false,
                 true,
             ],
-            'Production mode - File with compilation error results in unmodified markup' => [
+            'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                'CSS inlining error:',
                 false,
             ],
         ];
@@ -356,17 +367,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider
      *
      * @param string $templateText
      */
     public function testInlinecssDirectiveThrowsExceptionWhenMissingParameter($templateText)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            \Magento\Theme\Model\Theme\Registration::class
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
-        $this->_model->filter($templateText);
+        $this->model->filter($templateText);
     }
 
     /**
@@ -389,13 +406,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUpDesignParams()
     {
-        $themeCode = 'Vendor/custom_theme';
-        $this->_model->setDesignParams(
-            [
-                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'theme' => $themeCode,
-                'locale' => \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE,
-            ]
-        );
+        $themeCode = 'Vendor_EmailTest/custom_theme';
+        $this->model->setDesignParams([
+            'area' => Area::AREA_FRONTEND,
+            'theme' => $themeCode,
+            'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
+        ]);
     }
 }

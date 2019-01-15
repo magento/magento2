@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
@@ -8,7 +8,10 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 use Magento\Framework\App\Area;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CacheTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -31,12 +34,12 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected $viewConfig;
 
     /**
-     * @var \Magento\Framework\Config\View
+     * @var \Magento\Framework\Config\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollection;
 
@@ -52,32 +55,32 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewConfig = $this->getMockBuilder('Magento\Framework\View\ConfigInterface')
+        $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->config = $this->getMockBuilder('Magento\Framework\Config\View')
+        $this->config = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+        $this->themeCollection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageHelper = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+        $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mediaGalleryCollection = $this->getMockBuilder('Magento\Framework\Data\Collection')
+        $this->mediaGalleryCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            'Magento\Catalog\Model\Product\Image\Cache',
+            \Magento\Catalog\Model\Product\Image\Cache::class,
             [
                 'viewConfig' => $this->viewConfig,
                 'themeCollection' => $this->themeCollection,
@@ -86,11 +89,14 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGenerate()
     {
         $imageFile = 'image.jpg';
         $imageItem = $this->objectManager->getObject(
-            'Magento\Framework\Object',
+            \Magento\Framework\DataObject::class,
             [
                 'data' => ['file' => $imageFile]
             ]
@@ -103,37 +109,79 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->method('getMediaGalleryImages')
             ->willReturn($this->mediaGalleryCollection);
 
+        $data = $this->getTestData();
         $this->config->expects($this->once())
-            ->method('getVars')
+            ->method('getMediaEntities')
             ->with('Magento_Catalog')
-            ->willReturn($this->getTestData());
+            ->willReturn($data);
+
+        $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeMock->expects($this->exactly(3))
+            ->method('getCode')
+            ->willReturn('Magento\theme');
+
+        $this->themeCollection->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn([$themeMock]);
 
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
             ->with([
                 'area' => Area::AREA_FRONTEND,
-                'themeModel' => 'Magento\theme',
+                'themeModel' => $themeMock,
             ])
             ->willReturn($this->config);
-
-        $this->themeCollection->expects($this->once())
-            ->method('loadRegisteredThemes')
-            ->willReturn(['Magento\theme']);
 
         $this->imageHelper->expects($this->exactly(3))
             ->method('init')
             ->will($this->returnValueMap([
-                [$this->product, 'image', $imageFile, $this->imageHelper],
-                [$this->product, 'small_image', $imageFile, $this->imageHelper],
-                [$this->product, 'thumbnail', $imageFile, $this->imageHelper],
+                [
+                    $this->product,
+                    'product_image',
+                    $this->getImageData('product_image'),
+                    $this->imageHelper
+                ],
+                [
+                    $this->product,
+                    'product_small_image',
+                    $this->getImageData('product_small_image'),
+                    $this->imageHelper
+                ],
+                [
+                    $this->product,
+                    'product_thumbnail',
+                    $this->getImageData('product_thumbnail'),
+                    $this->imageHelper
+                ],
             ]));
         $this->imageHelper->expects($this->exactly(3))
-            ->method('resize')
-            ->will($this->returnValueMap([
-                [300, 300, $this->imageHelper],
-                [200, 200, $this->imageHelper],
-                [100, 100, $this->imageHelper],
-            ]));
+            ->method('setImageFile')
+            ->with($imageFile)
+            ->willReturnSelf();
+
+        $this->imageHelper->expects($this->any())
+            ->method('keepAspectRatio')
+            ->with($data['product_image']['aspect_ratio'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('keepFrame')
+            ->with($data['product_image']['frame'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('keepTransparency')
+            ->with($data['product_image']['transparency'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('constrainOnly')
+            ->with($data['product_image']['constrain'])
+            ->willReturnSelf();
+        $this->imageHelper->expects($this->any())
+            ->method('backgroundColor')
+            ->with($data['product_image']['background'])
+            ->willReturnSelf();
+
         $this->imageHelper->expects($this->exactly(3))
             ->method('save')
             ->will($this->returnSelf());
@@ -147,35 +195,39 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected function getTestData()
     {
         return [
-            // Wrong format
-            'product_image_size' => 100,
+            'product_image' => [
+                'type' => 'image',
+                'width' => 300,
+                'height' => 300,
+                'aspect_ratio' => true,
+                'frame' => true,
+                'transparency' => true,
+                'constrain' => true,
+                'background' => [255, 255, 255],
+            ],
+            'product_small_image' => [
+                'type' => 'small_image',
+                'height' => 200,
+            ],
+            'product_thumbnail' => [
+                'type' => 'thumbnail',
+                'width' => 100,
+            ],
+        ];
+    }
 
-            // Ok
-            'product_image:type' => 'image',
-            'product_image:width' => 300,
-            'product_image:height' => 300,
-
-            // Ok
-            'product_small_image:type' => 'small_image',
-            'product_small_image:width' => 200,
-            'product_small_image:height' => 200,
-
-            // Ok
-            'product_thumbnail:type' => 'thumbnail',
-            'product_thumbnail:width' => 100,
-            'product_thumbnail:height' => 100,
-
-            // Missing required parameter 'type'
-            'product_image_wrong_one:width' => 100,
-            'product_image_wrong_one:height' => 100,
-
-            // Missing required parameter 'height'
-            'product_image_wrong_two:type' => 'thumbnail',
-            'product_image_wrong_two:width' => 100,
-
-            // Missing required parameter 'width'
-            'product_image_wrong_three:type' => 'thumbnail',
-            'product_image_wrong_three:height' => 100,
+    /**
+     * @param string $imageId
+     * @return array
+     */
+    protected function getImageData($imageId)
+    {
+        $imageData = $this->getTestData();
+        return [
+            'id' => $imageId,
+            'type' => $imageData[$imageId]['type'],
+            'width' => isset($imageData[$imageId]['width']) ? $imageData[$imageId]['width'] : null,
+            'height' => isset($imageData[$imageId]['height']) ? $imageData[$imageId]['height'] : null,
         ];
     }
 }

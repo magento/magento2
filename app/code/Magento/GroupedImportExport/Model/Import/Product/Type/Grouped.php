@@ -2,12 +2,13 @@
 /**
  * Import entity of grouped product type
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\ImportExport\Model\Import;
 
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -29,16 +30,23 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $links;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param Grouped\Links $links
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         Grouped\Links $links
     ) {
@@ -69,36 +77,36 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 'relation' => []
             ];
             foreach ($bunch as $rowNum => $rowData) {
+                if ($this->_type != $rowData[Product::COL_TYPE]) {
+                    continue;
+                }
                 $associatedSkusQty = isset($rowData['associated_skus']) ? $rowData['associated_skus'] : null;
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSkusQty)) {
                     continue;
                 }
-                $associatedSkusAndQtyPairs = explode(Product::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
+                $associatedSkusAndQtyPairs = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
                 $position = 0;
                 foreach ($associatedSkusAndQtyPairs as $associatedSkuAndQty) {
                     ++$position;
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
-                    $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
+                    $associatedSku = isset($associatedSkuAndQty[0]) ? strtolower(trim($associatedSkuAndQty[0])) : null;
                     if (isset($newSku[$associatedSku])) {
-                        $linkedProductId = $newSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } elseif (isset($oldSku[$associatedSku])) {
-                        $linkedProductId = $oldSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } else {
                         continue;
                     }
                     $scope = $this->_entityModel->getRowScope($rowData);
                     if (Product::SCOPE_DEFAULT == $scope) {
-                        $productData = $newSku[$rowData[Product::COL_SKU]];
+                        $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
                     } else {
                         $colAttrSet = Product::COL_ATTR_SET;
                         $rowData[$colAttrSet] = $productData['attr_set_code'];
                         $rowData[Product::COL_TYPE] = $productData['type_id'];
                     }
-                    $productId = $productData['entity_id'];
+                    $productId = $productData[$this->getProductEntityLinkField()];
 
-                    if ($this->_type != $rowData[Product::COL_TYPE]) {
-                        continue;
-                    }
                     $linksData['product_ids'][$productId] = true;
                     $linksData['relation'][] = ['parent_id' => $productId, 'child_id' => $linkedProductId];
                     $qty = empty($associatedSkuAndQty[1]) ? 0 : trim($associatedSkuAndQty[1]);
@@ -119,5 +127,20 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
             $this->links->saveLinksData($linksData);
         }
         return $this;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductEntityIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }

@@ -2,12 +2,15 @@
 /**
  * Unit Test for \Magento\Framework\Filesystem\Directory\Write
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
-class WriteTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+
+class WriteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * \Magento\Framework\Filesystem\Driver
@@ -38,14 +41,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
-        $this->fileFactory = $this->getMock(
-            'Magento\Framework\Filesystem\File\WriteFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->fileFactory = $this->createMock(\Magento\Framework\Filesystem\File\WriteFactory::class);
         $this->path = 'PATH/';
         $this->write = new \Magento\Framework\Filesystem\Directory\Write(
             $this->fileFactory,
@@ -68,7 +65,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testGetDriver()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\Filesystem\DriverInterface',
+            DriverInterface::class,
             $this->write->getDriver(),
             'getDriver method expected to return instance of Magento\Framework\Filesystem\DriverInterface'
         );
@@ -88,11 +85,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
-
     public function testCreateSymlinkTargetDirectoryExists()
     {
-        $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
-            ->getMock();
+        $targetDir = $this->getMockBuilder(WriteInterface::class)->getMock();
         $targetDir->driver = $this->driver;
         $sourcePath = 'source/path/file';
         $destinationDirectory = 'destination/path';
@@ -123,6 +118,17 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\FileSystemException
+     */
+    public function testOpenFileNonWritable()
+    {
+        $targetPath = '/path/to/target.file';
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(false);
+        $this->write->openFile($targetPath);
+    }
+
+    /**
      * Assert is file expectation
      *
      * @param string $path
@@ -148,5 +154,70 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     private function getAbsolutePath($path)
     {
         return $this->path . $path;
+    }
+
+    /**
+     * @param string $sourcePath
+     * @param string $targetPath
+     * @param WriteInterface $targetDir
+     * @dataProvider getFilePathsDataProvider
+     */
+    public function testRenameFile($sourcePath, $targetPath, $targetDir)
+    {
+        if ($targetDir !== null) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $targetDir->driver = $this->getMockBuilder(DriverInterface::class)->getMockForAbstractClass();
+            $targetDirPath = 'TARGET_PATH/';
+            $targetDir->expects($this->once())
+                ->method('getAbsolutePath')
+                ->with($targetPath)
+                ->willReturn($targetDirPath . $targetPath);
+            $targetDir->expects($this->once())
+                ->method('isExists')
+                ->with(dirname($targetPath))
+                ->willReturn(false);
+            $targetDir->expects($this->once())
+                ->method('create')
+                ->with(dirname($targetPath));
+        }
+
+        $this->driver->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturnMap([
+                [$this->path, $sourcePath, null, $this->getAbsolutePath($sourcePath)],
+                [$this->path, $targetPath, null, $this->getAbsolutePath($targetPath)],
+            ]);
+        $this->driver->expects($this->any())
+            ->method('isFile')
+            ->willReturnMap([
+                [$this->getAbsolutePath($sourcePath), true],
+                [$this->getAbsolutePath($targetPath), true],
+            ]);
+        $this->driver->expects($this->any())
+            ->method('getParentDirectory')
+            ->with($targetPath)
+            ->willReturn(dirname($targetPath));
+        $this->write->renameFile($sourcePath, $targetPath, $targetDir);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilePathsDataProvider()
+    {
+        return [
+            [
+                'path/to/source.file',
+                'path/to/target.file',
+                null,
+            ],
+            [
+                'path/to/source.file',
+                'path/to/target.file',
+                $this->getMockBuilder(WriteInterface::class)
+                    ->setMethods(['isExists', 'getAbsolutePath', 'create'])
+                    ->getMockForAbstractClass(),
+            ],
+        ];
     }
 }

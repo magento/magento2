@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rss\Test\Unit\Block;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class FeedsTest
  * @package Magento\Rss\Block
  */
-class FeedsTest extends \PHPUnit_Framework_TestCase
+class FeedsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rss\Block\Feeds
@@ -35,12 +35,12 @@ class FeedsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->rssManagerInterface = $this->getMock('Magento\Framework\App\Rss\RssManagerInterface');
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->rssManagerInterface = $this->createMock(\Magento\Framework\App\Rss\RssManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Rss\Block\Feeds',
+            \Magento\Rss\Block\Feeds::class,
             [
                 'context' => $this->context,
                 'rssManager' => $this->rssManagerInterface
@@ -50,8 +50,8 @@ class FeedsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFeeds()
     {
-        $provider1 = $this->getMock('\Magento\Framework\App\Rss\DataProviderInterface');
-        $provider2 = $this->getMock('\Magento\Framework\App\Rss\DataProviderInterface');
+        $provider1 = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
+        $provider2 = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
         $feed1 = [
             'group' => 'Some Group',
             'feeds' => [

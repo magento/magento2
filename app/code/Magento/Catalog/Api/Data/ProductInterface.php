@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -35,7 +36,24 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
 
     const UPDATED_AT = 'updated_at';
 
-    const STORE_ID = 'store_id';
+    const MEDIA_GALLERY = 'media_gallery';
+
+    const TIER_PRICE = 'tier_price';
+
+    const ATTRIBUTES = [
+        self::SKU,
+        self::NAME,
+        self::PRICE,
+        self::WEIGHT,
+        self::STATUS,
+        self::VISIBILITY,
+        self::ATTRIBUTE_SET_ID,
+        self::TYPE_ID,
+        self::CREATED_AT,
+        self::UPDATED_AT,
+        self::MEDIA_GALLERY,
+        self::TIER_PRICE,
+    ];
     /**#@-*/
 
     /**
@@ -82,21 +100,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setName($name);
-
-    /**
-     * Product store id
-     *
-     * @return int|null
-     */
-    public function getStoreId();
-
-    /**
-     * Set product store id
-     *
-     * @param int $storeId
-     * @return $this
-     */
-    public function setStoreId($storeId);
 
     /**
      * Product attribute set id
@@ -277,21 +280,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
-
-    /**
-     * Gets list of product group prices
-     *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
-     */
-    public function getGroupPrices();
-
-    /**
-     * Sets list of product group prices
-     *
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
-     * @return $this
-     */
-    public function setGroupPrices(array $groupPrices = null);
 
     /**
      * Gets list of product tier prices

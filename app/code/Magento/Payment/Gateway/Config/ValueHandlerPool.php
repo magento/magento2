@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Config;
@@ -8,6 +8,15 @@ namespace Magento\Payment\Gateway\Config;
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 
+/**
+ * Default implementation of config value handlers pool.
+ * This class designed to be base for virtual types.
+ * Direct injection of this class is not recommended (inject ValueHandlerPoolInterface instead).
+ * Inheritance from this class is not recommended (declare virtual type or implement ValueHandlerPoolInterface instead).
+ *
+ * @api
+ * @since 100.0.2
+ */
 class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface
 {
     /**
@@ -21,12 +30,12 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
     private $handlers;
 
     /**
-     * @param array $handlers
      * @param TMapFactory $tmapFactory
+     * @param array $handlers
      */
     public function __construct(
-        array $handlers,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $handlers
     ) {
         if (!isset($handlers[self::DEFAULT_HANDLER])) {
             throw new \LogicException('Default handler should be provided.');
@@ -35,7 +44,7 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
         $this->handlers = $tmapFactory->create(
             [
                 'array' => $handlers,
-                'type' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+                'type' => ValueHandlerInterface::class
             ]
         );
     }
@@ -48,7 +57,7 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
      */
     public function get($field)
     {
-        return isset ($this->handlers[$field])
+        return isset($this->handlers[$field])
             ? $this->handlers[$field]
             : $this->handlers[self::DEFAULT_HANDLER];
     }

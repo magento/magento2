@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -9,5 +9,6 @@
   <page name="EditGroup" area="Adminhtml" mca="system_store/editGroup" module="Magento_Backend">
     <block name="formPageActions" class="Magento\Backend\Test\Block\System\Store\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="editFormGroup" class="Magento\Backend\Test\Block\System\Store\Edit\Form\GroupForm" locator="#edit_form" strategy="css selector"/>
+    <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
   </page>
 </config>

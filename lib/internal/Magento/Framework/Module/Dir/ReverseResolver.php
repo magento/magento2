@@ -2,12 +2,12 @@
 /**
  * Resolves file/directory paths to modules they belong to
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\Module\Dir as ModuleDir;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
 class ReverseResolver
@@ -18,15 +18,15 @@ class ReverseResolver
     protected $_moduleList;
 
     /**
-     * @var ModuleDir
+     * @var Dir
      */
     protected $_moduleDirs;
 
     /**
      * @param ModuleListInterface $moduleList
-     * @param ModuleDir $moduleDirs
+     * @param Dir $moduleDirs
      */
-    public function __construct(ModuleListInterface $moduleList, ModuleDir $moduleDirs)
+    public function __construct(ModuleListInterface $moduleList, Dir $moduleDirs)
     {
         $this->_moduleList = $moduleList;
         $this->_moduleDirs = $moduleDirs;

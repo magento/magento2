@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
@@ -34,6 +34,7 @@ class ExportSearchExcel extends TermController
      * Export search report to Excel XML format
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Exception
      */
     public function execute()
     {

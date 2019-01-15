@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Vault\Model\VaultPaymentInterface" type="Magento\Vault\Model\Method\Vault"/>
+    <preference for="Magento\Vault\Api\Data\PaymentTokenInterface" type="Magento\Vault\Model\PaymentToken"/>
+    <preference for="Magento\Vault\Api\Data\PaymentTokenFactoryInterface" type="Magento\Vault\Model\PaymentTokenFactory"/>
+    <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepository" />
+    <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
+    <preference for="Magento\Vault\Api\PaymentMethodListInterface" type="Magento\Vault\Model\PaymentMethodList" />
+    <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
+
+    <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
+        <plugin name="PaymentVaultExtensionAttributeOperations" type="Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
+    </type>
+
+    <!-- Payment Method configuration -->
+    <type name="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
+            <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Vault\Model\Method\NullPaymentProvider</argument>
+            <argument name="code" xsi:type="string">vault</argument>
+        </arguments>
+    </type>
+
+    <!-- @api create virtual type based on default value handler if it required by payment method -->
+    <virtualType name="VaultPaymentDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+    <!-- @api create virtual type based on default value handler pool if it required by payment method -->
+    <virtualType name="VaultPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">VaultPaymentDefaultValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Vault\Model\PaymentTokenFactory">
+        <arguments>
+            <argument name="tokenTypes" xsi:type="array">
+                <item name="account" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT</item>
+                <item name="credit_card" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

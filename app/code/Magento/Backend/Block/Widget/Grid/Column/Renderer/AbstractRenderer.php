@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {
@@ -48,13 +51,14 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param   Object $row
      * @return  string
      */
-    public function render(Object $row)
+    public function render(DataObject $row)
     {
         if ($this->getColumn()->getEditable()) {
-            $value = $this->_getValue($row);
-            return '<div class="admin__grid-control">' .
-            '<span class="admin__grid-control-value">' . $value . '</span>' .
-            $this->_getInputValueElement($row) . '</div>' ;
+            $result = '<div class="admin__grid-control">';
+            $result .= $this->getColumn()->getEditOnly() ? ''
+                : '<span class="admin__grid-control-value">' . $this->_getValue($row) . '</span>';
+
+            return $result . $this->_getInputValueElement($row) . '</div>' ;
         }
         return $this->_getValue($row);
     }
@@ -65,7 +69,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return string
      */
-    public function renderExport(Object $row)
+    public function renderExport(DataObject $row)
     {
         return $this->render($row);
     }
@@ -74,7 +78,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return mixed
      */
-    protected function _getValue(Object $row)
+    protected function _getValue(DataObject $row)
     {
         if ($getter = $this->getColumn()->getGetter()) {
             if (is_string($getter)) {
@@ -91,7 +95,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return string
      */
-    public function _getInputValueElement(Object $row)
+    public function _getInputValueElement(DataObject $row)
     {
         return '<input type="text" class="input-text ' .
             $this->getColumn()->getValidateClass() .
@@ -107,7 +111,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return mixed
      */
-    protected function _getInputValue(Object $row)
+    protected function _getInputValue(DataObject $row)
     {
         return $this->_getValue($row);
     }

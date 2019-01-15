@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ProductTypes\Config;
+
+use Magento\Framework\Module\Dir;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -26,7 +28,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $etcDir = $moduleReader->getModuleDir('etc', 'Magento_Catalog');
+        $etcDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Catalog');
         $this->_schema = $etcDir . '/product_types_merged.xsd';
         $this->_perFileSchema = $etcDir . '/product_types.xsd';
     }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Util\Generate\Fixture;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -43,8 +43,8 @@ class FieldsProvider
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
-        $this->eavConfig = $objectManager->create('Magento\Eav\Model\Config');
-        $this->resource = $objectManager->create('Magento\Framework\App\Resource');
+        $this->eavConfig = $objectManager->create(\Magento\Eav\Model\Config::class);
+        $this->resource = $objectManager->create(\Magento\Framework\App\ResourceConnection::class);
     }
 
     /**
@@ -54,7 +54,7 @@ class FieldsProvider
      */
     public function checkConnection()
     {
-        $this->connection = $this->getConnection('core_write');
+        $this->connection = $this->getConnection('core');
         if (!$this->connection || $this->connection instanceof \Zend_Db_Adapter_Exception) {
             echo ('Connection to Magento 2 database is absent. Fixture data has not been fetched.' . PHP_EOL);
             return false;
@@ -182,14 +182,14 @@ class FieldsProvider
      * Retrieve connection to resource specified by $resourceName.
      *
      * @param string $resourceName
-     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface|\Zend_Exception
+     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function getConnection($resourceName)
     {
         try {
             $connection = $this->resource->getConnection($resourceName);
             return $connection;
-        } catch (\Zend_Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage() . PHP_EOL;
             return $e;
         }

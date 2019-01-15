@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test for version control metadata model.
  */
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\VersionControl\Metadata
@@ -23,7 +23,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -36,26 +36,23 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->model = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            ['getResource', 'getAttributes'],
-            [],
-            '',
-            false
+        $this->model = $this->createPartialMock(
+            \Magento\Framework\Model\AbstractModel::class,
+            ['getResource', 'getAttributes']
         );
 
         $this->resource = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
             false,
             true,
-            ['getReadConnection', 'getEntityTable']
+            ['getConnection', 'getEntityTable']
         );
 
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -64,10 +61,10 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
 
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
 
-        $this->resource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
         $this->metadata = $objectManager->getObject(
-            'Magento\Eav\Model\Entity\VersionControl\Metadata'
+            \Magento\Eav\Model\Entity\VersionControl\Metadata::class
         );
     }
 

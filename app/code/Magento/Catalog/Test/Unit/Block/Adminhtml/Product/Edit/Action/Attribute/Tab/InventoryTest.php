@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribut
 /**
  * Class InventoryTest
  */
-class InventoryTest extends \PHPUnit_Framework_TestCase
+class InventoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders|\PHPUnit_Framework_MockObject_MockObject
@@ -44,28 +44,16 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Template\Context',
-            ['getRequest'],
-            [],
-            '',
-            false
-        );
-        $this->backordersMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Source\Backorders',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getRequest']);
+        $this->backordersMock = $this->createMock(\Magento\CatalogInventory\Model\Source\Backorders::class);
         $this->stockConfigurationMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockConfigurationInterface',
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],
             '',
             false
         );
         $this->requestMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['getParam'],
             '',
             false
@@ -76,7 +64,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->requestMock));
 
         $this->inventory = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory',
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory::class,
             [
                 'context' => $this->contextMock,
                 'backorders' => $this->backordersMock,
@@ -176,5 +164,15 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     public function testIsHidden()
     {
         $this->assertFalse($this->inventory->isHidden());
+    }
+
+    /**
+     * Run test isEnabled method
+     *
+     * @return void
+     */
+    public function testIsEnabled()
+    {
+        $this->assertEquals(true, $this->inventory->isAvailable('field'));
     }
 }

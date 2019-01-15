@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,22 +55,22 @@ class AttributeForm extends FormTabs
         $this->waitForElementVisible($this->propertiesTab);
         $data = [];
         if (null === $fixture) {
-            foreach ($this->tabs as $tabName => $tab) {
+            foreach ($this->getTabs() as $tabName => $tab) {
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTab($tabName)->getDataFormTab();
+                    $tabData = $this->getTab($tabName)->getFieldsData();
                     $data = array_merge($data, $tabData);
                 }
             }
         } else {
             $isHasData = ($fixture instanceof InjectableFixture) ? $fixture->hasData() : true;
-            $tabsFields = $isHasData ? $this->getFieldsByTabs($fixture) : [];
+            $tabsFields = $isHasData ? $this->getFixtureFieldsByContainers($fixture) : [];
             foreach ($tabsFields as $tabName => $fields) {
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTab($tabName)->getDataFormTab($fields, $this->_rootElement);
+                    $tabData = $this->getTab($tabName)->getFieldsData($fields, $this->_rootElement);
                     $data = array_merge($data, $tabData);
                 }
             }

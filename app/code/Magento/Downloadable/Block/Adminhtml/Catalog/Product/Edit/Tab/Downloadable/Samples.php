@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
@@ -15,14 +15,14 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * Block config data
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_config;
 
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/samples.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/samples.phtml';
 
     /**
      * Downloadable file
@@ -118,12 +118,12 @@ class Samples extends \Magento\Backend\Block\Widget
     public function getAddButtonHtml()
     {
         $addButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
-                'label' => __('Add New Row'),
+                'label' => __('Add New Link'),
                 'id' => 'add_sample_item',
-                'class' => 'add',
+                'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-sample'],
             ]
         );
@@ -179,7 +179,7 @@ class Samples extends \Magento\Backend\Block\Widget
             if ($this->getProduct() && $item->getStoreTitle()) {
                 $tmpSampleItem['store_title'] = $item->getStoreTitle();
             }
-            $samplesArr[] = new \Magento\Framework\Object($tmpSampleItem);
+            $samplesArr[] = new \Magento\Framework\DataObject($tmpSampleItem);
         }
 
         return $samplesArr;
@@ -220,7 +220,7 @@ class Samples extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'upload_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'id' => '',
                 'label' => __('Upload Files'),
@@ -264,12 +264,12 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * Retrieve config object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig()
     {
         if ($this->_config === null) {
-            $this->_config = new \Magento\Framework\Object();
+            $this->_config = new \Magento\Framework\DataObject();
         }
 
         return $this->_config;

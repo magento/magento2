@@ -2,7 +2,7 @@
 /**
  * Config reader factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
@@ -34,7 +34,7 @@ class DomFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\ObjectManager\Config\Reader\Dom'
+        $instanceName = \Magento\Framework\ObjectManager\Config\Reader\Dom::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

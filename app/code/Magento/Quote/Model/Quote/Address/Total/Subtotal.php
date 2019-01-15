@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
@@ -29,20 +29,25 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect address subtotal
      *
-     * @param Address $address
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
+     * @param Address\Total $total
      * @return $this
      */
-    public function collect(Address $address)
-    {
-        parent::collect($address);
-        $address->setTotalQty(0);
-
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        parent::collect($quote, $shippingAssignment, $total);
         $baseVirtualAmount = $virtualAmount = 0;
 
+        $address = $shippingAssignment->getShipping()->getAddress();
+        $address->setTotalQty(0);
         /**
          * Process address items
          */
-        $items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
         foreach ($items as $item) {
             if ($this->_initItem($address, $item) && $item->getQty() > 0) {
                 /**
@@ -57,14 +62,16 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        $address->setBaseVirtualAmount($baseVirtualAmount);
-        $address->setVirtualAmount($virtualAmount);
+        $total->setBaseVirtualAmount($baseVirtualAmount);
+        $total->setVirtualAmount($virtualAmount);
 
         /**
          * Initialize grand totals
          */
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $address->getSubtotal());
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $address->getBaseSubtotal());
+        $this->quoteValidator->validateQuoteAmount($quote, $total->getSubtotal());
+        $this->quoteValidator->validateQuoteAmount($quote, $total->getBaseSubtotal());
+        $address->setSubtotal($total->getSubtotal());
+        $address->setBaseSubtotal($total->getBaseSubtotal());
         return $this;
     }
 
@@ -98,6 +105,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
+        $quoteItem->setConvertedPrice(null);
         $originalPrice = $product->getPrice();
         if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
             $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
@@ -114,7 +122,6 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $this->_addBaseAmount($item->getBaseRowTotal());
             $address->setTotalQty($address->getTotalQty() + $item->getQty());
         }
-
         return true;
     }
 
@@ -156,22 +163,24 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $address->getQuote()->removeItem($item->getQuoteItemId());
             }
         }
-
         return $this;
     }
 
     /**
      * Assign subtotal amount and label to address object
      *
-     * @param Address $address
-     * @return $this
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param Address\Total $total
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(Address $address)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $address->addTotal(
-            ['code' => $this->getCode(), 'title' => __('Subtotal'), 'value' => $address->getSubtotal()]
-        );
-        return $this;
+        return [
+            'code' => $this->getCode(),
+            'title' => $this->getLabel(),
+            'value' => $total->getSubtotal()
+        ];
     }
 
     /**

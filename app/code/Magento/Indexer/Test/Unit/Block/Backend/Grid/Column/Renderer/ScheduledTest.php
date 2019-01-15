@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class ScheduledTest extends \PHPUnit_Framework_TestCase
+class ScheduledTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param bool $rowValue
@@ -16,9 +16,9 @@ class ScheduledTest extends \PHPUnit_Framework_TestCase
     public function testRender($rowValue, $class, $text)
     {
         $html = '<span class="' . $class . '"><span>' . $text . '</span></span>';
-        $row = new \Magento\Framework\Object();
-        $column = new \Magento\Framework\Object();
-        $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
+        $row = new \Magento\Framework\DataObject();
+        $column = new \Magento\Framework\DataObject();
+        $context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -31,6 +31,9 @@ class ScheduledTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $html);
     }
 
+    /**
+     * @return array
+     */
     public function typeProvider()
     {
         return [
@@ -39,5 +42,4 @@ class ScheduledTest extends \PHPUnit_Framework_TestCase
             ['', 'grid-severity-major', __('Update on Save')],
         ];
     }
-
 }

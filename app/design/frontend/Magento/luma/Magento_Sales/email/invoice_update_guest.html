@@ -1,0 +1,49 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Update to your %store_name invoice" store_name=$store.getFrontendName()}} @-->
+<!--@vars {
+"var billing.getName()":"Guest Customer Name",
+"var comment":"Invoice Comment",
+"var invoice.increment_id":"Invoice Id",
+"var order.increment_id":"Order Id",
+"var order.getStatusLabel()":"Order Status"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
+            <p>
+                {{trans
+                    "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+
+                    increment_id=$order.increment_id
+                    order_status=$order.getStatusLabel()
+                |raw}}
+            </p>
+            <p>
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>.' store_email=$store_email |raw}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

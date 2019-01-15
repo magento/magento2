@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractElementTest extends \PHPUnit_Framework_TestCase
+class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\AbstractElement
@@ -17,22 +19,43 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManager;
+    protected $storeManagerMock;
+
+    /**
+     * @var \Magento\Config\Model\Config\Structure\AbstractElement | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleManagerMock;
+
+    /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
 
     protected function setUp()
     {
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->moduleManagerMock = $this->createPartialMock(
+            \Magento\Framework\Module\Manager::class,
+            ['isOutputEnabled']
+        );
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Config\Model\Config\Structure\AbstractElement',
-            [$this->_storeManager]
+            \Magento\Config\Model\Config\Structure\AbstractElement::class,
+            [
+                'storeManager' => $this->storeManagerMock,
+                'moduleManager' => $this->moduleManagerMock,
+            ]
         );
-    }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
-        unset($this->_storeManager);
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
+        );
     }
 
     public function testGetId()
@@ -76,7 +99,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleReturnsTrueInSingleStoreModeForNonHiddenElements()
     {
-        $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -86,7 +109,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleReturnsFalseInSingleStoreModeForHiddenElements()
     {
-        $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['hide_in_single_store_mode' => 1, 'showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -99,7 +122,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsVisibleReturnsFalseInSingleStoreModeForInvisibleElements()
     {
-        $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -118,6 +141,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
@@ -147,6 +173,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isVisible());
     }
 
+    /**
+     * @return array
+     */
     public function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [
@@ -163,6 +192,32 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
             ]
         ];
+    }
+
+    public function testIsVisibleReturnFalseIfModuleNotEnabled()
+    {
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isOutputEnabled')
+            ->with('test_module')
+            ->willReturn(false);
+        $this->_model->setData(
+            [
+                'showInDefault' => 1,
+                'showInStore' => 0,
+                'showInWebsite' => 0,
+                'if_module_enabled' => 'test_module',
+            ],
+            'default'
+        );
+        $this->assertFalse($this->_model->isVisible());
+    }
+
+    public function testIsVisibleVisibilityIsHiddenTrue()
+    {
+        $this->elementVisibilityMock->expects($this->once())
+            ->method('isHidden')
+            ->willReturn(true);
+        $this->assertFalse($this->_model->isVisible());
     }
 
     public function testGetClass()

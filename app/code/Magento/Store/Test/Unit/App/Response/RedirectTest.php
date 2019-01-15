@@ -2,12 +2,12 @@
 /**
  * Response redirector tests
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\App\Response;
 
-class RedirectTest extends \PHPUnit_Framework_TestCase
+class RedirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\App\Response\Redirect
@@ -46,19 +46,13 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->_urlCoderMock = $this->getMock(
-            '\Magento\Framework\Encryption\UrlCoder',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_sessionMock = $this->getMock('\Magento\Framework\Session\SessionManagerInterface');
-        $this->_sidResolverMock = $this->getMock('\Magento\Framework\Session\SidResolverInterface');
-        $this->_urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface');
+        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_urlCoderMock = $this->createMock(\Magento\Framework\Encryption\UrlCoder::class);
+        $this->_sessionMock = $this->createMock(\Magento\Framework\Session\SessionManagerInterface::class);
+        $this->_sidResolverMock = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
+        $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
 
         $this->_model = new \Magento\Store\App\Response\Redirect(
             $this->_requestMock,
@@ -77,7 +71,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testSuccessUrl($baseUrl, $successUrl)
     {
-        $testStoreMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $testStoreMock = $this->createMock(\Magento\Store\Model\Store::class);
         $testStoreMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue($baseUrl));
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
         $this->_storeManagerMock->expects($this->any())->method('getStore')

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
@@ -37,10 +37,15 @@ class ReturnAction extends \Magento\Paypal\Controller\Express\AbstractExpress
             }
             return;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t process Express Checkout approval.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t process Express Checkout approval.')
+            );
         }
 
         return $resultRedirect->setPath('checkout/cart');

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+?>
+<?php /** @var $block \Magento\Ui\Block\Logger */ ?>
+<?php if ($block->isLoggingEnabled()): ?>
+    <script>
+        window.onerror = function(msg, url, line) {
+            var key = "<?= /* @escapeNotVerified */ $block->getSessionStorageKey() ?>";
+            var errors = {};
+            if (sessionStorage.getItem(key)) {
+                errors = JSON.parse(sessionStorage.getItem(key));
+            }
+            if (!(window.location.href in errors)) {
+                errors[window.location.href] = [];
+            }
+            errors[window.location.href].push("error: \'" + msg + "\' " + "file: " + url + " " + "line: " + line);
+            sessionStorage.setItem(key, JSON.stringify(errors));
+        };
+    </script>
+<?php endif; ?>

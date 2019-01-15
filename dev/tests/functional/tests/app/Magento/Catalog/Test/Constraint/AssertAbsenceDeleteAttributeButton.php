@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertAbsenceDeleteAttributeButton extends AbstractConstraint
      */
     public function processAssert(CatalogProductAttributeNew $attributeNew)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $attributeNew->getPageActions()->checkDeleteButton(),
             "Button 'Delete Attribute' is present on Attribute page"
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
@@ -10,6 +10,9 @@ use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
  * Class AddWebsitesFieldToCollection
+ *
+ * @api
+ * @since 100.0.2
  */
 class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
 {
@@ -18,6 +21,7 @@ class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
      */
     public function addField(Collection $collection, $field, $alias = null)
     {
-         $collection->addWebsiteNamesToResult();
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection->addWebsiteNamesToResult();
     }
 }

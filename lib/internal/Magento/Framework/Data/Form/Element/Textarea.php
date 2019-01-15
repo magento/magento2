@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ class Textarea extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('textarea');
+        $this->addClass('textarea admin__control-textarea');
         $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
             . $this->serialize($this->getHtmlAttributes()) . $this->_getUiId() . ' >';
         $html .= $this->getEscapedValue();

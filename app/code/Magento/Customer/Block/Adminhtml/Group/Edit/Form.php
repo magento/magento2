@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Group\Edit;
@@ -95,7 +95,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Group Name'),
                 'title' => __('Group Name'),
                 'note' => __(
-                    'Maximum length must be less then %1 symbols',
+                    'Maximum length must be less then %1 characters.',
                     \Magento\Customer\Model\GroupManagement::GROUP_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass,

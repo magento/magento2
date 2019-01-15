@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,6 +30,8 @@
                                         <xs:attribute name="resource" type="typeResource" use="required" />
                                         <xs:attribute name="dependsOnModule" type="typeModule" use="optional" />
                                         <xs:attribute name="dependsOnConfig" type="typeDependsConfig" use="optional" />
+                                        <xs:attribute name="translate" type="xs:string" use="optional" />
+                                        <xs:attribute name="target" type="xs:string" use="optional" />
                                     </xs:complexType>
                                 </xs:element>
                                 <xs:element name="update">
@@ -49,6 +51,8 @@
                                         <xs:attribute name="resource" type="typeResource" use="optional" />
                                         <xs:attribute name="dependsOnModule" type="typeModule" use="optional" />
                                         <xs:attribute name="dependsOnConfig" type="typeDependsConfig" use="optional" />
+                                        <xs:attribute name="translate" type="xs:string" use="optional" />
+                                        <xs:attribute name="target" type="xs:string" use="optional" />
                                     </xs:complexType>
                                 </xs:element>
                                 <xs:element name="remove">
@@ -64,7 +68,6 @@
                             </xs:choice>
                         </xs:sequence>
                     </xs:complexType>
-
                     <xs:unique name="uniqueAddItemId">
                         <xs:annotation>
                             <xs:documentation>

@@ -1,28 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Translation\Model;
 
-class StringTest extends \PHPUnit_Framework_TestCase
+class StringTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Translation\Model\String
+     * @var \Magento\Translation\Model\StringUtils
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Translation\Model\String'
+            \Magento\Translation\Model\StringUtils::class
         );
     }
 
     public function testConstructor()
     {
-        $this->assertInstanceOf('Magento\Translation\Model\Resource\String', $this->_model->getResource());
+        $this->assertInstanceOf(
+            \Magento\Translation\Model\ResourceModel\StringUtils::class,
+            $this->_model->getResource()
+        );
     }
 
     public function testSetGetString()

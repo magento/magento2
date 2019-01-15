@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Instance extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
@@ -24,6 +28,6 @@ class Instance extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_widget_instance';
         $this->_headerText = __('Manage Widget Instances');
         parent::_construct();
-        $this->buttonList->update('add', 'label', __('Add Frontend App'));
+        $this->buttonList->update('add', 'label', __('Add Widget'));
     }
 }

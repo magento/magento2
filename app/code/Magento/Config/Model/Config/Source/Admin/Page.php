@@ -2,11 +2,15 @@
 /**
  * Admin system config startup page
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Source\Admin;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Page implements \Magento\Framework\Option\ArrayInterface
 {
     /**

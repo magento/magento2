@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,12 +36,12 @@ class AssertProductReviewIsAbsentOnProductPage extends AbstractConstraint
     {
         $catalogProductView->getViewBlock()->selectTab('Reviews');
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $catalogProductView->getCustomerReviewBlock()->isVisibleReviewItem(),
             'No reviews below the form required.'
         );
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NO_REVIEW_LINK_TEXT,
             trim($catalogProductView->getReviewSummary()->getAddReviewLink()->getText()),
             sprintf('"%s" link is not available', self::NO_REVIEW_LINK_TEXT)

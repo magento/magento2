@@ -2,7 +2,7 @@
 /**
  * Plugin for \Magento\Catalog\Api\ProductRepositoryInterface
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Plugin\ProductRepository;
@@ -10,15 +10,15 @@ namespace Magento\Catalog\Model\Plugin\ProductRepository;
 class TransactionWrapper
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $resourceModel;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product $resourceModel
+     * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product $resourceModel
+        \Magento\Catalog\Model\ResourceModel\Product $resourceModel
     ) {
         $this->resourceModel = $resourceModel;
     }

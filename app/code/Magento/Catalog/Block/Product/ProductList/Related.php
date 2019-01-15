@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
-use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product related items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection
@@ -40,7 +41,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     /**
      * Checkout cart
      *
-     * @var \Magento\Checkout\Model\Resource\Cart
+     * @var \Magento\Checkout\Model\ResourceModel\Cart
      */
     protected $_checkoutCart;
 
@@ -51,7 +52,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Checkout\Model\Resource\Cart $checkoutCart
+     * @param \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -59,7 +60,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Checkout\Model\Resource\Cart $checkoutCart,
+        \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Module\Manager $moduleManager,
@@ -76,11 +77,13 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
 
         $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
@@ -102,6 +105,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -111,10 +116,19 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Get collection items
+     *
      * @return Collection
      */
     public function getItems()
     {
+        /**
+         * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
+         * @see https://github.com/magento/magento2/issues/5897
+         */
+        if ($this->_itemCollection === null) {
+            $this->_prepareData();
+        }
         return $this->_itemCollection;
     }
 
@@ -130,5 +144,20 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;
+    }
+
+    /**
+     * Find out if some products can be easy added to cart
+     *
+     * @return bool
+     */
+    public function canItemsAddToCart()
+    {
+        foreach ($this->getItems() as $item) {
+            if (!$item->isComposite() && $item->isSaleable() && !$item->getRequiredOptions()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

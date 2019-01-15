@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -8,6 +8,7 @@ namespace Magento\Developer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -21,6 +22,12 @@ class DevTestsRunCommand extends Command
      * input parameter parameter
      */
     const INPUT_ARG_TYPE = 'type';
+
+    /**
+     * PHPUnit arguments parameter
+     */
+    const INPUT_OPT_COMMAND_ARGUMENTS       = 'arguments';
+    const INPUT_OPT_COMMAND_ARGUMENTS_SHORT = 'c';
 
     /**
      * command name
@@ -56,7 +63,13 @@ class DevTestsRunCommand extends Command
             'Type of test to run. Available types: ' . implode(', ', array_keys($this->types)),
             'default'
         );
-
+        $this->addOption(
+            self::INPUT_OPT_COMMAND_ARGUMENTS,
+            self::INPUT_OPT_COMMAND_ARGUMENTS_SHORT,
+            InputOption::VALUE_REQUIRED,
+            'Additional arguments for PHPUnit. Example: "-c\'--filter=MyTest\'" (no spaces)',
+            ''
+        );
         parent::configure();
     }
 
@@ -86,7 +99,10 @@ class DevTestsRunCommand extends Command
             list($dir, $options) = $this->commands[$key];
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             chdir($dirName);
-            $command = 'php '. BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            if ($commandArguments = $input->getOption(self::INPUT_OPT_COMMAND_ARGUMENTS)) {
+                $command .= ' ' . $commandArguments;
+            }
             $message = $dirName . '> ' . $command;
             $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);
@@ -101,10 +117,12 @@ class DevTestsRunCommand extends Command
             foreach ($failures as $message) {
                 $output->writeln(' - ' . $message);
             }
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } else {
             $output->writeln('PASSED (' . count($runCommands) . ')');
         }
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -116,28 +134,25 @@ class DevTestsRunCommand extends Command
     {
         $this->commands = [
             'unit'                   => ['../tests/unit', ''],
-            'unit-performance'       => ['../tests/performance/framework/tests/unit', ''],
             'unit-static'            => ['../tests/static/framework/tests/unit', ''],
             'unit-integration'       => ['../tests/integration/framework/tests/unit', ''],
             'integration'            => ['../tests/integration', ''],
             'integration-integrity'  => ['../tests/integration', ' testsuite/Magento/Test/Integrity'],
             'static-default'         => ['../tests/static', ''],
             'static-legacy'          => ['../tests/static', ' testsuite/Magento/Test/Legacy'],
-            'static-integration-php' => ['../tests/static', ' testsuite/Magento/Test/Php/Exemplar'],
             'static-integration-js'  => ['../tests/static', ' testsuite/Magento/Test/Js/Exemplar'],
         ];
         $this->types = [
             'all'             => array_keys($this->commands),
-            'unit'            => ['unit', 'unit-performance', 'unit-static', 'unit-integration'],
+            'unit'            => ['unit', 'unit-static', 'unit-integration'],
             'integration'     => ['integration'],
             'integration-all' => ['integration', 'integration-integrity'],
             'static'          => ['static-default'],
-            'static-all'      => ['static-default', 'static-legacy', 'static-integration-php', 'static-integration-js'],
+            'static-all'      => ['static-default', 'static-legacy', 'static-integration-js'],
             'integrity'       => ['static-default', 'static-legacy', 'integration-integrity'],
             'legacy'          => ['static-legacy'],
             'default'         => [
                 'unit',
-                'unit-performance',
                 'unit-static',
                 'unit-integration',
                 'integration',

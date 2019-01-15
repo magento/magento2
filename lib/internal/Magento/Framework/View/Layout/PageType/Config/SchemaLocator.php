@@ -2,7 +2,7 @@
 /**
  * Locator for page_types XSD schemas.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\PageType\Config;
@@ -14,14 +14,14 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
+    protected $schema;
 
     /**
-     * Constructor
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
-    public function __construct()
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $this->_schema = realpath(__DIR__ . '/../../etc/page_types.xsd');
+        $this->schema = $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/page_types.xsd');
     }
 
     /**
@@ -31,7 +31,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -41,6 +41,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 }

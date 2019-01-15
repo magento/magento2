@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -19,22 +19,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_frontResolverMock = $this->getMock(
-            '\Magento\Backend\App\Area\FrontNameResolver',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_frontResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
         $this->_helper = new \Magento\Backend\Helper\Data(
-            $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false, false),
-            $this->getMock('\Magento\Framework\App\Route\Config', [], [], '', false),
-            $this->getMock('Magento\Framework\Locale\ResolverInterface'),
-            $this->getMock('\Magento\Backend\Model\Url', [], [], '', false),
-            $this->getMock('\Magento\Backend\Model\Auth', [], [], '', false),
+            $this->createMock(\Magento\Framework\App\Helper\Context::class),
+            $this->createMock(\Magento\Framework\App\Route\Config::class),
+            $this->createMock(\Magento\Framework\Locale\ResolverInterface::class),
+            $this->createMock(\Magento\Backend\Model\Url::class),
+            $this->createMock(\Magento\Backend\Model\Auth::class),
             $this->_frontResolverMock,
-            $this->getMock('\Magento\Framework\Math\Random', [], [], '', false),
-            $this->getMock('\Magento\Framework\App\RequestInterface')
+            $this->createMock(\Magento\Framework\Math\Random::class),
+            $this->createMock(\Magento\Framework\App\RequestInterface::class)
         );
     }
 
@@ -66,6 +60,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function getPrepareFilterStringValuesDataProvider()
     {
         return [

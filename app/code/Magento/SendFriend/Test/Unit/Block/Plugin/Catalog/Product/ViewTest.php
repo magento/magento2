@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\SendFriend\Test\Unit\Block\Plugin\Catalog\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\SendFriend\Block\Plugin\Catalog\Product\View */
     protected $view;
@@ -24,18 +24,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sendfriendModel = $this->getMock(
-            'Magento\SendFriend\Model\SendFriend',
-            ['__wakeup', 'canEmailToFriend'],
-            [],
-            '',
-            false
+        $this->sendfriendModel = $this->createPartialMock(
+            \Magento\SendFriend\Model\SendFriend::class,
+            ['__wakeup', 'canEmailToFriend']
         );
-        $this->productView = $this->getMock('Magento\Catalog\Block\Product\View', [], [], '', false);
+        $this->productView = $this->createMock(\Magento\Catalog\Block\Product\View::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $this->objectManagerHelper->getObject(
-            'Magento\SendFriend\Block\Plugin\Catalog\Product\View',
+            \Magento\SendFriend\Block\Plugin\Catalog\Product\View::class,
             [
                 'sendfriend' => $this->sendfriendModel
             ]
@@ -55,6 +52,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->view->afterCanEmailToFriend($this->productView, $result));
     }
 
+    /**
+     * @return array
+     */
     public function afterCanEmailToFriendDataSet()
     {
         return [

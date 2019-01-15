@@ -1,34 +1,70 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
+use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
+use Magento\Framework\Model\AbstractModel;
+
+/**
+ * Catalog search indexer plugin for catalog product.
+ */
 class Product extends AbstractPlugin
 {
     /**
-     * Reindex on product save
+     * Reindex on product save.
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param ResourceProduct $productResource
+     * @param \Closure $proceed
+     * @param AbstractModel $product
+     * @return ResourceProduct
+     * @throws \Exception
      */
-    public function afterSave(\Magento\Catalog\Model\Product $product)
+    public function aroundSave(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
-        $this->reindexRow($product->getId());
-        return $product;
+        return $this->addCommitCallback($productResource, $proceed, $product);
     }
 
     /**
      * Reindex on product delete
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param ResourceProduct $productResource
+     * @param \Closure $proceed
+     * @param AbstractModel $product
+     * @return ResourceProduct
+     * @throws \Exception
      */
-    public function afterDelete(\Magento\Catalog\Model\Product $product)
+    public function aroundDelete(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
     {
-        $this->reindexRow($product->getId());
-        return $product;
+        return $this->addCommitCallback($productResource, $proceed, $product);
+    }
+
+    /**
+     * Reindex catalog search.
+     *
+     * @param ResourceProduct $productResource
+     * @param \Closure $proceed
+     * @param AbstractModel $product
+     * @return ResourceProduct
+     * @throws \Exception
+     */
+    private function addCommitCallback(ResourceProduct $productResource, \Closure $proceed, AbstractModel $product)
+    {
+        try {
+            $productResource->beginTransaction();
+            $result = $proceed($product);
+            $productResource->addCommitCallback(function () use ($product) {
+                $this->reindexRow($product->getEntityId());
+            });
+            $productResource->commit();
+        } catch (\Exception $e) {
+            $productResource->rollBack();
+            throw $e;
+        }
+
+        return $result;
     }
 }

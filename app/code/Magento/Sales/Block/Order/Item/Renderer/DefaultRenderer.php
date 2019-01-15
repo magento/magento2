@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
@@ -14,13 +12,16 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * Order item render block
+ *
+ * @api
+ * @since 100.0.2
  */
 class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -31,13 +32,13 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = []
     ) {
@@ -47,10 +48,10 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return $this
      */
-    public function setItem(\Magento\Framework\Object $item)
+    public function setItem(\Magento\Framework\DataObject $item)
     {
         $this->setData('item', $item);
         return $this;
@@ -172,7 +173,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         $result = ['value' => $truncatedValue];
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
+            $result['value'] = $result['value']
+                . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, ['full_view' => $optionValue]);
         }

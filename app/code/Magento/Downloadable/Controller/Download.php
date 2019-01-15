@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * Download controller
@@ -14,6 +15,13 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
  */
 abstract class Download extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * @var array
+     */
+    private $disallowedContentTypes = [
+        'text/html',
+    ];
+
     /**
      * Prepare response to output resource contents
      *
@@ -24,13 +32,16 @@ abstract class Download extends \Magento\Framework\App\Action\Action
     protected function _processDownload($path, $resourceType)
     {
         /* @var $helper DownloadHelper */
-        $helper = $this->_objectManager->get('Magento\Downloadable\Helper\Download');
+        $helper = $this->_objectManager->get(\Magento\Downloadable\Helper\Download::class);
 
         $helper->setResource($path, $resourceType);
         $fileName = $helper->getFilename();
+
         $contentType = $helper->getContentType();
 
-        $this->getResponse()->setHttpResponseCode(
+        /** @var HttpResponse $response */
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(
             200
         )->setHeader(
             'Pragma',
@@ -47,15 +58,19 @@ abstract class Download extends \Magento\Framework\App\Action\Action
         );
 
         if ($fileSize = $helper->getFileSize()) {
-            $this->getResponse()->setHeader('Content-Length', $fileSize);
+            $response->setHeader('Content-Length', $fileSize);
         }
 
-        if ($contentDisposition = $helper->getContentDisposition()) {
-            $this->getResponse()->setHeader('Content-Disposition', $contentDisposition . '; filename=' . $fileName);
+        $contentDisposition = $helper->getContentDisposition();
+        if (!$contentDisposition || in_array($contentType, $this->disallowedContentTypes)) {
+            // For security reasons we force browsers to download the file instead of opening it.
+            $contentDisposition = \Magento\Framework\HTTP\Mime::DISPOSITION_ATTACHMENT;
         }
 
-        $this->getResponse()->clearBody();
-        $this->getResponse()->sendHeaders();
+        $response->setHeader('Content-Disposition', $contentDisposition  . '; filename=' . $fileName);
+        //Rendering
+        $response->clearBody();
+        $response->sendHeaders();
 
         $helper->output();
     }
@@ -67,6 +82,6 @@ abstract class Download extends \Magento\Framework\App\Action\Action
      */
     protected function _getLink()
     {
-        return $this->_objectManager->get('Magento\Downloadable\Model\Link');
+        return $this->_objectManager->get(\Magento\Downloadable\Model\Link::class);
     }
 }

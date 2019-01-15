@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@
 ?>
 <?php $_product = $block->getProduct() ?>
 <?php if ($block->canEmailToFriend()): ?>
-    <a title="<?php echo __('Email') ?>"
-       href="<?php echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
-       class="action mailto friend"><span><?php echo __('Email') ?></span></a>
+    <a href="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
+       class="action mailto friend"><span><?= /* @escapeNotVerified */ __('Email') ?></span></a>
 <?php endif; ?>

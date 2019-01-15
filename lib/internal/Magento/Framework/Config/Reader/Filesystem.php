@@ -2,14 +2,16 @@
 /**
  * Filesystem configuration loader. Loads configuration from XML files, split by scopes
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
+
 namespace Magento\Framework\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Filesystem implements \Magento\Framework\Config\ReaderInterface
 {
@@ -63,11 +65,21 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $_domDocumentClass;
 
     /**
-     * Should configuration be validated
-     *
-     * @var bool
+     * @var \Magento\Framework\Config\ValidationStateInterface
      */
-    protected $_isValidated;
+    protected $validationState;
+
+    /**
+     * @var string
+     * @since 100.0.3
+     */
+    protected $_defaultScope;
+
+    /**
+     * @var string
+     * @since 100.0.3
+     */
+    protected $_schemaFile;
 
     /**
      * Constructor
@@ -88,17 +100,17 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         $this->_fileResolver = $fileResolver;
         $this->_converter = $converter;
         $this->_fileName = $fileName;
         $this->_idAttributes = array_replace($this->_idAttributes, $idAttributes);
+        $this->validationState = $validationState;
         $this->_schemaFile = $schemaLocator->getSchema();
-        $this->_isValidated = $validationState->isValidated();
-        $this->_perFileSchema = $schemaLocator->getPerFileSchema() &&
-            $this->_isValidated ? $schemaLocator->getPerFileSchema() : null;
+        $this->_perFileSchema = $schemaLocator->getPerFileSchema() && $validationState->isValidationRequired()
+            ? $schemaLocator->getPerFileSchema() : null;
         $this->_domDocumentClass = $domDocumentClass;
         $this->_defaultScope = $defaultScope;
     }
@@ -141,11 +153,14 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
                 );
             }
         }
-        if ($this->_isValidated) {
+        if ($this->validationState->isValidationRequired()) {
             $errors = [];
             if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {
                 $message = "Invalid Document \n";
@@ -172,7 +187,13 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      */
     protected function _createConfigMerger($mergerClass, $initialContents)
     {
-        $result = new $mergerClass($initialContents, $this->_idAttributes, null, $this->_perFileSchema);
+        $result = new $mergerClass(
+            $initialContents,
+            $this->validationState,
+            $this->_idAttributes,
+            null,
+            $this->_perFileSchema
+        );
         if (!$result instanceof \Magento\Framework\Config\Dom) {
             throw new \UnexpectedValueException(
                 "Instance of the DOM config merger is expected, got {$mergerClass} instead."

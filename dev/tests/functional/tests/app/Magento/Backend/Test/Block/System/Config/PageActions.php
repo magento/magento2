@@ -2,7 +2,7 @@
 /**
  * Config actions block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,6 @@ class PageActions extends AbstractPageActions
     {
         $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
             ->setValue($websiteScope);
-        $this->browser->acceptAlert();
 
         return $this;
     }

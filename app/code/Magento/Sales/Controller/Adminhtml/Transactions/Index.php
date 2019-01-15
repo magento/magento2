@@ -1,14 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\Model\View\Result\Page;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
+class Index extends \Magento\Sales\Controller\Adminhtml\Transactions implements HttpGetActionInterface
 {
     /**
      * @return Page

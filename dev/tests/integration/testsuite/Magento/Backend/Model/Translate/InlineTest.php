@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Translate;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Model\Translate;
 /**
  * @magentoAppArea adminhtml
  */
-class InlineTest extends \PHPUnit_Framework_TestCase
+class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Translate\InlineInterface
@@ -18,7 +18,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_translateInline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Translate\InlineInterface'
+            \Magento\Framework\Translate\InlineInterface::class
         );
     }
 
@@ -30,12 +30,14 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     {
         $body = '<html><body>some body</body></html>';
         /** @var \Magento\Backend\Model\UrlInterface $url */
-        $url = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\UrlInterface');
+        $url = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\UrlInterface::class);
         $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate');
         $this->_translateInline->processResponseBody($body, true);
-        $this->assertContains(
-            $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate'),
-            $body
+        $expected = str_replace(
+            [':', '/'],
+            ['\u003A', '\u002F'],
+            $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate')
         );
+        $this->assertContains($expected, $body);
     }
 }

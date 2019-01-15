@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,8 +35,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      * @param string $format \DateTime input/output format
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
-    public function __construct($format = null, $localeResolver = null)
-    {
+    public function __construct(
+        $format = null,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+    ) {
         if ($format === null) {
             $format = DateTime::DATE_INTERNAL_FORMAT;
         }
@@ -52,6 +54,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function inputFilter($value)
     {
+        if (!$value) {
+            return $value;
+        }
+
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
             ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
@@ -72,6 +78,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function outputFilter($value)
     {
+        if (!$value) {
+            return $value;
+        }
+
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
             ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );

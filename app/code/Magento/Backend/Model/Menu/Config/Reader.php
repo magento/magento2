@@ -2,11 +2,15 @@
 /**
  * Menu configuration files handler
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Config;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -26,7 +30,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'menu.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Backend\Model\Menu\Config\Menu\Dom',
+        $domDocumentClass = \Magento\Backend\Model\Menu\Config\Menu\Dom::class,
         $defaultScope = 'global'
     ) {
         parent::__construct(

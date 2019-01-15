@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Express;
 
+use Magento\Paypal\Model\Config;
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 
@@ -51,13 +52,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected $_alias = '';
 
     /**
-     * Paypal data
-     *
-     * @var \Magento\Paypal\Helper\Data
-     */
-    protected $_paypalData;
-
-    /**
      * @var \Magento\Paypal\Model\ConfigFactory
      */
     protected $_paypalConfigFactory;
@@ -78,11 +72,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected $_mathRandom;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     */
-    protected $currentCustomer;
-
-    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -93,12 +82,15 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     private $_shortcutValidator;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param ValidatorInterface $shortcutValidator
      * @param string $paymentMethodCode
@@ -112,11 +104,9 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Paypal\Helper\Data $paypalData,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         ValidatorInterface $shortcutValidator,
         $paymentMethodCode,
@@ -127,7 +117,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = []
     ) {
-        $this->_paypalData = $paypalData;
         $this->_paypalConfigFactory = $paypalConfigFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
@@ -142,7 +131,9 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->setTemplate($shortcutTemplate);
 
         parent::__construct($context, $data);
-        $this->currentCustomer = $currentCustomer;
+
+        $this->config = $this->_paypalConfigFactory->create();
+        $this->config->setMethod($this->_paymentMethodCode);
     }
 
     /**
@@ -151,9 +142,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected function _beforeToHtml()
     {
         $result = parent::_beforeToHtml();
-        /** @var \Magento\Paypal\Model\Config $config */
-        $config = $this->_paypalConfigFactory->create();
-        $config->setMethod($this->_paymentMethodCode);
 
         $isInCatalog = $this->getIsInCatalogProduct();
 
@@ -173,26 +161,12 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
         // use static image if in catalog
         if ($isInCatalog || null === $quote) {
-            $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl($this->_localeResolver->getLocale()));
+            $this->setImageUrl($this->config->getExpressCheckoutShortcutImageUrl($this->_localeResolver->getLocale()));
         } else {
             /**@todo refactor checkout model. Move getCheckoutShortcutImageUrl to helper or separate model */
-            $parameters = ['params' => ['quote' => $quote, 'config' => $config]];
+            $parameters = ['params' => ['quote' => $quote, 'config' => $this->config]];
             $checkoutModel = $this->_checkoutFactory->create($this->_checkoutType, $parameters);
             $this->setImageUrl($checkoutModel->getCheckoutShortcutImageUrl());
-        }
-
-        // ask whether to create a billing agreement
-        $customerId = $this->currentCustomer->getCustomerId(); // potential issue for caching
-        if ($this->_paypalData->shouldAskToCreateBillingAgreement($config, $customerId)) {
-            $this->setConfirmationUrl(
-                $this->getUrl(
-                    $this->_startAction,
-                    [\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1]
-                )
-            );
-            $this->setConfirmationMessage(
-                __('Would you like to sign a billing agreement to streamline further purchases with PayPal?')
-            );
         }
 
         return $result;
@@ -205,10 +179,26 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     protected function _toHtml()
     {
-        if (!$this->_shouldRender) {
+        if (!$this->shouldRender()) {
             return '';
         }
         return parent::_toHtml();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function shouldRender()
+    {
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+
+        $isInCatalog = $this->getIsInCatalogProduct();
+        $isInContext = (bool)(int) $this->config->getValue('in_context');
+
+        $isEnabled = ($isInContext && $isInCatalog) || !$isInContext;
+        $this->config->setMethod($this->_paymentMethodCode);
+
+        return $isEnabled && $this->_shouldRender;
     }
 
     /**

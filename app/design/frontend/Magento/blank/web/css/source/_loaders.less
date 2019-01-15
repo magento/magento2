@@ -1,29 +1,32 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
     .load.indicator {
-        .loader();
+        .lib-loader();
         position: absolute;
+
         > span {
             display: none;
         }
     }
 
     .loading-mask {
-        .loading-mask();
+        .lib-loading-mask();
         background: rgba(255, 255, 255, .5);
+
         .loader {
             > img {
-                .loading-mask();
+                .lib-loading-mask();
             }
+
             > p {
                 display: none;
             }

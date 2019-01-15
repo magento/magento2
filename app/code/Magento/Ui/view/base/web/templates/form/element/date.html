@@ -1,14 +1,15 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <input class="admin__control-text" type="text" data-bind="
     hasFocus: focused,
-    datepicker: { storage: value, options: options },
+    datepicker: { storage: shiftedValue, options: options },
+    valueUpdate: valueUpdate,
     attr: {
-        value: value,
+        value: shiftedValue,
         name: inputName,
         placeholder: placeholder,
         'aria-describedby': noticeId,

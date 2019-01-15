@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
@@ -313,6 +313,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
         if (!$this->isNumeric()) {
             $this->prev();
         }
-        return floatval($value);
+        return (float)$value;
     }
 }

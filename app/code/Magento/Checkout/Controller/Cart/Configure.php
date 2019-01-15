@@ -1,15 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework;
 use Magento\Framework\Controller\ResultFactory;
 
-class Configure extends \Magento\Checkout\Controller\Cart
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Configure extends \Magento\Checkout\Controller\Cart implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -23,6 +28,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
+     * @codeCoverageIgnore
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -59,17 +65,19 @@ class Configure extends \Magento\Checkout\Controller\Cart
 
         try {
             if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
-                $this->messageManager->addError(__("We can't find the quote item."));
+                $this->messageManager->addErrorMessage(
+                    __("The quote item isn't found. Verify the item and try again.")
+                );
                 return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('checkout/cart');
             }
 
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());
 
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
+            $this->_objectManager->get(\Magento\Catalog\Helper\Product\View::class)
                 ->prepareAndRender(
                     $resultPage,
                     $quoteItem->getProduct()->getId(),
@@ -78,8 +86,8 @@ class Configure extends \Magento\Checkout\Controller\Cart
                 );
             return $resultPage;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot configure the product.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addErrorMessage(__('We cannot configure the product.'));
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }
     }

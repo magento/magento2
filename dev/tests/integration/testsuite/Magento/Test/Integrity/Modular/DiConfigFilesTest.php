@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Primary DI configs from app/etc
@@ -32,17 +35,18 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         //init primary configs
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Framework\Filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\Filesystem');
+        $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
         $configDirectory = $filesystem->getDirectoryRead(DirectoryList::CONFIG);
-        $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        self::$_primaryFiles = $fileIteratorFactory->create(
-            $configDirectory,
-            $configDirectory->search('{*/di.xml,di.xml}')
-        );
+        $fileIteratorFactory = $objectManager->get(\Magento\Framework\Config\FileIteratorFactory::class);
+        $search = [];
+        foreach ($configDirectory->search('{*/di.xml,di.xml}') as $path) {
+            $search[] = $configDirectory->getAbsolutePath($path);
+        }
+        self::$_primaryFiles = $fileIteratorFactory->create($search);
         //init module global configs
         /** @var $modulesReader \Magento\Framework\Module\Dir\Reader */
         $modulesReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Module\Dir\Reader');
+            ->get(\Magento\Framework\Module\Dir\Reader::class);
         self::$_moduleGlobalFiles = $modulesReader->getConfigurationFiles('di.xml');
 
         //init module area configs
@@ -54,21 +58,30 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $filePath
      * @param string $xml
-     * @return void
+     * @throws \Exception
      * @dataProvider linearFilesProvider
      */
-    public function testDiConfigFileWithoutMerging($xml)
+    public function testDiConfigFileWithoutMerging($filePath, $xml)
     {
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\ObjectManager\Config\SchemaLocator'
+            \Magento\Framework\ObjectManager\Config\SchemaLocator::class
         );
 
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        if (!@$dom->schemaValidate($schemaLocator->getSchema())) {
-            $this->fail('File ' . $xml . ' has invalid xml structure.');
+
+        libxml_use_internal_errors(true);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocator->getSchema());
+        libxml_use_internal_errors(false);
+
+        if (!empty($result)) {
+            $this->fail(
+                'File ' . $filePath . ' has invalid xml structure. '
+                . implode("\n", $result)
+            );
         }
     }
 
@@ -85,8 +98,8 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         }
 
         $output = [];
-        foreach ($common as $path => $file) {
-            $output[$path] = [$file];
+        foreach ($common as $path => $content) {
+            $output[] = [substr($path, strlen(BP)), $content];
         }
 
         return $output;
@@ -98,15 +111,20 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedDiConfig(array $files)
     {
-        $mapperMock = $this->getMock('Magento\Framework\ObjectManager\Config\Mapper\Dom', [], [], '', false);
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $mapperMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
+        $fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
+            ->setMethods(['read'])
+            ->getMockForAbstractClass();
         $fileResolverMock->expects($this->any())->method('read')->will($this->returnValue($files));
-        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $validationStateMock = $this->createPartialMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            ['isValidationRequired']
+        );
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\ObjectManager\Config\SchemaLocator'
+            \Magento\Framework\ObjectManager\Config\SchemaLocator::class
         );
 
         new \Magento\Framework\ObjectManager\Config\Reader\Dom(

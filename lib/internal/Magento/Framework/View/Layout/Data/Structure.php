@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Data;
 
 use Magento\Framework\Data\Structure as DataStructure;
+use Magento\Framework\App\State;
 
 /**
  * An associative data structure, that features "nested set" parent-child relations
+ *
+ * @api
  */
 class Structure extends DataStructure
 {
@@ -25,16 +28,24 @@ class Structure extends DataStructure
     protected $logger;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
      * Constructor
      *
      * @param \Psr\Log\LoggerInterface $logger
+     * @param State $state
      * @param array $elements
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
+        State $state,
         array $elements = null
     ) {
         $this->logger = $logger;
+        $this->state = $state;
         parent::__construct($elements);
     }
 
@@ -109,10 +120,12 @@ class Structure extends DataStructure
             if ($childName !== $sibling) {
                 $siblingParentName = $this->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
-                    $this->logger->critical(
-                        "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
-                        "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively."
-                    );
+                    if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                        $this->logger->info(
+                            "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
+                            "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively."
+                        );
+                    }
                     return;
                 }
                 $this->reorderToSibling($parentName, $childName, $sibling, $after ? 1 : -1);

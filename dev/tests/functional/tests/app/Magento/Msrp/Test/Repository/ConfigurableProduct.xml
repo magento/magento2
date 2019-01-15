@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,7 @@
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="tax_class_id" xsi:type="array">
@@ -29,7 +30,9 @@
                 <item name="dataset" xsi:type="string">one_variation_one_dollar</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">custom_attribute_set</item>

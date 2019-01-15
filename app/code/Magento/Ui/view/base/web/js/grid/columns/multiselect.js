@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -13,25 +17,32 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
+            controlVisibility: false,
             sortable: false,
+            draggable: false,
             menuVisible: false,
             excludeMode: false,
             allSelected: false,
             indetermine: false,
+            preserveSelectionsOnFilter: false,
+            disabled: [],
             selected: [],
             excluded: [],
+            fieldClass: {
+                'data-grid-checkbox-cell': true
+            },
             actions: [{
                 value: 'selectAll',
-                label: $t('Select all')
+                label: $t('Select All')
             }, {
                 value: 'deselectAll',
-                label: $t('Deselect all')
+                label: $t('Deselect All')
             }, {
                 value: 'selectPage',
-                label: $t('Select all on this page')
+                label: $t('Select All on This Page')
             }, {
                 value: 'deselectPage',
-                label: $t('Deselect all on this page')
+                label: $t('Deselect All on This Page')
             }],
 
             imports: {
@@ -40,9 +51,13 @@ define([
             },
 
             listens: {
-                '${ $.provider }:params.filters': 'deselectAll',
+                '${ $.provider }:params.filters': 'onFilter',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
+            },
+
+            modules: {
+                source: '${ $.provider }'
             }
         },
 
@@ -54,7 +69,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'menuVisible',
+                    'disabled',
                     'selected',
                     'excluded',
                     'excludeMode',
@@ -64,28 +79,6 @@ define([
                     'totalRecords',
                     'rows'
                 ]);
-
-            return this;
-        },
-
-        /**
-         * Toggles menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        toggleMenu: function () {
-            this.menuVisible(!this.menuVisible());
-
-            return this;
-        },
-
-        /**
-         * Hides menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        hideMenu: function () {
-            this.menuVisible(false);
 
             return this;
         },
@@ -214,6 +207,8 @@ define([
         selectPage: function () {
             var selected = _.union(this.selected(), this.getIds());
 
+            selected = _.difference(selected, this.disabled());
+
             this.selected(selected);
 
             return this;
@@ -232,6 +227,15 @@ define([
             });
 
             return this;
+        },
+
+        /**
+        * Selects or deselects all records on the current page.
+        *
+        * @returns {Multiselect} Chainable.
+        */
+        togglePage: function () {
+            return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
         /**
@@ -264,7 +268,7 @@ define([
          * Returns identifier of a record.
          *
          * @param {*} id - Id of a record or its' index in a rows array.
-         * @param {Boolean} [isIndex=false] - Flag that specifies whith what
+         * @param {Boolean} [isIndex=false] - Flag that specifies with what
          *      kind of identifier we are dealing with.
          * @returns {*}
          */
@@ -318,6 +322,19 @@ define([
         },
 
         /**
+         * Returns selected items on a current page.
+         *
+         * @returns {Array}
+         */
+        getPageSelections: function () {
+            var ids = this.getIds();
+
+            return this.selected.filter(function (id) {
+                return _.contains(ids, id);
+            });
+        },
+
+        /**
          * Returns selections data.
          *
          * @returns {Object}
@@ -327,8 +344,25 @@ define([
                 excluded: this.excluded(),
                 selected: this.selected(),
                 total: this.totalSelected(),
-                excludeMode: this.excludeMode()
+                excludeMode: this.excludeMode(),
+                params: this.getFiltering()
             };
+        },
+
+        /**
+         * Extracts filtering data from data provider.
+         *
+         * @returns {Object} Current filters state.
+         */
+        getFiltering: function () {
+            var source = this.source(),
+                keys = ['filters', 'search', 'namespace'];
+
+            if (!source) {
+                return {};
+            }
+
+            return _.pick(source.get('params'), keys);
         },
 
         /**
@@ -407,10 +441,10 @@ define([
                 allSelected     = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
-                if (excluded === totalRecords) {
+                if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
                     this.deselectAll();
                 }
-            } else if (totalRecords && selected === totalRecords) {
+            } else if (totalRecords && selected === totalRecords && !this.preserveSelectionsOnFilter) {
                 this.selectAll();
             }
 
@@ -418,6 +452,16 @@ define([
             this.indetermine(totalSelected && !allSelected);
 
             return this;
+        },
+
+        /**
+         * Overrides base method, because this component
+         * can't have global field action.
+         *
+         * @returns {Boolean} False.
+         */
+        hasFieldAction: function () {
+            return false;
         },
 
         /**
@@ -442,6 +486,15 @@ define([
                 newSelections = _.union(this.getIds(true), this.selected());
 
                 this.selected(newSelections);
+            }
+        },
+
+        /**
+         * Is invoked when filtration is applied or removed
+         */
+        onFilter: function () {
+            if (!this.preserveSelectionsOnFilter) {
+                this.deselectAll();
             }
         }
     });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,13 +26,17 @@ class Curl extends Conditions implements CatalogRuleInterface
      */
     protected $mapTypeParams = [
         'Conditions combination' => [
-            'type' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
             'value' => 1,
         ],
         'Category' => [
-            'type' => 'Magento\CatalogRule\Model\Rule\Condition\Product',
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Product::class,
             'attribute' => 'category_ids',
+        ],
+        'Attribute' => [
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Product::class,
+            'attribute' => 'attribute_id',
         ],
     ];
 
@@ -92,11 +96,11 @@ class Curl extends Conditions implements CatalogRuleInterface
         $url = $_ENV['app_backend_url'] . 'catalog_rule/promo_catalog/save/';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception(
                 "Catalog Price Rule entity creating by curl handler was not successful! Response: $response"
             );
@@ -154,7 +158,7 @@ class Curl extends Conditions implements CatalogRuleInterface
         // Sort data in grid to define category price rule id if more than 20 items in grid
         $url = $_ENV['app_backend_url'] . 'catalog_rule/promo_catalog/index/sort/rule_id/dir/desc';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0');
+        $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
 

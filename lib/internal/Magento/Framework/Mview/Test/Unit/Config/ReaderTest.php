@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\Config\Reader
@@ -26,30 +24,21 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock(
-            'Magento\Framework\App\Config\FileResolver',
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createPartialMock(\Magento\Framework\App\Config\FileResolver::class, ['get']);
 
-        $this->_converter = $this->getMock('Magento\Framework\Mview\Config\Converter', ['convert']);
+        $this->_converter = $this->createPartialMock(\Magento\Framework\Mview\Config\Converter::class, ['convert']);
 
-        $fsDirList = $this->getMock('Magento\Framework\Filesystem\DirectoryList', ['getPath'], [], '', false);
-        $fsDirList->expects(
-            $this->once()
-        )->method(
-            'getPath'
-        )->with(
-            DirectoryList::LIB_INTERNAL
-        )->will(
-            $this->returnValue('stub')
-        );
-        $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($fsDirList);
+        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Mview/etc/mview.xsd')
+            ->willReturn('test_folder');
+        $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($urnResolverMock);
 
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
         $this->_model = new \Magento\Framework\Mview\Config\Reader(
             $this->_fileResolverMock,
@@ -78,9 +67,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
             try {
                 $expected = file_get_contents(__DIR__ . '/../_files/' . $expectedFile);
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
+                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
                 return true;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 return false;
             }
         };

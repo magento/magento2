@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme\Data;
@@ -17,5 +17,5 @@ class Collection extends \Magento\Theme\Model\Theme\Collection implements ListIn
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Theme\Model\Theme\Data';
+    protected $_itemObjectClass = \Magento\Theme\Model\Theme\Data::class;
 }

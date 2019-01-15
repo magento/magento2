@@ -1,25 +1,39 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'Magento_Ui/js/modal/modal'
 ], function ($, mageTemplate) {
     'use strict';
 
-    $.widget('mage.systemMessageDialog', $.ui.dialog, {
+    $.widget('mage.systemMessageDialog', $.mage.modal, {
         options: {
+            modalClass: 'modal-system-messages',
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
-                    '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
+                    '<li class="message message-warning' +
+                        '<% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
                         '<%= item.text %>' +
                     '</li>' +
                 '<% }); %>'
         },
 
-        open: function (severity) {
+        /** @inheritdoc */
+        _create: function () {
+            this.options.title = $('#message-system-all').attr('title');
+            this._super();
+        },
+
+        /** @inheritdoc */
+        openModal: function (severity) {
             var superMethod = $.proxy(this._super, this);
 
             $.ajax({
@@ -47,16 +61,21 @@ define([
             }, this));
 
             return this;
+        },
+
+        /** @inheritdoc */
+        closeModal: function () {
+            this._super();
         }
     });
 
     $(document).ready(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 1);
+            $('#message-system-all').systemMessageDialog('openModal', 1);
         });
 
         $('#system_messages .message-system-short .warning').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 2);
+            $('#message-system-all').systemMessageDialog('openModal', 2);
         });
     });
 

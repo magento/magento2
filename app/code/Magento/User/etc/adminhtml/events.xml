@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="admin_user_authenticate_after">
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\AuthObserver" />
+    </event>
+    <event name="controller_action_predispatch">
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver" />
+    </event>
+    <event name="admin_user_save_after">
+        <observer name="magento_user" instance="Magento\User\Observer\Backend\TrackAdminNewPasswordObserver" />
+    </event>
+</config>

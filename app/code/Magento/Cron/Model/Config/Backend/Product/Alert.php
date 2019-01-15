@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
+/**
+ * Cron job Alert configuration
+ */
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -37,8 +40,9 @@ class Alert extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param string $runModelPath
      * @param array $data
@@ -47,19 +51,22 @@ class Alert extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $runModelPath = '',
         array $data = []
     ) {
         $this->_runModelPath = $runModelPath;
         $this->_configValueFactory = $configValueFactory;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
-     * @return void
+     * @inheritdoc
+     *
+     * @return $this
      * @throws \Exception
      */
     public function afterSave()
@@ -68,8 +75,8 @@ class Alert extends \Magento\Framework\App\Config\Value
         $frequency = $this->getData('groups/productalert_cron/fields/frequency/value');
 
         $cronExprArray = [
-            intval($time[1]), //Minute
-            intval($time[0]), //Hour
+            (int)$time[1], //Minute
+            (int)$time[0], //Hour
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY ? '1' : '*', //Day of the Month
             '*', //Month of the Year
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY ? '1' : '*', //Day of the Week
@@ -97,5 +104,7 @@ class Alert extends \Magento\Framework\App\Config\Value
         } catch (\Exception $e) {
             throw new \Exception(__('We can\'t save the cron expression.'));
         }
+
+        return parent::afterSave();
     }
 }

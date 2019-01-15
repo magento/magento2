@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -24,13 +24,14 @@
 
 //
 //  Order Summary
-// ----------------------------------------------
+//  ----------------------------------------------
 
 .order-details {
     width: 100%;
 
     tr {
-        > td {
+        > .address-details,
+        > .method-info {
             padding: @email-content__padding__base @email-content__padding__base @email-content__padding__base 0;
             width: 50%;
 
@@ -40,7 +41,7 @@
         }
 
         //  Prevent extra spacing on Payment & Shipping Method row
-        & + tr {
+        & + .method-info {
             > td {
                 padding: 0 0 @email-content__padding__base;
             }
@@ -53,23 +54,36 @@
         .title {
             font-weight: @font-weight__regular;
         }
+
+        .data.table {
+            > caption {
+                display: none;
+            }
+
+            th {
+                padding-right: @email-content__padding__base;
+            }
+        }
     }
 }
 
 //  Remove address and phone number link color on iOS
-.address-details a:extend(.no-link a) {};
+.address-details a {
+    &:extend(.no-link a);
+}
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     //  Stack columns
     .order-details {
-        td {
+        .address-details,
+        .method-info {
             display: block;
             padding: @email-content__padding__base 0 !important;
             width: auto !important;
 
             h3 {
-                margin-top: 0 !important;
                 margin-bottom: @indent__xs !important;
+                margin-top: 0 !important;
             }
         }
     }
@@ -77,10 +91,10 @@
 
 //
 //  Shipment Tracking
-// ----------------------------------------------
+//  ----------------------------------------------
 
 .shipment-track {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
 
     thead,
     tbody {
@@ -104,10 +118,10 @@
 
 //
 //  Items Table
-// ----------------------------------------------
+//  ----------------------------------------------
 
 .email-items {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
     border: @table__border-width @table__border-style @table__border-color;
 
     thead,
@@ -189,7 +203,8 @@
         text-align: center;
     }
 
-    .item-price {
+    .item-price,
+    .item-subtotal {
         text-align: right;
     }
 
@@ -225,6 +240,6 @@
 
 .email-non-inline() {
     .email-items {
-        .table-overflow();
+        .lib-table-overflow();
     }
 }

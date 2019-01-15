@@ -2,4 +2,4 @@
 
 new \Magento\Framework\Phrase('Testing');
 new Phrase('More testing');
-new \Magento\Framework\Object();
+new \Magento\Framework\DataObject();

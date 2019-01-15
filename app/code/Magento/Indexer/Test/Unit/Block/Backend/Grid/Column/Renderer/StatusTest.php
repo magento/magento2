@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $indexValues
@@ -14,11 +14,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($indexValues, $expectedResult)
     {
-        $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
+        $context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status($context);
-        $obj = new \Magento\Framework\Object();
+        $obj = new \Magento\Framework\DataObject();
         $obj->setGetter(null);
         $obj->setDefault('');
         $obj->setValue('');
@@ -27,25 +27,30 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $model->setColumn($obj);
         $model->setIndex($indexValues[0]);
         $result = $model->render($obj);
-        $this->assertEquals($result, '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>');
+        $this->assertEquals(
+            $result,
+            '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>'
+        );
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [
             'set1' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_INVALID],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_INVALID],
                 ['class' => 'grid-severity-critical', 'text' => 'Reindex required']
             ],
             'set2' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_VALID],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_VALID],
                 ['class' => 'grid-severity-notice', 'text' => 'Ready']
             ],
             'set3' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_WORKING],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_WORKING],
                 ['class' => 'grid-severity-major', 'text' => 'Processing']
             ]
         ];
     }
-
 }

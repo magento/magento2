@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
 use \Magento\Framework\App\Cache\Type\FrontendPool;
 
-class FrontendPoolTest extends \PHPUnit_Framework_TestCase
+class FrontendPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\FrontendPool
@@ -31,9 +31,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->_cachePool = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->_cachePool = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
         $this->_model = new FrontendPool(
             $this->_objectManager,
             $this->deploymentConfig,
@@ -61,7 +61,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($fixtureConfigData)
         );
 
-        $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
+        $cacheFrontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_cachePool->expects(
             $this->once()
         )->method(
@@ -72,13 +72,13 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($cacheFrontend)
         );
 
-        $accessProxy = $this->getMock('Magento\Framework\App\Cache\Type\AccessProxy', [], [], '', false);
+        $accessProxy = $this->createMock(\Magento\Framework\App\Cache\Type\AccessProxy::class);
         $this->_objectManager->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\Cache\Type\AccessProxy',
+            \Magento\Framework\App\Cache\Type\AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
         )->will(
             $this->returnValue($accessProxy)
@@ -89,6 +89,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($accessProxy, $this->_model->get($inputCacheType));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         $configData1 = [

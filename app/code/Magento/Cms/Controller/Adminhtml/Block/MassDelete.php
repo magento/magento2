@@ -1,34 +1,70 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Cms\Controller\Adminhtml\AbstractMassDelete;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 
 /**
  * Class MassDelete
  */
-class MassDelete extends AbstractMassDelete
+class MassDelete extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
-     * Field id
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    const ID_FIELD = 'block_id';
+    const ADMIN_RESOURCE = 'Magento_Cms::block';
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @var Filter
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Block\Collection';
+    protected $filter;
 
     /**
-     * Block model
-     *
-     * @var string
+     * @var CollectionFactory
      */
-    protected $model = 'Magento\Cms\Model\Block';
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context);
+    }
+
+    /**
+     * Execute action
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     */
+    public function execute()
+    {
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $collectionSize = $collection->getSize();
+
+        foreach ($collection as $block) {
+            $block->delete();
+        }
+
+        $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been deleted.', $collectionSize));
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
+    }
 }

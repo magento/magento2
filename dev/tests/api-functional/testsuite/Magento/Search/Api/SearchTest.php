@@ -1,25 +1,78 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Api;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SearchTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'searchV1';
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/search';
+    const SERVICE_NAME = 'searchV1';
+    const RESOURCE_PATH = '/V1/search/';
+
+    /**
+     * @var ProductInterface
+     */
+    private $product;
+
+    protected function setUp()
+    {
+        $productSku = 'simple';
+
+        $objectManager = Bootstrap::getObjectManager();
+        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+        $this->product = $productRepository->get($productSku);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @covers \Magento\Search\Model\Search::search
      */
-    public function testCatalogSearch()
+    public function testExistingProductSearch()
     {
-        $searchCriteria = [
+        $productName = $this->product->getName();
+
+        $searchCriteria = $this->buildSearchCriteria($productName);
+        $serviceInfo = $this->buildServiceInfo($searchCriteria);
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        self::assertArrayHasKey('search_criteria', $response);
+        self::assertArrayHasKey('items', $response);
+        self::assertGreaterThan(0, count($response['items']));
+        self::assertGreaterThan(0, $response['items'][0]['id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testNonExistentProductSearch()
+    {
+        $searchCriteria = $this->buildSearchCriteria('nonExistentProduct');
+        $serviceInfo = $this->buildServiceInfo($searchCriteria);
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        self::assertArrayHasKey('search_criteria', $response);
+        self::assertArrayHasKey('items', $response);
+        self::assertEquals(0, count($response['items']));
+    }
+
+    /**
+     * @param string $productName
+     * @return array
+     */
+    private function buildSearchCriteria(string $productName): array
+    {
+        return [
             'searchCriteria' => [
                 'request_name' => 'quick_search_container',
                 'filter_groups' => [
@@ -27,44 +80,31 @@ class SearchTest extends WebapiAbstract
                         'filters' => [
                             [
                                 'field' => 'search_term',
-                                'value' => 'simple',
-                            ],
-                            [
-                                'field' => 'price_dynamic_algorithm',
-                                'value' => 'auto',
+                                'value' => $productName,
                             ]
                         ]
                     ]
-                ],
-                'page_size' => 20000000000000,
-                'current_page' => 1,
-            ],
+                ]
+            ]
         ];
+    }
 
-        $serviceInfo = [
+    /**
+     * @param array $searchCriteria
+     * @return array
+     */
+    private function buildServiceInfo(array $searchCriteria): array
+    {
+        return [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Search',
-            ],
+                'operation' => self::SERVICE_NAME . 'Search'
+            ]
         ];
-
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
-
-        $this->assertArrayHasKey('search_criteria', $response);
-        $this->assertArrayHasKey('total_count', $response);
-        $this->assertArrayHasKey('items', $response);
-
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
-        $this->assertTrue($response['total_count'] > 0);
-        $this->assertTrue(count($response['items']) > 0);
-
-        $this->assertNotNull($response['items'][0]['id']);
-        $this->assertEquals('relevance', $response['items'][0]['custom_attributes'][0]['attribute_code']);
-        $this->assertTrue($response['items'][0]['custom_attributes'][0]['value'] > 0);
     }
 }

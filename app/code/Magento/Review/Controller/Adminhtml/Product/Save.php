@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends ProductController
+class Save extends ProductController implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -29,7 +30,7 @@ class Save extends ProductController
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', []);
                     /** @var \Magento\Review\Model\Rating\Option\Vote $votes */
-                    $votes = $this->_objectManager->create('Magento\Review\Model\Rating\Option\Vote')
+                    $votes = $this->_objectManager->create(\Magento\Review\Model\Rating\Option\Vote::class)
                         ->getResourceCollection()
                         ->setReviewFilter($reviewId)
                         ->addOptionInfo()

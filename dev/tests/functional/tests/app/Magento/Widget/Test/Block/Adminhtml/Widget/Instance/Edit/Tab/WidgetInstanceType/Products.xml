@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <page_group>
+            <selector>.fieldset-wrapper-title select</selector>
+            <input>optgroupselect</input>
+        </page_group>
+        <for>
+            <selector>//div[contains(@class,"group_container") and not(contains(@class,"no-display"))]/table//*[@class="radio for_specific"]</selector>
+            <strategy>xpath</strategy>
+            <input>checkbox</input>
+        </for>
+        <block>
+            <selector>.block_reference select</selector>
+            <input>select</input>
+        </block>
+        <template>
+            <selector>.block_template select</selector>
+            <input>select</input>
+        </template>
+    </fields>
+</mapping>

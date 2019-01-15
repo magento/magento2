@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Helper;
@@ -14,6 +14,9 @@ use Magento\Authorizenet\Model\Authorizenet;
 
 /**
  * Authorize.net Data Helper
+ *
+ * @api
+ * @since 100.0.2
  */
 class Data extends AbstractHelper
 {
@@ -188,7 +191,7 @@ class Data extends AbstractHelper
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $requestType
      * @param string $lastTransactionId
-     * @param \Magento\Framework\Object $card
+     * @param \Magento\Framework\DataObject $card
      * @param bool|float $amount
      * @param bool|string $exception
      * @param bool|string $additionalMessage

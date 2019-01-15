@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Config\Rules;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Module\Dir;
 
 /**
  * Class SchemaLocator
@@ -31,7 +32,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $xsd = $moduleReader->getModuleDir('etc', 'Magento_Paypal') . '/rules.xsd';
+        $xsd = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Paypal') . '/rules.xsd';
         $this->perFileSchema = $xsd;
         $this->schema = $xsd;
     }

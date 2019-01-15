@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Form
@@ -31,7 +31,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var FormFactory $formFactory */
-        $formFactory = $objectManager->create('Magento\Customer\Model\Metadata\FormFactory');
+        $formFactory = $objectManager->create(\Magento\Customer\Model\Metadata\FormFactory::class);
         $this->_form = $formFactory->create('customer_address', 'customer_address_edit');
 
         $this->_attributes = [
@@ -39,7 +39,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'default_shipping' => 1,
             'default_billing' => 0,
             'company' => 'Company Name',
-            'fax' => '(555) 555-5555',
             'middlename' => 'Mid',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',
@@ -57,7 +56,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $requestData = [
             'company' => 'Company Name',
-            'fax' => '(555) 555-5555',
             'middlename' => 'Mid',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',
@@ -72,7 +70,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'region_id' => 12,
             'region' => 'California',
         ];
-        $this->_request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $this->_request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $this->_request->setParams($requestData);
 
         $this->_expected = array_merge($this->_attributes, $requestData);

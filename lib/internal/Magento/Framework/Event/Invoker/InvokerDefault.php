@@ -2,16 +2,13 @@
 /**
  * Default event invoker
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Event\Invoker;
 
 use Magento\Framework\Event\Observer;
-use Zend\Stdlib\Exception\LogicException;
 
 class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
 {
@@ -33,8 +30,10 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      * @param \Magento\Framework\Event\ObserverFactory $observerFactory
      * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Framework\Event\ObserverFactory $observerFactory, \Magento\Framework\App\State $appState)
-    {
+    public function __construct(
+        \Magento\Framework\Event\ObserverFactory $observerFactory,
+        \Magento\Framework\App\State $appState
+    ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;
     }
@@ -58,24 +57,27 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
         } else {
             $object = $this->_observerFactory->get($configuration['instance']);
         }
-        $this->_callObserverMethod($object, $configuration['method'], $observer);
+        $this->_callObserverMethod($object, $observer);
     }
 
     /**
-     * Performs non-existent observer method calls protection
-     *
-     * @param object $object
-     * @param string $method
+     * @param \Magento\Framework\Event\ObserverInterface $object
      * @param Observer $observer
      * @return $this
      * @throws \LogicException
      */
-    protected function _callObserverMethod($object, $method, $observer)
+    protected function _callObserverMethod($object, $observer)
     {
-        if (method_exists($object, $method) && is_callable([$object, $method])) {
-            $object->{$method}($observer);
+        if ($object instanceof \Magento\Framework\Event\ObserverInterface) {
+            $object->execute($observer);
         } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            throw new \LogicException('Method "' . $method . '" is not defined in "' . get_class($object) . '"');
+            throw new \LogicException(
+                sprintf(
+                    'Observer "%s" must implement interface "%s"',
+                    get_class($object),
+                    \Magento\Framework\Event\ObserverInterface::class
+                )
+            );
         }
         return $this;
     }

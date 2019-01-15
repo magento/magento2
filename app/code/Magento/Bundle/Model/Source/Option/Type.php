@@ -2,7 +2,7 @@
 /**
  * Bundle Option Type Source Model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,9 +26,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_CODE = 'code';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $options = [];
 
     /**
@@ -37,7 +35,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param array $options
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -47,7 +45,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
         ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         array $options,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -78,6 +76,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -136,5 +135,6 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

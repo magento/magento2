@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
@@ -30,7 +30,7 @@ class EntityFactory implements EntityFactoryInterface
      * @param string $className
      * @param array $data
      * @throws \LogicException
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function create($className, array $data = [])
     {

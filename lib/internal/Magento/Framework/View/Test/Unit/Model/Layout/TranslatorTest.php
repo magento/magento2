@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
 use Magento\Framework\Phrase;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Model\Layout\Translator
@@ -45,7 +45,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 </layout>
 XML;
 
-        $this->_xmlDocument = simplexml_load_string($string, 'Magento\Framework\Simplexml\Element');
+        $this->_xmlDocument = simplexml_load_string($string, \Magento\Framework\Simplexml\Element::class);
 
         $this->_object = new \Magento\Framework\View\Model\Layout\Translator();
     }

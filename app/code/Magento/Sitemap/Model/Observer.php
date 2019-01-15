@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model;
@@ -19,6 +19,8 @@ class Observer
 
     /**
      * Cronjob expression configuration
+     *
+     * @deprecated Use \Magento\Cron\Model\Config\Backend\Sitemap::CRON_STRING_PATH instead.
      */
     const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
 
@@ -45,7 +47,7 @@ class Observer
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -66,14 +68,14 @@ class Observer
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
+        \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
@@ -88,12 +90,11 @@ class Observer
     /**
      * Generate sitemaps
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function scheduledGenerateSitemaps($schedule)
+    public function scheduledGenerateSitemaps()
     {
         $errors = [];
 
@@ -107,10 +108,9 @@ class Observer
         }
 
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\Resource\Sitemap\Collection */
+        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
-
             try {
                 $sitemap->generateXml();
             } catch (\Exception $e) {
@@ -123,8 +123,7 @@ class Observer
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
-            $translate = $this->_translateModel->getTranslateInline();
-            $this->_translateModel->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(

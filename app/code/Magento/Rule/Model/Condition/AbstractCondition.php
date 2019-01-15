@@ -1,28 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Abstract Rule condition data model
- *
- * @method string getOperator()
- */
 namespace Magento\Rule\Model\Condition;
 
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
+ * Abstract Rule condition data model
+ *
+ * @method string getOperator()
+ * @method string getFormName()
+ * @method setFormName()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
+ * @since 100.0.2
  */
-abstract class AbstractCondition extends \Magento\Framework\Object implements ConditionInterface
+abstract class AbstractCondition extends \Magento\Framework\DataObject implements ConditionInterface
 {
     /**
      * Defines which operators will be available for this condition
-     *
      * @var string
      */
     protected $_inputType = null;
@@ -82,17 +83,13 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
 
         $options = $this->getAttributeOptions();
         if ($options) {
-            foreach (array_keys($options) as $attr) {
-                $this->setAttribute($attr);
-                break;
-            }
+            reset($options);
+            $this->setAttribute(key($options));
         }
         $options = $this->getOperatorOptions();
         if ($options) {
-            foreach (array_keys($options) as $operator) {
-                $this->setOperator($operator);
-                break;
-            }
+            reset($options);
+            $this->setOperator(key($options));
         }
     }
 
@@ -158,14 +155,13 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asArray(array $arrAttributes = [])
     {
-        $out = [
+        return [
             'type' => $this->getType(),
             'attribute' => $this->getAttribute(),
             'operator' => $this->getOperator(),
             'value' => $this->getValue(),
             'is_value_processed' => $this->getIsValueParsed(),
         ];
-        return $out;
     }
 
     /**
@@ -203,7 +199,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asXml()
     {
-        $xml = "<type>" .
+        return "<type>" .
             $this->getType() .
             "</type>" .
             "<attribute>" .
@@ -215,7 +211,6 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             "<value>" .
             $this->getValue() .
             "</value>";
-        return $xml;
     }
 
     /**
@@ -242,8 +237,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
         if (is_string($xml)) {
             $xml = simplexml_load_string($xml);
         }
-        $arr = (array)$xml;
-        $this->loadArray($arr);
+        $this->loadArray((array)$xml);
         return $this;
     }
 
@@ -302,10 +296,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function getInputType()
     {
-        if (null === $this->_inputType) {
-            return 'string';
-        }
-        return $this->_inputType;
+        return null === $this->_inputType ? 'string' : $this->_inputType;
     }
 
     /**
@@ -346,12 +337,11 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function getValueSelectOptions()
     {
-        $valueOption = $opt = [];
+        $opt = [];
         if ($this->hasValueOption()) {
-            $valueOption = (array)$this->getValueOption();
-        }
-        foreach ($valueOption as $key => $value) {
-            $opt[] = ['value' => $key, 'label' => $value];
+            foreach ((array)$this->getValueOption() as $key => $value) {
+                $opt[] = ['value' => $key, 'label' => $value];
+            }
         }
         return $opt;
     }
@@ -365,10 +355,10 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     {
         if (!$this->hasValueParsed()) {
             $value = $this->getData('value');
-            if (is_array($value) && isset($value[0]) && is_string($value[0])) {
-                $value = $value[0];
+            if (is_array($value) && count($value) === 1) {
+                $value = reset($value);
             }
-            if ($this->isArrayOperatorType() && $value) {
+            if (!is_array($value) && $this->isArrayOperatorType() && $value) {
                 $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
             }
             $this->setValueParsed($value);
@@ -390,7 +380,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getValue()
     {
@@ -439,6 +429,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
         }
         if (!empty($valueArr)) {
             $value = implode(', ', $valueArr);
+        } elseif (is_array($value)) {
+            $value = implode(', ', $value);
         }
         return $value;
     }
@@ -466,13 +458,12 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asHtml()
     {
-        $html = $this->getTypeElementHtml() .
+        return $this->getTypeElementHtml() .
             $this->getAttributeElementHtml() .
             $this->getOperatorElementHtml() .
             $this->getValueElementHtml() .
             $this->getRemoveLinkHtml() .
             $this->getChooserContainerHtml();
-        return $html;
     }
 
     /**
@@ -480,8 +471,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asHtmlRecursive()
     {
-        $html = $this->asHtml();
-        return $html;
+        return $this->asHtml();
     }
 
     /**
@@ -496,7 +486,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
                 'value' => $this->getType(),
                 'no_span' => true,
-                'class' => 'hidden'
+                'class' => 'hidden',
+                'data-form-part' => $this->getFormName()
             ]
         );
     }
@@ -515,9 +506,10 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getAttributeElement()
     {
         if (null === $this->getAttribute()) {
-            foreach (array_keys($this->getAttributeOption()) as $option) {
-                $this->setAttribute($option);
-                break;
+            $options = $this->getAttributeOption();
+            if ($options) {
+                reset($options);
+                $this->setAttribute(key($options));
             }
         }
         return $this->getForm()->addField(
@@ -527,10 +519,11 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
                 'values' => $this->getAttributeSelectOptions(),
                 'value' => $this->getAttribute(),
-                'value_name' => $this->getAttributeName()
+                'value_name' => $this->getAttributeName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -552,10 +545,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     {
         $options = $this->getOperatorSelectOptions();
         if ($this->getOperator() === null) {
-            foreach ($options as $option) {
-                $this->setOperator($option['value']);
-                break;
-            }
+            $option = reset($options);
+            $this->setOperator($option['value']);
         }
 
         $elementId = sprintf('%s__%s__operator', $this->getPrefix(), $this->getId());
@@ -567,10 +558,11 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $elementName,
                 'values' => $options,
                 'value' => $this->getOperator(),
-                'value_name' => $this->getOperatorName()
+                'value_name' => $this->getOperatorName(),
+                'data-form-part' => $this->getFormName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
@@ -602,7 +594,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
         if (strpos($this->getValueElementType(), '/') !== false) {
             return $this->_layout->getBlockSingleton($this->getValueElementType());
         }
-        return $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable');
+        return $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class);
     }
 
     /**
@@ -617,6 +609,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             'value_name' => $this->getValueName(),
             'after_element_html' => $this->getValueAfterElementHtml(),
             'explicit_apply' => $this->getExplicitApply(),
+            'data-form-part' => $this->getFormName()
         ];
         if ($this->getInputType() == 'date') {
             // date format intentionally hard-coded
@@ -646,8 +639,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getAddLinkHtml()
     {
         $src = $this->_assetRepo->getUrl('images/rule_component_add.gif');
-        $html = '<img src="' . $src . '" class="rule-param-add v-middle" alt="" title="' . __('Add') . '"/>';
-        return $html;
+        return '<img src="' . $src . '" class="rule-param-add v-middle" alt="" title="' . __('Add') . '"/>';
     }
 
     /**
@@ -668,11 +660,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getChooserContainerHtml()
     {
         $url = $this->getValueElementChooserUrl();
-        $html = '';
-        if ($url) {
-            $html = '<div class="rule-chooser" url="' . $url . '"></div>';
-        }
-        return $html;
+        return $url ? '<div class="rule-chooser" url="' . $url . '"></div>' : '';
     }
 
     /**
@@ -682,8 +670,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asString($format = '')
     {
-        $str = $this->getAttributeName() . ' ' . $this->getOperatorName() . ' ' . $this->getValueName();
-        return $str;
+        return $this->getAttributeName() . ' ' . $this->getOperatorName() . ' ' . $this->getValueName();
     }
 
     /**
@@ -692,8 +679,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      */
     public function asStringRecursive($level = 0)
     {
-        $str = str_pad('', $level * 3, ' ', STR_PAD_LEFT) . $this->asString();
-        return $str;
+        return str_pad('', $level * 3, ' ', STR_PAD_LEFT) . $this->asString();
     }
 
     /**
@@ -732,12 +718,10 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             case '==':
             case '!=':
                 if (is_array($value)) {
-                    if (is_array($validatedValue)) {
-                        $result = array_intersect($value, $validatedValue);
-                        $result = !empty($result);
-                    } else {
+                    if (!is_array($validatedValue)) {
                         return false;
                     }
+                    $result = !empty(array_intersect($value, $validatedValue));
                 } else {
                     if (is_array($validatedValue)) {
                         $result = count($validatedValue) == 1 && array_shift($validatedValue) == $value;
@@ -751,18 +735,16 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             case '>':
                 if (!is_scalar($validatedValue)) {
                     return false;
-                } else {
-                    $result = $validatedValue <= $value;
                 }
+                $result = $validatedValue <= $value;
                 break;
 
             case '>=':
             case '<':
                 if (!is_scalar($validatedValue)) {
                     return false;
-                } else {
-                    $result = $validatedValue >= $value;
                 }
+                $result = $validatedValue >= $value;
                 break;
 
             case '{}':
@@ -775,12 +757,11 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                         }
                     }
                 } elseif (is_array($value)) {
-                    if (is_array($validatedValue)) {
-                        $result = array_intersect($value, $validatedValue);
-                        $result = !empty($result);
-                    } else {
+                    if (!is_array($validatedValue)) {
                         return false;
                     }
+                    $result = array_intersect($value, $validatedValue);
+                    $result = !empty($result);
                 } else {
                     if (is_array($validatedValue)) {
                         $result = in_array($value, $validatedValue);
@@ -825,13 +806,13 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     {
         if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
             return $validatedValue == $value;
-        } else {
-            $validatePattern = preg_quote($validatedValue, '~');
-            if ($strict) {
-                $validatePattern = '^' . $validatePattern . '$';
-            }
-            return (bool)preg_match('~' . $validatePattern . '~iu', $value);
         }
+
+        $validatePattern = preg_quote($validatedValue, '~');
+        if ($strict) {
+            $validatePattern = '^' . $validatePattern . '$';
+        }
+        return (bool)preg_match('~' . $validatePattern . '~iu', $value);
     }
 
     /**

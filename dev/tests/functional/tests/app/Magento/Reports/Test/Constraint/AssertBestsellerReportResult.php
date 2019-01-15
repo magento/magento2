@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,8 +23,6 @@ class AssertBestsellerReportResult extends AbstractConstraint
      * @param OrderInjectable $order
      * @param string $date
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processAssert(Bestsellers $bestsellers, OrderInjectable $order, $date)
     {
@@ -38,8 +36,8 @@ class AssertBestsellerReportResult extends AbstractConstraint
             'orders' => $product->getCheckoutData()['qty'],
         ];
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $bestsellers->getGridBlock()->isRowVisible($filter),
+        \PHPUnit\Framework\Assert::assertTrue(
+            $bestsellers->getGridBlock()->isRowVisible($filter, false),
             'Bestseller does not present in report grid.'
         );
     }

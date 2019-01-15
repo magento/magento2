@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class NodeFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\Data\Tree\Node'
+        $instanceName = \Magento\Framework\Data\Tree\Node::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

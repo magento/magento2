@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,9 +16,17 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 class Area implements \Magento\Framework\App\AreaInterface
 {
     const AREA_GLOBAL = 'global';
-
     const AREA_FRONTEND = 'frontend';
+    const AREA_ADMINHTML = 'adminhtml';
+    const AREA_DOC = 'doc';
+    const AREA_CRONTAB = 'crontab';
+    const AREA_WEBAPI_REST = 'webapi_rest';
+    const AREA_WEBAPI_SOAP = 'webapi_soap';
+    const AREA_GRAPHQL = 'graphql';
 
+    /**
+     * @deprecated
+     */
     const AREA_ADMIN    = 'admin';
 
     /**
@@ -182,7 +190,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     protected function _getDesign()
     {
-        return $this->_objectManager->get('Magento\Framework\View\DesignInterface');
+        return $this->_objectManager->get(\Magento\Framework\View\DesignInterface::class);
     }
 
     /**
@@ -237,7 +245,7 @@ class Area implements \Magento\Framework\App\AreaInterface
         $this->_translator->loadData(null, false);
 
         \Magento\Framework\Phrase::setRenderer(
-            $this->_objectManager->get('Magento\Framework\Phrase\RendererInterface')
+            $this->_objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
         );
 
         return $this;

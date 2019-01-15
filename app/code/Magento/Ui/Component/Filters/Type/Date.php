@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
- * Class Date
+ * @api
+ * @since 100.0.2
  */
 class Date extends AbstractFilter
 {
@@ -24,14 +26,12 @@ class Date extends AbstractFilter
     protected $wrappedComponent;
 
     /**
-     * Get component name
+     * Date format
      *
-     * @return string
+     * @var string
+     * @since 100.1.2
      */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
+    protected static $dateFormat = 'Y-m-d H:i:s';
 
     /**
      * Prepare component configuration
@@ -73,45 +73,61 @@ class Date extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (empty($value)) {
+                return;
+            }
+
+            if (is_array($value)) {
+                if (isset($value['from'])) {
+                    $this->applyFilterByType(
+                        'gteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['from'],
+                            0,
+                            0,
+                            0,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
+                }
+
+                if (isset($value['to'])) {
+                    $this->applyFilterByType(
+                        'lteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['to'],
+                            23,
+                            59,
+                            59,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
+                }
+            } else {
+                $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));
+            }
         }
     }
 
     /**
-     * Get condition
+     * Apply filter by its type
      *
-     * @return array|null
+     * @param string $type
+     * @param string $value
+     * @return void
      */
-    protected function getCondition()
+    protected function applyFilterByType($type, $value)
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if (!empty($value['from']) || !empty($value['to'])) {
-            if (!empty($value['from'])) {
-                $value['orig_from'] = $value['from'];
-                $value['from'] = $this->wrappedComponent->convertDate(
-                    $value['from'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['from']);
-            }
-            if (!empty($value['to'])) {
-                $value['orig_to'] = $value['to'];
-                $value['to'] = $this->wrappedComponent->convertDate(
-                    $value['to'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['to']);
-            }
-            $value['datetime'] = true;
-            $value['locale'] = $this->wrappedComponent->getLocale();
-        } else {
-            $value = null;
-        }
+        if (!empty($value)) {
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value->format(static::$dateFormat))
+                ->create();
 
-        return $value;
+            $this->getContext()->getDataProvider()->addFilter($filter);
+        }
     }
 }

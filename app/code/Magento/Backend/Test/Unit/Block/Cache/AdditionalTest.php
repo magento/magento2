@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Unit\Block\Cache;
 
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Cache\Additional
      */
-    private $additonalBlock;
+    private $additionalBlock;
 
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -25,22 +25,22 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
                 'appState' => $this->appStateMock,
             ]
         );
 
-        $this->additonalBlock = $objectHelper->getObject(
-            'Magento\Backend\Block\Cache\Additional',
+        $this->additionalBlock = $objectHelper->getObject(
+            \Magento\Backend\Block\Cache\Additional::class,
             ['context' => $context]
         );
     }
@@ -52,7 +52,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with('*/*/cleanImages')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanImagesUrl());
+        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
     }
 
     public function testGetCleanMediaUrl()
@@ -62,7 +62,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with('*/*/cleanMedia')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanMediaUrl());
+        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
     }
 
     public function testGetCleanStaticFiles()
@@ -72,7 +72,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
             ->will($this->returnValue($expectedUrl));
-        $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanStaticFilesUrl());
+        $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
     }
 
     /**
@@ -85,9 +85,12 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
-        $this->assertEquals($expected, $this->additonalBlock->isInProductionMode());
+        $this->assertEquals($expected, $this->additionalBlock->isInProductionMode());
     }
 
+    /**
+     * @return array
+     */
     public function isInProductionModeDataProvider()
     {
         return [

@@ -1,33 +1,34 @@
 {
     "name": "magento/module-catalog-import-export",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/module-eav": "1.0.0-beta",
-        "magento/module-import-export": "1.0.0-beta",
-        "magento/module-indexer": "1.0.0-beta",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-tax": "1.0.0-beta",
-        "magento/module-catalog-inventory": "1.0.0-beta",
-        "magento/module-media-storage": "1.0.0-beta",
-        "magento/module-customer": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
+        "php": "~7.1.3||~7.2.0",
         "ext-ctype": "*",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-catalog-url-rewrite": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-import-export": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-store": "*",
+        "magento/module-tax": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/CatalogImportExport"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\CatalogImportExport\\": ""
+        }
     }
 }

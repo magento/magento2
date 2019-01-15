@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model;
+
+use Magento\Framework\Indexer\ConfigInterface;
 
 class Config implements ConfigInterface
 {
@@ -38,6 +40,6 @@ class Config implements ConfigInterface
      */
     public function getIndexer($indexerId)
     {
-        return $this->configData->get($indexerId);
+        return $this->configData->get($indexerId) ?: [];
     }
 }

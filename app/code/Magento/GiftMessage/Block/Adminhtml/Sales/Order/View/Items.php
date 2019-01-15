@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
@@ -8,7 +8,9 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 /**
  * Gift message adminhtml sales order view items
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Items extends \Magento\Backend\Block\Template
 {
@@ -42,6 +44,7 @@ class Items extends \Magento\Backend\Block\Template
      * Get Order Item
      *
      * @return \Magento\Sales\Model\Order\Item
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -99,6 +102,7 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @param string $name
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldName($name)
     {
@@ -110,6 +114,7 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @param string $id
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldId($id)
     {
@@ -120,6 +125,7 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve field html id prefix
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldIdPrefix()
     {
@@ -166,6 +172,7 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve save url
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getSaveUrl()
     {
@@ -179,6 +186,7 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve block html id
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getHtmlId()
     {

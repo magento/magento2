@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -8,6 +8,11 @@ namespace Magento\CatalogInventory\Api;
 /**
  * Interface StockItemCriteriaInterface
  * @api
+ * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInterface
 {
@@ -36,12 +41,12 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
     public function setStockFilter($stock);
 
     /**
-     * Add website filter to collection
+     * Add scope filter to collection
      *
-     * @param int $website
+     * @param int $scope
      * @return bool
      */
-    public function setWebsiteFilter($website);
+    public function setScopeFilter($scope);
 
     /**
      * Add product filter to collection

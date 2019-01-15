@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Pdf;
 
@@ -12,10 +10,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order PDF abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-abstract class AbstractPdf extends \Magento\Framework\Object
+abstract class AbstractPdf extends \Magento\Framework\DataObject
 {
     /**
      * Y coordinate
@@ -64,7 +65,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected $_paymentData;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -117,7 +118,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Config $pdfConfig
@@ -131,7 +132,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         Config $pdfConfig,
@@ -157,8 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     }
 
     /**
-     * Returns the total width in points of the string using the specified font and
-     * size.
+     * Returns the total width in points of the string using the specified font and size.
      *
      * This is not the most efficient way to perform this calculation. I'm
      * concentrating optimization efforts on the upcoming layout manager class.
@@ -229,7 +229,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * Insert logo to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -284,7 +284,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * Insert address to pdf page
      *
      * @param \Zend_Pdf_Page &$page
-     * @param null $store
+     * @param string|null $store
      * @return void
      */
     protected function insertAddress(&$page, $store = null)
@@ -294,14 +294,15 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $page->setLineWidth(0);
         $this->y = $this->y ? $this->y : 815;
         $top = 815;
-        foreach (explode(
-                     "\n",
-                     $this->_scopeConfig->getValue(
-                         'sales/identity/address',
-                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                         $store
-                     )
-                 ) as $value) {
+        $values = explode(
+            "\n",
+            $this->_scopeConfig->getValue(
+                'sales/identity/address',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )
+        );
+        foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
@@ -363,6 +364,38 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     }
 
     /**
+     * Detect an input string is Arabic
+     *
+     * @param string $subject
+     * @return bool
+     */
+    private function isArabic(string $subject): bool
+    {
+        return (preg_match('/\p{Arabic}/u', $subject) > 0);
+    }
+
+    /**
+     * Reverse text with Arabic characters
+     *
+     * @param string $string
+     * @return string
+     */
+    private function reverseArabicText($string)
+    {
+        $splitText = explode(' ', $string);
+        for ($i = 0; $i < count($splitText); $i++) {
+            if ($this->isArabic($splitText[$i])) {
+                for ($j = $i + 1; $j < count($splitText); $j++) {
+                    $tmp = $this->string->strrev($splitText[$j]);
+                    $splitText[$j] = $this->string->strrev($splitText[$i]);
+                    $splitText[$i] = $tmp;
+                }
+            }
+        }
+        return implode(' ', $splitText);
+    }
+
+    /**
      * Insert order to pdf page
      *
      * @param \Zend_Pdf_Page &$page
@@ -395,7 +428,10 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
         if ($putOrderId) {
             $page->drawText(__('Order # ') . $order->getRealOrderId(), 35, $top -= 30, 'UTF-8');
+            $top +=15;
         }
+
+        $top -=30;
         $page->drawText(
             __('Order Date: ') .
             $this->_localeDate->formatDate(
@@ -408,7 +444,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
                 false
             ),
             35,
-            $top -= 15,
+            $top,
             'UTF-8'
         );
 
@@ -438,7 +474,9 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         /* Shipping Address and Method */
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
-            $shippingAddress = $this->_formatAddress($this->addressRenderer->format($order->getShippingAddress(), 'pdf'));
+            $shippingAddress = $this->_formatAddress(
+                $this->addressRenderer->format($order->getShippingAddress(), 'pdf')
+            );
             $shippingMethod = $order->getShippingDescription();
         }
 
@@ -468,7 +506,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $text[] = $_value;
+                    $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                 }
                 foreach ($text as $part) {
                     $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
@@ -485,7 +523,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
                 if ($value !== '') {
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
-                        $text[] = $_value;
+                        $text[] = ($this->isArabic($_value)) ? $this->reverseArabicText($_value) : $_value;
                     }
                     foreach ($text as $part) {
                         $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
@@ -551,11 +589,11 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "(" . __(
-                    'Total Shipping Charges'
-                ) . " " . $order->formatPriceTxt(
-                    $order->getShippingAmount()
-                ) . ")";
+            $totalShippingChargesText = "("
+                . __('Total Shipping Charges')
+                . " "
+                . $order->formatPriceTxt($order->getShippingAmount())
+                . ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -634,17 +672,13 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             return 0;
         }
 
-        if ($a['sort_order'] == $b['sort_order']) {
-            return 0;
-        }
-
-        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
+        return $a['sort_order'] <=> $b['sort_order'];
     }
 
     /**
      * Return total list
      *
-     * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
+     * @return \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal[] Array of totals
      */
     protected function _getTotalsList()
     {
@@ -707,7 +741,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     /**
      * Parse item description
      *
-     * @param  \Magento\Framework\Object $item
+     * @param  \Magento\Framework\DataObject $item
      * @return array
      */
     protected function _parseItemDescription($item)
@@ -798,7 +832,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid renderer model.'));
         }
 
-        if (is_null($this->_renderers[$type]['renderer'])) {
+        if ($this->_renderers[$type]['renderer'] === null) {
             $this->_renderers[$type]['renderer'] = $this->_pdfItemsFactory->get($this->_renderers[$type]['model']);
         }
 
@@ -821,13 +855,16 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     /**
      * Draw Item process
      *
-     * @param  \Magento\Framework\Object $item
+     * @param  \Magento\Framework\DataObject $item
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
      */
-    protected function _drawItem(\Magento\Framework\Object $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
-    {
+    protected function _drawItem(
+        \Magento\Framework\DataObject $item,
+        \Zend_Pdf_Page $page,
+        \Magento\Sales\Model\Order $order
+    ) {
         $type = $item->getOrderItem()->getProductType();
         $renderer = $this->_getRenderer($type);
         $renderer->setOrder($order);
@@ -851,7 +888,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerif.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -867,7 +904,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifBold.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -883,7 +920,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifItalic.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -948,7 +985,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * font         string; font style, optional: bold, italic, regular
      * font_file    string; path to font file (optional for use your custom font)
      * font_size    int; font size (default 7)
-     * align        string; text align (also see feed parametr), optional left, right
+     * align        string; text align (also see feed parameter), optional left, right
      * height       int;line spacing (default 10)
      *
      * @param  \Zend_Pdf_Page $page

@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
 
+use Magento\Framework\Module\Dir;
+
 /**
  * Configuration for reports
+ * @api
+ * @since 100.0.2
  */
-class Config extends \Magento\Framework\Object
+class Config extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Framework\Module\Dir\Reader
@@ -43,7 +47,7 @@ class Config extends \Magento\Framework\Object
     public function getGlobalConfig()
     {
         $dom = new \DOMDocument();
-        $dom->load($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexConfig.xml');
+        $dom->load($this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports') . '/flexConfig.xml');
 
         $baseUrl = $dom->createElement('baseUrl');
         $baseUrl->nodeValue = $this->_storeManager->getBaseUrl();
@@ -60,7 +64,9 @@ class Config extends \Magento\Framework\Object
      */
     public function getLanguage()
     {
-        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml');
+        return file_get_contents(
+            $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports') . '/flexLanguage.xml'
+        );
     }
 
     /**
@@ -70,6 +76,8 @@ class Config extends \Magento\Framework\Object
      */
     public function getDashboard()
     {
-        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml');
+        return file_get_contents(
+            $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports') . '/flexDashboard.xml'
+        );
     }
 }

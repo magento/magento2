@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -20,19 +21,19 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = 'Magento\TestFramework\ObjectManager';
+    protected $_locatorClassName = \Magento\TestFramework\ObjectManager::class;
 
     /**
      * Config class name
      *
      * @var string
      */
-    protected $_configClassName = 'Magento\TestFramework\ObjectManager\Config';
+    protected $_configClassName = \Magento\TestFramework\ObjectManager\Config::class;
 
     /**
      * @var string
      */
-    protected $envFactoryClassName = 'Magento\TestFramework\App\EnvironmentFactory';
+    protected $envFactoryClassName = \Magento\TestFramework\App\EnvironmentFactory::class;
 
     /**
      * @var array
@@ -52,20 +53,18 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
         $this->directoryList = $directoryList;
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\App\Filesystem\DirectoryList::class);
+        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
         $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);
-        $objectManager->addSharedInstance($deploymentConfig, 'Magento\Framework\App\DeploymentConfig');
+        $objectManager->addSharedInstance($deploymentConfig, \Magento\Framework\App\DeploymentConfig::class);
         $objectManager->addSharedInstance(
-            $objectManager->get(
-                'Magento\Framework\App\ObjectManager\ConfigLoader'
-            ),
-            'Magento\Framework\ObjectManager\ConfigLoaderInterface'
+            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class),
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class
         );
-        $objectManager->get('Magento\Framework\Interception\PluginListInterface')->reset();
+        $objectManager->get(\Magento\Framework\Interception\PluginListInterface::class)->reset();
         $objectManager->configure(
-            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load('global')
+            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)->load('global')
         );
 
         return $objectManager;
@@ -86,27 +85,24 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             $this->_primaryConfigData = array_replace(
                 parent::_loadPrimaryConfig($directoryList, $driverPool, $argumentMapper, $appMode),
                 [
-                    'default_setup' => ['type' => 'Magento\TestFramework\Db\ConnectionAdapter']
+                    'default_setup' => ['type' => \Magento\TestFramework\Db\ConnectionAdapter::class]
                 ]
             );
+            $diPreferences = [];
+            $diPreferencesPath = __DIR__ . '/../../../etc/di/preferences/';
+
+            $preferenceFiles = glob($diPreferencesPath . '*.php');
+
+            foreach ($preferenceFiles as $file) {
+                if (!is_readable($file)) {
+                    throw new LocalizedException(__("'%1' is not readable file.", $file));
+                }
+                $diPreferences = array_replace($diPreferences, include $file);
+            }
+
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
-                [
-                    'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
-                    'Magento\Framework\ObjectManager\DynamicConfigInterface' =>
-                        '\Magento\TestFramework\ObjectManager\Configurator',
-                    'Magento\Framework\App\RequestInterface' => 'Magento\TestFramework\Request',
-                    'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
-                    'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',
-                    'Magento\Framework\App\Response\Http' => 'Magento\TestFramework\Response',
-                    'Magento\Framework\Interception\PluginListInterface' =>
-                        'Magento\TestFramework\Interception\PluginList',
-                    'Magento\Framework\Interception\ObjectManager\Config' =>
-                        'Magento\TestFramework\ObjectManager\Config',
-                    'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
-                    'Magento\Framework\App\Resource\ConnectionAdapterInterface' =>
-                        'Magento\TestFramework\Db\ConnectionAdapter',
-                ]
+                $diPreferences
             );
         }
         return $this->_primaryConfigData;

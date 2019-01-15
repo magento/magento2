@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Annotation;
@@ -15,17 +15,18 @@ class AppArea
     private $_application;
 
     /**
-     * List of allowed areas
+     * List of allowed areas.
      *
      * @var array
      */
     private $_allowedAreas = [
         \Magento\Framework\App\Area::AREA_GLOBAL,
-        \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+        \Magento\Framework\App\Area::AREA_ADMINHTML,
         \Magento\Framework\App\Area::AREA_FRONTEND,
-        'webapi_rest',
-        'webapi_soap',
-        'cron',
+        \Magento\Framework\App\Area::AREA_WEBAPI_REST,
+        \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
+        \Magento\Framework\App\Area::AREA_CRONTAB,
+        \Magento\Framework\App\Area::AREA_GRAPHQL
     ];
 
     /**
@@ -70,9 +71,9 @@ class AppArea
     /**
      * Start test case event observer
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $area = $this->_getTestAppArea($test->getAnnotations());
         if ($this->_application->getArea() !== $area) {

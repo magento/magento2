@@ -1,30 +1,35 @@
 {
     "name": "magento/module-catalog-url-rewrite",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/module-catalog-import-export": "1.0.0-beta",
-        "magento/module-eav": "1.0.0-beta",
-        "magento/module-import-export": "1.0.0-beta",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-url-rewrite": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-eav": "*",
+        "magento/module-import-export": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*",
+        "magento/module-url-rewrite": "*"
+    },
+    "suggest": {
+        "magento/module-webapi": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/CatalogUrlRewrite"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\CatalogUrlRewrite\\": ""
+        }
     }
 }

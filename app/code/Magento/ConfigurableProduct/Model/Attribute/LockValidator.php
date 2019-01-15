@@ -1,24 +1,39 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class LockValidator
+ */
 class LockValidator implements LockValidatorInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var MetadataPool
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
-    {
+    private $metadataPool;
+
+    /**
+     * Constructor
+     *
+     * @param ResourceConnection $resource
+     */
+    public function __construct(
+        ResourceConnection $resource
+    ) {
         $this->resource = $resource;
     }
 
@@ -32,35 +47,44 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $adapter = $this->resource->getConnection('read');
-        $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
-        $productTable = $this->resource->getTableName('catalog_product_entity');
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $connection = $this->resource->getConnection();
 
         $bind = ['attribute_id' => $object->getAttributeId()];
-        $select = clone $adapter->select();
-        $select->reset()->from(
-            ['main_table' => $attrTable],
-            ['psa_count' => 'COUNT(product_super_attribute_id)']
-        )->join(
-            ['entity' => $productTable],
-            'main_table.product_id = entity.entity_id'
-        )->where(
-            'main_table.attribute_id = :attribute_id'
-        )->group(
-            'main_table.attribute_id'
-        )->limit(
-            1
-        );
+
+        $select = clone $connection->select();
+        $select->reset()
+            ->from(
+                ['main_table' => $this->resource->getTableName('catalog_product_super_attribute')],
+                ['psa_count' => 'COUNT(product_super_attribute_id)']
+            )->join(
+                ['entity' => $this->resource->getTableName('catalog_product_entity')],
+                'main_table.product_id = entity.' . $metadata->getLinkField()
+            )->where('main_table.attribute_id = :attribute_id')
+            ->group('main_table.attribute_id')
+            ->limit(1);
 
         if ($attributeSet !== null) {
             $bind['attribute_set_id'] = $attributeSet;
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
 
-        if ($adapter->fetchOne($select, $bind)) {
+        if ($connection->fetchOne($select, $bind)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('This attribute is used in configurable products.')
             );
         }
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

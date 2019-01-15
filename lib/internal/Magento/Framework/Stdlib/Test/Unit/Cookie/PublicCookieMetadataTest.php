@@ -1,39 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
-use \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
-
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test PublicCookieMetadata
  *
  */
-class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
+class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->publicCookieMetadata = $objectManager->getObject(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         );
     }
 
     /**
-     * @param String $setMethodName
-     * @param String $getMethodName
-     * @param String $expectedValue
+     * @param StringUtils $setMethodName
+     * @param StringUtils $getMethodName
+     * @param StringUtils $expectedValue
      * @dataProvider getMethodData
      */
-
     public function testGetters($setMethodName, $getMethodName, $expectedValue)
     {
         $this->publicCookieMetadata->$setMethodName($expectedValue);

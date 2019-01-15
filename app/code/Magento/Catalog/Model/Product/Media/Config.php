@@ -1,38 +1,49 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Media;
 
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
- * Catalog product media config
+ * Catalog product media config.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Config implements ConfigInterface
 {
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var Attribute
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    private $attributeHelper;
+
+    /**
+     * @var string[]
+     */
+    private $mediaAttributeCodes;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->storeManager = $storeManager;
     }
 
     /**
-     * Filesystem directory path of product images
-     * relatively to media folder
+     * Get filesystem directory path for product images relative to the media directory.
      *
      * @return string
      */
@@ -42,8 +53,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Web-based directory path of product images
-     * relatively to media folder
+     * Get web-based directory path for product images relative to the media directory.
      *
      * @return string
      */
@@ -53,7 +63,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getBaseMediaPath()
     {
@@ -61,16 +71,16 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getBaseMediaUrl()
     {
-        return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
+        return $this->storeManager->getStore()
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
     }
 
     /**
-     * Filesystem directory path of temporary product images
-     * relatively to media folder
+     * Filesystem directory path of temporary product images relative to the media directory.
      *
      * @return string
      */
@@ -80,6 +90,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get temporary base media URL.
+     *
      * @return string
      */
     public function getBaseTmpMediaUrl()
@@ -90,8 +102,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $file
-     * @return string
+     * @inheritdoc
      */
     public function getMediaUrl($file)
     {
@@ -99,8 +110,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $file
-     * @return string
+     * @inheritdoc
      */
     public function getMediaPath($file)
     {
@@ -108,6 +118,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get temporary media URL.
+     *
      * @param string $file
      * @return string
      */
@@ -117,8 +129,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Part of URL of temporary product images
-     * relatively to media folder
+     * Part of URL of temporary product images relative to the media directory.
      *
      * @param string $file
      * @return string
@@ -129,7 +140,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Part of URL of product images relatively to media folder
+     * Part of URL of product images relatively to media folder.
      *
      * @param string $file
      * @return string
@@ -140,6 +151,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get path to the temporary media.
+     *
      * @param string $file
      * @return string
      */
@@ -149,11 +162,42 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Process file path.
+     *
      * @param string $file
      * @return string
      */
     protected function _prepareFile($file)
     {
         return ltrim(str_replace('\\', '/', $file), '/');
+    }
+
+    /**
+     * Get codes of media attribute.
+     *
+     * @return array
+     * @since 100.0.4
+     */
+    public function getMediaAttributeCodes()
+    {
+        if (!isset($this->mediaAttributeCodes)) {
+            // the in-memory object-level caching allows to prevent unnecessary calls to the DB
+            $this->mediaAttributeCodes = $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+        }
+        return $this->mediaAttributeCodes;
+    }
+
+    /**
+     * Get attribute helper.
+     *
+     * @return Attribute
+     */
+    private function getAttributeHelper()
+    {
+        if (null === $this->attributeHelper) {
+            $this->attributeHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Model\Entity\Attribute::class);
+        }
+        return $this->attributeHelper;
     }
 }

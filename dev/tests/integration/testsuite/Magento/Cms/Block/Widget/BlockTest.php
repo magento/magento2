@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Widget;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Cms/_files/block.php
@@ -15,13 +15,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Block');
+        $cmsBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Cms\Model\Block::class
+        );
         $cmsBlock->load('fixture_block', 'identifier');
         /** @var $block \Magento\Cms\Block\Widget\Block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Cms\Block\Widget\Block'
+            \Magento\Cms\Block\Widget\Block::class
         );
         $block->setBlockId($cmsBlock->getId());
         $block->toHtml();
@@ -29,5 +31,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<a href="http://example.com/', $result);
         $this->assertContains('<p>Config value: "http://example.com/".</p>', $result);
         $this->assertContains('<p>Custom variable: "HTML Value".</p>', $result);
+        $this->assertSame($cmsBlock->getIdentities(), $block->getIdentities());
     }
 }

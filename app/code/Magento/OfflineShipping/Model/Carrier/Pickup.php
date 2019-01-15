@@ -1,10 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+
+/**
+ * Pickup shipping model
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -50,36 +58,14 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag('active')) {
-            return false;
-        }
-
-        /** @var \Magento\Shipping\Model\Rate\Result $result */
-        $result = $this->_rateResultFactory->create();
-
-        if (!empty($rate)) {
-            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
-            $method = $this->_rateMethodFactory->create();
-
-            $method->setCarrier('pickup');
-            $method->setCarrierTitle($this->getConfigData('title'));
-
-            $method->setMethod('store');
-            $method->setMethodTitle(__('Store Pickup'));
-
-            $method->setPrice(0);
-            $method->setCost(0);
-
-            $result->append($method);
-        }
-
-        return $result;
+        // Pickup shipping method is not supported in Magento2 yet.
+        return false;
     }
 
     /**

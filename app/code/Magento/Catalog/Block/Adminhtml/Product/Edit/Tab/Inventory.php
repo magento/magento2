@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
@@ -15,7 +15,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/inventory.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/inventory.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -134,13 +134,14 @@ class Inventory extends \Magento\Backend\Block\Widget
     public function getFieldValue($field)
     {
         $stockItem = $this->getStockItem();
+        $value = null;
         if ($stockItem->getItemId()) {
             $method = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field);
-            if (method_exists($stockItem, $method)) {
-                return $stockItem->{$method}();
+            if (is_callable([$stockItem, $method])) {
+                $value = $stockItem->{$method}();
             }
         }
-        return $this->stockConfiguration->getDefaultConfigValue($field);
+        return $value === null ? $this->stockConfiguration->getDefaultConfigValue($field) : $value;
     }
 
     /**

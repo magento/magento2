@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Adminhtml sales order create abstract block
@@ -115,7 +117,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve formated price
+     * Retrieve formatted price
      *
      * @param float $value
      * @return string
@@ -131,11 +133,21 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @param Product $product
+     * @return string
+     */
+    public function getItemPrice(Product $product)
+    {
+        $price = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+        return $this->convertPrice($price);
+    }
+
+    /**
      * Convert price
      *
-     * @param float $value
+     * @param int|float $value
      * @param bool $format
-     * @return float
+     * @return string|int|float
      */
     public function convertPrice($value, $format = true)
     {
@@ -147,5 +159,23 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
                 $this->getStore()
             )
             : $this->priceCurrency->convert($value, $this->getStore());
+    }
+
+    /**
+     * If item is quote or wishlist we need to get product from it.
+     *
+     * @param $item
+     *
+     * @return Product
+     */
+    public function getProduct($item)
+    {
+        if ($item instanceof Product) {
+            $product = $item;
+        } else {
+            $product = $item->getProduct();
+        }
+
+        return $product;
     }
 }

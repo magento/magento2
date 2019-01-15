@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
+class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var I18nCollectPhrasesCommand
@@ -27,7 +27,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $property = new \ReflectionProperty('\Magento\Setup\Module\I18n\ServiceLocator', '_dictionaryGenerator');
+        $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
         $property->setValue(null);
         $property->setAccessible(false);
@@ -46,17 +46,19 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteCsvOutput()
     {
-        $outputPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/output.csv';
+        $outputPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/phrases.csv';
         $this->tester->execute(
             [
-                'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/',
+                'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/phrases/',
                 '--output' => $outputPath,
             ]
         );
 
         $handle = fopen($outputPath, 'r');
         $output = fread($handle, filesize($outputPath));
-        $expected = '"Hello world","Hello world"' . PHP_EOL . '"Foo bar","Foo bar"' . PHP_EOL;
+        $expected = file_get_contents(
+            BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/expectedPhrases.csv'
+        );
         $this->assertEquals($expected, $output);
         unlink($outputPath);
     }
@@ -72,5 +74,23 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist',
             ]
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Directory path is not needed when --magento flag is set.
+     */
+    public function testExecuteMagentoFlagDirectoryPath()
+    {
+        $this->tester->execute(['directory' => 'a', '--magento' => true]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Directory path is needed when --magento flag is not set.
+     */
+    public function testExecuteNoMagentoFlagNoDirectoryPath()
+    {
+        $this->tester->execute([]);
     }
 }

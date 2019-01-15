@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Problem;
@@ -18,7 +18,8 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
         if ($this->getRequest()->getParam('_unsubscribe')) {
             $problems = (array)$this->getRequest()->getParam('problem', []);
             if (count($problems) > 0) {
-                $collection = $this->_objectManager->create('Magento\Newsletter\Model\Resource\Problem\Collection');
+                $collection =
+                    $this->_objectManager->create(\Magento\Newsletter\Model\ResourceModel\Problem\Collection::class);
                 $collection->addSubscriberInfo()->addFieldToFilter(
                     $collection->getResource()->getIdFieldName(),
                     ['in' => $problems]
@@ -33,7 +34,8 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
         if ($this->getRequest()->getParam('_delete')) {
             $problems = (array)$this->getRequest()->getParam('problem', []);
             if (count($problems) > 0) {
-                $collection = $this->_objectManager->create('Magento\Newsletter\Model\Resource\Problem\Collection');
+                $collection =
+                    $this->_objectManager->create(\Magento\Newsletter\Model\ResourceModel\Problem\Collection::class);
                 $collection->addFieldToFilter(
                     $collection->getResource()->getIdFieldName(),
                     ['in' => $problems]

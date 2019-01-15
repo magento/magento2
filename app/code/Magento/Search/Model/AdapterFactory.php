@@ -1,16 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
 
+use Magento\Framework\Search\EngineResolverInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
 class AdapterFactory
 {
     /**
      * Scope configuration
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @deprecated since it is not used anymore
      */
     protected $scopeConfig;
 
@@ -25,11 +32,13 @@ class AdapterFactory
      * Config path
      *
      * @var string
+     * @deprecated since it is not used anymore
      */
     protected $path;
 
     /**
      * Config Scope
+     * @deprecated since it is not used anymore
      */
     protected $scope;
 
@@ -41,24 +50,23 @@ class AdapterFactory
     private $adapterPool;
 
     /**
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $adapters
-     * @param string $path
-     * @param string $scopeType
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $adapters,
-        $path,
-        $scopeType
+        EngineResolverInterface $engineResolver
     ) {
         $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
         $this->adapterPool = $adapters;
-        $this->path = $path;
-        $this->scope = $scopeType;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -69,7 +77,7 @@ class AdapterFactory
      */
     public function create(array $data = [])
     {
-        $currentAdapter = $this->scopeConfig->getValue($this->path, $this->scope);
+        $currentAdapter = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->adapterPool[$currentAdapter])) {
             throw new \LogicException(
                 'There is no such adapter: ' . $currentAdapter

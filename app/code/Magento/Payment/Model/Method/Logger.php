@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Payment\Gateway\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Logger for payment related information (request, response, etc.) which is used for debug
+ * Class Logger for payment related information (request, response, etc.) which is used for debug.
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Logger
 {
@@ -22,17 +24,17 @@ class Logger
     protected $logger;
 
     /**
-     * @var \Magento\Payment\Gateway\ConfigInterface
+     * @var ConfigInterface
      */
     private $config;
 
     /**
      * @param LoggerInterface $logger
-     * @param \Magento\Payment\Gateway\ConfigInterface $config
+     * @param ConfigInterface|null $config
      */
     public function __construct(
         LoggerInterface $logger,
-        \Magento\Payment\Gateway\ConfigInterface $config = null
+        ConfigInterface $config = null
     ) {
         $this->logger = $logger;
         $this->config = $config;
@@ -41,21 +43,21 @@ class Logger
     /**
      * Logs payment related information used for debug
      *
-     * @param array $debugData
-     * @param array|null $debugReplaceKeys
-     * @param bool|null $debugFlag
+     * @param array $data
+     * @param array|null $maskKeys
+     * @param bool|null $forceDebug
      * @return void
      */
-    public function debug(array $debugData, array $debugReplaceKeys = null, $debugFlag = null)
+    public function debug(array $data, array $maskKeys = null, $forceDebug = null)
     {
-        $debugReplaceKeys = $debugReplaceKeys !== null ? $debugReplaceKeys : $this->getDebugReplaceFields();
-        $debugFlag = $debugFlag !== null ? $debugFlag : $this->isDebugOn();
-        if ($debugFlag === true && !empty($debugData) && !empty($debugReplaceKeys)) {
-            $debugData = $this->filterDebugData(
-                $debugData,
-                $debugReplaceKeys
+        $maskKeys = $maskKeys !== null ? $maskKeys : $this->getDebugReplaceFields();
+        $debugOn = $forceDebug !== null ? $forceDebug : $this->isDebugOn();
+        if ($debugOn === true) {
+            $data = $this->filterDebugData(
+                $data,
+                $maskKeys
             );
-            $this->logger->debug(var_export($debugData, true));
+            $this->logger->debug(var_export($data, true));
         }
     }
 
@@ -66,7 +68,7 @@ class Logger
      */
     private function getDebugReplaceFields()
     {
-        if ($this->config->getValue('debugReplaceKeys')) {
+        if ($this->config && $this->config->getValue('debugReplaceKeys')) {
             return explode(',', $this->config->getValue('debugReplaceKeys'));
         }
         return [];
@@ -79,7 +81,7 @@ class Logger
      */
     private function isDebugOn()
     {
-        return (bool)$this->config->getValue('debug');
+        return $this->config && (bool)$this->config->getValue('debug');
     }
 
     /**

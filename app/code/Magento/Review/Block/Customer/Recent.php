@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
 
-use Magento\Review\Model\Resource\Review\Product\Collection;
+use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 
 /**
  * Recent Customer Reviews Block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {
@@ -17,7 +20,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_template = 'customer/list.phtml';
+    protected $_template = 'Magento_Review::customer/list.phtml';
 
     /**
      * Product reviews collection
@@ -29,7 +32,7 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -40,13 +43,13 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
+        \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = []
     ) {
@@ -76,7 +79,7 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Return collection of reviews
      *
-     * @return array|\Magento\Review\Model\Resource\Review\Product\Collection
+     * @return array|\Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
     public function getReviews()
     {

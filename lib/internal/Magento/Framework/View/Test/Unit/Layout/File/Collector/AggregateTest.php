@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\File\Collector;
 
-class AggregateTest extends \PHPUnit_Framework_TestCase
+class AggregateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\File\Collector\Aggregated
@@ -39,22 +39,16 @@ class AggregateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileList = $this->getMock('Magento\Framework\View\File\FileList', [], [], '', false);
-        $this->_baseFiles = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
-        $this->_themeFiles = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
+        $this->_fileList = $this->createMock(\Magento\Framework\View\File\FileList::class);
+        $this->_baseFiles = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
+        $this->_themeFiles = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $this->_overridingBaseFiles = $this->getMockForAbstractClass(
-            'Magento\Framework\View\File\CollectorInterface'
+            \Magento\Framework\View\File\CollectorInterface::class
         );
         $this->_overridingThemeFiles = $this->getMockForAbstractClass(
-            'Magento\Framework\View\File\CollectorInterface'
+            \Magento\Framework\View\File\CollectorInterface::class
         );
-        $fileListFactory = $this->getMock(
-            'Magento\Framework\View\File\FileList\Factory',
-            [],
-            [],
-            '',
-            false
-        );
+        $fileListFactory = $this->createMock(\Magento\Framework\View\File\FileList\Factory::class);
         $fileListFactory->expects($this->once())->method('create')->will($this->returnValue($this->_fileList));
         $this->_model = new \Magento\Framework\View\Layout\File\Collector\Aggregated(
             $fileListFactory,
@@ -71,8 +65,8 @@ class AggregateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFiles()
     {
-        $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $parentTheme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects(
             $this->once()
         )->method(

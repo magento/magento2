@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,11 @@ namespace Magento\Customer\Model;
 
 class Form extends \Magento\Eav\Model\Form
 {
+    /**
+     * XML configuration paths for "Disable autocomplete on storefront" property
+     */
+    const XML_PATH_ENABLE_AUTOCOMPLETE = 'customer/password/autocomplete_on_storefront';
+
     /**
      * Current module pathname
      *
@@ -31,7 +36,7 @@ class Form extends \Magento\Eav\Model\Form
      * Get EAV Entity Form Attribute Collection for Customer
      * exclude 'created_at'
      *
-     * @return \Magento\Customer\Model\Resource\Form\Attribute\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection
      */
     protected function _getFormAttributeCollection()
     {

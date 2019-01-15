@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-class DataSetupTest extends \PHPUnit_Framework_TestCase
+class DataSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModuleDataSetupInterface
@@ -17,7 +17,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Setup\Module\DataSetup'
+            \Magento\Setup\Module\DataSetup::class
         );
     }
 
@@ -36,15 +36,6 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
             'schema_version',
             $original
         );
-    }
-
-    /**
-     * @expectedException \Zend_Db_Statement_Exception
-     */
-    public function testGetTableRow()
-    {
-        $this->assertNotEmpty($this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification'));
-        $this->_model->getTableRow('setup/module', 'module', 'Magento_AdminNotification');
     }
 
     /**
@@ -73,6 +64,6 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetupCache()
     {
-        $this->assertInstanceOf('Magento\Framework\Setup\DataCacheInterface', $this->_model->getSetupCache());
+        $this->assertInstanceOf(\Magento\Framework\Setup\DataCacheInterface::class, $this->_model->getSetupCache());
     }
 }

@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
-use Magento\Downloadable\Model\Resource\Link as Resource;
+use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 
 /**
  * Downloadable link model
  *
- * @method Resource getResource()
+ * @api
  * @method int getProductId()
  * @method Link setProductId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {
@@ -56,7 +57,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -65,7 +66,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -87,7 +88,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Resource\Link');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link::class);
         parent::_construct();
     }
 
@@ -272,6 +273,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param string $title
      * @return $this
@@ -396,7 +398,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
         return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
     }
 
-
     /**
      * Set URL
      *
@@ -428,5 +429,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

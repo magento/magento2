@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/* @var \Magento\Indexer\Model\IndexerInterface $model */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Indexer\Model\IndexerRegistry')
-    ->get('catalogsearch_fulltext');
+/* @var \Magento\Framework\Indexer\IndexerInterface $model */
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    \Magento\Framework\Indexer\IndexerRegistry::class
+)->get('catalogsearch_fulltext');
 $model->setScheduled(true);

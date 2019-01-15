@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View;
@@ -10,8 +10,10 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Customer personal information template block test.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PersonalInfoTest extends \PHPUnit_Framework_TestCase
+class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -44,89 +46,66 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Customer\Model\CustomerRegistry
+     */
+    protected $customerRegistry;
+
+    /**
+     * @var \Magento\Customer\Model\Customer
+     */
+    protected $customerModel;
+
+    /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $customer = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->willReturn(1);
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 
-        $customerDataFactory = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $customerDataFactory = $this->createPartialMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            ['create']
         );
         $customerDataFactory->expects($this->any())->method('create')->willReturn($customer);
 
-        $backendSession = $this->getMock(
-            'Magento\Backend\Model\Session',
-            ['getCustomerData'],
-            [],
-            '',
-            false
-        );
+        $backendSession = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['getCustomerData']);
         $backendSession->expects($this->any())->method('getCustomerData')->willReturn(['account' => []]);
 
-        $this->customerLog = $this->getMock(
-            'Magento\Customer\Model\Log',
-            ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'],
-            [],
-            '',
-            false
+        $this->customerLog = $this->createPartialMock(
+            \Magento\Customer\Model\Log::class,
+            ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt', 'loadByCustomer']
         );
         $this->customerLog->expects($this->any())->method('loadByCustomer')->willReturnSelf();
 
-        $customerLogger = $this->getMock(
-            'Magento\Customer\Model\Logger',
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $customerLogger = $this->createPartialMock(\Magento\Customer\Model\Logger::class, ['get']);
         $customerLogger->expects($this->any())->method('get')->willReturn($this->customerLog);
 
-        $dateTime = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime',
-            ['now'],
-            [],
-            '',
-            false
-        );
+        $dateTime = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, ['now']);
         $dateTime->expects($this->any())->method('now')->willReturn('2015-03-04 12:00:00');
 
-        $this->localeDate = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime\Timezone',
-            ['scopeDate', 'formatDateTime', 'getDefaultTimezonePath'],
-            [],
-            '',
-            false
+        $this->localeDate = $this->createPartialMock(
+            \Magento\Framework\Stdlib\DateTime\Timezone::class,
+            ['scopeDate', 'formatDateTime', 'getDefaultTimezonePath']
         );
         $this->localeDate
             ->expects($this->any())
             ->method('getDefaultTimezonePath')
             ->willReturn($this->pathToDefaultTimezone);
 
-        $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config',
-            ['getValue'],
-            [],
-            '',
-            false
+        $this->scopeConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['getValue']);
+        $this->customerRegistry = $this->createPartialMock(
+            \Magento\Customer\Model\CustomerRegistry::class,
+            ['retrieve']
         );
+        $this->customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['isCustomerLocked']);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo::class,
             [
                 'customerDataFactory' => $customerDataFactory,
                 'dateTime' => $dateTime,
@@ -136,6 +115,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
                 'backendSession' => $backendSession,
             ]
         );
+        $this->block->setCustomerRegistry($this->customerRegistry);
     }
 
     /**
@@ -242,6 +222,31 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         return [
             ['2015-03-04 12:00:00', '2015-03-04 12:00:00'],
             ['Never', null]
+        ];
+    }
+
+    /**
+     * @param string $expectedResult
+     * @param bool $value
+     * @dataProvider getAccountLockDataProvider
+     * @return void
+     */
+    public function testGetAccountLock($expectedResult, $value)
+    {
+        $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);
+        $this->customerModel->expects($this->once())->method('isCustomerLocked')->willReturn($value);
+        $expectedResult =  new \Magento\Framework\Phrase($expectedResult);
+        $this->assertEquals($expectedResult, $this->block->getAccountLock());
+    }
+
+    /**
+     * @return array
+     */
+    public function getAccountLockDataProvider()
+    {
+        return [
+            ['result' => 'Locked', 'expectedValue' => true],
+            ['result' => 'Unlocked', 'expectedValue' => false]
         ];
     }
 }

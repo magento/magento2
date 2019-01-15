@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ use Magento\Framework\App;
 
 /**
  * Page title
+ *
+ * @api
  */
 class Title
 {
@@ -23,10 +25,14 @@ class Title
      */
     private $scopeConfig;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $prependedValues = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $appendedValues = [];
 
     /**
@@ -77,11 +83,26 @@ class Title
     }
 
     /**
+     * Same as getShort(), but return title without prefix and suffix
+     * @return mixed
+     */
+    public function getShortHeading()
+    {
+        $title = $this->build(false);
+        return reset($title);
+    }
+
+    /**
+     * @param bool $withConfigValues
      * @return array
      */
-    protected function build()
+    protected function build($withConfigValues = true)
     {
-        return array_merge($this->prependedValues, [$this->addConfigValues($this->textValue)], $this->appendedValues);
+        return array_merge(
+            $this->prependedValues,
+            [$withConfigValues ? $this->addConfigValues($this->textValue) : $this->textValue],
+            $this->appendedValues
+        );
     }
 
     /**

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-class TabTest extends \PHPUnit_Framework_TestCase
+use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class TabTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Tab
@@ -15,27 +17,15 @@ class TabTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_iteratorMock;
 
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator\Field',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_iteratorMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Iterator\Field::class);
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Tab(
-            $this->_storeManagerMock,
-            $this->_iteratorMock
+        $this->_model = (new ObjectManager($this))->getObject(
+            \Magento\Config\Model\Config\Structure\Element\Tab::class,
+            ['childrenIterator' => $this->_iteratorMock]
         );
     }
 
@@ -43,7 +33,6 @@ class TabTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_model);
         unset($this->_iteratorMock);
-        unset($this->_storeManagerMock);
     }
 
     public function testIsVisibleOnlyChecksPresenceOfChildren()

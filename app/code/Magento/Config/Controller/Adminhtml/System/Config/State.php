@@ -1,12 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-class State extends AbstractScopeConfig
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+/**
+ * Save current state of open tabs. GET is allowed for legacy reasons.
+ */
+class State extends AbstractScopeConfig implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory

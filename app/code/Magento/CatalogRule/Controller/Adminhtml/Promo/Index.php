@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
@@ -9,12 +9,11 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_CatalogRule::promo');
-    }
+    const ADMIN_RESOURCE = 'Magento_CatalogRule::promo';
 
     /**
      * @return void

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -67,9 +67,13 @@ class Modules extends AbstractActionController
      */
     public function allModulesValidAction()
     {
-        $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
-        return $this->checkGraph($enabledModules);
+        try {
+            $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+            $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
+            return $this->checkGraph($enabledModules);
+        } catch (\Exception $e) {
+            return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -81,7 +85,7 @@ class Modules extends AbstractActionController
      */
     private function checkGraph(array $toBeEnabledModules, $prettyFormat = false)
     {
-        $status = $this->objectManager->create('Magento\Framework\Module\Status');
+        $status = $this->objectManager->create(\Magento\Framework\Module\Status::class);
 
         // checking enabling constraints
         $constraints = $status->checkConstraints(true, $toBeEnabledModules, [], $prettyFormat);
@@ -101,7 +105,7 @@ class Modules extends AbstractActionController
     public function validateAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $status = $this->objectManager->create('Magento\Framework\Module\Status');
+        $status = $this->objectManager->create(\Magento\Framework\Module\Status::class);
 
         $constraints = $status->checkConstraints(
             $params['status'],

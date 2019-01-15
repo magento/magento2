@@ -1,45 +1,56 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+ * @magentoAppIsolation enabled
  * @magentoCache all disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\Translate
+     */
+    private $translate;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
-        $viewFileSystem = $this->getMock(
-            'Magento\Framework\View\FileSystem',
-            ['getLocaleFileName', 'getDesignTheme'],
-            [],
-            '',
-            false
+        /** @var \Magento\Framework\View\FileSystem|MockObject $viewFileSystem */
+        $viewFileSystem = $this->createPartialMock(
+            \Magento\Framework\View\FileSystem::class,
+            ['getLocaleFileName']
         );
 
         $viewFileSystem->expects($this->any())
             ->method('getLocaleFileName')
             ->will(
-                $this->returnValue(dirname(__DIR__) . '/Theme/Model/_files/design/frontend/Test/default/i18n/en_US.csv')
+                $this->returnValue(
+                    dirname(__DIR__) . '/Translation/Model/_files/Magento/design/Magento/theme/i18n/en_US.csv'
+                )
             );
 
-        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
-        $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', []);
-        $theme->expects($this->any())->method('getId')->will($this->returnValue(10));
+        /** @var \Magento\Framework\View\Design\ThemeInterface|MockObject $theme */
+        $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('Magento/luma'));
 
-        $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
-
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->addSharedInstance($viewFileSystem, 'Magento\Framework\View\FileSystem');
+        $objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
 
         /** @var $moduleReader \Magento\Framework\Module\Dir\Reader */
-        $moduleReader = $objectManager->get('Magento\Framework\Module\Dir\Reader');
+        $moduleReader = $objectManager->get(\Magento\Framework\Module\Dir\Reader::class);
         $moduleReader->setModuleDir(
             'Magento_Store',
             'i18n',
@@ -51,38 +62,56 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/Translation/Model/_files/Magento/Catalog/i18n'
         );
 
-        /** @var \Magento\Theme\Model\View\Design $designModel */
-        $designModel = $this->getMock(
-            'Magento\Theme\Model\View\Design',
-            ['getDesignTheme'],
-            [
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
-                $objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory'),
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Theme\Model\ThemeFactory'),
-                $objectManager->get('Magento\Framework\ObjectManagerInterface'),
-                $objectManager->get('Magento\Framework\App\State'),
-                ['frontend' => 'Test/default']
-            ]
+        /** @var \Magento\Theme\Model\View\Design|MockObject $designModel */
+        $designModel = $this->getMockBuilder(\Magento\Theme\Model\View\Design::class)
+            ->setMethods(['getDesignTheme'])
+            ->setConstructorArgs(
+                [
+                    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
+                    $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                    $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
+                    $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\App\State::class),
+                    ['frontend' => 'Test/default']
+                ]
+            )
+            ->getMock();
+
+        $designModel->expects($this->any())->method('getDesignTheme')->willReturn($theme);
+
+        $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
+
+        $this->translate = $objectManager->create(\Magento\Framework\Translate::class);
+        $objectManager->addSharedInstance($this->translate, \Magento\Framework\Translate::class);
+        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
+        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
+        \Magento\Framework\Phrase::setRenderer(
+            $objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
         );
+    }
 
-        $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
-
-        $objectManager->addSharedInstance($designModel, 'Magento\Theme\Model\View\Design\Proxy');
-
-        $model = $objectManager->create('Magento\Framework\Translate');
-        $objectManager->addSharedInstance($model, 'Magento\Framework\Translate');
-        $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Composite');
-        $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
+    public function testLoadData()
+    {
+        $data = $this->translate->loadData(null, true)->getData();
+        CacheCleaner::cleanAll();
+        $this->translate->loadData()->getData();
+        $dataCached = $this->translate->loadData()->getData();
+        $this->assertEquals($data, $dataCached);
     }
 
     /**
+     * @magentoCache all disabled
      * @dataProvider translateDataProvider
+     *
+     * @param string $inputText
+     * @param string $expectedTranslation
+     * @return void
+     * @throws Exception\LocalizedException
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
+        $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
         $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
@@ -94,9 +123,26 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['', ''],
-            ['Text with different translation on different modules', 'Text translation that was last loaded'],
-            ['text_with_no_translation', 'text_with_no_translation'],
-            ['Design value to translate', 'Design translated value']
+            [
+                'Theme phrase will be translated',
+                'Theme phrase is translated',
+            ],
+            [
+                'Phrase in Magento_Store module that doesn\'t need translation',
+                'Phrase in Magento_Store module that doesn\'t need translation',
+            ],
+            [
+                'Phrase in Magento_Catalog module that doesn\'t need translation',
+                'Phrase in Magento_Catalog module that doesn\'t need translation',
+            ],
+            [
+                'Magento_Store module phrase will be overridden by theme translation',
+                'Magento_Store module phrase is overridden by theme translation',
+            ],
+            [
+                'Magento_Catalog module phrase will be overridden by theme translation',
+                'Magento_Catalog module phrase is overridden by theme translation',
+            ],
         ];
     }
 }

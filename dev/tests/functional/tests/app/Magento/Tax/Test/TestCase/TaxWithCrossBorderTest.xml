@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\TaxWithCrossBorderTest">
+    <testCase name="Magento\Tax\Test\TestCase\TaxWithCrossBorderTest" summary="Apply Cross Border Taxes for Simple Product" ticketId="MAGETWO-29052">
         <variation name="TaxWithCrossBorderTestVariation1">
             <data name="product/dataset" xsi:type="string">with_one_custom_option_and_category</data>
             <data name="configData" xsi:type="string">cross_border_enabled_price_incl_tax, display_excluding_including_tax</data>

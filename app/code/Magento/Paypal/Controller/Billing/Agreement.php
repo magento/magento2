@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Billing;
@@ -42,7 +42,7 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
-        if (!$this->_getSession()->authenticate($this)) {
+        if (!$this->_getSession()->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);
@@ -58,7 +58,7 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
         $agreementId = $this->getRequest()->getParam('agreement');
         if ($agreementId) {
             /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
-            $billingAgreement = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement')
+            $billingAgreement = $this->_objectManager->create(\Magento\Paypal\Model\Billing\Agreement::class)
                 ->load($agreementId);
             $currentCustomerId = $this->_getSession()->getCustomerId();
             $agreementCustomerId = $billingAgreement->getCustomerId();
@@ -67,7 +67,9 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
                 return $billingAgreement;
             }
         }
-        $this->messageManager->addError(__('Please specify the correct billing agreement ID and try again.'));
+        $this->messageManager->addErrorMessage(
+            __('Please specify the correct billing agreement ID and try again.')
+        );
         $this->_redirect('*/*/');
         return false;
     }
@@ -79,6 +81,6 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
      */
     protected function _getSession()
     {
-        return $this->_objectManager->get('Magento\Customer\Model\Session');
+        return $this->_objectManager->get(\Magento\Customer\Model\Session::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block;
@@ -8,23 +8,25 @@ namespace Magento\User\Block;
 /**
  * User block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * @var \Magento\User\Model\Resource\User
+     * @var \Magento\User\Model\ResourceModel\User
      */
     protected $_resourceModel;
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\User\Model\Resource\User $resourceModel
+     * @param \Magento\User\Model\ResourceModel\User $resourceModel
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
-        \Magento\User\Model\Resource\User $resourceModel,
+        \Magento\User\Model\ResourceModel\User $resourceModel,
         array $data = []
     ) {
         parent::__construct($context, $data);

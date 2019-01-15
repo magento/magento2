@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
@@ -12,6 +12,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -72,7 +74,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -86,7 +88,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -141,13 +143,14 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                if ($installDate <= strtotime((string)$item->pubDate)) {
+                $itemPublicationDate = strtotime((string)$item->pubDate);
+                if ($installDate <= $itemPublicationDate) {
                     $feedData[] = [
                         'severity' => (int)$item->severity,
-                        'date_added' => $this->getDate((string)$item->pubDate),
-                        'title' => (string)$item->title,
-                        'description' => (string)$item->description,
-                        'url' => (string)$item->link,
+                        'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
+                        'title' => $this->escapeString($item->title),
+                        'description' => $this->escapeString($item->description),
+                        'url' => $this->escapeString($item->link),
                     ];
                 }
             }
@@ -159,17 +162,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->setLastUpdate();
 
         return $this;
-    }
-
-    /**
-     * Retrieve DB date from RSS date
-     *
-     * @param string $rssDate
-     * @return string YYYY-MM-DD YY:HH:SS
-     */
-    public function getDate($rssDate)
-    {
-        return gmdate('Y-m-d H:i:s', strtotime($rssDate));
     }
 
     /**
@@ -222,9 +214,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
-        if ($data === false) {
-            return false;
-        }
         $data = preg_split('/^\r?$/m', $data, 2);
         $data = trim($data[1]);
         $curl->close();
@@ -253,5 +242,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         }
 
         return $xml;
+    }
+
+    /**
+     * Converts incoming data to string format and escapes special characters.
+     *
+     * @param \SimpleXMLElement $data
+     * @return string
+     */
+    private function escapeString(\SimpleXMLElement $data)
+    {
+        return htmlspecialchars((string)$data);
     }
 }

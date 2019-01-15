@@ -1,32 +1,32 @@
 {
     "name": "magento/module-newsletter",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-customer": "1.0.0-beta",
-        "magento/module-widget": "1.0.0-beta",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-cms": "1.0.0-beta",
-        "magento/module-email": "1.0.0-beta",
-        "magento/module-cron": "1.0.0-beta",
-        "magento/module-eav": "1.0.0-beta",
-        "magento/module-require-js": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-cms": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-email": "*",
+        "magento/module-require-js": "*",
+        "magento/module-store": "*",
+        "magento/module-widget": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Newsletter"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Newsletter\\": ""
+        }
     }
 }

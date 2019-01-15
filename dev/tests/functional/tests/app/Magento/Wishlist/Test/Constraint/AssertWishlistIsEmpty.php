@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class AssertWishlistIsEmpty extends AbstractConstraint
     {
         $cmsIndex->getCmsPageBlock()->waitPageInit();
         $cmsIndex->getLinksBlock()->openLink("My Wish List");
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $wishlistIndex->getWishlistBlock()->isEmptyBlockVisible(),
             'Wish List is not empty.'
         );

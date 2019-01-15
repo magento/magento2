@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -16,7 +20,8 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/actions',
-            selectProvider: '',
+            stickyTmpl: 'ui/grid/sticky/actions',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
             actions: [],
             noItemsMsg: $t('You haven\'t selected any items!'),
             modules: {
@@ -55,7 +60,7 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex),
+            action   = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
@@ -90,7 +95,7 @@ define([
         },
 
         /**
-         * Adds new action. If action with a specfied identifier
+         * Adds new action. If action with a specified identifier
          * already exists, than the original one will be overrided.
          *
          * @param {Object} action - Action object.
@@ -148,11 +153,18 @@ define([
             var itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
 
+            if (itemsType === 'excluded' && data.selected && data.selected.length) {
+                itemsType = 'selected';
+                data[itemsType] = _.difference(data.selected, data.excluded);
+            }
+
             selections[itemsType] = data[itemsType];
 
             if (!selections[itemsType].length) {
                 selections[itemsType] = false;
             }
+
+            _.extend(selections, data.params || {});
 
             utils.submit({
                 url: action.url,
@@ -168,11 +180,14 @@ define([
          *      invoked if action is confirmed.
          */
         _confirm: function (action, callback) {
-            var confirmData = action.confirm;
+            var confirmData = action.confirm,
+                data = this.getSelections(),
+                total = data.total ? data.total : 0,
+                confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
 
             confirm({
                 title: confirmData.title,
-                content: confirmData.message,
+                content: confirmMessage,
                 actions: {
                     confirm: callback
                 }

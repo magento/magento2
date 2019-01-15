@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api;
@@ -9,8 +9,9 @@ use \Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Base Class for extensible data Objects
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * TODO: This class can be split into Custom attribute and Extension attribute implementation classes
+ * @api
  */
 abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {
@@ -49,6 +50,9 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
         $this->extensionFactory = $extensionFactory;
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);
+        if (isset($data[self::EXTENSION_ATTRIBUTES_KEY]) && is_array($data[self::EXTENSION_ATTRIBUTES_KEY])) {
+            $this->populateExtensionAttributes($data[self::EXTENSION_ATTRIBUTES_KEY]);
+        }
     }
 
     /**
@@ -72,7 +76,7 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     public function getCustomAttributes()
     {
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES]) ? $this->_data[self::CUSTOM_ATTRIBUTES] : [];
+        return $this->_data[self::CUSTOM_ATTRIBUTES] ?? [];
     }
 
     /**
@@ -127,7 +131,7 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     protected function getCustomAttributesCodes()
     {
-        return isset($this->customAttributesCodes) ? $this->customAttributesCodes : [];
+        return $this->customAttributesCodes ?? [];
     }
 
     /**
@@ -158,7 +162,22 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     protected function _getExtensionAttributes()
     {
+        if (!$this->_get(self::EXTENSION_ATTRIBUTES_KEY)) {
+            $this->populateExtensionAttributes([]);
+        }
         return $this->_get(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * Instantiate extension attributes object and populate it with the provided data.
+     *
+     * @param array $extensionAttributesData
+     * @return void
+     */
+    private function populateExtensionAttributes(array $extensionAttributesData = [])
+    {
+        $extensionAttributes = $this->extensionFactory->create(get_class($this), $extensionAttributesData);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**

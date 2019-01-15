@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\User\Model\User as UserModel;
 /**
  * Test class for \Magento\Integration\Model\AdminTokenService.
  */
-class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
+class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Api\AdminTokenServiceInterface
@@ -36,9 +36,9 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\AdminTokenService');
-        $this->tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
-        $this->userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);
+        $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
+        $this->userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
     }
 
     /**
@@ -73,13 +73,17 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testCreateAdminAccessTokenInvalidCustomer()
     {
         $adminUserName = 'invalid';
         $password = 'invalid';
         $this->tokenService->createAdminAccessToken($adminUserName, $password);
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 
     /**
@@ -102,10 +106,10 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $e->getMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
-        $this->assertEquals('username is a required field.', $errors[0]->getLogMessage());
-        $this->assertEquals('password is a required field.', $errors[1]->getLogMessage());
+        $this->assertEquals('"username" is required. Enter and try again.', $errors[0]->getLogMessage());
+        $this->assertEquals('"password" is required. Enter and try again.', $errors[1]->getLogMessage());
     }
 }

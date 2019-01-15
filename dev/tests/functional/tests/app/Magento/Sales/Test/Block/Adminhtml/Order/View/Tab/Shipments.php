@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,27 +10,26 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid;
 
 /**
- * Class Shipments
- * Shipments tab
+ * Shipments tab.
  */
 class Shipments extends Tab
 {
     /**
-     * Grid block css selector
+     * Grid block css selector.
      *
      * @var string
      */
-    protected $grid = '#order_shipments';
+    protected $grid = '#sales_order_view_tabs_order_shipments_content';
 
     /**
-     * Get grid block
+     * Get grid block.
      *
      * @return Grid
      */
     public function getGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid',
+            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid::class,
             ['element' => $this->_rootElement->find($this->grid)]
         );
     }

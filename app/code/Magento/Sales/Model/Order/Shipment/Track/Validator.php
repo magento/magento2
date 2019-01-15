@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order\Shipment\Track;
 
 use Magento\Sales\Model\Order\Shipment\Track;
@@ -36,7 +37,7 @@ class Validator
         $commentData = $track->getData();
         foreach ($this->required as $code => $label) {
             if (!$track->hasData($code)) {
-                $errors[$code] = sprintf('%s is a required field', $label);
+                $errors[$code] = sprintf('"%s" is required. Enter and try again.', $label);
             } elseif (empty($commentData[$code])) {
                 $errors[$code] = sprintf('%s can not be empty', $label);
             }

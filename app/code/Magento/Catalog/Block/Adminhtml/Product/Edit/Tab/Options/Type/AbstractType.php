@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,7 +45,7 @@ class AbstractType extends \Magento\Backend\Block\Widget
         $this->setChild(
             'option_price_type',
             $this->getLayout()->addBlock(
-                'Magento\Framework\View\Element\Html\Select',
+                \Magento\Framework\View\Element\Html\Select::class,
                 $this->getNameInLayout() . '.option_price_type',
                 $this->getNameInLayout()
             )->setData(
@@ -70,13 +70,17 @@ class AbstractType extends \Magento\Backend\Block\Widget
     /**
      * Get html of Price Type select element
      *
+     * @param string $extraParams
      * @return string
      */
-    public function getPriceTypeSelectHtml()
+    public function getPriceTypeSelectHtml($extraParams = '')
     {
         if ($this->getCanEditPrice() === false) {
-            $this->getChildBlock('option_price_type')->setExtraParams('disabled="disabled"');
+            $extraParams .= ' disabled="disabled"';
+            $this->getChildBlock('option_price_type');
         }
+        $this->getChildBlock('option_price_type')->setExtraParams($extraParams);
+
         return $this->getChildHtml('option_price_type');
     }
 }

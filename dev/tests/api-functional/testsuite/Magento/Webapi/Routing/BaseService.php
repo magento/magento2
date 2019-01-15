@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Routing;
@@ -16,13 +16,17 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * Check a particular adapter and assert unauthorized access
      *
-     * @param array      $serviceInfo
+     * @param array $serviceInfo
      * @param array|null $requestData
      */
     protected function assertUnauthorizedException($serviceInfo, $requestData = null)
     {
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->_assertSoapException($serviceInfo, $requestData, 'Consumer is not authorized to access %resources');
+            $this->_assertSoapException(
+                $serviceInfo,
+                $requestData,
+                "The consumer isn't authorized to access %resources."
+            );
         } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $this->_assertRestUnauthorizedException($serviceInfo, $requestData);
         }
@@ -31,7 +35,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * Invoke the REST api and assert access is unauthorized
      *
-     * @param array      $serviceInfo
+     * @param array $serviceInfo
      * @param array|null $requestData
      */
     protected function _assertRestUnauthorizedException($serviceInfo, $requestData = null)
@@ -40,7 +44,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\Exception $e) {
             $this->assertContains(
-                '{"message":"' . AuthorizationException::NOT_AUTHORIZED . '"',
+                '{"message":"The consumer isn\'t authorized to access %resources.',
                 $e->getMessage(),
                 sprintf(
                     'REST routing did not fail as expected for the method "%s" of service "%s"',
@@ -55,7 +59,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * Check a particular adapter and assert the exception
      *
-     * @param array      $serviceInfo
+     * @param array $serviceInfo
      * @param array|null $requestData
      */
     protected function _assertNoRouteOrOperationException($serviceInfo, $requestData = null)
@@ -70,7 +74,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * Invoke the REST api and assert for test cases that no such REST route exist
      *
-     * @param array      $serviceInfo
+     * @param array $serviceInfo
      * @param array|null $requestData
      */
     protected function _assertNoRestRouteException($serviceInfo, $requestData = null)
@@ -87,9 +91,9 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * Invoke the SOAP api and assert for the NoWebApiXmlTestTest test cases that no such SOAP route exists
      *
-     * @param array      $serviceInfo
+     * @param array $serviceInfo
      * @param array|null $requestData
-     * @param string     $expectedMessage
+     * @param string $expectedMessage
      */
     protected function _assertSoapException($serviceInfo, $requestData = null, $expectedMessage = '')
     {
@@ -107,7 +111,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             }
 
             if ($expectedMessage) {
-                $this->assertEquals($expectedMessage, $e->getMessage());
+                $this->assertContains($expectedMessage, $e->getMessage());
             }
         }
     }

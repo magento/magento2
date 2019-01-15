@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -13,6 +14,9 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Profiler;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Framework\Data\Form\AbstractForm
 {
     /**
@@ -172,7 +176,9 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     public function checkElementId($elementId)
     {
         if ($this->_elementIdExists($elementId)) {
-            throw new \InvalidArgumentException('Element with id "' . $elementId . '" already exists');
+            throw new \InvalidArgumentException(
+                'An element with a "' . $elementId . '" ID already exists.'
+            );
         }
         return true;
     }

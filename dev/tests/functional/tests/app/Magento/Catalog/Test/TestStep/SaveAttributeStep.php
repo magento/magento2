@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,7 +71,7 @@ class SaveAttributeStep implements TestStepInterface
     public function cleanup()
     {
         $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
+            \Magento\Catalog\Test\TestStep\DeleteAttributeStep::class,
             ['attribute' => $this->attribute]
         )->run();
     }

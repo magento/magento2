@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
@@ -13,7 +11,7 @@ namespace Magento\Sales\Model\Order\Pdf\Total;
  *
  * @method \Magento\Sales\Model\Order getOrder()
  */
-class DefaultTotal extends \Magento\Framework\Object
+class DefaultTotal extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -26,7 +24,7 @@ class DefaultTotal extends \Magento\Framework\Object
     protected $_taxCalculation;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
      */
     protected $_taxOrdersFactory;
 
@@ -35,13 +33,13 @@ class DefaultTotal extends \Magento\Framework\Object
      *
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory
+     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory,
+        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
         array $data = []
     ) {
         $this->_taxHelper = $taxHelper;
@@ -97,7 +95,7 @@ class DefaultTotal extends \Magento\Framework\Object
     public function getFullTaxInfo()
     {
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
-        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getOrder());
+        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getSource());
         if (!empty($taxClassAmount)) {
             foreach ($taxClassAmount as &$tax) {
                 $percent = $tax['percent'] ? ' (' . $tax['percent'] . '%)' : '';
@@ -106,7 +104,7 @@ class DefaultTotal extends \Magento\Framework\Object
                 $tax['font_size'] = $fontSize;
             }
         } else {
-            /** @var $orders \Magento\Tax\Model\Resource\Sales\Order\Tax\Collection */
+            /** @var $orders \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection */
             $orders = $this->_taxOrdersFactory->create();
             $rates = $orders->loadByOrder($this->getOrder())->toArray();
             $fullInfo = $this->_taxCalculation->reproduceProcess($rates['items']);
@@ -145,7 +143,7 @@ class DefaultTotal extends \Magento\Framework\Object
     public function canDisplay()
     {
         $amount = $this->getAmount();
-        return $this->getDisplayZero() || $amount != 0;
+        return $this->getDisplayZero() === 'true' || $amount != 0;
     }
 
     /**
@@ -165,6 +163,6 @@ class DefaultTotal extends \Magento\Framework\Object
      */
     public function getTitleDescription()
     {
-        return $this->getSource()->getDataUsingMethod($this->getTitleSourceField());
+        return $this->getSource()->getOrder()->getData($this->getTitleSourceField());
     }
 }

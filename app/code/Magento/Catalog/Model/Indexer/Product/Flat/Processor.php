@@ -1,11 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+/**
+ * Catalog flat indexer
+ *
+ * @api
+ * @since 100.0.2
+ */
+class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID
@@ -18,11 +24,11 @@ class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
     protected $_state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $state
     ) {
         parent::__construct($indexerRegistry);
@@ -33,11 +39,12 @@ class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
      * Reindex single row by id
      *
      * @param int $id
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexRow($id)
+    public function reindexRow($id, $forceReindex = false)
     {
-        if (!$this->_state->isFlatEnabled() || $this->getIndexer()->isScheduled()) {
+        if (!$this->_state->isFlatEnabled() || (!$forceReindex && $this->getIndexer()->isScheduled())) {
             return;
         }
         $this->getIndexer()->reindexRow($id);
@@ -47,11 +54,12 @@ class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
      * Reindex multiple rows by ids
      *
      * @param int[] $ids
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexList($ids)
+    public function reindexList($ids, $forceReindex = false)
     {
-        if (!$this->_state->isFlatEnabled() || $this->getIndexer()->isScheduled()) {
+        if (!$this->_state->isFlatEnabled() || (!$forceReindex && $this->getIndexer()->isScheduled())) {
             return;
         }
         $this->getIndexer()->reindexList($ids);

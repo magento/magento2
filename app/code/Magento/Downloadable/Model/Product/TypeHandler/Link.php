@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\ComponentInterface;
 
 /**
  * Class Link
+ * @api
+ * @since 100.0.2
  */
 class Link extends AbstractTypeHandler
 {
@@ -24,21 +27,21 @@ class Link extends AbstractTypeHandler
     private $linkFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link
+     * @var \Magento\Downloadable\Model\ResourceModel\Link
      */
     private $linkResource;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
-     * @param \Magento\Downloadable\Model\ComponentInterfaceFactory $linkFactory
-     * @param \Magento\Downloadable\Model\Resource\Link $linkResource
+     * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
-        \Magento\Downloadable\Model\Resource\Link $linkResource
+        \Magento\Downloadable\Model\ResourceModel\Link $linkResource
     ) {
         parent::__construct($jsonHelper, $downloadableFile);
         $this->linkFactory = $linkFactory;
@@ -102,7 +105,9 @@ class Link extends AbstractTypeHandler
         )->setLinkType(
             $data['type']
         )->setProductId(
-            $product->getId()
+            $product->getData(
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            )
         )->setStoreId(
             $product->getStoreId()
         )->setWebsiteId(
@@ -163,7 +168,7 @@ class Link extends AbstractTypeHandler
                 $model->setSampleUrl($this->sampleItem['url']);
             }
             $model->setSampleType($this->sampleItem['type']);
-            if (isset($this->sampleItem['file'])) {
+            if (isset($this->sampleItem['file']) && $this->sampleItem['file']) {
                 $sampleFile = $this->jsonHelper->jsonDecode($this->sampleItem['file']);
             }
         }

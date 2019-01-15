@@ -4,7 +4,7 @@
  *
  * Format: array(<path>[, <replacement>])
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -256,4 +256,9 @@ return [
     ['/app/code/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
     ['/dev/tests/unit/testsuite/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
     ['/dev/tests/unit/testsuite'],
+    ['/app/code/Magento/Log'],
+    ['/app/code/Magento/DesignEditor'],
+    ['/dev/tools/Magento/Tools/Migration'],
+    ['/dev/shell/dependency.php'],
+    ['/dev/tests/performance'],
 ];

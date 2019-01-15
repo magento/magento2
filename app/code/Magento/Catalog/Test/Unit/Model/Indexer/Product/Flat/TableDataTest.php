@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
-class TableDataTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\ResourceConnection;
+
+class TableDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -18,15 +20,15 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
     }
 
     /**
@@ -67,14 +69,12 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->with(
-            'write'
         )->will(
             $this->returnValue($this->_connectionMock)
         );
 
         $model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\TableData',
+            \Magento\Catalog\Model\Indexer\Product\Flat\TableData::class,
             ['resource' => $this->_resourceMock]
         );
 

@@ -2,17 +2,19 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Date
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
-
 
 class DateTest extends AbstractFormTestCase
 {
     /** @var \Magento\Customer\Model\Metadata\Form\Date */
     protected $date;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -47,9 +49,12 @@ class DateTest extends AbstractFormTestCase
         );
     }
 
+    /**
+     * Test extractValue
+     */
     public function testExtractValue()
     {
-        $requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $requestMock->expects($this->once())->method('getParam')->will($this->returnValue('1999-1-2'));
@@ -70,7 +75,7 @@ class DateTest extends AbstractFormTestCase
     public function testValidateValue($value, $validation, $required, $expected)
     {
         $validationRules = [];
-        $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
@@ -84,7 +89,7 @@ class DateTest extends AbstractFormTestCase
         $validationRules[] = $validationRule;
         if (is_array($validation)) {
             foreach ($validation as $ruleName => $ruleValue) {
-                $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+                $validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
                     ->disableOriginalConstructor()
                     ->setMethods(['getName', 'getValue'])
                     ->getMockForAbstractClass();
@@ -113,6 +118,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function validateValueDataProvider()
     {
         return [
@@ -164,12 +172,15 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->compactValue($value));
     }
 
+    /**
+     * @return array
+     */
     public function compactAndRestoreValueDataProvider()
     {
         return [
             [1, 1],
             [false, false],
-            ['', null],
+            [null, null],
             ['test', 'test'],
             [['element1', 'element2'], ['element1', 'element2']]
         ];
@@ -186,6 +197,9 @@ class DateTest extends AbstractFormTestCase
         $this->assertSame($expected, $this->date->restoreValue($value));
     }
 
+    /**
+     * Test outputValue
+     */
     public function testOutputValue()
     {
         $this->assertEquals(null, $this->date->outputValue());

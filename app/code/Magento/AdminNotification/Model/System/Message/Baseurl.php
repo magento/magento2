@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Store\Model\Store;
 
+/**
+ * @deprecated 100.1.0
+ */
 class Baseurl implements \Magento\Framework\Notification\MessageInterface
 {
     /**
@@ -65,7 +68,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => 'web']);
         } else {
-            /** @var $dataCollection \Magento\Config\Model\Resource\Config\Data\Collection */
+            /** @var $dataCollection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
             $dataCollection = $this->_configValueFactory->create()->getCollection();
             $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
 

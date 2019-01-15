@@ -2,11 +2,15 @@
 /**
  * Represents a Field Element on the UI that can be configured via xml.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
     /**
@@ -50,21 +54,23 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Config\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Config\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
+     * @param Dependency\Mapper $dependencyMapper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Config\Model\Config\BackendFactory $backendFactory,
         \Magento\Config\Model\Config\SourceFactory $sourceFactory,
         \Magento\Config\Model\Config\CommentFactory $commentFactory,
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {
-        parent::__construct($storeManager);
+        parent::__construct($storeManager, $moduleManager);
         $this->_backendFactory = $backendFactory;
         $this->_sourceFactory = $sourceFactory;
         $this->_commentFactory = $commentFactory;
@@ -281,6 +287,17 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
     }
 
     /**
+     * Check if the field can be restored to default
+     *
+     * @return bool
+     * @since 100.1.0
+     */
+    public function canRestore()
+    {
+        return isset($this->_data['canRestore']) && (int)$this->_data['canRestore'];
+    }
+
+    /**
      * Populate form element with field data
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $formField
@@ -421,7 +438,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
         }
 
         $sourceModel = $this->_sourceFactory->create($sourceModel);
-        if ($sourceModel instanceof \Magento\Framework\Object) {
+        if ($sourceModel instanceof \Magento\Framework\DataObject) {
             $sourceModel->setPath($this->getPath());
         }
         if ($method) {

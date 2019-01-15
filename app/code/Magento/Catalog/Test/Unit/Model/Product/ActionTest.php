@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Action
@@ -38,76 +38,56 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavAttribute;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $this->productWebsiteFactory = $this->getMock(
-            '\Magento\Catalog\Model\Product\WebsiteFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->productWebsiteFactory = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\WebsiteFactory::class,
+            ['create']
         );
-        $this->resource = $this->getMock(
-            '\Magento\Framework\Model\Resource\AbstractResource',
+        $this->resource = $this->createPartialMock(
+            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [
                 'updateAttributes',
-                '_getWriteAdapter',
-                '_getReadAdapter',
+                'getConnection',
                 '_construct',
                 'getIdFieldName',
-                'getConnection'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->productWebsite = $this->getMock(
-            '\Magento\Catalog\Model\Product\Website',
-            ['addProducts', 'removeProducts', '__wakeup'],
-            [],
-            '',
-            false
+        $this->productWebsite = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Website::class,
+            ['addProducts', 'removeProducts', '__wakeup']
         );
         $this->productWebsiteFactory
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->productWebsite));
-        $this->categoryIndexer = $this->getMock(
-            '\Magento\Indexer\Model\Indexer',
-            ['getId', 'load', 'isScheduled', 'reindexList'],
-            [],
-            '',
-            false
+        $this->categoryIndexer = $this->createPartialMock(
+            \Magento\Indexer\Model\Indexer::class,
+            ['getId', 'load', 'isScheduled', 'reindexList']
         );
-        $this->eavConfig = $this->getMock(
-            '\Magento\Eav\Model\Config',
-            ['__wakeup', 'getAttribute'],
-            [],
-            '',
-            false
+        $this->eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['__wakeup', 'getAttribute']);
+        $this->eavAttribute = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['__wakeup', 'isIndexable']
         );
-        $this->eavAttribute = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
-            ['__wakeup', 'isIndexable'],
-            [],
-            '',
-            false
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\Product\Action',
+            \Magento\Catalog\Model\Product\Action::class,
             [
                 'eventDispatcher' => $eventManagerMock,
                 'resource' => $this->resource,
@@ -184,6 +164,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->getDataByKey('action_type'), $type);
     }
 
+    /**
+     * @return array
+     */
     public function updateWebsitesDataProvider()
     {
         return [

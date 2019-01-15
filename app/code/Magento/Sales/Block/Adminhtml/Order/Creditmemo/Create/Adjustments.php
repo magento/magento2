@@ -1,18 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Adjustments extends \Magento\Backend\Block\Template
 {
     /**
      * Source object
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_source;
 
@@ -54,7 +58,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     {
         $parent = $this->getParentBlock();
         $this->_source = $parent->getSource();
-        $total = new \Magento\Framework\Object(['code' => 'agjustments', 'block_name' => $this->getNameInLayout()]);
+        $total = new \Magento\Framework\DataObject(['code' => 'agjustments', 'block_name' => $this->getNameInLayout()]);
         $parent->removeTotal('shipping');
         $parent->removeTotal('adjustment_positive');
         $parent->removeTotal('adjustment_negative');
@@ -65,7 +69,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     /**
      * Get source object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getSource()
     {

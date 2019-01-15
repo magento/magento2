@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  *
  * @package Magento\Framework\View\Asset\PreProcessor
  */
-class ChainTest extends \PHPUnit_Framework_TestCase
+class ChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -27,7 +27,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $this->asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }

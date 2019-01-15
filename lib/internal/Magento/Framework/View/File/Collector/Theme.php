@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\Factory;
+use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of view files introduced by a theme
@@ -18,38 +18,42 @@ use Magento\Framework\View\File\Factory;
 class Theme implements CollectorInterface
 {
     /**
-     * File factory
-     *
-     * @var \Magento\Framework\View\File\Factory
+     * @var FileFactory
      */
     private $fileFactory;
 
     /**
-     * Themes directory
-     *
-     * @var ReadInterface
+     * @var ReadFactory
      */
-    protected $themesDirectory;
+    private $readDirFactory;
+
+    /**
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
 
     /**
      * @var string
      */
-    protected $subDir;
+    private $subDir;
 
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
-     * @param \Magento\Framework\View\File\Factory $fileFactory
+     * @param FileFactory $fileFactory
+     * @param ReadFactory $readDirFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $subDir
      */
     public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory,
+        FileFactory $fileFactory,
+        ReadFactory $readDirFactory,
+        ComponentRegistrarInterface $componentRegistrar,
         $subDir = ''
     ) {
-        $this->themesDirectory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
         $this->fileFactory = $fileFactory;
+        $this->readDirFactory = $readDirFactory;
+        $this->componentRegistrar = $componentRegistrar;
         $this->subDir = $subDir ? $subDir . '/' : '';
     }
 
@@ -58,15 +62,24 @@ class Theme implements CollectorInterface
      *
      * @param ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
+     * @throws \UnexpectedValueException
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $themePath = $theme->getFullPath();
-        $files = $this->themesDirectory->search("{$themePath}/{$this->subDir}{$filePath}");
+        if (empty($themePath)) {
+            return [];
+        }
+        $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        if (!$themeAbsolutePath) {
+            return [];
+        }
+        $themeDir = $this->readDirFactory->create($themeAbsolutePath);
+        $files = $themeDir->search($this->subDir . $filePath);
         $result = [];
         foreach ($files as $file) {
-            $filename = $this->themesDirectory->getAbsolutePath($file);
+            $filename = $themeDir->getAbsolutePath($file);
             $result[] = $this->fileFactory->create($filename, null, $theme);
         }
         return $result;

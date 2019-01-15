@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
-class JsonProductInfo extends ProductController
+/**
+ * Represents product info in json
+ */
+class JsonProductInfo extends ProductController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -40,13 +44,15 @@ class JsonProductInfo extends ProductController
     }
 
     /**
+     * Execute controller
+     *
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
-        $response = new Object();
+        $response = new DataObject();
         $id = $this->getRequest()->getParam('id');
-        if (intval($id) > 0) {
+        if ((int)$id > 0) {
             $product = $this->productRepository->getById($id);
             $response->setId($id);
             $response->addData($product->getData());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,10 +16,10 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return mixed
      */
-    public function _getValue(\Magento\Framework\Object $row)
+    public function _getValue(\Magento\Framework\DataObject $row)
     {
         $url7zip = __(
             'The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.',

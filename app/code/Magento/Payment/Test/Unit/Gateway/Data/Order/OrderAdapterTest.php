@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data\Order;
@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 /**
  * Class OrderAdapterTest
  */
-class OrderAdapterTest extends \PHPUnit_Framework_TestCase
+class OrderAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderAdapter */
     protected $model;
@@ -29,11 +29,12 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->addressAdapterFactoryMock =
-            $this->getMockBuilder('Magento\Payment\Gateway\Data\Order\AddressAdapterFactory')
+            $this->getMockBuilder(\Magento\Payment\Gateway\Data\Order\AddressAdapterFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -62,36 +63,50 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getCustomerId());
     }
 
+    public function testGetBillingAddressIsNull()
+    {
+        $this->orderMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
+
+        $this->assertSame(null, $this->model->getBillingAddress());
+    }
+
     public function testGetBillingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder('Magento\Payment\Gateway\Data\AddressAdapterInterface')
+        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
             ->getMockForAbstractClass();
         /** @var \Magento\Sales\Api\Data\OrderAddressInterface $orderAddressMock */
-        $orderAddressMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderAddressInterface')
+        $orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $orderAddressMock])
             ->willReturn($addressAdapterMock);
-        $this->orderMock->expects($this->once())->method('getBillingAddress')->willReturn($orderAddressMock);
+        $this->orderMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($orderAddressMock);
 
         $this->assertSame($addressAdapterMock, $this->model->getBillingAddress());
+    }
+
+    public function testGetShippingAddressIsNull()
+    {
+        $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn(null);
+
+        $this->assertSame(null, $this->model->getShippingAddress());
     }
 
     public function testGetShippingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder('Magento\Payment\Gateway\Data\AddressAdapterInterface')
+        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
             ->getMockForAbstractClass();
         /** @var \Magento\Sales\Api\Data\OrderAddressInterface $orderAddressMock */
-        $orderAddressMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderAddressInterface')
+        $orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
             ->with(['address' => $orderAddressMock])
             ->willReturn($addressAdapterMock);
-        $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn($orderAddressMock);
+        $this->orderMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($orderAddressMock);
 
         $this->assertSame($addressAdapterMock, $this->model->getShippingAddress());
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,10 @@ namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\File;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UploadTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class UploadTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload */
     protected $upload;
@@ -57,11 +60,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     protected $fileHelper;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
-     */
-    protected $session;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\ResultFactory
      */
     protected $resultFactory;
@@ -70,27 +68,24 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->storageDatabase = $this->getMockBuilder('\Magento\MediaStorage\Helper\File\Storage\Database')
+        $this->storageDatabase = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->disableOriginalConstructor()
             ->setMethods(['saveFile'])
             ->getMock();
-        $this->uploaderFactory = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')
+        $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->session = $this->getMockBuilder('\Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultFactory = $this->getMockBuilder('\Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->context = $this->getMockBuilder('\Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->response = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface',
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -99,34 +94,25 @@ class UploadTest extends \PHPUnit_Framework_TestCase
                 'setHeader'
             ]
         );
-        $this->fileHelper = $this->getMock(
-            '\Magento\Downloadable\Helper\File',
-            [
+        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
                 'uploadFromTmp'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
         $this->context->expects($this->any())
-            ->method('getSession')
-            ->will($this->returnValue($this->session));
-        $this->context->expects($this->any())
             ->method('getResultFactory')
             ->will($this->returnValue($this->resultFactory));
 
-        $this->link = $this->getMockBuilder('\Magento\Downloadable\Model\Link')
+        $this->link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sample = $this->getMockBuilder('\Magento\Downloadable\Model\Sample')
+        $this->sample = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->upload = $this->objectManagerHelper->getObject(
-            'Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload',
+            \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload::class,
             [
                 'context' => $this->context,
                 'link' => $this->link,
@@ -145,10 +131,10 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             'path' => 'path',
             'file' => 'file'
         ];
-        $uploader = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
+        $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
@@ -157,11 +143,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactory->expects($this->once())->method('create')->willReturn($uploader);
         $this->fileHelper->expects($this->once())->method('uploadFromTmp')->willReturn($data);
         $this->storageDatabase->expects($this->once())->method('saveFile');
-        $this->session->expects($this->once())->method('getName')->willReturn('Name');
-        $this->session->expects($this->once())->method('getSessionId')->willReturn('SessionId');
-        $this->session->expects($this->once())->method('getCookieLifetime')->willReturn('CookieLifetime');
-        $this->session->expects($this->once())->method('getCookiePath')->willReturn('CookiePath');
-        $this->session->expects($this->once())->method('getCookieDomain')->willReturn('CookieDomain');
         $this->resultFactory->expects($this->once())->method('create')->willReturn($resultJson);
         $resultJson->expects($this->once())->method('setData')->willReturnSelf();
 

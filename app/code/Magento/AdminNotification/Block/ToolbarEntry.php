@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\AdminNotification\Block;
 
 /**
  * Toolbar entry that shows latest notifications
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class ToolbarEntry extends \Magento\Backend\Block\Template
 {
@@ -33,18 +33,18 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Collection of latest unread notifications
      *
-     * @var \Magento\AdminNotification\Model\Resource\Inbox\Collection
+     * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
      */
     protected $_notificationList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList
+     * @param \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList,
+        \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -84,7 +84,7 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Retrieve the list of latest unread notifications
      *
-     * @return \Magento\AdminNotification\Model\Resource\Inbox\Collection
+     * @return \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
      */
     public function getLatestUnreadNotifications()
     {

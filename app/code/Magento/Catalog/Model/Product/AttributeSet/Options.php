@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
@@ -13,12 +13,12 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     protected $options;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product $product
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product $product
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Resource\Product $product
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product $product
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->product = $product;

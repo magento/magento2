@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
@@ -21,7 +21,7 @@ interface ConfigOptionsListInterface
     public function getOptions();
 
     /**
-     * Creates array of ConfigData objects from user inputted data.
+     * Creates array of ConfigData objects from user input data.
      * Data in these objects will be stored in array form in deployment config file.
      *
      * @param array $options

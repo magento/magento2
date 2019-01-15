@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
     /**
      * Turn mview off for the given indexers
@@ -21,8 +23,10 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
         } else {
             try {
                 foreach ($indexerIds as $indexerId) {
-                    /** @var \Magento\Indexer\Model\IndexerInterface $model */
-                    $model = $this->_objectManager->get('Magento\Indexer\Model\IndexerRegistry')->get($indexerId);
+                    /** @var \Magento\Framework\Indexer\IndexerInterface $model */
+                    $model = $this->_objectManager->get(
+                        \Magento\Framework\Indexer\IndexerRegistry::class
+                    )->get($indexerId);
                     $model->setScheduled(false);
                 }
                 $this->messageManager->addSuccess(

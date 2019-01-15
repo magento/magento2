@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
@@ -42,9 +42,9 @@ class XmlInterceptorScanner implements ScannerInterface
             $attributes = $entityNode->attributes;
             $type = $attributes->getNamedItem('type');
             if ($type !== null) {
-                array_push($output, $type->nodeValue);
+                $output[] = $type->nodeValue;
             } else {
-                array_push($output, $attributes->getNamedItem('name')->nodeValue);
+                $output[] = $attributes->getNamedItem('name')->nodeValue;
             }
         }
         return $output;
@@ -80,7 +80,7 @@ class XmlInterceptorScanner implements ScannerInterface
                 $this->_handleControllerClassName($entityName);
             }
             if (class_exists($entityName) || interface_exists($entityName)) {
-                array_push($filteredEntities, $entityName . '\\Interceptor');
+                $filteredEntities[] = $entityName . '\\Interceptor';
             }
         }
         return $filteredEntities;

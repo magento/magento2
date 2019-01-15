@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Plugin;
@@ -32,7 +32,7 @@ class Product
         CatalogProduct $product,
         array $identities
     ) {
-        foreach ($this->type->getParentIdsByChild($product->getId()) as $parentId) {
+        foreach ($this->type->getParentIdsByChild($product->getEntityId()) as $parentId) {
             $identities[] = CatalogProduct::CACHE_TAG . '_' . $parentId;
         }
         return $identities;

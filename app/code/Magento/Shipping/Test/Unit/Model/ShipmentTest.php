@@ -1,79 +1,55 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Test\Unit\Model;
 
-use Magento\Sales\Model\Resource\OrderFactory;
+use \Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ShipmentTest
  */
-class ShipmentTest extends \PHPUnit_Framework_TestCase
+class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderFactory;
+    protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment
      */
     protected $shipment;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->orderFactory = $this->getMock(
-            '\Magento\Sales\Model\OrderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = [
-            'context' => $this->getMock('Magento\Framework\Model\Context', [], [], '', false),
-            'registry' => $this->getMock('Magento\Framework\Registry', [], [], '', false),
-            'localeDate' => $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false),
-            'dateTime' => $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false),
-            'orderFactory' => $this->orderFactory,
-            'shipmentItemCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory',
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'trackCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory',
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'commentFactory' => $this->getMock(
-                    'Magento\Sales\Model\Order\Shipment\CommentFactory',
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'commentCollectionFactory' => $this->getMock(
-                    'Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory',
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+            'context' => $this->createMock(\Magento\Framework\Model\Context::class),
+            'registry' => $this->createMock(\Magento\Framework\Registry::class),
+            'localeDate' => $this->createMock(
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            ),
+            'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
+            'orderRepository' => $this->orderRepository,
+            'shipmentItemCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class
+            ),
+            'trackCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory::class
+            ),
+            'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Shipment\CommentFactory::class),
+            'commentCollectionFactory' => $this->createMock(
+                \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory::class
+            ),
         ];
         $this->shipment = $objectManagerHelper->getObject(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             $arguments
         );
     }
@@ -83,25 +59,18 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
         $orderId = 100000041;
         $this->shipment->setOrderId($orderId);
         $entityName = 'shipment';
-        $order = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['load', 'setHistoryEntityName', '__wakeUp'],
-            [],
-            '',
-            false
+        $order = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['load', 'setHistoryEntityName', '__wakeUp']
         );
         $this->shipment->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
             ->with($entityName)
             ->will($this->returnSelf());
-        $order->expects($this->atLeastOnce())
-            ->method('load')
-            ->with($orderId)
-            ->will($this->returnValue($order));
 
-        $this->orderFactory->expects($this->atLeastOnce())
-            ->method('create')
+        $this->orderRepository->expects($this->atLeastOnce())
+            ->method('get')
             ->will($this->returnValue($order));
 
         $this->assertEquals($order, $this->shipment->getOrder());

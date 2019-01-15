@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -11,12 +11,14 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Mustishipping checkout shipping
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * @var \Magento\Framework\Filter\Object\GridFactory
+     * @var \Magento\Framework\Filter\DataObject\GridFactory
      */
     protected $_filterGridFactory;
 
@@ -32,7 +34,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
+     * @param \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
@@ -40,7 +42,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
+        \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Tax\Helper\Data $taxHelper,
         PriceCurrencyInterface $priceCurrency,
@@ -98,7 +100,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param Address $address
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getAddressItems($address)
     {
@@ -202,12 +204,12 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve text for items box
      *
-     * @param \Magento\Framework\Object $addressEntity
+     * @param \Magento\Framework\DataObject $addressEntity
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getItemsBoxTextAfter(\Magento\Framework\Object $addressEntity)
+    public function getItemsBoxTextAfter(\Magento\Framework\DataObject $addressEntity)
     {
         return '';
     }

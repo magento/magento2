@@ -1,31 +1,40 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Adminhtml grid item renderer date
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
     /**
      * Constructor
      *
      * @param \Magento\Backend\Block\Context $context
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
+        DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {
-        parent::__construct($context, $data);
-        $this->_localeResolver = $localeResolver;
+        parent::__construct($context, $dateTimeFormatter, $data);
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -38,7 +47,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
         $format = $this->getColumn()->getFormat();
         if (!$format) {
             $dataBundle = new DataBundle();
-            $resourceBundle = $dataBundle->get($this->_localeResolver->getLocale());
+            $resourceBundle = $dataBundle->get($this->localeResolver->getLocale());
             $formats = $resourceBundle['calendar']['gregorian']['availableFormats'];
             switch ($this->getColumn()->getPeriodType()) {
                 case 'month':
@@ -58,10 +67,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     /**
      * Renders grid column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {
@@ -78,7 +87,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } else {
                 $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return \IntlDateFormatter::formatObject($date, $format);
+            return $this->dateTimeFormatter->formatObject($date, $format, $this->localeResolver->getLocale());
         }
         return $this->getColumn()->getDefault();
     }

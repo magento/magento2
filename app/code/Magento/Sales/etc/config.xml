@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <sales>
             <totals_sort>
@@ -18,13 +18,21 @@
             <reorder>
                 <allow>1</allow>
             </reorder>
+            <zerograndtotal_creditmemo>
+                <allow_zero_grandtotal>1</allow_zero_grandtotal>
+            </zerograndtotal_creditmemo>
             <minimum_order>
                 <tax_including>1</tax_including>
             </minimum_order>
+            <orders>
+                <items_per_page>20</items_per_page>
+                <delete_pending_after>480</delete_pending_after>
+            </orders>
         </sales>
         <sales_email>
             <general>
                 <async_sending>0</async_sending>
+                <sending_limit>50</sending_limit>
             </general>
             <order>
                 <enabled>1</enabled>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
@@ -8,7 +8,8 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 /**
  * Directory contents block for Wysiwyg Images
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Files extends \Magento\Backend\Block\Template
 {
@@ -74,12 +75,12 @@ class Files extends \Magento\Backend\Block\Template
     }
 
     /**
-     * File idetifier getter
+     * File identifier getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileId(\Magento\Framework\Object $file)
+    public function getFileId(\Magento\Framework\DataObject $file)
     {
         return $file->getId();
     }
@@ -87,10 +88,10 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * File thumb URL getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileThumbUrl(\Magento\Framework\Object $file)
+    public function getFileThumbUrl(\Magento\Framework\DataObject $file)
     {
         return $file->getThumbUrl();
     }
@@ -98,10 +99,10 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * File name URL getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileName(\Magento\Framework\Object $file)
+    public function getFileName(\Magento\Framework\DataObject $file)
     {
         return $file->getName();
     }
@@ -109,10 +110,10 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * Image file width getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileWidth(\Magento\Framework\Object $file)
+    public function getFileWidth(\Magento\Framework\DataObject $file)
     {
         return $file->getWidth();
     }
@@ -120,10 +121,10 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * Image file height getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileHeight(\Magento\Framework\Object $file)
+    public function getFileHeight(\Magento\Framework\DataObject $file)
     {
         return $file->getHeight();
     }
@@ -131,10 +132,10 @@ class Files extends \Magento\Backend\Block\Template
     /**
      * File short name getter
      *
-     * @param  \Magento\Framework\Object $file
+     * @param  \Magento\Framework\DataObject $file
      * @return string
      */
-    public function getFileShortName(\Magento\Framework\Object $file)
+    public function getFileShortName(\Magento\Framework\DataObject $file)
     {
         return $file->getShortName();
     }

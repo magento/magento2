@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
@@ -38,7 +38,7 @@ class Form extends \Magento\Catalog\Controller\Adminhtml\Product
         $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
         $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle',
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle::class,
                 'admin.product.bundle.items'
             )->setProductId(
                 $product->getId()

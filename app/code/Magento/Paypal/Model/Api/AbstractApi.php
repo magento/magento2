@@ -1,17 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\Method\Logger;
 
 /**
  * Abstract class for Paypal API wrappers
  */
-abstract class AbstractApi extends \Magento\Framework\Object
+abstract class AbstractApi extends \Magento\Framework\DataObject
 {
+    use Formatter;
+
     /**
      * Config instance
      *
@@ -49,7 +54,9 @@ abstract class AbstractApi extends \Magento\Framework\Object
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFilters = [];
+    protected $_lineItemExportItemsFilters = [
+        'name' => 'strval'
+    ];
 
     /**
      * @var array
@@ -285,25 +292,25 @@ abstract class AbstractApi extends \Magento\Framework\Object
     /**
      * Import $this public data to specified object or array
      *
-     * @param array|\Magento\Framework\Object $to
+     * @param array|\Magento\Framework\DataObject $to
      * @param array $publicMap
-     * @return array|\Magento\Framework\Object
+     * @return array|\Magento\Framework\DataObject
      */
     public function import($to, array $publicMap = [])
     {
-        return \Magento\Framework\Object\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $to, $publicMap);
+        return \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $to, $publicMap);
     }
 
     /**
      * Export $this public data from specified object or array
      *
-     * @param array|\Magento\Framework\Object $from
+     * @param array|\Magento\Framework\DataObject $from
      * @param array $publicMap
      * @return $this
      */
     public function export($from, array $publicMap = [])
     {
-        \Magento\Framework\Object\Mapper::accumulateByMap($from, [$this, 'setDataUsingMethod'], $publicMap);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($from, [$this, 'setDataUsingMethod'], $publicMap);
         return $this;
     }
 
@@ -366,7 +373,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 $map[$this->_globalMap[$key]] = $key;
             }
         }
-        $result = \Magento\Framework\Object\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
+        $result = \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
         foreach ($privateRequestMap as $key) {
             if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
                 $callback = $this->_exportToRequestFilters[$key];
@@ -397,7 +404,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 $response[$key] = call_user_func([$this, $callback], $response[$key], $key, $map[$key]);
             }
         }
-        \Magento\Framework\Object\Mapper::accumulateByMap($response, [$this, 'setDataUsingMethod'], $map);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($response, [$this, 'setDataUsingMethod'], $map);
     }
 
     /**
@@ -422,7 +429,8 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 if (isset($this->_lineItemTotalExportMap[$key])) {
                     // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
-                    $request[$privateKey] = $this->_filterAmount($total);
+                    $total = round($total, 2);
+                    $request[$privateKey] = $this->formatPrice($total);
                 }
             }
         }
@@ -437,14 +445,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
             foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
-                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
-                    $value = call_user_func([$this, $callback], $value);
-                }
-                if (is_float($value)) {
-                    $value = $this->_filterAmount($value);
-                }
-                $request[sprintf($privateFormat, $i)] = $value;
+                $request[sprintf($privateFormat, $i)] = $this->formatValue($value, $publicKey);
             }
             $i++;
         }
@@ -453,6 +454,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
 
     /**
      * Prepare shipping options request
+     *
      * Returns false if there are no shipping options
      *
      * @param array &$request
@@ -469,7 +471,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
             foreach ($this->_shippingOptionsExportItemsFormat as $publicKey => $privateFormat) {
                 $value = $option->getDataUsingMethod($publicKey);
                 if (is_float($value)) {
-                    $value = $this->_filterAmount($value);
+                    $value = $this->formatPrice($value);
                 }
                 if (is_bool($value)) {
                     $value = $this->_filterBool($value);
@@ -479,17 +481,6 @@ abstract class AbstractApi extends \Magento\Framework\Object
             $i++;
         }
         return true;
-    }
-
-    /**
-     * Filter amounts in API calls
-     *
-     * @param float|string $value
-     * @return string
-     */
-    protected function _filterAmount($value)
-    {
-        return sprintf('%.2F', $value);
     }
 
     /**
@@ -530,12 +521,12 @@ abstract class AbstractApi extends \Magento\Framework\Object
     }
 
     /**
-     * region_id workaround: PayPal requires state code, try to find one in the address
+     * Region_id workaround: PayPal requires state code, try to find one in the address
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return string
      */
-    protected function _lookupRegionCodeFromAddress(\Magento\Framework\Object $address)
+    protected function _lookupRegionCodeFromAddress(\Magento\Framework\DataObject $address)
     {
         $regionId = $address->getData('region_id');
         if ($regionId) {
@@ -551,11 +542,11 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * Street address workaround: divides address lines into parts by specified keys
      * (keys should go as 3rd, 4th[...] parameters)
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param array $to
      * @return void
      */
-    protected function _importStreetFromAddress(\Magento\Framework\Object $address, array &$to)
+    protected function _importStreetFromAddress(\Magento\Framework\DataObject $address, array &$to)
     {
         $keys = func_get_args();
         array_shift($keys);
@@ -587,6 +578,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
 
     /**
      * Filter qty in API calls
+     *
      * Paypal note: The value for quantity must be a positive integer. Null, zero, or negative numbers are not allowed.
      *
      * @param float|string|int $value
@@ -594,7 +586,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 
     /**
@@ -642,5 +634,26 @@ abstract class AbstractApi extends \Magento\Framework\Object
     public function getDebugReplacePrivateDataKeys()
     {
         return $this->_debugReplacePrivateDataKeys;
+    }
+
+    /**
+     * Formats value according to configured filters or converts to 0.00 format if value is float.
+     *
+     * @param string|int|float|\Magento\Framework\Phrase $value
+     * @param string $publicKey
+     * @return string
+     */
+    private function formatValue($value, $publicKey)
+    {
+        if (!empty($this->_lineItemExportItemsFilters[$publicKey])) {
+            $callback = $this->_lineItemExportItemsFilters[$publicKey];
+            $value = method_exists($this, $callback) ? $this->{$callback}($value) : $callback($value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->formatPrice($value);
+        }
+
+        return $value;
     }
 }

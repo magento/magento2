@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
+
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\ContainerInterface;
+use Magento\Email\Model\BackendTemplate;
 
 /**
  * Adminhtml system template edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\ContainerInterface
+class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     protected $_registryManager;
 
@@ -38,7 +44,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      *
      * @var string
      */
-    protected $_template = 'template/edit.phtml';
+    protected $_template = 'Magento_Email::template/edit.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -98,7 +104,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -107,7 +113,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -115,7 +121,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function removeButton($buttonId)
     {
@@ -213,12 +219,18 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
             null
         );
         $this->toolbar->pushButtons($this, $this->buttonList);
-        $this->addChild('form', 'Magento\Email\Block\Adminhtml\Template\Edit\Form');
+        $this->addChild(
+            'form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
+            [
+                'email_template' => $this->getEmailTemplate()
+            ]
+        );
         return parent::_prepareLayout();
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -337,6 +349,16 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
+     * Return template type from template object
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        return $this->getEmailTemplate()->getType();
+    }
+
+    /**
      * Return delete url for customer group
      *
      * @return string
@@ -353,7 +375,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      */
     public function getEmailTemplate()
     {
-        return $this->_registryManager->registry('current_email_template');
+        return $this->getData('email_template');
     }
 
     /**
@@ -374,7 +396,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      */
     public function getCurrentlyUsedForPaths($asJSON = true)
     {
-        /** @var $template \Magento\Email\Model\BackendTemplate */
+        /** @var $template BackendTemplate */
         $template = $this->getEmailTemplate();
         $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);

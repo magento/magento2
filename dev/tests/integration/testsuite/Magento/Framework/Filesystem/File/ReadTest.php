@@ -2,14 +2,14 @@
 /**
  * Test for \Magento\Framework\Filesystem\File\Read
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test instance of Read
@@ -305,7 +305,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
         return Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem\File\Read',
+            \Magento\Framework\Filesystem\File\Read::class,
             ['path' => $fullPath, 'driver' => new \Magento\Framework\Filesystem\Driver\File()]
         );
     }

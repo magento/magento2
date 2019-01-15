@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
-class CountryValidatorTest extends \PHPUnit_Framework_TestCase
+class CountryValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Gateway\Validator\CountryValidator */
     protected $model;
@@ -27,13 +27,14 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Payment\Gateway\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ResultInterfaceFactory')
-            ->setMethods(['create'])
+        $this->resultFactoryMock = $this->getMockBuilder(
+            \Magento\Payment\Gateway\Validator\ResultInterfaceFactory::class
+        )->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder('Magento\Payment\Gateway\Validator\Result')
+        $this->resultMock = $this->getMockBuilder(\Magento\Payment\Gateway\Validator\Result::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -42,7 +43,6 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
             $this->configMock
         );
     }
-
 
     /**
      * @dataProvider validateAllowspecificTrueDataProvider
@@ -62,12 +62,15 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificTrueDataProvider()
     {
         return [
@@ -90,12 +93,15 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificFalseDataProvider()
     {
         return [

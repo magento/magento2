@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\Algorithm\Repository;
+use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * MySQL search dynamic aggregation builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Dynamic implements BucketInterface
 {
     /**
@@ -18,25 +26,34 @@ class Dynamic implements BucketInterface
     private $algorithmRepository;
 
     /**
-     * @param Repository $algorithmRepository
+     * @var EntityStorageFactory
      */
-    public function __construct(Repository $algorithmRepository)
-    {
+    private $entityStorageFactory;
+
+    /**
+     * @param Repository $algorithmRepository
+     * @param EntityStorageFactory $entityStorageFactory
+     */
+    public function __construct(
+        Repository $algorithmRepository,
+        EntityStorageFactory $entityStorageFactory
+    ) {
         $this->algorithmRepository = $algorithmRepository;
+        $this->entityStorageFactory = $entityStorageFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         DataProviderInterface $dataProvider,
         array $dimensions,
         RequestBucketInterface $bucket,
-        array $entityIds
+        Table $entityIdsTable
     ) {
         /** @var DynamicBucket $bucket */
         $algorithm = $this->algorithmRepository->get($bucket->getMethod());
-        $data = $algorithm->getItems($bucket, $dimensions, $entityIds);
+        $data = $algorithm->getItems($bucket, $dimensions, $this->entityStorageFactory->create($entityIdsTable));
 
         $resultData = $this->prepareData($data);
 

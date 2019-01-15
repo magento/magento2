@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
@@ -10,10 +10,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 /**
  * Gift Message model
  *
- * @method \Magento\GiftMessage\Model\Resource\Message _getResource()
- * @method \Magento\GiftMessage\Model\Resource\Message getResource()
- *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Message extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\GiftMessage\Api\Data\MessageInterface
@@ -29,7 +28,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TypeFactory $typeFactory
-     * @param Resource\Message $resource
+     * @param \Magento\GiftMessage\Model\ResourceModel\Message $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -39,7 +38,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
-        \Magento\GiftMessage\Model\Resource\Message $resource = null,
+        \Magento\GiftMessage\Model\ResourceModel\Message $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -60,7 +59,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\GiftMessage\Model\Resource\Message');
+        $this->_init(\Magento\GiftMessage\Model\ResourceModel\Message::class);
     }
 
     /**
@@ -85,6 +84,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -185,5 +185,6 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

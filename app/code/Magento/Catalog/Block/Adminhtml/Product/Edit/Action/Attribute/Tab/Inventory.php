@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 /**
  * Products mass update inventory tab
+ *
+ * @api
+ * @since 100.0.2
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -19,6 +22,12 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
     protected $stockConfiguration;
+
+    /**
+     * @var array
+     * @since 101.0.0
+     */
+    protected $disabledFields = [];
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -65,7 +74,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function getStoreId()
     {
         $storeId = $this->getRequest()->getParam('store');
-        return intval($storeId);
+        return (int) $storeId;
     }
 
     /**
@@ -111,5 +120,16 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function isHidden()
     {
         return false;
+    }
+
+    /**
+     * @param string $fieldName
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
+     */
+    public function isAvailable($fieldName)
+    {
+        return true;
     }
 }

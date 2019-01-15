@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component;
 
+/**
+ * Column Factory
+ *
+ * @api
+ * @since 100.0.2
+ */
 class ColumnFactory
 {
     /**
@@ -18,6 +24,7 @@ class ColumnFactory
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
+        'multiselect' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
@@ -29,7 +36,7 @@ class ColumnFactory
         'text' => 'text',
         'boolean' => 'select',
         'select' => 'select',
-        'multiselect' => 'select',
+        'multiselect' => 'multiselect',
         'date' => 'date',
     ];
 
@@ -42,10 +49,14 @@ class ColumnFactory
     }
 
     /**
+     * Create Factory
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param array $config
+     *
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($attribute, $context, array $config = [])
     {
@@ -53,28 +64,34 @@ class ColumnFactory
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
-            'align' => 'left',
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
+            'filter' => ($attribute->getIsFilterableInGrid())
+                ? $this->getFilterType($attribute->getFrontendInput())
+                : null,
         ], $config);
 
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
         }
+        
+        $config['component'] = $this->getJsComponent($config['dataType']);
+        
         $arguments = [
             'data' => [
-                'js_config' => [
-                    'component' => $this->getJsComponent($config['dataType']),
-                ],
                 'config' => $config,
             ],
             'context' => $context,
         ];
+        
         return $this->componentFactory->create($columnName, 'column', $arguments);
     }
 
     /**
+     * Get Js Component
+     *
      * @param string $dataType
+     *
      * @return string
      */
     protected function getJsComponent($dataType)
@@ -83,13 +100,27 @@ class ColumnFactory
     }
 
     /**
+     * Get Data Type
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     *
      * @return string
      */
     protected function getDataType($attribute)
     {
-        return isset($this->dataTypeMap[$attribute->getFrontendInput()])
-            ? $this->dataTypeMap[$attribute->getFrontendInput()]
-            : $this->dataTypeMap['default'];
+        return $this->dataTypeMap[$attribute->getFrontendInput()] ?? $this->dataTypeMap['default'];
+    }
+
+    /**
+     * Retrieve filter type by $frontendInput
+     *
+     * @param string $frontendInput
+     * @return string
+     */
+    protected function getFilterType($frontendInput)
+    {
+        $filtersMap = ['date' => 'dateRange'];
+        $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
+        return $result[$frontendInput] ?? $result['default'];
     }
 }

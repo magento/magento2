@@ -1,24 +1,31 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
-use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Catalog\Model\Resource\Eav\AttributeFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
-class CreateOptions extends Action
+class CreateOptions extends Action implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
     /**
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     protected $attributeFactory;
 
@@ -35,16 +42,6 @@ class CreateOptions extends Action
         $this->jsonHelper = $jsonHelper;
         $this->attributeFactory = $attributeFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 
     /**

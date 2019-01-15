@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,14 +20,13 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 3. Verify checkout cart.
  *
  * @ZephyrId MAGETWO-12392
- * @group Related_Products_(MX)
+ * @group Related_Products
  */
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -186,7 +185,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
      */
     protected function assertAbsentRelatedSellSection()
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $this->catalogProductView->getRelatedProductBlock()->isVisible(),
             "Related section is present."
         );
@@ -215,7 +214,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 
         asort($fixtureData);
         asort($pageData);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $pageData,
             $fixtureData,
             'Wrong products are displayed in related section.'
@@ -233,7 +232,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $this->checkoutCart->open();
 
         foreach ($checkoutProducts as $product) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $this->checkoutCart->getCartBlock()->getCartItem($product)->isVisible(),
                 "Product {$product->getName()} absent in cart."
             );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
@@ -15,11 +15,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
-    //protected $_template = 'tax/checkout/subtotal.phtml';
-
     /**
-     * Tax config
-     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;

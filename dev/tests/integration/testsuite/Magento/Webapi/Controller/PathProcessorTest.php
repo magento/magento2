@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Controller;
 
-class PathProcessorTest extends \PHPUnit_Framework_TestCase
+use Magento\Store\Model\Store;
+
+class PathProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -21,8 +23,9 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
-        $this->pathProcessor = $objectManager->get('Magento\Webapi\Controller\PathProcessor');
+        $this->storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager->reinitStores();
+        $this->pathProcessor = $objectManager->get(\Magento\Webapi\Controller\PathProcessor::class);
     }
 
     /**
@@ -38,11 +41,22 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($storeCode, $this->storeManager->getStore()->getCode());
     }
 
+    public function testProcessWithAllStoreCode()
+    {
+        $storeCode = 'all';
+        $path = '/V1/customerAccounts/createCustomer';
+        $uri = 'rest/' . $storeCode . $path;
+        $result = $this->pathProcessor->process($uri);
+        $this->assertEquals($path, $result);
+        $this->assertEquals(Store::ADMIN_CODE, $this->storeManager->getStore()->getCode());
+    }
+
     public function testProcessWithoutStoreCode()
     {
-        $path = 'rest/V1/customerAccounts/createCustomer';
-        $result = $this->pathProcessor->process($path);
-        $this->assertEquals('/V1/customerAccounts/createCustomer', $result);
+        $path = '/V1/customerAccounts/createCustomer';
+        $uri = 'rest' . $path;
+        $result = $this->pathProcessor->process($uri);
+        $this->assertEquals($path, $result);
         $this->assertEquals('default', $this->storeManager->getStore()->getCode());
     }
 }

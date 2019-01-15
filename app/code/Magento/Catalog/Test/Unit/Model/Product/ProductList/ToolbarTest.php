@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,17 +10,12 @@ use \Magento\Catalog\Model\Product\ProductList\Toolbar;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ToolbarTest extends \PHPUnit_Framework_TestCase
+class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Toolbar
      */
     protected $toolbarModel;
-
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface |\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cookieManagerMock;
 
     /**
      * @var \Magento\Framework\App\Request\Http |\PHPUnit_Framework_MockObject_MockObject
@@ -30,16 +25,14 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->toolbarModel = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Product\ProductList\Toolbar',
+            \Magento\Catalog\Model\Product\ProductList\Toolbar::class,
             [
-                'cookieManager' => $this->cookieManagerMock,
                 'request' => $this->requestMock,
             ]
         );
@@ -51,9 +44,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOrder($param)
     {
-        $this->cookieManagerMock->expects($this->once())
-            ->method('getCookie')
-            ->with(Toolbar::ORDER_COOKIE_NAME)
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with(Toolbar::ORDER_PARAM_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getOrder());
     }
@@ -64,9 +57,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirection($param)
     {
-        $this->cookieManagerMock->expects($this->once())
-            ->method('getCookie')
-            ->with(Toolbar::DIRECTION_COOKIE_NAME)
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with(Toolbar::DIRECTION_PARAM_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getDirection());
     }
@@ -77,9 +70,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMode($param)
     {
-        $this->cookieManagerMock->expects($this->once())
-            ->method('getCookie')
-            ->with(Toolbar::MODE_COOKIE_NAME)
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with(Toolbar::MODE_PARAM_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getMode());
     }
@@ -90,9 +83,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLimit($param)
     {
-        $this->cookieManagerMock->expects($this->once())
-            ->method('getCookie')
-            ->with(Toolbar::LIMIT_COOKIE_NAME)
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with(Toolbar::LIMIT_PARAM_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getLimit());
     }
@@ -119,6 +112,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->toolbarModel->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function stringParamProvider()
     {
         return [
@@ -126,6 +122,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function intParamProvider()
     {
         return [

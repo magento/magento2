@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,9 +28,9 @@ class AssertUsedSuperAttributeImpossibleDeleteMessages extends AbstractConstrain
      */
     public function processAssert(CatalogProductAttributeNew $newPage)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_DELETE_MESSAGE,
-            $newPage->getMessagesBlock()->getErrorMessages(),
+            $newPage->getMessagesBlock()->getErrorMessage(),
             'Wrong impossible to delete message is not displayed.'
         );
     }

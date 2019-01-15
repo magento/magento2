@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
@@ -46,6 +49,11 @@ class Tax extends CommonTaxCollector
     protected $_discountTaxCompensationes = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Tax\Model\Config $taxConfig
@@ -56,6 +64,7 @@ class Tax extends CommonTaxCollector
      * @param CustomerAddressFactory $customerAddressFactory
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -65,10 +74,12 @@ class Tax extends CommonTaxCollector
         \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
-        \Magento\Tax\Helper\Data $taxData
+        \Magento\Tax\Helper\Data $taxData,
+        Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $taxConfig,
             $taxCalculationService,
@@ -83,43 +94,47 @@ class Tax extends CommonTaxCollector
     /**
      * Collect tax totals for quote address
      *
-     * @param   Address $address
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Address\Total $total
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function collect(Address $address)
-    {
-        parent::collect($address);
-        $this->clearValues($address);
-        $items = $this->_getAddressItems($address);
-        if (!$items) {
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $this->clearValues($total);
+        if (!$shippingAssignment->getItems()) {
             return $this;
         }
 
-        $baseTaxDetails = $this->getQuoteTaxDetails($address, true);
-        $taxDetails = $this->getQuoteTaxDetails($address, false);
+        $baseTaxDetails = $this->getQuoteTaxDetails($shippingAssignment, $total, true);
+        $taxDetails = $this->getQuoteTaxDetails($shippingAssignment, $total, false);
 
         //Populate address and items with tax calculation results
         $itemsByType = $this->organizeItemTaxDetailsByType($taxDetails, $baseTaxDetails);
         if (isset($itemsByType[self::ITEM_TYPE_PRODUCT])) {
-            $this->processProductItems($address, $itemsByType[self::ITEM_TYPE_PRODUCT]);
+            $this->processProductItems($shippingAssignment, $itemsByType[self::ITEM_TYPE_PRODUCT], $total);
         }
 
         if (isset($itemsByType[self::ITEM_TYPE_SHIPPING])) {
             $shippingTaxDetails = $itemsByType[self::ITEM_TYPE_SHIPPING][self::ITEM_CODE_SHIPPING][self::KEY_ITEM];
             $baseShippingTaxDetails =
                 $itemsByType[self::ITEM_TYPE_SHIPPING][self::ITEM_CODE_SHIPPING][self::KEY_BASE_ITEM];
-            $this->processShippingTaxInfo($address, $shippingTaxDetails, $baseShippingTaxDetails);
+            $this->processShippingTaxInfo($shippingAssignment, $total, $shippingTaxDetails, $baseShippingTaxDetails);
         }
 
         //Process taxable items that are not product or shipping
-        $this->processExtraTaxables($address, $itemsByType);
+        $this->processExtraTaxables($total, $itemsByType);
 
         //Save applied taxes for each item and the quote in aggregation
-        $this->processAppliedTaxes($address, $itemsByType);
+        $this->processAppliedTaxes($total, $shippingAssignment, $itemsByType);
 
         if ($this->includeExtraTax()) {
-            $this->_addAmount($address->getExtraTaxAmount());
-            $this->_addBaseAmount($address->getBaseExtraTaxAmount());
+            $total->addTotalAmount('extra_tax', $total->getExtraTaxAmount());
+            $total->addBaseTotalAmount('extra_tax', $total->getBaseExtraTaxAmount());
         }
 
         return $this;
@@ -128,38 +143,51 @@ class Tax extends CommonTaxCollector
     /**
      * Clear tax related total values in address
      *
-     * @param Address $address
+     * @param Address\Total $total
      * @return void
      */
-    protected function clearValues(Address $address)
+    protected function clearValues(Address\Total $total)
     {
-        $address->setTotalAmount('subtotal', 0);
-        $address->setBaseTotalAmount('subtotal', 0);
-        $address->setTotalAmount('tax', 0);
-        $address->setBaseTotalAmount('tax', 0);
-        $address->setTotalAmount('discount_tax_compensation', 0);
-        $address->setBaseTotalAmount('discount_tax_compensation', 0);
-        $address->setTotalAmount('shipping_discount_tax_compensation', 0);
-        $address->setBaseTotalAmount('shipping_discount_tax_compensation', 0);
-        $address->setSubtotalInclTax(0);
-        $address->setBaseSubtotalInclTax(0);
+        $total->setTotalAmount('subtotal', 0);
+        $total->setBaseTotalAmount('subtotal', 0);
+        $total->setTotalAmount('tax', 0);
+        $total->setBaseTotalAmount('tax', 0);
+        $total->setTotalAmount('shipping', 0);
+        $total->setBaseTotalAmount('shipping', 0);
+        $total->setTotalAmount('discount_tax_compensation', 0);
+        $total->setBaseTotalAmount('discount_tax_compensation', 0);
+        $total->setTotalAmount('shipping_discount_tax_compensation', 0);
+        $total->setBaseTotalAmount('shipping_discount_tax_compensation', 0);
+        $total->setSubtotalInclTax(0);
+        $total->setBaseSubtotalInclTax(0);
+        $total->setShippingInclTax(0);
+        $total->setBaseShippingInclTax(0);
+        $total->setShippingTaxAmount(0);
+        $total->setBaseShippingTaxAmount(0);
+        $total->setShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setTotalAmount('extra_tax', 0);
+        $total->setBaseTotalAmount('extra_tax', 0);
     }
 
     /**
      * Call tax calculation service to get tax details on the quote and items
      *
-     * @param Address $address
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Address\Total $total
      * @param bool $useBaseCurrency
      * @return \Magento\Tax\Api\Data\TaxDetailsInterface
      */
-    protected function getQuoteTaxDetails($address, $useBaseCurrency)
+    protected function getQuoteTaxDetails($shippingAssignment, $total, $useBaseCurrency)
     {
+        $address = $shippingAssignment->getShipping()->getAddress();
         //Setup taxable items
         $priceIncludesTax = $this->_config->priceIncludesTax($address->getQuote()->getStore());
-        $itemDataObjects = $this->mapItems($address, $priceIncludesTax, $useBaseCurrency);
+        $itemDataObjects = $this->mapItems($shippingAssignment, $priceIncludesTax, $useBaseCurrency);
 
         //Add shipping
-        $shippingDataObject = $this->getShippingDataObject($address, $useBaseCurrency);
+        $shippingDataObject = $this->getShippingDataObject($shippingAssignment, $total, $useBaseCurrency);
         if ($shippingDataObject != null) {
             $itemDataObjects[] = $shippingDataObject;
         }
@@ -175,7 +203,7 @@ class Tax extends CommonTaxCollector
         }
 
         //Preparation for calling taxCalculationService
-        $quoteDetails = $this->prepareQuoteDetails($address, $itemDataObjects);
+        $quoteDetails = $this->prepareQuoteDetails($shippingAssignment, $itemDataObjects);
 
         $taxDetails = $this->taxCalculationService
             ->calculateTax($quoteDetails, $address->getQuote()->getStore()->getStoreId());
@@ -228,12 +256,12 @@ class Tax extends CommonTaxCollector
     /**
      * Process everything other than product or shipping, save the result in quote
      *
-     * @param Address $address
+     * @param Address\Total $total
      * @param array $itemsByType
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function processExtraTaxables(Address $address, Array $itemsByType)
+    protected function processExtraTaxables(Address\Total $total, array $itemsByType)
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {
@@ -267,77 +295,115 @@ class Tax extends CommonTaxCollector
                         self::KEY_TAX_DETAILS_APPLIED_TAXES => $appliedTaxesArray,
                     ];
 
-                    $address->addTotalAmount('tax', $taxDetails->getRowTax());
-                    $address->addBaseTotalAmount('tax', $baseTaxDetails->getRowTax());
+                    $total->addTotalAmount('tax', $taxDetails->getRowTax());
+                    $total->addBaseTotalAmount('tax', $baseTaxDetails->getRowTax());
                     //TODO: save applied taxes for the item
                 }
             }
         }
 
-        $address->setExtraTaxableDetails($extraTaxableDetails);
+        $total->setExtraTaxableDetails($extraTaxableDetails);
         return $this;
     }
 
     /**
      * Add tax totals information to address object
      *
-     * @param   Address $address
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param Address\Total $total
+     * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function fetch(Address $address)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $applied = $address->getAppliedTaxes();
-        $store = $address->getQuote()->getStore();
-        $amount = $address->getTaxAmount();
-
-        $items = $this->_getAddressItems($address);
-        $discountTaxCompensation = 0;
-        foreach ($items as $item) {
-            $discountTaxCompensation += $item->getDiscountTaxCompensation();
+        $totals = [];
+        $store = $quote->getStore();
+        $applied = $total->getAppliedTaxes();
+        if (is_string($applied)) {
+            $applied = $this->serializer->unserialize($applied);
         }
-        $taxAmount = $amount + $discountTaxCompensation;
+        $amount = $total->getTaxAmount();
+        if ($amount === null) {
+            $this->enhanceTotalData($quote, $total);
+            $amount = $total->getTaxAmount();
+        }
+        $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
 
         $area = null;
-        if ($this->_config->displayCartTaxWithGrandTotal($store) && $address->getGrandTotal()) {
+        if ($this->_config->displayCartTaxWithGrandTotal($store) && $total->getGrandTotal()) {
             $area = 'taxes';
         }
 
-        if ($amount != 0 || $this->_config->displayCartZeroTax($store)) {
-            $address->addTotal(
-                [
-                    'code' => $this->getCode(),
-                    'title' => __('Tax'),
-                    'full_info' => $applied ? $applied : [],
-                    'value' => $amount,
-                    'area' => $area,
-                ]
-            );
-        }
+        $totals[] = [
+            'code' => $this->getCode(),
+            'title' => __('Tax'),
+            'full_info' => $applied ? $applied : [],
+            'value' => $amount,
+            'area' => $area,
+        ];
 
-        $store = $address->getQuote()->getStore();
         /**
          * Modify subtotal
          */
         if ($this->_config->displayCartSubtotalBoth($store) || $this->_config->displayCartSubtotalInclTax($store)) {
-            if ($address->getSubtotalInclTax() > 0) {
-                $subtotalInclTax = $address->getSubtotalInclTax();
+            if ($total->getSubtotalInclTax() > 0) {
+                $subtotalInclTax = $total->getSubtotalInclTax();
             } else {
-                $subtotalInclTax = $address->getSubtotal() + $taxAmount - $address->getShippingTaxAmount();
+                $subtotalInclTax = $total->getSubtotal() + $taxAmount - $total->getShippingTaxAmount();
             }
 
-            $address->addTotal(
-                [
-                    'code' => 'subtotal',
-                    'title' => __('Subtotal'),
-                    'value' => $subtotalInclTax,
-                    'value_incl_tax' => $subtotalInclTax,
-                    'value_excl_tax' => $address->getSubtotal(),
-                ]
-            );
+            $totals[] = [
+                'code' => 'subtotal',
+                'title' => __('Subtotal'),
+                'value' => $subtotalInclTax,
+                'value_incl_tax' => $subtotalInclTax,
+                'value_excl_tax' => $total->getSubtotal(),
+            ];
         }
 
-        return $this;
+        if (empty($totals)) {
+            return null;
+        }
+        return $totals;
+    }
+
+    /**
+     * Adds minimal tax information to the "total" data structure
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param Address\Total $total
+     * @return null
+     */
+    protected function enhanceTotalData(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $taxAmount = 0;
+        $shippingTaxAmount = 0;
+        $discountTaxCompensation = 0;
+
+        $subtotalInclTax = $total->getSubtotalInclTax();
+        $computeSubtotalInclTax = true;
+        if ($total->getSubtotalInclTax() > 0) {
+            $computeSubtotalInclTax = false;
+        }
+
+        /** @var \Magento\Quote\Model\Quote\Address $address */
+        foreach ($quote->getAllAddresses() as $address) {
+            $taxAmount += $address->getTaxAmount();
+            $shippingTaxAmount += $address->getShippingTaxAmount();
+            $discountTaxCompensation += $address->getDiscountTaxCompensationAmount();
+            if ($computeSubtotalInclTax) {
+                $subtotalInclTax += $address->getSubtotalInclTax();
+            }
+        }
+
+        $total->setTaxAmount($taxAmount);
+        $total->setShippingTaxAmount($shippingTaxAmount);
+        $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'
+        $total->setSubtotalInclTax($subtotalInclTax);
+        return;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Config;
@@ -27,6 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_SOURCE = 'source';
     const KEY_METHOD = 'method';
     const KEY_METHODS = 'methods';
+    const KEY_DESCRIPTION = 'description';
     /**#@-*/
 
     /**

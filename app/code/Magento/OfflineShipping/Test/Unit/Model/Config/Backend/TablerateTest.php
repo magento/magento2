@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Backend;
 
-class TablerateTest extends \PHPUnit_Framework_TestCase
+class TablerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Config\Backend\Tablerate
@@ -13,27 +13,28 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $tableateFactoryMock;
 
     protected function setUp()
     {
         $this->tableateFactoryMock =
-            $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory')
+            $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject('\Magento\OfflineShipping\Model\Config\Backend\Tablerate', [
-            'tablerateFactory' => $this->tableateFactoryMock
-        ]);
+        $this->model = $helper->getObject(
+            \Magento\OfflineShipping\Model\Config\Backend\Tablerate::class,
+            ['tablerateFactory' => $this->tableateFactoryMock]
+        );
     }
 
     public function testAfterSave()
     {
-        $tablerateMock = $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\Tablerate')
+        $tablerateMock = $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate::class)
             ->disableOriginalConstructor()
             ->setMethods(['uploadAndImport'])
             ->getMock();

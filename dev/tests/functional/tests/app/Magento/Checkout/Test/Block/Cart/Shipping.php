@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,28 +30,14 @@ class Shipping extends Form
     protected $openForm = '.title';
 
     /**
-     * Get quote selector.
-     *
-     * @var string
-     */
-    protected $getQuote = '.action.quote';
-
-    /**
-     * Update total selector.
-     *
-     * @var string
-     */
-    protected $updateTotalSelector = '.action.update';
-
-    /**
      * Selector to access the shipping carrier method.
      *
      * @var string
      */
-    protected $shippingMethod = '//span[text()="%s"]/following::*//*[contains(text(), "%s")]';
+    protected $shippingMethod = '//span[text()="%s"]/following::label[contains(., "%s")]/../input';
 
     /**
-     * From with shipping available shipping methods.
+     * Form with shipping available shipping methods.
      *
      * @var string
      */
@@ -59,10 +45,39 @@ class Shipping extends Form
 
     /**
      * Fields that are used in estimation shipping form.
+     * Indexes of this array should be numeric, they are used in compare() method.
      *
      * @var array
      */
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
+
+    /**
+     * Selector for top destinations in country field.
+     *
+     * @var string
+     */
+    private $topOptions = './option[@value="delimiter"]/preceding-sibling::option[string(@value)]';
+
+    /**
+     * Block wait element.
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
+
+    /**
+     * Get shipping price selector for exclude and include price.
+     *
+     * @var string
+     */
+    protected $commonShippingPriceSelector = '.totals.shipping .price';
+
+    /**
+     * Estimate shipping and tax form locator.
+     *
+     * @var string
+     */
+    private $estimateShippingForm = '#shipping-zip-form';
 
     /**
      * Open estimate shipping and tax form.
@@ -77,13 +92,26 @@ class Shipping extends Form
     }
 
     /**
-     * Click Get quote button.
+     * Get countries displayed at the top of country element.
      *
-     * @return void
+     * @return array
      */
-    public function clickGetQuote()
+    public function getTopCountries()
     {
-        $this->_rootElement->find($this->getQuote)->click();
+        $this->openEstimateShippingAndTax();
+        $mapping = $this->dataMapping(array_flip(['country_id']));
+        $countryField = $this->getElement($this->_rootElement, $mapping['country_id']);
+        $this->_rootElement->waitUntil(
+            function () use ($countryField) {
+                return $countryField->isVisible() ? true : null;
+            }
+        );
+        return array_map(
+            function ($option) {
+                return $option->getAttribute('value');
+            },
+            $countryField->getElements($this->topOptions, Locator::SELECTOR_XPATH)
+        );
     }
 
     /**
@@ -91,15 +119,66 @@ class Shipping extends Form
      *
      * @param array $shipping
      * @return void
+     * @throws \Exception
      */
     public function selectShippingMethod(array $shipping)
     {
-        $selector = sprintf($this->shippingMethod, $shipping['shipping_service'], $shipping['shipping_method']);
-        if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
-            $this->openEstimateShippingAndTax();
+        if (isset($shipping['shipping_service']) && isset($shipping['shipping_method'])) {
+            $selector = sprintf($this->shippingMethod, $shipping['shipping_service'], $shipping['shipping_method']);
+            if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
+                $this->openEstimateShippingAndTax();
+            }
+            $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+
+            if (!empty($element->getAttribute('checked'))) {
+                return;
+            }
+
+            if (!$element->isDisabled()) {
+                $element->click();
+            } else {
+                throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
+            }
         }
-        $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
-        $this->_rootElement->find($this->updateTotalSelector, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Reset the address fields in the shipping and tax form.
+     *
+     * @return void
+     */
+    public function resetAddress()
+    {
+        $this->openEstimateShippingAndTax();
+        $fields = [
+           'country_id' => [
+               'selector' => '[name=country_id]',
+               'strategy' => 'css selector',
+               'input' => 'select',
+               'class' => null,
+               'value' => 'United States'
+           ],
+            'region_id' => [
+                'selector' => '[name=region_id]',
+                'strategy' => 'css selector',
+                'input' => 'select',
+                'class' => null,
+                'value' => 'Please select a region, state or province.'
+            ],
+            'postcode' => [
+                'selector' => '[name=postcode]',
+                'strategy' => 'css selector',
+                'input' => null,
+                'class' => null,
+                'value' => ''
+            ]
+        ];
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($fields as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
+        }
     }
 
     /**
@@ -113,8 +192,28 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
-        $this->_fill($mapping, $this->_rootElement);
-        $this->clickGetQuote();
+        // sort array according to $this->estimationFields elements order
+        uksort($mapping, function ($a, $b) {
+            $a = array_search($a, $this->estimationFields);
+            $b = array_search($b, $this->estimationFields);
+            switch (true) {
+                case false !== $a && false !== $b:
+                    return $a - $b;
+                case false !== $a:
+                    return -1;
+                case false !== $b:
+                    return 1;
+                default:
+                    return 0;
+            }
+        });
+
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($mapping as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
+        }
     }
 
     /**
@@ -135,5 +234,74 @@ class Shipping extends Form
         $selector = sprintf($this->shippingMethod, $carrier, $method);
 
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Wait for shipping methods block to update contents asynchronously.
+     *
+     * @return void
+     */
+    public function waitForUpdatedShippingMethods()
+    {
+        // Code under test uses JavaScript delay at this point as well.
+        sleep(1);
+        $this->waitForElementNotVisible($this->blockWaitElement);
+    }
+
+    /**
+     * Wait for common shipping price block to appear.
+     *
+     * @return void
+     */
+    public function waitForCommonShippingPriceBlock()
+    {
+        $this->waitForElementVisible($this->commonShippingPriceSelector, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Wait until estimation form to appear.
+     *
+     * @return void
+     */
+    public function waitForEstimateShippingAndTaxForm()
+    {
+        $browser = $this->browser;
+        $selector = $this->estimateShippingForm;
+
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isPresent() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for shipping method form.
+     *
+     * @return void
+     */
+    public function waitForShippingMethodForm()
+    {
+        $browser = $this->browser;
+        $selector = $this->shippingMethodForm;
+
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isPresent() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for summary block to be loaded.
+     *
+     * @return void
+     */
+    public function waitForSummaryBlock()
+    {
+        $this->waitForEstimateShippingAndTaxForm();
+        $this->waitForShippingMethodForm();
     }
 }

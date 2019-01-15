@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
@@ -10,7 +10,7 @@ use Magento\Payment\Gateway\Validator\Result;
 /**
  * Class ResultTest
  */
-class ResultTest extends \PHPUnit_Framework_TestCase
+class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Result */
     protected $model;
@@ -29,9 +29,12 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
+    /**
+     * @return array
+     */
     public function resultDataProvider()
     {
-        $phraseMock = $this->getMockBuilder('Magento\Framework\Phrase')->disableOriginalConstructor()->getMock();
+        $phraseMock = $this->getMockBuilder(\Magento\Framework\Phrase::class)->disableOriginalConstructor()->getMock();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
@@ -43,17 +43,13 @@ class ModularSwitch implements RuleInterface
      *
      * @param array $params
      * @return array
-     * @throws \InvalidArgumentException
      */
     public function getPatternDirs(array $params)
     {
-        $isNamespaceDefined = isset($params['namespace']);
-        $isModuleDefined = isset($params['module']);
-        if ($isNamespaceDefined && $isModuleDefined) {
+        if (isset($params['module_name'])) {
             return $this->ruleModular->getPatternDirs($params);
-        } elseif (!$isNamespaceDefined && !$isModuleDefined) {
+        } else {
             return $this->ruleNonModular->getPatternDirs($params);
         }
-        throw new \InvalidArgumentException("Parameters 'namespace' and 'module' should either be both set or unset.");
     }
 }

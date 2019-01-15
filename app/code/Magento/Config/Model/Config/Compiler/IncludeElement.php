@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Model\Config\Compiler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
 
 /**
  * Class IncludeElement
+ * @api
+ * @since 100.0.2
  */
 class IncludeElement implements ElementInterface
 {
@@ -26,19 +29,19 @@ class IncludeElement implements ElementInterface
     protected $moduleReader;
 
     /**
-     * @var Filesystem
+     * @var Filesystem\Directory\ReadFactory
      */
-    protected $filesystem;
+    protected $readFactory;
 
     /**
      * Constructor
      *
      * @param Reader $moduleReader
-     * @param Filesystem $filesystem
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
-    public function __construct(Reader $moduleReader, Filesystem $filesystem)
+    public function __construct(Reader $moduleReader, Filesystem\Directory\ReadFactory $readFactory)
     {
-        $this->filesystem = $filesystem;
+        $this->readFactory = $readFactory;
         $this->moduleReader = $moduleReader;
     }
 
@@ -47,12 +50,16 @@ class IncludeElement implements ElementInterface
      *
      * @param CompilerInterface $compiler
      * @param \DOMElement $node
-     * @param Object $processedObject
-     * @param Object $context
+     * @param DataObject $processedObject
+     * @param DataObject $context
      * @return void
      */
-    public function compile(CompilerInterface $compiler, \DOMElement $node, Object $processedObject, Object $context)
-    {
+    public function compile(
+        CompilerInterface $compiler,
+        \DOMElement $node,
+        DataObject $processedObject,
+        DataObject $context
+    ) {
         $ownerDocument = $node->ownerDocument;
         $parentNode = $node->parentNode;
 
@@ -88,7 +95,7 @@ class IncludeElement implements ElementInterface
     }
 
     /**
-     * Get content include file (in adminhtml area)
+     * Get content of include file (in adminhtml area)
      *
      * @param string $includePath
      * @return string
@@ -96,18 +103,18 @@ class IncludeElement implements ElementInterface
      */
     protected function getContent($includePath)
     {
-        $modulesDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-
         // <include path="Magento_Payment::my_payment.xml" />
         list($moduleName, $filename) = explode('::', $includePath);
 
-        $file = $this->moduleReader->getModuleDir('etc', $moduleName) . '/adminhtml/' . $filename;
-        $path = $modulesDirectory->getRelativePath($file);
+        $path = 'adminhtml/' . $filename;
+        $directoryRead = $this->readFactory->create(
+            $this->moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, $moduleName)
+        );
 
-        if ($modulesDirectory->isExist($path) && $modulesDirectory->isFile($path)) {
-            return $modulesDirectory->readFile($path);
+        if ($directoryRead->isExist($path) && $directoryRead->isFile($path)) {
+            return $directoryRead->readFile($path);
         }
 
-        throw new LocalizedException(__('The file "' . $path . '" does not exist'));
+        throw new LocalizedException(__('The "%1" file doesn\'t exist.', $path));
     }
 }

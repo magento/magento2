@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Helper;
+
+use Magento\Sales\Model\Order;
 
 /**
  * Checkout workflow helper
@@ -11,9 +13,9 @@ namespace Magento\Paypal\Helper;
 class Checkout
 {
     /**
-     * @var \Magento\Checkout\Model\SessionFactory
+     * @var \Magento\Checkout\Model\Session
      */
-    protected $_session;
+    protected $session;
 
     /**
      * @param \Magento\Checkout\Model\Session $session
@@ -21,7 +23,7 @@ class Checkout
     public function __construct(
         \Magento\Checkout\Model\Session $session
     ) {
-        $this->_session = $session;
+        $this->session = $session;
     }
 
     /**
@@ -32,11 +34,21 @@ class Checkout
      */
     public function cancelCurrentOrder($comment)
     {
-        $order = $this->_session->getLastRealOrder();
-        if ($order->getId() && $order->getState() != \Magento\Sales\Model\Order::STATE_CANCELED) {
+        $order = $this->session->getLastRealOrder();
+        if ($order->getId() && $order->getState() != Order::STATE_CANCELED) {
             $order->registerCancellation($comment)->save();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Restores quote
+     *
+     * @return bool
+     */
+    public function restoreQuote()
+    {
+        return $this->session->restoreQuote();
     }
 }

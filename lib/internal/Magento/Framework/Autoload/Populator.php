@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Autoload;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem\FileResolver;
 
 /**
@@ -16,31 +15,20 @@ use Magento\Framework\Filesystem\FileResolver;
 class Populator
 {
     /**
-     * @param AutoloaderInterface $registry
+     * @param AutoloaderInterface $autoloader
      * @param DirectoryList $dirList
      * @return void
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $modulesDir = $dirList->getPath(DirectoryList::MODULES);
-        $generationDir = $dirList->getPath(DirectoryList::GENERATION);
-        $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
+        $generationDir = $dirList->getPath(DirectoryList::GENERATED_CODE);
 
-        $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
-
-        $autoloader->addPsr0('Apache_', $frameworkDir, true);
-        $autoloader->addPsr0('Cm_', $frameworkDir, true);
-        $autoloader->addPsr0('Credis_', $frameworkDir, true);
-        $autoloader->addPsr0('Less_', $frameworkDir, true);
-        $autoloader->addPsr0('Symfony\\', $frameworkDir, true);
-
-        /** Required for Zend functionality */
-        FileResolver::addIncludePath($frameworkDir);
+        $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);
 
         /** Required for code generation to occur */
         FileResolver::addIncludePath($generationDir);
 
         /** Required to autoload custom classes */
-        $autoloader->addPsr0('', [$modulesDir, $generationDir]);
+        $autoloader->addPsr0('', [$generationDir]);
     }
 }

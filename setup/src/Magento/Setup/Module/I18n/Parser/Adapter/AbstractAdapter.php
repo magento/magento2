@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
@@ -63,9 +63,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function _addPhrase($phrase, $line = '')
     {
         if (!$phrase) {
-            throw new \InvalidArgumentException(
-                sprintf('Phrase cannot be empty. File: "%s" Line: "%s"', $this->_file, $line)
-            );
+            return;
         }
         if (!isset($this->_phrases[$phrase])) {
             $enclosureCharacter = $this->getEnclosureCharacter($phrase);

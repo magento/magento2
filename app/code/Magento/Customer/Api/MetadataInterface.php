@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,14 @@ namespace Magento\Customer\Api;
 
 /**
  * Interface for getting attributes metadata. Note that this interface should not be used directly, use its children.
+ * @api
+ * @since 100.0.2
  */
 interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {
     /**
      * Retrieve all attributes filtered by form code
      *
-     * @api
      * @param string $formCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -24,7 +25,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      * Retrieve attribute metadata.
      *
-     * @api
      * @param string $attributeCode
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -35,7 +35,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      * Get all attribute metadata.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -44,7 +43,6 @@ interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterf
     /**
      *  Get custom attributes metadata for the given data interface.
      *
-     * @api
      * @param string $dataInterfaceName
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException

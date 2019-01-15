@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Compare;
@@ -10,7 +10,7 @@ use \Magento\Catalog\Block\Product\Compare\ListCompare;
 /**
  * Class ListCompareTest
  */
-class ListCompareTest extends \PHPUnit_Framework_TestCase
+class ListCompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ListCompare
@@ -24,16 +24,16 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
+        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
 
-        $context = $this->getMock('Magento\Catalog\Block\Product\Context', ['getLayout'], [], '', false);
+        $context = $this->createPartialMock(\Magento\Catalog\Block\Product\Context::class, ['getLayout']);
         $context->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
-            'Magento\Catalog\Block\Product\Compare\ListCompare',
+            \Magento\Catalog\Block\Product\Compare\ListCompare::class,
             ['context' => $context]
         );
     }
@@ -51,12 +51,12 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         //Verification
-        $product = $this->getMock('Magento\Catalog\Model\Product', ['getId', '__wakeup'], [], '', false);
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($productId));
 
-        $blockMock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false);
+        $blockMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['render']);
         $blockMock->expects($this->once())
             ->method('render')
             ->with(

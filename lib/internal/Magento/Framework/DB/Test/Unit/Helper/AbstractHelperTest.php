@@ -2,12 +2,12 @@
 /**
  * \Magento\Framework\DB\Helper\AbstractHelper test case
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper;
 
-class AbstractHelperTest extends \PHPUnit_Framework_TestCase
+class AbstractHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Helper\AbstractHelper|\PHPUnit_Framework_MockObject_MockObject
@@ -15,7 +15,7 @@ class AbstractHelperTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceMock;
 
@@ -26,16 +26,16 @@ class AbstractHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_adapterMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->_adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('prefix_read')
+            ->with('prefix')
             ->will($this->returnValue($this->_adapterMock));
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Helper\AbstractHelper',
+            \Magento\Framework\DB\Helper\AbstractHelper::class,
             [$this->_resourceMock, 'prefix'],
             '',
             true,

@@ -2,16 +2,20 @@
 /**
  * Google AdWords Validator Factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 namespace Magento\GoogleAdwords\Model\Validator;
 
-use Magento\Framework\Validator\Int;
+use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\UniversalFactory;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Factory
 {
     /**
@@ -41,13 +45,13 @@ class Factory
         );
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_validatorBuilderFactory->create(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Regex',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\Regex',
+                        'class' => \Magento\Framework\Validator\Regex::class,
                         'options' => [
                             'arguments' => ['pattern' => '/^[0-9a-f]{6}$/i'],
                             'methods' => [
@@ -77,18 +81,18 @@ class Factory
         $message = __('Conversion Id value is not valid "%1". Conversion Id should be an integer.', $currentId);
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_validatorBuilderFactory->create(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Int',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\Int',
+                        'class' => \Magento\Framework\Validator\IntUtils::class,
                         'options' => [
                             'methods' => [
                                 [
                                     'method' => 'setMessages',
-                                    'arguments' => [[Int::NOT_INT => $message, Int::INVALID => $message]],
+                                    'arguments' => [[IntUtils::NOT_INT => $message, IntUtils::INVALID => $message]],
                                 ],
                             ],
                         ],

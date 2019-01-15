@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
@@ -13,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Totals block test
  */
-class TotalsTest extends \PHPUnit_Framework_TestCase
+class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -39,19 +37,15 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote', ['getCustomerNoteNotify'], [], '', false
-        );
-        $this->sessionQuoteMock = $this->getMock(
-            '\Magento\Backend\Model\Session\Quote', [], [], '', false
-        );
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify']);
+        $this->sessionQuoteMock = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
 
         $this->sessionQuoteMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
 
         $this->totals = $this->objectManager->getObject(
-            '\Magento\Sales\Block\Adminhtml\Order\Create\Totals',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Totals::class,
             [
                 'sessionQuote' => $this->sessionQuoteMock
             ]

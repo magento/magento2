@@ -1,29 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message\Test\Unit;
 
-use Magento\Framework\Message\MessageInterface;
-
 /**
  * \Magento\Framework\Message\AbstractMessage test case
  */
-class AbstractMessageTest extends \PHPUnit_Framework_TestCase
+class AbstractMessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\AbstractMessage
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->model = $this->getMockBuilder(
-            'Magento\Framework\Message\AbstractMessage'
-        )->disableOriginalConstructor()->setMethods(
-            ['getType']
-        )->getMockForAbstractClass();
+        $this->model = new TestingMessage();
     }
 
     /**
@@ -81,16 +75,9 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $someText = 'some text';
-        $expectedString = MessageInterface::TYPE_SUCCESS . ': ' . $someText;
+        $expectedString = TestingMessage::TYPE_TESTING . ': testing_message: ' . $someText;
 
-        $this->model->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getType'
-        )->will(
-            $this->returnValue(MessageInterface::TYPE_SUCCESS)
-        );
-
+        $this->model->setIdentifier('testing_message');
         $this->model->setText($someText);
         $this->assertEquals($expectedString, $this->model->toString());
     }

@@ -2,11 +2,9 @@
 /**
  * Adminhtml AdminNotification Severity Renderer
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
@@ -34,14 +32,13 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' . __(
-            'Read Details'
-        ) . '</a>' : '';
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' .
+            __('Read Details') . '</a>' : '';
 
         $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
@@ -60,7 +57,7 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
                 [
                     '_current' => true,
                     'id' => $row->getId(),
-                    \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl
+                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
                 ]
             ),
             __('Are you sure?'),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Source;
@@ -12,7 +12,7 @@ use Magento\Developer\Model\Config\Source\WorkflowType;
  *
  * @package Magento\Backend\Model\Config\Source\Dev
  */
-class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
+class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WorkflowType
@@ -26,13 +26,13 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $this->assertInstanceOf('\Magento\Framework\Option\ArrayInterface', $this->model);
+        $this->assertInstanceOf(\Magento\Framework\Option\ArrayInterface::class, $this->model);
         $this->assertCount(2, $this->model->toOptionArray());
         $option = current($this->model->toOptionArray());
 
         /** @var \Magento\Framework\Phrase $label */
         $label = $option['label'];
-        $this->assertInstanceOf('\Magento\Framework\Phrase', $label);
+        $this->assertInstanceOf(\Magento\Framework\Phrase::class, $label);
     }
 
     public function testOptionStructure()
