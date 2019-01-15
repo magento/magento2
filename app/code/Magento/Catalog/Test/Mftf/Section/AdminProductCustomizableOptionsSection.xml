@@ -19,6 +19,7 @@
         <element name="optionTypeOpenDropDown" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-select" timeout="30"/>
         <element name="optionTypeTextField" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li li" timeout="30"/>
         <element name="maxCharactersInput" type="input" selector="input[name='product[options][0][max_characters]']"/>
+
         <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" />
         <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" />
         <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
