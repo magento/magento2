@@ -13,15 +13,14 @@
                 <cctypes>AE,VI,MC,DI,JCB,DN</cctypes>
                 <debug>0</debug>
                 <can_authorize>1</can_authorize>
+                <can_refund>1</can_refund>
                 <can_capture>1</can_capture>
                 <can_void>1</can_void>
                 <can_deny_payment>1</can_deny_payment>
                 <can_cancel>1</can_cancel>
-                <can_validate_credentials>1</can_validate_credentials>
                 <model>AuthorizenetAcceptjsFacade</model>
                 <email_customer>0</email_customer>
                 <login backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <merchant_email />
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <title>Credit Card (Authorize.net)</title>
@@ -30,7 +29,6 @@
                 <trans_signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <allowspecific>0</allowspecific>
                 <currency>USD</currency>
-                <date_delim>/</date_delim>
                 <api_url>https://api.authorize.net/xml/v1/request.api</api_url>
                 <additional_info_keys>accountType,authCode,avsResultCode,cvvResultCode,cavvResultCode</additional_info_keys>
             </authorizenet_acceptjs>

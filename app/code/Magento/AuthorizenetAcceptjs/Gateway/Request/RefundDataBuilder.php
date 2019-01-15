@@ -15,9 +15,9 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the basic payment information to the request
+ * Adds the basic refund information to the request
  */
-class PaymentDataBuilder implements BuilderInterface
+class RefundDataBuilder implements BuilderInterface
 {
     use Formatter;
 
@@ -57,9 +57,8 @@ class PaymentDataBuilder implements BuilderInterface
                 ];
             }
 
-            // Set the information on the payment as well because it won't be available in the handler post-request
-            $payment->setAdditionalInformation('opaqueDataDescriptor', 'abc123');
-            $payment->setAdditionalInformation('opaqueDataValue', '321cba');
+            $dataDescriptor = $payment->getAdditionalInformation('opaqueDataDescriptor');
+            $dataValue = $payment->getAdditionalInformation('opaqueDataValue');
 
             $data['transactionRequest']['payment'] = [
                 'creditCard' => [

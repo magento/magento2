@@ -90,7 +90,7 @@ class TransactionHashValidator extends AbstractValidator
         $storedHash = $this->config->getLegacyTransactionHash($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        if (empty($transactionResponse['refTransId'])) {
+        if (empty($transactionResponse['refTransID'])) {
             try {
                 $amount = $this->subjectReader->readAmount($validationSubject);
             } catch (\InvalidArgumentException $e) {

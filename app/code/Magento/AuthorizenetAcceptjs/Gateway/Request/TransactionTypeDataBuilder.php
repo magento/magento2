@@ -24,6 +24,7 @@ class TransactionTypeDataBuilder implements BuilderInterface
     private const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
     private const REQUEST_AUTH_ONLY = 'authOnlyTransaction';
     private const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
+    private const REQUEST_TYPE_REFUND = 'refundTransaction';
 
     /**
      * @var SubjectReader

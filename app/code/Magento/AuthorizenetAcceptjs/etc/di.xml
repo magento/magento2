@@ -71,6 +71,11 @@
             <argument name="errorMessageMapper" xsi:type="object">AuthorizenetAcceptjsVirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
+    <virtualType name="AuthorizenetAcceptjsRefundCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsRefundRequest</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsCaptureRequest</argument>
@@ -141,6 +146,15 @@
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsRefundRequest" type="AuthorizenetAcceptjsAuthorizeRequest">
+        <arguments>
+            <!-- Be advised that the order of the xml elements is important -->
+            <argument name="builders" xsi:type="array">
+                <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -240,6 +254,11 @@
             <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\AuthorizenetAcceptjs\Gateway\Http\Client">
+        <arguments>
+            <argument name="paymentLogger" xsi:type="object">AuthorizenetAcceptjsLogger</argument>
+        </arguments>
+    </type>
     <virtualType name="AuthorizenetAcceptjsRemoveStoreConfigFilter" type="Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter">
         <arguments>
             <argument name="fields" xsi:type="array">

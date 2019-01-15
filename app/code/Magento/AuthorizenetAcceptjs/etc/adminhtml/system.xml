@@ -16,7 +16,7 @@
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment Action</label>
-                    <source_model>Magento\Authorizenet\Model\Source\PaymentAction</source_model>
+                    <source_model>Magento\AuthorizenetAcceptjs\Model\Source\PaymentAction</source_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
@@ -41,8 +41,12 @@
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
                 </field>
+                <field id="test" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Test Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="api_url" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>API Endpoint URL</label>
+                    <label>Gateway URL</label>
                 </field>
                 <field id="currency" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Accepted Currency</label>
@@ -58,7 +62,7 @@
                 </field>
                 <field id="cctypes" translate="label" type="multiselect" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Credit Card Types</label>
-                    <source_model>Magento\Authorizenet\Model\Source\Cctype</source_model>
+                    <source_model>Magento\AuthorizenetAcceptjs\Model\Source\Cctype</source_model>
                 </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Payment from Applicable Countries</label>
