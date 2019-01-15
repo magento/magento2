@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,7 +9,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Controller class Save. Performs save action of customers group
+ */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
@@ -79,6 +82,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
                 $customerGroupCode = (string)$this->getRequest()->getParam('code');
+                $this->validateGroupCode($customerGroupCode);
+
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
@@ -108,5 +113,21 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
         } else {
             return $this->resultForwardFactory->create()->forward('new');
         }
+    }
+
+    /**
+     * Validates group code given in POST param
+     *
+     * @param string $groupCode
+     * @return bool
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
+     */
+    private function validateGroupCode(string $groupCode): bool
+    {
+        if (!\Zend_Validate::is($groupCode, 'Alnum')) {
+            throw new LocalizedException(__('Invalid group code provided.' .
+                ' Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) '));
+        };
     }
 }
