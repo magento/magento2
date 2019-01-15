@@ -49,7 +49,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param [] $reportTypes
+     * @param array $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
