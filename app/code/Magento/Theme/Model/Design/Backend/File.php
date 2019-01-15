@@ -117,7 +117,9 @@ class File extends BackendFile
     }
 
     /**
-     * @return array
+     * @return File
+     *
+     * @throws LocalizedException
      */
     public function afterLoad()
     {

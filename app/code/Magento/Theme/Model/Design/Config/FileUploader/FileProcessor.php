@@ -79,8 +79,8 @@ class FileProcessor
      * Save file to temp media directory
      *
      * @param  string $fileId
+     *
      * @return array
-     * @throws LocalizedException
      */
     public function saveToTmp($fileId)
     {
