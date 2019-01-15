@@ -32,7 +32,7 @@ require(['prototype'], function(){
                     if (response.valid == 1) {
                         validationMessage.removeClassName('hidden').addClassName('success')
                     } else {
-                        validationMessage.removeClassName('hidden').addClassName('error')
+                        validationMessage.removeClassName('hidden').addClassName('error-message error')
                     }
                 } catch (e) {
                     validationMessage.removeClassName('hidden').addClassName('error-message error')
