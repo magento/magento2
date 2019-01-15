@@ -154,9 +154,11 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                 $model = $this->_getUrlRewrite();
 
                 $requestPath = $this->getRequest()->getParam('request_path');
-                $this->_objectManager->get(
-                    \Magento\UrlRewrite\Helper\UrlRewrite::class
-                )->validateRequestPath($requestPath);
+                $targetPath = $this->getRequest()->getParam('target_path');
+                /** @var $helper \Magento\UrlRewrite\Helper\UrlRewrite */
+                $helper = $this->_objectManager->get(\Magento\UrlRewrite\Helper\UrlRewrite::class);
+                $helper->validateRequestPath($requestPath);
+                $helper->validateRedirect($requestPath, $targetPath);
 
                 $model->setEntityType($this->getRequest()->getParam('entity_type') ?: self::ENTITY_TYPE_CUSTOM)
                     ->setRequestPath($requestPath)
