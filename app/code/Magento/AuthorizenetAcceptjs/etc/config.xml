@@ -24,7 +24,6 @@
                 <merchant_email />
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
-                <test>1</test>
                 <title>Credit Card (Authorize.net)</title>
                 <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />

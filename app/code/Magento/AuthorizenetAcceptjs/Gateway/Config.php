@@ -15,14 +15,14 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const KEY_LOGIN_ID = 'login';
-    const KEY_TRANSACTION_KEY = 'trans_key';
-    const KEY_API_URL = 'api_url';
-    const KEY_LEGACY_TRANSACTION_HASH = 'trans_md5';
-    const KEY_SIGNATURE_KEY = 'trans_sig_key';
-    const KEY_PAYMENT_ACTION = 'payment_action';
-    const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
-    const KEY_ADDITIONAL_INFO_KEYS = 'additional_info_keys';
+    private const KEY_LOGIN_ID = 'login';
+    private const KEY_TRANSACTION_KEY = 'trans_key';
+    private const KEY_API_URL = 'api_url';
+    private const KEY_LEGACY_TRANSACTION_HASH = 'trans_md5';
+    private const KEY_SIGNATURE_KEY = 'signature_key';
+    private const KEY_PAYMENT_ACTION = 'payment_action';
+    private const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
+    private const KEY_ADDITIONAL_INFO_KEYS = 'additional_info_keys';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -43,7 +43,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getLoginId($storeId = null)
+    public function getLoginId($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_LOGIN_ID, $storeId);
     }
@@ -54,7 +54,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getTransactionKey($storeId = null)
+    public function getTransactionKey($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_TRANSACTION_KEY, $storeId);
     }
@@ -65,7 +65,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getApiUrl($storeId = null)
+    public function getApiUrl($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_API_URL, $storeId);
     }
@@ -76,7 +76,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getTransactionSignatureKey($storeId = null)
+    public function getTransactionSignatureKey($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_SIGNATURE_KEY, $storeId);
     }
@@ -87,7 +87,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getLegacyTransactionHash($storeId = null)
+    public function getLegacyTransactionHash($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_LEGACY_TRANSACTION_HASH, $storeId);
     }
@@ -98,7 +98,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getPaymentAction($storeId = null)
+    public function getPaymentAction($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_PAYMENT_ACTION, $storeId);
     }
@@ -109,7 +109,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function shouldEmailCustomer($storeId = null)
+    public function shouldEmailCustomer($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
     }
@@ -120,8 +120,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string[]
      */
-    public function getAdditionalInfoKeys($storeId = null)
+    public function getAdditionalInfoKeys($storeId = null): array
     {
-        return explode(',', $this->getValue(Config::KEY_ADDITIONAL_INFO_KEYS, $storeId));
+        return explode(',', $this->getValue(Config::KEY_ADDITIONAL_INFO_KEYS, $storeId) ?? '');
     }
 }

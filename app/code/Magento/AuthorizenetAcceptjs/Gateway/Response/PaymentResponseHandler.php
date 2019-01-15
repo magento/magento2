@@ -56,11 +56,10 @@ class PaymentResponseHandler implements HandlerInterface
             ) {
                 $payment->setTransactionId($transactionResponse['transId']);
             }
-            $payment
-                ->setTransactionAdditionalInfo(
-                    self::REAL_TRANSACTION_ID,
-                    $transactionResponse['transId']
-                );
+            $payment->setTransactionAdditionalInfo(
+                self::REAL_TRANSACTION_ID,
+                $transactionResponse['transId']
+            );
             $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
             $payment->setIsTransactionClosed(false);
 

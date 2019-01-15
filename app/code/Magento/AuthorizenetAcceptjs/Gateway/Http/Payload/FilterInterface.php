@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http\Payload;
 
 /**
- * Describes a filter for use with the payload converter
+ * Describes a filter for filtering content after all the builders have finished
  */
 interface FilterInterface
 {

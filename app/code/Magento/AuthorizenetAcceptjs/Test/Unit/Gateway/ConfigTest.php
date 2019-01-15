@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
-            ->with($this->getPath(Config::KEY_API_URL), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('api_url'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn('abc');
         $this->assertEquals('abc', $this->model->getApiUrl());
     }
@@ -52,7 +52,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
-            ->with($this->getPath(Config::KEY_TRANSACTION_KEY), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('trans_key'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn('abc');
         $this->assertEquals('abc', $this->model->getTransactionKey());
     }
@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
-            ->with($this->getPath(Config::KEY_LEGACY_TRANSACTION_HASH), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('trans_md5'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn('myhash');
         $this->assertEquals('myhash', $this->model->getLegacyTransactionHash());
     }

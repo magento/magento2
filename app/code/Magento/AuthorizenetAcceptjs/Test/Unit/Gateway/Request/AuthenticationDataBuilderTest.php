@@ -20,22 +20,22 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMock;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -48,7 +48,7 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SubjectReader subjectReaderMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|SubjectReader subjectReaderMock */
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,9 +56,6 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder = new AuthenticationDataBuilder($this->subjectReaderMock, $this->configMock);
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Request\CaptureDataBuilder::build
-     */
     public function testBuild()
     {
         $this->configMock->expects($this->once())

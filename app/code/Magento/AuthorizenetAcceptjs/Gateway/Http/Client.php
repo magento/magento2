@@ -9,21 +9,24 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
-use Magento\Payment\Model\Method\Logger;
+use Magento\Payment\Model\Method\Logger as PaymentLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * A client that can communicate with the Authorize.net API
  */
 class Client implements ClientInterface
 {
-    const API_ENDPOINT_URL = 'https://api.authorize.net/xml/v1/request.api';
+    /**
+     * @var PaymentLogger
+     */
+    private $paymentLogger;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -38,25 +41,20 @@ class Client implements ClientInterface
     private $config;
 
     /**
-     * @var Converter
-     */
-    private $payloadConverter;
-
-    /**
-     * @param Logger $logger
+     * @param PaymentLogger $paymentLogger
+     * @param LoggerInterface $logger
      * @param ZendClientFactory $httpClientFactory
      * @param Config $config
-     * @param Converter $payloadConverter
      */
     public function __construct(
-        Logger $logger,
+        PaymentLogger $paymentLogger,
+        LoggerInterface $logger,
         ZendClientFactory $httpClientFactory,
-        Config $config,
-        Converter $payloadConverter
+        Config $config
     ) {
         $this->httpClientFactory = $httpClientFactory;
-        $this->payloadConverter = $payloadConverter;
         $this->config = $config;
+        $this->paymentLogger = $paymentLogger;
         $this->logger = $logger;
     }
 
@@ -74,24 +72,42 @@ class Client implements ClientInterface
             'request' => $request,
         ];
         $client = $this->httpClientFactory->create();
-        $url = $this->config->getApiUrl() ?: self::API_ENDPOINT_URL;
+        $url = $this->config->getApiUrl();
+
+        $type = $request['payload_type'];
+        unset($request['payload_type']);
+        $request = [$type => $request];
 
         try {
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-            $client->setRawData($this->payloadConverter->convertArrayToXml($request), 'text/xml');
+            $client->setRawData(json_encode($request), 'application/json');
             $client->setMethod(\Zend_Http_Client::POST);
 
             $responseBody = $client->request()->getBody();
+
+            // Strip BOM because Authorize.net sends it in the response
+            if ($responseBody && substr($responseBody, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+                $responseBody = substr($responseBody, 3);
+            }
+
             $log['response'] = $responseBody;
 
-            return $this->payloadConverter->convertXmlToArray($responseBody);
+            $data = json_decode($responseBody, true);
+
+            if (json_last_error()) {
+                throw new \Exception('Invalid JSON was returned by the gateway');
+            }
+
+            return $data;
         } catch (\Exception $e) {
+            $this->logger->critical($e);
+
             throw new ClientException(
                 __('Something went wrong in the payment gateway.')
             );
         } finally {
-            $this->logger->debug($log);
+            $this->paymentLogger->debug($log);
         }
     }
 }

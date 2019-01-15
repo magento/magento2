@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper;
 
 /**
- * Class SubjectReader
+ * Helper for extracting information from the payment data structure
  */
 class SubjectReader
 {
@@ -20,7 +22,7 @@ class SubjectReader
      * @param array $subject
      * @return PaymentDataObjectInterface
      */
-    public function readPayment(array $subject)
+    public function readPayment(array $subject): PaymentDataObjectInterface
     {
         return Helper\SubjectReader::readPayment($subject);
     }
@@ -31,28 +33,32 @@ class SubjectReader
      * @param array $subject
      * @return int|null
      */
-    public function readStoreId(array $subject)
+    public function readStoreId(array $subject): ?int
     {
         $storeId = $subject['store_id'] ?? null;
 
         if (empty($storeId)) {
             try {
-                $storeId = $this->readPayment($subject)->getOrder()->getStoreId();
-            } catch (\InvalidArgumentException $e) {}
+                $storeId = (int)$this->readPayment($subject)
+                    ->getOrder()
+                    ->getStoreId();
+            } catch (\InvalidArgumentException $e) {
+                // No store id is current set
+            }
         }
 
-        return $storeId;
+        return $storeId ? (int)$storeId : null;
     }
 
     /**
      * Reads amount from subject
      *
      * @param array $subject
-     * @return mixed
+     * @return string
      */
-    public function readAmount(array $subject)
+    public function readAmount(array $subject): string
     {
-        return Helper\SubjectReader::readAmount($subject);
+        return (string)Helper\SubjectReader::readAmount($subject);
     }
 
     /**
@@ -61,7 +67,7 @@ class SubjectReader
      * @param array $subject
      * @return array
      */
-    public function readResponse(array $subject)
+    public function readResponse(array $subject): ?array
     {
         return Helper\SubjectReader::readResponse($subject);
     }

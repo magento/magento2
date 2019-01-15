@@ -47,10 +47,14 @@ class TransactionResponseValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
         $transactionResponse = $response['transactionResponse'];
+        $code = $transactionResponse['messages']['message']['code']
+            ?? $transactionResponse['messages']['message'][0]['code']
+            ?? null;
 
         if (in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
+            && $code
             && !in_array(
-                $transactionResponse['messages']['message']['code'],
+                $code,
                 [
                     self::RESPONSE_REASON_CODE_APPROVED,
                     self::RESPONSE_REASON_CODE_PENDING_REVIEW,

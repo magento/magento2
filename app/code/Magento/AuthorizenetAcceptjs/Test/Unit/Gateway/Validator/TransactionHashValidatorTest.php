@@ -11,13 +11,14 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Validator;
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
 class TransactionHashValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
@@ -27,9 +28,14 @@ class TransactionHashValidatorTest extends TestCase
     private $validator;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
+
+    /**
+     * @var ResultInterface
+     */
+    private $resultMock;
 
     protected function setUp()
     {
@@ -38,6 +44,8 @@ class TransactionHashValidatorTest extends TestCase
             ->getMock();
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
             ->getMock();
 
         $this->validator = new TransactionHashValidator(
@@ -58,7 +66,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->validator->validate(['response' => []]);
 
@@ -81,7 +90,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getTransactionSignatureKey')
@@ -115,7 +125,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getTransactionSignatureKey')
@@ -151,7 +162,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getLegacyTransactionHash')
@@ -185,7 +197,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getLegacyTransactionHash')

@@ -7,6 +7,7 @@
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 class SubjectReaderTest extends \PHPUnit\Framework\TestCase
@@ -31,19 +32,21 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($paymentDO, $this->subjectReader->readPayment(['payment' => $paymentDO]));
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Payment data object should be provided
+     */
     public function testReadPaymentThrowsExceptionWhenNotAPaymentObject(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Payment data object should be provided');
-
         $this->subjectReader->readPayment(['payment' => 'nope']);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Payment data object should be provided
+     */
     public function testReadPaymentThrowsExceptionWhenNotSet(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Payment data object should be provided');
-
         $this->subjectReader->readPayment([]);
     }
 
@@ -54,18 +57,38 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->subjectReader->readResponse(['response' => $expected]));
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Response does not exist
+     */
     public function testReadResponseThrowsExceptionWhenNotAvailable(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Response does not exist');
-
         $this->subjectReader->readResponse([]);
         $this->subjectReader->readResponse(['response' => 123]);
     }
 
     public function testReadStoreId(): void
     {
-        $this->assertEquals('abc', $this->subjectReader->readStoreId(['store_id' => 'abc']));
+        $this->assertEquals(123, $this->subjectReader->readStoreId(['store_id' => '123']));
+    }
+
+    public function testReadStoreIdFromOrder(): void
+    {
+        $paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
+            ->getMock();
+        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
+            ->getMock();
+        $paymentDOMock->method('getOrder')
+            ->willReturn($orderMock);
+        $orderMock->expects($this->once())
+            ->method('getStoreID')
+            ->willReturn('123');
+
+        $result = $this->subjectReader->readStoreId([
+            'payment' => $paymentDOMock
+        ]);
+
+        $this->assertEquals(123, $result);
     }
 
     public function testReadLoginId(): void

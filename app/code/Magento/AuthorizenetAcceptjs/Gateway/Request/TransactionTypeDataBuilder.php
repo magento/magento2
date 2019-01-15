@@ -8,9 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
+use Magento\AuthorizenetAcceptjs\Gateway\Config;
+use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -18,11 +21,9 @@ use Magento\Sales\Model\Order\Payment;
  */
 class TransactionTypeDataBuilder implements BuilderInterface
 {
-    const REQUEST_TYPE_CAPTURE_ONLY = 'captureOnlyTransaction';
-
-    const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
-
-    const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
+    private const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
+    private const REQUEST_AUTH_ONLY = 'authOnlyTransaction';
+    private const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
 
     /**
      * @var SubjectReader
@@ -30,26 +31,26 @@ class TransactionTypeDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @var Config
      */
-    private $transactionRepository;
+    private $config;
 
     /**
      * @param SubjectReader $subjectReader
-     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param Config $config
      */
     public function __construct(
         SubjectReader $subjectReader,
-        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+        Config $config
     ) {
         $this->subjectReader = $subjectReader;
-        $this->transactionRepository = $transactionRepository;
+        $this->config = $config;
     }
 
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
         $transactionData = [
@@ -58,31 +59,20 @@ class TransactionTypeDataBuilder implements BuilderInterface
 
         if ($payment instanceof Payment) {
             if ($payment->getData(Payment::PARENT_TXN_ID)) {
+                $authTransaction = $payment->getAuthorizationTransaction();
+                $refId = $authTransaction->getAdditionalInformation(PaymentResponseHandler::REAL_TRANSACTION_ID);
                 $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
-                $transactionData['transactionRequest']['refTransId'] = $this->getRealParentTransactionId($payment);
+                $transactionData['transactionRequest']['refTransId'] = $refId;
             } else {
-                $transactionData['transactionRequest']['transactionType'] = self::REQUEST_AUTH_AND_CAPTURE;
+                $storeId = $this->subjectReader->readStoreId($buildSubject);
+                $defaultAction = $this->config->getPaymentAction($storeId) === 'authorize'
+                    ? self::REQUEST_AUTH_ONLY
+                    : self::REQUEST_AUTH_AND_CAPTURE;
+
+                $transactionData['transactionRequest']['transactionType'] = $defaultAction;
             }
         }
 
         return $transactionData;
-    }
-
-    /**
-     * Retrieves the previously Auth'd transaction id to be captured
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @return string
-     */
-    private function getRealParentTransactionId($payment): string
-    {
-        // TODO use interface methods
-        $transaction = $this->transactionRepository->getByTransactionId(
-            $payment->getData(Payment::PARENT_TXN_ID),
-            $payment->getId(),
-            $payment->getOrder()->getId()
-        );
-
-        return $transaction->getAdditionalInformation('real_transaction_id');
     }
 }

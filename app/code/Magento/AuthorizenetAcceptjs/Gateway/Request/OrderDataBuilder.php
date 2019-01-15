@@ -8,8 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
-use Magento\Braintree\Gateway\SubjectReader;
+use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Sales\Model\Order\Payment;
 
 /**
  * Adds the basic payment information to the request
@@ -32,17 +33,24 @@ class OrderDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();
 
-        return [
+        $data = [
             'transactionRequest' => [
                 'order' => [
                     'invoiceNumber' => $order->getOrderIncrementId()
                 ]
             ]
         ];
+
+        if ($payment instanceof Payment) {
+            $data['transactionRequest']['poNumber'] = $payment->getPoNumber();
+        }
+
+        return $data;
     }
 }

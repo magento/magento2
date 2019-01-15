@@ -10,6 +10,7 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Validator;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use Magento\CatalogSearch\Block\Result;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
@@ -82,16 +83,22 @@ class TransactionHashValidator extends AbstractValidator
      * @param array $validationSubject
      * @return ResultInterface
      */
-    private function validateMd5Hash(array $validationSubject)
+    private function validateMd5Hash(array $validationSubject): ResultInterface
     {
         $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
         $storedHash = $this->config->getLegacyTransactionHash($storeId);
+        $transactionResponse = $response['transactionResponse'];
 
-        try {
-            $amount = $this->subjectReader->readAmount($validationSubject);
-        } catch (\InvalidArgumentException $e) {
-            // Void will not contain the amount and will use 0.00 for hashing
+        if (empty($transactionResponse['refTransId'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+        // Edge case with some transactions
+        } else {
             $amount = 0;
         }
 
@@ -99,10 +106,10 @@ class TransactionHashValidator extends AbstractValidator
             $storedHash,
             $this->config->getLoginId($storeId),
             sprintf('%.2F', $amount),
-            $response['transactionResponse']['transId'] ?? ''
+            $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $response['transactionResponse']['transHash'])) {
+        if (Security::compareStrings($hash, $transactionResponse['transHash'])) {
             return $this->createResult(true);
         }
 
@@ -126,15 +133,16 @@ class TransactionHashValidator extends AbstractValidator
         $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
         $storedKey = $this->config->getTransactionSignatureKey($storeId);
+        $transactionResponse = $response['transactionResponse'];
 
         $hash = $this->generateSha512Hash(
             $storedKey,
             $this->config->getLoginId($storeId),
-            $this->subjectReader->readAmount($validationSubject),
-            $response['transactionResponse']['transId'] ?? ''
+            sprintf('%.2F', $transactionResponse['amount'] ?? 0),
+            $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $response['transactionResponse']['transHashSHA2'])) {
+        if (Security::compareStrings($hash, $transactionResponse['transHashSHA2'])) {
             return $this->createResult(true);
         }
 

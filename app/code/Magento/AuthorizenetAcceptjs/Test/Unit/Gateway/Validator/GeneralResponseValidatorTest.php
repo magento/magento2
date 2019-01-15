@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class GeneralResponseValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 

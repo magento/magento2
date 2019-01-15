@@ -45,7 +45,7 @@ class AuthenticationDataBuilder implements BuilderInterface
      * @param array $buildSubject
      * @return array
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $storeId = $this->subjectReader->readStoreId($buildSubject);
 

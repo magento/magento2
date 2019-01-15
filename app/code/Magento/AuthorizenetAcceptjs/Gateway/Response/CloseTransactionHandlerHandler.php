@@ -18,7 +18,6 @@ use Magento\Sales\Model\Order\Payment;
  */
 class CloseTransactionHandlerHandler implements HandlerInterface
 {
-
     /**
      * @var SubjectReader
      */
