@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Files\File;
 class EmptyLineMissedSniff implements Sniff
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -22,7 +22,7 @@ class EmptyLineMissedSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -37,6 +37,8 @@ class EmptyLineMissedSniff implements Sniff
     }
 
     /**
+     * Execute empty line missed check.
+     *
      * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
