@@ -633,7 +633,7 @@ interface AdapterInterface
     /**
      * Quotes an identifier.
      *
-     * Accepts a string representing a qualified indentifier. For Example:
+     * Accepts a string representing a qualified identifier. For Example:
      * <code>
      * $adapter->quoteIdentifier('myschema.mytable')
      * </code>
