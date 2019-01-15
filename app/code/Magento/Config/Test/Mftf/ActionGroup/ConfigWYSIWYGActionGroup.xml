@@ -9,15 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EnabledWYSIWYG">
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
-        <waitForPageLoad stepKey="wait1"/>
-        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1" />
-        <waitForElementVisible  selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="waitForUseSystemValueVisible"/>
-        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
-        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" stepKey="selectOption1"/>
-        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <magentoCLI stepKey="enableWYSIWYG" command="config:set cms/wysiwyg/enabled enabled"/>
     </actionGroup>
     <actionGroup name="SwitchToTinyMCE3">
     <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
@@ -31,14 +23,7 @@
     <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToConfigurationPage" />
-        <waitForPageLoad stepKey="wait3"/>
-        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown2" time="30"/>
-        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
-        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" stepKey="selectOption2"/>
-        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <magentoCLI stepKey="disableWYSIWYG" command="config:set cms/wysiwyg/enabled disabled"/>
     </actionGroup>
     <actionGroup name="UseStaticURLForMediaContentInWYSIWYG">
         <arguments>

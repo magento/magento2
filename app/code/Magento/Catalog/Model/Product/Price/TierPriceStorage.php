@@ -97,7 +97,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -107,7 +107,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -128,7 +128,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function replace(array $prices)
     {
@@ -144,7 +144,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $prices)
     {
@@ -171,16 +171,17 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
         $ids = $this->retrieveAffectedIds($skus);
         $rawPrices = $this->tierPricePersistence->get($ids);
         $prices = [];
-
-        $linkField = $this->tierPricePersistence->getEntityLinkField();
-        $skuByIdLookup = $this->buildSkuByIdLookup($skus);
-        foreach ($rawPrices as $rawPrice) {
-            $sku = $skuByIdLookup[$rawPrice[$linkField]];
-            $price = $this->tierPriceFactory->create($rawPrice, $sku);
-            if ($groupBySku) {
-                $prices[$sku][] = $price;
-            } else {
-                $prices[] = $price;
+        if ($rawPrices) {
+            $linkField = $this->tierPricePersistence->getEntityLinkField();
+            $skuByIdLookup = $this->buildSkuByIdLookup($skus);
+            foreach ($rawPrices as $rawPrice) {
+                $sku = $skuByIdLookup[$rawPrice[$linkField]];
+                $price = $this->tierPriceFactory->create($rawPrice, $sku);
+                if ($groupBySku) {
+                    $prices[$sku][] = $price;
+                } else {
+                    $prices[] = $price;
+                }
             }
         }
 

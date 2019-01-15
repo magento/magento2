@@ -58,4 +58,35 @@ class PostOrder implements ActionInterface
             ]]>
         </example>
     </rule>
+    <rule name="RequestAwareBlockMethod"
+          class="Magento\CodeMessDetector\Rule\Design\RequestAwareBlockMethod"
+          message="{0} uses request object directly. Add user input validation and suppress this warning.">
+        <description>
+            <![CDATA[
+Blocks must not depend on being used with certain controllers.
+If you use request object in a block directly you must validate all user input inside the block.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class MyOrder extends AbstractBlock
+{
+
+    .......
+
+    public function getOrder()
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        //Validate customer having such order.
+        if (!$this->hasOrder($this->getCustomerId(), $orderId)) {
+            ...deny access...
+        }
+        .....
+    }
+}
+            ]]>
+        </example>
+    </rule>
 </ruleset>
