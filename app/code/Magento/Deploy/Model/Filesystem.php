@@ -138,7 +138,11 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ]
         );
-        
+
+        // Cache flush will regenerate needed folders structure for compilation and deploy that were deleted previously
+        $cmd = $this->functionCallPath . 'cache:flush ';
+        $this->shell->execute($cmd);
+
         // Trigger code generation
         $this->compile($output);
         // Trigger static assets compilation and deployment
