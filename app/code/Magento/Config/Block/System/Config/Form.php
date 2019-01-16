@@ -707,6 +707,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSectionCode()
     {
@@ -718,6 +719,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getWebsiteCode()
     {
@@ -729,6 +731,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @TODO delete this methods when {^see above^} is done
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getStoreCode()
     {
