@@ -322,7 +322,7 @@ class Related extends Extended
     }
 
     /**
-     * Rerieve grid URL
+     * Retrieve grid URL
      *
      * @return string
      */
