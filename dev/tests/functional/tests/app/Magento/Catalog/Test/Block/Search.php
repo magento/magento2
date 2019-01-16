@@ -10,7 +10,6 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Search
  * Block for "Search" section
  */
 class Search extends Block
@@ -157,5 +156,25 @@ class Search extends Block
     {
         $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
         $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Wait for element is enabled.
+     *
+     * @param string $selector
+     * @param string $strategy
+     * @return bool|null
+     */
+    public function waitForElementEnabled($selector, $strategy = Locator::SELECTOR_CSS)
+    {
+        $browser = $this->browser;
+
+        return $browser->waitUntil(
+            function () use ($browser, $selector, $strategy) {
+                $element = $browser->find($selector, $strategy);
+
+                return !$element->isDisabled() ? true : null;
+            }
+        );
     }
 }
