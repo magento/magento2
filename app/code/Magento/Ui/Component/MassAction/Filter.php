@@ -98,10 +98,14 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
-
+        
+        $filterIds = $this->getFilterIds();
+        if(is_array($selected)){
+            $filterIds = array_unique(array_merge($this->getFilterIds(), $selected));
+        }
         $collection->addFieldToFilter(
             $collection->getIdFieldName(),
-            ['in' => $this->getFilterIds()]
+            ['in' => $filterIds]
         );
 
         return $collection;
