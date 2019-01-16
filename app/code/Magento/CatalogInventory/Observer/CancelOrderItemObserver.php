@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogInventory\Observer;
 
-use Magento\CatalogInventory\Model\Configuration;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
@@ -32,6 +32,7 @@ class CancelOrderItemObserver implements ObserverInterface
     protected $priceIndexer;
 
     /**
+     * @param Configuration $configuration
      * @param StockManagementInterface $stockManagement
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      */
