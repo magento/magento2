@@ -663,7 +663,7 @@
         <column xsi:type="varchar" name="cc_ss_start_month" nullable="true" length="128" comment="Cc Ss Start Month"/>
         <column xsi:type="varchar" name="echeck_account_type" nullable="true" length="255"
                 comment="Echeck Account Type"/>
-        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="32" comment="Last Trans Id"/>
+        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="255" comment="Last Trans Id"/>
         <column xsi:type="varchar" name="cc_cid_status" nullable="true" length="32" comment="Cc Cid Status"/>
         <column xsi:type="varchar" name="cc_owner" nullable="true" length="128" comment="Cc Owner"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="32" comment="Cc Type"/>
