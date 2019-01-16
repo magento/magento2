@@ -272,6 +272,6 @@
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="amOnPage"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{categoryName}}]" stepKey="selectCategory"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveProductMessage"/>
     </actionGroup>
 </actionGroups>

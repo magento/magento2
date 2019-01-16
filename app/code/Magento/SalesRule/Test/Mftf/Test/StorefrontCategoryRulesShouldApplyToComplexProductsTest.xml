@@ -16,11 +16,11 @@
             <description value="Sales rules filtering on category should apply to all products, including complex products."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-70192"/>
-            <group value="CatalogRule"/>
+            <group value="catalogRule"/>
         </annotations>
         <before>
             <!-- Create two Categories: CAT1 and CAT2 -->
-            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
             <!--Create config1 and config2-->
             <actionGroup ref="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" stepKey="createConfigurableProduct1">
@@ -71,34 +71,15 @@
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct2" stepKey="deleteConfigChildProduct4"/>
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct2" stepKey="deleteConfigProductAttribute2"/>
             <!--Delete Cart Price Rule -->
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
-            </actionGroup>
+            <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceGridPage"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
-        <!-- Open the Actions Tab-->
-        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickOnActionTab"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
-        <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" stepKey="clickToChooseOption2"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsAggregator}}" userInput="ANY" stepKey="selectCondition"/>
-        <click selector="{{AdminCartPriceRulesFormSection.condition('TRUE')}}" stepKey="clickToChooseOption3"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsValue}}" userInput="FALSE" stepKey="selectCondition2"/>
-        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="selectActionConditions"/>
-        <waitForPageLoad stepKey="waitForDropDownOpened"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="Category" stepKey="selectAttribute"/>
-        <waitForPageLoad stepKey="waitForOperatorOpened"/>
-        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption1"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="$$createCategory.id$$" stepKey="fillActionValue"/>
-        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" stepKey="applyAction"/>
-        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createCartPriceRule"/>
+        <amOnPage url="{{AdminCartPriceRuleEditPage.url($$createCartPriceRule.rule_id$$)}}" stepKey="goToCartPriceRuleEditPage"/>
+        <actionGroup ref="SetConditionForActionsInCartPriceRuleActionGroup" stepKey="setConditionForActionsInCartPriceRuleActionGroup">
+            <argument name="actionValue" value="$$createCategory.id$$"/>
+        </actionGroup>
         <!-- 2: Go to frontend and add an item from both CAT1 and CAT2 to your cart -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontend"/>
         <!-- 3: Open configurable product 1 and add all his child products to cart -->
