@@ -13,8 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that single quotes are used
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#quotes
- *
+ * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#quotes
  */
 class QuotesSniff implements Sniff
 {
@@ -26,7 +25,7 @@ class QuotesSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -34,7 +33,7 @@ class QuotesSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
