@@ -77,6 +77,7 @@ class Search extends Block
             $keyword = substr($keyword, 0, $length);
         }
         $this->fillSearch($keyword);
+        $this->waitForElementEnabled($this->searchButton);
         $this->_rootElement->find($this->searchButton)->click();
     }
 
