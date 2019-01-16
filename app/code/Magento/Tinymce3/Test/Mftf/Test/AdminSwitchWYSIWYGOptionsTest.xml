@@ -17,9 +17,6 @@
             <description value="Admin should able to switch between versions of TinyMCE"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82936"/>
-            <skip>
-                <issueId value="MAGETWO-89417"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
