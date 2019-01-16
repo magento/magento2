@@ -1649,11 +1649,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
                 if ($this->getErrorAggregator()->hasToBeTerminated()) {
-                    $validationStrategy = $this->_parameters[Import::FIELD_NAME_VALIDATION_STRATEGY];
-                    if (ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS !== $validationStrategy) {
-                        $this->getErrorAggregator()->addRowToSkip($rowNum);
-                        continue;
-                    }
+                    $this->getErrorAggregator()->addRowToSkip($rowNum);
+                    continue;
                 }
                 $rowScope = $this->getRowScope($rowData);
 
