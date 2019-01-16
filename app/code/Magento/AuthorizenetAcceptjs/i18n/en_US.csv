@@ -10,3 +10,8 @@ Authorize.net,Authorize.net
 "Environment","Environment"
 "Production","Production"
 "Sandbox","Sandbox"
+"accountType","Account Type"
+"authCode", "Processor Response Text"
+"avsResultCode", "AVS Response Code"
+"cvvResultCode","CVV Response Code"
+"cavvResultCode","CAVV Response Code"

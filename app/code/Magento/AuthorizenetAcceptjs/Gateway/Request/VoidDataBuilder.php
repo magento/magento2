@@ -10,10 +10,8 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\Framework\Exception\InputException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use Psr\Log\LoggerInterface;
 
 /**

@@ -23,7 +23,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const KEY_SIGNATURE_KEY = 'trans_signature_key';
     private const KEY_PAYMENT_ACTION = 'payment_action';
     private const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
-    private const KEY_ADDITIONAL_INFO_KEYS = 'additional_info_keys';
+    private const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
 

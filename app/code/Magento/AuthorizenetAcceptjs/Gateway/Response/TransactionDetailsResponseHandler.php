@@ -58,6 +58,7 @@ class TransactionDetailsResponseHandler implements HandlerInterface
             foreach ($additionalInformationKeys as $paymentInfoKey) {
                 if (isset($transactionResponse[$paymentInfoKey])) {
                     $rawDetails[$paymentInfoKey] = $transactionResponse[$paymentInfoKey];
+                    $payment->setAdditionalInformation($paymentInfoKey, $transactionResponse[$paymentInfoKey]);
                 }
             }
             $payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $rawDetails);

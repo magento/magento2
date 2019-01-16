@@ -67,6 +67,19 @@ class PaymentResponseHandler implements HandlerInterface
                 $payment->setIsTransactionPending(true)
                     ->setIsFraudDetected(true);
             }
+
+            $fields = [];
+            $userFields = $transactionResponse['userFields'] ?? [];
+            foreach ($userFields as $userField) {
+                $fields[$userField['name']] = $userField['value'];
+            }
+
+            if (isset($fields['opaqueDataDescriptor'])) {
+                $payment->setAdditionalInformation('opaqueDataDescriptor', $fields['opaqueDataDescriptor']);
+            }
+            if (isset($fields['opaqueDataValue'])) {
+                $payment->setAdditionalInformation('opaqueDataValue', $fields['opaqueDataValue']);
+            }
         }
     }
 }

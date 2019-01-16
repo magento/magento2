@@ -38,8 +38,15 @@ class CloseTransactionHandlerHandler implements HandlerInterface
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
+        $fields = [];
+        $userFields = $response['transactionResponse']['userFields'] ?? [];
+        foreach ($userFields as $userField) {
+            $fields[$userField['name']] = $userField['value'];
+        }
 
-        if ($payment instanceof Payment) {
+        if ($payment instanceof Payment
+        && (!isset($fields['transactionType']) || $fields['transactionType'] !== 'authOnlyTransaction')
+        ) {
             $payment->setIsTransactionClosed(true);
             $payment->setShouldCloseParentTransaction(true);
         }

@@ -11,9 +11,8 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\Framework\DataObject;
+use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -24,7 +23,6 @@ class TransactionTypeDataBuilder implements BuilderInterface
     private const REQUEST_AUTH_AND_CAPTURE = 'authCaptureTransaction';
     private const REQUEST_AUTH_ONLY = 'authOnlyTransaction';
     private const REQUEST_TYPE_PRIOR_AUTH_CAPTURE = 'priorAuthCaptureTransaction';
-    private const REQUEST_TYPE_REFUND = 'refundTransaction';
 
     /**
      * @var SubjectReader
@@ -37,15 +35,23 @@ class TransactionTypeDataBuilder implements BuilderInterface
     private $config;
 
     /**
+     * @var PassthroughDataObject
+     */
+    private $passthroughData;
+
+    /**
      * @param SubjectReader $subjectReader
      * @param Config $config
+     * @param PassthroughDataObject $passthroughData
      */
     public function __construct(
         SubjectReader $subjectReader,
-        Config $config
+        Config $config,
+        PassthroughDataObject $passthroughData
     ) {
         $this->subjectReader = $subjectReader;
         $this->config = $config;
+        $this->passthroughData = $passthroughData;
     }
 
     /**
@@ -72,6 +78,11 @@ class TransactionTypeDataBuilder implements BuilderInterface
 
                 $transactionData['transactionRequest']['transactionType'] = $defaultAction;
             }
+
+            $this->passthroughData->setData(
+                'transactionType',
+                $transactionData['transactionRequest']['transactionType']
+            );
         }
 
         return $transactionData;

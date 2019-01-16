@@ -15,7 +15,7 @@
         <arguments>
             <argument name="code" xsi:type="string">authorizenet_acceptjs</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form\Cc</argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info\Cc</argument>
+            <argument name="infoBlockType" xsi:type="string">AuthorizenetAcceptjsInfoBlock</argument>
             <argument name="valueHandlerPool" xsi:type="object">AuthorizenetAcceptjsValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">AuthorizenetAcceptjsValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
@@ -26,6 +26,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="authorize" xsi:type="string">AuthorizenetAcceptjsAuthorizeCommand</item>
                 <item name="capture" xsi:type="string">AuthorizenetAcceptjsCaptureCommand</item>
+                <item name="settle" xsi:type="string">AuthorizenetAcceptjsSettleCommand</item>
                 <item name="void" xsi:type="string">AuthorizenetAcceptjsVoidCommand</item>
                 <item name="refund" xsi:type="string">AuthorizenetAcceptjsRefundCommand</item>
                 <item name="cancel" xsi:type="string">AuthorizenetAcceptjsCancelCommand</item>
@@ -75,13 +76,16 @@
     <virtualType name="AuthorizenetAcceptjsRefundCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsRefundRequest</argument>
-            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureHandler</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
+    <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AuthorizenetAcceptjsCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsSettleCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsCaptureRequest</argument>
-            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -107,12 +111,6 @@
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
                 <item name="transaction_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionDetailsResponseHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="AuthorizenetAcceptjsCaptureHandler" type="AuthorizenetAcceptjsAuthorizationHandler">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
                 <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
             </argument>
         </arguments>
@@ -148,6 +146,7 @@
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
+                <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -168,6 +167,7 @@
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionTypeDataBuilder</item>
+                <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -179,6 +179,7 @@
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="void" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder</item>
+                <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -273,6 +274,11 @@
             <argument name="payloadFilters" xsi:type="array">
                 <item name="store_config" xsi:type="object">AuthorizenetAcceptjsRemoveStoreConfigFilter</item>
             </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsInfoBlock" type="Magento\AuthorizenetAcceptjs\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
         </arguments>
     </virtualType>
 </config>
