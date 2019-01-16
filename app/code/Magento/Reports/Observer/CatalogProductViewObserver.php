@@ -10,6 +10,7 @@ use Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogProductViewObserver implements ObserverInterface
 {
