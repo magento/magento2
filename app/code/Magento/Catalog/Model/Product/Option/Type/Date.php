@@ -147,7 +147,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareForCart()
     {
         if ($this->getIsValid() && $this->getUserValue() !== null) {
-            $option = $this->getOption();
             $value = $this->getUserValue();
 
             if (isset($value['date_internal']) && $value['date_internal'] != '') {
