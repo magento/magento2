@@ -21,6 +21,7 @@ define([
             var pattern, regex,
                 patterns = postCodesPatterns ? postCodesPatterns[countryId] :
                 window.checkoutConfig.postCodes[countryId];
+
             this.validatedPostCodeExample = [];
 
             if (!utils.isEmpty(postCode) && !utils.isEmpty(patterns)) {
