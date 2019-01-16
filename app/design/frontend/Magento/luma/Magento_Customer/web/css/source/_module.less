@@ -70,7 +70,7 @@
     }
 
     .form-address-edit {
-        #region_id {
+        .region_id {
             display: none;
         }
 
@@ -334,12 +334,16 @@
         }
     }
 
-    .order-products-toolbar {
+    .order-products-toolbar,
+    .customer-addresses-toolbar {
         position: relative;
 
         .toolbar-amount {
             position: relative;
             text-align: center;
+        }
+        .pages {
+            position: relative;
         }
     }
 }
@@ -551,7 +555,7 @@
 
     .account {
         .page.messages {
-            margin-bottom: @indent__xl;
+            margin-bottom: @indent__base;
         }
 
         .column.main {
