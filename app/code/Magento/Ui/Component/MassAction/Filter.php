@@ -99,10 +99,14 @@ class Filter
                 throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
         }
-
+        
+        $filterIds = $this->getFilterIds();
+        if(is_array($selected)){
+            $filterIds = array_unique(array_merge($this->getFilterIds(), $selected));
+        }
         $collection->addFieldToFilter(
             $collection->getIdFieldName(),
-            ['in' => $this->getFilterIds()]
+            ['in' => $filterIds]
         );
 
         return $collection;
