@@ -11,6 +11,7 @@ use Magento\Framework\Data\Form\FormKey;
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
