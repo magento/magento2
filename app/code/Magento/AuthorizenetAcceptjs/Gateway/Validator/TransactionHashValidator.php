@@ -10,7 +10,6 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Validator;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\CatalogSearch\Block\Result;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
@@ -62,7 +61,7 @@ class TransactionHashValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
 
-        if (!empty($response['transactionResponse']['transHashSHA2'])) {
+        if (!empty($response['transactionResponse']['transHashSha2'])) {
             return $this->validateSha512Hash($validationSubject);
         } elseif (!empty($response['transactionResponse']['transHash'])) {
             return $this->validateMd5Hash($validationSubject);
@@ -135,14 +134,26 @@ class TransactionHashValidator extends AbstractValidator
         $storedKey = $this->config->getTransactionSignatureKey($storeId);
         $transactionResponse = $response['transactionResponse'];
 
+        if (empty($transactionResponse['refTransID'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+            // Edge case with some transactions
+        } else {
+            $amount = 0;
+        }
+
         $hash = $this->generateSha512Hash(
             $storedKey,
             $this->config->getLoginId($storeId),
-            sprintf('%.2F', $transactionResponse['amount'] ?? 0),
+            sprintf('%.2F', $amount),
             $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $transactionResponse['transHashSHA2'])) {
+        if (Security::compareStrings($hash, $transactionResponse['transHashSha2'])) {
             return $this->createResult(true);
         }
 
@@ -190,6 +201,6 @@ class TransactionHashValidator extends AbstractValidator
     ) {
         $message = '^' . $merchantApiLogin . '^' . $transactionId . '^' . $amount . '^';
 
-        return hash_hmac('sha512', $message, $merchantKey);
+        return strtoupper(hash_hmac('sha512', $message, pack('H*', $merchantKey)));
     }
 }

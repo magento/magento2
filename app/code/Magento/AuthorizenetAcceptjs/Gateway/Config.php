@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
+use Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source\Environment;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
@@ -17,12 +18,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 {
     private const KEY_LOGIN_ID = 'login';
     private const KEY_TRANSACTION_KEY = 'trans_key';
-    private const KEY_API_URL = 'api_url';
+    private const KEY_ENVIRONMENT = 'environment';
     private const KEY_LEGACY_TRANSACTION_HASH = 'trans_md5';
-    private const KEY_SIGNATURE_KEY = 'signature_key';
+    private const KEY_SIGNATURE_KEY = 'trans_signature_key';
     private const KEY_PAYMENT_ACTION = 'payment_action';
     private const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
     private const KEY_ADDITIONAL_INFO_KEYS = 'additional_info_keys';
+    private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
+    private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -67,7 +70,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getApiUrl($storeId = null): ?string
     {
-        return $this->getValue(Config::KEY_API_URL, $storeId);
+        $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+
+        return $environment === Environment::ENVIRONMENT_SANDBOX
+            ? self::ENDPOINT_URL_SANDBOX
+            : self::ENDPOINT_URL_PRODUCTION;
     }
 
     /**

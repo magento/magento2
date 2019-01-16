@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptJs\Model\Source;
+namespace Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source;
 
 /**
  * Authorize.net Payment Action Dropdown source

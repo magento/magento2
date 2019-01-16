@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Model\Source;
+namespace Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source;
 
 use Magento\Payment\Model\Source\Cctype as PaymentCctype;
 
