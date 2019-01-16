@@ -75,5 +75,4 @@ class GetLatLngFromSource
             'lng' => (float) $source->getLongitude()
         ]);
     }
-
 }
