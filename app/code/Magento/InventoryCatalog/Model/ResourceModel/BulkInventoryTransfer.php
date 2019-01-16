@@ -205,7 +205,7 @@ class BulkInventoryTransfer
         $connection->beginTransaction();
         foreach ($types as $sku => $type) {
             if ($this->isSourceItemManagementAllowedForProductType->execute($type)) {
-                $this->transferInventory($sku, $originSource, $destinationSource);
+                $this->transferInventory((string)$sku, $originSource, $destinationSource);
             }
         }
 
