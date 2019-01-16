@@ -34,7 +34,8 @@ class ArrayPool
     {
         $modelInstance = $this->_objectManager->get($model);
         if (false == $modelInstance instanceof \Magento\Framework\Data\OptionSourceInterface) {
-            throw new \InvalidArgumentException($model . 'doesn\'t implement \Magento\Framework\Data\OptionSourceInterface');
+            throw new \InvalidArgumentException($model
+                . 'doesn\'t implement \Magento\Framework\Data\OptionSourceInterface');
         }
         return $modelInstance;
     }
