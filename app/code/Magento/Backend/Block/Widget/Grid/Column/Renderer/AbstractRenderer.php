@@ -28,6 +28,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     protected $_column;
 
     /**
+     * Set column for renderer.
+     *
      * @param Column $column
      * @return $this
      */
@@ -38,6 +40,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Returns row associated with the renderer.
+     *
      * @return Column
      */
     public function getColumn()
@@ -75,6 +79,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Returns value of the row.
+     *
      * @param DataObject $row
      * @return mixed
      */
@@ -92,6 +98,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Get pre-rendered input element.
+     *
      * @param DataObject $row
      * @return string
      */
@@ -108,6 +116,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Get input value by row.
+     *
      * @param DataObject $row
      * @return mixed
      */
@@ -117,6 +127,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Renders header of the column,
+     *
      * @return string
      */
     public function renderHeader()
@@ -148,6 +160,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Render HTML properties.
+     *
      * @return string
      */
     public function renderProperty()
@@ -172,6 +186,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Returns HTML for CSS.
+     *
      * @return string
      */
     public function renderCss()
