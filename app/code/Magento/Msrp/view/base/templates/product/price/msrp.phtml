@@ -34,6 +34,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
 
 <?php if ($amount): ?>
     <span class="old-price map-old-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
+    <span class="map-fallback-price normal-price"><?= /* @escapeNotVerified */ $msrpPrice ?></span>
 <?php endif; ?>
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>

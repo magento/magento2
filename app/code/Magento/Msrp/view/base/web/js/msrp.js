@@ -9,7 +9,7 @@ define([
     'jquery/ui',
     'mage/dropdown',
     'mage/template'
-], function ($, priceUtils) {
+], function ($, priceUtils, _) {
     'use strict';
 
     $.widget('mage.addToCart', {
@@ -28,7 +28,11 @@ define([
             msrpPriceElement: '#map-popup-msrp .price-wrapper',
             priceLabelId: '#map-popup-price',
             priceElement: '#map-popup-price .price',
-            oldPriceElement: '.old-price.map-old-price .price-wrapper',
+            mapInfoLinks: ".map-show-info",
+            displayPriceElement: '.old-price.map-old-price .price-wrapper',
+            fallbackPriceElement: '.normal-price.fallback-price .price-wrapper',
+            displayPriceContainer: '.old-price.map-old-price',
+            fallbackPriceContainer: '.normal-price.map-fallback-price',
             popUpAttr: '[data-role=msrp-popup-template]',
             popupCartButtonId: '#map-popup-button',
             paypalCheckoutButons: '[data-action=checkout-form-submit]',
@@ -67,6 +71,7 @@ define([
 
         /**
          * Creates widget instance
+         *
          * @private
          */
         _create: function () {
@@ -83,6 +88,7 @@ define([
 
         /**
          * Init msrp popup
+         *
          * @private
          */
         initMsrpPopup: function () {
@@ -110,6 +116,7 @@ define([
 
         /**
          * Init info popup
+         *
          * @private
          */
         initInfoPopup: function () {
@@ -232,6 +239,7 @@ define([
         },
 
         /**
+         * Toggle MAP popup visibility
          *
          * @param {HTMLElement} $elem
          * @private
@@ -248,6 +256,7 @@ define([
         },
 
         /**
+         * Close MAP information popup
          *
          * @param {HTMLElement} $elem
          */
@@ -286,14 +295,36 @@ define([
          * @param {mixed} optionId
          * @param {Object} prices
          */
-        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, optionId, prices) {
-            let useDefaultPrice = optionId === undefined;
-            let priceIndex = useDefaultPrice ? Object.keys(prices)[0] : optionId;
-            return this.updateMsrpPrice(
-                priceUtils.formatPrice(prices[priceIndex].finalPrice.amount),
-                priceUtils.formatPrice(prices[priceIndex].msrpPrice.amount),
-                useDefaultPrice
-            );
+        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices) {
+
+            var defaultMsrp = _.chain(prices).map(function (price) {
+                return price.msrpPrice.amount;
+            }).reject(function (p) {
+                return p === null
+            }).min().value();
+
+            var defaultPrice = _.chain(prices).map(function (p) {
+                return p.finalPrice.amount
+            }).min().value();
+
+            if (typeof priceIndex !== "undefined") {
+                var msrpPrice = prices[priceIndex].msrpPrice.amount;
+
+                if(msrpPrice !== null) {
+                    this.updateMsrpPrice(
+                        priceUtils.formatPrice(prices[priceIndex].finalPrice.amount),
+                        priceUtils.formatPrice(prices[priceIndex].msrpPrice.amount),
+                        false);
+                } else {
+                    this.updateNonMsrpPrice(
+                        priceUtils.formatPrice(prices[priceIndex].finalPrice.amount));
+                }
+            } else {
+                this.updateMsrpPrice(
+                    priceUtils.formatPrice(defaultPrice),
+                    priceUtils.formatPrice(defaultMsrp),
+                    true);
+            }
         },
 
         /**
@@ -304,17 +335,36 @@ define([
          * @param {boolean} useDefaultPrice
          */
         updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
-            if (!this.wasOpened || useDefaultPrice) {
-                let options = this.tierOptions || this.options;
-                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
-                this.wasOpened = true;
+            var options = this.tierOptions || this.options;
+            $(this.options.fallbackPriceContainer).hide();
+            $(this.options.displayPriceContainer).show();
+            $(this.options.mapInfoLinks).show();
+
+            if(useDefaultPrice || !this.wasOpened) {
+                    this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+                    this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                    $(this.options.displayPriceElement).html(msrpPrice);
+                    this.wasOpened = true;
             }
-            if (!useDefaultPrice) {
+
+            if(!useDefaultPrice) {
                 this.$popup.find(this.options.msrpPriceElement).html(msrpPrice);
                 this.$popup.find(this.options.priceElement).html(finalPrice);
+                $(this.options.displayPriceElement).html(msrpPrice);
             }
-            $(this.options.oldPriceElement).html(msrpPrice);
+        },
+
+        /**
+         * Display non MAP price for irrelevant products
+         *
+         * @param {string} price
+         */
+        updateNonMsrpPrice: function(price) {
+            var options = this.tierOptions || this.options;
+            $(this.options.fallbackPriceElement).html(price);
+            $(this.options.displayPriceContainer).hide();
+            $(this.options.mapInfoLinks).hide();
+            $(this.options.fallbackPriceContainer).show();
         }
 
     });
