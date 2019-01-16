@@ -30,7 +30,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
 
     /**
      * TemporaryTableStrategy constructor.
-     * @param \Magento\Framework\Indexer\Table\Strategy $strategy
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $strategy
      * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(

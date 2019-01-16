@@ -213,6 +213,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Returns a list of category ids which are assigned to product ids in the index
      *
+     * @param array $productIds
      * @return \Magento\Framework\Indexer\CacheContext
      */
     private function getCategoryIdsFromIndex(array $productIds)

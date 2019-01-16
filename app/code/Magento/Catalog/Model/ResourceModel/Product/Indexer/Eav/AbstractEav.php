@@ -30,7 +30,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param null $connectionName
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

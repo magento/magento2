@@ -70,6 +70,8 @@ class BaseFinalPrice
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(

@@ -16,7 +16,7 @@ class Image extends \Magento\Framework\Model\AbstractExtensibleModel implements
 {
     /**
      * @param string $url
-     * @return @return void
+     * @return void
      */
     public function setUrl($url)
     {
@@ -149,7 +149,7 @@ class Image extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Set an extension attributes object.
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\ImageExtensionInterface $extensionAttributes
-     * @return $this
+     * @return void
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\ImageExtensionInterface $extensionAttributes

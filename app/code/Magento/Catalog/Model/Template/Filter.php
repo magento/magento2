@@ -66,7 +66,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Set use absolute links flag
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseAbsoluteLinks($flag)
     {
@@ -79,7 +79,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseSessionInUrl($flag)
     {

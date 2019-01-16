@@ -18,7 +18,7 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * ReadHandler constructor.
-     * @param ProductWebsiteLink $resourceModel
+     * @param ProductWebsiteLink $productWebsiteLink
      */
     public function __construct(
         ProductWebsiteLink $productWebsiteLink

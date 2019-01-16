@@ -40,7 +40,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
-     * @param string $limitIdsBySkuValues
+     * @param int $idsLimit
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,

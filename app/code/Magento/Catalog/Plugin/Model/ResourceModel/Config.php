@@ -47,7 +47,7 @@ class Config
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedInListing(
@@ -74,7 +74,7 @@ class Config
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return array
      */
     public function aroundGetAttributesUsedForSortBy(

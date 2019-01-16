@@ -105,7 +105,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\View\Result\Page $resultPage
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\View\Result\Page
+     * @return $this
      */
     private function preparePageMetadata(ResultPage $resultPage, $product)
     {

@@ -46,7 +46,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
     /**
      * Move category action
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

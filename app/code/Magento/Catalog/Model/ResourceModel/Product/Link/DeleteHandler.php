@@ -62,7 +62,7 @@ class DeleteHandler
     /**
      * @param string $entityType
      * @param object $entity
-     * @return object
+     * @return void
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

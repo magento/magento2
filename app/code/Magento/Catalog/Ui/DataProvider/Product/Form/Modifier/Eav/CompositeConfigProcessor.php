@@ -24,6 +24,7 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
 
     /**
      * CompositeConfigProcessor constructor.
+     * @param Logger $logger
      * @param array $eavWysiwygDataProcessors
      */
     public function __construct(Logger $logger, array $eavWysiwygDataProcessors)
