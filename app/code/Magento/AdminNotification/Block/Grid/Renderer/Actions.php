@@ -8,6 +8,9 @@
 
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
+/**
+ * Renderer class for action in the admin notifications grid.
+ */
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
