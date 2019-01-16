@@ -27,6 +27,7 @@
                 <item name="authorize" xsi:type="string">AuthorizenetAcceptjsAuthorizeCommand</item>
                 <item name="capture" xsi:type="string">AuthorizenetAcceptjsCaptureCommand</item>
                 <item name="void" xsi:type="string">AuthorizenetAcceptjsVoidCommand</item>
+                <item name="refund" xsi:type="string">AuthorizenetAcceptjsRefundCommand</item>
                 <item name="cancel" xsi:type="string">AuthorizenetAcceptjsCancelCommand</item>
                 <item name="deny_payment" xsi:type="string">AuthorizenetAcceptjsCancelCommand</item>
             </argument>
@@ -74,11 +75,13 @@
     <virtualType name="AuthorizenetAcceptjsRefundCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsRefundRequest</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureCommand" type="AuthorizenetAcceptjsAuthorizeCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AuthorizenetAcceptjsCaptureRequest</argument>
+            <argument name="handler" xsi:type="object">AuthorizenetAcceptjsCaptureHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -107,11 +110,10 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsCaptureHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+    <virtualType name="AuthorizenetAcceptjsCaptureHandler" type="AuthorizenetAcceptjsAuthorizationHandler">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
-                <item name="transaction_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionDetailsResponseHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
             </argument>
         </arguments>
     </virtualType>

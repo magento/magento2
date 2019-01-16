@@ -57,8 +57,8 @@ class RefundDataBuilder implements BuilderInterface
                 ];
             }
 
-            $dataDescriptor = $payment->getAdditionalInformation('opaqueDataDescriptor');
-            $dataValue = $payment->getAdditionalInformation('opaqueDataValue');
+            $dataDescriptor = $payment->decrypt($payment->getAdditionalInformation('opaqueDataDescriptor'));
+            $dataValue = $payment->decrypt($payment->getAdditionalInformation('opaqueDataValue'));
 
             $data['transactionRequest']['payment'] = [
                 'creditCard' => [
@@ -66,10 +66,10 @@ class RefundDataBuilder implements BuilderInterface
                     'expirationDate' => '2019-12',
                     'cardCode' => '123'
                 ]
+                // @TODO integrate the real payment values from accept.js
                 /*'opaqueData' => [
-                    // @TODO integrate the real payment values from accept.js
-                    'dataDescriptor' => '???',
-                    'dataValue' => '???'
+                    'dataDescriptor' => $dataDescriptor,
+                    'dataValue' => $dataValue
                 ]*/
             ];
         }

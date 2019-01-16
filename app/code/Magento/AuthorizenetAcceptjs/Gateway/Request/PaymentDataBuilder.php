@@ -58,8 +58,8 @@ class PaymentDataBuilder implements BuilderInterface
             }
 
             // Set the information on the payment as well because it won't be available in the handler post-request
-            $payment->setAdditionalInformation('opaqueDataDescriptor', 'abc123');
-            $payment->setAdditionalInformation('opaqueDataValue', '321cba');
+            $payment->setAdditionalInformation('opaqueDataDescriptor', $payment->encrypt('abc123'));
+            $payment->setAdditionalInformation('opaqueDataValue', $payment->encrypt('321cba'));
 
             $data['transactionRequest']['payment'] = [
                 'creditCard' => [
