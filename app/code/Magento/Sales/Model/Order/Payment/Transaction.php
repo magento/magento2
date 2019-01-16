@@ -132,6 +132,8 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -559,7 +561,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Retrieve order instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return \Magento\Sales\Model\Order\Payment
      */
     public function getOrder()
     {

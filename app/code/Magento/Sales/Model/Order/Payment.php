@@ -264,6 +264,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Returns transaction parent
      *
+     * @param string $txnId
      * @return string
      * @since 100.1.0
      */

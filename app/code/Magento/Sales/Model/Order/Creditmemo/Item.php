@@ -236,7 +236,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Invoice item row total calculation
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     public function calcRowTotal()
     {

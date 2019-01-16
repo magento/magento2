@@ -12,7 +12,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements 
     /**
      * Index page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
