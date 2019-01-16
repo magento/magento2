@@ -1032,6 +1032,7 @@ class AccountManagement implements AccountManagementInterface
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
+        $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
         return true;

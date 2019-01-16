@@ -8,13 +8,14 @@ namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Newsletter\Model\Subscriber;
 
 /**
  * Customers newsletter subscription save controller
  */
-class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActionInterface
+class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
