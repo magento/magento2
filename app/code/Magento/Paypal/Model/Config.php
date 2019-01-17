@@ -1653,6 +1653,14 @@ class Config extends AbstractConfig
             case 'checkout_page_button_label':
             case 'checkout_page_button_mx_installment_period':
             case 'checkout_page_button_br_installment_period':
+            case 'product_page_button_customize':
+            case 'product_page_button_layout':
+            case 'product_page_button_size':
+            case 'product_page_button_color':
+            case 'product_page_button_shape':
+            case 'product_page_button_label':
+            case 'product_page_button_mx_installment_period':
+            case 'product_page_button_br_installment_period':
             case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
