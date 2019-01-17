@@ -10,6 +10,7 @@
         <arguments>
             <argument name="productImage" type="string" defaultValue="Magento_Catalog/images/product/placeholder/image.jpg" />
         </arguments>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitGallerySpinnerDisappear" />
         <seeElement selector="{{StorefrontProductMediaSection.gallery}}" stepKey="seeProductGallery" />
         <seeElement selector="{{StorefrontProductMediaSection.productImage(productImage)}}" stepKey="seeProductImage" />
         <click selector="{{StorefrontProductMediaSection.productImage(productImage)}}" stepKey="openFullscreenImage" />
