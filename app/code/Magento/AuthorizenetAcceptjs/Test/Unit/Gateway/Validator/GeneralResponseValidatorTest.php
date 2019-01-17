@@ -49,7 +49,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_SUCCESS,
+                    'resultCode' => 'Ok',
                     'message' => [
                         [
                             'code' => 'foo',
@@ -81,7 +81,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_ERROR,
+                    'resultCode' => 'Error',
                     'message' => [
                         [
                             'code' => 'foo',
@@ -113,7 +113,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_ERROR,
+                    'resultCode' => 'Error',
                     'message' => [
                         'code' => 'foo',
                         'text' => 'bar'

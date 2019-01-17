@@ -10,10 +10,13 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Client;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,13 +28,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
@@ -89,13 +92,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
@@ -158,13 +161,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));

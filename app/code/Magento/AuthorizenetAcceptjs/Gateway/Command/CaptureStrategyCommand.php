@@ -23,8 +23,8 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
  */
 class CaptureStrategyCommand implements CommandInterface
 {
-    const AUTHORIZE = 'authorize';
-    const CAPTURE = 'settle';
+    private const AUTHORIZE = 'authorize';
+    private const CAPTURE = 'settle';
 
     /**
      * @var CommandPoolInterface

@@ -17,13 +17,11 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  */
 class TransactionResponseValidator extends AbstractValidator
 {
-    const RESPONSE_CODE_APPROVED = 1;
-    const RESPONSE_CODE_DECLINED = 2;
-    const RESPONSE_CODE_ERROR = 3;
-    const RESPONSE_CODE_HELD = 4;
-    const RESPONSE_REASON_CODE_APPROVED = 1;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
+    private const RESPONSE_CODE_APPROVED = 1;
+    private const RESPONSE_CODE_HELD = 4;
+    private const RESPONSE_REASON_CODE_APPROVED = 1;
+    private const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
+    private const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
 
     /**
      * @var SubjectReader

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -53,7 +52,7 @@ class VoidDataBuilder implements BuilderInterface
 
         if ($payment instanceof Payment) {
             $authorizationTransaction = $payment->getAuthorizationTransaction();
-            $refId = $authorizationTransaction->getAdditionalInformation(PaymentResponseHandler::REAL_TRANSACTION_ID);
+            $refId = $authorizationTransaction->getAdditionalInformation('real_transaction_id');
 
             $transactionData['transactionRequest'] = [
                 'transactionType' => self::REQUEST_TYPE_VOID,

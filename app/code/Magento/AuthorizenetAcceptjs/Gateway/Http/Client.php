@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
+use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -82,7 +83,7 @@ class Client implements ClientInterface
             $client->setUri($url);
             $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
             $client->setRawData(json_encode($request), 'application/json');
-            $client->setMethod(\Zend_Http_Client::POST);
+            $client->setMethod(ZendClient::POST);
 
             $responseBody = $client->request()->getBody();
 

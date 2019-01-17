@@ -19,7 +19,7 @@ use Magento\Sales\Model\Order\Payment;
  */
 class TransactionDetailsResponseHandler implements HandlerInterface
 {
-    const REAL_TRANSACTION_ID = 'real_transaction_id';
+    private const REAL_TRANSACTION_ID = 'real_transaction_id';
 
     /**
      * @var SubjectReader
@@ -63,6 +63,5 @@ class TransactionDetailsResponseHandler implements HandlerInterface
             }
             $payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $rawDetails);
         }
-
     }
 }

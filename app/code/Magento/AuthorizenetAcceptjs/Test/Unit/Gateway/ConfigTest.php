@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    const METHOD_CODE = 'authorizenet_acceptjs';
+    private const METHOD_CODE = 'authorizenet_acceptjs';
 
     /**
      * @var Config
@@ -39,13 +39,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetApiUrl()
+    public function testGetApiUrlProduction()
     {
-        $this->scopeConfigMock->expects(static::any())
-            ->method('getValue')
-            ->with($this->getPath('api_url'), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('abc');
-        $this->assertEquals('abc', $this->model->getApiUrl());
+        $this->scopeConfigMock->method('getValue')
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn('production');
+        $this->assertEquals('https://api.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
+    }
+
+    public function testGetApiUrlSandbox()
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn('sandbox');
+        $this->assertEquals('https://apitest.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
     }
 
     public function testGetTransactionKey()

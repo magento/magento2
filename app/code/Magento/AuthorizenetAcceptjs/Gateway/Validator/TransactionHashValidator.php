@@ -23,7 +23,7 @@ class TransactionHashValidator extends AbstractValidator
     /**
      * The error code for failed transaction hash verification
      */
-    const ERROR_TRANSACTION_HASH = 'ETHV';
+    private const ERROR_TRANSACTION_HASH = 'ETHV';
 
     /**
      * @var SubjectReader

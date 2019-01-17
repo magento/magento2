@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -67,7 +66,7 @@ class TransactionTypeDataBuilder implements BuilderInterface
         if ($payment instanceof Payment) {
             if ($payment->getData(Payment::PARENT_TXN_ID)) {
                 $authTransaction = $payment->getAuthorizationTransaction();
-                $refId = $authTransaction->getAdditionalInformation(PaymentResponseHandler::REAL_TRANSACTION_ID);
+                $refId = $authTransaction->getAdditionalInformation('real_transaction_id');
                 $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
                 $transactionData['transactionRequest']['refTransId'] = $refId;
             } else {
