@@ -245,9 +245,9 @@ class RefundOrderTest extends \PHPUnit\Framework\TestCase
             ->method('setState')
             ->with(Order::STATE_CLOSED)
             ->willReturnSelf();
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn(Order::STATE_CLOSED);
+        $this->configMock->expects($this->once())
+            ->method('getStateStatuses')
+            ->willReturn(['first, second']);
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_CLOSED)
