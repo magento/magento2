@@ -42,35 +42,50 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetApiUrlProduction()
     {
         $this->scopeConfigMock->method('getValue')
-            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
             ->willReturn('production');
-        $this->assertEquals('https://api.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
+        $this->assertEquals('https://api.authorize.net/xml/v1/request.api', $this->model->getApiUrl(123));
     }
 
     public function testGetApiUrlSandbox()
     {
         $this->scopeConfigMock->method('getValue')
-            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
             ->willReturn('sandbox');
-        $this->assertEquals('https://apitest.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
+        $this->assertEquals('https://apitest.authorize.net/xml/v1/request.api', $this->model->getApiUrl(123));
     }
 
     public function testGetTransactionKey()
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
-            ->with($this->getPath('trans_key'), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('trans_key'), ScopeInterface::SCOPE_STORE, 123)
             ->willReturn('abc');
-        $this->assertEquals('abc', $this->model->getTransactionKey());
+        $this->assertEquals('abc', $this->model->getTransactionKey(123));
     }
 
     public function testGetTransactionHash()
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
-            ->with($this->getPath('trans_md5'), ScopeInterface::SCOPE_STORE, null)
+            ->with($this->getPath('trans_md5'), ScopeInterface::SCOPE_STORE, 123)
             ->willReturn('myhash');
-        $this->assertEquals('myhash', $this->model->getLegacyTransactionHash());
+        $this->assertEquals('myhash', $this->model->getLegacyTransactionHash(123));
+    }
+
+    public function testGetSolutionIdSandbox()
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
+            ->willReturn('sandbox');
+        $this->assertEquals('AAA102993', $this->model->getSolutionId(123));
+    }
+    public function testGetSolutionIdProduction()
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
+            ->willReturn('production');
+        $this->assertEquals('', $this->model->getSolutionId(123));
     }
 
     /**

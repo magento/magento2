@@ -26,6 +26,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
+    private const SOLUTION_ID_SANDBOX = 'AAA102993';
+    // TODO populate with real data
+    private const SOLUTION_ID_PRODUCTION = '';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -119,6 +122,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function shouldEmailCustomer($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
+    }
+
+    /**
+     * Retrieves the solution id for the given store based on environment
+     *
+     * @param int|null $storeId
+     * @return string
+     */
+    public function getSolutionId($storeId = null): ?string
+    {
+        $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
+
+        return $environment === Environment::ENVIRONMENT_SANDBOX
+            ? self::SOLUTION_ID_SANDBOX
+            : self::SOLUTION_ID_PRODUCTION;
     }
 
     /**
