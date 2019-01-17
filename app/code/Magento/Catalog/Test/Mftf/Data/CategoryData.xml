@@ -68,4 +68,20 @@
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
     </entity>
+    <entity name="Two_nested_categories" type="category">
+        <data key="name" unique="suffix">SecondLevel</data>
+        <data key="url_key" unique="suffix">secondlevel</data>
+        <data key="name_lwr" unique="suffix">secondlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="Three_nested_categories" type="category">
+        <data key="name" unique="suffix">ThirdLevel</data>
+        <data key="url_key" unique="suffix">thirdlevel</data>
+        <data key="name_lwr" unique="suffix">thirdlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
 </entities>
