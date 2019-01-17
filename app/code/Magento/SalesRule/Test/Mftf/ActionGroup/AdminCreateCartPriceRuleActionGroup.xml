@@ -40,14 +40,23 @@
 
     <!--Delete Cart price Rule for Retailer customer-->
     <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
-        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
-        <waitForPageLoad stepKey="waitForMarketing" time="3"/>
-        <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
-        <waitForPageLoad stepKey="waitForCartPriceRules" time="5"/>
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="goToCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{SimpleSalesRule.name}}" stepKey="filterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
         <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
         <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
+    </actionGroup>
+
+    <actionGroup name="CreateCartPriceRuleSecondWebsiteActionGroup">
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Second Website" stepKey="selectWebsites"/>
     </actionGroup>
 </actionGroups>
