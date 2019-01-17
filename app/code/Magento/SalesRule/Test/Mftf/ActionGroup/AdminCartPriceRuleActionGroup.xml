@@ -44,7 +44,7 @@
             <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
             <argument name="actionsValue" type="string" defaultValue="FALSE"/>
             <argument name="childAttribute" type="string" defaultValue="Category"/>
-            <argument name="actionValue"/>
+            <argument name="actionValue" type="string"/>
         </arguments>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickOnActionTab"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" stepKey="clickToChooseOption"/>
