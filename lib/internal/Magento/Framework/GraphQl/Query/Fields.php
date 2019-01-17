@@ -28,7 +28,7 @@ class Fields
      *
      * @return void
      */
-    public function setQuery($query, $variables = null)
+    public function setQuery($query, array $variables = null)
     {
         $queryFields = [];
         try {
@@ -43,15 +43,15 @@ class Fields
                     ]
                 ]
             );
+            if (isset($variables)) {
+                $queryFields = array_merge($queryFields, $this->getVariables($variables));
+            }
         } catch (\Exception $e) {
             // If a syntax error is encountered do not collect fields
         }
         if (isset($queryFields['IntrospectionQuery'])) {
             // It must be possible to query any fields during introspection query
             $queryFields = [];
-        }
-        if (isset($variables)) {
-            $queryFields = array_merge($queryFields, $this->getVariables($variables));
         }
         $this->fieldsUsedInQuery = $queryFields;
     }
@@ -75,7 +75,7 @@ class Fields
      *
      * @return string[]
      */
-    private function getVariables($variables)
+    private function getVariables(array $variables): array
     {
         $fields = [];
         foreach ($variables as $key => $value){
