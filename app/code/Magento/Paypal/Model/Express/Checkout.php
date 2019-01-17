@@ -618,7 +618,7 @@ class Checkout
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function returnFromPaypal($token, $payerIdentifier = null)
+    public function returnFromPaypal($token, string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)

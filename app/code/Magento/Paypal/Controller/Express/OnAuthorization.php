@@ -34,7 +34,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     protected $_checkoutType = PayPalCheckout::class;
 
     /**
-     * @var \Magento\Quote\Model\Quote\PaymentFactory
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $cartRepository;
 
@@ -51,7 +51,6 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     private $guestCartRepository;
 
     /**
-     * OnAuthorization constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
