@@ -107,6 +107,9 @@ define(
                 /** Add logic to be triggered onClick action for smart buttons component*/
                 this.clientConfig.onClick = function () {
                     additionalValidators.validate();
+                    if (this.getBillingAgreementCode()) {
+                        this.clientConfig.billingAgreement = this.billingAgreement()
+                    }
                     this.selectPaymentMethod();
                 };
                 this.clientConfig.additionalAction = setPaymentMethodAction;
