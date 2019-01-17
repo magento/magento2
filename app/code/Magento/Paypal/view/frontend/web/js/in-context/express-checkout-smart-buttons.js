@@ -18,50 +18,14 @@ define([
      * @return {Array}
      */
     function getFunding(config) {
-        var funding = [];
-        _.each(config, function (name) {
-            funding.push(paypal.FUNDING[name]);
-        }, this);
-
-        return funding;
+        return config.map(function (name) {
+            return paypal.FUNDING[name]
+        })
     };
 
     return function (clientConfig, element) {
 
         var environment = clientConfig.environment;
-        /**
-         *
-         * @param handler
-         */
-        function onChangeValidateStatus(handler) {
-            _.each(jQuery('#' + clientConfig.rendererComponent.getAgreementId()).find('input'), function (element) {
-                element.addEventListener('change', handler);
-            }, this);
-        }
-
-        /**
-         *
-         * @return {Boolean}
-         */
-        function isValid() {
-
-            return clientConfig.validator.validate();
-        }
-
-        /**
-         *
-         * @param actions
-         */
-        function toggleButtons(actions) {
-            var id = '#agreement[1]-error';
-            if (isValid()) {
-                actions.enable()
-            } else {
-                actions.disable();
-                //hide error message
-                jQuery(id).hide();
-            }
-        }
 
         paypal.Button.render({
 
@@ -80,19 +44,14 @@ define([
             commit: true,
 
             validate: function (actions) {
-                //@todo move outside. Load this logic as composite
-                //disable on the first page load
-                toggleButtons(actions);
-                onChangeValidateStatus(function () {
-                    toggleButtons(actions);
-                });
+                clientConfig.rendererComponent.initButtonActions(actions)
             },
 
             /**
              * Execute logic on Paypal button click
              */
             onClick: function () {
-                if (typeof clientConfig.onClick === "function") {
+                if (typeof clientConfig.onClick === 'function') {
                     clientConfig.onClick();
                 }
             },
@@ -105,7 +64,7 @@ define([
             payment: function () {
                 var params = {
                     quote_id: clientConfig.quoteId,
-                    customer_id: clientConfig.customerId || "",
+                    customer_id: clientConfig.customerId || '',
                     button: clientConfig.button,
                     form_key: clientConfig.formKey
                 };
@@ -130,6 +89,7 @@ define([
                         ).fail(
                             function (response) {
                                 var error;
+
                                 try {
                                     error = JSON.parse(response.responseText);
                                 } catch (exception) {
@@ -178,7 +138,7 @@ define([
 
                 return paypal.request.post(clientConfig.onAuthorizeUrl, params)
                     .then(function (res) {
-                        if(res.success) {
+                        if (res.success) {
 
                             return actions.redirect(window, res.redirectUrl);
                         } else {

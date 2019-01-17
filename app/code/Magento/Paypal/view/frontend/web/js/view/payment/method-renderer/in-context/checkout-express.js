@@ -25,10 +25,46 @@ define(
     ) {
         'use strict';
 
+        /**
+         * Handler function
+         * @param {String} id
+         * @param {Function} handler
+         */
+        function onChangeValidateStatus(id, handler) {
+            _.each(jQuery('.payment-group')
+                .find('input'), function (element) {
+                element.addEventListener('change', handler);
+            }, this);
+        }
+
         return Component.extend({
 
             defaults: {
                 template: 'Magento_Paypal/payment/paypal-express-in-context'
+            },
+
+            /**
+             * Initialize Button Actions
+             * @param {Object} actions
+             * @param {Function} actions.enable() - Enables Smart Buttons
+             * @param {Function} actions.disable() - Disables Smart Buttons
+             */
+            initButtonActions: function (actions) {
+                var renderContext = this;
+
+                this.clientConfig.buttonActions = actions;
+                renderContext.validate();
+                onChangeValidateStatus(this.getAgreementId(), function () {
+                    renderContext.validate();
+                });
+            },
+
+            /**
+             *  Validates Smart Buttons
+             */
+            validate: function () {
+                additionalValidators.validate() && this.clientConfig.buttonActions ?
+                    this.clientConfig.buttonActions.enable() : this.clientConfig.buttonActions.disable();
             },
 
             /**
