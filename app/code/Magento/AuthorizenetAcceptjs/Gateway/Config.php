@@ -117,9 +117,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Should authorize.net email the customer their receipt.
      *
      * @param int|null $storeId
-     * @return string
+     * @return bool
      */
-    public function shouldEmailCustomer($storeId = null): ?string
+    public function shouldEmailCustomer($storeId = null): ?bool
     {
         return $this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
     }

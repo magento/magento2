@@ -85,7 +85,8 @@ class Client implements ClientInterface
             $client->setRawData(json_encode($request), 'application/json');
             $client->setMethod(ZendClient::POST);
 
-            $responseBody = $client->request()->getBody();
+            $responseBody = $client->request()
+                ->getBody();
 
             // Strip BOM because Authorize.net sends it in the response
             if ($responseBody && substr($responseBody, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {

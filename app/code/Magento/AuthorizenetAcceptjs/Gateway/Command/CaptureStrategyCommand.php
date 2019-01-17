@@ -83,7 +83,8 @@ class CaptureStrategyCommand implements CommandInterface
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
 
         $command = $this->getCommand($paymentDO);
-        $this->commandPool->get($command)->execute($commandSubject);
+        $this->commandPool->get($command)
+            ->execute($commandSubject);
     }
 
     /**
@@ -133,7 +134,8 @@ class CaptureStrategyCommand implements CommandInterface
         );
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
+        $count = $this->transactionRepository->getList($searchCriteria)
+            ->getTotalCount();
 
         return $count > 0;
     }

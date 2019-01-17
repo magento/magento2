@@ -38,7 +38,8 @@ class VoidDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $payment = $paymentDO->getPayment();
         $transactionData = [];
 
         if ($payment instanceof Payment) {
