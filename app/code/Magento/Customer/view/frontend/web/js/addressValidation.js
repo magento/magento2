@@ -28,6 +28,7 @@ define([
 
         /**
          * Validation creation
+         *
          * @protected
          */
         _create: function () {
@@ -54,6 +55,8 @@ define([
 
         /**
          * Add postcode validation
+         *
+         * @protected
          */
         _addPostCodeValidation: function () {
             var self = this;
@@ -75,6 +78,7 @@ define([
         /**
          * Validate post code value.
          *
+         * @protected
          * @param {String} postCode - post code
          * @return {Boolean} Whether is post code valid
          */
@@ -91,6 +95,7 @@ define([
         /**
          * Renders warning messages for invalid post code.
          *
+         * @protected
          * @param {Boolean} valid
          */
         _renderValidationResult: function (valid) {
