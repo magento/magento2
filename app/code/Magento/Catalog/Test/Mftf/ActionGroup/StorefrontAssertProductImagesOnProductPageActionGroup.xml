@@ -17,5 +17,6 @@
         <waitForPageLoad stepKey="waitForGalleryLoaded" />
         <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(productImage)}}" stepKey="seeFullscreenProductImage" />
         <click selector="{{StorefrontProductMediaSection.closeFullscreenImage}}" stepKey="closeFullScreenImage" />
+        <waitForPageLoad stepKey="waitForGalleryDisappear" />
     </actionGroup>
 </actionGroups>
