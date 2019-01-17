@@ -216,7 +216,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $selectClone = clone $select;
 
                 $select->where(
-                    //$noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')',
                     '(' . $orWhereCondition . ') AND ' . $andWhereCondition,
                     null,
                     Select::TYPE_CONDITION
