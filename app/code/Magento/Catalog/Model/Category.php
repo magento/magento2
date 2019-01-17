@@ -1224,6 +1224,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Returns is anchor
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsAnchor()
+    {
+        return $this->getData(self::KEY_IS_ANCHOR);
+    }
+
+    /**
      * Returns category id
      *
      * @return int|null
@@ -1356,6 +1367,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function setIsActive($isActive)
     {
         return $this->setData(self::KEY_IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * Set whether category is anchor
+     *
+     * @param bool $isAnchor
+     * @return $this
+     */
+    public function setIsAnchor($isAnchor)
+    {
+        return $this->setData(self::KEY_IS_ANCHOR, $isAnchor);
     }
 
     /**

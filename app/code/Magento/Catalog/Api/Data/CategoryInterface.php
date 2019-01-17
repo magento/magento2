@@ -20,6 +20,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     const KEY_PARENT_ID = 'parent_id';
     const KEY_NAME = 'name';
     const KEY_IS_ACTIVE = 'is_active';
+    const KEY_IS_ANCHOR = 'is_anchor';
     const KEY_POSITION = 'position';
     const KEY_LEVEL = 'level';
     const KEY_UPDATED_AT = 'updated_at';
@@ -35,6 +36,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
         self::KEY_PARENT_ID,
         self::KEY_NAME,
         self::KEY_IS_ACTIVE,
+        self::KEY_IS_ANCHOR,
         self::KEY_POSITION,
         self::KEY_LEVEL,
         self::KEY_UPDATED_AT,
@@ -100,6 +102,21 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @return $this
      */
     public function setIsActive($isActive);
+
+    /**
+     * Check whether category is anchor
+     *
+     * @return bool|null
+     */
+    public function getIsAnchor();
+
+    /**
+     * Set whether category is anchor
+     *
+     * @param bool $isAnchor
+     * @return $this
+     */
+    public function setIsAnchor($isAnchor);
 
     /**
      * Get category position
