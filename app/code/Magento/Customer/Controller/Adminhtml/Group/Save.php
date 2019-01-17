@@ -13,7 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Controller class Save. Performs save action of customers group
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
