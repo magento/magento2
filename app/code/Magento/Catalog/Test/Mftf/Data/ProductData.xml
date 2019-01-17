@@ -260,7 +260,7 @@
         <data key="status">1</data>
         <data key="quantity">100</data>
         <data key="weight">0</data>
-        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="productWithDescription" type="product">
@@ -562,6 +562,41 @@
         <data key="sku" unique="suffix">virtual_sku</data>
         <data key="price">10.00</data>
         <data key="quantity">999</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductRegularPriceInStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">120.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="visibility">Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductWithTierPriceInStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">99.99</data>
+        <data key="productTaxClass">None</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="visibility">Catalog</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateRegularPriceVirtualProductOutOfStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">99.99</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="status">Out of Stock</data>
+        <data key="storefrontStatus">OUT OF STOCK</data>
+        <data key="visibility">Search</data>
         <data key="urlKey" unique="suffix">virtual-product</data>
         <data key="type_id">virtual</data>
     </entity>

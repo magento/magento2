@@ -40,9 +40,9 @@
         <element name="addValue" type="button" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@data-action='add_new_row']" timeout="30"/>
         <element name="valueTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='title']//input" />
         <element name="valuePrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='price']//input" />
-        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][{{index}}][price]']" parameterized="true"/>
-        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][{{var}}][price_type]']" parameterized="true"/>
-        <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>
-        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@name='product[options][{{index}}][file_extension]']" parameterized="true"/>
+        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][price]']" parameterized="true"/>
+        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{var}}][price_type]']" parameterized="true"/>
+        <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>
+        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][file_extension]']" parameterized="true"/>
     </section>
 </sections>
