@@ -1158,7 +1158,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Check attribute is valid
+     * Check attribute is valid.
      *
      * @param string $code
      * @param mixed $value
@@ -1172,6 +1172,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         if (!isset($this->_attributeValues[$code])) {
+            $isValid = false;
+        }
+
+        if (is_array($value)) {
             $isValid = false;
         }
 

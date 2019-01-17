@@ -179,7 +179,6 @@
         </arguments>
         <!--TODO use other action group for filtering grid when MQE-539 is implemented -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
@@ -191,6 +190,17 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+    </actionGroup>
+
+    <actionGroup name="deleteProductByName" extends="deleteProductBySku">
+        <arguments>
+            <argument name="sku" type="string" defaultValue=""/>
+            <argument name="name" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillProductSkuFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{name}}" stepKey="fillProductSkuFilter" after="openProductFilters"/>
+        <remove keyForRemoval="seeProductSkuInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{name}}"  stepKey="seeProductNameInGrid" after="clickApplyFilters"/>
     </actionGroup>
 
     <!--Open product for edit by clicking row X and column Y in product grid-->
@@ -233,6 +243,7 @@
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
         <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
+        <waitForPageLoad stepKey="waitForStatusToBeChanged"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskToDisappear"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
