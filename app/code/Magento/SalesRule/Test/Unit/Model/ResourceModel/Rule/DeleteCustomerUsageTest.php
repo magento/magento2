@@ -78,9 +78,15 @@ class DeleteCustomerUsageTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithUpdateTimeGreaterThanZero()
     {
-        $this->adapterMock->expects($this->never())
-                          ->method('delete');
-        $this->customerRuleMock->expects($this->never());
+        $this->adapterMock
+            ->expects($this->never())
+            ->method('delete');
+
+        $this->customerRuleMock
+            ->expects($this->never())
+            ->method('getConnection')
+            ->willReturn($this->adapterMock);
+
         $deleteCustomerUsage = $this->objectManager->getObject(
             DeleteCustomerUsage::class,
             [
