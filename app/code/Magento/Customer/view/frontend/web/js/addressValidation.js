@@ -8,9 +8,10 @@ define([
     'underscore',
     'mageUtils',
     'mage/translate',
+    'Magento_Checkout/js/model/postcode-validator',
     'jquery/ui',
     'validation'
-], function ($, __, utils, $t) {
+], function ($, __, utils, $t, postCodeValidator) {
     'use strict';
 
     $.widget('mage.addressValidation', {
@@ -22,12 +23,12 @@ define([
             }
         },
 
-        validatedPostCodeExample: [],
         zipInput: null,
         countrySelect: null,
 
         /**
          * Validation creation
+         *
          * @protected
          */
         _create: function () {
@@ -54,6 +55,8 @@ define([
 
         /**
          * Add postcode validation
+         *
+         * @protected
          */
         _addPostCodeValidation: function () {
             var self = this;
@@ -75,41 +78,24 @@ define([
         /**
          * Validate post code value.
          *
+         * @protected
          * @param {String} postCode - post code
          * @return {Boolean} Whether is post code valid
          */
         _validatePostCode: function (postCode) {
-            var countryId = this.countrySelect.val(),
-                patterns = this.options.postCodes[countryId],
-                pattern, regex;
+            var countryId = this.countrySelect.val();
 
             if (postCode === null) {
                 return true;
             }
 
-            this.validatedPostCodeExample = [];
-
-            if (!utils.isEmpty(postCode) && !utils.isEmpty(patterns)) {
-                for (pattern in patterns) {
-                    if (patterns.hasOwnProperty(pattern)) { //eslint-disable-line max-depth
-                        this.validatedPostCodeExample.push(patterns[pattern].example);
-                        regex = new RegExp(patterns[pattern].pattern);
-
-                        if (regex.test(postCode)) { //eslint-disable-line max-depth
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            return true;
+            return postCodeValidator.validate(postCode, countryId, this.options.postCodes);
         },
 
         /**
          * Renders warning messages for invalid post code.
          *
+         * @protected
          * @param {Boolean} valid
          */
         _renderValidationResult: function (valid) {
@@ -119,8 +105,8 @@ define([
             if (!valid) {
                 warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
 
-                if (this.validatedPostCodeExample.length) {
-                    warnMessage += $t(' Example: ') + this.validatedPostCodeExample.join('; ') + '. ';
+                if (postCodeValidator.validatedPostCodeExample.length) {
+                    warnMessage += $t(' Example: ') + postCodeValidator.validatedPostCodeExample.join('; ') + '. ';
                 }
                 warnMessage += $t('If you believe it is the right one you can ignore this notice.');
             }
