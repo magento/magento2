@@ -8,9 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Response;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
@@ -20,7 +18,6 @@ use Magento\Sales\Model\Order\Payment;
 class PaymentResponseHandler implements HandlerInterface
 {
     private const RESPONSE_CODE_HELD = 4;
-    private const REAL_TRANSACTION_ID = 'real_transaction_id';
 
     /**
      * @var SubjectReader
@@ -28,18 +25,11 @@ class PaymentResponseHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param Config $config
      */
-    public function __construct(SubjectReader $subjectReader, Config $config)
+    public function __construct(SubjectReader $subjectReader)
     {
         $this->subjectReader = $subjectReader;
-        $this->config = $config;
     }
 
     /**
@@ -58,7 +48,7 @@ class PaymentResponseHandler implements HandlerInterface
                 $payment->setTransactionId($transactionResponse['transId']);
             }
             $payment->setTransactionAdditionalInfo(
-                self::REAL_TRANSACTION_ID,
+                'real_transaction_id',
                 $transactionResponse['transId']
             );
             $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
