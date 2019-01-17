@@ -83,6 +83,9 @@ class TransactionResponseValidatorTest extends TestCase
         $this->assertEquals($errorMessages, $args['failsDescription']);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function scenarioProvider()
     {
         return [
@@ -207,7 +210,7 @@ class TransactionResponseValidatorTest extends TestCase
                 false,
                 ['foo'],
                 ['bar']
-        ],
+            ],
         ];
     }
 }

@@ -70,7 +70,7 @@ class SolutionDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'id' => 'solutionid',
                 ]
             ]
-        ];;
+        ];
 
         $buildSubject = [];
         $this->assertEquals($expected, $this->builder->build($buildSubject));
