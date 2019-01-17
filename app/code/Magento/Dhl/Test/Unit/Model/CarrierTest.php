@@ -567,6 +567,40 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that the built software name string is of the appropriate format.
+     *
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareName()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
+        $method->setAccessible(true);
+
+        $name = $method->invoke($this->model);
+        self::assertLessThanOrEqual(30, $name);
+
+        $nameExceedsLength = $method->invoke($this->model);
+        self::assertLessThanOrEqual(30, $nameExceedsLength);
+    }
+
+    /**
+     * Tests that the built software version string is of the appropriate format.
+     *
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareVersion()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
+        $method->setAccessible(true);
+
+        $version = $method->invoke($this->model);
+        self::assertLessThanOrEqual(10, strlen($version));
+
+        $versionExceedsLength = $method->invoke($this->model);
+        self::assertLessThanOrEqual(10, strlen($versionExceedsLength));
+    }
+
+    /**
      * Creates mock for XML factory.
      *
      * @return ElementFactory|MockObject
@@ -755,8 +789,16 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private function getProductMetadata(): MockObject
     {
         $productMetadata = $this->createMock(\Magento\Framework\App\ProductMetadata::class);
-        $productMetadata->method('getName')->willReturn('Magento');
-        $productMetadata->method('getVersion')->willReturn('2.3.1');
+
+        $productMetadata->method('getName')->willReturnOnConsecutiveCalls(
+            'Magento',
+            str_pad('Magento', 24, '_')
+        );
+
+        $productMetadata->method('getVersion')->willReturnOnConsecutiveCalls(
+            '2.3.1',
+            'dev-MC-1000'
+        );
 
         return $productMetadata;
     }

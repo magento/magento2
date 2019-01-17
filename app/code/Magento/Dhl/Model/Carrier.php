@@ -1022,8 +1022,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
 
         $nodeMetaData = $nodeRequest->addChild('MetaData');
-        $nodeMetaData->addChild('SoftwareName', $this->productMetadata->getName());
-        $nodeMetaData->addChild('SoftwareVersion', $this->productMetadata->getVersion());
+        $nodeMetaData->addChild('SoftwareName', $this->buildSoftwareName());
+        $nodeMetaData->addChild('SoftwareVersion', $this->buildSoftwareVersion());
 
         $nodeFrom = $nodeGetQuote->addChild('From');
         $nodeFrom->addChild('CountryCode', $rawRequest->getOrigCountryId());
@@ -2035,5 +2035,25 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         return str_replace('.', '', uniqid("MAGE_{$servicePrefix}_", true));
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareName.
+     *
+     * @return string
+     */
+    private function buildSoftwareName(): string
+    {
+        return substr($this->productMetadata->getName(), 0, 30);
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareVersion.
+     *
+     * @return string
+     */
+    private function buildSoftwareVersion(): string
+    {
+        return substr($this->productMetadata->getVersion(), 0, 10);
     }
 }
