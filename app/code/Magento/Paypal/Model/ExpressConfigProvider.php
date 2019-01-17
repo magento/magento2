@@ -11,6 +11,7 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Paypal\Helper\Data as PaypalHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ExpressConfigProvider
@@ -66,6 +67,11 @@ class ExpressConfigProvider implements ConfigProviderInterface
     protected $urlBuilder;
 
     /**
+     *
+     */
+    private $smartButtonConfig;
+
+    /**
      * Constructor
      *
      * @param ConfigFactory $configFactory
@@ -74,6 +80,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
      * @param PaypalHelper $paypalHelper
      * @param PaymentHelper $paymentHelper
      * @param UrlInterface $urlBuilder
+     * @param SmartButtonConfig $smartButtonConfig
      */
     public function __construct(
         ConfigFactory $configFactory,
@@ -81,7 +88,8 @@ class ExpressConfigProvider implements ConfigProviderInterface
         CurrentCustomer $currentCustomer,
         PaypalHelper $paypalHelper,
         PaymentHelper $paymentHelper,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        SmartButtonConfig $smartButtonConfig = null
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -93,6 +101,8 @@ class ExpressConfigProvider implements ConfigProviderInterface
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $this->paymentHelper->getMethodInstance($code);
         }
+
+        $this->smartButtonConfig = $smartButtonConfig ?: ObjectManager::getInstance()->get(SmartButtonConfig::class);
     }
 
     /**
@@ -131,8 +141,8 @@ class ExpressConfigProvider implements ConfigProviderInterface
                         self::IN_CONTEXT_BUTTON_ID
                     ],
                     'allowedFunding' => [],
-                    'disallowedFunding' => $this->getDisallowedFunding(),
-                    'styles' => $this->getButtonStyles($locale),
+                    'disallowedFunding' => $this->smartButtonConfig->getDisallowedFunding(),
+                    'styles' => $this->smartButtonConfig->getButtonStyles('checkout'),
                     'getTokenUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
                     'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization'),
                     'onCancelUrl' => $this->urlBuilder->getUrl('paypal/express/cancel')
@@ -186,82 +196,5 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $this->config->setMethod($code);
         return $this->paypalHelper->shouldAskToCreateBillingAgreement($this->config, $customerId)
             ? Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT : null;
-    }
-
-    /**
-     * Returns button styles based on configuration
-     *
-     * @param string $locale
-     * @return array
-     */
-    private function getButtonStyles($locale) : array
-    {
-        $this->config->setMethod(Config::METHOD_EXPRESS);
-
-        $styles = [
-            'layout' => 'vertical',
-            'size' => 'responsive',
-            'color' => 'gold',
-            'shape' => 'rect',
-            'label' => 'paypal'
-        ];
-        if (!!$this->config->getValue('checkout_page_button_customize')) {
-            $styles['layout'] = $this->config->getValue('checkout_page_button_layout');
-            $styles['size'] = $this->config->getValue('checkout_page_button_size');
-            $styles['color'] = $this->config->getValue('checkout_page_button_color');
-            $styles['shape'] = $this->config->getValue('checkout_page_button_shape');
-            $styles['label'] = $this->config->getValue('checkout_page_button_label');
-
-            $styles = $this->updateStyles($styles, $locale);
-        }
-        return $styles;
-    }
-
-    /**
-     * Update styles based on locale and labels
-     *
-     * @param array $styles
-     * @param string $locale
-     * @return array
-     */
-    private function updateStyles($styles, $locale) : array
-    {
-        $installmentPeriodLocale = [
-            'en_MX' => 'mx',
-            'es_MX' => 'mx',
-            'en_BR' => 'br',
-            'pt_BR' => 'br'
-        ];
-
-        // Credit label cannot be used with any custom color option or vertical layout.
-        if ($styles['label'] === 'credit') {
-            $styles['color'] = 'darkblue';
-            $styles['layout'] = 'horizontal';
-        }
-
-        // Installment label is only available for specific locales
-        if ($styles['label'] === 'installment') {
-            if (array_key_exists($locale, $installmentPeriodLocale)) {
-                $styles['installmentperiod'] = (int)$this->config->getValue(
-                    "checkout_page_button_{$installmentPeriodLocale[$locale]}_installment_period"
-                );
-            } else {
-                $styles['label'] = 'paypal';
-            }
-        }
-
-        return $styles;
-    }
-
-    /**
-     * Returns disallowed funding from configuration
-     *
-     * @return array
-     */
-    private function getDisallowedFunding() : array
-    {
-        $this->config->setMethod(Config::METHOD_EXPRESS);
-        $disallowedFunding = $this->config->getValue('disable_funding_options');
-        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
     }
 }
