@@ -55,6 +55,8 @@ define([
             varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
                 if (this.disabled()) {
                     this.setDisabled(true);
+                }else{
+                   this.setDisabled(false);
                 }
             }.bind(this));
 
