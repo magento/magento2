@@ -17,13 +17,11 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  */
 class TransactionResponseValidator extends AbstractValidator
 {
-    const RESPONSE_CODE_APPROVED = 1;
-    const RESPONSE_CODE_DECLINED = 2;
-    const RESPONSE_CODE_ERROR = 3;
-    const RESPONSE_CODE_HELD = 4;
-    const RESPONSE_REASON_CODE_APPROVED = 1;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
-    const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
+    private const RESPONSE_CODE_APPROVED = 1;
+    private const RESPONSE_CODE_HELD = 4;
+    private const RESPONSE_REASON_CODE_APPROVED = 1;
+    private const RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED = 252;
+    private const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
 
     /**
      * @var SubjectReader
@@ -47,10 +45,14 @@ class TransactionResponseValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
         $transactionResponse = $response['transactionResponse'];
+        $code = $transactionResponse['messages']['message']['code']
+            ?? $transactionResponse['messages']['message'][0]['code']
+            ?? null;
 
         if (in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
+            && $code
             && !in_array(
-                $transactionResponse['messages']['message']['code'],
+                $code,
                 [
                     self::RESPONSE_REASON_CODE_APPROVED,
                     self::RESPONSE_REASON_CODE_PENDING_REVIEW,

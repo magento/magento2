@@ -51,7 +51,7 @@ class VoidResponseHandler implements HandlerInterface
         if ($payment instanceof Payment) {
             $payment->setIsTransactionClosed(true);
             $payment->setShouldCloseParentTransaction(true);
-            $payment->setTransactionAdditionalInfo(PaymentResponseHandler::REAL_TRANSACTION_ID, $transactionId);
+            $payment->setTransactionAdditionalInfo('real_transaction_id', $transactionId);
         }
     }
 }

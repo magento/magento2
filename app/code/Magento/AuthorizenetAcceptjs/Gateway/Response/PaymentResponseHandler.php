@@ -19,7 +19,8 @@ use Magento\Sales\Model\Order\Payment;
  */
 class PaymentResponseHandler implements HandlerInterface
 {
-    const REAL_TRANSACTION_ID = 'real_transaction_id';
+    private const RESPONSE_CODE_HELD = 4;
+    private const REAL_TRANSACTION_ID = 'real_transaction_id';
 
     /**
      * @var SubjectReader
@@ -56,17 +57,29 @@ class PaymentResponseHandler implements HandlerInterface
             ) {
                 $payment->setTransactionId($transactionResponse['transId']);
             }
-            $payment
-                ->setTransactionAdditionalInfo(
-                    self::REAL_TRANSACTION_ID,
-                    $transactionResponse['transId']
-                );
+            $payment->setTransactionAdditionalInfo(
+                self::REAL_TRANSACTION_ID,
+                $transactionResponse['transId']
+            );
             $payment->setCcAvsStatus($transactionResponse['avsResultCode']);
             $payment->setIsTransactionClosed(false);
 
-            if ($transactionResponse['responseCode'] == TransactionResponseValidator::RESPONSE_CODE_HELD) {
+            if ($transactionResponse['responseCode'] == self::RESPONSE_CODE_HELD) {
                 $payment->setIsTransactionPending(true)
                     ->setIsFraudDetected(true);
+            }
+
+            $fields = [];
+            $userFields = $transactionResponse['userFields'] ?? [];
+            foreach ($userFields as $userField) {
+                $fields[$userField['name']] = $userField['value'];
+            }
+
+            if (isset($fields['opaqueDataDescriptor'])) {
+                $payment->setAdditionalInformation('opaqueDataDescriptor', $fields['opaqueDataDescriptor']);
+            }
+            if (isset($fields['opaqueDataValue'])) {
+                $payment->setAdditionalInformation('opaqueDataValue', $fields['opaqueDataValue']);
             }
         }
     }

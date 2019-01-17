@@ -23,7 +23,7 @@ class TransactionHashValidator extends AbstractValidator
     /**
      * The error code for failed transaction hash verification
      */
-    const ERROR_TRANSACTION_HASH = 'ETHV';
+    private const ERROR_TRANSACTION_HASH = 'ETHV';
 
     /**
      * @var SubjectReader
@@ -61,7 +61,7 @@ class TransactionHashValidator extends AbstractValidator
     {
         $response = $this->subjectReader->readResponse($validationSubject);
 
-        if (!empty($response['transactionResponse']['transHashSHA2'])) {
+        if (!empty($response['transactionResponse']['transHashSha2'])) {
             return $this->validateSha512Hash($validationSubject);
         } elseif (!empty($response['transactionResponse']['transHash'])) {
             return $this->validateMd5Hash($validationSubject);
@@ -82,16 +82,22 @@ class TransactionHashValidator extends AbstractValidator
      * @param array $validationSubject
      * @return ResultInterface
      */
-    private function validateMd5Hash(array $validationSubject)
+    private function validateMd5Hash(array $validationSubject): ResultInterface
     {
         $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
         $storedHash = $this->config->getLegacyTransactionHash($storeId);
+        $transactionResponse = $response['transactionResponse'];
 
-        try {
-            $amount = $this->subjectReader->readAmount($validationSubject);
-        } catch (\InvalidArgumentException $e) {
-            // Void will not contain the amount and will use 0.00 for hashing
+        if (empty($transactionResponse['refTransID'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+        // Edge case with some transactions
+        } else {
             $amount = 0;
         }
 
@@ -99,10 +105,10 @@ class TransactionHashValidator extends AbstractValidator
             $storedHash,
             $this->config->getLoginId($storeId),
             sprintf('%.2F', $amount),
-            $response['transactionResponse']['transId'] ?? ''
+            $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $response['transactionResponse']['transHash'])) {
+        if (Security::compareStrings($hash, $transactionResponse['transHash'])) {
             return $this->createResult(true);
         }
 
@@ -126,15 +132,28 @@ class TransactionHashValidator extends AbstractValidator
         $storeId = $this->subjectReader->readStoreId($validationSubject);
         $response = $this->subjectReader->readResponse($validationSubject);
         $storedKey = $this->config->getTransactionSignatureKey($storeId);
+        $transactionResponse = $response['transactionResponse'];
+
+        if (empty($transactionResponse['refTransID'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+            // Edge case with some transactions
+        } else {
+            $amount = 0;
+        }
 
         $hash = $this->generateSha512Hash(
             $storedKey,
             $this->config->getLoginId($storeId),
-            $this->subjectReader->readAmount($validationSubject),
-            $response['transactionResponse']['transId'] ?? ''
+            sprintf('%.2F', $amount),
+            $transactionResponse['transId'] ?? ''
         );
 
-        if (Security::compareStrings($hash, $response['transactionResponse']['transHashSHA2'])) {
+        if (Security::compareStrings($hash, $transactionResponse['transHashSha2'])) {
             return $this->createResult(true);
         }
 
@@ -182,6 +201,6 @@ class TransactionHashValidator extends AbstractValidator
     ) {
         $message = '^' . $merchantApiLogin . '^' . $transactionId . '^' . $amount . '^';
 
-        return hash_hmac('sha512', $message, $merchantKey);
+        return strtoupper(hash_hmac('sha512', $message, pack('H*', $merchantKey)));
     }
 }

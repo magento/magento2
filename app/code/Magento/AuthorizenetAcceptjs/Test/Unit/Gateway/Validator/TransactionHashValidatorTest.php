@@ -11,13 +11,14 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Validator;
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
 class TransactionHashValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
@@ -27,9 +28,14 @@ class TransactionHashValidatorTest extends TestCase
     private $validator;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
+
+    /**
+     * @var ResultInterface
+     */
+    private $resultMock;
 
     protected function setUp()
     {
@@ -38,6 +44,8 @@ class TransactionHashValidatorTest extends TestCase
             ->getMock();
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
             ->getMock();
 
         $this->validator = new TransactionHashValidator(
@@ -58,12 +66,13 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->validator->validate(['response' => []]);
 
         $this->assertFalse($args['isValid']);
-        $this->assertEquals([TransactionHashValidator::ERROR_TRANSACTION_HASH], $args['errorCodes']);
+        $this->assertEquals(['ETHV'], $args['errorCodes']);
         $this->assertEquals(
             ['The authenticity of the gateway response could not be verified.'],
             $args['failsDescription']
@@ -81,7 +90,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getTransactionSignatureKey')
@@ -91,13 +101,13 @@ class TransactionHashValidatorTest extends TestCase
             'amount' => '123.00',
             'response' => [
                 'transactionResponse' => [
-                    'transHashSHA2' => 'bad'
+                    'transHashSha2' => 'bad'
                 ]
             ]
         ]);
 
         $this->assertFalse($args['isValid']);
-        $this->assertEquals([TransactionHashValidator::ERROR_TRANSACTION_HASH], $args['errorCodes']);
+        $this->assertEquals(['ETHV'], $args['errorCodes']);
         $this->assertEquals(
             ['The authenticity of the gateway response could not be verified.'],
             $args['failsDescription']
@@ -115,13 +125,12 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
-        $this->configMock->expects($this->once())
-            ->method('getTransactionSignatureKey')
+        $this->configMock->method('getTransactionSignatureKey')
             ->willReturn('abc');
-        $this->configMock->expects($this->once())
-            ->method('getLoginId')
+        $this->configMock->method('getLoginId')
             ->willReturn('username');
 
         $this->validator->validate([
@@ -129,8 +138,8 @@ class TransactionHashValidatorTest extends TestCase
             'response' => [
                 'transactionResponse' => [
                     'transId' => '123',
-                    'transHashSHA2' => 'b4eb297d45976bc3bfc2f078cf026d075bf3942ec02aa94140a709f106'
-                        . '772308cf36b7b364371ce389b687dc03ef93f58f3f4ba2ba5a2fde4cf23695ec9b8e43'
+                    'transHashSha2' => '1DBD16DED0DA02F52A22A9AD71A49F70BD2ECD42437552889912DD5CE'
+                        . 'CBA0E09A5E8E6221DA74D98A46E5F77F7774B6D9C39CADF3E9A33D85870A6958DA7C8B2'
                 ]
             ]
         ]);
@@ -151,7 +160,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getLegacyTransactionHash')
@@ -167,7 +177,7 @@ class TransactionHashValidatorTest extends TestCase
         ]);
 
         $this->assertFalse($args['isValid']);
-        $this->assertEquals([TransactionHashValidator::ERROR_TRANSACTION_HASH], $args['errorCodes']);
+        $this->assertEquals(['ETHV'], $args['errorCodes']);
         $this->assertEquals(
             ['The authenticity of the gateway response could not be verified.'],
             $args['failsDescription']
@@ -185,7 +195,8 @@ class TransactionHashValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->resultMock);
 
         $this->configMock->expects($this->once())
             ->method('getLegacyTransactionHash')

@@ -8,19 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\Framework\Exception\InputException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
+use Psr\Log\LoggerInterface;
 
 /**
  * Adds the meta transaction information to the request
  */
 class VoidDataBuilder implements BuilderInterface
 {
-    const REQUEST_TYPE_VOID = 'voidTransaction';
+    private const REQUEST_TYPE_VOID = 'voidTransaction';
 
     /**
      * @var SubjectReader
@@ -28,67 +26,40 @@ class VoidDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var TransactionRepository
-     */
-    private $transactionRepository;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
      * @param SubjectReader $subjectReader
-     * @param TransactionRepository $transactionRepository
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         SubjectReader $subjectReader,
-        TransactionRepository $transactionRepository,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger
     ) {
         $this->subjectReader = $subjectReader;
-        $this->transactionRepository = $transactionRepository;
         $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
         $transactionData = [];
 
         if ($payment instanceof Payment) {
+            $authorizationTransaction = $payment->getAuthorizationTransaction();
+            $refId = $authorizationTransaction->getAdditionalInformation('real_transaction_id');
+
             $transactionData['transactionRequest'] = [
                 'transactionType' => self::REQUEST_TYPE_VOID,
-                'refTransId' => $this->getRealParentTransactionId($payment)
+                'refTransId' => $refId
             ];
         }
 
         return $transactionData;
-    }
-
-    /**
-     * Lookup the original authorize.net transaction id
-     * @param $payment
-     * @return mixed
-     */
-    private function getRealParentTransactionId(Payment $payment)
-    {
-
-        try {
-            /** @var Payment\Transaction $transaction */
-            $transaction = $this->transactionRepository->getByTransactionId(
-                $payment->getParentTransactionId(),
-                $payment->getId(),
-                $payment->getOrder()->getId()
-            );
-        } catch (InputException $e) {
-            $this->logger->critical($e);
-        }
-
-        return $transaction->getAdditionalInformation(PaymentResponseHandler::REAL_TRANSACTION_ID);
     }
 }

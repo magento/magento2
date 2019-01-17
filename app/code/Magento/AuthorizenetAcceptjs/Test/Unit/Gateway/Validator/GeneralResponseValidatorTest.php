@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class GeneralResponseValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
@@ -49,7 +49,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_SUCCESS,
+                    'resultCode' => 'Ok',
                     'message' => [
                         [
                             'code' => 'foo',
@@ -81,7 +81,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_ERROR,
+                    'resultCode' => 'Error',
                     'message' => [
                         [
                             'code' => 'foo',
@@ -113,7 +113,7 @@ class GeneralResponseValidatorTest extends TestCase
         $this->validator->validate([
             'response' => [
                 'messages' => [
-                    'resultCode' => GeneralResponseValidator::RESULT_CODE_ERROR,
+                    'resultCode' => 'Error',
                     'message' => [
                         'code' => 'foo',
                         'text' => 'bar'

@@ -20,12 +20,7 @@ class GeneralResponseValidator extends AbstractValidator
     /**
      * The result code that authorize.net returns for a successful Api call
      */
-    const RESULT_CODE_SUCCESS = 'Ok';
-
-    /**
-     * The result code that authorize.net returns for a unsuccessful Api call
-     */
-    const RESULT_CODE_ERROR = 'Error';
+    private const RESULT_CODE_SUCCESS = 'Ok';
 
     /**
      * @var SubjectReader

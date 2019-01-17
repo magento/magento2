@@ -9,16 +9,15 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
-use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the basic payment information to the request
+ * Adds the basic refund information to the request
  */
-class PaymentDataBuilder implements BuilderInterface
+class RefundDataBuilder implements BuilderInterface
 {
     use Formatter;
 
@@ -28,18 +27,11 @@ class PaymentDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var PassthroughDataObject
-     */
-    private $passthroughData;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param PassthroughDataObject $passthroughData
      */
-    public function __construct(SubjectReader $subjectReader, PassthroughDataObject $passthroughData)
+    public function __construct(SubjectReader $subjectReader)
     {
         $this->subjectReader = $subjectReader;
-        $this->passthroughData = $passthroughData;
     }
 
     /**
@@ -65,12 +57,8 @@ class PaymentDataBuilder implements BuilderInterface
                 ];
             }
 
-            // @TODO integrate the real payment values from accept.js
-            $descriptor = $payment->encrypt('abc123');
-            $value = $payment->encrypt('321cba');
-
-            $this->passthroughData->setData('opaqueDataDescriptor', $descriptor);
-            $this->passthroughData->setData('opaqueDataValue', $value);
+            $dataDescriptor = $payment->decrypt($payment->getAdditionalInformation('opaqueDataDescriptor'));
+            $dataValue = $payment->decrypt($payment->getAdditionalInformation('opaqueDataValue'));
 
             $data['transactionRequest']['payment'] = [
                 'creditCard' => [
@@ -78,9 +66,10 @@ class PaymentDataBuilder implements BuilderInterface
                     'expirationDate' => '2019-12',
                     'cardCode' => '123'
                 ]
+                // @TODO integrate the real payment values from accept.js
                 /*'opaqueData' => [
-                    'dataDescriptor' => $descriptor,
-                    'dataValue' => $value
+                    'dataDescriptor' => $dataDescriptor,
+                    'dataValue' => $dataValue
                 ]*/
             ];
         }

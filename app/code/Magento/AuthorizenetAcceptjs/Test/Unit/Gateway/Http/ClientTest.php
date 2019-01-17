@@ -9,28 +9,32 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Client;
-use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Converter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use Psr\Log\LoggerInterface;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanSendRequest()
     {
         $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
-        $loggerMock = $this->getMockBuilder(Logger::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
+        $paymentLogger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
@@ -38,26 +42,25 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
-                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
-                'text/xml'
-            )
-            ->willReturn([]);
+                '{"doSomeThing":{"foobar":"baz"}}',
+                'application/json'
+            );
 
         $httpClient->expects($this->once())
             ->method('request')
             ->willReturn($httpResponse);
 
         $request = [
-            Converter::PAYLOAD_TYPE => 'doSomeThing',
+            'payload_type' => 'doSomeThing',
             'foobar' => 'baz'
         ];
-        $response = '<foo><bar>baz</bar></foo>';
+        $response = '{"foo":{"bar":"baz"}}';
 
         $httpResponse->expects($this->once())
             ->method('getBody')
             ->willReturn($response);
 
-        $loggerMock->expects($this->once())
+        $paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => $response]);
 
@@ -66,34 +69,36 @@ class ClientTest extends \PHPUnit\Framework\TestCase
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(Converter::class),
-            'logger' => $loggerMock
+            'paymentLogger' => $paymentLogger
         ]);
 
         $result = $apiClient->placeRequest($this->getTransferObjectMock($request));
 
-        $this->assertSame('foo', $result[Converter::PAYLOAD_TYPE]);
-        $this->assertSame('baz', $result['bar']);
+        $this->assertSame('baz', $result['foo']['bar']);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Something went wrong in the payment gateway.
+     */
     public function testExceptionIsThrownWhenEmptyResponseIsReceived()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage(__('Something went wrong in the payment gateway.')->__toString());
-
         $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
-        $loggerMock = $this->getMockBuilder(Logger::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
+        $paymentLogger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
@@ -101,10 +106,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
-                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
-                'text/xml'
-            )
-            ->willReturn([]);
+                '{"doSomeThing":{"foobar":"baz"}}',
+                'application/json'
+            );
 
         $httpClient->expects($this->once())
             ->method('request')
@@ -114,12 +118,19 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->method('getBody')
             ->willReturn('');
 
+        $logger->expects($this->once())
+            ->method('critical')
+            ->with($this->callback(function ($e) {
+                return $e instanceof \Exception
+                    && $e->getMessage() === 'Invalid JSON was returned by the gateway';
+            }));
+
         $request = [
-            Converter::PAYLOAD_TYPE => 'doSomeThing',
+            'payload_type' => 'doSomeThing',
             'foobar' => 'baz'
         ];
 
-        $loggerMock->expects($this->once())
+        $paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => '']);
 
@@ -128,31 +139,35 @@ class ClientTest extends \PHPUnit\Framework\TestCase
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(Converter::class),
-            'logger' => $loggerMock
+            'logger' => $logger,
+            'paymentLogger' => $paymentLogger
         ]);
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Something went wrong in the payment gateway.
+     */
     public function testExceptionIsThrownWhenInvalidResponseIsReceived()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage(__('Something went wrong in the payment gateway.')->__toString());
-
         $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $loggerMock */
-        $loggerMock = $this->getMockBuilder(Logger::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
+        $paymentLogger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(\Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
+        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
@@ -160,10 +175,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
-                '<doSomeThing xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><foobar>baz</foobar></doSomeThing>',
-                'text/xml'
-            )
-            ->willReturn([]);
+                '{"doSomeThing":{"foobar":"baz"}}',
+                'application/json'
+            );
 
         $httpClient->expects($this->once())
             ->method('request')
@@ -174,21 +188,28 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->willReturn('bad');
 
         $request = [
-            Converter::PAYLOAD_TYPE => 'doSomeThing',
+            'payload_type' => 'doSomeThing',
             'foobar' => 'baz'
         ];
 
-        $loggerMock->expects($this->once())
+        $paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => 'bad']);
+
+        $logger->expects($this->once())
+            ->method('critical')
+            ->with($this->callback(function ($e) {
+                return $e instanceof \Exception
+                    && $e->getMessage() === 'Invalid JSON was returned by the gateway';
+            }));
 
         /**
          * @var $apiClient Client
          */
         $apiClient = $objectManager->getObject(Client::class, [
             'httpClientFactory' => $httpClientFactory,
-            'payloadConverter' => $objectManager->getObject(Converter::class),
-            'logger' => $loggerMock
+            'logger' => $logger,
+            'paymentLogger' => $paymentLogger
         ]);
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));
@@ -197,7 +218,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * Creates mock object for TransferInterface.
      *
-     * @return TransferInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return TransferInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getTransferObjectMock(array $data)
     {
