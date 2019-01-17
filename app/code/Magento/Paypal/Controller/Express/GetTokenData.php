@@ -16,6 +16,7 @@ use Magento\Paypal\Model\Config;
 
 /**
  * Retrieve paypal token
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetTokenData extends AbstractExpress implements HttpGetActionInterface
 {
