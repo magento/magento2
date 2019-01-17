@@ -221,7 +221,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     Select::TYPE_CONDITION
                 );
                 $selectClone->where($noCouponWhereCondition, null, Select::TYPE_CONDITION);
-                $this->_select = $this->getConnection()->select()->union([$select, $selectClone]);
+                $select = $this->getConnection()->select()->union([$select, $selectClone]);
+                $this->_select = $select;
             } else {
                 $this->addFieldToFilter(
                     'main_table.coupon_type',
