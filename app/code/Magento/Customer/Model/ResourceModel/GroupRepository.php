@@ -314,11 +314,6 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
 
-        if (!\Zend_Validate::is($group->getCode(), 'Alnum')) {
-            $exception->addError(__('Invalid group code provided.' .
-                ' Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) '));
-        };
-
         if ($exception->wasErrorAdded()) {
             throw $exception;
         }
