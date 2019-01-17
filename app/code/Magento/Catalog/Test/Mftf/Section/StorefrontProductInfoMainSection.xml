@@ -7,12 +7,13 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="stock" type="input" selector=".stock.available"/>
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPrice" type="text" selector=".price"/>
+        <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
         <element name="productDescription" type="text" selector="#description .value"/>

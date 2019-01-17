@@ -20,4 +20,18 @@
     <entity name="persistentEnabledState" type="persistent_options_enabled">
         <data key="value">1</data>
     </entity>
+
+    <entity name="PersistentLogoutClearEnabled" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">LogoutClearActive</requiredEntity>
+    </entity>
+    <entity name="LogoutClearActive" type="logout_clear">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="PersistentLogoutClearDisabled" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">LogoutClearInactive</requiredEntity>
+    </entity>
+    <entity name="LogoutClearInactive" type="logout_clear">
+        <data key="value">0</data>
+    </entity>
 </entities>
