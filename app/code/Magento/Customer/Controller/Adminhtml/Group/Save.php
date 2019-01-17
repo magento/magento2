@@ -9,7 +9,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Controller class Save. Performs save action of customers group
