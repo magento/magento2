@@ -205,7 +205,7 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
-     * Set the form
+     * Set form.
      *
      * @param AbstractForm $form
      * @return $this
@@ -244,6 +244,7 @@ abstract class AbstractElement extends AbstractForm
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',
@@ -332,7 +333,7 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
-     * Returns ui identifier
+     * Get Ui Id.
      *
      * @param null|string $suffix
      * @return string
