@@ -50,6 +50,16 @@ class Adapter implements AdapterInterface
     private $temporaryStorageFactory;
 
     /**
+     * Query Select Parts to be skipped when prepare query for count
+     *
+     * @var array
+     */
+    protected $countSqlSkipParts = [
+        \Magento\Framework\DB\Select::LIMIT_COUNT => true,
+        \Magento\Framework\DB\Select::LIMIT_OFFSET => true,
+    ];
+
+    /**
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
      * @param ResourceConnection $resource
@@ -86,6 +96,7 @@ class Adapter implements AdapterInterface
         $response = [
             'documents' => $documents,
             'aggregations' => $aggregations,
+            'size' => $this->getSize($query)
         ];
         return $this->responseFactory->create($response);
     }
@@ -113,5 +124,36 @@ class Adapter implements AdapterInterface
     private function getConnection()
     {
         return $this->resource->getConnection();
+    }
+
+    /**
+     * Get rows size
+     *
+     * @return int
+     */
+    public function getSize($query)
+    {
+        $sql = $this->getSelectCountSql($query);
+        $parentSelect = $this->getConnection()->select();
+        $parentSelect->from(['core_select' => $sql]);
+        $parentSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $parentSelect->columns('COUNT(*)');
+        $totalRecords = $this->getConnection()->fetchOne($parentSelect);
+        return intval($totalRecords);
+    }
+
+    /**
+     * Reset limit and offset
+     *
+     * @return Select
+     */
+    protected function getSelectCountSql($query)
+    {
+        foreach ($this->countSqlSkipParts as $part => $toSkip) {
+            if ($toSkip) {
+                $query->reset($part);
+            }
+        }
+        return $query;
     }
 }

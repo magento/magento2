@@ -30,13 +30,21 @@ class QueryResponse implements ResponseInterface
     protected $aggregations;
 
     /**
+     * Total count of collection
+     *
+     * @var int
+     */
+    protected $totalCount;
+
+    /**
      * @param Document[] $documents
      * @param AggregationInterface $aggregations
      */
-    public function __construct(array $documents, AggregationInterface $aggregations)
+    public function __construct(array $documents, AggregationInterface $aggregations, int $size = 0)
     {
         $this->documents = $documents;
         $this->aggregations = $aggregations;
+        $this->totalCount = $size;
     }
 
     /**
@@ -64,5 +72,13 @@ class QueryResponse implements ResponseInterface
     public function getAggregations()
     {
         return $this->aggregations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotalCount()
+    {
+        return $this->totalCount;
     }
 }
