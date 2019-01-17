@@ -153,7 +153,6 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
         $quoteId = $this->getRequest()->getParam('quote_id');
         $customerId = $this->getRequest()->getParam('customer_id');
         $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
-        $isBaRequested = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
 
         $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
         $this->_initCheckout($quote);
@@ -172,6 +171,9 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
                 $quote->getShippingAddress()
             );
 
+            // billing agreement
+            $isBaRequested = (bool)$this->getRequest()
+                ->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
             $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
         }
 
