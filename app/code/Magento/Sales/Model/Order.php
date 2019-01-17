@@ -1284,7 +1284,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getShippingMethod($asObject = false)
     {
         $shippingMethod = parent::getShippingMethod();
-        if (!$asObject) {
+        if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
