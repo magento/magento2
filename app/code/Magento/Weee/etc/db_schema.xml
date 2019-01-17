@@ -13,7 +13,7 @@
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website Id"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Id"/>
+                default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="country" nullable="true" length="2" comment="Country"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Value"/>

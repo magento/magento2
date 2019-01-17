@@ -60,7 +60,7 @@ define([
     }
 
     /**
-     * Validates provied value by a specfied set of rules.
+     * Validates provied value by a specified set of rules.
      *
      * @param {(String|Object)} rules - One or many validation rules.
      * @param {*} value - Value to be checked.

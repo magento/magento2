@@ -53,8 +53,14 @@ class EraserTest extends \PHPUnit\Framework\TestCase
     {
         $productsToDeleteIds = [1, 2];
         $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $select->expects($this->once())->method('from')->with('catalog_product_entity')->will($this->returnSelf());
-        $select->expects($this->once())->method('where')->with('entity_id IN(?)', $productsToDeleteIds)
+        $select->expects($this->once())
+            ->method('from')
+            ->with(['product_table' => 'catalog_product_entity'])
+            ->will($this->returnSelf());
+        $select->expects($this->once())->method('columns')->with('entity_id')->will($this->returnSelf());
+        $select->expects($this->once())
+            ->method('where')
+            ->with('product_table.entity_id IN(?)', $productsToDeleteIds)
             ->will($this->returnSelf());
         $products = [['entity_id' => 2]];
         $statement = $this->createMock(\Zend_Db_Statement_Interface::class);

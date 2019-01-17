@@ -18,9 +18,6 @@
             <testCaseId value="MC-124"/>
             <group value="Downloadable"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MQE-1187"/>
-            </skip>
         </annotations>
 
         <!-- A Cms page containing the New Products Widget gets created here via extends -->

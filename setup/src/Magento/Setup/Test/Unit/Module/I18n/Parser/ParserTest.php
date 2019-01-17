@@ -39,7 +39,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
      * @param array $jsFiles
      * @param array $phpMap
      * @param array $jsMap
-     * @paran array $phraseFactoryMap
+     * @param array $phraseFactoryMap
      * @param array $expectedResult
      * @dataProvider addPhraseDataProvider
      */
