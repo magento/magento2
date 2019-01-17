@@ -242,4 +242,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Model\Rule\Condition\Product">
+        <plugin name="apply_rule_on_configurable_children" type="Magento\ConfigurableProduct\Plugin\SalesRule\Model\Rule\Condition\Product" />
+    </type>
 </config>
