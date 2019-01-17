@@ -78,14 +78,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $baseFilesFolder = '',
         $whitelistFile = '/_files/whitelist/common.txt'
     ) {
-        $dir = new \RecursiveDirectoryIterator('/Users/nathsmit/Sites/m2/app/code/Magento/AuthorizenetAcceptjs/');
-        $ite = new \RecursiveIteratorIterator($dir);
-        $files = new \RegexIterator($ite, '/.*php/', \RegexIterator::GET_MATCH);
-        $fileList = array();
-        foreach($files as $file) {
-            $fileList = array_merge($fileList, $file);
-        }
-        return $fileList;
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];

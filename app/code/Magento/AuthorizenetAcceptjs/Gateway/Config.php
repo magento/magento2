@@ -71,7 +71,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getApiUrl($storeId = null): ?string
+    public function getApiUrl($storeId = null): string
     {
         $environment = $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
 
