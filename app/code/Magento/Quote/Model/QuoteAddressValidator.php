@@ -11,7 +11,6 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Quote shipping/billing address validator service.
- *
  */
 class QuoteAddressValidator
 {
