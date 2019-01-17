@@ -726,11 +726,7 @@ User,User
 "Silver","Silver"
 "Black","Black"
 "Features","Features"
-"
-                    PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where Paybal Credit is offered and the currency offered by the merchant is USD.
-                ","
-                    PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where Paybal Credit is offered and the currency offered by the merchant is USD.
-                "
+"PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where PayPal Credit is offered and the currency offered by the merchant is USD.","PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where PayPal Credit is offered and the currency offered by the merchant is USD."
 "PayPal Credit","PayPal Credit"
 "PayPal Guest Checkout Credit Card Icons","PayPal Guest Checkout Credit Card Icons"
 "Elektronisches Lastschriftverfahren - German ELV","Elektronisches Lastschriftverfahren - German ELV"

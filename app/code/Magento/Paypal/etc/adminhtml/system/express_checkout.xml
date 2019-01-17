@@ -734,7 +734,7 @@
                             <label>Disable Funding Options</label>
                             <comment>
                                 <![CDATA[PayPal will automatically display each enabled funding option to eligible buyers.
-                                For example, PayPal Credit is only shown to buyers in countries where Paybal Credit is
+                                For example, PayPal Credit is only shown to buyers in countries where PayPal Credit is
                                 offered and the currency offered by the merchant is USD.]]>
                             </comment>
                             <config_path>paypal/style/disable_funding_options</config_path>
