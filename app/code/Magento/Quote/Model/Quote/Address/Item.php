@@ -8,6 +8,8 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote;
 
 /**
+ * Quote item model.
+ *
  * @api
  * @method int getParentItemId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentItemId(int $value)
@@ -103,7 +105,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     protected $_quote;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -111,7 +113,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     }
 
     /**
-     * @return $this|\Magento\Quote\Model\Quote\Item\AbstractItem
+     * @inheritdoc
      */
     public function beforeSave()
     {
@@ -156,6 +158,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     }
 
     /**
+     * Import quote item.
+     *
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @return $this
      */
@@ -194,10 +198,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     }
 
     /**
-     * @param string $code
-     * @return \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface|null
+     * @inheritdoc
      */
-    public function getOptionBycode($code)
+    public function getOptionByCode($code)
     {
         if ($this->getQuoteItem()) {
             return $this->getQuoteItem()->getOptionBycode($code);
