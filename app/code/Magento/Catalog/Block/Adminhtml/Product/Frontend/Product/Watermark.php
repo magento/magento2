@@ -130,7 +130,6 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
      */
     protected function _getHeaderHtml($element)
     {
-        $id = $element->getHtmlId();
         $default = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
 
         $html = '<h4 class="icon-head head-edit-form">' . $element->getLegend() . '</h4>';

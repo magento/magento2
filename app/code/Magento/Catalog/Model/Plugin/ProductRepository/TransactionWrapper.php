@@ -25,7 +25,7 @@ class TransactionWrapper
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $saveOptions
      * @return \Magento\Catalog\Api\Data\ProductInterface
@@ -52,7 +52,7 @@ class TransactionWrapper
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return bool
      * @throws \Exception
@@ -77,7 +77,7 @@ class TransactionWrapper
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param string $productSku
      * @return bool
      * @throws \Exception

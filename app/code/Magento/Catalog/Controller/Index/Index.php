@@ -10,7 +10,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Index action
      *
-     * @return $this
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {

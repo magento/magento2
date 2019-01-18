@@ -64,7 +64,6 @@ class ProductRenderList implements ProductRenderListInterface
      * @param ProductRenderSearchResultsFactory $searchResultFactory
      * @param ProductRenderFactory $productRenderDtoFactory
      * @param Config $config
-     * @param Product\Visibility $productVisibility
      * @param CollectionModifier $collectionModifier
      * @param array $productAttributes
      */

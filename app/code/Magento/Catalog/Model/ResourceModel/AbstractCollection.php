@@ -128,7 +128,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param int $limit
      * @param int $offset
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
