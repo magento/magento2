@@ -55,7 +55,7 @@
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
-        <click selector="{{AdminProductFormSection.visibility}}" stepKey="clickVisibility"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductGeneralGroup.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductGeneralGroup.urlKey}}" stepKey="fillUrlKeyInput"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
