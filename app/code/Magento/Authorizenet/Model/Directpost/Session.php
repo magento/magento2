@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model\Directpost;
 
 use Magento\Framework\Session\SessionManager;
 
 /**
  * Authorize.net DirectPost session model
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Session extends SessionManager
 {
@@ -17,6 +20,7 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
+     * @deprecated
      */
     public function addCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -33,6 +37,7 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
+     * @deprecated
      */
     public function removeCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -53,6 +58,7 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return bool
+     * @deprecated
      */
     public function isCheckoutOrderIncrementIdExist($orderIncrementId)
     {
@@ -68,6 +74,7 @@ class Session extends SessionManager
      *
      * @param int|string $id
      * @return $this
+     * @deprecated
      */
     public function setQuoteId($id)
     {

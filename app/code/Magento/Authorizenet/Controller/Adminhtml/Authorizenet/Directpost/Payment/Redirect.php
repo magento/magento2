@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
 use Magento\Backend\App\Action;
@@ -13,6 +15,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -42,6 +45,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param \Magento\Framework\Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param \Magento\Authorizenet\Helper\Backend\Data $helper
+     * @deprecated
      */
     public function __construct(
         Action\Context $context,
@@ -71,6 +75,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
+     * @deprecated
      */
     protected function _returnQuote($cancelOrder, $errorMsg)
     {
@@ -92,6 +97,7 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Retrieve params and put javascript into iframe
      *
      * @return \Magento\Framework\View\Result\Layout
+     * @deprecated
      */
     public function execute()
     {

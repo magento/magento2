@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model;
 
 /**
@@ -18,6 +20,7 @@ namespace Magento\Authorizenet\Model;
  * @method \Magento\Authorizenet\Model\Debug setRequestDump(string $value)
  * @method string getResultDump()
  * @method \Magento\Authorizenet\Model\Debug setResultDump(string $value)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Debug extends \Magento\Framework\Model\AbstractModel
 {

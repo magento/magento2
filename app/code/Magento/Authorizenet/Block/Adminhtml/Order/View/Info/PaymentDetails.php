@@ -12,6 +12,7 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Payment information block for Authorize.net payment method
+ * @deprecated 2.3.1 Auth.net is removing all support for this payment method in July 2019
  */
 class PaymentDetails extends ConfigurableInfo
 {
@@ -20,6 +21,7 @@ class PaymentDetails extends ConfigurableInfo
      *
      * @param string $field
      * @return string | Phrase
+     * @deprecated
      */
     protected function getLabel($field)
     {

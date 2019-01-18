@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
@@ -25,6 +26,7 @@ use Psr\Log\LoggerInterface;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Place extends Payment implements HttpPostActionInterface
 {
@@ -63,6 +65,7 @@ class Place extends Payment implements HttpPostActionInterface
      * @param Onepage $onepageCheckout
      * @param JsonHelper $jsonHelper
      * @param LoggerInterface|null $logger
+     * @deprecated
      */
     public function __construct(
         Context $context,
@@ -85,6 +88,7 @@ class Place extends Payment implements HttpPostActionInterface
      * Send request to authorize.net
      *
      * @return string
+     * @deprecated
      */
     public function execute()
     {
@@ -125,6 +129,7 @@ class Place extends Payment implements HttpPostActionInterface
      * Place order for checkout flow
      *
      * @return void
+     * @deprecated
      */
     protected function placeCheckoutOrder()
     {

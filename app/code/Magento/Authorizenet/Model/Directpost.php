@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -14,6 +16,7 @@ use Magento\Payment\Model\Method\TransparentInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements TransparentInterface, ConfigInterface
 {
@@ -157,6 +160,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param array $data
      * @param \Magento\Sales\Api\PaymentFailuresInterface|null $paymentFailures
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @deprecated
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -219,6 +223,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @return void
+     * @deprecated
      */
     public function setDataHelper(\Magento\Authorizenet\Helper\Data $dataHelper)
     {
@@ -229,6 +234,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Do not validate payment form using server methods
      *
      * @return bool
+     * @deprecated
      */
     public function validate()
     {
@@ -242,6 +248,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param  float $amount
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -255,6 +262,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -287,6 +295,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     protected function processCapture($result, $payment)
     {
@@ -333,6 +342,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -377,6 +387,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Exception
+     * @deprecated
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -399,6 +410,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     protected function processRefund(\Magento\Framework\DataObject $payment, $amount)
     {
@@ -444,6 +456,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Get CGI url
      *
      * @return string
+     * @deprecated
      */
     public function getCgiUrl()
     {
@@ -456,6 +469,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param int $storeId
      * @return string
+     * @deprecated
      */
     public function getRelayUrl($storeId = null)
     {
@@ -469,6 +483,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Return response.
      *
      * @return \Magento\Authorizenet\Model\Directpost\Response
+     * @deprecated
      */
     public function getResponse()
     {
@@ -482,6 +497,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject $stateObject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -509,6 +525,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order $order Quote or order object.
      * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @deprecated
      */
     public function generateRequestFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -527,6 +544,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param array $postData
      * @return $this
+     * @deprecated
      */
     public function setResponseData(array $postData)
     {
@@ -539,6 +557,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return bool true in case of validation success.
      * @throws \Magento\Framework\Exception\LocalizedException In case of validation error
+     * @deprecated
      */
     public function validateResponse()
     {
@@ -561,6 +580,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param array $responseData data from Authorize.net from $_POST
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException In case of validation error or order creation error
+     * @deprecated
      */
     public function process(array $responseData)
     {
@@ -607,6 +627,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Framework\DataObject $payment
      * @return void
+     * @deprecated
      */
     protected function fillPaymentByResponse(\Magento\Framework\DataObject $payment)
     {
@@ -640,6 +661,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return true in case of Approved response
      * @throws \Magento\Framework\Exception\LocalizedException In case of Declined or Error response from Authorize.net
+     * @deprecated
      */
     public function checkResponseCode()
     {
@@ -665,6 +687,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @return true in case of right transaction id
      * @throws \Magento\Framework\Exception\LocalizedException In case of bad transaction id.
+     * @deprecated
      */
     public function checkTransId()
     {
@@ -681,6 +704,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param float $amount
      * @return bool
+     * @deprecated
      */
     protected function matchAmount($amount)
     {
@@ -697,6 +721,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @deprecated
      */
     protected function processOrder(\Magento\Sales\Model\Order $order)
     {
@@ -751,6 +776,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return $this
+     * @deprecated
      */
     protected function processPaymentFraudStatus(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -782,6 +808,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return $this
+     * @deprecated
      */
     protected function addStatusComment(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -818,6 +845,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $message
      * @param bool $voidPayment
      * @return void
+     * @deprecated
      */
     protected function declineOrder(\Magento\Sales\Model\Order $order, $message = '', $voidPayment = true)
     {
@@ -845,6 +873,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
+     * @deprecated
      */
     protected function getRealParentTransactionId($payment)
     {
@@ -858,6 +887,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
 
     /**
      * {inheritdoc}
+     * @deprecated
      */
     public function getConfigInterface()
     {
@@ -870,6 +900,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param mixed $key
      * @param mixed $storeId
      * @return mixed
+     * @deprecated
      */
     public function getValue($key, $storeId = null)
     {
@@ -881,6 +912,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param bool $isInitializeNeeded
      * @return void
+     * @deprecated
      */
     public function setIsInitializeNeeded($isInitializeNeeded = true)
     {
@@ -891,6 +923,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Get whether it is possible to capture
      *
      * @return bool
+     * @deprecated
      */
     public function canCapture()
     {
@@ -905,6 +938,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
+     * @deprecated
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
@@ -938,6 +972,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Framework\DataObject $response
      * @param string $transactionId
      * @return $this
+     * @deprecated
      */
     protected function addStatusCommentOnUpdate(
         \Magento\Sales\Model\Order\Payment $payment,
@@ -970,6 +1005,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $methodCode
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
+     * @deprecated
      */
     public function setMethodCode($methodCode)
     {
@@ -981,6 +1017,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param string $pathPattern
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
+     * @deprecated
      */
     public function setPathPattern($pathPattern)
     {
@@ -994,6 +1031,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @throws \Magento\Framework\Exception\LocalizedException
      * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
      * @link http://developer.authorize.net/api/transaction_details/
+     * @deprecated
      */
     protected function getTransactionResponse($transactionId)
     {
@@ -1026,6 +1064,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Fetch order by increment id from response.
      *
      * @return \Magento\Sales\Model\Order
+     * @deprecated
      */
     private function getOrderFromResponse(): \Magento\Sales\Model\Order
     {
@@ -1044,6 +1083,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * Fetch order increment id from response.
      *
      * @return string
+     * @deprecated
      */
     private function getOrderIncrementId(): string
     {
@@ -1058,6 +1098,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      *
      * @param string $fdsFilterAction
      * @return bool
+     * @deprecated
      */
     private function fdsFilterActionIsReportOnly($fdsFilterAction)
     {

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -10,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class DataFactory
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class DataFactory
 {
@@ -33,6 +36,7 @@ class DataFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @deprecated
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -45,6 +49,7 @@ class DataFactory
      * @param string $area
      * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
      * @throws LocalizedException
+     * @deprecated
      */
     public function create($area)
     {

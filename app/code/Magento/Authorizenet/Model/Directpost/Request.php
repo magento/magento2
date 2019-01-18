@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Model\Directpost;
 
@@ -10,6 +11,7 @@ use Magento\Authorizenet\Model\Request as AuthorizenetRequest;
 
 /**
  * Authorize.net request model for DirectPost model
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Request extends AuthorizenetRequest
 {
@@ -23,6 +25,7 @@ class Request extends AuthorizenetRequest
      * Needed to generate sign.
      *
      * @return string
+     * @deprecated
      */
     protected function _getTransactionKey()
     {
@@ -35,6 +38,7 @@ class Request extends AuthorizenetRequest
      *
      * @param string $transKey
      * @return $this
+     * @deprecated
      */
     protected function _setTransactionKey($transKey)
     {
@@ -52,6 +56,7 @@ class Request extends AuthorizenetRequest
      * @param string $fpSequence An invoice number or random number.
      * @param string $fpTimestamp
      * @return string The fingerprint.
+     * @deprecated
      */
     public function generateRequestSign(
         $merchantApiLoginId,
@@ -73,6 +78,7 @@ class Request extends AuthorizenetRequest
      *
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
      * @return $this
+     * @deprecated
      */
     public function setConstantData(\Magento\Authorizenet\Model\Directpost $paymentMethod)
     {
@@ -94,6 +100,7 @@ class Request extends AuthorizenetRequest
      * @param \Magento\Sales\Model\Order $order
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
      * @return $this
+     * @deprecated
      */
     public function setDataFromOrder(
         \Magento\Sales\Model\Order $order,
@@ -165,6 +172,7 @@ class Request extends AuthorizenetRequest
      * All needed fields should be placed in the object fist.
      *
      * @return $this
+     * @deprecated
      */
     public function signRequestData()
     {

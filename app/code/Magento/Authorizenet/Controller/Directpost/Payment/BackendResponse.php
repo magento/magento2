@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
 use Magento\Authorizenet\Helper\DataFactory;
@@ -18,6 +20,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class BackendResponse
+ * @package Magento\Authorizenet\Controller\Directpost\Payment
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ */
 class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
 {
     /**
@@ -38,6 +45,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      * @param DataFactory $dataFactory
      * @param DirectpostFactory $directpostFactory
      * @param LoggerInterface|null $logger
+     * @deprecated
      */
     public function __construct(
         Context $context,
@@ -53,6 +61,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
 
     /**
      * @inheritDoc
+     * @deprecated
      */
     public function createCsrfValidationException(
         RequestInterface $request
@@ -62,6 +71,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
 
     /**
      * @inheritDoc
+     * @deprecated
      */
     public function validateForCsrf(RequestInterface $request): ?bool
     {
@@ -73,6 +83,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      * Action for Authorize.net SIM Relay Request.
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @deprecated
      */
     public function execute()
     {

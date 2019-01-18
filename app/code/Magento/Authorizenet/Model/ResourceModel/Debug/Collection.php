@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Model\ResourceModel\Debug;
 
 /**
  * Resource Authorize.net debug collection model
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -14,6 +17,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Resource initialization
      *
      * @return void
+     * @deprecated
      */
     protected function _construct()
     {

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Directpost;
 
 use Magento\Payment\Block\Transparent\Iframe;
@@ -11,6 +13,7 @@ use Magento\Payment\Block\Transparent\Iframe;
  * DirectPost Payment Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 abstract class Payment extends \Magento\Framework\App\Action\Action
 {
@@ -32,6 +35,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
+     * @deprecated
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -45,6 +49,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Checkout\Model\Session
+     * @deprecated
      */
     protected function _getCheckout()
     {
@@ -55,6 +60,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Get session model
      *
      * @return \Magento\Authorizenet\Model\Directpost\Session
+     * @deprecated
      */
     protected function _getDirectPostSession()
     {
@@ -67,6 +73,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      *
      * @param string $area
      * @return void
+     * @deprecated
      */
     protected function _responseAction($area = 'frontend')
     {
@@ -121,6 +128,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
+     * @deprecated
      */
     protected function _returnCustomerQuote($cancelOrder = false, $errorMsg = '')
     {

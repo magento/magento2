@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
 
 use Magento\Authorizenet\Model\Directpost;
@@ -10,11 +12,13 @@ use Magento\Authorizenet\Model\Directpost;
 /**
  * @api
  * @since 100.0.2
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Registry
+     * @deprecated
      */
     protected $registry;
 
@@ -22,6 +26,7 @@ class FraudDetails extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @deprecated
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -34,6 +39,7 @@ class FraudDetails extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Sales\Model\Order\Payment
+     * @deprecated
      */
     public function getPayment()
     {
@@ -43,6 +49,7 @@ class FraudDetails extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @deprecated
      */
     protected function _toHtml()
     {

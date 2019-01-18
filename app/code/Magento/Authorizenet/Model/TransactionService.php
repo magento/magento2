@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Model;
 
@@ -16,6 +17,7 @@ use Magento\Payment\Model\Method\Logger;
 /**
  * Class TransactionService
  * @package Magento\Authorizenet\Model
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
  */
 class TransactionService
 {
@@ -61,6 +63,7 @@ class TransactionService
      * @param Security $xmlSecurityHelper
      * @param Logger $logger
      * @param ZendClientFactory $httpClientFactory
+     * @deprecated
      */
     public function __construct(
         Security $xmlSecurityHelper,
@@ -78,6 +81,7 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     public function getTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -93,6 +97,7 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated
      */
     protected function loadTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -146,6 +151,7 @@ class TransactionService
      * @param string $transactionKey
      * @param string $transactionId
      * @return string
+     * @deprecated
      */
     private function getRequestBody($login, $transactionKey, $transactionId)
     {
@@ -169,6 +175,7 @@ class TransactionService
      *
      * @param string $xml
      * @return string
+     * @deprecated
      */
     private function removePrivateDataFromXml($xml)
     {
