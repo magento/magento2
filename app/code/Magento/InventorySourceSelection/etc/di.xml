@@ -21,6 +21,8 @@
                 type="Magento\InventorySourceSelection\Model\SourceSelectionService"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface"
                 type="Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCode"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\AddressInterface"
+                type="Magento\InventorySourceSelection\Model\Address"/>
 
     <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
         <arguments>

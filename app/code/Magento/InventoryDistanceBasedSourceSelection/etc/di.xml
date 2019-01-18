@@ -9,8 +9,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\GetDistanceProviderCode"/>
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface"
-                type="Magento\InventoryDistanceBasedSourceSelection\Model\Address"/>
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\LatLng"/>
 

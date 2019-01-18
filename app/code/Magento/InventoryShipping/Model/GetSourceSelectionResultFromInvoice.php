@@ -9,8 +9,6 @@ namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\InventorySalesApi\Model\GetSkuFromOrderItemInterface;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
-use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrder;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -23,8 +21,8 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Traversable;
 
 /**
- * Creates instance of InventoryRequestInterface by given InvoiceInterface object.
- * Only virtual type items will be used.
+ * Provides Source Selection by given InvoiceInterface object.
+ * Used for Virtual and Downloadable products only
  */
 class GetSourceSelectionResultFromInvoice
 {
@@ -37,11 +35,6 @@ class GetSourceSelectionResultFromInvoice
      * @var ItemRequestInterfaceFactory
      */
     private $itemRequestFactory;
-
-    /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
 
     /**
      * @var GetDefaultSourceSelectionAlgorithmCodeInterface
@@ -63,8 +56,8 @@ class GetSourceSelectionResultFromInvoice
      *
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
-     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
+     * @param $stockByWebsiteIdResolver
+     * @param $inventoryRequestFactory
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetInventoryRequestFromOrder|null $getInventoryRequestFromOrder
@@ -73,14 +66,13 @@ class GetSourceSelectionResultFromInvoice
     public function __construct(
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
         ItemRequestInterfaceFactory $itemRequestFactory,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
+        $stockByWebsiteIdResolver,
+        $inventoryRequestFactory,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetInventoryRequestFromOrder $getInventoryRequestFromOrder = null
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
@@ -98,11 +90,7 @@ class GetSourceSelectionResultFromInvoice
     {
         /** @var OrderInterface $order */
         $order = $invoice->getOrder();
-        $websiteId = (int) $order->getStore()->getWebsiteId();
-        $stockId = (int) $this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
-
         $inventoryRequest = $this->getInventoryRequestFromOrder->execute(
-            $stockId,
             (int) $order->getEntityId(),
             $this->getSelectionRequestItems($invoice->getItems())
         );

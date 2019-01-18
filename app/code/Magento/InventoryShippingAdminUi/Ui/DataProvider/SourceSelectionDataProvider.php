@@ -32,11 +32,6 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $orderRepository;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
-
-    /**
      * @var GetStockItemConfigurationInterface
      */
     private $getStockItemConfiguration;
@@ -52,9 +47,9 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $sources = [];
 
     /**
-     * @var GetSourcesByOrderIdStockIdSkuAndQty
+     * @var GetSourcesByOrderIdSkuAndQty
      */
-    private $getSourcesByOrderIdStockIdSkuAndQty;
+    private $getSourcesByOrderIdSkuAndQty;
 
     /**
      * @param string $name
@@ -64,9 +59,9 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param OrderRepository $orderRepository
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty
+     * @param $getSourcesByStockIdSkuAndQty
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
-     * @param GetSourcesByOrderIdStockIdSkuAndQty $getSourcesByOrderIdStockIdSkuAndQty
+     * @param GetSourcesByOrderIdSkuAndQty $getSourcesByOrderIdSkuAndQty
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,20 +76,19 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         OrderRepository $orderRepository,
         StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        GetSourcesByStockIdSkuAndQty $getSourcesByStockIdSkuAndQty,
+        $getSourcesByStockIdSkuAndQty,
         GetSkuFromOrderItemInterface $getSkuFromOrderItem,
-        GetSourcesByOrderIdStockIdSkuAndQty $getSourcesByOrderIdStockIdSkuAndQty = null,
+        GetSourcesByOrderIdSkuAndQty $getSourcesByOrderIdSkuAndQty = null,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->request = $request;
         $this->orderRepository = $orderRepository;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
-        $this->getSourcesByOrderIdStockIdSkuAndQty = $getSourcesByOrderIdStockIdSkuAndQty ?:
-            ObjectManager::getInstance()->get(GetSourcesByOrderIdStockIdSkuAndQty::class);
+        $this->getSourcesByOrderIdSkuAndQty = $getSourcesByOrderIdSkuAndQty ?:
+            ObjectManager::getInstance()->get(GetSourcesByOrderIdSkuAndQty::class);
     }
 
     /**
@@ -137,7 +131,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
                 'sku' => $sku,
                 'product' => $this->getProductName($orderItem),
                 'qtyToShip' => $qty,
-                'sources' => $this->getSources($orderId, $stockId, $sku, $qty),
+                'sources' => $this->getSources($orderId, $sku, $qty),
                 'isManageStock' => $this->isManageStock($sku, $stockId)
             ];
         }
@@ -157,15 +151,14 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * Get sources
      *
      * @param int $orderId
-     * @param int $stockId
      * @param string $sku
      * @param float $qty
      * @return array
      * @throws NoSuchEntityException
      */
-    private function getSources(int $orderId, int $stockId, string $sku, float $qty): array
+    private function getSources(int $orderId, string $sku, float $qty): array
     {
-        $sources = $this->getSourcesByOrderIdStockIdSkuAndQty->execute($orderId, $stockId, $sku, $qty);
+        $sources = $this->getSourcesByOrderIdSkuAndQty->execute($orderId, $sku, $qty);
         foreach ($sources as $source) {
             $this->sources[$source['sourceCode']] = $source['sourceName'];
         }

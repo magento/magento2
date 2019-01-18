@@ -15,7 +15,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
@@ -49,11 +48,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     private $sourceRepository;
 
     /**
-     * @var StockByWebsiteIdResolverInterface
-     */
-    private $stockByWebsiteIdResolver;
-
-    /**
      * @var ItemRequestInterfaceFactory
      */
     private $itemRequestFactory;
@@ -72,19 +66,20 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * ProcessAlgorithm constructor.
      *
      * @param Context $context
-     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     * @param $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
+     * @param $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetInventoryRequestFromOrder|null $getInventoryRequestFromOrder
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
-        StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver,
+        $stockByWebsiteIdResolver,
         ItemRequestInterfaceFactory $itemRequestFactory,
-        InventoryRequestInterfaceFactory $inventoryRequestFactory,
+        $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceRepositoryInterface $sourceRepository,
@@ -94,7 +89,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
-        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->getInventoryRequestFromOrder = $getInventoryRequestFromOrder ?:
             ObjectManager::getInstance()->get(GetInventoryRequestFromOrder::class);
@@ -135,14 +129,9 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
             $requestData = $postRequest['requestData'];
             $defaultCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
             $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
-
-            //TODO: maybe need to add exception when websiteId empty
-            $websiteId = (int) $postRequest['websiteId'] ?? 1;
-            $stockId = (int) $this->stockByWebsiteIdResolver->execute($websiteId)->getStockId();
-
             $requestItems = $this->getRequestItems($requestData);
 
-            $inventoryRequest = $this->getInventoryRequestFromOrder->execute($stockId, $orderId, $requestItems);
+            $inventoryRequest = $this->getInventoryRequestFromOrder->execute($orderId, $requestItems);
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
             foreach ($requestData as $data) {

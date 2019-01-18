@@ -10,7 +10,7 @@ namespace Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\AddressToString;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressInterface;
 
 /**
  * Get geoname data by postcode

@@ -15,10 +15,9 @@ use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCo
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class GetSourcesByOrderIdStockIdSkuAndQty
- * @package Magento\InventoryShippingAdminUi\Ui\DataProvider
+ * Class GetSourcesByOrderIdSkuAndQty
  */
-class GetSourcesByOrderIdStockIdSkuAndQty
+class GetSourcesByOrderIdSkuAndQty
 {
     /**
      * @var ItemRequestInterfaceFactory
@@ -51,8 +50,6 @@ class GetSourcesByOrderIdStockIdSkuAndQty
     private $sources = [];
 
     /**
-     * GetSourcesByStockIdSkuAndQty constructor.
-     *
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
@@ -75,18 +72,16 @@ class GetSourcesByOrderIdStockIdSkuAndQty
     }
 
     /**
-     * TODO passing both OrderID and StockID is excessive, because you can always retrieve Website from Order and resolve Stock
-     * Get sources by stock id sku and qty
+     * Get sources by order id sku and qty
      *
      * @param int $orderId
-     * @param int $stockId
      * @param string $sku
      * @param float $qty
      * @return array
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function execute(int $orderId, int $stockId, string $sku, float $qty): array
+    public function execute(int $orderId, string $sku, float $qty): array
     {
         $algorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
 
@@ -95,7 +90,7 @@ class GetSourcesByOrderIdStockIdSkuAndQty
             'qty' => $qty
         ]);
 
-        $inventoryRequest = $this->getInventoryRequestFromOrder->execute($stockId, $orderId, [$requestItem]);
+        $inventoryRequest = $this->getInventoryRequestFromOrder->execute($orderId, [$requestItem]);
         $sourceSelectionResult = $this->sourceSelectionService->execute(
             $inventoryRequest,
             $algorithmCode
