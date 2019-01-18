@@ -98,7 +98,7 @@ class Context implements ContextInterface
     /**
      * @var AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @param PageLayoutInterface $pageLayout
@@ -123,9 +123,9 @@ class Context implements ContextInterface
         UrlInterface $urlBuilder,
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
-        AuthorizationInterface $authorization,
         DataProviderInterface $dataProvider = null,
-        $namespace = null
+        $namespace = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->namespace = $namespace;
         $this->request = $request;
@@ -137,7 +137,9 @@ class Context implements ContextInterface
         $this->urlBuilder = $urlBuilder;
         $this->processor = $processor;
         $this->uiComponentFactory = $uiComponentFactory;
-        $this->authorization = $authorization;
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(
+            AuthorizationInterface::class
+        );
         $this->setAcceptType();
     }
 
