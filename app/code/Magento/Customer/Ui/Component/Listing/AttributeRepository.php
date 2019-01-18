@@ -143,12 +143,11 @@ class AttributeRepository
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => str_replace(
-                '${',
-                '',
-                (string)$option->getLabel()
-            ),
-                'value' => $option->getValue()];
+            $option = [
+                'label' => (string)$option->getLabel(),
+                'value' => $option->getValue(),
+                '__ignore' => true
+            ];
         }
         return $options;
     }

@@ -47,7 +47,8 @@ class FilterFactory
     {
         $config = [
             'dataScope' => $attributeData[AttributeMetadata::ATTRIBUTE_CODE],
-            'label' => str_replace('${', '', __($attributeData[AttributeMetadata::FRONTEND_LABEL])),
+            'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
+            '__ignore' => 'true'
         ];
         if ($attributeData[AttributeMetadata::OPTIONS]) {
             $config['options'] = $attributeData[AttributeMetadata::OPTIONS];

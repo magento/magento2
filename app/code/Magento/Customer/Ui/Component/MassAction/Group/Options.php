@@ -87,8 +87,8 @@ class Options implements \JsonSerializable
             foreach ($options as $optionCode) {
                 $this->options[$optionCode['value']] = [
                     'type' => 'customer_group_' . $optionCode['value'],
-                    'label' => str_replace('${', '', __($optionCode['label'])),
-
+                    'label' => __($optionCode['label']),
+                    '__ignore' => true
                 ];
 
                 if ($this->urlPath && $this->paramName) {
