@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Processes payment information from a void transaction response
  */
-class CloseTransactionHandlerHandler implements HandlerInterface
+class CloseTransactionHandler implements HandlerInterface
 {
     /**
      * @var SubjectReader
@@ -34,7 +34,7 @@ class CloseTransactionHandlerHandler implements HandlerInterface
     /**
      * @inheritdoc
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();

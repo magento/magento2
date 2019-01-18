@@ -52,8 +52,6 @@ class CaptureStrategyCommand implements CommandInterface
     private $subjectReader;
 
     /**
-     * Constructor
-     *
      * @param CommandPoolInterface $commandPool
      * @param TransactionRepositoryInterface $repository
      * @param FilterBuilder $filterBuilder
@@ -99,8 +97,8 @@ class CaptureStrategyCommand implements CommandInterface
         ContextHelper::assertOrderPayment($payment);
 
         // If auth transaction does not exist then execute authorize&capture command
-        $existsCapture = $this->captureTransactionExists($payment);
-        if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
+        $captureExists = $this->captureTransactionExists($payment);
+        if (!$payment->getAuthorizationTransaction() && !$captureExists) {
             return self::AUTHORIZE;
         }
 

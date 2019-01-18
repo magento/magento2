@@ -111,7 +111,7 @@
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
                 <item name="transaction_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionDetailsResponseHandler</item>
-                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -126,7 +126,7 @@
     <virtualType name="AuthorizenetAcceptjsCancelHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="cancel" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
+                <item name="cancel" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>

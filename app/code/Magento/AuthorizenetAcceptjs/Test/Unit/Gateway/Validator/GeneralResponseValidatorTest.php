@@ -10,6 +10,7 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Validator;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +45,8 @@ class GeneralResponseValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->createMock(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [
@@ -76,7 +78,8 @@ class GeneralResponseValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->createMock(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [
@@ -108,7 +111,8 @@ class GeneralResponseValidatorTest extends TestCase
                 $args = $a;
 
                 return true;
-            }));
+            }))
+            ->willReturn($this->createMock(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [

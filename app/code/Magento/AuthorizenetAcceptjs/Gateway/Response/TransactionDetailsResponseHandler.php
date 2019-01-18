@@ -44,7 +44,7 @@ class TransactionDetailsResponseHandler implements HandlerInterface
     /**
      * @inheritdoc
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $storeId = $this->subjectReader->readStoreId($handlingSubject);
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);

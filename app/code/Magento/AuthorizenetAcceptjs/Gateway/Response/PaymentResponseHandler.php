@@ -35,7 +35,7 @@ class PaymentResponseHandler implements HandlerInterface
     /**
      * @inheritdoc
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();

@@ -89,7 +89,7 @@ class Client implements ClientInterface
                 ->getBody();
 
             // Strip BOM because Authorize.net sends it in the response
-            if ($responseBody && substr($responseBody, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+            if ($responseBody && substr($responseBody, 0, 3) === pack('CCC', 0xef, 0xbb, 0xbf)) {
                 $responseBody = substr($responseBody, 3);
             }
 
