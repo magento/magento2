@@ -29,6 +29,11 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
+    
+    /**
+     * @var \Magento\Widget\Model\Template\Filter
+     */
+    protected $templateProcessor;
 
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
@@ -44,6 +49,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Widget\Model\Template\Filter $templateProcessor
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
      * @codeCoverageIgnore
@@ -52,12 +58,14 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
         \Magento\Framework\Escaper $escaper,
+        \Magento\Widget\Model\Template\Filter $templateProcessor, 
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
         ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
         $this->escaper = $escaper;
+        $this->templateProcessor = $templateProcessor;
         $this->checkoutAgreementsList = $checkoutAgreementsList ?: ObjectManager::getInstance()->get(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
@@ -97,7 +105,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         foreach ($agreementsList as $agreement) {
             $agreementConfiguration['agreements'][] = [
                 'content' => $agreement->getIsHtml()
-                    ? $agreement->getContent()
+                    ? $this->templateProcessor->filter($agreement->getContent())
                     : nl2br($this->escaper->escapeHtml($agreement->getContent())),
                 'checkboxText' => $agreement->getCheckboxText(),
                 'mode' => $agreement->getMode(),
