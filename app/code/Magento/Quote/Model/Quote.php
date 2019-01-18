@@ -2284,11 +2284,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 $taxes = ($taxInclude) ? $address->getBaseTaxAmount() : 0;
                 foreach ($address->getQuote()->getItemsCollection() as $item) {
                     /** @var \Magento\Quote\Model\Quote\Item $item */
-                    if ($includeDiscount) {
-                        $amount = $item->getBaseRowTotal() - $item->getBaseDiscountAmount() + $taxes;
-                    } else {
-                        $amount = $taxInclude ? $item->getBaseRowTotalInclTax() : $item->getBaseRowTotal();
-                    }
+                    $amount = $includeDiscount ?
+                        $item->getBaseRowTotal() - $item->getBaseDiscountAmount() + $taxes :
+                        $item->getBaseRowTotal() + $taxes;
+
                     if ($amount < $minAmount) {
                         return false;
                     }
@@ -2298,11 +2297,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $baseTotal = 0;
             foreach ($addresses as $address) {
                 $taxes = ($taxInclude) ? $address->getBaseTaxAmount() : 0;
-                if ($includeDiscount) {
-                    $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
-                } else {
-                    $baseTotal += $taxInclude ? $address->getBaseSubtotalTotalInclTax() : $address->getBaseSubtotal();
-                }
+                $baseTotal += $includeDiscount ?
+                    $address->getBaseSubtotalWithDiscount() + $taxes :
+                    $address->getBaseSubtotal() + $taxes;
             }
             if ($baseTotal < $minAmount) {
                 return false;
