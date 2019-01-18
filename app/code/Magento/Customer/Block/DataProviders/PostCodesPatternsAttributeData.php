@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Block\DataProviders;
 
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Directory\Model\Country\Postcode\Config as PostCodeConfig;
 
@@ -22,7 +22,7 @@ class PostCodesPatternsAttributeData implements ArgumentInterface
     private $postCodeConfig;
 
     /**
-     * @var Json
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -30,20 +30,20 @@ class PostCodesPatternsAttributeData implements ArgumentInterface
      * Constructor
      *
      * @param PostCodeConfig $postCodeConfig
-     * @param Json $serializer
+     * @param SerializerInterface $serializer
      */
-    public function __construct(PostCodeConfig $postCodeConfig, Json $serializer)
+    public function __construct(PostCodeConfig $postCodeConfig, SerializerInterface $serializer)
     {
         $this->postCodeConfig = $postCodeConfig;
         $this->serializer = $serializer;
     }
 
     /**
-     * Get post codes in json format
+     * Get serialized post codes
      *
      * @return string
      */
-    public function getPostCodesJson(): string
+    public function getSerializedPostCodes(): string
     {
         return $this->serializer->serialize($this->postCodeConfig->getPostCodes());
     }
