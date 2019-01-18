@@ -190,9 +190,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * Get rules ids related to coupon code
      *
      * @param string $couponCode
-     * @return array|null
+     * @return array
      */
-    private function getCouponRelatedRuleIds(string $couponCode): ?array
+    private function getCouponRelatedRuleIds(string $couponCode): array
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
