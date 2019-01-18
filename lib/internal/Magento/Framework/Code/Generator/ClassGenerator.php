@@ -47,6 +47,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
         'abstract' => 'setAbstract',
         'visibility' => 'setVisibility',
         'body' => 'setBody',
+        'returntype' => 'setReturnType'
     ];
 
     /**
@@ -59,6 +60,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
         'type' => 'setType',
         'defaultValue' => 'setDefaultValue',
         'passedByReference' => 'setPassedByReference',
+        'variadic' => 'setVariadic',
     ];
 
     /**

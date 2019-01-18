@@ -16,5 +16,7 @@
         <section name="AdminCategoryBasicFieldSection"/>
         <section name="AdminCategorySEOSection"/>
         <section name="AdminCategoryModalSection"/>
+        <section name="AdminCategoryContentSection"/>
+        <section name="AdminCategoryDisplaySettingsSection"/>
     </page>
 </pages>

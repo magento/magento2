@@ -93,7 +93,7 @@ define([
          * @returns {Object} Chainable.
          */
         initModalEvents: function () {
-            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this[this.onCancel].bind(this);
+            this.options.keyEventHandlers.escapeKey = this[this.onCancel].bind(this);
 
             return this;
         },

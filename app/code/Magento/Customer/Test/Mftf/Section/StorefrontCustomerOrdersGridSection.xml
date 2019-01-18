@@ -1,0 +1,13 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrdersGridSection">
+        <element name="viewOrderAction" type="text" selector="//*[@id='my-orders-table']//*[text()='{{orderId}}']/..//a[contains(@class, 'action view')]" parameterized="true"/>
+        <element name="orderStatus" type="text" selector="//*[@id='my-orders-table']//*[text()='{{orderId}}']/..//td[contains(@class,'status')]" parameterized="true"/>
+    </section>
+</sections>

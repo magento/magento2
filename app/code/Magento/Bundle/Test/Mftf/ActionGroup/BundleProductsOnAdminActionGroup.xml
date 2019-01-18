@@ -47,4 +47,8 @@
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addBundleProduct}}" stepKey="goToNewBundleProductPage"/>
     </actionGroup>
+
+    <actionGroup name="CreateBundleProductForTwoSimpleProductsWithRadioTypeOptions" extends="CreateBundleProductForTwoSimpleProducts">
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="Radio Buttons" after="fillOptionTitle" stepKey="selectInputType"/>
+    </actionGroup>
 </actionGroups>

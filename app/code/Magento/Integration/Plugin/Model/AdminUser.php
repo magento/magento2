@@ -6,6 +6,8 @@
 namespace Magento\Integration\Plugin\Model;
 
 use Magento\Integration\Model\AdminTokenService;
+use Magento\Framework\DataObject;
+use Magento\User\Model\User;
 
 /**
  * Plugin to delete admin tokens when admin becomes inactive
@@ -29,16 +31,15 @@ class AdminUser
     /**
      * Check if admin is inactive - if so, invalidate their tokens
      *
-     * @param \Magento\User\Model\User $subject
-     * @param \Magento\Framework\DataObject $object
-     * @return $this
+     * @param User $subject
+     * @param DataObject $object
+     * @return User
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterSave(
-        \Magento\User\Model\User $subject,
-        \Magento\Framework\DataObject $object
-    ) {
+    public function afterSave(User $subject, DataObject $object): User
+    {
         $isActive = $object->getIsActive();
-        if (isset($isActive) && $isActive == 0) {
+        if ($isActive !== null && $isActive == 0) {
             $this->adminTokenService->revokeAdminAccessToken($object->getId());
         }
         return $subject;

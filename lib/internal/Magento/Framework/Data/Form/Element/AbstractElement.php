@@ -238,6 +238,7 @@ abstract class AbstractElement extends AbstractForm
             'onchange',
             'disabled',
             'readonly',
+            'autocomplete',
             'tabindex',
             'placeholder',
             'data-form-part',

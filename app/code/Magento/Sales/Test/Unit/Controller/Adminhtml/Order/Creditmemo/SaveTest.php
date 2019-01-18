@@ -197,9 +197,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
 
-        $creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, ['load', 'getGrandTotal', 'getAllowZeroGrandTotal', '__wakeup']);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('0'));
-        $creditmemoMock->expects($this->once())->method('getAllowZeroGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            ['load', 'isValidGrandTotal', '__wakeup']
+        );
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->willReturn(false);
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(

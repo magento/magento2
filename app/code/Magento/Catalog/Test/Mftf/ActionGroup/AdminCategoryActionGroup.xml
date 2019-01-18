@@ -87,4 +87,39 @@
         <see selector="{{AdminCategoryProductsGridSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
         <see selector="{{AdminCategoryProductsGridSection.priceColumn}}" userInput="{{product.price}}" stepKey="seeProductPriceInGrid"/>
     </actionGroup>
+
+    <actionGroup name="AdminNavigateToCategoryInTree">
+        <arguments>
+            <argument name="category"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
+        <waitForPageLoad stepKey="waitForTreeToExpand"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(category.name)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForCategoryPageLoaded"/>
+    </actionGroup>
+
+    <actionGroup name="ChangeSeoUrlKey">
+        <arguments>
+            <argument name="value" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.UrlKeyInput}}" visible="false" stepKey="openSeoSection"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{value}}" stepKey="enterURLKey"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="ChangeSeoUrlKeyForSubCategory" extends="ChangeSeoUrlKey">
+        <arguments>
+            <argument name="value" type="string"/>
+        </arguments>
+        <uncheckOption selector="{{AdminCategorySEOSection.urlKeyDefaultValueCheckbox}}" before="enterURLKey" stepKey="uncheckDefaultValue"/>
+    </actionGroup>
+
+    <!-- Save category form -->
+    <actionGroup name="saveCategoryForm">
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccess"/>
+    </actionGroup>
 </actionGroups>
