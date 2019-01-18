@@ -7,6 +7,7 @@
 
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
@@ -14,9 +15,10 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 
 /**
  * Class DownloadCustomOption
+ *
  * @package Magento\Sales\Controller\Download
  */
-class DownloadCustomOption extends \Magento\Framework\App\Action\Action
+class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var ForwardFactory
@@ -95,7 +97,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
             /** @var $productOption \Magento\Catalog\Model\Product\Option */
             $productOption = $this->_objectManager->create(
                 \Magento\Catalog\Model\Product\Option::class
-            )->load($optionId);
+            );
+            $productOption->load($optionId);
         }
 
         if ($productOption->getId() && $productOption->getType() != 'file') {
