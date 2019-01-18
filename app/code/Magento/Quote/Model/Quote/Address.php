@@ -1159,17 +1159,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             $storeId
         );
 
-        if ($includeDiscount) {
-            $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
 
-            $isMinimumReached = ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount);
-        } else {
-            $isMinimumReached = $taxInclude
-                ? ($this->getBaseSubtotalTotalInclTax() >= $amount)
-                : ($this->getBaseSubtotal() >= $amount);
-        }
-
-        return $isMinimumReached;
+        return $includeDiscount ?
+            ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
+            ($this->getBaseSubtotal() + $taxes >= $amount);
     }
 
     /**
