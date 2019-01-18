@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\UrlInterface;
