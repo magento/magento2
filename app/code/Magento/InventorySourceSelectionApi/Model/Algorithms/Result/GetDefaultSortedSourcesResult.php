@@ -105,6 +105,8 @@ class GetDefaultSortedSourcesResult
         $isShippable = true;
         $sourceItemSelections = [];
 
+        //@TODO from performance perspective it's better to switch these foreaches and make the inner one
+        //which loops over sources to be outermost and iterate over inventory request inside
         foreach ($inventoryRequest->getItems() as $item) {
             $itemSku = $item->getSku();
             $qtyToDeliver = $item->getQty();
