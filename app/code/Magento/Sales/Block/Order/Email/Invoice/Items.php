@@ -21,7 +21,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * Prepare item before output
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
-     * @return \Magento\Sales\Block\Items\AbstractItems
+     * @return void
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {

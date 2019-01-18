@@ -116,7 +116,7 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Returns string with formatted address
      *
-     * @param Address $address
+     * @param \Magento\Sales\Model\Order\Address $address
      * @return null|string
      */
     public function getFormattedAddress(\Magento\Sales\Model\Order\Address $address)

@@ -196,7 +196,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
     /**
      * Retrieve save url
      *
-     * @return array
+     * @return string
      */
     public function getSaveUrl()
     {
