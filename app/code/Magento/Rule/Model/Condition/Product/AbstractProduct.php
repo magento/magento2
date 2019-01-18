@@ -713,7 +713,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getOperatorForValidate()
     {
         $operator = $this->getOperator();
-        if (in_array($this->getInputType(), ['category', 'sku'])) {
+        if (in_array($this->getInputType(), ['category'])) {
             if ($operator == '==') {
                 $operator = '{}';
             } elseif ($operator == '!=') {
