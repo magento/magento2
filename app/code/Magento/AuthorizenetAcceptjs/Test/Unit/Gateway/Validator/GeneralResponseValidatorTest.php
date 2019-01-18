@@ -83,12 +83,12 @@ class GeneralResponseValidatorTest extends TestCase
 
         $this->validator->validate([
             'response' => [
-                'messages' => [
+                'errors' => [
                     'resultCode' => 'Error',
-                    'message' => [
+                    'error' => [
                         [
-                            'code' => 'foo',
-                            'text' => 'bar'
+                            'errorCode' => 'foo',
+                            'errorText' => 'bar'
                         ]
                     ]
                 ]

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptJs\Gateway\Http;
+namespace Magento\AuthorizenetAcceptjs\Gateway\Http;
 
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;

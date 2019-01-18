@@ -16,7 +16,7 @@ class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

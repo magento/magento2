@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptJs\Test\Unit\Gateway\Http;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter;
-use Magento\AuthorizenetAcceptJs\Gateway\Http\TransferFactory;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;

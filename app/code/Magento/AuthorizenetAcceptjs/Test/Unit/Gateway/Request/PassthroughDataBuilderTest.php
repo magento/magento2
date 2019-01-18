@@ -39,4 +39,13 @@ class PassthroughDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $builder->build([]));
     }
+
+    public function testBuildWithNoData()
+    {
+        $passthroughData = new PassthroughDataObject();
+        $builder = new PassthroughDataBuilder($passthroughData);
+        $expected = [];
+
+        $this->assertEquals($expected, $builder->build([]));
+    }
 }

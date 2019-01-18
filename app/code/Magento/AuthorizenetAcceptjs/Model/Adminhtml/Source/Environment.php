@@ -21,7 +21,7 @@ class Environment implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

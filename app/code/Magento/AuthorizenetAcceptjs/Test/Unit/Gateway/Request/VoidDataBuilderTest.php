@@ -46,7 +46,6 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-
         $transactionMock = $this->createMock(Payment\Transaction::class);
         $this->paymentMock->method('getAuthorizationTransaction')
             ->willReturn($transactionMock);

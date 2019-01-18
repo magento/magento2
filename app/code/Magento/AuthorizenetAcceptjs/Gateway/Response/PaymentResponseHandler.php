@@ -65,12 +65,14 @@ class PaymentResponseHandler implements HandlerInterface
                 $fields[$userField['name']] = $userField['value'];
             }
 
+            $additionalData = [];
             if (isset($fields['opaqueDataDescriptor'])) {
-                $payment->setAdditionalInformation('opaqueDataDescriptor', $fields['opaqueDataDescriptor']);
+                $additionalData['opaqueDataDescriptor'] = $fields['opaqueDataDescriptor'];
             }
             if (isset($fields['opaqueDataValue'])) {
-                $payment->setAdditionalInformation('opaqueDataValue', $fields['opaqueDataValue']);
+                $additionalData['opaqueDataValue'] = $fields['opaqueDataValue'];
             }
+            $payment->addData($additionalData);
         }
     }
 }
