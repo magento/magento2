@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
@@ -95,6 +96,11 @@ class Context implements ContextInterface
     protected $uiComponentFactory;
 
     /**
+     * @var AuthorizationInterface
+     */
+    protected $authorization;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
@@ -103,6 +109,7 @@ class Context implements ContextInterface
      * @param UrlInterface $urlBuilder
      * @param Processor $processor
      * @param UiComponentFactory $uiComponentFactory
+     * @param AuthorizationInterface $authorization
      * @param DataProviderInterface|null $dataProvider
      * @param string|null $namespace
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -116,6 +123,7 @@ class Context implements ContextInterface
         UrlInterface $urlBuilder,
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
+        AuthorizationInterface $authorization,
         DataProviderInterface $dataProvider = null,
         $namespace = null
     ) {
@@ -129,6 +137,7 @@ class Context implements ContextInterface
         $this->urlBuilder = $urlBuilder;
         $this->processor = $processor;
         $this->uiComponentFactory = $uiComponentFactory;
+        $this->authorization = $authorization;
         $this->setAcceptType();
     }
 
@@ -280,6 +289,9 @@ class Context implements ContextInterface
             uasort($buttons, [$this, 'sortButtons']);
 
             foreach ($buttons as $buttonId => $buttonData) {
+                if (isset($buttonData['aclResource']) && !$this->authorization->isAllowed($buttonData['aclResource'])) {
+                    continue;
+                }
                 if (isset($buttonData['url'])) {
                     $buttonData['url'] = $this->getUrl($buttonData['url']);
                 }
