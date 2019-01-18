@@ -89,7 +89,6 @@ class GetInventoryRequestFromOrder
         /** @var OrderInterface $order */
         $order = $this->orderRepository->get($orderId);
 
-        $address = $this->getAddressFromOrder($order);
         $store = $this->storeManager->getStore($order->getStoreId());
         $stock = $this->stockByWebsiteIdResolver->execute($store->getWebsiteId());
 
@@ -98,9 +97,12 @@ class GetInventoryRequestFromOrder
             'items'   => $requestItems
         ]);
 
-        $extensionAttributes = $this->inventoryRequestExtensionFactory->create();
-        $extensionAttributes->setDestinationAddress($address);
-        $inventoryRequest->setExtensionAttributes($extensionAttributes);
+        $address = $this->getAddressFromOrder($order);
+        if ($address !== null) {
+            $extensionAttributes = $this->inventoryRequestExtensionFactory->create();
+            $extensionAttributes->setDestinationAddress($address);
+            $inventoryRequest->setExtensionAttributes($extensionAttributes);
+        }
 
         return $inventoryRequest;
     }
@@ -109,12 +111,15 @@ class GetInventoryRequestFromOrder
      * Create an address from an order
      *
      * @param OrderInterface $order
-     * @return AddressInterface
+     * @return null|AddressInterface
      */
-    private function getAddressFromOrder(OrderInterface $order): AddressInterface
+    private function getAddressFromOrder(OrderInterface $order): ?AddressInterface
     {
         /** @var Address $shippingAddress */
         $shippingAddress = $order->getShippingAddress();
+        if ($shippingAddress === null) {
+            return;
+        }
 
         return $this->addressInterfaceFactory->create([
             'country' => $shippingAddress->getCountryId(),
