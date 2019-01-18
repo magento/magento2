@@ -41,7 +41,7 @@ define([
              * @param {Object} actions
              */
             validate: function (actions) {
-                clientConfig.rendererComponent.initButtonActions(actions);
+                clientConfig.rendererComponent.validate(actions);
             },
 
             /**
