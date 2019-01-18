@@ -11,6 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Paypal\Model\Config as PayPalConfig;
 use Magento\Paypal\Model\Express\Checkout as PayPalCheckout;
+use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
  * Processes data after returning from PayPal
@@ -140,6 +141,9 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
                 $responseContent['redirectUrl'] = $this->urlBuilder->getUrl('paypal/express/review');
                 $this->_checkoutSession->setQuoteId($quote->getId());
             }
+        } catch (ApiProcessableException $e) {
+            $responseContent['success'] = false;
+            $responseContent['error_message'] = $e->getUserMessage();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent['success'] = false;
             $responseContent['error_message'] = $e->getMessage();
