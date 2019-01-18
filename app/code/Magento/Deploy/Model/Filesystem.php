@@ -165,6 +165,7 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ]
         );
+        $this->reinitCacheDirectories();
         
         // Trigger code generation
         $this->compile($output);
@@ -222,10 +223,6 @@ class Filesystem
      */
     private function getUsedLocales()
     {
-        /** init cache directory */
-        $this->filesystem
-            ->getDirectoryWrite(DirectoryList::CACHE)
-            ->create();
         $usedLocales = array_merge(
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
@@ -362,5 +359,16 @@ class Filesystem
             self::PERMISSIONS_DIR,
             self::PERMISSIONS_FILE
         );
+    }
+
+    /**
+     * Flush cache and restore the basic cache directories.
+     *
+     * @throws LocalizedException
+     */
+    private function reinitCacheDirectories()
+    {
+        $command = $this->functionCallPath . 'cache:flush';
+        $this->shell->execute($command);
     }
 }
