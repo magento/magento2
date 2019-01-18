@@ -68,9 +68,9 @@ define([
                     button: clientConfig.button,
                     form_key: clientConfig.formKey
                 };
-                    if (clientConfig.hasOwnProperty('billingAgreement')) {
-                        params.paypal_ec_create_ba = clientConfig.billingAgreement;
-                    }
+                if (clientConfig.hasOwnProperty('billingAgreement')) {
+                    params.paypal_ec_create_ba = clientConfig.billingAgreement;
+                }
                 if (!clientConfig.button) {
                     return new paypal.Promise(function (resolve, reject) {
                         clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
