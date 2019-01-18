@@ -12,7 +12,7 @@
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\LatLng"/>
 
-    <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
+    <type name="Magento\InventorySourceSelectionApi\Model\SourceSelectionService">
         <arguments>
             <argument name="sourceSelectionMethods" xsi:type="array">
                 <item name="distance"
