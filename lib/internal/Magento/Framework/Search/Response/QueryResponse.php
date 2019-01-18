@@ -39,6 +39,7 @@ class QueryResponse implements ResponseInterface
     /**
      * @param Document[] $documents
      * @param AggregationInterface $aggregations
+     * @param Total size int $size
      */
     public function __construct(array $documents, AggregationInterface $aggregations, int $size = 0)
     {

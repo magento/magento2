@@ -139,7 +139,7 @@ class Adapter implements AdapterInterface
         $parentSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $parentSelect->columns('COUNT(*)');
         $totalRecords = $this->getConnection()->fetchOne($parentSelect);
-        return intval($totalRecords);
+        return (int)$totalRecords;
     }
 
     /**

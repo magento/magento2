@@ -42,7 +42,6 @@ class SearchResponseBuilder
     {
         /** @var \Magento\Framework\Api\Search\SearchResult $searchResult */
         $searchResult = $this->searchResultFactory->create();
-
         $documents = iterator_to_array($response);
         $searchResult->setItems($documents);
         $searchResult->setAggregations($response->getAggregations());
