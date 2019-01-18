@@ -15,8 +15,6 @@ use Magento\Catalog\Model\Product\Option;
  */
 class Checkable extends AbstractOptions
 {
-    /** @noinspection ClassOverridesFieldOfSuperClassInspection */
-
     /**
      * @var string
      */
@@ -28,7 +26,6 @@ class Checkable extends AbstractOptions
      */
     public function formatPrice(ProductCustomOptionValuesInterface $value)
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         return parent::_formatPrice(
             [
                 'is_percent' => $value->getPriceType() === 'percent',
@@ -43,7 +40,6 @@ class Checkable extends AbstractOptions
      */
     public function getCurrencyByStore(ProductCustomOptionValuesInterface $value)
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         return $this->pricingHelper->currencyByStore(
             $value->getPrice(true),
             $this->getProduct()->getStore(),
