@@ -25,7 +25,7 @@
         <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
         <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
         <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
-        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
         <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
         <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
         <element name="advancedInventoryLink" type="button" selector="//button[contains(@data-index, 'advanced_inventory_button')]"/>
