@@ -17,14 +17,12 @@
                 type="Magento\InventorySourceSelection\Model\Result\SourceSelectionItem"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface"
                 type="Magento\InventorySourceSelection\Model\Result\SourceSelectionResult"/>
-    <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface"
-                type="Magento\InventorySourceSelection\Model\SourceSelectionService"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface"
                 type="Magento\InventorySourceSelection\Model\GetDefaultSourceSelectionAlgorithmCode"/>
     <preference for="Magento\InventorySourceSelectionApi\Api\Data\AddressInterface"
                 type="Magento\InventorySourceSelection\Model\Address"/>
 
-    <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
+    <type name="Magento\InventorySourceSelectionApi\Model\SourceSelectionService">
         <arguments>
             <argument name="sourceSelectionMethods" xsi:type="array">
                 <item name="priority"

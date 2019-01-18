@@ -9,6 +9,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface"
                 type="Magento\InventorySourceSelectionApi\Model\GetSourceSelectionAlgorithmList"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface"
+                type="Magento\InventorySourceSelectionApi\Model\SourceSelectionService"/>
 
     <type name="Magento\InventorySourceSelectionApi\Model\GetSourceSelectionAlgorithmList">
         <arguments>
