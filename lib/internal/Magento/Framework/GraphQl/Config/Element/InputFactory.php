@@ -73,7 +73,7 @@ class InputFactory implements ConfigElementFactoryInterface
     }
 
     /**
-     * Create type object based off array of configured GraphQL InputType data.
+     * Create input type object based off array of configured GraphQL InputType data.
      *
      * Type data must contain name and the type's fields. Optional data includes description.
      *

@@ -44,7 +44,7 @@ class Fields
                 ]
             );
             if (isset($variables)) {
-                $queryFields = array_merge($queryFields, $this->getVariables($variables));
+                $queryFields = array_merge($queryFields, $this->extracttVariables($variables));
             }
         } catch (\Exception $e) {
             // If a syntax error is encountered do not collect fields
@@ -75,12 +75,12 @@ class Fields
      *
      * @return string[]
      */
-    private function getVariables(array $variables): array
+    private function extracttVariables(array $variables): array
     {
         $fields = [];
         foreach ($variables as $key => $value){
             if (is_array($value)){
-                $fields = array_merge($fields, $this->getVariables($value));
+                $fields = array_merge($fields, $this->extracttVariables($value));
             }
             $fields[$key] = $key;
         }

@@ -71,7 +71,10 @@ class TypeRegistry
             $configElementClass = get_class($configElement);
             if (!isset($this->configToTypeMap[$configElementClass])) {
                 throw new GraphQlInputException(
-                    new Phrase("Type for '{$configElementClass}' has not declared.")
+                    new Phrase(
+                        "No mapping to Webonyx type is declared for '%1' config element type.",
+                        [$configElementClass]
+                    )
                 );
             }
 
