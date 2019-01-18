@@ -2432,6 +2432,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -2459,25 +2460,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return true;
         }
 
+        // if product doesn't exist, need to throw critical error else all errors should be not critical.
+        $errorLevel = $this->getValidationErrorLevel();
+
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->skipRow(
-                    $rowNum,
-                    $message,
-                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
-                    $this->validator->getInvalidAttribute()
-                );
+                $this->skipRow($rowNum, $message, $errorLevel, $this->validator->getInvalidAttribute());
             }
         }
 
         if (null === $sku) {
-            $this->skipRow($rowNum, ValidatorInterface::ERROR_SKU_IS_EMPTY);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_SKU_IS_EMPTY, $errorLevel);
         } elseif (false === $sku) {
-            $this->skipRow($rowNum, ValidatorInterface::ERROR_ROW_IS_ORPHAN);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_ROW_IS_ORPHAN, $errorLevel);
         } elseif (self::SCOPE_STORE == $rowScope
             && !$this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
         ) {
-            $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_STORE);
+            $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_STORE, $errorLevel);
         }
 
         // SKU is specified, row is SCOPE_DEFAULT, new product block begins
@@ -2492,15 +2491,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->prepareNewSkuData($sku)
                 );
             } else {
-                $this->skipRow($rowNum, ValidatorInterface::ERROR_TYPE_UNSUPPORTED);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_TYPE_UNSUPPORTED, $errorLevel);
             }
         } else {
             // validate new product type and attribute set
             if (!isset($rowData[self::COL_TYPE], $this->_productTypeModels[$rowData[self::COL_TYPE]])) {
-                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_TYPE);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_TYPE, $errorLevel);
             } elseif (!isset($rowData[self::COL_ATTR_SET], $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]])
             ) {
-                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_ATTR_SET);
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_INVALID_ATTR_SET, $errorLevel);
             } elseif ($this->skuProcessor->getNewSku($sku) === null) {
                 $this->skuProcessor->addNewSku(
                     $sku,
@@ -2570,11 +2569,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
             $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
             if ($newFromTimestamp > $newToTimestamp) {
-                $this->addRowError(
-                    ValidatorInterface::ERROR_NEW_TO_DATE,
-                    $rowNum,
-                    $rowData[self::COL_NEW_TO_DATE]
-                );
+                $this->skipRow($rowNum, ValidatorInterface::ERROR_NEW_TO_DATE, $errorLevel, $rowData[self::COL_NEW_TO_DATE]);
             }
         }
 
@@ -3120,5 +3115,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->getErrorAggregator()
             ->addRowToSkip($rowNum);
         return $this;
+    }
+
+    /**
+     * Returns errorLevel for validation
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getValidationErrorLevel($sku): string
+    {
+        return (!$this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
+            ? ProcessingError::ERROR_LEVEL_CRITICAL
+            : ProcessingError::ERROR_LEVEL_NOT_CRITICAL;
     }
 }
