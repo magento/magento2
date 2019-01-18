@@ -66,7 +66,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     /**
      * @var GetInventoryRequestFromOrder
      */
-    private $inventoryRequestFromOrder;
+    private $getInventoryRequestFromOrder;
 
     /**
      * ProcessAlgorithm constructor.
@@ -96,7 +96,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         $this->sourceRepository = $sourceRepository;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
-        $this->inventoryRequestFromOrder = $getInventoryRequestFromOrder ?:
+        $this->getInventoryRequestFromOrder = $getInventoryRequestFromOrder ?:
             ObjectManager::getInstance()->get(GetInventoryRequestFromOrder::class);
     }
 
@@ -142,7 +142,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
 
             $requestItems = $this->getRequestItems($requestData);
 
-            $inventoryRequest = $this->inventoryRequestFromOrder->execute($stockId, $orderId, $requestItems);
+            $inventoryRequest = $this->getInventoryRequestFromOrder->execute($stockId, $orderId, $requestItems);
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
             foreach ($requestData as $data) {
