@@ -118,7 +118,7 @@ class GetInventoryRequestFromOrder
         /** @var Address $shippingAddress */
         $shippingAddress = $order->getShippingAddress();
         if ($shippingAddress === null) {
-            return;
+            return null;
         }
 
         return $this->addressInterfaceFactory->create([
