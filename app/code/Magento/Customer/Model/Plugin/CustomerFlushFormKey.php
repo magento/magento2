@@ -47,7 +47,7 @@ class CustomerFlushFormKey
         $currentFormKey = $this->dataFormKey->getFormKey();
         $proceed($observer);
         $beforeParams = $this->session->getBeforeRequestParams();
-        if ($beforeParams['form_key'] == $currentFormKey) {
+        if (isset($beforeParams['form_key']) && $beforeParams['form_key'] === $currentFormKey) {
             $beforeParams['form_key'] = $this->dataFormKey->getFormKey();
             $this->session->setBeforeRequestParams($beforeParams);
         }

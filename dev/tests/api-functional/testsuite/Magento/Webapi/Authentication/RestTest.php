@@ -168,6 +168,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         self::consumerFixture();
         $oAuthClientB = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
+        $oAuthClientB->requestRequestToken();
 
         $oAuthClientB->requestAccessToken(
             $requestTokenA->getRequestToken(),

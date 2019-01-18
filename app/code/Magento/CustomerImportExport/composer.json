@@ -2,7 +2,7 @@
     "name": "magento/module-customer-import-export",
     "description": "N/A",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-store": "100.1.*",
         "magento/module-backend": "100.1.*",
         "magento/module-customer": "100.1.*",
@@ -12,7 +12,7 @@
         "magento/framework": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.6",
+    "version": "100.1.7",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

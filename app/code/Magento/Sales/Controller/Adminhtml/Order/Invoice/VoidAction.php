@@ -6,7 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+class VoidAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * Void invoice action

@@ -2,7 +2,7 @@
     "name": "magento/module-fedex",
     "description": "N/A",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-store": "100.1.*",
         "magento/module-shipping": "100.1.*",
         "magento/module-directory": "100.1.*",
@@ -15,7 +15,7 @@
         "lib-libxml": "*"
     },
     "type": "magento2-module",
-    "version": "100.1.5",
+    "version": "100.1.6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

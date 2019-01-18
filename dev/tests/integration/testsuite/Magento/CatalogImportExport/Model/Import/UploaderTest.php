@@ -46,6 +46,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $tmpDir = $this->directory->getRelativePath($mediaPath . '/import');
+        $this->directory->create($tmpDir);
         $this->uploader->setTmpDir($tmpDir);
 
         parent::setUp();
@@ -78,5 +79,17 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $this->uploader->move($fileName);
 
         $this->assertFalse($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class);
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $directory->delete('import');
     }
 }

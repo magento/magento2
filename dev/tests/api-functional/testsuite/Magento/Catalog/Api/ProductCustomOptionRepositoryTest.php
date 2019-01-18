@@ -220,7 +220,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            if (isset($optionDataPost['title']) && empty($optionDataPost['title'])) {
+            if ($optionDataPost['title'] === null || $optionDataPost['title'] === '') {
                 $this->setExpectedException('SoapFault', 'Missed values for option required fields');
             } else {
                 $this->setExpectedException('SoapFault', 'Invalid option');

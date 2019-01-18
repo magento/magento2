@@ -56,6 +56,9 @@ var config = {
         "mixins": {
             "jquery/jstree/jquery.jstree": {
                 "mage/backend/jstree-mixin": true
+            },
+            'jquery': {
+                'jquery/patches/jquery': true
             }
         }
     }

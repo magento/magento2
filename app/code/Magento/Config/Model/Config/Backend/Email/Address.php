@@ -20,7 +20,8 @@ class Address extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        if (!\Zend_Validate::is($value, 'EmailAddress')) {
+        $validator = new \Zend\Validator\EmailAddress();
+        if (!$validator->isValid($value)) {
             throw new LocalizedException(__('Please correct the email address: "%1".', $value));
         }
         return $this;

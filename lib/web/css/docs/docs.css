@@ -4187,7 +4187,7 @@ select {
   color: #000066;
 }
 .example-message-4:before {
-  background: #green;
+  background: green;
   width: 30px;
   content: '';
   display: block;
@@ -4230,7 +4230,7 @@ select {
   border: 5px solid transparent;
   height: 0;
   width: 0;
-  border-left-color: #green;
+  border-left-color: green;
   left: 30px;
 }
 .example-message-4 > *:first-child:after {

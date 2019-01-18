@@ -31,6 +31,11 @@ define([
             this.options.cache.input = $(this.options.passwordSelector, this.element);
             this.options.cache.meter = $(this.options.passwordStrengthMeterSelector, this.element);
             this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
+
+            // We need to look outside the module for backward compatibility, since someone can already use the module.
+            // @todo Narrow this selector in 2.3 so it doesn't accidentally finds the the email field from the
+            // newsletter email field or any other "email" field.
+            this.options.cache.email = $(this.options.formSelector).find(this.options.emailSelector);
             this._bind();
         },
 
@@ -60,8 +65,20 @@ define([
             // Display score is based on combination of whether password is empty, valid, and zxcvbn strength
             if (isEmpty) {
                 displayScore = 0;
-            } else if (!isValid) {
-                displayScore = 1;
+            } else {
+                this.options.cache.input.rules('add', {
+                    'password-not-equal-to-user-name': this.options.cache.email.val()
+                });
+
+                // We should only perform this check in case there is an email field on screen
+                if (this.options.cache.email.length &&
+                    password.toLowerCase() === this.options.cache.email.val().toLowerCase()) {
+                    displayScore = 1;
+                } else {
+                    isValid = $.validator.validateSingleElement(this.options.cache.input);
+                    zxcvbnScore = zxcvbn(password).score;
+                    displayScore = isValid ? zxcvbnScore : 1;
+                }
             }
 
             // Update label

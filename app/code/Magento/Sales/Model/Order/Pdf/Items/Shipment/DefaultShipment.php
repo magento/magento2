@@ -89,7 +89,7 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                 ];
 
                 // draw options value
-                if ($option['value']) {
+                if ($option['value']!= null) {
                     $printValue = isset(
                         $option['print_value']
                     ) ? $option['print_value'] : $this->filterManager->stripTags(
