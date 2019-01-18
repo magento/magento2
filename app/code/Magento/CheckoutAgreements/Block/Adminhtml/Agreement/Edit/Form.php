@@ -22,6 +22,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $_wysiwygConfig;
     
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * Editor config path
+     */
+   const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_agreements';
+    
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -30,6 +40,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      * @codeCoverageIgnore
      */
@@ -40,11 +51,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = []
     ) {
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
         $this->_wysiwygConfig = $wysiwygConfig;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -69,6 +82,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $model = $this->_coreRegistry->registry('checkout_agreement');
         $wysiwygConfig = $this->_wysiwygConfig->getConfig();
+        $showEditor = $this->scopeConfig->getValue(self::XML_PATH_SHOW_EDITOR);
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
@@ -156,20 +170,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset->addField(
             'checkbox_text',
-            'editor',
+            'textarea',
             [
                 'name' => 'checkbox_text',
                 'label' => __('Checkbox Text'),
                 'title' => __('Checkbox Text'),
                 'rows' => '5',
                 'cols' => '30',
-                'wysiwyg' => false,
-                'config' =>$wysiwygConfig,
                 'required' => true
             ]
         );
 
-        $fieldset->addField(
+        if($showEditor){
+           $fieldset->addField(
             'content',
             'editor',
             [
@@ -177,11 +190,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Content'),
                 'title' => __('Content'),
                 'style' => 'height:24em;',
-                'wysiwyg' => false,
-                'config' =>$wysiwygConfig,
-                'required' => true
+                'required' => true,
+                'wysiwyg' => true,
+                'config' =>$wysiwygConfig
             ]
+        ); 
+       }else{
+        $fieldset->addField(
+            'content',
+            'textarea',
+            [
+                'name' => 'content',
+                'label' => __('Content'),
+                'title' => __('Content'),
+                'style' => 'height:24em;',
+                'required' => true,
+             ]
         );
+       }
 
         $fieldset->addField(
             'content_height',
