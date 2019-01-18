@@ -56,8 +56,8 @@ class GetSourceSelectionResultFromInvoice
      *
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param $stockByWebsiteIdResolver
-     * @param $inventoryRequestFactory
+     * @param null $stockByWebsiteIdResolver @deprecated
+     * @param null $inventoryRequestFactory @deprecated
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetInventoryRequestFromOrder|null $getInventoryRequestFromOrder

@@ -66,9 +66,9 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * ProcessAlgorithm constructor.
      *
      * @param Context $context
-     * @param $stockByWebsiteIdResolver
+     * @param null $stockByWebsiteIdResolver @deprecated
      * @param ItemRequestInterfaceFactory $itemRequestFactory
-     * @param $inventoryRequestFactory
+     * @param null $inventoryRequestFactory @deprecated
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository

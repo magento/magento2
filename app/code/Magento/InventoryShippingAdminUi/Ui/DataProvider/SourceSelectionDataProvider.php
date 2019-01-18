@@ -59,7 +59,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
      * @param OrderRepository $orderRepository
      * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param $getSourcesByStockIdSkuAndQty
+     * @param null $getSourcesByStockIdSkuAndQty @deprecated
      * @param GetSkuFromOrderItemInterface $getSkuFromOrderItem
      * @param GetSourcesByOrderIdSkuAndQty $getSourcesByOrderIdSkuAndQty
      * @param array $meta
