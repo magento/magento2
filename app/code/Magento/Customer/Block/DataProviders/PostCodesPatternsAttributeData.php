@@ -39,11 +39,11 @@ class PostCodesPatternsAttributeData implements ArgumentInterface
     }
 
     /**
-     * Get post codes in json format
+     * Get serialized post codes
      *
      * @return string
      */
-    public function getPostCodesJson(): string
+    public function getSerializedPostCodes(): string
     {
         return $this->serializer->serialize($this->postCodeConfig->getPostCodes());
     }
