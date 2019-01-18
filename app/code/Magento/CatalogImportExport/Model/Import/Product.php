@@ -2461,7 +2461,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         // if product doesn't exist, need to throw critical error else all errors should be not critical.
-        $errorLevel = $this->getValidationErrorLevel();
+        $errorLevel = $this->getValidationErrorLevel($sku);
 
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
