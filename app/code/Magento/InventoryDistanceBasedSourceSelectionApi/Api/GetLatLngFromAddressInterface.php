@@ -15,7 +15,7 @@ namespace Magento\InventoryDistanceBasedSourceSelectionApi\Api;
 interface GetLatLngFromAddressInterface
 {
     /**
-     * Get latitude and longitude object from source
+     * Get latitude and longitude object from address
      *
      * @param \Magento\InventorySourceSelectionApi\Api\Data\AddressInterface $address
      * @return \Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface
