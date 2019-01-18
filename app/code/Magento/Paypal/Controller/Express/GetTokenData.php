@@ -170,11 +170,6 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
                 $quote->getBillingAddress(),
                 $quote->getShippingAddress()
             );
-
-            // billing agreement
-            $isBaRequested = (bool)$this->getRequest()
-                ->getParam(Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
-            $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
         }
 
         // giropay urls

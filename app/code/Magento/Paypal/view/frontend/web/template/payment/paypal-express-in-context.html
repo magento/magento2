@@ -27,7 +27,6 @@
     </div>
     <div class="payment-method-content">
         <each args="getRegion('messages')" render=""/>
-        <render args="billingAgreementTemplate"/>
         <div class="checkout-agreements-block" attr="id: getAgreementId()">
             <each args="$parent.getRegion('before-place-order')" render=""/>
         </div>

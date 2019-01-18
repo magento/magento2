@@ -37,7 +37,6 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_Paypal/payment/paypal-express-in-context',
-            billingAgreementTemplate: 'Magento_Paypal/payment/express/billing-agreement'
         },
 
         /**
@@ -106,10 +105,6 @@ define([
             /** Add logic to be triggered onClick action for smart buttons component*/
             this.clientConfig.onClick = function () {
                 additionalValidators.validate();
-
-                if (this.getBillingAgreementCode()) {
-                    this.clientConfig.billingAgreement = this.billingAgreement();
-                }
                 this.selectPaymentMethod();
             };
             this.clientConfig.additionalAction = setPaymentMethodAction;
