@@ -14,6 +14,7 @@ use Magento\Eav\Model\ResourceModel\GetAttributeOptionId;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use \Magento\Framework\App\ObjectManager;
 
 /**
  * Eav Option Management
@@ -42,13 +43,17 @@ class OptionManagement implements AttributeOptionManagementInterface
      * @codeCoverageIgnore
      */
     public function __construct(
-        AttributeRepository $attributeRepository,
+        AttributeRepository $attributeRepository = null,
         Attribute $resourceModel,
-        GetAttributeOptionId $getAttributeOptionId
+        GetAttributeOptionId $getAttributeOptionId = null
     ) {
-        $this->attributeRepository = $attributeRepository;
+        $this->attributeRepository = $attributeRepository ?: ObjectManager::getInstance()->get(
+            AttributeRepository::class
+        );
         $this->resourceModel = $resourceModel;
-        $this->getAttributeOptionId = $getAttributeOptionId;
+        $this->getAttributeOptionId = $getAttributeOptionId ?: ObjectManager::getInstance()->get(
+            GetAttributeOptionId::class
+        );
     }
 
     /**
