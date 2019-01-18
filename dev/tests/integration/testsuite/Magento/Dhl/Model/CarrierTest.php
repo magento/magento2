@@ -216,7 +216,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('MAGE_TRCK_', $messageReference);
         $this->assertGreaterThanOrEqual(28, strlen($messageReference));
         $this->assertLessThanOrEqual(32, strlen($messageReference));
-        $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_TRCK_CHECKED';
+        $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_TRCK_28TO32_Char_CHECKED';
         $this->assertXmlStringEqualsXmlString($expectedRequestElement->asXML(), $requestElement->asXML());
     }
 

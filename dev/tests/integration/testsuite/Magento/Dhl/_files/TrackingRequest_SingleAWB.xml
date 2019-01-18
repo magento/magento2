@@ -9,7 +9,7 @@
 	<Request>
 		<ServiceHeader>
 			<MessageTime>2002-06-25T11:28:56-08:00</MessageTime>
-			<MessageReference>MAGE_TRCK_CHECKED</MessageReference>
+			<MessageReference>MAGE_TRCK_28TO32_Char_CHECKED</MessageReference>
 			<SiteID>CustomerSiteID</SiteID>
 			<Password>CustomerPassword</Password>
 		</ServiceHeader>

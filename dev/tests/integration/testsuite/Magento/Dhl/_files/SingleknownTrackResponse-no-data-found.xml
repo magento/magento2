@@ -9,7 +9,7 @@
     <Response>
         <ServiceHeader>
             <MessageTime>2018-02-27T12:59:34+01:00</MessageTime>
-            <MessageReference>tracking_4781585060</MessageReference>
+            <MessageReference>1234567890123456789012345678</MessageReference>
             <SiteID>CustomerSiteID</SiteID>
         </ServiceHeader>
     </Response>
