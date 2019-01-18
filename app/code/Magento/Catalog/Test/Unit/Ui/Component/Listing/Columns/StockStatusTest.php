@@ -77,16 +77,12 @@ class StockStatusTest extends AbstractColumnTest
             'data' => [
                 'items' => [
                     [
-                        StockStatus::NAME => self::STOCK_STATUS_TEXT,
+                        'entity_id' => self::ENTITY_ID,
+                        StockStatus::NAME => null,
                     ]
                 ],
             ],
         ];
-
-        $this->statusMock->expects($this->once())
-                         ->method('getOptionText')
-                         ->with(\Magento\Catalog\Model\Product\Attribute\Source\StockStatus::IN_STOCK)
-                         ->willReturn(self::STOCK_STATUS_TEXT);
 
         $this->assertEquals($expectedDataSource, $this->getModel()->prepareDataSource($dataSource));
     }

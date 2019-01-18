@@ -11,6 +11,9 @@ namespace Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class StockStatus
+ */
 class StockStatus extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

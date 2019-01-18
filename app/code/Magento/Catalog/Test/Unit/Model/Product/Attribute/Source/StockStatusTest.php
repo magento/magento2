@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+/**
+ * Class StockStatusTest
+ */
 class StockStatusTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\Product\Attribute\Source\StockStatus */
@@ -26,7 +29,7 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptionArray()
     {
-        $this->assertEquals([1 => 'In Stock', 0 => 'Out of Stock'], $this->stastockStatus->getOptionArray());
+        $this->assertEquals([1 => 'In Stock', 0 => 'Out of Stock'], $this->stockStatus->getOptionArray());
     }
 
     /**
