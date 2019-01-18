@@ -283,6 +283,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->httpResponse->method('getBody')
             ->willReturn($responseXml);
 
+        $this->coreDateMock->method('date')
+           ->willReturnCallback(function () {
+               return date(\DATE_RFC3339);
+           });
+
         $request = $this->objectManager->getObject(RateRequest::class, $requestData);
 
         $reflectionClass = new \ReflectionObject($this->httpClient);
@@ -516,68 +521,104 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests that the built message reference string is of the appropriate format.
+     * Tests that the built MessageReference string is of the appropriate format.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid service prefix
+     * @dataProvider buildMessageReferenceDataProvider
+     * @param $servicePrefix
      * @throws \ReflectionException
      */
-    public function testBuildMessageReference()
+    public function testBuildMessageReference($servicePrefix)
     {
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
 
-        $constPrefixQuote = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_QUOTE');
-        $constPrefixShipval = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_SHIPVAL');
-        $constPrefixTracking = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_TRACKING');
+        $messageReference = $method->invoke($this->model, $servicePrefix);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+    }
 
-        $msgRefQuote = $method->invoke($this->model, $constPrefixQuote->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefQuote));
-        self::assertLessThanOrEqual(32, strlen($msgRefQuote));
+    /**
+     * @return array
+     */
+    public function buildMessageReferenceDataProvider()
+    {
+        return [
+            'quote_prefix' => ['QUOT'],
+            'shipval_prefix' => ['SHIP'],
+            'tracking_prefix' => ['TRCK']
+        ];
+    }
 
-        $msgRefShip = $method->invoke($this->model, $constPrefixShipval->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefShip));
-        self::assertLessThanOrEqual(32, strlen($msgRefShip));
+    /**
+     * Tests that an exception is thrown when an invalid service prefix is provided.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid service prefix
+     */
+    public function testBuildMessageReferenceInvalidPrefix()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
 
-        $msgRefTrack = $method->invoke($this->model, $constPrefixTracking->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefTrack));
-        self::assertLessThanOrEqual(32, strlen($msgRefTrack));
-
-        $method->invoke($this->model, 'TEST');
+        $method->invoke($this->model, 'INVALID');
     }
 
     /**
      * Tests that the built software name string is of the appropriate format.
      *
+     * @dataProvider buildSoftwareNameDataProvider
+     * @param $productName
      * @throws \ReflectionException
      */
-    public function testBuildSoftwareName()
+    public function testBuildSoftwareName($productName)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
         $method->setAccessible(true);
 
-        $name = $method->invoke($this->model);
-        self::assertLessThanOrEqual(30, $name);
+        $this->productMetadataMock->method('getName')->willReturn($productName);
 
-        $nameExceedsLength = $method->invoke($this->model);
-        self::assertLessThanOrEqual(30, $nameExceedsLength);
+        $softwareName = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(30, strlen($softwareName));
+    }
+
+    /**
+     * @return array
+     */
+    public function buildSoftwareNameDataProvider()
+    {
+        return [
+            'valid_length' => ['Magento'],
+            'exceeds_length' => ['Product_Name_Longer_Than_30_Char']
+        ];
     }
 
     /**
      * Tests that the built software version string is of the appropriate format.
      *
+     * @dataProvider buildSoftwareVersionProvider
+     * @param $productVersion
      * @throws \ReflectionException
      */
-    public function testBuildSoftwareVersion()
+    public function testBuildSoftwareVersion($productVersion)
     {
         $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
         $method->setAccessible(true);
 
-        $version = $method->invoke($this->model);
-        self::assertLessThanOrEqual(10, strlen($version));
+        $this->productMetadataMock->method('getVersion')->willReturn($productVersion);
 
-        $versionExceedsLength = $method->invoke($this->model);
-        self::assertLessThanOrEqual(10, strlen($versionExceedsLength));
+        $softwareVersion = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(10, strlen($softwareVersion));
+    }
+
+    /**
+     * @return array
+     */
+    public function buildSoftwareVersionProvider()
+    {
+        return [
+            'valid_length' => ['2.3.1'],
+            'exceeds_length' => ['dev-MC-1000']
+        ];
     }
 
     /**
@@ -728,21 +769,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @return MockObject
      */
-    private function getCoreDate(): MockObject
-    {
-        $coreDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $coreDate->method('date')->willReturnCallback(function () {
-            return date(\DATE_RFC3339);
-        });
-
-        return $coreDate;
-    }
-
-    /**
-     * @return MockObject
-     */
     private function getHttpClientFactory(): MockObject
     {
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
@@ -761,25 +787,5 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->httpClient);
 
         return $httpClientFactory;
-    }
-
-    /**
-     * @return MockObject
-     */
-    private function getProductMetadata(): MockObject
-    {
-        $productMetadata = $this->createMock(\Magento\Framework\App\ProductMetadata::class);
-
-        $productMetadata->method('getName')->willReturnOnConsecutiveCalls(
-            'Magento',
-            str_pad('Magento', 24, '_')
-        );
-
-        $productMetadata->method('getVersion')->willReturnOnConsecutiveCalls(
-            '2.3.1',
-            'dev-MC-1000'
-        );
-
-        return $productMetadata;
     }
 }
