@@ -75,6 +75,7 @@ class GetSourcesByOrderIdStockIdSkuAndQty
     }
 
     /**
+     * TODO passing both OrderID and StockID is excessive, because you can always retrieve Website from Order and resolve Stock
      * Get sources by stock id sku and qty
      *
      * @param int $orderId
