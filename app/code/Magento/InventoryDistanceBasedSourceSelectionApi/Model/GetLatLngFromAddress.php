@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelectionApi\Model;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface;

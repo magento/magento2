@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data;
+namespace Magento\InventorySourceSelectionApi\Api\Data;
 
 /**
- * DTO for shipping source or shipping destination
+ * Data interface for shipping source or shipping destination
  *
  * @api
  */

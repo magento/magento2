@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryDistanceBasedSourceSelection\Model\Convert;
 
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressInterface;
 
 class AddressToString
 {

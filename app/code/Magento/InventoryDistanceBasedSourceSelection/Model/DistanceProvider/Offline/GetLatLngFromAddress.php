@@ -13,7 +13,7 @@ use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterfaceFactory;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface;
 use Magento\InventoryDistanceBasedSourceSelection\Model\ResourceModel\GetGeoNameDataByAddress;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressInterface;
 
 /**
  * @inheritdoc

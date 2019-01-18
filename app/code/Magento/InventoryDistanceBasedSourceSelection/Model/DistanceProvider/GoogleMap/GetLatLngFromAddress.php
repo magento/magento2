@@ -13,7 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\AddressToComponentsString;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\AddressToQueryString;
 use Magento\InventoryDistanceBasedSourceSelection\Model\Convert\AddressToString;
-use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\AddressInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterfaceFactory;
 use Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetLatLngFromAddressInterface;

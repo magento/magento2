@@ -8,18 +8,16 @@ declare(strict_types=1);
 namespace Magento\InventoryShippingAdminUi\Ui\DataProvider;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySourceSelectionApi\Exception\UndefinedInventoryRequestBuilderException;
-use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder;
+use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrder;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class GetSourcesByOrderIdStockIdSkuAndQty
- * @package Magento\InventoryShippingAdminUi\Ui\DataProvider
+ * Class GetSourcesByOrderIdSkuAndQty
  */
-class GetSourcesByOrderIdStockIdSkuAndQty
+class GetSourcesByOrderIdSkuAndQty
 {
     /**
      * @var ItemRequestInterfaceFactory
@@ -42,9 +40,9 @@ class GetSourcesByOrderIdStockIdSkuAndQty
     private $sourceRepository;
 
     /**
-     * @var GetInventoryRequestFromOrderBuilder
+     * @var GetInventoryRequestFromOrder
      */
-    private $getInventoryRequestFromOrderBuilder;
+    private $getInventoryRequestFromOrder;
 
     /**
      * @var array
@@ -52,12 +50,10 @@ class GetSourcesByOrderIdStockIdSkuAndQty
     private $sources = [];
 
     /**
-     * GetSourcesByStockIdSkuAndQty constructor.
-     *
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
-     * @param GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder
+     * @param GetInventoryRequestFromOrder $getInventoryRequestFromOrder
      * @param SourceRepositoryInterface $sourceRepository
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -65,29 +61,27 @@ class GetSourcesByOrderIdStockIdSkuAndQty
         ItemRequestInterfaceFactory $itemRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
-        GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder,
+        GetInventoryRequestFromOrder $getInventoryRequestFromOrder,
         SourceRepositoryInterface $sourceRepository
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->sourceRepository = $sourceRepository;
-        $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder;
+        $this->getInventoryRequestFromOrder = $getInventoryRequestFromOrder;
     }
 
     /**
-     * Get sources by stock id sku and qty
+     * Get sources by order id sku and qty
      *
      * @param int $orderId
-     * @param int $stockId
      * @param string $sku
      * @param float $qty
      * @return array
      * @throws NoSuchEntityException
-     * @throws UndefinedInventoryRequestBuilderException
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function execute(int $orderId, int $stockId, string $sku, float $qty): array
+    public function execute(int $orderId, string $sku, float $qty): array
     {
         $algorithmCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
 
@@ -96,9 +90,7 @@ class GetSourcesByOrderIdStockIdSkuAndQty
             'qty' => $qty
         ]);
 
-        $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($algorithmCode);
-        $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $orderId, [$requestItem]);
-
+        $inventoryRequest = $this->getInventoryRequestFromOrder->execute($orderId, [$requestItem]);
         $sourceSelectionResult = $this->sourceSelectionService->execute(
             $inventoryRequest,
             $algorithmCode

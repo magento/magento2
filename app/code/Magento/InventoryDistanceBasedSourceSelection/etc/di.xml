@@ -9,12 +9,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\GetDistanceProviderCodeInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\GetDistanceProviderCode"/>
-    <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\AddressInterface"
-                type="Magento\InventoryDistanceBasedSourceSelection\Model\Address"/>
     <preference for="Magento\InventoryDistanceBasedSourceSelectionApi\Api\Data\LatLngInterface"
                 type="Magento\InventoryDistanceBasedSourceSelection\Model\LatLng"/>
 
-    <type name="Magento\InventorySourceSelection\Model\SourceSelectionService">
+    <type name="Magento\InventorySourceSelectionApi\Model\SourceSelectionService">
         <arguments>
             <argument name="sourceSelectionMethods" xsi:type="array">
                 <item name="distance"
@@ -55,15 +53,6 @@
     <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
         <plugin sortOrder="10" name="updateSourceLatitudeAndLongitude"
                 type="Magento\InventoryDistanceBasedSourceSelection\Plugin\FillSourceLatitudeAndLongitude"/>
-    </type>
-
-    <type name="Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder">
-        <arguments>
-            <argument name="buildersByAlgorithm" xsi:type="array">
-                <item name="distance"
-                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\InventoryRequestBuilder\FromOrder\DistanceBuilder</item>
-            </argument>
-        </arguments>
     </type>
 
     <type name="Magento\Config\Model\Config\TypePool">
