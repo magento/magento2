@@ -589,6 +589,7 @@ define([
                     displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
+
             return displayPrices;
         },
 
@@ -626,11 +627,13 @@ define([
          */
         _displayRegularPriceBlock: function (optionId) {
             var shouldBeShown = true;
+
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
                     shouldBeShown = false;
                 }
             });
+
             if (shouldBeShown &&
                 this.options.spConfig.optionPrices[optionId].oldPrice.amount !==
                 this.options.spConfig.optionPrices[optionId].finalPrice.amount
@@ -643,7 +646,7 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices,
+                    this.options.spConfig.optionPrices
                 ]
             );
         },

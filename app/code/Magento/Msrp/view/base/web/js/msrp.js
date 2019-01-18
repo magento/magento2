@@ -28,9 +28,9 @@ define([
             msrpPriceElement: '#map-popup-msrp .price-wrapper',
             priceLabelId: '#map-popup-price',
             priceElement: '#map-popup-price .price',
-            mapInfoLinks: ".map-show-info",
+            mapInfoLinks: '.map-show-info',
             displayPriceElement: '.old-price.map-old-price .price-wrapper',
-            fallbackPriceElement: '.normal-price.fallback-price .price-wrapper',
+            fallbackPriceElement: '.normal-price.map-fallback-price .price-wrapper',
             displayPriceContainer: '.old-price.map-old-price',
             fallbackPriceContainer: '.normal-price.map-fallback-price',
             popUpAttr: '[data-role=msrp-popup-template]',
@@ -225,6 +225,7 @@ define([
             var options = this.tierOptions || this.options;
 
             this.popUpOptions.position.of = $(event.target);
+
             if (!this.wasOpened) {
                 this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
                 this.$popup.find(this.options.priceLabelId).html(options.realPrice);
@@ -292,23 +293,27 @@ define([
          * Call on event updatePrice. Proxy to updateMsrpPrice method.
          *
          * @param {Event} event
-         * @param {mixed} optionId
+         * @param {mixed} priceIndex
          * @param {Object} prices
          */
         onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices) {
 
-            var defaultMsrp = _.chain(prices).map(function (price) {
+            var defaultMsrp,
+                defaultPrice,
+                msrpPrice;
+
+            defaultMsrp = _.chain(prices).map(function (price) {
                 return price.msrpPrice.amount;
             }).reject(function (p) {
-                return p === null
+                return p === null;
             }).min().value();
 
-            var defaultPrice = _.chain(prices).map(function (p) {
-                return p.finalPrice.amount
+            defaultPrice = _.chain(prices).map(function (p) {
+                return p.finalPrice.amount;
             }).min().value();
 
-            if (typeof priceIndex !== "undefined") {
-                var msrpPrice = prices[priceIndex].msrpPrice.amount;
+            if (typeof priceIndex !== 'undefined') {
+                msrpPrice = prices[priceIndex].msrpPrice.amount;
 
                 if(msrpPrice !== null) {
                     this.updateMsrpPrice(
@@ -336,6 +341,7 @@ define([
          */
         updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
             var options = this.tierOptions || this.options;
+
             $(this.options.fallbackPriceContainer).hide();
             $(this.options.displayPriceContainer).show();
             $(this.options.mapInfoLinks).show();
@@ -360,7 +366,6 @@ define([
          * @param {string} price
          */
         updateNonMsrpPrice: function(price) {
-            var options = this.tierOptions || this.options;
             $(this.options.fallbackPriceElement).html(price);
             $(this.options.displayPriceContainer).hide();
             $(this.options.mapInfoLinks).hide();

@@ -1385,7 +1385,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getUsedProductsCacheKey($keyParts)
     {
-        return md5(implode('_', $keyParts));
+        return sha1(implode('_', $keyParts));
     }
 
     /**
