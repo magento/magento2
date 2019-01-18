@@ -31,12 +31,4 @@
         </arguments>
     </type>
 
-    <type name="Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder">
-        <arguments>
-            <argument name="buildersByAlgorithm" xsi:type="array">
-                <item name="priority"
-                      xsi:type="object">Magento\InventorySourceSelection\Model\InventoryRequestBuilder\FromOrder\DefaultBuilder</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

@@ -57,15 +57,6 @@
                 type="Magento\InventoryDistanceBasedSourceSelection\Plugin\FillSourceLatitudeAndLongitude"/>
     </type>
 
-    <type name="Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder">
-        <arguments>
-            <argument name="buildersByAlgorithm" xsi:type="array">
-                <item name="distance"
-                      xsi:type="object">Magento\InventoryDistanceBasedSourceSelection\Model\InventoryRequestBuilder\FromOrder\DistanceBuilder</item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

@@ -5,18 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryDistanceBasedSourceSelection\Model\InventoryRequestBuilder\FromOrder;
+namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\InventoryDistanceBasedSourceSelection\Model\GetAddressFromOrder;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestExtensionInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Model\InventoryRequestFromOrderBuilderInterface;
 
 /**
- * @inheritdoc
+ * Build inventory request based on Order Id
+ *
+ * @api
  */
-class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
+class GetInventoryRequestFromOrder
 {
     /**
      * @var InventoryRequestInterfaceFactory
@@ -52,7 +53,7 @@ class DistanceBuilder implements InventoryRequestFromOrderBuilderInterface
     }
 
     /**
-     * @inheritdoc
+     * Build inventory request based on Order Id and provided request items
      */
     public function execute(int $stockId, int $orderId, array $requestItems): InventoryRequestInterface
     {

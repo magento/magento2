@@ -17,12 +17,11 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Exception\UndefinedInventoryRequestBuilderException;
-use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrderBuilder;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventorySourceSelectionApi\Model\GetInventoryRequestFromOrder;
 
 /**
  * ProcessAlgorithm Controller
@@ -55,11 +54,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     private $stockByWebsiteIdResolver;
 
     /**
-     * @var GetInventoryRequestFromOrderBuilder
-     */
-    private $getInventoryRequestFromOrderBuilder;
-
-    /**
      * @var ItemRequestInterfaceFactory
      */
     private $itemRequestFactory;
@@ -68,6 +62,11 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * @var array
      */
     private $sources = [];
+
+    /**
+     * @var GetInventoryRequestFromOrder
+     */
+    private $inventoryRequestFromOrder;
 
     /**
      * ProcessAlgorithm constructor.
@@ -79,7 +78,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
-     * @param GetInventoryRequestFromOrderBuilder|null $getInventoryRequestFromOrderBuilder
+     * @param GetInventoryRequestFromOrder|null $getInventoryRequestFromOrder
      */
     public function __construct(
         Context $context,
@@ -89,7 +88,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         SourceSelectionServiceInterface $sourceSelectionService,
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         SourceRepositoryInterface $sourceRepository,
-        GetInventoryRequestFromOrderBuilder $getInventoryRequestFromOrderBuilder = null
+        GetInventoryRequestFromOrder $getInventoryRequestFromOrder = null
     ) {
         parent::__construct($context);
         $this->sourceSelectionService = $sourceSelectionService;
@@ -97,8 +96,8 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
         $this->sourceRepository = $sourceRepository;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
-        $this->getInventoryRequestFromOrderBuilder = $getInventoryRequestFromOrderBuilder ?:
-            ObjectManager::getInstance()->get(GetInventoryRequestFromOrderBuilder::class);
+        $this->inventoryRequestFromOrder = $getInventoryRequestFromOrder ?:
+            ObjectManager::getInstance()->get(GetInventoryRequestFromOrder::class);
     }
 
     /**
@@ -123,7 +122,6 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
     /**
      * @inheritdoc
      * @throws NoSuchEntityException
-     * @throws UndefinedInventoryRequestBuilderException
      */
     public function execute(): ResultInterface
     {
@@ -144,9 +142,7 @@ class ProcessAlgorithm extends Action implements HttpPostActionInterface
 
             $requestItems = $this->getRequestItems($requestData);
 
-            $inventoryRequestBuilder = $this->getInventoryRequestFromOrderBuilder->execute($algorithmCode);
-            $inventoryRequest = $inventoryRequestBuilder->execute($stockId, $orderId, $requestItems);
-
+            $inventoryRequest = $this->inventoryRequestFromOrder->execute($stockId, $orderId, $requestItems);
             $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest, $algorithmCode);
 
             foreach ($requestData as $data) {
