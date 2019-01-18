@@ -8,12 +8,14 @@ namespace Magento\Dhl\Test\Unit\Model;
 use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -90,6 +92,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private $logger;
 
     /**
+     * @var DateTime|MockObject
+     */
+    private $coreDateMock;
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadataMock;
+
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -133,6 +146,20 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->coreDateMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->coreDateMock->method('date')
+            ->willReturn('currentTime');
+
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productMetadataMock->method('getName')
+            ->willReturn('Software_Product_Name_30_Char_123456789');
+        $this->productMetadataMock->method('getVersion')
+            ->willReturn('10Char_Ver123456789');
+
         $this->model = $this->objectManager->getObject(
             Carrier::class,
             [
@@ -144,14 +171,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'rateFactory' => $this->getRateFactory(),
                 'rateMethodFactory' => $this->getRateMethodFactory(),
                 'carrierHelper' => $this->getCarrierHelper(),
-                'coreDate' => $this->getCoreDate(),
                 'configReader' => $this->getConfigReader(),
                 'storeManager' => $this->getStoreManager(),
                 'readFactory' => $this->getReadFactory(),
                 'httpClientFactory' => $this->getHttpClientFactory(),
                 'data' => ['id' => 'dhl', 'store' => '1'],
                 'xmlValidator' => $this->xmlValidator,
-                'productMetadata' => $this->getProductMetadata()
+                'coreDate' => $this->coreDateMock,
+                'productMetadata' => $this->productMetadataMock
             ]
         );
     }
@@ -306,11 +333,26 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test request to shipment sends valid xml values.
+     *
+     * @param string $origCountryId
+     * @param string $expectedRegionCode
+     * @dataProvider requestToShipmentDataProvider
      */
-    public function testRequestToShipment()
+    public function testRequestToShipment(string $origCountryId, string $expectedRegionCode)
     {
+        $expectedRequestXml = file_get_contents(__DIR__ . '/_files/shipment_request.xml');
+        $scopeConfigValueMap = [
+            ['carriers/dhl/account', 'store', null, '1234567890'],
+            ['carriers/dhl/gateway_url', 'store', null, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
+            ['carriers/dhl/id', 'store', null, 'some ID'],
+            ['carriers/dhl/password', 'store', null, 'some password'],
+            ['carriers/dhl/content_type', 'store', null, 'N'],
+            ['carriers/dhl/nondoc_methods', 'store', null, '1,3,4,8,P,Q,E,F,H,J,M,V,Y'],
+            ['shipping/origin/country_id', 'store', null, $origCountryId],
+        ];
+
         $this->scope->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+            ->willReturnMap($scopeConfigValueMap);
 
         $this->httpResponse->method('getBody')
             ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
@@ -350,7 +392,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->request->method('getPackages')
             ->willReturn($packages);
         $this->request->method('getOrigCountryId')
-            ->willReturn('GB');
+            ->willReturn($origCountryId);
         $this->request->method('setPackages')
             ->willReturnSelf();
         $this->request->method('setPackageWeight')
@@ -380,7 +422,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $rawPostData->setAccessible(true);
 
         $this->assertNotNull($result);
-        $this->assertContains('<Weight>0.454</Weight>', $rawPostData->getValue($this->httpClient));
+        $requestXml = $rawPostData->getValue($this->httpClient);
+        $requestElement = new Element($requestXml);
+        $this->assertEquals($expectedRegionCode, $requestElement->RegionCode->__toString());
+        $requestElement->RegionCode = 'Checked';
+        $messageReference = $requestElement->Request->ServiceHeader->MessageReference->__toString();
+        $this->assertStringStartsWith('MAGE_SHIP_', $messageReference);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+        $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_SHIP_CHECKED';
+        $expectedRequestElement = new Element($expectedRequestXml);
+        $this->assertXmlStringEqualsXmlString($expectedRequestElement->asXML(), $requestElement->asXML());
     }
 
     /**
@@ -392,86 +444,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'GB'
+                'GB', 'EU'
             ],
             [
-                null
+                'SG', 'AP'
             ]
         ];
     }
 
-    /**
-     * Test that shipping label request for origin country from AP region doesn't contain restricted fields.
-     *
-     * @return void
-     */
-    public function testShippingLabelRequestForAsiaPacificRegion()
-    {
-        $this->scope->method('getValue')
-            ->willReturnMap(
-                [
-                    ['shipping/origin/country_id', ScopeInterface::SCOPE_STORE, null, 'SG'],
-                    ['carriers/dhl/gateway_url', ScopeInterface::SCOPE_STORE, null, 'https://xmlpi-ea.dhl.com'],
-                ]
-            );
-
-        $this->httpResponse->method('getBody')
-            ->willReturn(utf8_encode(file_get_contents(__DIR__ . '/_files/response_shipping_label.xml')));
-
-        $packages = [
-            'package' => [
-                'params' => [
-                    'width' => '1',
-                    'length' => '1',
-                    'height' => '1',
-                    'dimension_units' => 'INCH',
-                    'weight_units' => 'POUND',
-                    'weight' => '0.45',
-                    'customs_value' => '10.00',
-                    'container' => Carrier::DHL_CONTENT_TYPE_NON_DOC,
-                ],
-                'items' => [
-                    'item1' => [
-                        'name' => 'item_name',
-                    ],
-                ],
-            ],
-        ];
-
-        $this->request->method('getPackages')->willReturn($packages);
-        $this->request->method('getOrigCountryId')->willReturn('SG');
-        $this->request->method('setPackages')->willReturnSelf();
-        $this->request->method('setPackageWeight')->willReturnSelf();
-        $this->request->method('setPackageValue')->willReturnSelf();
-        $this->request->method('setValueWithDiscount')->willReturnSelf();
-        $this->request->method('setPackageCustomsValue')->willReturnSelf();
-
-        $result = $this->model->requestToShipment($this->request);
-
-        $reflectionClass = new \ReflectionObject($this->httpClient);
-        $rawPostData = $reflectionClass->getProperty('raw_post_data');
-        $rawPostData->setAccessible(true);
-
-        $this->assertNotNull($result);
-        $requestXml = $rawPostData->getValue($this->httpClient);
-
-        $this->assertNotContains(
-            'NewShipper',
-            $requestXml,
-            'NewShipper is restricted field for AP region'
-        );
-        $this->assertNotContains(
-            'Division',
-            $requestXml,
-            'Division is restricted field for AP region'
-        );
-        $this->assertNotContains(
-            'RegisteredAccount',
-            $requestXml,
-            'RegisteredAccount is restricted field for AP region'
-        );
-    }
-    
     /**
      * @dataProvider dhlProductsDataProvider
      *
