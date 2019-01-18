@@ -85,10 +85,10 @@
         <data key="state">New York</data>
         <data key="postcode">11001</data>
         <data key="country_id">US</data>
+        <data key="country">United States</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionNY</requiredEntity>
-        <data key="country">United States</data>
     </entity>
     <entity name="UK_Default_Address" type="address">
         <data key="firstname">Jane</data>

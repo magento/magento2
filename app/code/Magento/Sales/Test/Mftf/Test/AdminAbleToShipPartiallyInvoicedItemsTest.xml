@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAbleToShipPartiallyInvoicedItemsTest">
         <annotations>
             <title value="Ship Action is available for remaining of the partially invoiced items "/>
@@ -14,6 +14,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-95524"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="MAGETWO-97664"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -56,7 +59,8 @@
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" after="seeCorrectGrandTotal" stepKey="clickSubmitOrder"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskTodisappear"/>
         <waitForPageLoad stepKey="waitForOrderSubmitted"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" after="clickSubmitOrder" stepKey="seeViewOrderPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" after="grabOrderId" stepKey="seeViewOrderPage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the order." after="seeViewOrderPage" stepKey="seeSuccessMessage"/>
         <grabTextFrom selector="|Order # (\d+)|" after="seeSuccessMessage" stepKey="getOrderId"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.qtyColumn}}" after="getOrderId" stepKey="scrollToItemsOrdered"/>
@@ -69,12 +73,13 @@
         <scrollTo selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" stepKey="scrollToItemsInvoiced"/>
         <!--Change invoiced items count-->
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="5" stepKey="invoiceHalfTheItems"/>
+        <waitForElementVisible selector="{{AdminInvoiceItemsSection.updateQtyEnabled}}" stepKey="waitForEnabledQtyToBeInvoicedSubmitButton"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQtyToBeInvoiced"/>
         <waitForLoadingMaskToDisappear stepKey="waitForQtyToUpdate"/>
         <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitforSubmitInvoiceBtn"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceToSubmit"/>
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit1"/>
         <!--Invoice created successfully-->
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems"/>
@@ -110,10 +115,8 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
         <!--Submit refund-->
         <scrollTo selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="scrollToItemsToRefund"/>
-        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="fillQtyOfItemsToRefund"/>
-        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateRefundQty"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForRefundQtyToUpdate"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="seeSubmitRefundBtn"/>
+        <seeInField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" after="scrollToItemsToRefund" stepKey="checkQtyOfItemsToRefund"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" stepKey="waitForSubmitRefundOfflineEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="submitRefundOffline"/>
         <!--Verify Credit Memo created successfully-->
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." after="submitRefundOffline" stepKey="seeCreditMemoSuccessMsg"/>
@@ -135,8 +138,9 @@
         <see selector="{{AdminInvoiceItemsSection.itemQty('1')}}" userInput="Refunded 5" stepKey="seeQtyOfItemsRefunded"/>
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2" />
+        <waitForPageLoad stepKey="waitForInvoiceToSubmit2"/>
         <!--Invoice created successfully for the rest of the ordered items-->
-        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." after="submitInvoice2" stepKey="seeInvoiceSuccessMessage2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceSuccessMessage2"/>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.itemStatus('1')}}" stepKey="scrollToOrderItems3"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 10" stepKey="see10itemsInvoiced"/>
         <scrollTo selector="{{AdminHeaderSection.pageTitle}}" stepKey="scrollToTopOfPage3"/>

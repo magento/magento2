@@ -22,4 +22,26 @@
         <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForApplyCode"/>
     </actionGroup>
+
+    <!-- Apply Sales Rule Coupon to the cart -->
+    <actionGroup name="StorefrontApplyCouponActionGroup">
+        <arguments>
+            <argument name="couponCode" type="string"/>
+        </arguments>
+        <waitForElement selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <conditionalClick selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
+        <waitForElementVisible selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="waitForCouponField" />
+        <fillField userInput="{{couponCode}}" selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="fillCouponField"/>
+        <click selector="{{AdminCartPriceRuleDiscountSection.applyCodeBtn}}" stepKey="clickApplyButton"/>
+        <see userInput='You used coupon code "{{couponCode}}".' selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Cancel Sales Rule Coupon applied to the cart -->
+    <actionGroup name="StorefrontCancelCouponActionGroup">
+        <waitForElement selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" time="30" stepKey="waitForCouponHeader" />
+        <conditionalClick selector="{{AdminCartPriceRuleDiscountSection.discountTab}}" dependentSelector="{{AdminCartPriceRuleDiscountSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
+        <waitForElementVisible selector="{{AdminCartPriceRuleDiscountSection.couponInput}}" stepKey="waitForCouponField" />
+        <click selector="{{AdminCartPriceRuleDiscountSection.cancelButton}}" stepKey="clickCancelButton"/>
+        <see userInput="You canceled the coupon code." selector="{{StorefrontMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
 </actionGroups>

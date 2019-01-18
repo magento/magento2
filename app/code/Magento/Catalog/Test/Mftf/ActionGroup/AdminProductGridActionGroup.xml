@@ -71,7 +71,14 @@
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatusAction"/>
         <click selector="{{AdminProductGridSection.changeStatus('status')}}" stepKey="clickChangeStatusDisabled" parameterized="true"/>
+        <waitForPageLoad stepKey="waitForStatusToBeChanged"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) have been updated." stepKey="seeSuccessMessage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
+    </actionGroup>
+
+    <!-- Sort products by ID descending -->
+    <actionGroup name="sortProductsByIdDescending">
+        <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('ascend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('descend')}}" visible="false" stepKey="sortById"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

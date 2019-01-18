@@ -276,7 +276,7 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('verifyStock')
             ->with($this->stockItemMock)
             ->willReturn(false);
-        $this->stockItemMock->expects($this->exactly(2))->method('getManageStock')->willReturn(true);
+        $this->stockItemMock->expects($this->once())->method('getManageStock')->willReturn(true);
         $this->stockItemMock->expects($this->once())->method('setIsInStock')->with(false)->willReturnSelf();
         $this->stockItemMock->expects($this->once())
             ->method('setStockStatusChangedAutomaticallyFlag')

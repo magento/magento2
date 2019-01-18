@@ -665,8 +665,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $isRefundZero = abs($totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
-        $hasActinFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
-        if ($isRefundZero || $hasAdjustmentFee || $hasActinFlag) {
+        $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
+        if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
         }
 
@@ -682,15 +682,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function canCreditmemoForZeroTotal(float $totalRefunded): bool
     {
         $totalPaid = $this->getTotalPaid();
-        //check if total paid is less than grandtotal
+        //check if total paid is less than grand total
         $checkAmtTotalPaid = $totalPaid <= $this->getGrandTotal();
         //case when amount is due for invoice
-        $dueAmountCondition = $this->canInvoice() && $checkAmtTotalPaid;
+        $hasDueAmount = $this->canInvoice() && $checkAmtTotalPaid;
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
             true : (count($this->getCreditmemosCollection()) > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
-        if (($dueAmountCondition || $paidAmtIsRefunded)
+        if (($hasDueAmount || $paidAmtIsRefunded)
             || (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
         ) {
             return false;
@@ -2130,11 +2130,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(OrderInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
     }
 
     /**
