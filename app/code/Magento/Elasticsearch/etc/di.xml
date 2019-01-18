@@ -416,7 +416,7 @@
     <type name="Magento\Search\Model\Search\PageSizeProvider">
         <arguments>
             <argument name="pageSizeBySearchEngine" xsi:type="array">
-                <item name="elasticsearch" xsi:type="number">2147483647</item>
+                <item name="elasticsearch" xsi:type="number">10000</item>
                 <item name="elasticsearch5" xsi:type="number">2147483647</item>
             </argument>
         </arguments>
