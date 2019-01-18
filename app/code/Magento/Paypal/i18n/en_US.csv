@@ -726,6 +726,8 @@ User,User
 "Silver","Silver"
 "Black","Black"
 "PayPal Button - Product Page","PayPal Button - Product Page"
+"PayPal Button - Cart Page","PayPal Button - Cart Page"
+"PayPal Button - Mini Cart","PayPal Button - Mini Cart"
 "Features","Features"
 "PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where PayPal Credit is offered and the currency offered by the merchant is USD.","PayPal will automatically display each enabled funding option to eligible buyers. For example, PayPal Credit is only shown to buyers in countries where PayPal Credit is offered and the currency offered by the merchant is USD."
 "PayPal Credit","PayPal Credit"
