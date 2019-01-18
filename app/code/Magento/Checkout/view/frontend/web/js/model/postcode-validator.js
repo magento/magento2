@@ -20,7 +20,7 @@ define([
         validate: function (postCode, countryId, postCodesPatterns) {
             var pattern, regex,
                 patterns = postCodesPatterns ? postCodesPatterns[countryId] :
-                window.checkoutConfig.postCodes[countryId];
+                    window.checkoutConfig.postCodes[countryId];
 
             this.validatedPostCodeExample = [];
 
