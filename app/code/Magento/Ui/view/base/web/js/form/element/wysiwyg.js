@@ -56,7 +56,7 @@ define([
                 if (this.disabled()) {
                     this.setDisabled(true);
                 } else {
-                   this.setDisabled(false);
+                    this.setDisabled(false);
                 }
             }.bind(this));
 
