@@ -222,6 +222,12 @@
                                                                             <item name="min_text_length" xsi:type="number">0</item>
                                                                         </item>
                                                                     </item>
+                                                                    <item name="city" xsi:type="array">
+                                                                        <item name="sortOrder" xsi:type="string">110</item>
+                                                                        <item name="validation" xsi:type="array">
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
                                                                     <item name="country_id" xsi:type="array">
                                                                         <item name="sortOrder" xsi:type="string">80</item>
                                                                     </item>
