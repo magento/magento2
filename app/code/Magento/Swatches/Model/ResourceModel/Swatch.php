@@ -49,7 +49,7 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if (count($optionIDs)) {
             foreach ($optionIDs as $optionId) {
-                $where = ['option_id' => $optionId];
+                $where = ['option_id = ?' => $optionId];
                 if ($type !== null) {
                     $where['type = ?'] = $type;
                 }
