@@ -52,6 +52,11 @@ class SourceSelectionDataProvider extends AbstractDataProvider
     private $getSourcesByOrderIdSkuAndQty;
 
     /**
+     * @var StockByWebsiteIdResolverInterface
+     */
+    private $stockByWebsiteIdResolver;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -85,6 +90,7 @@ class SourceSelectionDataProvider extends AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->request = $request;
         $this->orderRepository = $orderRepository;
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getSkuFromOrderItem = $getSkuFromOrderItem;
         $this->getSourcesByOrderIdSkuAndQty = $getSourcesByOrderIdSkuAndQty ?:
