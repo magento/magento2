@@ -464,6 +464,7 @@ class Store extends AbstractExtensibleModel implements
      * Validation rules for store
      *
      * @return \Zend_Validate_Interface|null
+     * @throws \Zend_Validate_Exception
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -489,9 +490,11 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Loading store data
      *
-     * @param   mixed $key
-     * @param   string $field
-     * @return  $this
+     * @param mixed $key
+     * @param string $field
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function load($key, $field = null)
     {
@@ -566,6 +569,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store website
      *
      * @return Website|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getWebsite()
     {
@@ -578,9 +582,11 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve url using store configuration specific
      *
-     * @param   string $route
-     * @param   array $params
-     * @return  string
+     * @param string $route
+     * @param array $params
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUrl($route = '', $params = [])
     {
@@ -880,8 +886,10 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Set current store currency code
      *
-     * @param   string $code
-     * @return  string
+     * @param string $code
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCurrencyCode($code)
     {
@@ -966,6 +974,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store current currency
      *
      * @return Currency
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentCurrency()
     {
@@ -988,6 +997,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current currency rate
      *
      * @return float
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentCurrencyRate()
     {
@@ -998,6 +1008,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve root category identifier
      *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getRootCategoryId()
     {
@@ -1023,6 +1034,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve group model
      *
      * @return Group|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getGroup()
     {
@@ -1130,6 +1142,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store can be deleted
      *
      * @return boolean
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isCanDelete()
     {
@@ -1145,6 +1158,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @return boolean
      * @since 100.1.0
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isDefault()
     {
@@ -1158,9 +1172,11 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current url for store
      *
      * @param bool $fromStore
+     *
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCurrentUrl($fromStore = true)
     {
@@ -1236,6 +1252,7 @@ class Store extends AbstractExtensibleModel implements
      * Protect delete from non admin area
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
@@ -1247,6 +1264,7 @@ class Store extends AbstractExtensibleModel implements
      * Rewrite in order to clear configuration cache
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function afterDelete()
     {
@@ -1306,6 +1324,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store group name
      *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getFrontendName()
     {
@@ -1338,14 +1357,14 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Get store path
+     * Return Store Path
      *
      * @return string
      */
     public function getStorePath()
     {
         $parsedUrl = parse_url($this->getBaseUrl());
-        return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+        return $parsedUrl['path'] ?? '/';
     }
 
     /**

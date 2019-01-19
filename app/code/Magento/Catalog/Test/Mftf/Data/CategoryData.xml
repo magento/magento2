@@ -42,4 +42,24 @@
         <data key="is_active">true</data>
         <var key="parent_id" entityType="category" entityKey="id" />
     </entity>
+    <entity name="FirstLevelSubCat" type="category">
+        <data key="name" unique="suffix">FirstLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="SecondLevelSubCat" type="category">
+        <data key="name" unique="suffix">SecondLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="ThirdLevelSubCat" type="category">
+        <data key="name" unique="suffix">ThirdLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FourthLevelSubCat" type="category">
+        <data key="name" unique="suffix">FourthLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FifthLevelCat" type="category">
+        <data key="name" unique="suffix">FifthLevelCategory</data>
+        <data key="name_lwr" unique="suffix">category</data>
+    </entity>
 </entities>

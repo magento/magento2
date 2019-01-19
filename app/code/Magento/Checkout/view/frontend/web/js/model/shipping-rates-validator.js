@@ -35,6 +35,7 @@ define([
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
+        postcodeElements = [],
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
@@ -78,11 +79,7 @@ define([
             }
 
             $.each(elements, function (index, field) {
-                var elementBinding = self.doElementBinding.bind(self),
-                    fullPath = formPath + '.' + field,
-                    func = uiRegistry.async(fullPath);
-
-                func(elementBinding);
+                uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
             });
         },
 
@@ -104,6 +101,7 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
+                postcodeElements.push(element);
             }
         },
 
@@ -138,7 +136,13 @@ define([
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation(element);
+                            if (element.index === postcodeElementName) {
+                                self.postcodeValidation(element);
+                            } else {
+                                $.each(postcodeElements, function (index, elem) {
+                                    self.postcodeValidation(elem);
+                                });
+                            }
                             self.validateFields();
                         }, delay);
                     }
@@ -151,7 +155,7 @@ define([
          * @return {*}
          */
         postcodeValidation: function (postcodeElement) {
-            var countryId = $('select[name="country_id"]').val(),
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 
