@@ -90,7 +90,7 @@ class GetInventoryRequestFromOrder
         $order = $this->orderRepository->get($orderId);
 
         $store = $this->storeManager->getStore($order->getStoreId());
-        $stock = $this->stockByWebsiteIdResolver->execute($store->getWebsiteId());
+        $stock = $this->stockByWebsiteIdResolver->execute((int)$store->getWebsiteId());
 
         $inventoryRequest = $this->inventoryRequestFactory->create([
             'stockId' => $stock->getStockId(),
