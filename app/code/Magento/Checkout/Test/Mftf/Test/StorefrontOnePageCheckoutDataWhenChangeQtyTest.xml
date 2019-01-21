@@ -68,7 +68,7 @@
         <fillField selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}" userInput="2" stepKey="updateProductQty"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" stepKey="grabQty"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}" stepKey="grabQty"/>
         <assertEquals expected="2" actual="$grabQty" stepKey="assertQty"/>
         <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
 
