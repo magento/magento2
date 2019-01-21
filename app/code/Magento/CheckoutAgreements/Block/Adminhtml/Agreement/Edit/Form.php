@@ -198,7 +198,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'config' =>$this->wysiwygConfig->getConfig()
             ]
         ); 
-       }else{
+       } else {
         $fieldset->addField(
             'content',
             'textarea',
