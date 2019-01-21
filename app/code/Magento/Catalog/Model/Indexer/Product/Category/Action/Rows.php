@@ -17,6 +17,8 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Category rows indexer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction

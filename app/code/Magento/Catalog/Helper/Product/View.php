@@ -10,7 +10,9 @@ use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {

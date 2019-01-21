@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Block\Adminhtml\Product\Frontend\Product;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 /**
  * Fieldset config form element renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Frontend\Product;
-
-use Magento\Framework\Data\Form\Element\AbstractElement;
-
 class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -60,6 +60,8 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     }
 
     /**
+     * Render form element as HTML
+     *
      * @param AbstractElement $element
      * @return string
      */
@@ -124,6 +126,8 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     }
 
     /**
+     * Get header html for render
+     *
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -147,6 +151,8 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     }
 
     /**
+     * Get footer html for render
+     *
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * Catalog product option date type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {

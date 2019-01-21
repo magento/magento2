@@ -76,6 +76,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Setter whether SID is allowed in store directive
+     *
      * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
@@ -132,6 +133,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param array $construction

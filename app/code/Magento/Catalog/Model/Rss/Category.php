@@ -6,8 +6,7 @@
 namespace Magento\Catalog\Model\Rss;
 
 /**
- * Class Category
- * @package Magento\Catalog\Model\Rss
+ * Rss Category model.
  */
 class Category
 {
@@ -42,6 +41,8 @@ class Category
     }
 
     /**
+     * Get products for given category.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
