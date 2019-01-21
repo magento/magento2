@@ -27,9 +27,9 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 class Login extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var AccountManagementInterface

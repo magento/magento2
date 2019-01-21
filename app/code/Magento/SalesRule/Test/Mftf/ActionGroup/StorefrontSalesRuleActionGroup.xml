@@ -18,6 +18,7 @@
         <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
         <fillField userInput="{{coupon.code}}" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="fillCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
     <!-- Cancel Sales Rule Coupon applied to the cart -->
@@ -32,11 +33,11 @@
     <actionGroup name="StorefrontCheckCouponAppliedActionGroup">
         <arguments>
             <argument name="rule"/>
-            <argument name="discount"/>
+            <argument name="discount" type="string"/>
         </arguments>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="waitForDiscountTotal" />
-        <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel" />
-        <see userInput="-${{discount}}" selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="assertDiscountTotal" />
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="waitForDiscountTotal"/>
+        <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel"/>
+        <see userInput="-${{discount}}" selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="assertDiscountTotal"/>
     </actionGroup>
 
     <actionGroup name="VerifyDiscountAmount">
