@@ -255,10 +255,19 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 );
             }
         }
+        
+       /**
+        * check header
+        */
 
         $this->_resourceFile = $resourceFile;
+        $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
+        if(isset($headers['location'])){
+            $this->_resourceFile  = is_array($headers['location']) ? current($headers['location']): 
+                                    $headers['location'];
+        }
+        
         $this->_linkType = $linkType;
-
         return $this;
     }
 
