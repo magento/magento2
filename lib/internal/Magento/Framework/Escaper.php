@@ -47,6 +47,20 @@ class Escaper
     private $escapeAsUrlAttributes = ['href'];
 
     /**
+     * @param \Magento\Framework\ZendEscaper|null $escaper
+     * @param \Psr\Log\LoggerInterface|null $logger
+     */
+    public function __construct(
+        \Magento\Framework\ZendEscaper $escaper = null,
+        \Psr\Log\LoggerInterface $logger = null
+    ) {
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\ZendEscaper::class);
+        $this->logger = $logger ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+    }
+
+    /**
      * Escape string for HTML context.
      *
      * AllowedTags will not be escaped, except the following: script, img, embed,
@@ -77,6 +91,7 @@ class Escaper
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
+                $data = $this->prepareUnescapedCharacters($data);
                 $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
@@ -84,7 +99,7 @@ class Escaper
                     );
                 } catch (\Exception $e) {
                     restore_error_handler();
-                    $this->getLogger()->critical($e);
+                    $this->logger->critical($e);
                 }
                 restore_error_handler();
 
@@ -103,6 +118,19 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Used to replace characters, that mb_convert_encoding will not process
+     *
+     * @param string $data
+     * @return string|null
+     */
+    private function prepareUnescapedCharacters(string $data): ?string
+    {
+        $patterns = ['/\&/u'];
+        $replacements = ['&amp;'];
+        return \preg_replace($patterns, $replacements, $data);
     }
 
     /**
@@ -201,7 +229,7 @@ class Escaper
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
         if ($escapeSingleQuote) {
-            return $this->getEscaper()->escapeHtmlAttr((string) $string);
+            return $this->escaper->escapeHtmlAttr((string) $string);
         }
         return htmlspecialchars((string)$string, ENT_COMPAT, 'UTF-8', false);
     }
@@ -226,7 +254,7 @@ class Escaper
      */
     public function encodeUrlParam($string)
     {
-        return $this->getEscaper()->escapeUrl($string);
+        return $this->escaper->escapeUrl($string);
     }
 
     /**
@@ -265,7 +293,7 @@ class Escaper
      */
     public function escapeCss($string)
     {
-        return $this->getEscaper()->escapeCss($string);
+        return $this->escaper->escapeCss($string);
     }
 
     /**
@@ -341,36 +369,6 @@ class Escaper
     }
 
     /**
-     * Get escaper
-     *
-     * @return \Magento\Framework\ZendEscaper
-     * @deprecated 100.2.0
-     */
-    private function getEscaper()
-    {
-        if ($this->escaper == null) {
-            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\ZendEscaper::class);
-        }
-        return $this->escaper;
-    }
-
-    /**
-     * Get logger
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
-     */
-    private function getLogger()
-    {
-        if ($this->logger == null) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
-    }
-
-    /**
      * Filter prohibited tags.
      *
      * @param string[] $allowedTags
@@ -384,7 +382,7 @@ class Escaper
         );
 
         if (!empty($notAllowedTags)) {
-            $this->getLogger()->critical(
+            $this->logger->critical(
                 'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
             );
             $allowedTags = array_diff($allowedTags, $this->notAllowedTags);

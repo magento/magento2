@@ -62,7 +62,7 @@ define([
         },
 
         /**
-         * Set price taax type.
+         * Set price tax type.
          *
          * @param {String} priceType
          * @return {Object}
