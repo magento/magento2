@@ -60,7 +60,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         \Magento\Framework\Escaper $escaper,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
         ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null,
-        \Magento\Widget\Model\Template\Filter $templateProcessor = null,
+        \Magento\Widget\Model\Template\Filter $templateProcessor = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
