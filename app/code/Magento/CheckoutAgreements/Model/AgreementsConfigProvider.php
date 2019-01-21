@@ -29,7 +29,6 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
-    
     /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
      */
