@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
@@ -764,11 +765,23 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() &&
+                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Check if item is refunded.
+     *
+     * @param OrderItemInterface $item
+     * @return bool
+     */
+    private function isRefunded(OrderItemInterface $item)
+    {
+        return $item->getQtyRefunded() == $item->getQtyOrdered();
     }
 
     /**
