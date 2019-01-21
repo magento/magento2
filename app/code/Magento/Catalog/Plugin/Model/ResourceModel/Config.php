@@ -8,6 +8,9 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Config cache plugin.
+ */
 class Config
 {
     /**#@+
@@ -46,6 +49,8 @@ class Config
     }
 
     /**
+     * Cache attribute used in listing.
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param \Closure $proceed
      * @return array
@@ -73,6 +78,8 @@ class Config
     }
 
     /**
+     * Cache attributes used for sorting.
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Config $config
      * @param \Closure $proceed
      * @return array
