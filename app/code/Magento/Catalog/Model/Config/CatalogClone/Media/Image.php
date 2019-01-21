@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
  * Clone model for media images related config fields
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Image extends \Magento\Framework\App\Config\Value
 {
@@ -46,6 +47,9 @@ class Image extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Escaper|null $escaper
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
