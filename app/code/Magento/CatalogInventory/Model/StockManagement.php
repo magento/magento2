@@ -83,6 +83,7 @@ class StockManagement implements StockManagementInterface
 
     /**
      * Subtract product qtys from stock.
+     *
      * Return array of items that require full save.
      *
      * @param string[] $items
@@ -139,10 +140,7 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @param string[] $items
-     * @param int|null $websiteId
-     *
-     * @return array|bool
+     * @inheritdoc
      */
     public function revertProductsSale($items, $websiteId = null)
     {
@@ -204,6 +202,8 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
+     * Get stock resource.
+     *
      * @return ResourceStock
      */
     protected function getResource()
