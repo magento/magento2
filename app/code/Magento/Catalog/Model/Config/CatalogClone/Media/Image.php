@@ -31,8 +31,6 @@ class Image extends \Magento\Framework\App\Config\Value
     protected $_attributeCollectionFactory;
 
     /**
-     * Escaper
-     *
      * @var Escaper
      */
     private $escaper;

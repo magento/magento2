@@ -41,6 +41,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     private $escaperMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
@@ -89,7 +92,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @param string $actualLabel
      * @param string $expectedLabel
      * @return void
-     * @dataProvider getPrefixesDataProvider     *
+     * @dataProvider getPrefixesDataProvider
      */
     public function testGetPrefixes(string $actualLabel, string $expectedLabel)
     {
@@ -136,8 +139,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'expected_label' => 'testLabel',
             ],
             [
-                'actual_label' => '"<script>alert(\'media-image-attributelabel\')</script>',
-                'expected_label' => '&quot;&lt;script&gt;alert(&#039;media-image-attributelabel&#039;)&lt;/script&gt;',
+                'actual_label' => '<media-image-attributelabel',
+                'expected_label' => '&lt;media-image-attributelabel',
             ],
         ];
     }
