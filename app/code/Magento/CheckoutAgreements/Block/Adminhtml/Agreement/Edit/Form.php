@@ -5,6 +5,8 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
+use \Magento\Framework\App\ObjectManager;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -20,7 +22,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-    protected $_wysiwygConfig;
+    private $wysiwygConfig;
     
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -30,7 +32,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Editor config path
      */
-   const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_agreements';
+   const XML_PATH_SHOW_EDITOR = 'checkout/options/enable_wysiwyg_editor';
     
 
     /**
@@ -39,9 +41,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
+     * @param array $data
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param array $data
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -50,15 +52,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        array $data = []
+         array $data = [],
+         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
     ) {
         $this->_systemStore = $systemStore;
         $this->agreementModeOptions = $agreementModeOptions;
-        $this->_wysiwygConfig = $wysiwygConfig;
-        $this->scopeConfig = $scopeConfig;
-        parent::__construct($context, $registry, $formFactory, $data);
+        $this->wysiwygConfig = $wysiwygConfig ?: ObjectManager::getInstance()
+                ->get(Config::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
+                ->get(ScopeConfigInterface::class);
+       parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -81,8 +85,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('checkout_agreement');
-        $wysiwygConfig = $this->_wysiwygConfig->getConfig();
-        $showEditor = $this->scopeConfig->getValue(self::XML_PATH_SHOW_EDITOR);
+       
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
@@ -181,7 +184,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        if($showEditor){
+        if($this->scopeConfig->getValue(self::XML_PATH_SHOW_EDITOR)){
            $fieldset->addField(
             'content',
             'editor',
@@ -192,7 +195,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'style' => 'height:24em;',
                 'required' => true,
                 'wysiwyg' => true,
-                'config' =>$wysiwygConfig
+                'config' =>$this->wysiwygConfig->getConfig()
             ]
         ); 
        }else{

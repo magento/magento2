@@ -31,11 +31,6 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     protected $escaper;
     
     /**
-     * @var \Magento\Widget\Model\Template\Filter
-     */
-    protected $templateProcessor;
-
-    /**
      * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
      */
     private $checkoutAgreementsList;
@@ -46,32 +41,37 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     private $activeStoreAgreementsFilter;
 
     /**
+     * @var \Magento\Widget\Model\Template\Filter
+     */
+    private $templateProcessor;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Widget\Model\Template\Filter $templateProcessor
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
+     * @param \Magento\Widget\Model\Template\Filter $templateProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Widget\Model\Template\Filter $templateProcessor, 
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
-        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
+        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null,
+        \Magento\Widget\Model\Template\Filter $templateProcessor = null,
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
         $this->escaper = $escaper;
-        $this->templateProcessor = $templateProcessor;
         $this->checkoutAgreementsList = $checkoutAgreementsList ?: ObjectManager::getInstance()->get(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
             ActiveStoreAgreementsFilter::class
         );
+         $this->templateProcessor = $templateProcessor ?: ObjectManager::getInstance()->get(Filter::class);
     }
 
     /**

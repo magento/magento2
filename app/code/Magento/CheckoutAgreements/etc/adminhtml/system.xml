@@ -13,8 +13,8 @@
                     <label>Enable Terms and Conditions</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_editor" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enable Editor on Terms and Conditions Content</label>
+                <field id="enable_wysiwyg_editor" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable WYSIWYG Editor on Terms and Conditions Content</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
