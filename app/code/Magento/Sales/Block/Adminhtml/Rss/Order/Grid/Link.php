@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Rss\Order\Grid;
 
 /**
  * Class Link
+ *
  * @package Magento\Sales\Block\Adminhtml\Rss\Order\Grid
  */
 class Link extends \Magento\Framework\View\Element\Template
@@ -36,6 +37,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get url for link.
+     *
      * @return string
      */
     public function getLink()
@@ -44,6 +47,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get translatable label for link.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getLabel()
@@ -62,6 +67,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get link type param.
+     *
      * @return array
      */
     protected function getLinkParams()

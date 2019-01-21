@@ -7,6 +7,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ * Order create index page controller.
+ */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements HttpGetActionInterface
 {
     /**

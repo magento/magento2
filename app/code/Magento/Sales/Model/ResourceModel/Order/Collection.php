@@ -138,6 +138,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
 
     /**
      * Join table sales_order_address to select for billing and shipping order addresses.
+     *
      * Create correlation map
      *
      * @return $this
