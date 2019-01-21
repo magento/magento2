@@ -189,4 +189,12 @@ class Message implements MailMessageInterface
         $this->setMessageType(self::TYPE_TEXT);
         return $this->setBody($text);
     }
+
+    /**
+     * @return \Zend\Mail\Message
+     */
+    public function getZendMessage(): \Zend\Mail\Message
+    {
+        return $this->zendMessage;
+    }
 }
