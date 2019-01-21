@@ -13,6 +13,8 @@ use Magento\Catalog\Api\Data\SpecialPriceInterface;
 
 /**
  * Product special price model.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class FrontSpecialPrice extends Price
 {
