@@ -52,7 +52,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
-         array $data = [],
+        array $data = [],
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig = null,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
     ) {
