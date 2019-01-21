@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Sales Order Email Invoice items
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Sales\Block\Order\Email\Invoice;
 
 /**
+ * Sales Order Email Invoice items
+ *
  * @api
  * @since 100.0.2
  */
