@@ -110,9 +110,9 @@ class Context implements ContextInterface
      * @param UrlInterface $urlBuilder
      * @param Processor $processor
      * @param UiComponentFactory $uiComponentFactory
-     * @param AuthorizationInterface $authorization
      * @param DataProviderInterface|null $dataProvider
-     * @param string|null $namespace
+     * @param string $namespace
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
