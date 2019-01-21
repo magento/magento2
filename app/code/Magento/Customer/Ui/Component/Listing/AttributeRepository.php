@@ -146,7 +146,7 @@ class AttributeRepository
             $option = [
                 'label' => (string)$option->getLabel(),
                 'value' => $option->getValue(),
-                '__ignore' => true
+                '__disableTmpl' => true
             ];
         }
         return $options;

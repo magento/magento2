@@ -88,7 +88,7 @@ class Options implements \JsonSerializable
                 $this->options[$optionCode['value']] = [
                     'type' => 'customer_group_' . $optionCode['value'],
                     'label' => __($optionCode['label']),
-                    '__ignore' => true
+                    '__disableTmpl' => true
                 ];
 
                 if ($this->urlPath && $this->paramName) {

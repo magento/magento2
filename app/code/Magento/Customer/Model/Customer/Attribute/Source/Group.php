@@ -48,10 +48,15 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements 
     {
         if (!$this->_options) {
             $groups = $this->_groupManagement->getLoggedInGroups();
-            foreach ($groups as $group) {
-                $group['__ignore'] = true;
-            }
+
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
+
+            array_walk(
+                $this->_options,
+                function (&$item) {
+                    $item['__disableTmpl'] = true;
+                }
+            );
         }
 
         return $this->_options;

@@ -74,7 +74,7 @@ class ColumnFactory
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
             'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
-            '__ignore' => 'true'
+            '__disableTmpl' => 'true'
         ], $config);
         if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
             $config['dateFormat'] = 'MMM d, y';
