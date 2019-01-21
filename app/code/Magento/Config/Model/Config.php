@@ -424,6 +424,11 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
+                
+                if ($field->getType() == 'multiline' && is_array($fieldData['value'])) {
+                    $fieldData['value'] = trim(implode(PHP_EOL, $fieldData['value']));
+                }
+                
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
