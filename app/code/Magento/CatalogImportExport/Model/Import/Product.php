@@ -2569,7 +2569,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_FROM_DATE], false));
             $newToTimestamp = strtotime($this->dateTime->formatDate($rowData[self::COL_NEW_TO_DATE], false));
             if ($newFromTimestamp > $newToTimestamp) {
-                $this->skipRow($rowNum, ValidatorInterface::ERROR_NEW_TO_DATE, $errorLevel, $rowData[self::COL_NEW_TO_DATE]);
+                $this->skipRow(
+                    $rowNum,
+                    ValidatorInterface::ERROR_NEW_TO_DATE,
+                    $errorLevel,
+                    $rowData[self::COL_NEW_TO_DATE]
+                );
             }
         }
 
