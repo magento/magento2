@@ -56,15 +56,16 @@ class Currency implements \Magento\Framework\Option\ArrayInterface
         if (!$this->_options) {
             $this->_options = $this->_localeLists->getOptionCurrencies();
         }
-        $options = [];
+
         $selected = $this->_getInstalledCurrencies();
         
-        foreach ($this->_options as $option) {
-            if (!in_array($option['value'], $selected)) {
-                continue;
+        $options = array_filter(
+            $this->_options,
+            function ($option) use ($selected) {
+                return in_array($option['value'], $selected);
             }
-            $options[] = $option;
-        }   
+        );
+ 
         return $options;
     }
     
