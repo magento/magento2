@@ -741,7 +741,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images works properly
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -792,7 +791,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that errors occurred during importing images are logged.
      *
-     * @magentoDataIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture mediaImportImageFixtureError
@@ -2190,7 +2188,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images for non-default store works properly.
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      */
@@ -2237,7 +2234,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that imported product stock status with backorders functionality enabled can be set to 'out of stock'.
      *
-     * @magentoDataIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testImportWithBackordersEnabled()
@@ -2364,7 +2360,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with non existing images does not broke roles on existing images.
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @return void
