@@ -3106,14 +3106,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param int $rowNum
      * @param string $errorCode Error code or simply column name
-     * @param string $errorLevel
-     * @param string $colName OPTIONAL Column name.
+     * @param string $errorLevel error level
+     * @param string|null $colName optional column name
      * @return $this
      */
     private function skipRow(
         $rowNum,
         string $errorCode,
-        $errorLevel = ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
+        string $errorLevel = ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
         $colName = null
     ): self {
         $this->addRowError($errorCode, $rowNum, $colName, null, $errorLevel);
