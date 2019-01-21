@@ -11,7 +11,11 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -20,7 +24,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface
+     * @var ActionPoolInterface
      */
     private $actionPool;
 
@@ -43,7 +47,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->actionPool = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface::class)
+        $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $actionPoolFactory->method('create')->willReturn($this->actionPool);
