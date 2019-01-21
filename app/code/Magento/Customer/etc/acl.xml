@@ -13,6 +13,7 @@
                     <resource id="Magento_Customer::manage" title="All Customers" translate="title" sortOrder="10">
                         <resource id="Magento_Customer::actions" title="Actions" translate="title" sortOrder="10">
                             <resource id="Magento_Customer::delete" title="Delete" translate="title" sortOrder="10" />
+                            <resource id="Magento_Customer::reset_password" title="Reset password" translate="title" sortOrder="20" />
                         </resource>
                     </resource>
                     <resource id="Magento_Customer::online" title="Now Online" translate="title" sortOrder="20" />
