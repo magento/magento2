@@ -49,7 +49,7 @@ mutation {
 }
 MUTATION;
 
-        self::expectExceptionMessage('Mutation requests allowed only for POST requests');
+        self::expectException(\Exception::class);
 
         $this->graphQlQuery($query, [], '', [], 'GET');
     }
