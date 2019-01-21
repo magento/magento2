@@ -53,6 +53,7 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
                 ],
                 'on_click' => '',
                 'sort_order' => 20,
+                'aclResource' => 'Magento_Customer::delete',
             ];
         }
         return $data;

@@ -19,6 +19,13 @@ use Magento\Framework\Controller\ResultFactory;
 class MassDelete extends AbstractMassAction implements HttpPostActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::delete';
+
+    /**
      * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
