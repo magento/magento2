@@ -28,6 +28,13 @@ use Magento\Framework\Api\DataObjectHelper;
 class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::invalidate_tokens';
+
+    /**
      * @var CustomerTokenServiceInterface
      */
     protected $tokenService;
