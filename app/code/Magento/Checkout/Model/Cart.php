@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Shopping cart model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
@@ -757,7 +758,7 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get request quantity
      *
-     * @param $product
+     * @param Product $product
      * @param \Magento\Framework\DataObject|int|array $request
      * @return int|DataObject
      */
