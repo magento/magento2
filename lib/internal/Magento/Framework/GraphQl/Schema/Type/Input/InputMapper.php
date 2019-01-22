@@ -13,6 +13,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
 use Magento\Framework\GraphQl\Schema\Type\TypeRegistry;
 
+/**
+ * Prepare argument's metadata for GraphQL schema generation
+ */
 class InputMapper
 {
     /**

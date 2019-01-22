@@ -22,28 +22,20 @@ class TypeFactory implements ConfigElementFactoryInterface
     private $objectManager;
 
     /**
-     * @var ArgumentFactory
+     * @var FieldsFactory
      */
-    private $argumentFactory;
-
-    /**
-     * @var FieldFactory
-     */
-    private $fieldFactory;
+    private $fieldsFactory;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ArgumentFactory $argumentFactory
-     * @param FieldFactory $fieldFactory
+     * @param FieldsFactory $fieldsFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ArgumentFactory $argumentFactory,
-        FieldFactory $fieldFactory
+        FieldsFactory $fieldsFactory
     ) {
         $this->objectManager = $objectManager;
-        $this->argumentFactory = $argumentFactory;
-        $this->fieldFactory = $fieldFactory;
+        $this->fieldsFactory = $fieldsFactory;
     }
 
     /**
@@ -54,18 +46,8 @@ class TypeFactory implements ConfigElementFactoryInterface
      */
     public function createFromConfigData(array $data): ConfigElementInterface
     {
-        $fields = [];
-        $data['fields'] = isset($data['fields']) ? $data['fields'] : [];
-        foreach ($data['fields'] as $field) {
-            $arguments = [];
-            foreach ($field['arguments'] as $argument) {
-                $arguments[$argument['name']] = $this->argumentFactory->createFromConfigData($argument);
-            }
-            $fields[$field['name']] = $this->fieldFactory->createFromConfigData(
-                $field,
-                $arguments
-            );
-        }
+        $fields = isset($data['fields']) ? $this->fieldsFactory->createFromConfigData($data['fields']) : [];
+
         return $this->create(
             $data,
             $fields

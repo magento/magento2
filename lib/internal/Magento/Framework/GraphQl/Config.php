@@ -62,7 +62,7 @@ class Config implements ConfigInterface
         $fieldsInQuery = $this->queryFields->getFieldsUsedInQuery();
         if (isset($data['fields'])) {
             if (!empty($fieldsInQuery)) {
-                foreach ($data['fields'] as $fieldName => $fieldConfig) {
+                foreach (array_keys($data['fields']) as $fieldName) {
                     if (!isset($fieldsInQuery[$fieldName])) {
                         unset($data['fields'][$fieldName]);
                     }

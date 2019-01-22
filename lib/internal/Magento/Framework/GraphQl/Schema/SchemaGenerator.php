@@ -48,7 +48,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generate() : Schema
     {
@@ -61,7 +61,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
                 },
                 'types' => function () {
                     $typesImplementors = [];
-                    foreach ($this->config->getDeclaredTypeNames() as $type) {
+                    foreach ($this->config->getDeclaredTypes() as $type) {
                         $typesImplementors [] = $this->typeRegistry->get($type['name']);
                     }
                     return $typesImplementors;

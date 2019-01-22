@@ -79,7 +79,7 @@ class Fields implements FormatterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function format(TypeInterface $configElement, OutputTypeInterface $outputType): array
     {

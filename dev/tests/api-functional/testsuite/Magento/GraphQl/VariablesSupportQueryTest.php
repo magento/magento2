@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\TestFramework\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 class VariablesSupportQueryTest extends GraphQlAbstract
@@ -21,7 +20,7 @@ class VariablesSupportQueryTest extends GraphQlAbstract
 
     protected function setUp()
     {
-        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
 
     /**
