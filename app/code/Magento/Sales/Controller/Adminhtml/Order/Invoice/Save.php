@@ -18,6 +18,8 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
 
 /**
+ * Save invoice controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
@@ -103,6 +105,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
     /**
      * Save invoice
+     *
      * We can save only new invoice. Existing invoices are not editable
      *
      * @return \Magento\Framework\Controller\ResultInterface
