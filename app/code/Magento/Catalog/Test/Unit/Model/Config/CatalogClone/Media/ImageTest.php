@@ -97,7 +97,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider getPrefixesDataProvider
      */
-    public function testGetPrefixes(string $actualLabel, string $expectedLabel)
+    public function testGetPrefixes($actualLabel, $expectedLabel)
     {
         $entityTypeId = 3;
         /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $entityType */
