@@ -56,6 +56,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     protected $_template = 'Magento_Backend::widget/form/container.phtml';
 
     /**
+     * Initialize form.
+     *
      * @return void
      */
     protected function _construct()
@@ -151,6 +153,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get URL for delete button.
+     *
      * @return string
      */
     public function getDeleteUrl()
@@ -183,6 +187,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get form HTML.
+     *
      * @return string
      */
     public function getFormHtml()
@@ -192,6 +198,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get form init scripts.
+     *
      * @return string
      */
     public function getFormInitScripts()
@@ -203,6 +211,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get form scripts.
+     *
      * @return string
      */
     public function getFormScripts()
@@ -214,6 +224,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get header width.
+     *
      * @return string
      */
     public function getHeaderWidth()
@@ -222,6 +234,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get header css class.
+     *
      * @return string
      */
     public function getHeaderCssClass()
@@ -230,6 +244,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get header HTML.
+     *
      * @return string
      */
     public function getHeaderHtml()
