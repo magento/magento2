@@ -11,8 +11,7 @@
     <test name="StorefrontUpdateQtyInShoppingCartAfterUpdateInMinicartTest">
         <annotations>
             <features value="Checkout"/>
-            <stories
-                    value="MAGETWO-72879: Update product from mini shopping cart doesn't reflect in the shopping cart"/>
+            <stories value="Checkout via Guest Checkout"/>
             <title value="Check updating shopping cart while updating items from minicart"/>
             <description value="Check updating shopping cart while updating items from minicart"/>
             <severity value="AVERAGE"/>
@@ -36,7 +35,6 @@
 
         <!--Open Product Page-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
         <!--Add product to cart-->
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
             <argument name="productName" value="$$createProduct.name$$"/>
@@ -45,26 +43,19 @@
         <!--Go to Shopping cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
         <!--Check quantity in Shopping cart-->
-        <grabValueFrom selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}"
-                       stepKey="grabQtyFromShoppingCart"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyFromShoppingCart"/>
         <assertEquals expected="1" actual="$grabQtyFromShoppingCart" stepKey="assertQtyInShoppingCart"/>
 
         <!--Open minicart-->
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart"/>
-        <waitForElementVisible selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}"
-                               stepKey="waitForItemQuantity"/>
-        <pressKey selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}"
-                  parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE]" stepKey="clearQtyField"/>
-        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" userInput="5"
-                   stepKey="fillQtyField"/>
-        <waitForElementVisible selector="{{StorefrontMinicartSection.itemQuantityUpdate($$createProduct.name$$)}}"
-                               stepKey="waitForUpdateButton"/>
-        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$createProduct.name$$)}}"
-               stepKey="clickUpdateButton"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="waitForItemQuantity"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE]" stepKey="clearQtyField"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" userInput="5" stepKey="fillQtyField"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.itemQuantityUpdate($$createProduct.name$$)}}" stepKey="waitForUpdateButton"/>
+        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$createProduct.name$$)}}" stepKey="clickUpdateButton"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <!--Check quantity in shopping cart after updating-->
-        <grabValueFrom selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}"
-                       stepKey="grabQtyFromShoppingCart1"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.productQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyFromShoppingCart1"/>
         <assertEquals expected="5" actual="$grabQtyFromShoppingCart1" stepKey="assertQtyInShoppingCart1"/>
     </test>
 </tests>
