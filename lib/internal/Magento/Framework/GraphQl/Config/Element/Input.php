@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Config\Element;
 
 /**
- * Class representing 'type' GraphQL config element.
+ * Class representing 'input' GraphQL config element.
  */
-class Type implements TypeInterface
+class Input implements TypeInterface
 {
     /**
      * @var string
@@ -23,11 +23,6 @@ class Type implements TypeInterface
     private $fields;
 
     /**
-     * @var string[]
-     */
-    private $interfaces;
-
-    /**
      * @var string
      */
     private $description;
@@ -35,18 +30,15 @@ class Type implements TypeInterface
     /**
      * @param string $name
      * @param Field[] $fields
-     * @param string[] $interfaces
      * @param string $description
      */
     public function __construct(
         string $name,
         array $fields,
-        array $interfaces,
         string $description
     ) {
         $this->name = $name;
         $this->fields = $fields;
-        $this->interfaces = $interfaces;
         $this->description = $description;
     }
 
@@ -55,7 +47,7 @@ class Type implements TypeInterface
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -65,19 +57,9 @@ class Type implements TypeInterface
      *
      * @return Field[]
      */
-    public function getFields() : array
+    public function getFields(): array
     {
         return $this->fields;
-    }
-
-    /**
-     * Get interfaces the type implements, if any. Return an empty array if none are configured.
-     *
-     * @return string[]
-     */
-    public function getInterfaces() : array
-    {
-        return $this->interfaces;
     }
 
     /**
@@ -85,7 +67,7 @@ class Type implements TypeInterface
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
