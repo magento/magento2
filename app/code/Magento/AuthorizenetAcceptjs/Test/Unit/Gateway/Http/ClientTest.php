@@ -54,7 +54,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'payload_type' => 'doSomeThing',
             'foobar' => 'baz'
         ];
-        $response = '{"foo":{"bar":"baz"}}';
+        // Authorize.net returns a BOM and refuses to fix it
+        $response = pack('CCC', 0xef, 0xbb, 0xbf) . '{"foo":{"bar":"baz"}}';
 
         $httpResponse->expects($this->once())
             ->method('getBody')
@@ -62,7 +63,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $paymentLogger->expects($this->once())
             ->method('debug')
-            ->with(['request' => $request, 'response' => $response]);
+            ->with(['request' => $request, 'response' => '{"foo":{"bar":"baz"}}']);
 
         /**
          * @var $apiClient Client

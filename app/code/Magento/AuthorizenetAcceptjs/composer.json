@@ -10,9 +10,7 @@
         "magento/module-checkout": "*",
         "magento/module-payment": "*",
         "magento/module-sales": "*",
-        "magento/module-directory": "*",
-        "magento/module-config": "*",
-        "magento/module-store": "*"
+        "magento/module-config": "*"
     },
     "suggest": {
         "magento/module-config": "*"

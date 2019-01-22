@@ -18,7 +18,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\Data\TransactionSearchResultInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 {
