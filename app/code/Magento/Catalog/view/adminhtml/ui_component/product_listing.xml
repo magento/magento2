@@ -190,6 +190,13 @@
                 <label translate="true">Websites</label>
             </settings>
         </column>
+        <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="110">
+            <settings>
+                <addField>false</addField>
+                <filter>textRange</filter>
+                <label translate="true">Special Price</label>
+            </settings>
+        </column>
         <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
             <settings>
                 <indexField>entity_id</indexField>
