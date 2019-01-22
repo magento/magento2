@@ -14,7 +14,10 @@ use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
 
 /**
  * Data upgrade script
@@ -49,12 +52,18 @@ class UpgradeData implements UpgradeDataInterface
      * @param SalesSetupFactory $salesSetupFactory
      * @param Config $eavConfig
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param AddressCollectionFactory $addressCollFactory
+     * @param OrderFactory $orderFactory
+     * @param QuoteFactory $quoteFactory
      * @param State $state
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
         Config $eavConfig,
         AggregatedFieldDataConverter $aggregatedFieldConverter,
+        AddressCollectionFactory $addressCollFactory,
+        OrderFactory $orderFactory,
+        QuoteFactory $quoteFactory,
         State $state
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
