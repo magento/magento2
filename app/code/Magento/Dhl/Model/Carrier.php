@@ -1000,18 +1000,29 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _buildQuotesRequestXml()
     {
         $rawRequest = $this->_rawRequest;
-        $xmlStr = '<?xml version = "1.0" encoding = "UTF-8"?>' .
-            '<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" ' .
-            'xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" ' .
+
+        $xmlStr = '<?xml version="1.0" encoding = "UTF-8"?>' .
+            '<req:DCTRequest schemaVersion="2.0" ' .
+            'xmlns:req="http://www.dhl.com" ' .
             'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' .
-            'xsi:schemaLocation="http://www.dhl.com DCT-req.xsd "/>';
+            'xsi:schemaLocation="http://www.dhl.com DCT-req_global-2.0.xsd"/>';
+
         $xml = $this->_xmlElFactory->create(['data' => $xmlStr]);
         $nodeGetQuote = $xml->addChild('GetQuote', '', '');
         $nodeRequest = $nodeGetQuote->addChild('Request');
 
         $nodeServiceHeader = $nodeRequest->addChild('ServiceHeader');
-        $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
-        $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
+        $nodeServiceHeader->addChild('MessageTime', $this->buildMessageTimestamp());
+        $nodeServiceHeader->addChild(
+            'MessageReference',
+            $this->buildMessageReference(self::SERVICE_PREFIX_QUOTE)
+        );
+        $nodeServiceHeader->addChild('SiteID', (string) $this->getConfigData('id'));
+        $nodeServiceHeader->addChild('Password', (string) $this->getConfigData('password'));
+
+        $nodeMetaData = $nodeRequest->addChild('MetaData');
+        $nodeMetaData->addChild('SoftwareName', $this->buildSoftwareName());
+        $nodeMetaData->addChild('SoftwareVersion', $this->buildSoftwareVersion());
 
         $nodeFrom = $nodeGetQuote->addChild('From');
         $nodeFrom->addChild('CountryCode', $rawRequest->getOrigCountryId());
@@ -1994,5 +2005,25 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         return str_replace('.', '', uniqid("MAGE_{$servicePrefix}_", true));
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareName.
+     *
+     * @return string
+     */
+    private function buildSoftwareName(): string
+    {
+        return substr($this->productMetadata->getName(), 0, 30);
+    }
+
+    /**
+     * Builds a string to be used as the request SoftwareVersion.
+     *
+     * @return string
+     */
+    private function buildSoftwareVersion(): string
+    {
+        return substr($this->productMetadata->getVersion(), 0, 10);
     }
 }

@@ -130,14 +130,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $xmlElFactory = $this->getXmlFactory();
-        $rateFactory = $this->getRateFactory();
-        $rateMethodFactory = $this->getRateMethodFactory();
-        $httpClientFactory = $this->getHttpClientFactory();
-        $configReader = $this->getConfigReader();
-        $readFactory = $this->getReadFactory();
-        $storeManager = $this->getStoreManager();
-
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
@@ -147,8 +139,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->errorFactory->method('create')
             ->willReturn($this->error);
-
-        $carrierHelper = $this->getCarrierHelper();
 
         $this->xmlValidator = $this->getMockBuilder(XmlValidator::class)
             ->disableOriginalConstructor()
@@ -174,17 +164,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             Carrier::class,
             [
                 'scopeConfig' => $this->scope,
-                'xmlSecurity' => new Security(),
-                'logger' => $this->logger,
-                'xmlElFactory' => $xmlElFactory,
-                'rateFactory' => $rateFactory,
                 'rateErrorFactory' => $this->errorFactory,
-                'rateMethodFactory' => $rateMethodFactory,
-                'httpClientFactory' => $httpClientFactory,
-                'readFactory' => $readFactory,
-                'storeManager' => $storeManager,
-                'configReader' => $configReader,
-                'carrierHelper' => $carrierHelper,
+                'logger' => $this->logger,
+                'xmlSecurity' => new Security(),
+                'xmlElFactory' => $this->getXmlFactory(),
+                'rateFactory' => $this->getRateFactory(),
+                'rateMethodFactory' => $this->getRateMethodFactory(),
+                'carrierHelper' => $this->getCarrierHelper(),
+                'configReader' => $this->getConfigReader(),
+                'storeManager' => $this->getStoreManager(),
+                'readFactory' => $this->getReadFactory(),
+                'httpClientFactory' => $this->getHttpClientFactory(),
                 'data' => ['id' => 'dhl', 'store' => '1'],
                 'xmlValidator' => $this->xmlValidator,
                 'coreDate' => $this->coreDateMock,
@@ -212,7 +202,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
             'carriers/dhl/showmethod' => 1,
-            'carriers/dhl/title' => 'dhl Title',
+            'carriers/dhl/title' => 'DHL Title',
             'carriers/dhl/specificerrmsg' => 'dhl error message',
             'carriers/dhl/unit_of_measure' => 'K',
             'carriers/dhl/size' => '1',
@@ -220,7 +210,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/dhl/width' => '1.6',
             'carriers/dhl/depth' => '1.6',
             'carriers/dhl/debug' => 1,
-            'shipping/origin/country_id' => 'GB',
+            'shipping/origin/country_id' => 'GB'
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
@@ -276,8 +266,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         return $method->invoke($model, $xml);
     }
 
+    /**
+     * Tests that valid rates are returned when sending a quotes request.
+     */
     public function testCollectRates()
     {
+        $requestData = require __DIR__ . '/_files/dhl_quote_request_data.php';
+        $responseXml = file_get_contents(__DIR__ . '/_files/dhl_quote_response.xml');
+
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
@@ -285,13 +281,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->httpResponse->method('getBody')
-            ->willReturn(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml'));
+            ->willReturn($responseXml);
 
-        /** @var RateRequest $request */
-        $request = $this->objectManager->getObject(
-            RateRequest::class,
-            require __DIR__ . '/_files/rates_request_data_dhl.php'
-        );
+        $this->coreDateMock->method('date')
+           ->willReturnCallback(function () {
+               return date(\DATE_RFC3339);
+           });
+
+        $request = $this->objectManager->getObject(RateRequest::class, $requestData);
 
         $reflectionClass = new \ReflectionObject($this->httpClient);
         $rawPostData = $reflectionClass->getProperty('raw_post_data');
@@ -301,13 +298,27 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->method('debug')
             ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
 
-        self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
-        self::assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
+        $expectedRates = require __DIR__ . '/_files/dhl_quote_response_rates.php';
+        $actualRates = $this->model->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
+
+        $requestXml = $rawPostData->getValue($this->httpClient);
+        self::assertContains('<Weight>18.223</Weight>', $requestXml);
+        self::assertContains('<Height>0.630</Height>', $requestXml);
+        self::assertContains('<Width>0.630</Width>', $requestXml);
+        self::assertContains('<Depth>0.630</Depth>', $requestXml);
     }
 
+    /**
+     * Tests that an error is returned when attempting to collect rates for an inactive shipping method.
+     */
     public function testCollectRatesErrorMessage()
     {
         $this->scope->method('getValue')
@@ -323,16 +334,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->error, $this->model->collectRates($request));
-    }
-
-    public function testCollectRatesFail()
-    {
-        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
-
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
-
-        $this->assertFalse(false, $this->model->collectRates($request));
     }
 
     /**
@@ -520,34 +521,104 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests that the built message reference string is of the appropriate format.
+     * Tests that the built MessageReference string is of the appropriate format.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid service prefix
+     * @dataProvider buildMessageReferenceDataProvider
+     * @param $servicePrefix
      * @throws \ReflectionException
      */
-    public function testBuildMessageReference()
+    public function testBuildMessageReference($servicePrefix)
     {
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
 
-        $constPrefixQuote = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_QUOTE');
-        $constPrefixShipval = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_SHIPVAL');
-        $constPrefixTracking = new \ReflectionClassConstant($this->model, 'SERVICE_PREFIX_TRACKING');
+        $messageReference = $method->invoke($this->model, $servicePrefix);
+        $this->assertGreaterThanOrEqual(28, strlen($messageReference));
+        $this->assertLessThanOrEqual(32, strlen($messageReference));
+    }
 
-        $msgRefQuote = $method->invoke($this->model, $constPrefixQuote->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefQuote));
-        self::assertLessThanOrEqual(32, strlen($msgRefQuote));
+    /**
+     * @return array
+     */
+    public function buildMessageReferenceDataProvider()
+    {
+        return [
+            'quote_prefix' => ['QUOT'],
+            'shipval_prefix' => ['SHIP'],
+            'tracking_prefix' => ['TRCK']
+        ];
+    }
 
-        $msgRefShip = $method->invoke($this->model, $constPrefixShipval->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefShip));
-        self::assertLessThanOrEqual(32, strlen($msgRefShip));
+    /**
+     * Tests that an exception is thrown when an invalid service prefix is provided.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid service prefix
+     */
+    public function testBuildMessageReferenceInvalidPrefix()
+    {
+        $method = new \ReflectionMethod($this->model, 'buildMessageReference');
+        $method->setAccessible(true);
 
-        $msgRefTrack = $method->invoke($this->model, $constPrefixTracking->getValue());
-        self::assertGreaterThanOrEqual(28, strlen($msgRefTrack));
-        self::assertLessThanOrEqual(32, strlen($msgRefTrack));
+        $method->invoke($this->model, 'INVALID');
+    }
 
-        $method->invoke($this->model, 'TEST');
+    /**
+     * Tests that the built software name string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareNameDataProvider
+     * @param $productName
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareName($productName)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareName');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getName')->willReturn($productName);
+
+        $softwareName = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(30, strlen($softwareName));
+    }
+
+    /**
+     * @return array
+     */
+    public function buildSoftwareNameDataProvider()
+    {
+        return [
+            'valid_length' => ['Magento'],
+            'exceeds_length' => ['Product_Name_Longer_Than_30_Char']
+        ];
+    }
+
+    /**
+     * Tests that the built software version string is of the appropriate format.
+     *
+     * @dataProvider buildSoftwareVersionProvider
+     * @param $productVersion
+     * @throws \ReflectionException
+     */
+    public function testBuildSoftwareVersion($productVersion)
+    {
+        $method = new \ReflectionMethod($this->model, 'buildSoftwareVersion');
+        $method->setAccessible(true);
+
+        $this->productMetadataMock->method('getVersion')->willReturn($productVersion);
+
+        $softwareVersion = $method->invoke($this->model);
+        $this->assertLessThanOrEqual(10, strlen($softwareVersion));
+    }
+
+    /**
+     * @return array
+     */
+    public function buildSoftwareVersionProvider()
+    {
+        return [
+            'valid_length' => ['2.3.1'],
+            'exceeds_length' => ['dev-MC-1000']
+        ];
     }
 
     /**
@@ -608,14 +679,18 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $rateMethod = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setPrice'])
-            ->getMock();
-        $rateMethod->method('setPrice')
-            ->willReturnSelf();
+
         $rateMethodFactory->method('create')
-            ->willReturn($rateMethod);
+            ->willReturnCallback(function () {
+                $rateMethod = $this->getMockBuilder(Method::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['setPrice'])
+                    ->getMock();
+                $rateMethod->method('setPrice')
+                    ->willReturnSelf();
+
+                return $rateMethod;
+            });
 
         return $rateMethodFactory;
     }
