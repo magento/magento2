@@ -53,7 +53,7 @@ define([
 
             // disable editor completely after initialization is field is disabled
             varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
-                if (typeof window.tinyMceEditors !== 'undefined') {
+                if (!_.isUndefined(window.tinyMceEditors)) {
                     this.wysiwyg = window.tinyMceEditors[this.wysiwygId];
                 }
 
@@ -91,7 +91,7 @@ define([
         destroy: function () {
             this._super();
 
-            if (typeof this.wysiwyg !== 'undefined' && this.wysiwyg) {
+            if (!_.isUndefined(this.wysiwyg)) {
                 this.wysiwyg.removeEvents(this.wysiwygId);
             }
         },
@@ -144,7 +144,7 @@ define([
 
             /* eslint-disable no-undef */
 
-            if (typeof this.wysiwyg !== 'undefined' && this.wysiwyg && this.wysiwyg.activeEditor()) {
+            if (!_.isUndefined(this.wysiwyg) && this.wysiwyg.activeEditor()) {
                 if (disabled) {
                     this.wysiwyg.setEnabledStatus(false);
                     this.wysiwyg.getPluginButtons().prop('disabled', 'disabled');
