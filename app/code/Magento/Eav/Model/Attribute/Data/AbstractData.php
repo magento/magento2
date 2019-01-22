@@ -297,7 +297,7 @@ abstract class AbstractData
      * Validate value by attribute input validation rule
      *
      * @param string $value
-     * @return string|true
+     * @return array|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
