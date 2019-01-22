@@ -62,8 +62,7 @@ class TransactionResponseValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;

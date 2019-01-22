@@ -54,8 +54,7 @@ class StoreConfigBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-        $this->orderMock->expects($this->once())
-            ->method('getStoreID')
+        $this->orderMock->method('getStoreID')
             ->willReturn(123);
 
         $expected = [

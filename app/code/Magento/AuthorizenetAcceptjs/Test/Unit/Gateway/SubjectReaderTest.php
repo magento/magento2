@@ -80,8 +80,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentDOMock->method('getOrder')
             ->willReturn($orderMock);
-        $orderMock->expects($this->once())
-            ->method('getStoreID')
+        $orderMock->method('getStoreID')
             ->willReturn('123');
 
         $result = $this->subjectReader->readStoreId([

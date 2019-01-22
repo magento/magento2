@@ -41,8 +41,7 @@ class CustomSettingsBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildWithEmailCustomerDisabled()
     {
-        $this->configMock->expects($this->once())
-            ->method('shouldEmailCustomer')
+        $this->configMock->method('shouldEmailCustomer')
             ->with('123')
             ->willReturn(false);
 
@@ -51,8 +50,7 @@ class CustomSettingsBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildWithEmailCustomerEnabled()
     {
-        $this->configMock->expects($this->once())
-            ->method('shouldEmailCustomer')
+        $this->configMock->method('shouldEmailCustomer')
             ->with('123')
             ->willReturn(true);
 

@@ -59,8 +59,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -83,8 +82,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -93,8 +91,7 @@ class TransactionHashValidatorTest extends TestCase
             }))
             ->willReturn($this->resultMock);
 
-        $this->configMock->expects($this->once())
-            ->method('getTransactionSignatureKey')
+        $this->configMock->method('getTransactionSignatureKey')
             ->willReturn('abc');
 
         $this->validator->validate([
@@ -118,8 +115,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -153,8 +149,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -187,8 +182,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -197,8 +191,7 @@ class TransactionHashValidatorTest extends TestCase
             }))
             ->willReturn($this->resultMock);
 
-        $this->configMock->expects($this->once())
-            ->method('getLegacyTransactionHash')
+        $this->configMock->method('getLegacyTransactionHash')
             ->willReturn('abc');
 
         $this->validator->validate([
@@ -222,8 +215,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -232,11 +224,9 @@ class TransactionHashValidatorTest extends TestCase
             }))
             ->willReturn($this->resultMock);
 
-        $this->configMock->expects($this->once())
-            ->method('getLegacyTransactionHash')
+        $this->configMock->method('getLegacyTransactionHash')
             ->willReturn('abc');
-        $this->configMock->expects($this->once())
-            ->method('getLoginId')
+        $this->configMock->method('getLoginId')
             ->willReturn('username');
 
         $this->validator->validate([
@@ -258,8 +248,7 @@ class TransactionHashValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -268,11 +257,9 @@ class TransactionHashValidatorTest extends TestCase
             }))
             ->willReturn($this->resultMock);
 
-        $this->configMock->expects($this->once())
-            ->method('getLegacyTransactionHash')
+        $this->configMock->method('getLegacyTransactionHash')
             ->willReturn('abc');
-        $this->configMock->expects($this->once())
-            ->method('getLoginId')
+        $this->configMock->method('getLoginId')
             ->willReturn('username');
 
         $this->validator->validate([

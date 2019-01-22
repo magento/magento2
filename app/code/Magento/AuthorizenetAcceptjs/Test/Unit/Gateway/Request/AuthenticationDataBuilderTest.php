@@ -59,11 +59,9 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-        $this->configMock->expects($this->once())
-            ->method('getLoginId')
+        $this->configMock->method('getLoginId')
             ->willReturn('myloginid');
-        $this->configMock->expects($this->once())
-            ->method('getTransactionKey')
+        $this->configMock->method('getTransactionKey')
             ->willReturn('mytransactionkey');
 
         $expected = [
@@ -75,8 +73,7 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $buildSubject = [];
 
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readStoreId')
+        $this->subjectReaderMock->method('readStoreId')
             ->with($buildSubject)
             ->willReturn(123);
 

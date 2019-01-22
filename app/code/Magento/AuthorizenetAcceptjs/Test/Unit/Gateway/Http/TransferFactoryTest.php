@@ -51,18 +51,19 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $request = ['data1', 'data2'];
 
+        // Assert the filter was created
         $this->filterMock->expects($this->once())
             ->method('filter')
             ->with($request)
             ->willReturn($request);
 
+        // Assert the body of the transfer was set
         $this->transferBuilder->expects($this->once())
             ->method('setBody')
             ->with($request)
             ->willReturnSelf();
 
-        $this->transferBuilder->expects($this->once())
-            ->method('build')
+        $this->transferBuilder->method('build')
             ->willReturn($this->transferMock);
 
         $this->assertEquals($this->transferMock, $this->transferFactory->create($request));
