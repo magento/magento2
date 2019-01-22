@@ -31,7 +31,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param AbstractModel $object
+     * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
      */
     protected function _afterLoad(AbstractModel $object): Instance
@@ -51,7 +51,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param AbstractModel $object
+     * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
      */
     protected function _afterSave(AbstractModel $object): Instance
@@ -166,7 +166,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Perform actions before object delete.
      * Collect page ids and layout update ids and set to object for further delete
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
      */
     protected function _beforeDelete(AbstractModel $object): Instance
@@ -192,7 +192,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Perform actions after object delete.
      * Delete layout updates by layout update ids collected in _beforeSave
      *
-     * @param AbstractModel $object
+     * @param \Magento\Widget\Model\Widget\Instance $object
      * @return $this
      */
     protected function _afterDelete(AbstractModel $object): Instance
