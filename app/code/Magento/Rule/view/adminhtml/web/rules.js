@@ -220,6 +220,8 @@ define([
 
             var elem = Element.down(elemContainer, 'input.input-text');
 
+            jQuery(elem).trigger('contentUpdated');
+
             if (elem) {
                 elem.focus();
 
