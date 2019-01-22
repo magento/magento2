@@ -121,6 +121,9 @@
 
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+            input[type="checkbox"] {
+                margin-top: 1.2rem;
+            }
         }
 
         > .admin__field-label {
@@ -685,8 +688,10 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
-                text-align: left;
             }
+        }
+        & > .admin__field-label { 
+            text-align: left;
         }
 
         &:nth-child(n + 2) {
