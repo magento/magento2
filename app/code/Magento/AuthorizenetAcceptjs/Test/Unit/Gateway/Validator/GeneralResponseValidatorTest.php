@@ -100,6 +100,39 @@ class GeneralResponseValidatorTest extends TestCase
         $this->assertSame(['bar'], $args['failsDescription']);
     }
 
+    public function testValidateParsesMessages()
+    {
+        $args = [];
+
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->callback(function ($a) use (&$args) {
+                // Spy on method call
+                $args = $a;
+
+                return true;
+            }))
+            ->willReturn($this->createMock(ResultInterface::class));
+
+        $this->validator->validate([
+            'response' => [
+                'messages' => [
+                    'resultCode' => 'Error',
+                    'message' => [
+                        [
+                            'code' => 'foo',
+                            'text' => 'bar'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertFalse($args['isValid']);
+        $this->assertSame(['foo'], $args['errorCodes']);
+        $this->assertSame(['bar'], $args['failsDescription']);
+    }
+
     public function testValidateParsesErrorsWhenOnlyOneIsReturned()
     {
         $args = [];

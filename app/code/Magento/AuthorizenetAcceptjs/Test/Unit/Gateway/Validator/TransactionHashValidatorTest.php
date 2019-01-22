@@ -149,6 +149,40 @@ class TransactionHashValidatorTest extends TestCase
         $this->assertEmpty($args['failsDescription']);
     }
 
+    public function testValidateSucceedsWhenValidSha512HashIsReceivedWithNoAmount()
+    {
+        $args = [];
+
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->callback(function ($a) use (&$args) {
+                // Spy on method call
+                $args = $a;
+
+                return true;
+            }))
+            ->willReturn($this->resultMock);
+
+        $this->configMock->method('getTransactionSignatureKey')
+            ->willReturn('abc');
+        $this->configMock->method('getLoginId')
+            ->willReturn('username');
+
+        $this->validator->validate([
+            'response' => [
+                'transactionResponse' => [
+                    'transId' => '123',
+                    'transHashSha2' => 'CC0FF465A081D98FFC6E502C40B2DCC7655ACF591F859135B6E66558D4'
+                        . '1E3A2C654D5A2ACF4749104F3133711175C232C32676F79F70211C2984B21A33D30DEE'
+                ]
+            ]
+        ]);
+
+        $this->assertTrue($args['isValid']);
+        $this->assertEmpty($args['errorCodes']);
+        $this->assertEmpty($args['failsDescription']);
+    }
+
     public function testValidateFailsWhenInvalidMD5HashIsReceived()
     {
         $args = [];
@@ -211,6 +245,41 @@ class TransactionHashValidatorTest extends TestCase
                 'transactionResponse' => [
                     'transId' => '123',
                     'transHash' => '44BCA82F40E417C51E842630FDAAAB88'
+                ]
+            ]
+        ]);
+
+        $this->assertTrue($args['isValid']);
+        $this->assertEmpty($args['errorCodes']);
+        $this->assertEmpty($args['failsDescription']);
+    }
+
+    public function testValidateSucceedsWhenValidMd5HashIsReceivedWithNoAmount()
+    {
+        $args = [];
+
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->callback(function ($a) use (&$args) {
+                // Spy on method call
+                $args = $a;
+
+                return true;
+            }))
+            ->willReturn($this->resultMock);
+
+        $this->configMock->expects($this->once())
+            ->method('getLegacyTransactionHash')
+            ->willReturn('abc');
+        $this->configMock->expects($this->once())
+            ->method('getLoginId')
+            ->willReturn('username');
+
+        $this->validator->validate([
+            'response' => [
+                'transactionResponse' => [
+                    'transId' => '123',
+                    'transHash' => 'C8675D9F7BE7BE4A04C18EA1B6F7B6FD'
                 ]
             ]
         ]);

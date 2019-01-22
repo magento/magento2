@@ -1,0 +1,10 @@
+<phpunit>
+    <filter>
+        <whitelist>
+            <directory>../</directory>
+        </whitelist>
+        <blacklist>
+            <directory>.</directory>
+        </blacklist>
+    </filter>
+</phpunit>
