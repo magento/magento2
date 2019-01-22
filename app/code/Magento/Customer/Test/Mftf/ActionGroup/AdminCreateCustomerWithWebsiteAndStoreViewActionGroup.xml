@@ -22,6 +22,9 @@
         <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
         <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeView}}"/>
         <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <click stepKey="saveCustomer" selector="{{AdminCustomerAccountInformationSection.saveCustomerAndContinueEdit}}"/>
+        <waitForPageLoad stepKey="waitForCustomersPage"/>
+        <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
         <click stepKey="goToAddresses" selector="{{AdminCustomerAccountInformationSection.addressesButton}}"/>
         <waitForPageLoad stepKey="waitForAddresses"/>
         <click stepKey="clickOnAddNewAddress" selector="{{AdminCustomerAddressesSection.addNewAddress}}"/>
@@ -36,8 +39,7 @@
         <selectOption stepKey="selectState" selector="{{AdminCustomerAddressesSection.state}}" userInput="{{address.state}}"/>
         <fillField stepKey="fillZip" selector="{{AdminCustomerAddressesSection.zip}}" userInput="{{address.postcode}}"/>
         <fillField stepKey="fillPhoneNumber" selector="{{AdminCustomerAddressesSection.phoneNumber}}" userInput="{{address.telephone}}"/>
-        <click stepKey="save" selector="{{AdminCustomerAccountInformationSection.saveCustomer}}"/>
-        <waitForPageLoad stepKey="waitForCustomersPage"/>
-        <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
+        <click stepKey="saveAddress" selector="{{AdminCustomerAddressesSection.saveAddress}}"/>
+        <waitForPageLoad stepKey="waitForAddressSave"/>
     </actionGroup>
 </actionGroups>
