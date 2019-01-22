@@ -344,6 +344,12 @@ define([
          * @param {Object} data - File data that will be uploaded.
          */
         onBeforeFileUpload: function (e, data) {
+            if (this.disabled()) {
+                this.notifyError($t('was not uploaded'));
+
+                return;
+            }
+
             var file     = data.files[0],
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
