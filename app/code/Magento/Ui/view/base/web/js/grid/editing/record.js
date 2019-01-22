@@ -280,7 +280,7 @@ define([
         },
 
         /**
-         * Counts total errors ammount accros all fields.
+         * Counts total errors amount across all fields.
          *
          * @returns {Number}
          */
