@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Class Converter. Responsible for transform dom documents into an array
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -65,6 +68,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $backendModel = $node->attributes->getNamedItem('backend_model');
                 if ($backendModel) {
                     $this->_metadata[$path] = ['backendModel' => $backendModel->nodeValue];
+                }
+
+                if ($node->getAttribute('protected')) {
+                    $this->_metadata[$path] = [
+                        'protected' => $node->attributes->getNamedItem('protected')->nodeValue
+                    ];
                 }
             }
             $nodeData = [];
