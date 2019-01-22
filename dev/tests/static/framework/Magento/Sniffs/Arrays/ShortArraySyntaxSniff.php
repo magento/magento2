@@ -5,13 +5,16 @@
  */
 namespace Magento\Sniffs\Arrays;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
+/**
+ * Validate short array syntax is used.
+ */
 class ShortArraySyntaxSniff implements Sniff
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -19,7 +22,7 @@ class ShortArraySyntaxSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $sourceFile, $stackPtr)
     {
