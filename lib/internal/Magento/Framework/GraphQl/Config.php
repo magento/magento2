@@ -48,12 +48,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get a data object with data pertaining to a GraphQL type's structural makeup.
-     *
-     * @param string $configElementName
-     * @return ConfigElementInterface
-     * @throws \LogicException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @inheritdoc
      */
     public function getConfigElement(string $configElementName) : ConfigElementInterface
     {
@@ -81,11 +76,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Return all type names declared in a GraphQL schema's configuration and their type.
-     *
-     * Format is ['name' => 'example value', 'type' = 'example value']
-     *
-     * @return array $types
+     * @inheritdoc
      */
     public function getDeclaredTypes() : array
     {

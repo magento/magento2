@@ -9,7 +9,6 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 
 use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Schema\Type\InputTypeInterface;
 use Magento\Framework\GraphQl\Schema\TypeInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;

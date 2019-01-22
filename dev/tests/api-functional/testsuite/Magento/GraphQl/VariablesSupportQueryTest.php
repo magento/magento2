@@ -15,76 +15,68 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 class VariablesSupportQueryTest extends GraphQlAbstract
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
 
     /**
-     * Tests that Introspection is disabled when not in developer mode
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @magentoApiDataFixture Magento/Catalog/_files/products_list.php
      */
     public function testQueryObjectVariablesSupport()
     {
-        $productSku = 'simple';
+        $productSku = 'simple-249';
+        $minPrice = 153;
 
         $query
             = <<<'QUERY'
-query GetProductsQuery($page: Int, $filterInput: ProductFilterInput){
+query GetProductsQuery($pageSize: Int, $filterInput: ProductFilterInput, $priceSort: SortEnum) {
   products(
-    pageSize: 10
-    currentPage: $page
+    pageSize: $pageSize
     filter: $filterInput
-    sort: {}
+    sort: {price: $priceSort}
   ) {
     items {
-    	name
+      sku
+      price {
+        minimalPrice {
+          amount {
+            value
+            currency
+          }          
+        }
+      }
     }
   }
 }
 QUERY;
+
         $variables = [
-            'page' => 1,
+            'pageSize' => 1,
+            'priceSort' => 'ASC',
             'filterInput' => [
-                'sku' => [
-                    'like' => '%simple%'
-                ]
-            ]
+                'min_price' => [
+                    'gt' => 150,
+                ],
+            ],
         ];
 
         $response = $this->graphQlQuery($query, $variables);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku, false, null, true);
 
-        $this->assertArrayHasKey('products', $response);
-        $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
-        $this->assertArrayHasKey(0, $response['products']['items']);
-        $this->assertFields($product, $response['products']['items'][0]);
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertFields($product, $actualResponse)
-    {
-        $assertionMap = [
-            ['response_field' => 'name', 'expected_value' => $product->getName()],
-        ];
-
-        $this->assertResponseFields($actualResponse, $assertionMap);
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertEquals(1, count($response['products']['items']));
+        self::assertArrayHasKey(0, $response['products']['items']);
+        self::assertEquals($product->getSku(), $response['products']['items'][0]['sku']);
+        self::assertEquals(
+            $minPrice,
+            $response['products']['items'][0]['price']['minimalPrice']['amount']['value']
+        );
     }
 }
