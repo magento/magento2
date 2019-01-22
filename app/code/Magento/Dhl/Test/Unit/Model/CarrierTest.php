@@ -101,7 +101,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     private $productMetadataMock;
 
-
     /**
      * @inheritdoc
      */

@@ -1609,6 +1609,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _shipmentDetails($xml, $rawRequest, $originRegion = '')
     {
