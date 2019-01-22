@@ -9,6 +9,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 
 /**
  * Class NotifyStock
+ *
  * @package Magento\Catalog\Block\Adminhtml\Rss
  */
 class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataProviderInterface
@@ -41,7 +42,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -50,7 +51,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRssData()
     {
@@ -73,7 +74,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -81,7 +82,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -89,7 +90,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFeeds()
     {
@@ -97,7 +98,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
