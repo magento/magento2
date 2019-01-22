@@ -7,17 +7,18 @@
  * @api
  */
 define([
+    'wysiwygAdapter',
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'ko',
     './abstract',
     'mage/adminhtml/events',
     'Magento_Variable/variables'
-], function ($, _, ko, Abstract, varienGlobalEvents) {
+], function (wysiwyg, $, _, ko, Abstract, varienGlobalEvents) {
     'use strict';
 
     return Abstract.extend({
-        wysiwyg: undefined,
+        currentWysiwyg: undefined,
         defaults: {
             elementSelector: 'textarea',
             suffixRegExpPattern: '${ $.wysiwygUniqueSuffix }',
@@ -54,7 +55,7 @@ define([
             // disable editor completely after initialization is field is disabled
             varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
                 if (!_.isUndefined(window.tinyMceEditors)) {
-                    this.wysiwyg = window.tinyMceEditors[this.wysiwygId];
+                    this.currentWysiwyg = window.tinyMceEditors[this.wysiwygId];
                 }
 
                 if (this.disabled()) {
@@ -90,10 +91,7 @@ define([
          */
         destroy: function () {
             this._super();
-
-            if (!_.isUndefined(this.wysiwyg)) {
-                this.wysiwyg.removeEvents(this.wysiwygId);
-            }
+            wysiwyg.removeEvents(this.wysiwygId);
         },
 
         /**
@@ -143,16 +141,8 @@ define([
             }
 
             /* eslint-disable no-undef */
-
-            if (!_.isUndefined(this.wysiwyg) && this.wysiwyg.activeEditor()) {
-                if (disabled) {
-                    this.wysiwyg.setEnabledStatus(false);
-                    this.wysiwyg.getPluginButtons().prop('disabled', 'disabled');
-                } else {
-                    this.wysiwyg.setEnabledStatus(true);
-                    this.wysiwyg.getPluginButtons().removeProp('disabled');
-                }
-            }
+            this.currentWysiwyg.setEnabledStatus(!disabled);
+            this.currentWysiwyg.getPluginButtons().prop('disabled', disabled);
         }
     });
 });
