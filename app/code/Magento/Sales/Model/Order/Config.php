@@ -75,6 +75,8 @@ class Config
     }
 
     /**
+     * Get collection.
+     *
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected function _getCollection()
@@ -86,6 +88,8 @@ class Config
     }
 
     /**
+     * Get state.
+     *
      * @param string $state
      * @return Status
      */
@@ -275,8 +279,9 @@ class Config
     }
 
     /**
-     * Get existing order statuses
-     * Visible or invisible on frontend according to passed param
+     * Get existing order statuses.
+     *
+     * Visible or invisible on frontend according to passed param.
      *
      * @param bool $visibility
      * @return array
