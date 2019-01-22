@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\Payment\Gateway\Validator;
 
 /**
+ * Represents a basic validator shell that can create a result
+ *
  * @api
  * @since 100.0.2
  */
