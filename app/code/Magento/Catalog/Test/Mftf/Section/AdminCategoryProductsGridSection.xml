@@ -15,5 +15,6 @@
         <element name="rowPrice" type="text" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-price" parameterized="true"/>
         <element name="rowPosition" type="input" selector="#catalog_category_products_table tbody tr:nth-of-type({{row}}) .col-position .position input" timeout="30" parameterized="true"/>
         <element name="productGridNameProduct" type="text" selector="//table[@id='catalog_category_products_table']//td[contains(., '{{productName}}')]" parameterized="true"/>
+        <element name="productVisibility" type="select" selector="//*[@name='product[visibility]']"/>
     </section>
 </sections>
