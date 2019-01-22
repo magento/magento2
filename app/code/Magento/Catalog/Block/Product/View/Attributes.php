@@ -90,7 +90,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
 
                 if (is_string($value) && strlen($value)) {
                     $data[$attribute->getAttributeCode()] = [
-                        'label' => __($attribute->getStoreLabel()),
+                        'label' => $attribute->getStoreLabel(),
                         'value' => $value,
                         'code' => $attribute->getAttributeCode(),
                     ];
