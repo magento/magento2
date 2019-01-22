@@ -167,7 +167,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $allAllowedRules = $this->getConnection()->select();
                 $allAllowedRules->union([$noCouponRules, $couponRules], \Zend_Db_Select::SQL_UNION_ALL);
 
-                $this->_select = $allAllowedRules;
+                $wrapper = $this->getConnection()->select();
+                $wrapper->from($allAllowedRules);
+
+                $this->_select = $wrapper;
             } else {
                 $this->_select = $noCouponRules;
             }
