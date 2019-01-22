@@ -7,6 +7,7 @@ namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Data collection
@@ -234,12 +235,20 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Get current collection page
      *
      * @param  int $displacement
+     * @throws \Magento\Framework\Exception\InputException
      * @return int
      */
     public function getCurPage($displacement = 0)
     {
         if ($this->_curPage + $displacement < 1) {
             return 1;
+        } elseif ($this->_curPage > $this->getLastPageNumber() && $displacement === 0) {
+            throw new InputException(
+                __(
+                    'currentPage value %1 specified is greater than the %2 page(s) available.',
+                    [$this->_curPage, $this->getLastPageNumber()]
+                )
+            );
         } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
             return $this->getLastPageNumber();
         } else {
