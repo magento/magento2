@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -37,6 +37,9 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
      */
     private $serializerMock;
 
+    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+    protected $collection;
+
     protected function setUp()
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -56,6 +59,19 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             $this->countryOfManufacture,
             'serializer',
             $this->serializerMock
+        );
+
+        $this->collection = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [
+                '__wakeup',
+                'getSelect',
+                'joinLeft',
+                'order',
+                'getStoreId',
+                'getConnection',
+                'getCheckSql'
+            ]
         );
     }
 
@@ -92,5 +108,26 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             [
                 ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
+    }
+
+    /**
+     * Add Value Sort To Collection Select
+     * all NULL values will add to the end
+     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     */
+    public function testAddValueSortToCollection()
+    {
+        $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
+                         ->will($this->returnSelf());
+
+        $this->collection->expects($this->once())->method('order')->with('check_sql asc')
+                         ->will($this->returnSelf());
+
+        $this->collection->expects($this->any())->method('getConnection')
+                         ->will($this->returnSelf());
+        $this->collection->expects($this->any())->method('getCheckSql')
+                         ->will($this->returnValue('check_sql'));
+
+        $this->countryOfManufacture->addValueSortToCollection($this->collection);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,6 +13,8 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
+use \Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use \Magento\Framework\Data\Collection;
 
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
@@ -92,4 +94,39 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
         }
         return $this->serializer;
     }
+
+    /**
+     * Add Value Sort To Collection Select
+     * all NULL values will add to the end
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param string $dir direction
+     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     */
+    public function addValueSortToCollection(AbstractCollection $collection, string $dir = Collection::SORT_ORDER_DESC) : AbstractSource
+    {
+        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $attributeId = $this->getAttribute()->getId();
+        $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        $linkField = $this->getAttribute()->getEntity()->getLinkField();
+
+        $tableName = $attributeCode . '_t';
+
+        $collection->getSelect()->joinLeft(
+            [$tableName => $attributeTable],
+            "e.{$linkField}={$tableName}.{$linkField}" .
+            " AND {$tableName}.attribute_id='{$attributeId}'",
+            []
+        );
+
+        $valueExpr = $tableName . '.value';
+
+        $collection->getSelect()->order([
+                                            $collection->getConnection()->getCheckSql($valueExpr.' IS NULL', 1, 0),
+                                            $valueExpr . ' ' . $dir
+                                        ]);
+
+        return parent::addValueSortToCollection($collection, $dir);
+    }
+
 }
