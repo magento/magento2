@@ -4,7 +4,7 @@
     <Request xmlns="">
         <ServiceHeader>
             <MessageTime>currentTime</MessageTime>
-            <MessageReference>MAGE_SHIP_CHECKED</MessageReference>
+            <MessageReference>MAGE_SHIP_28TO32_Char_CHECKED</MessageReference>
             <SiteID>some ID</SiteID>
             <Password>some password</Password>
         </ServiceHeader>
