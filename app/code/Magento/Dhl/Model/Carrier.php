@@ -1669,7 +1669,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Get tracking
      *
      * @param string|string[] $trackings
-     * @return Result|null
+     * @return \Magento\Shipping\Model\Tracking\Result|null
      */
     public function getTracking($trackings)
     {
@@ -1693,12 +1693,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             '<req:KnownTrackingRequest' .
             ' xmlns:req="http://www.dhl.com"' .
             ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' .
-            ' xsi:schemaLocation="http://www.dhl.com TrackingRequestKnown.xsd" />';
+            ' xsi:schemaLocation="http://www.dhl.com TrackingRequestKnown-1.0.xsd"' .
+            ' schemaVersion="1.0" />';
 
         $xml = $this->_xmlElFactory->create(['data' => $xmlStr]);
 
         $requestNode = $xml->addChild('Request', '', '');
         $serviceHeaderNode = $requestNode->addChild('ServiceHeader', '', '');
+        $serviceHeaderNode->addChild('MessageTime', $this->buildMessageTimestamp());
+        $serviceHeaderNode->addChild('MessageReference', $this->buildMessageReference(self::SERVICE_PREFIX_TRACKING));
         $serviceHeaderNode->addChild('SiteID', (string)$this->getConfigData('id'));
         $serviceHeaderNode->addChild('Password', (string)$this->getConfigData('password'));
 
@@ -1942,12 +1945,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
+     * Verify if the shipment is dutiable
+     *
      * @param string $origCountryId
      * @param string $destCountryId
      *
      * @return bool
      */
-    protected function isDutiable($origCountryId, $destCountryId)
+    protected function isDutiable($origCountryId, $destCountryId) : bool
     {
         $this->_checkDomesticStatus($origCountryId, $destCountryId);
 
