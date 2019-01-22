@@ -42,6 +42,9 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
     private $componentRegistrarMock;
 
+    /** @var  \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $eventManageMock;
+
     /** @var  \Symfony\Component\Console\Output\OutputInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $outputMock;
 
@@ -85,6 +88,15 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
 
+        $this->eventManageMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->eventManageMock->expects($this->any())->method('dispatch')->with(
+            'setup_di_compile_excluded_patterns', array(
+            'modulePaths' => ['/path/to/module/one', '/path (1)/to/module/two'],
+            'excludedPaths' => []
+            ))->willReturnMap([
+                ['#^(?:/custom/path/to)/exclude#']
+        ]);
+
         $this->outputFormatterMock = $this->createMock(
             \Symfony\Component\Console\Formatter\OutputFormatterInterface::class
         );
@@ -99,7 +111,8 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             $objectManagerProviderMock,
             $this->filesystemMock,
             $this->fileDriverMock,
-            $this->componentRegistrarMock
+            $this->componentRegistrarMock,
+            $this->eventManageMock
         );
     }
 

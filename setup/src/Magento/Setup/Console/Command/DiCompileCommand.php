@@ -73,6 +73,11 @@ class DiCompileCommand extends Command
     private $componentRegistrar;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
@@ -82,6 +87,7 @@ class DiCompileCommand extends Command
      * @param Filesystem $filesystem
      * @param DriverInterface $fileDriver
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -90,7 +96,8 @@ class DiCompileCommand extends Command
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
         DriverInterface $fileDriver,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Event\ManagerInterface $eventManager = null
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
@@ -99,6 +106,7 @@ class DiCompileCommand extends Command
         $this->filesystem       = $filesystem;
         $this->fileDriver       = $fileDriver;
         $this->componentRegistrar  = $componentRegistrar;
+        $this->eventManager = $eventManager;
         parent::__construct();
     }
 
@@ -162,6 +170,7 @@ class DiCompileCommand extends Command
             'application' => $this->getExcludedModulePaths($modulePaths),
             'framework' => $this->getExcludedLibraryPaths($libraryPaths),
             'setup' => $this->getExcludedSetupPaths($setupPath),
+            'custom-paths' => $this->getExcludedCustomPaths($modulePaths),
         ];
         $this->configureObjectManager($output);
 
@@ -399,5 +408,23 @@ class DiCompileCommand extends Command
         ];
 
         return $operations;
+    }
+
+    /**
+     * Exclude custom directories
+     *
+     * @param array $modulePaths
+     *
+     * @return array
+     */
+    protected function getExcludedCustomPaths(array $modulePaths) {
+        $excludedCustomPaths = [];
+
+        /** @var \Magento\Framework\Event\ManagerInterface $eventManager */
+        if (!$this->eventManager) {
+            return $excludedCustomPaths;
+        }
+        $this->eventManager->dispatch('setup_di_compile_excluded_patterns', array('modulePaths' => $modulePaths, 'excludedPaths' => &$excludedCustomPaths));
+        return $excludedCustomPaths;
     }
 }
