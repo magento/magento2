@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Fields attribute merger.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AttributeMerger
 {
