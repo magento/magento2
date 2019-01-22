@@ -106,9 +106,6 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers \Magento\AuthorizenetAcceptjs\Gateway\Command\CaptureStrategyCommand::execute
-     */
     public function testExecuteWillAuthorizeWhenNotAuthorizedAndNotCaptured()
     {
         $subject = ['payment' => $this->paymentDOMock];
