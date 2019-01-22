@@ -61,7 +61,7 @@ class Image extends \Magento\Framework\App\Config\Value
         array $data = [],
         Escaper $escaper = null
     ) {
-        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_eavConfig = $eavConfig;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
