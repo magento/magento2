@@ -67,7 +67,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 'addOption',
                 'setCustomPrice',
                 'setOriginalCustomPrice',
-            'setData',
+                'setData',
                 'hasData',
                 'setIsQtyDecimal'
             ]);
@@ -301,7 +301,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 'setProduct',
                 'getData',
                 'unsetData',
-                'hasData'
+                'hasData',
             ]);
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->will($this->returnValue([]));
