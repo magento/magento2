@@ -57,6 +57,8 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     }
 
     /**
+     * Retrieve configuration files.
+     *
      * @return array
      */
     protected function getConfigFiles()
