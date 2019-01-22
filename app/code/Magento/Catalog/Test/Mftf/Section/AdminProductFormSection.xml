@@ -177,4 +177,9 @@
         <element name="specialPrice" type="input" selector="input[name='product[special_price]']"/>
         <element name="doneButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-primary"/>
     </section>
+    <section name="AdminProductAttributeSection">
+        <element name="attributeSectionHeader" type="button" selector="//div[@data-index='attributes']" timeout="30"/>
+        <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
+        <element name="attributeSection" type="div" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+    </section>
 </sections>
