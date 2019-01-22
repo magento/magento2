@@ -11,6 +11,8 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Quote shipping/billing address validator service.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class QuoteAddressValidator
 {
@@ -29,7 +31,7 @@ class QuoteAddressValidator
     protected $customerRepository;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @deprecated This class is not a part of HTML presentation layer and should not use sessions.
      */
     protected $customerSession;
 
