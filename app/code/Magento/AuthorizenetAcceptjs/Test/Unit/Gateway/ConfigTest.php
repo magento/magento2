@@ -105,7 +105,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['sandbox', 'AAA102993'],
-            ['production', ''],
+            ['production', 'AAA175350'],
         ];
     }
 

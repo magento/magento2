@@ -27,8 +27,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
-    // TODO populate with real data
-    private const SOLUTION_ID_PRODUCTION = '';
+    private const SOLUTION_ID_PRODUCTION = 'AAA175350';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
