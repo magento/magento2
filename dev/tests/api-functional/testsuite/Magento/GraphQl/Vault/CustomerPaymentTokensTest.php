@@ -175,7 +175,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Vault/_files/payment_tokens.php
      * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Token could not be found by public hash: ksdfk392ks
+     * @expectedExceptionMessage GraphQL response contains errors: Could not find a token using public hash: ksdfk392ks
      */
     public function testDeletePaymentTokenInvalidPublicHash()
     {
