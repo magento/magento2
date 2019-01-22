@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model;
 
 class NamespaceResolver
@@ -35,7 +38,7 @@ class NamespaceResolver
      * @param bool $asFullModuleName
      * @return string
      */
-    public function determineOmittedNamespace($name, $asFullModuleName = false)
+    public function determineOmittedNamespace(string $name, bool $asFullModuleName = false): string
     {
         $this->prepareModuleNamespaces();
         $name = $this->prepareName($name);
@@ -67,7 +70,7 @@ class NamespaceResolver
      *
      * @return void
      */
-    protected function prepareModuleNamespaces()
+    protected function prepareModuleNamespaces(): void
     {
         if (null === $this->moduleNamespaces) {
             $this->moduleNamespaces = [];
@@ -84,7 +87,7 @@ class NamespaceResolver
      * @param string $name
      * @return array
      */
-    protected function prepareName($name)
+    protected function prepareName(string $name): array
     {
         $explodeString = strpos($name, '\\') === false ? '_' : '\\';
         return explode($explodeString, strtolower($name));

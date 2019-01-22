@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
 /**
@@ -30,7 +32,7 @@ class ThemeId implements \Magento\Framework\Option\ArrayInterface
     /**
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return $this->_resourceModel->toOptionHash();
     }

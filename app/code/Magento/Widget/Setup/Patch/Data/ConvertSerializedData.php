@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Widget\Setup\Patch\Data;
 
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;
@@ -39,6 +40,8 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * ConvertSerializedData constructor.
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param QueryModifierFactory $queryModifierFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
@@ -53,7 +56,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public function apply()
+    public function apply(): void
     {
         $this->convertSerializedData();
     }
@@ -61,7 +64,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [UpgradeModelInstanceClassAliases::class];
     }
@@ -69,7 +72,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return '2.0.1';
     }
@@ -77,7 +80,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
@@ -85,7 +88,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     /**
      * Convert native serialized data to json.
      */
-    private function convertSerializedData()
+    private function convertSerializedData(): void
     {
         $layoutUpdateQueryModifier = $this->queryModifierFactory->create(
             'like',

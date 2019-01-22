@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Layout\Link;
 
 /**
@@ -42,7 +45,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         parent::_construct();
         $this->_init(\Magento\Widget\Model\Layout\Link::class, \Magento\Widget\Model\ResourceModel\Layout\Link::class);
@@ -54,7 +57,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $themeId
      * @return $this
      */
-    public function addThemeFilter($themeId)
+    public function addThemeFilter(int $themeId): Collection
     {
         $this->addFieldToFilter('theme_id', $themeId);
         return $this;
@@ -66,7 +69,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param array $fields
      * @return $this
      */
-    protected function _joinWithUpdate($fields = [])
+    protected function _joinWithUpdate(array $fields = []): Collection
     {
         $flagName = 'joined_with_update_table';
         if (!$this->getFlag($flagName)) {
@@ -87,7 +90,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param bool $isTemporary
      * @return $this
      */
-    public function addTemporaryFilter($isTemporary)
+    public function addTemporaryFilter(bool $isTemporary): Collection
     {
         $this->addFieldToFilter('main_table.is_temporary', $isTemporary ? 1 : 0);
         return $this;
@@ -99,7 +102,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $days
      * @return $this
      */
-    public function addUpdatedDaysBeforeFilter($days)
+    public function addUpdatedDaysBeforeFilter(string $days): Collection
     {
         $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . $days . 'D');

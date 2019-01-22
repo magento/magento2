@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Widget;
 
 use Magento\Framework\Model\AbstractModel;
@@ -29,10 +31,10 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterLoad(AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object): Instance
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -49,10 +51,10 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(AbstractModel $object)
+    protected function _afterSave(AbstractModel $object): Instance
     {
         $pageTable = $this->getTable('widget_instance_page');
         $pageLayoutTable = $this->getTable('widget_instance_page_layout');
@@ -110,7 +112,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $pageGroupData
      * @return string[] of inserted layout updates ids
      */
-    protected function _saveLayoutUpdates($widgetInstance, $pageGroupData)
+    protected function _saveLayoutUpdates(\Magento\Widget\Model\Widget\Instance $widgetInstance, array $pageGroupData): array
     {
         $connection = $this->getConnection();
         $pageLayoutUpdateIds = [];
@@ -152,7 +154,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $storeIds
      * @return array
      */
-    protected function _prepareStoreIds($storeIds)
+    protected function _prepareStoreIds(array $storeIds): array
     {
         if (in_array('0', $storeIds)) {
             $storeIds = [0];
@@ -167,7 +169,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _beforeDelete(AbstractModel $object)
+    protected function _beforeDelete(AbstractModel $object): Instance
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -190,10 +192,10 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Perform actions after object delete.
      * Delete layout updates by layout update ids collected in _beforeSave
      *
-     * @param \Magento\Widget\Model\Widget\Instance $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterDelete(AbstractModel $object)
+    protected function _afterDelete(AbstractModel $object): Instance
     {
         $this->_deleteLayoutUpdates($object->getLayoutUpdateIdsToDelete());
         return parent::_afterDelete($object);
@@ -205,7 +207,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $pageIds
      * @return $this
      */
-    protected function _deleteWidgetInstancePages($pageIds)
+    protected function _deleteWidgetInstancePages(array $pageIds): Instance
     {
         $connection = $this->getConnection();
         if ($pageIds) {
@@ -221,7 +223,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $layoutUpdateIds
      * @return $this
      */
-    protected function _deleteLayoutUpdates($layoutUpdateIds)
+    protected function _deleteLayoutUpdates(array $layoutUpdateIds): Instance
     {
         $connection = $this->getConnection();
         if ($layoutUpdateIds) {
@@ -237,7 +239,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $id
      * @return string[]
      */
-    public function lookupStoreIds($id)
+    public function lookupStoreIds(int $id): array
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(

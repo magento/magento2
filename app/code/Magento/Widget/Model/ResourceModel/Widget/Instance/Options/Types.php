@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
 /**
@@ -27,7 +29,7 @@ class Types implements \Magento\Framework\Option\ArrayInterface
     /**
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $widgets = [];
         $widgetsOptionsArr = $this->_model->getWidgetsOptionArray('type');

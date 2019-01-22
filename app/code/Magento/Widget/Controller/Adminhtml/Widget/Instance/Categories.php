@@ -4,6 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
 class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
@@ -40,7 +43,7 @@ class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    public function execute(): \Magento\Framework\Controller\Result\Raw
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $isAnchorOnly = $this->getRequest()->getParam('is_anchor_only', 0);

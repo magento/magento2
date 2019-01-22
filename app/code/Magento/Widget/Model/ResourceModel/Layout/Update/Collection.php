@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Layout\Update;
 
 /**
@@ -56,7 +59,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         parent::_construct();
         $this->_init(
@@ -71,7 +74,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $themeId
      * @return $this
      */
-    public function addThemeFilter($themeId)
+    public function addThemeFilter(int $themeId): Collection
     {
         $this->_joinWithLink();
         $this->getSelect()->where('link.theme_id = ?', $themeId);
@@ -85,7 +88,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @return $this
      */
-    public function addStoreFilter($storeId)
+    public function addStoreFilter(int $storeId): Collection
     {
         $this->_joinWithLink();
         $this->getSelect()->where('link.store_id = ?', $storeId);
@@ -98,7 +101,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      */
-    protected function _joinWithLink()
+    protected function _joinWithLink(): Collection
     {
         $flagName = 'joined_with_link_table';
         if (!$this->getFlag($flagName)) {
@@ -120,7 +123,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param array $fields
      * @return $this
      */
-    protected function _joinLeftWithLink($fields = [])
+    protected function _joinLeftWithLink(array $fields = []): Collection
     {
         $flagName = 'joined_left_with_link_table';
         if (!$this->getFlag($flagName)) {
@@ -141,7 +144,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $days
      * @return $this
      */
-    public function addUpdatedDaysBeforeFilter($days)
+    public function addUpdatedDaysBeforeFilter(string $days): Collection
     {
         $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . $days . 'D');
@@ -164,7 +167,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      */
-    public function addNoLinksFilter()
+    public function addNoLinksFilter(): Collection
     {
         $this->_joinLeftWithLink();
         $this->addFieldToFilter('link.layout_update_id', ['null' => true]);
@@ -177,7 +180,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      */
-    public function delete()
+    public function delete(): Collection
     {
         /** @var $update \Magento\Widget\Model\Layout\Update */
         foreach ($this->getItems() as $update) {

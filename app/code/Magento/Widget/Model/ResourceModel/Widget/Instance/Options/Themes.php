@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -33,7 +36,7 @@ class Themes implements OptionSourceInterface
      *
      * @return array Format: array('<theme ID>' => '<theme label>', ...)
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         // Load only visible themes that are used in frontend area
         return $this->themeCollectionFactory->create()->loadRegisteredThemes()->toOptionHash();
