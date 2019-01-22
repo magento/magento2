@@ -9,13 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUrlForProductRewrittenCorrectlyTest">
         <annotations>
-            <features value="UrlRewrite"/>
+            <features value="CatalogUrlRewrite"/>
             <title value="Check that URL for product rewritten correctly"/>
             <description value="Check that URL for product rewritten correctly"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97224"/>
             <useCaseId value="MAGETWO-64191"/>
-            <group value="urlRewrite"/>
+            <group value="CatalogUrlRewrite"/>
         </annotations>
 
         <before>
