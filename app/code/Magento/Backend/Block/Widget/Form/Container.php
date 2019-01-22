@@ -65,7 +65,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
             -1
         );
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -137,7 +137,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
+        return $this->getUrl('*/*/delete', [$this->_objectId => (int)$this->getRequest()->getParam($this->_objectId)]);
     }
 
     /**
