@@ -200,6 +200,7 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * Action after data import.
+     *
      * Save new url rewrites and remove old if exist.
      *
      * @param Observer $observer
@@ -268,6 +269,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Add store id to product data.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $rowData
      * @return void
@@ -437,6 +440,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Generate url-rewrite for outogenerated url-rewirte.
+     *
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
@@ -471,6 +476,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Generate url-rewrite for custom url-rewirte.
+     *
      * @param UrlRewrite $url
      * @param Category $category
      * @return array
@@ -504,6 +511,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Retrieve category from url metadata.
+     *
      * @param UrlRewrite $url
      * @return Category|null|bool
      */
@@ -518,6 +527,8 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * Check, category suited for url-rewrite generation.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool
