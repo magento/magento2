@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontConfigurableProductChildSearchTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -144,18 +144,15 @@
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <fillField stepKey="searchStorefront1" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch1" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$]" stepKey="searchStorefront1" />
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the second attribute option -->
-        <fillField stepKey="searchStorefront2" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch2" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$]" stepKey="searchStorefront2" />
         <seeElement stepKey="seeProduct2" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the first product description -->
-        <fillField stepKey="searchStorefront3" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.custom_attributes[short_description]$$'"/>
-        <click stepKey="clickSearch3" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigChildProduct1.custom_attributes[short_description]$$]" stepKey="searchStorefront3" />
         <seeElement stepKey="seeProduct3" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
     </test>
 </tests>

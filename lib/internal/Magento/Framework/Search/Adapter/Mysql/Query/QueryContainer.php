@@ -9,6 +9,12 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
+/**
+ * MySQL search query container.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class QueryContainer
 {
     const DERIVED_QUERY_PREFIX = 'derived_';
@@ -32,6 +38,8 @@ class QueryContainer
     }
 
     /**
+     * Add query to select.
+     *
      * @param Select $select
      * @param RequestQueryInterface $query
      * @param string $conditionType
@@ -54,6 +62,8 @@ class QueryContainer
     }
 
     /**
+     * Get queries.
+     *
      * @return MatchContainer[]
      */
     public function getMatchQueries()

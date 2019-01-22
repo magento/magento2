@@ -48,6 +48,7 @@
         <variation name="CancelCreatedOrderTestVariationWithPurchaseOrderPaymentMethod" summary="Cancel order with purchase order payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
+            <data name="order/data/payment_auth_expiration/po_number" xsi:type="string">po_number</data>
             <data name="status" xsi:type="string">Canceled</data>
             <data name="configData" xsi:type="string">purchaseorder</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />

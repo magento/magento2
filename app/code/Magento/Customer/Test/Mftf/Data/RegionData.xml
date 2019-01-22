@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomerRegionOne" type="region">
         <data key="region_code">100</data>
         <data key="region_id">12</data>
@@ -15,7 +15,7 @@
     <entity name="RegionTX" type="region">
         <data key="region">Texas</data>
         <data key="region_code">TX</data>
-        <data key="region_id">1</data>
+        <data key="region_id">57</data>
     </entity>
     <entity name="RegionCA" type="region">
         <data key="region">California</data>
@@ -26,5 +26,10 @@
         <data key="region">New York</data>
         <data key="region_code">NY</data>
         <data key="region_id">43</data>
+    </entity>
+    <entity name="RegionUT" type="region">
+        <data key="region">Utah</data>
+        <data key="region_code">UT</data>
+        <data key="region_id">58</data>
     </entity>
 </entities>

@@ -7,12 +7,12 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontSalesRuleCartCouponSection">
-        <element name="couponHeader" type="button" selector="//*[@id='block-discount-heading']"/>
-        <element name="couponField" type="text" selector="//*[@id='coupon_code']"/>
-        <element name="discountBlockActive" type="text" selector="//*[@class='block discount active']" />
-        <element name="applyButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'apply')]"/>
-        <element name="cancelButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'cancel')]"/>
+        <element name="couponHeader" type="button" selector="#block-discount-heading"/>
+        <element name="couponField" type="text" selector="#coupon_code"/>
+        <element name="discountBlockActive" type="text" selector=".block.discount.active" />
+        <element name="applyButton" type="text" selector="#discount-coupon-form button[class*='apply']" timeout="30"/>
+        <element name="cancelButton" type="text" selector="#discount-coupon-form button[class*='cancel']" timeout="30"/>
     </section>
 </sections>

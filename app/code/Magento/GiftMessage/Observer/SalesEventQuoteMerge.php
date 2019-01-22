@@ -28,7 +28,10 @@ class SalesEventQuoteMerge implements ObserverInterface
         /** @var  Quote $sourceQuote */
         $sourceQuote = $observer->getData('source');
 
-        $targetQuote->setGiftMessageId($sourceQuote->getGiftMessageId());
+        $giftMessageId = $sourceQuote->getGiftMessageId();
+        if ($giftMessageId) {
+            $targetQuote->setGiftMessageId($giftMessageId);
+        }
 
         return $this;
     }

@@ -6,12 +6,15 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAddProductsToCartFromWishlistUsingSidebarTest">
         <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add to wishlist"/>
             <title value="Add products from the wishlist to the cart using the sidebar."/>
             <description value="Products added to the cart from wishlist and a customer remains on the same page."/>
             <group value="wishlist"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>

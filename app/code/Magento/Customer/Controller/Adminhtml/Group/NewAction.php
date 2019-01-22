@@ -6,9 +6,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
-class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
+class NewAction extends \Magento\Customer\Controller\Adminhtml\Group implements HttpGetActionInterface
 {
     /**
      * Initialize current group and set it in the registry.

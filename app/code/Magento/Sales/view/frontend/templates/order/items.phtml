@@ -29,9 +29,10 @@
         </thead>
         <?php $items = $block->getItems(); ?>
         <?php $giftMessage = ''?>
+        <tbody>
         <?php foreach ($items as $item): ?>
             <?php if ($item->getParentItem()) continue; ?>
-            <tbody>
+
                 <?= $block->getItemHtml($item) ?>
                 <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>
                     <?php $giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($item); ?>
@@ -62,8 +63,8 @@
                         </td>
                     </tr>
                 <?php endif ?>
-            </tbody>
         <?php endforeach; ?>
+        </tbody>
         <tfoot>
             <?php if($block->isPagerDisplayed()): ?>
                 <tr>

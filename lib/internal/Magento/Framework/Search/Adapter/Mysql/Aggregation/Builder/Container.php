@@ -5,6 +5,12 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+/**
+ * MySQL search aggregation container builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Container
 {
     /**
@@ -21,6 +27,8 @@ class Container
     }
 
     /**
+     * Get bucket by type.
+     *
      * @param string $bucketType
      * @return BucketInterface
      */

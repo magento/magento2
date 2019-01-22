@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
      * Array of actions which can be processed without secret key validation

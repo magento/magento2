@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\BIEssentials;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -12,7 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Provides link to BI Essentials signup
  */
-class SignUp extends Action
+class SignUp extends Action implements HttpGetActionInterface
 {
     /**
      * Path to config value with URL to BI Essentials sign-up page.

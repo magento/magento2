@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurationTimeToSendDataTest">
         <annotations>
             <features value="Analytics"/>
@@ -19,17 +19,16 @@
             <group value="analytics"/>
         </annotations>
         <after>
-            <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
-        <waitForPageLoad stepKey="waitForAdminConfig"/>
-        <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
-        <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
-        <selectOption stepKey="selectAdvancedReportingHour" selector="{{AdminConfigSection.advancedReportingHour}}" userInput="11"/>
-        <selectOption stepKey="selectAdvancedReportingMinute" selector="{{AdminConfigSection.advancedReportingMinute}}" userInput="11"/>
-        <selectOption stepKey="selectAdvancedReportingSeconds" selector="{{AdminConfigSection.advancedReportingSeconds}}" userInput="00"/>
-        <click stepKey="clickSaveConfigButton" selector="{{AdminConfigSection.saveButton}}"/>
-        <see stepKey="seeBlankIndustryErrorMessage" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
+        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingHour}}" userInput="11" stepKey="selectAdvancedReportingHour"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingMinute}}" userInput="11" stepKey="selectAdvancedReportingMinute"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingSeconds}}" userInput="00" stepKey="selectAdvancedReportingSeconds"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </test>
 </tests>

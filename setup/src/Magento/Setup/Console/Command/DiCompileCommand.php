@@ -111,7 +111,7 @@ class DiCompileCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -140,7 +140,7 @@ class DiCompileCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -316,8 +316,8 @@ class DiCompileCommand extends Command
     {
         $this->objectManager->configure(
             [
-                'preferences' => [\Magento\Setup\Module\Di\Compiler\Config\WriterInterface::class =>
-                    \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem::class,
+                'preferences' => [\Magento\Framework\App\ObjectManager\ConfigWriterInterface::class =>
+                    \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class,
                 ], \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
                     'arguments' => [
                         'modificationsList' => [

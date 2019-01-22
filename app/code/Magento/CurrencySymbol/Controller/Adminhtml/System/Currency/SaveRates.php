@@ -7,7 +7,9 @@
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency implements HttpPostActionInterface
 {
     /**
      * Save rates action

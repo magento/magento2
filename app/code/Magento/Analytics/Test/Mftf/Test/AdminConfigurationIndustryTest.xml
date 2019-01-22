@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurationIndustryTest">
         <annotations>
             <features value="Analytics"/>
@@ -17,18 +17,14 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-63898"/>
             <group value="analytics"/>
-            <skip>
-                <issueId value="MAGETWO-90659"/>
-            </skip>
         </annotations>
 
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-
-        <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
-        <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
-        <see stepKey="seeAdvancedReportingIndustryLabel" selector="{{AdminConfigSection.advancedReportingIndustryLabel}}" userInput="Industry"/>
-        <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
-        <click stepKey="clickSaveConfigButton" selector="{{AdminConfigSection.saveButton}}"/>
-        <see stepKey="seeIndustrySuccessMessage" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
+        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </test>
 </tests>

@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
@@ -59,13 +60,29 @@ class ReadHandler implements AttributeInterface
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception if for unknown entity type
+     * @deprecated Not used anymore
+     * @see ReadHandler::getEntityAttributes
      */
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
-        $attributes = (null === $eavEntityType) ? [] : $this->config->getAttributes($eavEntityType);
-        return $attributes;
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType);
+    }
+
+    /**
+     * Get attribute of given entity type
+     *
+     * @param string $entityType
+     * @param DataObject $entity
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
+     * @throws \Exception if for unknown entity type
+     */
+    private function getEntityAttributes(string $entityType, DataObject $entity): array
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $eavEntityType = $metadata->getEavEntityType();
+        return null === $eavEntityType ? [] : $this->config->getEntityAttributes($eavEntityType, $entity);
     }
 
     /**
@@ -105,7 +122,7 @@ class ReadHandler implements AttributeInterface
         $selects = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($this->getAttributes($entityType) as $attribute) {
+        foreach ($this->getEntityAttributes($entityType, new DataObject($entityData)) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();

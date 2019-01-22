@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxQuoteCheckoutGuestVirtual">
         <annotations>
             <features value="Tax"/>
@@ -66,7 +66,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -92,9 +92,10 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="GuestCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+        <actionGroup ref="GuestCheckoutSelectPaymentAndFillNewBillingAddressActionGroup" stepKey="changeAddress">
             <argument name="customerVar" value="Simple_US_Customer_NY"/>
             <argument name="customerAddressVar" value="US_Address_NY"/>
+            <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
         <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
 
@@ -178,7 +179,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -289,7 +290,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -312,6 +313,9 @@
             <argument name="Address" value="US_Address_CA"/>
         </actionGroup>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForAddressToLoad"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
         <see stepKey="seeShipTo" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxCA.state}}"/>
 
@@ -329,6 +333,9 @@
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <click stepKey="clickNext2" selector="{{CheckoutShippingSection.next}}"/>
+        <waitForPageLoad stepKey="waitForShippingToLoad"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeShipTo2" selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
@@ -407,7 +414,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -424,6 +431,8 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForShippingSection"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
@@ -445,6 +454,8 @@
         <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
 
         <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>
 
         <!-- Assert that taxes are applied correctly for CA -->

@@ -1,11 +1,11 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
@@ -13,7 +13,10 @@ use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
-class ReturnUrl extends Payflow implements CsrfAwareActionInterface
+/**
+ * Paypal Payflow ReturnUrl controller class
+ */
+class ReturnUrl extends Payflow implements CsrfAwareActionInterface, HttpGetActionInterface
 {
     /**
      * @var array of allowed order states on frontend
