@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Review\Model;
 
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -47,7 +51,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory
      * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -56,7 +60,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
         \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
         \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_ratingOptionFactory = $ratingOptionFactory;
@@ -69,7 +73,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
@@ -79,7 +83,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param int $entityPkValue
      * @return $this
      */
-    public function addOptionVote($optionId, $entityPkValue)
+    public function addOptionVote(int $optionId, int $entityPkValue): Rating
     {
         $this->_ratingOptionFactory->create()->setOptionId(
             $optionId
@@ -97,7 +101,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param int $optionId
      * @return $this
      */
-    public function updateOptionVote($optionId)
+    public function updateOptionVote(int $optionId): Rating
     {
         $this->_ratingOptionFactory->create()->setOptionId(
             $optionId
@@ -116,7 +120,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         $options = $this->getData('options');
         if ($options) {
@@ -134,9 +138,9 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @param int $entityPkValue
      * @param bool $onlyForCurrentStore
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @return array
      */
-    public function getEntitySummary($entityPkValue, $onlyForCurrentStore = true)
+    public function getEntitySummary(int $entityPkValue, bool $onlyForCurrentStore = true): array
     {
         $this->setEntityPkValue($entityPkValue);
         return $this->_getResource()->getEntitySummary($this, $onlyForCurrentStore);
@@ -145,9 +149,9 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
-     * @return array
+     * @return Rating
      */
-    public function getReviewSummary($reviewId, $onlyForCurrentStore = true)
+    public function getReviewSummary(int $reviewId, bool $onlyForCurrentStore = true): Rating
     {
         $this->setReviewId($reviewId);
         return $this->_getResource()->getReviewSummary($this, $onlyForCurrentStore);
@@ -159,7 +163,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param string $entityCode
      * @return int
      */
-    public function getEntityIdByCode($entityCode)
+    public function getEntityIdByCode(string $entityCode): int
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
     }
@@ -169,7 +173,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      *
      * @return array
      */
-    public function getIdentities()
+    public function getIdentities(): array
     {
         // clear cache for all reviews
         return [Review::CACHE_TAG];

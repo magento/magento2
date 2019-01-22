@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Review\Helper;
 
 /**
@@ -51,7 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $origDetail
      * @return string
      */
-    public function getDetail($origDetail)
+    public function getDetail(string $origDetail): string
     {
         return nl2br($this->filter->truncate($origDetail, ['length' => 50]));
     }
@@ -62,7 +64,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $origDetail Full detail info
      * @return string
      */
-    public function getDetailHtml($origDetail)
+    public function getDetailHtml(string $origDetail): string
     {
         return nl2br($this->filter->truncate($this->_escaper->escapeHtml($origDetail), ['length' => 50]));
     }
@@ -73,7 +75,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsGuestAllowToWrite()
+    public function getIsGuestAllowToWrite(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_REVIEW_GUETS_ALLOW,
@@ -86,7 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return array
      */
-    public function getReviewStatuses()
+    public function getReviewStatuses(): array
     {
         return [
             \Magento\Review\Model\Review::STATUS_APPROVED => __('Approved'),
@@ -100,7 +102,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return array
      */
-    public function getReviewStatusesOptionArray()
+    public function getReviewStatusesOptionArray(): array
     {
         $result = [];
         foreach ($this->getReviewStatuses() as $value => $label) {

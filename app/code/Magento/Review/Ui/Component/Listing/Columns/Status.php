@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Review\Ui\Component\Listing\Columns;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -47,7 +50,7 @@ class Status extends Column implements OptionSourceInterface
      * {@inheritdoc}
      * @since 100.1.0
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         $dataSource = parent::prepareDataSource($dataSource);
         $options = $this->source->getReviewStatuses();
@@ -69,7 +72,7 @@ class Status extends Column implements OptionSourceInterface
      * {@inheritdoc}
      * @since 100.1.0
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return $this->source->getReviewStatusesOptionArray();
     }

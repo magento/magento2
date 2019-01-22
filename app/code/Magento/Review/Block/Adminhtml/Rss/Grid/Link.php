@@ -73,7 +73,7 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @return array
      */
     protected function getLinkParams()
     {

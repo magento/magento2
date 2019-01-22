@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Review\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
@@ -29,7 +31,7 @@ class Review implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSectionData()
+    public function getSectionData(): array
     {
         return (array)$this->reviewSession->getFormData(true) + ['nickname' => '','title' => '', 'detail' => ''];
     }

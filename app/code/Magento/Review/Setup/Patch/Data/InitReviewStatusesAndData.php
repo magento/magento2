@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Review\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
@@ -30,7 +32,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
     /**
      * {@inheritdoc}
      */
-    public function apply()
+    public function apply(): void
     {
         //Fill table review/review_entity
         $reviewEntityCodes = [
@@ -101,7 +103,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
     /**
      * {@inheritdoc}
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
@@ -109,7 +111,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
     /**
      * {@inheritdoc}
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return '2.0.0';
     }
@@ -117,7 +119,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
     /**
      * {@inheritdoc}
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
