@@ -14,67 +14,67 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save
      */
-    protected $saveController;
+    private $saveController;
 
     /**
      * @var \Magento\Backend\App\Action\Context
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultFactoryMock;
+    private $resultFactoryMock;
 
     /**
      * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultRedirectMock;
+    private $resultRedirectMock;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $messageManagerMock;
+    private $messageManagerMock;
 
     /**
      * @var \Magento\Framework\Validator\StringLength|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $lengthValidator;
+    private $lengthValidator;
 
     /**
      * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pathValidator;
+    private $pathValidator;
 
     /**
      * @var \Magento\Sitemap\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $helper;
+    private $helper;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $fileSystem;
+    private $fileSystem;
 
     /**
      * @var \Magento\Sitemap\Model\SitemapFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $siteMapFactory;
+    private $siteMapFactory;
 
     /**
      * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $session;
+    private $session;
 
     protected function setUp()
     {

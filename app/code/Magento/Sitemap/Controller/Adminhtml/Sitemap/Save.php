@@ -17,29 +17,29 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     const MAX_FILENAME_LENGTH = 32;
 
     /**
-     * @var $_stringValidator
+     * @var \Magento\Framework\Validator\StringLength
      */
-    public $_stringValidator;
+    private $stringValidator;
 
     /**
-     * @var $_pathValidator
+     * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath
      */
-    public $_pathValidator;
+    private $pathValidator;
 
     /**
-     * @var $_sitemapHelper
+     * @var \Magento\Sitemap\Helper\Data
      */
-    public $_sitemapHelper;
+    private $sitemapHelper;
 
     /**
-     * @var $_filesystem
+     * @var \Magento\Framework\Filesystem
      */
-    public $_filesystem;
+    private $filesystem;
 
     /**
-     * @var $_sitemapFactory
+     * @var \Magento\Sitemap\Model\SitemapFactory
      */
-    public $_sitemapFactory;
+    private $sitemapFactory;
 
     /**
      * Save constructor.
@@ -52,18 +52,18 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Validator\StringLength $stringValidator,
-        \Magento\MediaStorage\Model\File\Validator\AvailablePath $pathValidator,
-        \Magento\Sitemap\Helper\Data $sitemapHelper,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory
+        \Magento\Framework\Validator\StringLength $stringValidator = null,
+        \Magento\MediaStorage\Model\File\Validator\AvailablePath $pathValidator = null,
+        \Magento\Sitemap\Helper\Data $sitemapHelper = null,
+        \Magento\Framework\Filesystem $filesystem = null,
+        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory = null
     ) {
         parent::__construct($context);
-        $this->_stringValidator = $stringValidator;
-        $this->_pathValidator = $pathValidator;
-        $this->_sitemapHelper = $sitemapHelper;
-        $this->_filesystem = $filesystem;
-        $this->_sitemapFactory = $sitemapFactory;
+        $this->stringValidator = $stringValidator ?: $this->_objectManager->get(\Magento\Framework\Validator\StringLength::class);
+        $this->pathValidator = $pathValidator ?: $this->_objectManager->get(\Magento\MediaStorage\Model\File\Validator\AvailablePath::class);
+        $this->sitemapHelper = $sitemapHelper ?: $this->_objectManager->get(\Magento\Sitemap\Helper\Data::class);
+        $this->filesystem = $filesystem ?: $this->_objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->sitemapFactory = $sitemapFactory ?: $this->_objectManager->get(\Magento\Sitemap\Model\SitemapFactory::class);
     }
 
     /**
@@ -78,9 +78,9 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if (!empty($data['sitemap_filename']) && !empty($data['sitemap_path'])) {
             $data['sitemap_path'] = '/' . ltrim($data['sitemap_path'], '/');
             $path = rtrim($data['sitemap_path'], '\\/') . '/' . $data['sitemap_filename'];
-            $this->_pathValidator->setPaths($this->_sitemapHelper->getValidPaths());
-            if (!$this->_pathValidator->isValid($path)) {
-                foreach ($this->_pathValidator->getMessages() as $message) {
+            $this->pathValidator->setPaths($this->sitemapHelper->getValidPaths());
+            if (!$this->pathValidator->isValid($path)) {
+                foreach ($this->pathValidator->getMessages() as $message) {
                     $this->messageManager->addErrorMessage($message);
                 }
                 // save data in session
@@ -90,9 +90,9 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             }
 
             $filename = rtrim($data['sitemap_filename']);
-            $this->_stringValidator->setMax(self::MAX_FILENAME_LENGTH);
-            if (!$this->_stringValidator->isValid($filename)) {
-                foreach ($this->_stringValidator->getMessages() as $message) {
+            $this->stringValidator->setMax(self::MAX_FILENAME_LENGTH);
+            if (!$this->stringValidator->isValid($filename)) {
+                foreach ($this->stringValidator->getMessages() as $message) {
                     $this->messageManager->addErrorMessage($message);
                 }
                 // save data in session
@@ -113,7 +113,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
         /** @var \Magento\Framework\Filesystem $directory */
-        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         if ($this->getRequest()->getParam('sitemap_id')) {
             $model->load($this->getRequest()->getParam('sitemap_id'));
@@ -136,7 +136,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // init model and set data
         /** @var \Magento\Sitemap\Model\Sitemap $model */
-        $model = $this->_sitemapFactory->create();
+        $model = $this->sitemapFactory->create();
         $this->clearSiteMap($model);
         $model->setData($data);
 
