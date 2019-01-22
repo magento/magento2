@@ -25,7 +25,7 @@
                translate="'What is PayPal?'"/>
         </label>
     </div>
-    <div class="payment-method-content">
+    <div class="payment-method-content" afterRender="initListeners">
         <each args="getRegion('messages')" render=""/>
         <div class="checkout-agreements-block" attr="id: getAgreementId()">
             <each args="$parent.getRegion('before-place-order')" render=""/>

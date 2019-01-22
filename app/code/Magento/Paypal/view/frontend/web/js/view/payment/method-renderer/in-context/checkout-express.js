@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'underscore',
     'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
     'Magento_Paypal/js/action/set-payment-method',
@@ -10,8 +11,10 @@ define([
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/model/messageList',
-    'Magento_Paypal/js/in-context/express-checkout-smart-buttons'
+    'Magento_Paypal/js/in-context/express-checkout-smart-buttons',
+    'Magento_Ui/js/lib/view/utils/async'
 ], function (
+    $,
     _,
     Component,
     setPaymentMethodAction,
@@ -23,44 +26,36 @@ define([
 ) {
     'use strict';
 
-    /**
-     * Handler function
-     * @param {String} id
-     * @param {Function} handler
-     */
-    function onChangeValidateStatus(id, handler) {
-        _.each(jQuery('.payment-group').find('input'), function (element) {
-            element.addEventListener('change', handler);
-        }, this);
-    }
-
     return Component.extend({
         defaults: {
             template: 'Magento_Paypal/payment/paypal-express-in-context',
+            validationElements: 'input'
         },
 
         /**
-         * Initialize Button Actions
-         * @param {Object} actions
-         * @param {Function} actions.enable() - Enables Smart Buttons
-         * @param {Function} actions.disable() - Disables Smart Buttons
+         * Listens element on change and validate it.
+         *
+         * @param {HTMLElement} context
          */
-        initButtonActions: function (actions) {
-            var renderContext = this;
-
-            this.clientConfig.buttonActions = actions;
-            renderContext.validate();
-            onChangeValidateStatus(this.getAgreementId(), function () {
-                renderContext.validate();
-            });
+        initListeners: function (context) {
+            $.async(this.validationElements, context, function (element) {
+                $(element).on('change', function () {
+                    this.validate();
+                }.bind(this));
+            }.bind(this));
         },
 
         /**
          *  Validates Smart Buttons
          */
-        validate: function () {
-            additionalValidators.validate() && this.clientConfig.buttonActions ?
-                this.clientConfig.buttonActions.enable() : this.clientConfig.buttonActions.disable();
+        validate: function (actions) {
+            this.clientConfig.buttonActions = actions || this.clientConfig.buttonActions;
+
+            if (this.clientConfig.buttonActions) {
+                additionalValidators.validate(true) ?
+                    this.clientConfig.buttonActions.enable() :
+                    this.clientConfig.buttonActions.disable();
+            }
         },
 
         /**
@@ -101,17 +96,17 @@ define([
             this.clientConfig.validator = additionalValidators;
             this.clientConfig.client = {};
             this.clientConfig.client[this.clientConfig.environment] = this.merchantId;
+            this.clientConfig.additionalAction = setPaymentMethodAction;
+            this.clientConfig.rendererComponent = this;
+            this.clientConfig.messageContainer = this.messageContainer;
 
             /** Add logic to be triggered onClick action for smart buttons component*/
             this.clientConfig.onClick = function () {
                 additionalValidators.validate();
                 this.selectPaymentMethod();
             };
-            this.clientConfig.additionalAction = setPaymentMethodAction;
-            this.clientConfig.rendererComponent = this;
-            this.clientConfig.messageContainer = this.messageContainer;
             _.each(this.clientConfig, function (fn, name) {
-                if (typeof fn === 'function') {
+                if (_.isFunction(fn)) {
                     this.clientConfig[name] = fn.bind(this);
                 }
             }, this);
