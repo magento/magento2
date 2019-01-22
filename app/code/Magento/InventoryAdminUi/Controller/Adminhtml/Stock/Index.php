@@ -30,7 +30,7 @@ class Index extends Action implements HttpGetActionInterface
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_InventoryApi::stock')
+        $resultPage->setActiveMenu('Magento_InventoryAdminUi::stock')
             ->addBreadcrumb(__('Sources'), __('List'));
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Stock'));
 
