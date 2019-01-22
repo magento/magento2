@@ -1434,8 +1434,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
 
         $nodeMetaData = $nodeRequest->addChild('MetaData');
-        $nodeMetaData->addChild('SoftwareName', $this->productMetadata->getName());
-        $nodeMetaData->addChild('SoftwareVersion', $this->productMetadata->getVersion());
+        $nodeMetaData->addChild('SoftwareName', $this->buildSoftwareName());
+        $nodeMetaData->addChild('SoftwareVersion', $this->buildSoftwareVersion());
 
         $originRegion = $this->getCountryParams(
             $this->_scopeConfig->getValue(
