@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryCatalog\Model\LocalCache\GetProductTypesBySkusCache;
 use Magento\InventoryCatalogApi\Model\GetProductTypesBySkusInterface;
 
 /**
@@ -22,12 +23,20 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
     private $resource;
 
     /**
+     * @var GetProductTypesBySkusCache
+     */
+    private $getProductTypesBySkusCache;
+
+    /**
      * @param ResourceConnection $resource
+     * @param GetProductTypesBySkusCache $getProductTypesBySkusCache
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        GetProductTypesBySkusCache $getProductTypesBySkusCache
     ) {
         $this->resource = $resource;
+        $this->getProductTypesBySkusCache = $getProductTypesBySkusCache;
     }
 
     /**
@@ -35,24 +44,30 @@ class GetProductTypesBySkus implements GetProductTypesBySkusInterface
      */
     public function execute(array $skus): array
     {
-        $connection = $this->resource->getConnection();
-        $productTable = $this->resource->getTableName('catalog_product_entity');
+        $cacheKey = hash('md5', implode(',', $skus));
 
-        $select = $connection->select()
-            ->from(
-                $productTable,
-                [ProductInterface::SKU, ProductInterface::TYPE_ID]
-            )->where(
-                ProductInterface::SKU . ' IN (?)',
-                $skus
-            );
+        if (null === $this->getProductTypesBySkusCache->get($cacheKey)) {
+            $productTypesBySkus = [];
+            $connection = $this->resource->getConnection();
+            $productTable = $this->resource->getTableName('catalog_product_entity');
 
-        $result = [];
-        foreach ($connection->fetchPairs($select) as $sku => $productType) {
-            $result[$this->getResultKey((string)$sku, $skus)] = (string)$productType;
+            $select = $connection->select()
+                ->from(
+                    $productTable,
+                    [ProductInterface::SKU, ProductInterface::TYPE_ID]
+                )->where(
+                    ProductInterface::SKU . ' IN (?)',
+                    $skus
+                );
+
+            foreach ($connection->fetchPairs($select) as $sku => $productType) {
+                $productTypesBySkus[$this->getResultKey((string)$sku, $skus)] = (string)$productType;
+            }
+
+            $this->getProductTypesBySkusCache->set($cacheKey, $productTypesBySkus);
         }
 
-        return $result;
+        return $this->getProductTypesBySkusCache->get($cacheKey);
     }
 
     /**
