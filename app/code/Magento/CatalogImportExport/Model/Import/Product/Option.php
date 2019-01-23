@@ -2025,7 +2025,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($optionValues as $optionValue) {
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
             foreach ($optionValueParams as $nameAndValue) {
-                $nameAndValue = explode('=', $nameAndValue);
+                $nameAndValue = explode('=', $nameAndValue, 2);
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
                     $value = trim($value);
