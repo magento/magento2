@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,6 +8,7 @@ namespace Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use \Magento\Framework\DB\Helper;
 
 /**
  * @api
@@ -21,6 +22,11 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     const NAME = 'websites';
 
     /**
+     * Data for concatenated website names value
+     */
+    const WEBSITE_NAMES = 'website_names';
+
+    /**
      * Store manager
      *
      * @var StoreManagerInterface
@@ -28,9 +34,15 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     protected $storeManager;
 
     /**
+     * @var \Magento\Framework\DB\Helper
+     */
+    protected $_resourceHelper;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
+     * @param Helper $resourceHelper
      * @param array $components
      * @param array $data
      */
@@ -38,11 +50,13 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
+        Helper $resourceHelper,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->storeManager = $storeManager;
+        $this->_resourceHelper = $resourceHelper;
     }
 
     /**
@@ -71,7 +85,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
         return $dataSource;
     }
-    
+
     /**
      * Prepare component configuration
      * @return void
@@ -81,6 +95,48 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         parent::prepare();
         if ($this->storeManager->isSingleStoreMode()) {
             $this->_data['config']['componentDisabled'] = true;
+        }
+    }
+
+    /**
+     * Apply sorting
+     *
+     * @return void
+     */
+    protected function applySorting()
+    {
+        $sorting = $this->getContext()->getRequestParam('sorting');
+        $isSortable = $this->getData('config/sortable');
+        if ($isSortable !== false
+            && !empty($sorting['field'])
+            && !empty($sorting['direction'])
+            && $sorting['field'] === $this->getName()
+        ) {
+            $collection = $this->getContext()->getDataProvider()->getCollection();
+            $collection
+                ->joinField(
+                    'websites_ids',
+                    'catalog_product_website',
+                    'website_id',
+                    'product_id=entity_id',
+                    null,
+                    'left'
+                )
+                ->joinTable(
+                    'store_website',
+                    'website_id = websites_ids',
+                    ['name'],
+                    null,
+                    'left'
+                )
+                ->groupByAttribute('entity_id');
+            $this->_resourceHelper->addGroupConcatColumn(
+                $collection->getSelect(),
+                self::WEBSITE_NAMES,
+                'name'
+            );
+
+            $collection->getSelect()->order(self::WEBSITE_NAMES . ' ' . $sorting['direction']);
         }
     }
 }
