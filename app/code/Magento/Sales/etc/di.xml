@@ -745,6 +745,10 @@
     <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -768,6 +772,10 @@
     <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">street</item>

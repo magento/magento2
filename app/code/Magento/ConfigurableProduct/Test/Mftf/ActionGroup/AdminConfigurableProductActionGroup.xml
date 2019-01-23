@@ -105,7 +105,7 @@
         <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
     </actionGroup>
 
-    <actionGroup name="createConfigurationsForAttribute">
+    <actionGroup name="generateConfigurationsByAttributeCode">
         <arguments>
             <argument name="attributeCode" type="string" defaultValue="SomeString"/>
         </arguments>
@@ -121,6 +121,12 @@
         <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="99" stepKey="enterAttributeQuantity"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+    </actionGroup>
+
+    <actionGroup name="createConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <arguments>
+            <argument name="attributeCode" type="string" defaultValue="SomeString"/>
+        </arguments>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>

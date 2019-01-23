@@ -28,6 +28,7 @@
     <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy" />
     <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State" />
     <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
+    <preference for="Magento\Framework\App\ObjectManager\ConfigWriterInterface" type="Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy" />
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
@@ -411,6 +412,11 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">interception</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Interception\Config\CacheManager">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Interception\PluginList\PluginList">
@@ -1740,6 +1746,13 @@
                 <item name="CONNECT" xsi:type="string">\Magento\Framework\App\Action\HttpConnectActionInterface</item>
                 <item name="PROPFIND" xsi:type="string">\Magento\Framework\App\Action\HttpPropfindActionInterface</item>
                 <item name="TRACE" xsi:type="string">\Magento\Framework\App\Action\HttpTraceActionInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\ScopeResolverPool">
+        <arguments>
+            <argument name="scopeResolvers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
             </argument>
         </arguments>
     </type>
