@@ -12,9 +12,9 @@ use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for config elements of 'type' type.
+ * Factory for config elements of 'input' type.
  */
-class TypeFactory implements ConfigElementFactoryInterface
+class InputFactory implements ConfigElementFactoryInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -39,7 +39,7 @@ class TypeFactory implements ConfigElementFactoryInterface
     }
 
     /**
-     * Instantiate an object representing 'type' GraphQL config element.
+     * Instantiate an object representing 'input' GraphQL config element.
      *
      * @param array $data
      * @return ConfigElementInterface
@@ -55,25 +55,23 @@ class TypeFactory implements ConfigElementFactoryInterface
     }
 
     /**
-     * Create type object based off array of configured GraphQL Type data.
+     * Create input type object based off array of configured GraphQL InputType data.
      *
-     * Type data must contain name and the type's fields. Optional data includes 'implements' (i.e. the interfaces
-     * implemented by the types), and description.
+     * Type data must contain name and the type's fields. Optional data includes description.
      *
      * @param array $typeData
      * @param array $fields
-     * @return Type
+     * @return Input
      */
-    public function create(
+    private function create(
         array $typeData,
         array $fields
-    ) : Type {
+    ): Input {
         return $this->objectManager->create(
-            Type::class,
+            Input::class,
             [
                 'name' => $typeData['name'],
                 'fields' => $fields,
-                'interfaces' => isset($typeData['implements']) ? $typeData['implements'] : [],
                 'description' => isset($typeData['description']) ? $typeData['description'] : ''
             ]
         );
