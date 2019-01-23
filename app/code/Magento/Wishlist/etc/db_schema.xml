@@ -16,16 +16,16 @@
                 default="0" comment="Sharing flag (0 or 1)"/>
         <column xsi:type="varchar" name="sharing_code" nullable="true" length="32" comment="Sharing encrypted code"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Last updated date"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="wishlist_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="wishlist"
+        <constraint xsi:type="foreign" referenceId="WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="wishlist"
                     column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="WISHLIST_CUSTOMER_ID">
+        <constraint xsi:type="unique" referenceId="WISHLIST_CUSTOMER_ID">
             <column name="customer_id"/>
         </constraint>
-        <index name="WISHLIST_SHARED" indexType="btree">
+        <index referenceId="WISHLIST_SHARED" indexType="btree">
             <column name="shared"/>
         </index>
     </table>
@@ -42,23 +42,23 @@
         <column xsi:type="text" name="description" nullable="true" comment="Short description of wish list item"/>
         <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Qty"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="wishlist_item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID" table="wishlist_item"
+        <constraint xsi:type="foreign" referenceId="WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID" table="wishlist_item"
                     column="wishlist_id" referenceTable="wishlist" referenceColumn="wishlist_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
                     table="wishlist_item" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="WISHLIST_ITEM_STORE_ID_STORE_STORE_ID" table="wishlist_item"
+        <constraint xsi:type="foreign" referenceId="WISHLIST_ITEM_STORE_ID_STORE_STORE_ID" table="wishlist_item"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <index name="WISHLIST_ITEM_WISHLIST_ID" indexType="btree">
+        <index referenceId="WISHLIST_ITEM_WISHLIST_ID" indexType="btree">
             <column name="wishlist_id"/>
         </index>
-        <index name="WISHLIST_ITEM_PRODUCT_ID" indexType="btree">
+        <index referenceId="WISHLIST_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
-        <index name="WISHLIST_ITEM_STORE_ID" indexType="btree">
+        <index referenceId="WISHLIST_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -71,10 +71,10 @@
                 comment="Product Id"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="option_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="FK_A014B30B04B72DD0EAB3EECD779728D6" table="wishlist_item_option"
+        <constraint xsi:type="foreign" referenceId="FK_A014B30B04B72DD0EAB3EECD779728D6" table="wishlist_item_option"
                     column="wishlist_item_id" referenceTable="wishlist_item" referenceColumn="wishlist_item_id"
                     onDelete="CASCADE"/>
     </table>

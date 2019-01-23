@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Action;
@@ -75,6 +76,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     protected $categoryRepository;
 
     /**
+     * @var ToolbarMemorizer
+     */
+    private $toolbarMemorizer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -87,6 +93,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param ToolbarMemorizer|null $toolbarMemorizer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +106,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ToolbarMemorizer $toolbarMemorizer = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -111,6 +119,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
+        $this->toolbarMemorizer = $toolbarMemorizer ?: $context->getObjectManager()->get(ToolbarMemorizer::class);
     }
 
     /**
@@ -135,6 +144,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
+        $this->toolbarMemorizer->memorizeParams();
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
@@ -198,7 +208,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             if ($layoutUpdates && is_array($layoutUpdates)) {
                 foreach ($layoutUpdates as $layoutUpdate) {
                     $page->addUpdate($layoutUpdate);
-                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)], null, false);
+                    $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
                 }
             }
 

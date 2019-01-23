@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
+/**
+ * Implementation of the notification about MySQL search being deprecated.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
     /**

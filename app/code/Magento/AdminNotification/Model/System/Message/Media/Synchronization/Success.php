@@ -6,6 +6,8 @@
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
 /**
+ * Media synchronization success message class.
+ *
  * @api
  * @since 100.0.2
  */
@@ -27,8 +29,8 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
     {
         $state = $this->_syncFlag->getState();
         $data = $this->_syncFlag->getFlagData();
-        $hasErrors = isset($data['has_errors']) && true == $data['has_errors'] ? true : false;
-        return false == $hasErrors && \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED == $state;
+        $hasErrors = !empty($data['has_errors']);
+        return !$hasErrors && \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED == $state;
     }
 
     /**

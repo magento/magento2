@@ -108,6 +108,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $bulkUuid = 'bulk-001';
         $description = 'Bulk summary description...';
         $userId = 1;
+        $userType = \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN;
         $connectionName = 'default';
         $topicNames = ['topic.name.0', 'topic.name.1'];
         $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
@@ -131,6 +132,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $bulkSummary->expects($this->once())->method('setBulkId')->with($bulkUuid)->willReturnSelf();
         $bulkSummary->expects($this->once())->method('setDescription')->with($description)->willReturnSelf();
         $bulkSummary->expects($this->once())->method('setUserId')->with($userId)->willReturnSelf();
+        $bulkSummary->expects($this->once())->method('setUserType')->with($userType)->willReturnSelf();
         $bulkSummary->expects($this->once())->method('getOperationCount')->willReturn(1);
         $bulkSummary->expects($this->once())->method('setOperationCount')->with(3)->willReturnSelf();
         $this->entityManager->expects($this->once())->method('save')->with($bulkSummary)->willReturn($bulkSummary);
