@@ -11,6 +11,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,7 +23,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 

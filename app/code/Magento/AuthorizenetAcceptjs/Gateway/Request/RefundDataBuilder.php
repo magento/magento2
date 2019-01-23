@@ -39,7 +39,6 @@ class RefundDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        // @TODO test coverage for this class when complete
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();
@@ -66,7 +65,7 @@ class RefundDataBuilder implements BuilderInterface
                     'cardNumber' => '4111111111111111',
                     'expirationDate' => '2019-12',
                     'cardCode' => '123'
-                ]
+                ],
                 // @TODO integrate the real payment values from accept.js
                 /*'opaqueData' => [
                     'dataDescriptor' => $dataDescriptor,

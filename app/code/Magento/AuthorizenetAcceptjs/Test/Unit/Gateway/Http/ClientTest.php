@@ -14,41 +14,66 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Zend_Http_Client;
 use Zend_Http_Response;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var Logger
+     */
+    private $paymentLogger;
+
+    /**
+     * @var ZendClientFactory
+     */
+    private $httpClientFactory;
+
+    /**
+     * @var Zend_Http_Client
+     */
+    private $httpClient;
+
+    /**
+     * @var Zend_Http_Response
+     */
+    private $httpResponse;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    protected function setUp()
+    {
+        $this->objectManager = new ObjectManager($this);
+        $this->paymentLogger = $this->createMock(Logger::class);
+        $this->httpClientFactory = $this->createMock(ZendClientFactory::class);
+        $this->httpClient = $this->createMock(Zend_Http_Client::class);
+        $this->httpResponse = $this->createMock(Zend_Http_Response::class);
+        $this->httpClientFactory->method('create')->will($this->returnValue($this->httpClient));
+        $this->httpClient->method('request')
+            ->willReturn($this->httpResponse);
+        /** @var MockObject $logger */
+        $this->logger = $this->createMock(LoggerInterface::class);
+    }
+
     public function testCanSendRequest()
     {
-        $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
-        $paymentLogger = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpClientFactory->method('create')->will($this->returnValue($httpClient));
-
         // Assert the raw data was set on the client
-        $httpClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
                 '{"doSomeThing":{"foobar":"baz"}}',
                 'application/json'
             );
-
-        $httpClient->method('request')
-            ->willReturn($httpResponse);
 
         $request = [
             'payload_type' => 'doSomeThing',
@@ -57,20 +82,20 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         // Authorize.net returns a BOM and refuses to fix it
         $response = pack('CCC', 0xef, 0xbb, 0xbf) . '{"foo":{"bar":"baz"}}';
 
-        $httpResponse->method('getBody')
+        $this->httpResponse->method('getBody')
             ->willReturn($response);
 
         // Assert the logger was given the data
-        $paymentLogger->expects($this->once())
+        $this->paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => '{"foo":{"bar":"baz"}}']);
 
         /**
          * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(Client::class, [
-            'httpClientFactory' => $httpClientFactory,
-            'paymentLogger' => $paymentLogger
+        $apiClient = $this->objectManager->getObject(Client::class, [
+            'httpClientFactory' => $this->httpClientFactory,
+            'paymentLogger' => $this->paymentLogger
         ]);
 
         $result = $apiClient->placeRequest($this->getTransferObjectMock($request));
@@ -84,42 +109,19 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testExceptionIsThrownWhenEmptyResponseIsReceived()
     {
-        $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
-        $paymentLogger = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpClientFactory->method('create')->will($this->returnValue($httpClient));
-
         // Assert the client has the raw data set
-        $httpClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
                 '{"doSomeThing":{"foobar":"baz"}}',
                 'application/json'
             );
 
-        $httpClient->method('request')
-            ->willReturn($httpResponse);
-
-        $httpResponse->method('getBody')
+        $this->httpResponse->method('getBody')
             ->willReturn('');
 
         // Assert the exception is given to the logger
-        $logger->expects($this->once())
+        $this->logger->expects($this->once())
             ->method('critical')
             ->with($this->callback(function ($e) {
                 return $e instanceof \Exception
@@ -132,17 +134,17 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         ];
 
         // Assert the logger was given the data
-        $paymentLogger->expects($this->once())
+        $this->paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => '']);
 
         /**
          * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(Client::class, [
-            'httpClientFactory' => $httpClientFactory,
-            'logger' => $logger,
-            'paymentLogger' => $paymentLogger
+        $apiClient = $this->objectManager->getObject(Client::class, [
+            'httpClientFactory' => $this->httpClientFactory,
+            'paymentLogger' => $this->paymentLogger,
+            'logger' => $this->logger
         ]);
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));
@@ -154,38 +156,15 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testExceptionIsThrownWhenInvalidResponseIsReceived()
     {
-        $objectManager = new ObjectManager($this);
-        /** @var \PHPUnit\Framework\MockObject\MockObject $paymentLogger */
-        $paymentLogger = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClientFactory */
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(Zend_Http_Client::class)->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject $httpResponse */
-        $httpResponse = $this->getMockBuilder(Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpClientFactory->method('create')->will($this->returnValue($httpClient));
-
         // Assert the client was given the raw data
-        $httpClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
                 '{"doSomeThing":{"foobar":"baz"}}',
                 'application/json'
             );
 
-        $httpClient->method('request')
-            ->willReturn($httpResponse);
-
-        $httpResponse->method('getBody')
+        $this->httpResponse->method('getBody')
             ->willReturn('bad');
 
         $request = [
@@ -194,12 +173,12 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         ];
 
         // Assert the logger was given the data
-        $paymentLogger->expects($this->once())
+        $this->paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => 'bad']);
 
         // Assert the exception was given to the logger
-        $logger->expects($this->once())
+        $this->logger->expects($this->once())
             ->method('critical')
             ->with($this->callback(function ($e) {
                 return $e instanceof \Exception
@@ -209,11 +188,12 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /**
          * @var $apiClient Client
          */
-        $apiClient = $objectManager->getObject(Client::class, [
-            'httpClientFactory' => $httpClientFactory,
-            'logger' => $logger,
-            'paymentLogger' => $paymentLogger
+        $apiClient = $this->objectManager->getObject(Client::class, [
+            'httpClientFactory' => $this->httpClientFactory,
+            'paymentLogger' => $this->paymentLogger,
+            'logger' => $this->logger
         ]);
+
 
         $apiClient->placeRequest($this->getTransferObjectMock($request));
     }
@@ -221,7 +201,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * Creates mock object for TransferInterface.
      *
-     * @return TransferInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return TransferInterface|MockObject
      */
     private function getTransferObjectMock(array $data)
     {

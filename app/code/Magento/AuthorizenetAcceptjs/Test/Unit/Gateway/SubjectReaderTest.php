@@ -28,7 +28,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     public function testReadPayment(): void
     {
-        $paymentDO = $this->getMockBuilder(PaymentDataObjectInterface::class)->getMock();
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
 
         $this->assertSame($paymentDO, $this->subjectReader->readPayment(['payment' => $paymentDO]));
     }
@@ -74,10 +74,8 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     public function testReadStoreIdFromOrder(): void
     {
-        $paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
-            ->getMock();
-        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
-            ->getMock();
+        $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $orderMock = $this->createMock(OrderAdapterInterface::class);
         $paymentDOMock->method('getOrder')
             ->willReturn($orderMock);
         $orderMock->method('getStoreID')

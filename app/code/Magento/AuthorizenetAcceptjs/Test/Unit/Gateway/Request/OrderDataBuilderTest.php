@@ -13,6 +13,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class OrderDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,17 +23,17 @@ class OrderDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var InfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InfoInterface|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderAdapterInterface|MockObject
      */
     private $orderMock;
 

@@ -12,6 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,38 +22,32 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(Config::class);
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var \PHPUnit\Framework\MockObject\MockObject|SubjectReader subjectReaderMock */
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(Payment::class);
+        /** @var MockObject|SubjectReader subjectReaderMock */
+        $this->subjectReaderMock = $this->createMock(SubjectReader::class);
 
         $this->builder = new AuthenticationDataBuilder($this->subjectReaderMock, $this->configMock);
     }

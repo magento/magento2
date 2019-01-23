@@ -13,6 +13,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class TransactionTypeDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,17 +23,17 @@ class TransactionTypeDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 

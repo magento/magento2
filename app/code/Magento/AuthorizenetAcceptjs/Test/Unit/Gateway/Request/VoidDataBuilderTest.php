@@ -12,6 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,21 +24,19 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentDOMock;
 
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 

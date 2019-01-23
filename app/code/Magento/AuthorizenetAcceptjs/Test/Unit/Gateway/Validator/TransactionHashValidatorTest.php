@@ -13,12 +13,13 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionHashValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TransactionHashValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     private $resultFactoryMock;
 
@@ -28,7 +29,7 @@ class TransactionHashValidatorTest extends TestCase
     private $validator;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
@@ -39,14 +40,9 @@ class TransactionHashValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->resultMock = $this->createMock(ResultInterface::class);
 
         $this->validator = new TransactionHashValidator(
             $this->resultFactoryMock,

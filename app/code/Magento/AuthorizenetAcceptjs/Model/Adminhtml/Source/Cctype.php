@@ -12,6 +12,8 @@ use Magento\Payment\Model\Source\Cctype as PaymentCctype;
 
 /**
  * Authorize.net Payment CC Types Source Model
+ *
+ * @codeCoverageIgnore
  */
 class Cctype extends PaymentCctype
 {

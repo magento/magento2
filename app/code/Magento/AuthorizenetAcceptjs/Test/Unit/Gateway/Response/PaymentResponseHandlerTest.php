@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Response;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
@@ -37,9 +37,7 @@ class PaymentResponseHandlerTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 

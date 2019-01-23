@@ -47,7 +47,6 @@ class PaymentDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        // TODO test coverage for this class when complete
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();
@@ -66,22 +65,25 @@ class PaymentDataBuilder implements BuilderInterface
                 ];
             }
 
-            // @TODO integrate the real payment values from accept.js
-            $descriptor = $payment->encrypt('abc123');
-            $value = $payment->encrypt('321cba');
+            $dataDescriptor = $payment->getAdditionalInformation('opaqueDataDescriptor');
+            $dataValue = $payment->getAdditionalInformation('opaqueDataValue');
 
-            $this->passthroughData->setData('opaqueDataDescriptor', $descriptor);
-            $this->passthroughData->setData('opaqueDataValue', $value);
+            $encDescriptor = $payment->encrypt($dataDescriptor);
+            $encValue = $payment->encrypt($dataValue);
+
+            $this->passthroughData->setData('opaqueDataDescriptor', $encDescriptor);
+            $this->passthroughData->setData('opaqueDataValue', $encValue);
 
             $data['transactionRequest']['payment'] = [
                 'creditCard' => [
                     'cardNumber' => '4111111111111111',
                     'expirationDate' => '2019-12',
                     'cardCode' => '123'
-                ]
+                ],
+                // @TODO integrate the real payment values from accept.js
                 /*'opaqueData' => [
-                    'dataDescriptor' => $descriptor,
-                    'dataValue' => $value
+                    'dataDescriptor' => $dataDescriptor,
+                    'dataValue' => $dataValue
                 ]*/
             ];
         }
