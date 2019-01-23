@@ -127,7 +127,5 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
                          ->will($this->returnSelf());
         $this->collection->expects($this->any())->method('getCheckSql')
                          ->will($this->returnValue('check_sql'));
-
-        $this->countryOfManufacture->addValueSortToCollection($this->collection);
     }
 }
