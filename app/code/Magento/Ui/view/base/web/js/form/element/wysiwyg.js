@@ -141,8 +141,10 @@ define([
             }
 
             /* eslint-disable no-undef */
-            this.currentWysiwyg.setEnabledStatus(!disabled);
-            this.currentWysiwyg.getPluginButtons().prop('disabled', disabled);
+            if (!_.isUndefined(this.currentWysiwyg) && this.currentWysiwyg.activeEditor()) {
+                this.currentWysiwyg.setEnabledStatus(!disabled);
+                this.currentWysiwyg.getPluginButtons().prop('disabled', disabled);
+            }
         }
     });
 });
