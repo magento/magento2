@@ -49,12 +49,12 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
         foreach ($connection->fetchAll($select) as $pair) {
             if (!$pair['value']) {
                 $this->moduleDataSetup->getConnection()
-                    ->insert(
+                    ->insertOnDuplicate(
                         $this->moduleDataSetup->getTable('core_config_data'),
                         [
                             'scope' => $pair['scope'],
                             'scope_id' => $pair['scope_id'],
-                            'path' => 'payment/paypal_express/disable_funding_options',
+                            'path' => 'paypal/style/disable_funding_options',
                             'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT
                         ]
                     );
