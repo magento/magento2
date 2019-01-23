@@ -12,6 +12,18 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Paypal\Model\Config as PayPalConfig;
 use Magento\Paypal\Model\Express\Checkout as PayPalCheckout;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
+use Magento\Framework\Session\Generic as PayPalSession;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Quote\Api\GuestCartRepositoryInterface;
 
 /**
  * Processes data after returning from PayPal
@@ -67,18 +79,18 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
-        \Magento\Framework\Session\Generic $paypalSession,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
+        OrderFactory $orderFactory,
+        CheckoutFactory $checkoutFactory,
+        PayPalSession $paypalSession,
+        UrlHelper $urlHelper,
+        CustomerUrl $customerUrl,
+        AgreementsValidatorInterface $agreementValidator,
+        CartRepositoryInterface $cartRepository,
+        UrlInterface $urlBuilder,
+        GuestCartRepositoryInterface $guestCartRepository
     ) {
         parent::__construct(
             $context,

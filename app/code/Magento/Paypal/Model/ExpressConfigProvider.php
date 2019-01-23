@@ -67,7 +67,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
     protected $urlBuilder;
 
     /**
-     *
+     * @var SmartButtonConfig
      */
     private $smartButtonConfig;
 
@@ -89,7 +89,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
         PaypalHelper $paypalHelper,
         PaymentHelper $paymentHelper,
         UrlInterface $urlBuilder,
-        SmartButtonConfig $smartButtonConfig = null
+        SmartButtonConfig $smartButtonConfig
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -97,12 +97,11 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $this->paypalHelper = $paypalHelper;
         $this->paymentHelper = $paymentHelper;
         $this->urlBuilder = $urlBuilder;
+        $this->smartButtonConfig = $smartButtonConfig;
 
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $this->paymentHelper->getMethodInstance($code);
         }
-
-        $this->smartButtonConfig = $smartButtonConfig ?: ObjectManager::getInstance()->get(SmartButtonConfig::class);
     }
 
     /**

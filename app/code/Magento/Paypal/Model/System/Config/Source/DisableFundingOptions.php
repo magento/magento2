@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
+use Magento\Paypal\Model\Express\Checkout;
+
 /**
  * Get disable funding options
  */
@@ -19,15 +21,15 @@ class DisableFundingOptions
     {
         return [
             [
-                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT,
+                'value' => Checkout::PAYPAL_FUNDING_CREDIT,
                 'label' => __('PayPal Credit')
             ],
             [
-                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CARD,
+                'value' => Checkout::PAYPAL_FUNDING_CARD,
                 'label' => __('PayPal Guest Checkout Credit Card Icons')
             ],
             [
-                'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_ELV,
+                'value' => Checkout::PAYPAL_FUNDING_ELV,
                 'label' => __('Elektronisches Lastschriftverfahren - German ELV')
             ]
         ];

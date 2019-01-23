@@ -650,7 +650,7 @@
                         <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
                         <attribute type="shared">1</attribute>
                     </field>
-                    <group id="checkout_page_button" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
+                    <group id="checkout_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
                         <label>PayPal Button - Checkout Page</label>
                         <field id="checkout_page_button_customize" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                             <label>Customize Button</label>

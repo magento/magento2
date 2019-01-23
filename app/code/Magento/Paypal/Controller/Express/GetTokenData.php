@@ -13,6 +13,18 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Model\Config;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
+use Magento\Framework\Session\Generic as PayPalSession;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\GuestCartRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Retrieve paypal token
@@ -74,20 +86,21 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      * @param \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
-        \Magento\Framework\Session\Generic $paypalSession,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Model\ResourceModel\CustomerRepository $customerRepository,
-        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Quote\Api\GuestCartRepositoryInterface $guestCartRepository
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
+        OrderFactory $orderFactory,
+        CheckoutFactory $checkoutFactory,
+        PayPalSession $paypalSession,
+        UrlHelper $urlHelper,
+        CustomerUrl $customerUrl,
+        LoggerInterface $logger,
+        CustomerRepository $customerRepository,
+        CartRepositoryInterface $cartRepository,
+        GuestCartRepositoryInterface $guestCartRepository
     ) {
         parent::__construct(
             $context,
