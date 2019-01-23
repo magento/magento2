@@ -13,7 +13,7 @@ use Magento\Ui\Component\Form\Element\ActionDelete;
 class ActionDeleteTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
@@ -21,7 +21,7 @@ class ActionDeleteTest extends AbstractElementTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function testGetComponentName()
     {
