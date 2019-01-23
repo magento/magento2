@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            acceptjs: 'https://jstest.authorize.net/v1/Accept.js'
+            acceptjs: 'https://js.authorize.net/v1/Accept.js'
         }
     }
 };
