@@ -6,7 +6,9 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
+use function GuzzleHttp\Psr7\str;
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Abstract Form block.
@@ -38,6 +40,27 @@ abstract class AbstractForm extends Form
             function () {
                 $element = $this->browser->find($this->loader);
                 return $element->isVisible() == false ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for element is enabled.
+     *
+     * @param string $selector
+     * @param string $strategy
+     * @return bool|null
+     */
+    protected function waitForElementEnabled(string $selector, string $strategy = Locator::SELECTOR_CSS)
+    {
+        $browser = $this->browser;
+
+        return $browser->waitUntil(
+            function () use ($browser, $selector, $strategy) {
+                $element = $browser->find($selector, $strategy);
+                $class = $element->getAttribute('class');
+
+                return (!$element->isDisabled() && !strpos($class, 'disabled')) ? true : null;
             }
         );
     }
@@ -113,7 +136,7 @@ abstract class AbstractForm extends Form
      */
     public function submit()
     {
-        $this->waitLoader();
+        $this->waitForElementEnabled($this->send);
 
         $this->_rootElement->find($this->send)->click();
     }
