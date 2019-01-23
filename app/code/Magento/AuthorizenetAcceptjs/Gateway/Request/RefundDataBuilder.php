@@ -39,6 +39,7 @@ class RefundDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
+        // @TODO test coverage for this class when complete
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();

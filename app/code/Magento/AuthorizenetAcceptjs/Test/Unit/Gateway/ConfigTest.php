@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway;
 
@@ -39,38 +40,73 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetApiUrlProduction()
+    /**
+     * @param $getterName
+     * @param $configField
+     * @param $configValue
+     * @param $expectedValue
+     * @dataProvider configMapProvider
+     */
+    public function testConfigGetters($getterName, $configField, $configValue, $expectedValue)
     {
         $this->scopeConfigMock->method('getValue')
-            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('production');
-        $this->assertEquals('https://api.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
+            ->with($this->getPath($configField), ScopeInterface::SCOPE_STORE, 123)
+            ->willReturn($configValue);
+        $this->assertEquals($expectedValue, $this->model->{$getterName}(123));
     }
 
-    public function testGetApiUrlSandbox()
+    /**
+     * @dataProvider environmentUrlProvider
+     * @param $environment
+     * @param $expectedUrl
+     */
+    public function testGetApiUrl($environment, $expectedUrl)
     {
         $this->scopeConfigMock->method('getValue')
-            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('sandbox');
-        $this->assertEquals('https://apitest.authorize.net/xml/v1/request.api', $this->model->getApiUrl());
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
+            ->willReturn($environment);
+        $this->assertEquals($expectedUrl, $this->model->getApiUrl(123));
     }
 
-    public function testGetTransactionKey()
+    /**
+     * @dataProvider environmentSolutionProvider
+     * @param $environment
+     * @param $expectedSolution
+     */
+    public function testGetSolutionIdSandbox($environment, $expectedSolution)
     {
-        $this->scopeConfigMock->expects(static::any())
-            ->method('getValue')
-            ->with($this->getPath('trans_key'), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('abc');
-        $this->assertEquals('abc', $this->model->getTransactionKey());
+        $this->scopeConfigMock->method('getValue')
+            ->with($this->getPath('environment'), ScopeInterface::SCOPE_STORE, 123)
+            ->willReturn($environment);
+        $this->assertEquals($expectedSolution, $this->model->getSolutionId(123));
     }
 
-    public function testGetTransactionHash()
+    public function configMapProvider()
     {
-        $this->scopeConfigMock->expects(static::any())
-            ->method('getValue')
-            ->with($this->getPath('trans_md5'), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn('myhash');
-        $this->assertEquals('myhash', $this->model->getLegacyTransactionHash());
+        return [
+            ['getLoginId', 'login', 'username', 'username'],
+            ['getTransactionKey', 'trans_key', 'password', 'password'],
+            ['getLegacyTransactionHash', 'trans_md5', 'abc123', 'abc123'],
+            ['getTransactionSignatureKey', 'trans_signature_key', 'abc123', 'abc123'],
+            ['getPaymentAction', 'payment_action', 'authorize', 'authorize'],
+            ['shouldEmailCustomer', 'email_customer', true, true],
+            ['getAdditionalInfoKeys', 'paymentInfoKeys', 'a,b,c', ['a', 'b', 'c']],
+        ];
+    }
+    public function environmentUrlProvider()
+    {
+        return [
+            ['sandbox', 'https://apitest.authorize.net/xml/v1/request.api'],
+            ['production', 'https://api.authorize.net/xml/v1/request.api'],
+        ];
+    }
+
+    public function environmentSolutionProvider()
+    {
+        return [
+            ['sandbox', 'AAA102993'],
+            ['production', 'AAA175350'],
+        ];
     }
 
     /**

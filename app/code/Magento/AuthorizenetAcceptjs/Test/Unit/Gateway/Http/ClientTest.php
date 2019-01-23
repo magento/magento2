@@ -39,6 +39,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
+        // Assert the raw data was set on the client
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
@@ -46,23 +47,23 @@ class ClientTest extends \PHPUnit\Framework\TestCase
                 'application/json'
             );
 
-        $httpClient->expects($this->once())
-            ->method('request')
+        $httpClient->method('request')
             ->willReturn($httpResponse);
 
         $request = [
             'payload_type' => 'doSomeThing',
             'foobar' => 'baz'
         ];
-        $response = '{"foo":{"bar":"baz"}}';
+        // Authorize.net returns a BOM and refuses to fix it
+        $response = pack('CCC', 0xef, 0xbb, 0xbf) . '{"foo":{"bar":"baz"}}';
 
-        $httpResponse->expects($this->once())
-            ->method('getBody')
+        $httpResponse->method('getBody')
             ->willReturn($response);
 
+        // Assert the logger was given the data
         $paymentLogger->expects($this->once())
             ->method('debug')
-            ->with(['request' => $request, 'response' => $response]);
+            ->with(['request' => $request, 'response' => '{"foo":{"bar":"baz"}}']);
 
         /**
          * @var $apiClient Client
@@ -103,6 +104,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
+        // Assert the client has the raw data set
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
@@ -110,14 +112,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
                 'application/json'
             );
 
-        $httpClient->expects($this->once())
-            ->method('request')
+        $httpClient->method('request')
             ->willReturn($httpResponse);
 
-        $httpResponse->expects($this->once())
-            ->method('getBody')
+        $httpResponse->method('getBody')
             ->willReturn('');
 
+        // Assert the exception is given to the logger
         $logger->expects($this->once())
             ->method('critical')
             ->with($this->callback(function ($e) {
@@ -130,6 +131,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'foobar' => 'baz'
         ];
 
+        // Assert the logger was given the data
         $paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => '']);
@@ -172,6 +174,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $httpClientFactory->method('create')->will($this->returnValue($httpClient));
 
+        // Assert the client was given the raw data
         $httpClient->expects($this->once())
             ->method('setRawData')
             ->with(
@@ -179,12 +182,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
                 'application/json'
             );
 
-        $httpClient->expects($this->once())
-            ->method('request')
+        $httpClient->method('request')
             ->willReturn($httpResponse);
 
-        $httpResponse->expects($this->once())
-            ->method('getBody')
+        $httpResponse->method('getBody')
             ->willReturn('bad');
 
         $request = [
@@ -192,10 +193,12 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'foobar' => 'baz'
         ];
 
+        // Assert the logger was given the data
         $paymentLogger->expects($this->once())
             ->method('debug')
             ->with(['request' => $request, 'response' => 'bad']);
 
+        // Assert the exception was given to the logger
         $logger->expects($this->once())
             ->method('critical')
             ->with($this->callback(function ($e) {
@@ -223,8 +226,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     private function getTransferObjectMock(array $data)
     {
         $transferObjectMock = $this->createMock(TransferInterface::class);
-        $transferObjectMock->expects($this->once())
-            ->method('getBody')
+        $transferObjectMock->method('getBody')
             ->willReturn($data);
 
         return $transferObjectMock;

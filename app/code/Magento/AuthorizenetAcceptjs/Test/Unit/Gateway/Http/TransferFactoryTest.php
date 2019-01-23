@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AuthorizenetAcceptJs\Test\Unit\Gateway\Http;
+declare(strict_types=1);
+
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Http;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\Filter\RemoveFieldsFilter;
-use Magento\AuthorizenetAcceptJs\Gateway\Http\TransferFactory;
+use Magento\AuthorizenetAcceptjs\Gateway\Http\TransferFactory;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;
@@ -49,18 +51,19 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $request = ['data1', 'data2'];
 
+        // Assert the filter was created
         $this->filterMock->expects($this->once())
             ->method('filter')
             ->with($request)
             ->willReturn($request);
 
+        // Assert the body of the transfer was set
         $this->transferBuilder->expects($this->once())
             ->method('setBody')
             ->with($request)
             ->willReturnSelf();
 
-        $this->transferBuilder->expects($this->once())
-            ->method('build')
+        $this->transferBuilder->method('build')
             ->willReturn($this->transferMock);
 
         $this->assertEquals($this->transferMock, $this->transferFactory->create($request));

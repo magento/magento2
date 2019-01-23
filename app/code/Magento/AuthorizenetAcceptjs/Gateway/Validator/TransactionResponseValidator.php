@@ -10,6 +10,7 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Validator;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
@@ -41,7 +42,7 @@ class TransactionResponseValidator extends AbstractValidator
     /**
      * @inheritdoc
      */
-    public function validate(array $validationSubject)
+    public function validate(array $validationSubject): ResultInterface
     {
         $response = $this->subjectReader->readResponse($validationSubject);
         $transactionResponse = $response['transactionResponse'];

@@ -58,14 +58,15 @@ class TransactionTypeDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $payment = $paymentDO->getPayment();
         $transactionData = [
             'transactionRequest' => []
         ];
 
         if ($payment instanceof Payment) {
-            if ($payment->getData(Payment::PARENT_TXN_ID)) {
-                $authTransaction = $payment->getAuthorizationTransaction();
+            $authTransaction = $payment->getAuthorizationTransaction();
+            if ($authTransaction) {
                 $refId = $authTransaction->getAdditionalInformation('real_transaction_id');
                 $transactionData['transactionRequest']['transactionType'] = self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE;
                 $transactionData['transactionRequest']['refTransId'] = $refId;

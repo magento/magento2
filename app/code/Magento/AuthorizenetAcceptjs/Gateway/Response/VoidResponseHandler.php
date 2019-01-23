@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway\Response;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -25,24 +24,17 @@ class VoidResponseHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param Config $config
      */
-    public function __construct(SubjectReader $subjectReader, Config $config)
+    public function __construct(SubjectReader $subjectReader)
     {
         $this->subjectReader = $subjectReader;
-        $this->config = $config;
     }
 
     /**
      * @inheritdoc
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();

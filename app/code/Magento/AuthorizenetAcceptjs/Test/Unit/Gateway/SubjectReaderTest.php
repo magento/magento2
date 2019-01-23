@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway;
 
@@ -64,7 +65,6 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     public function testReadResponseThrowsExceptionWhenNotAvailable(): void
     {
         $this->subjectReader->readResponse([]);
-        $this->subjectReader->readResponse(['response' => 123]);
     }
 
     public function testReadStoreId(): void
@@ -80,8 +80,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentDOMock->method('getOrder')
             ->willReturn($orderMock);
-        $orderMock->expects($this->once())
-            ->method('getStoreID')
+        $orderMock->method('getStoreID')
             ->willReturn('123');
 
         $result = $this->subjectReader->readStoreId([
@@ -103,5 +102,19 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('abc', $this->subjectReader->readTransactionKey([
             'merchantAuthentication' => ['transactionKey' => 'abc']
         ]));
+    }
+
+    public function testReadAmount(): void
+    {
+        $this->assertSame('123.12', $this->subjectReader->readAmount(['amount' => 123.12]));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Amount should be provided
+     */
+    public function testReadAmountThrowsExceptionWhenNotAvailable(): void
+    {
+        $this->subjectReader->readAmount([]);
     }
 }

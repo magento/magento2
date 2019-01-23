@@ -11,7 +11,6 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
-use Psr\Log\LoggerInterface;
 
 /**
  * Adds the meta transaction information to the request
@@ -26,20 +25,12 @@ class VoidDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param SubjectReader $subjectReader
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        SubjectReader $subjectReader,
-        LoggerInterface $logger
+        SubjectReader $subjectReader
     ) {
         $this->subjectReader = $subjectReader;
-        $this->logger = $logger;
     }
 
     /**
@@ -47,7 +38,8 @@ class VoidDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $payment = $paymentDO->getPayment();
         $transactionData = [];
 
         if ($payment instanceof Payment) {

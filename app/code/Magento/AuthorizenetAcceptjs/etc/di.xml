@@ -111,7 +111,7 @@
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler</item>
                 <item name="transaction_details" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionDetailsResponseHandler</item>
-                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -126,22 +126,23 @@
     <virtualType name="AuthorizenetAcceptjsCancelHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="cancel" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandlerHandler</item>
+                <item name="cancel" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
     <!-- End Handlers -->
 
     <!-- Request Types -->
+    <!-- Be advised that the order of the request parameters is important -->
     <virtualType name="AuthorizenetAcceptjsAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
-            <!-- Be advised that the order of the xml elements is important -->
             <argument name="builders" xsi:type="array">
                 <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\TransactionTypeDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PaymentDataBuilder</item>
+                <item name="solution" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder</item>
                 <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
@@ -150,18 +151,25 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AuthorizenetAcceptjsRefundRequest" type="AuthorizenetAcceptjsAuthorizeRequest">
+    <virtualType name="AuthorizenetAcceptjsRefundRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
-            <!-- Be advised that the order of the xml elements is important -->
             <argument name="builders" xsi:type="array">
+                <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
+                <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
+                <item name="merchant_account" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder</item>
                 <item name="transaction_type" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\RefundDataBuilder</item>
+                <item name="solution" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder</item>
+                <item name="order" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\OrderDataBuilder</item>
+                <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
+                <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
+                <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
-            <!-- Be advised that the order of the xml elements is important -->
             <argument name="builders" xsi:type="array">
                 <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>
@@ -173,7 +181,6 @@
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsVoidRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
-            <!-- Be advised that the order of the xml elements is important -->
             <argument name="builders" xsi:type="array">
                 <item name="request_type" xsi:type="string">AuthorizenetAcceptjsTransactionRequestTypeBuilder</item>
                 <item name="store" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder</item>

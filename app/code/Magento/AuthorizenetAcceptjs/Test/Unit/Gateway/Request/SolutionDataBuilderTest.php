@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\AuthorizenetAcceptjs\Gateway\Request\AuthenticationDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
+class SolutionDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AuthenticationDataBuilder
+     * @var SolutionDataBuilder
      */
     private $builder;
 
@@ -54,29 +54,26 @@ class AuthenticationDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new AuthenticationDataBuilder($this->subjectReaderMock, $this->configMock);
+        $this->builder = new SolutionDataBuilder($this->subjectReaderMock, $this->configMock);
     }
 
     public function testBuild()
     {
-        $this->configMock->method('getLoginId')
-            ->willReturn('myloginid');
-        $this->configMock->method('getTransactionKey')
-            ->willReturn('mytransactionkey');
+        $this->subjectReaderMock->method('readStoreId')
+            ->willReturn('123');
+        $this->configMock->method('getSolutionId')
+            ->with('123')
+            ->willReturn('solutionid');
 
         $expected = [
-            'merchantAuthentication' => [
-                'name' => 'myloginid',
-                'transactionKey' => 'mytransactionkey'
+            'transactionRequest' => [
+                'solution' => [
+                    'id' => 'solutionid',
+                ]
             ]
         ];
 
         $buildSubject = [];
-
-        $this->subjectReaderMock->method('readStoreId')
-            ->with($buildSubject)
-            ->willReturn(123);
-
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }
