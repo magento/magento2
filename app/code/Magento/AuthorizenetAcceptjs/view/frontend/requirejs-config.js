@@ -6,8 +6,7 @@
 var config = {
     map: {
         '*': {
-            transparent: 'Magento_Payment/js/transparent',
-            'Magento_Payment/transparent': 'Magento_Payment/js/transparent'
+            acceptjs: 'https://jstest.authorize.net/v1/Accept.js'
         }
     }
 };
