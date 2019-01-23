@@ -15,6 +15,7 @@ type Mutation {
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+    addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddVirtualProductsToCart")
 }
 
 input SetShippingAddressesOnCartInput {
@@ -167,7 +168,17 @@ input AddSimpleProductsToCartInput {
     cartItems: [SimpleProductCartItemInput!]!
 }
 
+input AddVirtualProductsToCartInput {
+    cart_id: String!
+    cartItems: [VirtualProductCartItemInput!]!
+}
+
 input SimpleProductCartItemInput {
+    data: CartItemInput!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input VirtualProductCartItemInput {
     data: CartItemInput!
     customizable_options:[CustomizableOptionInput!]
 }
@@ -178,6 +189,10 @@ input CustomizableOptionInput {
 }
 
 type AddSimpleProductsToCartOutput {
+    cart: Cart!
+}
+
+type AddVirtualProductsToCartOutput {
     cart: Cart!
 }
 
