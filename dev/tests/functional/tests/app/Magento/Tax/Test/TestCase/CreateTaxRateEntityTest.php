@@ -28,6 +28,7 @@ class CreateTaxRateEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const MFTF_MIGRATED = 'yes';
     /* end tags */
 
     /**
