@@ -380,4 +380,16 @@ TEMPLATE;
         $dataObject->setAllVisibleItems($visibleItems);
         return $dataObject;
     }
+
+    /**
+     * Check that if calling a method of an object fails expected result is returned.
+     */
+    public function testInvalidMethodCall()
+    {
+        $this->templateFilter->setVariables(['dateTime' => '\DateTime']);
+        $this->assertEquals(
+            '\DateTime',
+            $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
+        );
+    }
 }

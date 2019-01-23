@@ -412,7 +412,10 @@ class Template implements \Zend_Filter_Interface
                     }
                 }
                 $last = $i;
-            } elseif (isset($stackVars[$i - 1]['variable']) && $stackVars[$i]['type'] == 'method') {
+            } elseif (isset($stackVars[$i - 1]['variable'])
+                && is_object($stackVars[$i - 1]['variable'])
+                && $stackVars[$i]['type'] == 'method'
+            ) {
                 // Calling object methods
                 if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
                     $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
