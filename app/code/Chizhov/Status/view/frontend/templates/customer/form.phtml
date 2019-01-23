@@ -1,0 +1,39 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+/** @var \Chizhov\Status\ViewModel\Customer\Status $viewModel */
+$viewModel = $block->getData('view_model');
+?>
+
+<form class="form"
+      action="<?= $block->escapeUrl($block->getUrl('*/*/save')) ?>"
+      method="post"
+      data-mage-init='{"validation":{}}'>
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+
+    <fieldset class="fieldset">
+        <div class="field status required">
+            <label class="label" for="status">
+                <span><?= $block->escapeHtml(__('Status')) ?></span>
+            </label>
+            <div class="control">
+                <input id="status"
+                       class="input-text validate-length maximum-length-255"
+                       name="status"
+                       type="text"
+                       title="<?= $block->escapeHtml(__('Status')) ?>"
+                       value="<?= $block->escapeHtml($viewModel->getCustomerStatus()) ?>"/>
+            </div>
+        </div>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit"
+                        title="<?= $block->escapeHtml(__('Save')) ?>"
+                        class="action submit primary">
+                    <span><?= $block->escapeHtml(__('Save')) ?></span>
+                </button>
+            </div>
+        </div>
+    </fieldset>
+</form>

@@ -1,0 +1,28 @@
+<?php
+/** @var \Magento\Customer\Block\Account\Customer $block */
+
+/** @var \Chizhov\Status\ViewModel\Customer\Status $viewModel */
+$viewModel = $block->getData('view_model');
+?>
+
+<?php if($block->customerLoggedIn() && $viewModel->getCustomerStatus()): ?>
+<li class="greet welcome" data-bind="scope: 'customer'">
+    <!-- ko if: customer().customer_status  -->
+    <span data-bind="text: customer().customer_status"></span>
+    <!-- /ko -->
+
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "customer": {
+                            "component": "Magento_Customer/js/view/customer"
+                        }
+                    }
+                }
+            }
+        }
+        </script>
+</li>
+<?php endif; ?>

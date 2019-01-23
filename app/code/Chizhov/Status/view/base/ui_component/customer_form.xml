@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="customer">
+        <field name="chizhov_customer_status" formElement="input">
+            <settings>
+                <label translate="true">Status</label>
+                <dataType>text</dataType>
+                <dataScope>extension_attributes.chizhov_customer_status</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+</form>

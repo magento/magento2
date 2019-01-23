@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="header.links">
+            <block class="Magento\Customer\Block\Account\Customer"
+                   name="customer-status-message"
+                   template="Chizhov_Status::customer/message.phtml"
+                   after="header">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Chizhov\Status\ViewModel\Customer\Status</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <move element="customer" destination="header.links" after="customer-status-message"/>
+    </body>
+</page>

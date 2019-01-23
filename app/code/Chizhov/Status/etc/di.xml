@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+      <plugin name="chizhov_customer_repository_plugin" type="Chizhov\Status\Plugin\Customer\Model\CustomerRepositoryPlugin"/>
+   </type>
+
+   <type name="Magento\Customer\CustomerData\Customer">
+      <plugin name="chizhov_customer_data_plugin" type="Chizhov\Status\Plugin\Customer\CustomerData\CustomerPlugin"/>
+   </type>
+
+   <!-- Customer Status preferences -->
+   <preference for="Chizhov\Status\Api\Data\CustomerStatusInterface" type="Chizhov\Status\Model\CustomerStatus"/>
+   <preference for="Chizhov\Status\Api\Data\CustomerStatusSearchResultsInterface" type="Chizhov\Status\Model\CustomerStatusSearchResults"/>
+   <preference for="Chizhov\Status\Api\CustomerStatusRepositoryInterface" type="Chizhov\Status\Model\CustomerStatusRepository"/>
+   <preference for="Chizhov\Status\Model\CustomerStatus\Command\DeleteByIdInterface" type="Chizhov\Status\Model\CustomerStatus\Command\DeleteById"/>
+   <preference for="Chizhov\Status\Model\CustomerStatus\Command\SaveInterface" type="Chizhov\Status\Model\CustomerStatus\Command\Save"/>
+   <preference for="Chizhov\Status\Model\CustomerStatus\Command\GetInterface" type="Chizhov\Status\Model\CustomerStatus\Command\Get"/>
+   <preference for="Chizhov\Status\Model\CustomerStatus\Command\GetListInterface" type="Chizhov\Status\Model\CustomerStatus\Command\GetList"/>
+</config>
