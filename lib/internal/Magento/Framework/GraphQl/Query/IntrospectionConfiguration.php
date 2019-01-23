@@ -33,10 +33,10 @@ class IntrospectionConfiguration
     /**
      * Check the the environment config to determine if introspection should be disabled.
      *
-     * @return int
+     * @return bool
      */
-    public function isIntrospectionDisabled(): int
+    public function isIntrospectionDisabled(): bool
     {
-        return (int) $this->deploymentConfig->get(self::CONFIG_PATH_DISABLE_INTROSPECTION);
+        return (bool)$this->deploymentConfig->get(self::CONFIG_PATH_DISABLE_INTROSPECTION);
     }
 }
