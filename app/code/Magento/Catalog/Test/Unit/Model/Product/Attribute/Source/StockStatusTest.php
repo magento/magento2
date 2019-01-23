@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class StockStatusTest
@@ -15,11 +18,15 @@ class StockStatusTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Product\Attribute\Source\StockStatus */
     protected $stockStatus;
 
+    /** @var ObjectManagerHelper */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
         parent::setUp();
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->stockStatus = $this->createMock(
+        $this->stockStatus = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Attribute\Source\StockStatus::class
         );
     }
