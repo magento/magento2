@@ -183,7 +183,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-   public function getContentType()
+    public function getContentType()
     {
         $this->_getHandle();
         if ($this->_linkType === self::LINK_TYPE_FILE) {
