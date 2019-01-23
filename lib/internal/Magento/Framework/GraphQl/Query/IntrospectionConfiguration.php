@@ -14,7 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
  */
 class IntrospectionConfiguration
 {
-    const CONFIG_PATH_DISABLE_INTROSPECTION = 'graphql/disable_introspection';
+    private const CONFIG_PATH_DISABLE_INTROSPECTION = 'graphql/disable_introspection';
 
     /**
      * @var DeploymentConfig
@@ -35,7 +35,7 @@ class IntrospectionConfiguration
      *
      * @return int
      */
-    public function disableIntrospection(): int
+    public function isIntrospectionDisabled(): int
     {
         return (int) $this->deploymentConfig->get(self::CONFIG_PATH_DISABLE_INTROSPECTION);
     }
