@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model\Validator\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\AbstractValidator;
+use Zend_Validate;
 
 /**
  * Class Code
  *
  * Validation EAV attribute code
  */
-class Code  extends \Magento\Framework\Validator\AbstractValidator
+class Code  extends AbstractValidator
 {
     /**
      * Validates the correctness of the attribute code
@@ -45,7 +48,7 @@ class Code  extends \Magento\Framework\Validator\AbstractValidator
          */
         $minLength = Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
         $maxLength = Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-        $isAllowedLength = \Zend_Validate::is(
+        $isAllowedLength = Zend_Validate::is(
             trim($attributeCode),
             'StringLength',
             ['min' => $minLength, 'max' => $maxLength]
