@@ -9,6 +9,7 @@ namespace Magento\Eav\Setup;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -81,23 +82,33 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
+     * @var Code
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
+     * @param Code|null $attributeCodeValidator
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
+        CollectionFactory $attrGroupCollectionFactory,
+        Code $attributeCodeValidator = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
         $this->attributeMapper = $context->getAttributeMapper();
         $this->setup = $setup;
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            Code::class
+        );
     }
 
     /**
@@ -783,25 +794,8 @@ class EavSetup
      */
     private function _validateAttributeData($data)
     {
-        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
-        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
         $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-
-        $isAllowedLength = \Zend_Validate::is(
-            trim($attributeCode),
-            'StringLength',
-            ['min' => $minLength, 'max' => $maxLength]
-        );
-
-        if (!$isAllowedLength) {
-            $errorMessage = __(
-                'An attribute code must not be less than %1 and more than %2 characters.',
-                $minLength,
-                $maxLength
-            );
-
-            throw new LocalizedException($errorMessage);
-        }
+        $this->attributeCodeValidator->isValid($attributeCode);
 
         return true;
     }
