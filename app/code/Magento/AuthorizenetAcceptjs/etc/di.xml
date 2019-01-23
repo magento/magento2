@@ -50,7 +50,7 @@
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
         <arguments>
-            <argument name="config" xsi:type="object">AuthorizenetAcceptjsConfig</argument>
+            <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
         </arguments>
     </virtualType>
     <virtualType name="AuthorizenetAcceptjsValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
