@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Setup;
 
@@ -17,7 +16,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class InstallData
- * @package Magento\AuthorizenetAcceptjs\Setup
+ *
+ * Migrates Authorize.net DirectPost configuration values to the new Accept.js module.
  */
 class InstallData implements InstallDataInterface
 {
@@ -36,12 +36,11 @@ class InstallData implements InstallDataInterface
      */
     private $encryptor;
 
-    const DIRECTPOST_PATH = 'payment/authorizenet_directpost';
-    const ACCEPTJS_PATH = 'payment/authorizenet_acceptjs';
-    const PAYMENT_PATH_FORMAT = '%s/%s';
+    private const DIRECTPOST_PATH = 'payment/authorizenet_directpost';
+    private const ACCEPTJS_PATH = 'payment/authorizenet_acceptjs';
+    private const PAYMENT_PATH_FORMAT = '%s/%s';
 
     /**
-     * InstallData constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $resourceConfig
      * @param EncryptorInterface $encryptor
@@ -57,10 +56,14 @@ class InstallData implements InstallDataInterface
     }
 
     /**
+     * Migrate DirectPost values in store scope to Accept.js
+     *
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context) :void
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context): void
     {
         $setup->startSetup();
 
@@ -81,18 +84,18 @@ class InstallData implements InstallDataInterface
         ];
 
         foreach ($configFieldsToMigrate as $field) {
-            $configValue = $this->getConfigValue($field);
+            $configValue = $this->getOldConfigValue($field);
 
-            if ($configValue !== null && !empty($configValue)) {
-                $this->saveConfigValue($field, $configValue);
+            if (!empty($configValue)) {
+                $this->saveNewConfigValue($field, $configValue);
             }
         }
 
         foreach ($encryptedConfigFieldsToMigrate as $field) {
-            $configValue = $this->getConfigValue($field);
+            $configValue = $this->getOldConfigValue($field);
 
-            if ($configValue !== null && !empty($configValue)) {
-                $this->saveConfigValue($field, $configValue, true);
+            if (!empty($configValue)) {
+                $this->saveNewConfigValue($field, $configValue, true);
             }
         }
 
@@ -100,22 +103,33 @@ class InstallData implements InstallDataInterface
     }
 
     /**
-     * @param $field
+     * Get old configuration value from the DirectPost module's configuration on the store scope
+     *
+     * @param string $field
      * @return mixed
      */
-    protected function getConfigValue($field)
+    private function getOldConfigValue(string $field)
     {
-        return $this->scopeConfig->getValue(sprintf(self::PAYMENT_PATH_FORMAT, self::DIRECTPOST_PATH, $field), ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            sprintf(self::PAYMENT_PATH_FORMAT, self::DIRECTPOST_PATH, $field),
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
-     * @param $field
-     * @param $value
+     * Save configuration value for AcceptJS
+     *
+     * @param string $field
+     * @param mixed $value
      * @param bool $isEncrypted
      */
-    protected function saveConfigValue($field, $value, $isEncrypted = false) :void
+    private function saveNewConfigValue(string $field, $value, $isEncrypted = false): void
     {
         $value = $isEncrypted ? $this->encryptor->encrypt($value) : $value;
-        $this->resourceConfig->saveConfig(sprintf(self::PAYMENT_PATH_FORMAT, self::ACCEPTJS_PATH, $field), $value, ScopeInterface::SCOPE_STORE);
+        $this->resourceConfig->saveConfig(
+            sprintf(self::PAYMENT_PATH_FORMAT, self::ACCEPTJS_PATH, $field),
+            $value,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

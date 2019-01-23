@@ -5,12 +5,19 @@
  */
 
 declare(strict_types=1);
+
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Setup;
 
 use Magento\AuthorizenetAcceptjs\Setup\InstallData;
+use Magento\Config\Model\ResourceModel\Config as ResourceConfig;
+use Magento\Framework\App\Config;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\DataSetup;
+use Magento\Setup\Model\ModuleContext;
+use PHPUnit\Framework\TestCase;
 
-class InstallDataTest extends \PHPUnit\Framework\TestCase
+class InstallDataTest extends TestCase
 {
     /**
      * @var \Magento\Framework\App\Config
@@ -37,23 +44,12 @@ class InstallDataTest extends \PHPUnit\Framework\TestCase
      */
     private $context;
 
-    protected function setUp() :void
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resourceConfig = $this->getMockBuilder(\Magento\Config\Model\ResourceModel\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\Encryptor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->setup = $this->getMockBuilder(\Magento\Setup\Module\DataSetup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfig = $this->createMock(Config::class);
+        $this->resourceConfig = $this->createMock(ResourceConfig::class);
+        $this->encryptor = $this->createMock(Encryptor::class);
+        $this->setup = $this->createMock(DataSetup::class);
 
         $this->setup->expects($this->once())
             ->method('startSetup')
@@ -63,12 +59,10 @@ class InstallDataTest extends \PHPUnit\Framework\TestCase
             ->method('endSetup')
             ->willReturn(null);
 
-        $this->context = $this->getMockBuilder(\Magento\Setup\Model\ModuleContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(ModuleContext::class);
     }
 
-    public function testMigrateData() :void
+    public function testMigrateData(): void
     {
         $this->scopeConfig->expects($this->exactly(10))
             ->method('getValue')
@@ -96,7 +90,7 @@ class InstallDataTest extends \PHPUnit\Framework\TestCase
         $installer->install($this->setup, $this->context);
     }
 
-    public function testMigrateDataNullFields() :void
+    public function testMigrateDataNullFields(): void
     {
         $this->scopeConfig->expects($this->exactly(10))
             ->method('getValue')
