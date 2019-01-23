@@ -91,7 +91,7 @@ class ButtonStyles
      */
     public function getBrInstallmentPeriod(): array
     {
-        $numbers = range(2,12);
+        $numbers = range(2, 12);
 
         return array_combine($numbers, $numbers);
     }
@@ -103,7 +103,7 @@ class ButtonStyles
      */
     public function getMxInstallmentPeriod(): array
     {
-        $numbers = range(3,12,3);
+        $numbers = range(3, 12, 3);
 
         return array_combine($numbers, $numbers);
     }

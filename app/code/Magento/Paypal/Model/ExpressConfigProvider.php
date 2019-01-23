@@ -11,7 +11,6 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Paypal\Helper\Data as PaypalHelper;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ExpressConfigProvider

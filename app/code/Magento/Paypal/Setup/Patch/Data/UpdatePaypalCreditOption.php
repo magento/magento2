@@ -55,7 +55,7 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
                             'scope' => $pair['scope'],
                             'scope_id' => $pair['scope_id'],
                             'path' => 'paypal/style/disable_funding_options',
-                            'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT
+                            'value' => 'CREDIT'
                         ]
                     );
             }

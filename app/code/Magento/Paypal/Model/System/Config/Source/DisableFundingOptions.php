@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Model\Config\StructurePlugin;
 
 /**
@@ -44,11 +43,11 @@ class DisableFundingOptions implements \Magento\Framework\Data\OptionSourceInter
     {
         $defaultFundingOptions = [
             [
-                'value' => Checkout::PAYPAL_FUNDING_CARD,
+                'value' => 'CARD',
                 'label' => __('PayPal Guest Checkout Credit Card Icons')
             ],
             [
-                'value' => Checkout::PAYPAL_FUNDING_ELV,
+                'value' => 'ELV',
                 'label' => __('Elektronisches Lastschriftverfahren - German ELV')
             ]
         ];
@@ -65,7 +64,7 @@ class DisableFundingOptions implements \Magento\Framework\Data\OptionSourceInter
     private function addPaypalCreditForUS($fundingOptions): array
     {
         $paypalCredit = [
-            'value' => Checkout::PAYPAL_FUNDING_CREDIT,
+            'value' => 'CREDIT',
             'label' => __('PayPal Credit')
         ];
         if ($this->checkMerchantCountry('US')) {

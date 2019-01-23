@@ -125,22 +125,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ['payment/paypal_express/disable_funding_options', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, []],
             ];
             $this->scopeConfig
-                ->expects($this->any())
                 ->method('getValue')
-                ->will($this->returnValueMap($valueMap));
+                ->willReturnMap($valueMap);
             $this->scopeConfig->expects($this->exactly(1))
                 ->method('isSetFlag')
                 ->withAnyParameters()
-                ->will($this->returnValue(true));
+                ->willReturn(true);
         } else {
-            $this->scopeConfig->expects($this->any())
+            $this->scopeConfig
                 ->method('getValue')
                 ->with('paypal/general/merchant_country')
-                ->will($this->returnValue('US'));
+                ->willReturn('US');
             $this->scopeConfig->expects($this->exactly(2))
                 ->method('isSetFlag')
                 ->withAnyParameters()
-                ->will($this->returnValue(true));
+                ->willReturn(true);
         }
 
         $this->model->setMethod($methodName);
