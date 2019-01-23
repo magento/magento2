@@ -113,7 +113,7 @@
         <grabValueFrom selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}"  stepKey="grabTextFromContent"/>
         <fillField stepKey="fillMoreThan64Symbols" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="01234567890123456789012345678901234567890123456789012345678901234"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct1"/>
-        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.close}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.close}}" visible="true" stepKey="clickOnCloseInPopup"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" visible="true" stepKey="clickOnCloseInPopup"/>
         <see stepKey="seeErrorMessage" userInput="Please enter less or equal than 64 symbols."/>
         <fillField stepKey="fillCorrectSKU" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="$grabTextFromContent"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
