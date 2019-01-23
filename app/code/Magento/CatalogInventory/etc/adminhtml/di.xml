@@ -39,4 +39,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Model\ProductLink\Search">
+        <plugin name="processOutOfStockProducts" type="Magento\CatalogInventory\Model\Plugin\ProductSearch"/>
+    </type>
 </config>

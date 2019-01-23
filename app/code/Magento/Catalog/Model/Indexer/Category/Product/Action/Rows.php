@@ -36,17 +36,16 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Return array of all category root IDs + tree root ID
      *
-     * @return int[]
+     * @param \Magento\Store\Model\Store $store
+     * @return int
      */
-    protected function getRootCategoryIds()
+    private function getRootCategoryId($store)
     {
-        $rootIds = [\Magento\Catalog\Model\Category::TREE_ROOT_ID];
-        foreach ($this->storeManager->getStores() as $store) {
-            if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
-                $rootIds[] = $store->getRootCategoryId();
-            }
+        $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+        if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
+            $rootId = $store->getRootCategoryId();
         }
-        return $rootIds;
+        return $rootId;
     }
 
     /**
@@ -54,10 +53,15 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return void
      */
-    protected function removeEntries()
+    private function removeEntries()
     {
-        $removalCategoryIds = array_diff($this->limitationByCategories, $this->getRootCategoryIds());
-        $this->connection->delete($this->getMainTable(), ['category_id IN (?)' => $removalCategoryIds]);
+        foreach ($this->storeManager->getStores() as $store) {
+            $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
+            $this->connection->delete(
+                $this->getIndexTable($store->getId()),
+                ['category_id IN (?)' => $removalCategoryIds]
+            );
+        }
     }
 
     /**

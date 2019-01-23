@@ -123,7 +123,16 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareTable()
     {
-        $table = new Table('table', 'table', 'table', 'default', 'innodb');
+        $table = new Table(
+            'table',
+            'table',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
+        );
         $column = new Integer(
             'int',
             'int',

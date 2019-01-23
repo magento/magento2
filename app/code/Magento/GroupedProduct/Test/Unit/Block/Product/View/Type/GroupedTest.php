@@ -111,6 +111,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->groupedView->setPreconfiguredValue();
     }
 
+    /**
+     * @return array
+     */
     public function setPreconfiguredValueDataProvider()
     {
         return ['item_id_exist_in_config' => ['id_one'], 'item_id_not_exist_in_config' => ['id_two']];

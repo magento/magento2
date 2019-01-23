@@ -18,7 +18,7 @@ class State extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'layer/state.phtml';
+    protected $_template = 'Magento_LayeredNavigation::layer/state.phtml';
 
     /**
      * Catalog layer

@@ -110,14 +110,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     private function preparePageMetadata(ResultPage $resultPage, $product)
     {
         $pageLayout = $resultPage->getLayout();
-        $pageLayout->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
-
         $pageConfig = $resultPage->getConfig();
 
-        $title = $product->getMetaTitle();
-        if ($title) {
-            $pageConfig->getTitle()->set($title);
-        }
+        $metaTitle = $product->getMetaTitle();
+        $pageConfig->setMetaTitle($metaTitle);
+        $pageConfig->getTitle()->set($metaTitle ?: $product->getName());
 
         $keyword = $product->getMetaKeyword();
         $currentCategory = $this->_coreRegistry->registry('current_category');
@@ -131,7 +128,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         if ($description) {
             $pageConfig->setDescription($description);
         } else {
-            $pageConfig->setDescription($this->string->substr($product->getDescription(), 0, 255));
+            $pageConfig->setDescription($this->string->substr(strip_tags($product->getDescription()), 0, 255));
         }
 
         if ($this->_catalogProduct->canUseCanonicalTag()) {

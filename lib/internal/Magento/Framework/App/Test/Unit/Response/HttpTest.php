@@ -8,6 +8,8 @@ namespace Magento\Framework\App\Test\Unit\Response;
 
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -49,6 +51,19 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionConfigMock;
+
+    /**
+     * @var int
+     */
+    private $cookieLifeTime = 3600;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -68,6 +83,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\App\Response\Http::class,
             [
@@ -75,13 +94,17 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'sessionConfig' => $this->sessionConfigMock,
             ]
         );
         $this->model->headersSentThrowsException = false;
         $this->model->setHeader('Name', 'Value');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         unset($this->model);
@@ -108,9 +131,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->method('getVaryString')
             ->will($this->returnValue($expectedCookieValue));
 
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieLifetime')
+            ->willReturn($this->cookieLifeTime);
+
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnValue($sensitiveCookieMetadataMock));
+            ->with([CookieMetadata::KEY_DURATION => $this->cookieLifeTime])
+            ->willReturn($sensitiveCookieMetadataMock);
 
         $this->cookieManagerMock->expects($this->once())
             ->method('setSensitiveCookie')
@@ -185,10 +213,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPublicHeadersWithoutTtl()
     {
-        $this->expectException(
-            'InvalidArgumentException',
-            'Time to live is a mandatory parameter for set public headers'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Time to live is a mandatory parameter for set public headers');
         $this->model->setPublicHeaders(null);
     }
 
@@ -223,10 +249,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPrivateHeadersWithoutTtl()
     {
-        $this->expectException(
-            'InvalidArgumentException',
-            'Time to live is a mandatory parameter for set private headers'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Time to live is a mandatory parameter for set private headers');
         $this->model->setPrivateHeaders(null);
     }
 

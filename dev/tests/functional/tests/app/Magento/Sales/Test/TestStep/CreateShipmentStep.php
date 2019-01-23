@@ -99,13 +99,21 @@ class CreateShipmentStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->ship();
-        if (!empty($this->data)) {
-            $this->orderShipmentNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+        $shipmentIds = [];
+        /**
+         * As this step is used in general scenarios and not all test cases has shippable items(ex: virtual product)
+         * we need to check, if it possible to create shipment for given order.
+         */
+        if ($this->salesOrderView->getPageActions()->canShip()) {
+            $this->salesOrderView->getPageActions()->ship();
+            if (!empty($this->data)) {
+                $this->orderShipmentNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+            }
+            $this->orderShipmentNew->getFormBlock()->submit();
+            $shipmentIds = $this->getShipmentIds();
         }
-        $this->orderShipmentNew->getFormBlock()->submit();
 
-        return ['shipmentIds' => $this->getShipmentIds()];
+        return ['shipmentIds' => $shipmentIds];
     }
 
     /**

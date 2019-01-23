@@ -144,11 +144,15 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn($requestType);
         if ($expectedResult) {
-            $this->expectException('InvalidArgumentException', $expectedResult);
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage($expectedResult);
         }
         $this->model->validate('topic', $message);
     }
 
+    /**
+     * @return array
+     */
     public function getQueueConfigRequestType()
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)

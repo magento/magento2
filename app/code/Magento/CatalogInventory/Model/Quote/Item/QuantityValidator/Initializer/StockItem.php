@@ -135,6 +135,8 @@ class StockItem
             $quoteItem->setBackorders($result->getItemBackorders());
         }
 
+        $quoteItem->setStockStateResult($result);
+
         return $result;
     }
 }

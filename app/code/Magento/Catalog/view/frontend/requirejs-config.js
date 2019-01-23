@@ -18,5 +18,12 @@ var config = {
             priceUtils:             'Magento_Catalog/js/price-utils',
             catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
         }
+    },
+    config: {
+        mixins: {
+            'Magento_Theme/js/view/breadcrumbs': {
+                'Magento_Catalog/js/product/breadcrumbs': true
+            }
+        }
     }
 };

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSwitchWYSIWYGOptionsTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-51829-Extensible list of WYSIWYG editors available in Magento"/>
+            <group value="Cms"/>
+            <title value="Admin should able to switch between versions of TinyMCE"/>
+            <description value="Admin should able to switch between versions of TinyMCE"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-82936"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+        </before>
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
+        <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue1"/>
+        <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown1" />
+        <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 4" stepKey="switchToVersion4" />
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions1" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig1" />
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage1"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle1"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE4}}"  stepKey="seeTinyMCE4" />
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE4!');" stepKey="executeJSFillContent1"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab1" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation1"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey1"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage1"/>
+        <!-- Go to storefront cms page, assert cms content -->
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage1"/>
+        <waitForPageLoad stepKey="wait3" />
+        <!--see widget on Storefront-->
+        <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
+        <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
+        <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2" />
+        <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3" />
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions2" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig2" />
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
+        <waitForPageLoad stepKey="wait5"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE3!');" stepKey="executeJSFillContent2"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab2" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation2"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{simpleCmsPage.identifier}}" stepKey="fillFieldUrlKey2"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible2"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu2"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage2"/>
+        <!-- Go to storefront cms page, assert cms content -->
+        <amOnPage url="{{simpleCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
+        <waitForPageLoad stepKey="wait6" />
+        <!--see widget on Storefront-->
+        <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
+        <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

@@ -27,8 +27,8 @@ class CopyConstructorFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithInvalidType()
     {
-        $this->expectException(
-            '\InvalidArgumentException',
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Magento\Framework\DataObject does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
         );
         $this->_objectManagerMock->expects($this->never())->method('create');

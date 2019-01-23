@@ -27,8 +27,3 @@ $groupId = $website->getDefaultGroupId();
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 $store->setCode('thirdstore')->setName('Third Store')->setSortOrder(10)->setIsActive(1);
 $store->save();
-
-/* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    \Magento\Store\Model\StoreManagerInterface::class
-)->reinitStores();

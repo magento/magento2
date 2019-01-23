@@ -5,17 +5,17 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class KountPaymentDataBuilderTest
- *
- * @see \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder
+ * Tests \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder.
  */
 class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,19 +27,19 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDO;
+    private $paymentDOMock;
 
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
@@ -48,7 +48,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,7 +69,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $buildSubject = [];
 
-        $this->configMock->expects(static::once())
+        $this->configMock->expects(self::never())
             ->method('hasFraudProtection')
             ->willReturn(true);
 
@@ -84,31 +84,34 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $additionalData = [
-            DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA
+            DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
         $expectedResult = [
             KountPaymentDataBuilder::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
-        $buildSubject = ['payment' => $this->paymentDO];
+        $order = $this->createMock(OrderAdapterInterface::class);
+        $this->paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
 
-        $this->paymentMock->expects(static::exactly(count($additionalData)))
+        $buildSubject = ['payment' => $this->paymentDOMock];
+
+        $this->paymentMock->expects(self::exactly(count($additionalData)))
             ->method('getAdditionalInformation')
             ->willReturn($additionalData);
 
-        $this->configMock->expects(static::once())
+        $this->configMock->expects(self::once())
             ->method('hasFraudProtection')
             ->willReturn(true);
 
-        $this->paymentDO->expects(static::once())
+        $this->paymentDOMock->expects(self::once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
             ->with($buildSubject)
-            ->willReturn($this->paymentDO);
+            ->willReturn($this->paymentDOMock);
 
         static::assertEquals(
             $expectedResult,

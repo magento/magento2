@@ -13,7 +13,7 @@ use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
 /**
- * @covers Magento\Framework\View\Page\Config
+ * @covers \Magento\Framework\View\Page\Config
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -139,6 +139,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'description' => null,
             'keywords' => null,
             'robots' => null,
+            'title' => null,
             'name' => 'test_value',
             'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
         ];
@@ -287,6 +288,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function pageAssetDataProvider()
     {
         return [
@@ -326,6 +330,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function remotePageAssetDataProvider()
     {
         return [
@@ -382,6 +389,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeDataProvider()
     {
         return [
@@ -412,13 +422,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testElementAttributeException($elementType, $attribute, $value)
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            $elementType . " isn't allowed"
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($elementType . " isn't allowed");
         $this->model->setElementAttribute($elementType, $attribute, $value);
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeExceptionDataProvider()
     {
         return [
@@ -454,6 +465,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributesDataProvider()
     {
         return [
@@ -478,6 +492,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($handle, $this->model->getPageLayout());
     }
 
+    /**
+     * @return array
+     */
     public function pageLayoutDataProvider()
     {
         return [
@@ -538,6 +555,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $model->getIncludes());
     }
 
+    /**
+     * @return array
+     */
     public function getIncludesDataProvider()
     {
         return [

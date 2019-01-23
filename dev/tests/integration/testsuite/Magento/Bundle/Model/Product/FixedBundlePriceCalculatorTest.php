@@ -9,7 +9,6 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoAppArea frontend
  */
 class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
@@ -19,6 +18,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -29,23 +30,25 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
-        $priceInfoFromIndexer = $this->productCollectionFactory->create()
-            ->addIdFilter([42])
-            ->addPriceData()
-            ->load()
-            ->getFirstItem();
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
-        $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addIdFilter([42])
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -54,6 +57,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForFixedBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
@@ -64,23 +69,25 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
-        $priceInfoFromIndexer = $this->productCollectionFactory->create()
-            ->addFieldToFilter('sku', 'bundle_product')
-            ->addPriceData()
-            ->load()
-            ->getFirstItem();
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
-        $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -98,7 +105,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 10 (sum of simple price)
                     'maximalPrice' => 120,
-                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -109,7 +115,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     //  110 + (3 * 10) + (2 * 10) + 10
                     'maximalPrice' => 170,
-                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -120,7 +125,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 60
                     'maximalPrice' => 170,
-                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -131,7 +135,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 30
                     'maximalPrice' => 140,
-                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -149,7 +152,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 1 * 20 + 100
                     'maximalPrice' => 230,
-                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -167,7 +169,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 110 * 0.2 + 110 * 1
                     'maximalPrice' => 242,
-                    'indexerMinimalPrice' => 132
                 ]
             ],
 
@@ -185,7 +186,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 1 * 20 + 110 * 1
                     'maximalPrice' => 240,
-                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -203,7 +203,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 110 * 0.2 + 100
                     'maximalPrice' => 232,
-                    'indexerMinimalPrice' => 132
                 ]
             ],
         ];

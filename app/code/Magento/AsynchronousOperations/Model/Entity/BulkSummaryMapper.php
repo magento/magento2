@@ -8,7 +8,6 @@ namespace Magento\AsynchronousOperations\Model\Entity;
 use Magento\Framework\EntityManager\MapperInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
 /**
  * @deprecated 100.2.0

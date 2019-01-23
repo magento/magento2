@@ -104,12 +104,12 @@ class DiffManager
     ) {
         foreach ($generatedElements as $generatedElement) {
             if ($generatedElement instanceof Reference) {
-                $this->registerReferenceDrop($generatedElement, $diff);
-                continue;
+                $diff->register($generatedElement, DropReference::OPERATION_NAME, $generatedElement);
+            } elseif ($generatedElement instanceof Table) {
+                $diff->register($generatedElement, DropTable::OPERATION_NAME, $generatedElement);
+            } else {
+                $diff->register($generatedElement, DropElement::OPERATION_NAME, $generatedElement);
             }
-
-            $operation = $generatedElement instanceof Table ? DropTable::OPERATION_NAME : DropElement::OPERATION_NAME;
-            $diff->register($generatedElement, $operation, $generatedElement);
         }
 
         return $diff;
@@ -138,27 +138,6 @@ class DiffManager
     }
 
     /**
-     * We need to register drop of foreign key in scope of reference table.
-     *
-     * This done because reference table is goes first and starting from this table
-     * there should be no foreign key on modified column.
-     *
-     * @param Reference $reference
-     * @param Diff $diff
-     * @return Diff
-     */
-    public function registerReferenceDrop(Reference $reference, Diff $diff)
-    {
-        $diff->register(
-            $reference,
-            DropReference::OPERATION_NAME,
-            $reference,
-            $reference->getReferenceTable()->getName()
-        );
-        return $diff;
-    }
-
-    /**
      * Depends on what should be changed we can re-create table or modify it.
      *
      * For example, we can modify table if we need to change comment or engine.
@@ -171,19 +150,28 @@ class DiffManager
      */
     public function registerTableModification(Table $declaredTable, Table $generatedTable, Diff $diff)
     {
-        if ($declaredTable->getResource() !== $generatedTable->getResource()) {
-            $diff->register(
-                $declaredTable,
-                ReCreateTable::OPERATION_NAME,
-                $generatedTable
-            );
-        } else {
-            $diff->register(
-                $declaredTable,
-                ModifyTable::OPERATION_NAME,
-                $generatedTable
-            );
-        }
+        $diff->register(
+            $declaredTable,
+            ModifyTable::OPERATION_NAME,
+            $generatedTable
+        );
+    }
+
+    /**
+     * Register recreation of table, in case for example, when we need to move table from one shard to another
+     *
+     * @param Table $declaredTable
+     * @param Table $generatedTable
+     * @param Diff $diff
+     * @return void
+     */
+    public function registerRecreation(Table $declaredTable, Table $generatedTable, Diff $diff)
+    {
+        $diff->register(
+            $declaredTable,
+            ReCreateTable::OPERATION_NAME,
+            $generatedTable
+        );
     }
 
     /**

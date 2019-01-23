@@ -48,7 +48,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $resultPage->getConfig()->getTitle()->prepend(__('Edit Order Status'));
             return $resultPage;
         } else {
-            $this->messageManager->addError(__('We can\'t find this order status.'));
+            $this->messageManager->addErrorMessage(__('We can\'t find this order status.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('sales/');

@@ -191,9 +191,9 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                     'is_anchor' => 'int',
                     'custom_design_from' => 'string',
                     'custom_design_to' => 'string',
-                    'available_sort_by' => \Magento\Eav\Api\Data\AttributeOptionInterface::class,
+                    'available_sort_by' => 'string[]',
                     'page_layout' => 'string',
-                    'default_sort_by' => \Magento\Eav\Api\Data\AttributeOptionInterface::class,
+                    'default_sort_by' => 'string[]',
                     'filter_price_range' => 'double',
                     'custom_layout_update' => 'string',
                 ]

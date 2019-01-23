@@ -91,7 +91,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      */
     public function getCreateAccountUrl()
     {
-        return $this->getUrl('checkout/account/create');
+        return $this->getUrl('checkout/account/delegateCreate');
     }
 
     /**

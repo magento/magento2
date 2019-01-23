@@ -8,6 +8,11 @@ namespace Magento\Framework\ObjectManager;
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
+     * Test class with type error
+     */
+    const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
+
+    /**#@+
      * Test classes for basic instantiation
      */
     const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
@@ -137,5 +142,18 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
                 $this->assertAttributeInstanceOf($propertyClass, $propertyName, $testObject);
             }
         }
+    }
+
+    /**
+     * Test creating an object and passing incorrect type of arguments to the constructor.
+     *
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Error occurred when creating object
+     */
+    public function testNewInstanceWithTypeError()
+    {
+        self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR, [
+            'testArgument' => new \stdClass()
+        ]);
     }
 }

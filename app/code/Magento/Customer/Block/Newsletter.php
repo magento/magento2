@@ -20,7 +20,7 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
     /**
      * @var string
      */
-    protected $_template = 'form/newsletter.phtml';
+    protected $_template = 'Magento_Customer::form/newsletter.phtml';
 
     /**
      * @return bool

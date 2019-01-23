@@ -16,6 +16,14 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 class Aggregation
 {
     /**
+     * Max number of results returned per single term bucket, i.e. limit of options for layered navigation filter.
+     * Default ElasticSearch limit is 10
+     *
+     * @var int
+     */
+    private static $maxTermBacketSize = 500;
+
+    /**
      * @var FieldMapperInterface
      * @since 100.1.0
      */
@@ -67,6 +75,7 @@ class Aggregation
                 $searchQuery['body']['aggregations'][$bucket->getName()]= [
                     'terms' => [
                         'field' => $field,
+                        'size' => self::$maxTermBacketSize,
                     ],
                 ];
                 break;

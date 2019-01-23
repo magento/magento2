@@ -10,6 +10,7 @@ use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Create stores and websites. Actually stores and websites are part of schema as
@@ -64,7 +65,7 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
                 $this->schemaSetup->getTable('store_website'),
                 [
                     'website_id' => 0,
-                    'code' => 'admin',
+                    'code' => WebsiteInterface::ADMIN_CODE,
                     'name' => 'Admin',
                     'sort_order' => 0,
                     'default_group_id' => 0,

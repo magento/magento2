@@ -95,9 +95,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -219,9 +218,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
             return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
         }
+        return $this->getItem()->getOrderItem();
     }
 
     /**

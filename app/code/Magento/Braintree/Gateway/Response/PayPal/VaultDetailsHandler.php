@@ -6,7 +6,7 @@
 namespace Magento\Braintree\Gateway\Response\PayPal;
 
 use Braintree\Transaction;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;

@@ -6,13 +6,14 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
 /**
  * Class Save
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
+class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
@@ -192,7 +193,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->_eventManager->dispatch('catalog_product_to_website_change', ['products' => $productIds]);
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) were updated.', count($this->attributeHelper->getProductIds()))
             );
 
@@ -205,9 +206,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->_productPriceIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );

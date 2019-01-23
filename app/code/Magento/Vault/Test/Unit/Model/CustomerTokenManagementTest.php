@@ -43,28 +43,30 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetCustomerSessionTokensNonRegisteredCustomer()
+    /**
+     * @param int|null $customerId
+     * @param bool $isLoggedCustomer
+     * @return void
+     * @dataProvider getCustomerSessionTokensNegativeDataProvider
+     */
+    public function testGetCustomerSessionTokensNegative($customerId, bool $isLoggedCustomer)
     {
-        $this->customerSession->expects(self::once())
-            ->method('getCustomerId')
-            ->willReturn(null);
+        $this->customerSession->method('getCustomerId')->willReturn($customerId);
+        $this->customerSession->method('isLoggedIn')->willReturn($isLoggedCustomer);
+        $this->paymentTokenManagement->expects(static::never())->method('getVisibleAvailableTokens');
 
-        $this->paymentTokenManagement->expects(static::never())
-            ->method('getVisibleAvailableTokens');
-
-        $this->tokenManagement->getCustomerSessionTokens();
+        static::assertEquals([], $this->tokenManagement->getCustomerSessionTokens());
     }
 
-    public function testGetCustomerSessionTokensForNotExistsCustomer()
+    /**
+     * @return array
+     */
+    public function getCustomerSessionTokensNegativeDataProvider()
     {
-        $this->customerSession->expects(static::once())
-            ->method('getCustomerId')
-            ->willReturn(null);
-
-        $this->paymentTokenManagement->expects(static::never())
-            ->method('getVisibleAvailableTokens');
-
-        $this->tokenManagement->getCustomerSessionTokens();
+        return [
+            'not registered customer' => [null, false],
+            'not logged in customer' => [1, false],
+        ];
     }
 
     public function testGetCustomerSessionTokens()
@@ -76,6 +78,10 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSession->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
+
+        $this->customerSession->expects(static::once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
 
         $this->paymentTokenManagement->expects(static::once())
             ->method('getVisibleAvailableTokens')

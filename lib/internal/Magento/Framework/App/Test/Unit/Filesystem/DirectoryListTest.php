@@ -23,10 +23,8 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
         $this->assertFileExists($object->getPath(DirectoryList::SYS_TMP));
         $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
         $this->assertEquals('bar', $object->getUrlPath(DirectoryList::APP));
-        $this->expectException(
-            \Magento\Framework\Exception\FileSystemException::class,
-            "Unknown directory type: 'unknown'"
-        );
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessage("Unknown directory type: 'unknown'");
         $object->getPath('unknown');
     }
 

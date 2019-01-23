@@ -145,7 +145,7 @@ class AssertProductPage extends AbstractAssertForm
         }
         $expectedSpecialPrice = $this->product->getSpecialPrice();
         $expectedSpecialPrice = number_format($expectedSpecialPrice, 2);
-        $priceBlock = $this->productView->getPriceBlock();
+        $priceBlock = $this->productView->getPriceBlock($this->product);
         if (!$priceBlock->isVisible()) {
             return "Price block for '{$this->product->getName()}' product' is not visible.";
         }

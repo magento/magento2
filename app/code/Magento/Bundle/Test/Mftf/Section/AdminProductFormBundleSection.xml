@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormBundleSection">
+        <element name="bundleItemsToggle" type="button" selector="//span[text()='Bundle Items']"/>
+        <element name="shipmentType" type="select" selector=".admin__control-select[name='product[shipment_type]']"/>
+        <element name="addOption" type="button" selector="button[data-index='add_button']"/>
+        <element name="firstOptionTitle" type="input" selector="[name='bundle_options[bundle_options][0][title]']"/>
+        <element name="firstInputType" type="select" selector="[name='bundle_options[bundle_options][0][type]']"/>
+        <element name="firstRequired" type="checkbox" selector="[name='bundle_options[bundle_options][0][required]']"/>
+        <element name="firstProductQuantity" type="input" selector="[name='bundle_options[bundle_options][0][bundle_selections][0][selection_qty]']"/>
+        <element name="bundleOptionXTitle" type="input" selector="[name='bundle_options[bundle_options][{{x}}][title]']" parameterized="true"/>
+        <element name="bundleOptionXInputType" type="select" selector="[name='bundle_options[bundle_options][{{x}}][type]']" parameterized="true"/>
+        <element name="bundleOptionXRequired" type="checkbox" selector="[name='bundle_options[bundle_options][{{x}}][required]']" parameterized="true"/>
+        <element name="bundleOptionXProductYQuantity" type="input" selector="[name='bundle_options[bundle_options][{{x}}][bundle_selections][{{y}}][selection_qty]']" parameterized="true"/>
+        <element name="addProductsToOption" type="button" selector="[data-index='modal_set']" timeout="30"/>
+        <element name="nthAddProductsToOption" type="button" selector="//tr[{{var}}]//button[@data-index='modal_set']" timeout="30" parameterized="true"/>
+        <element name="bundlePriceType" type="select" selector="bundle_options[bundle_options][0][bundle_selections][0][selection_price_type]"/>
+        <element name="bundlePriceValue" type="input" selector="bundle_options[bundle_options][0][bundle_selections][0][selection_price_value]"/>
+        <!--Select"url Key"InputForm-->
+        <element name="urlKey" type="input" selector="//input[@name='product[url_key]']" timeout="30"/>
+        <!--AddSelectedProducts-->
+        <element name="addSelectedProducts" type="button" selector="//span[contains(text(),'Add Selected Products')]/ancestor::button" timeout="30"/>
+        <!--DefaultQuantities-->
+        <element name="defaultQuantity1" type="input" selector="//input[@name='bundle_options[bundle_options][0][bundle_selections][0][selection_qty]']" timeout="30"/>
+        <element name="defaultQuantity2" type="input" selector="//input[@name='bundle_options[bundle_options][0][bundle_selections][1][selection_qty]']" timeout="30"/>
+        <element name="productName" type="input" selector="//*[@name='product[name]']"/>
+        <element name="productSku" type="input" selector="//*[@name='product[sku]']"/>
+        <!--TestingForLocationOfOptions-->
+        <element name="bundleOptionSelector" type="button" selector="//*[@id='bundle-slide']/span"/>
+        <element name="bundleOptionSelection" type="button" selector="//div[@class='nested options-list']/div[2]/label[@class='label']"/>
+        <!--SelectorsForDescriptionCreationOnBundleProduct-->
+        <element name="contentDropDown" type="button" selector="div[data-index='content']" timeout="30"/>
+        <element name="contentDropDownIfNotShowing" type="button" selector="//div[@data-index='content']//div[contains(@class, '_hide')]"/>
+        <element name="longDescription" type="input" selector="#product_form_description"/>
+        <element name="shortDescription" type="input" selector="#product_form_short_description"/>
+        <!--BundleOptinsDropDown-->
+        <element name="bundleOptionsDropDown" type="button" selector="div[data-index='bundle-items']" timeout="30"/>
+        <!--AddingAnOption-->
+        <element name="addOptions" type="button" selector="//tr[@data-repeat-index='0']//td[4]" timeout="30"/>
+        <!--SEODropdownTab-->
+        <element name="seoDropdown" type="button" selector="//div[@data-index='search-engine-optimization']"/>
+        <element name="seoDependent" type="button" selector="//div[@data-index='search-engine-optimization']//div[contains(@class, '_show')]"/>
+        <!--NameOfProductOnProductPage-->
+        <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
+        <!--EnableDisableToggle-->
+        <element name="enableDisableToggle" type="checkbox" selector="//*[@id='container']//input[@name='product[status]']/.." timeout="30"/>
+        <element name="enableDisableToggleOn" type="checkbox" selector="//*[@id='container']//input[@name='product[status]' and @value='1']/.."/>
+        <element name="enableDisableToggleOff" type="checkbox" selector="//*[@id='container']//input[@name='product[status]' and @value='2']/.."/>
+        <!--SearchButton-->
+        <element name="searchButton" type="button" selector="//div[@class='data-grid-search-control-wrap']//*[@type='button']" timeout="30"/>
+        <!--ClickOnFirstProductInCatalog-->
+        <element name="firstCatalogProduct" type="button" selector="//table[@class='data-grid data-grid-draggable']/tbody/tr[@class='data-row']/td[4]"/>
+        <element name="bundledItems" type="block" selector="[data-index=bundle-items]"/>
+        <element name="dynamicPrice" type="button" selector="//div[@data-index='price_type']//div[@data-role='switcher']" timeout="30"/>
+        <element name="priceField" type="input" selector="//div[@data-index='price']//input"/>
+        <element name="listedBundleItem" type="text" selector="//tr[@data-repeat-index='0']//div"/>
+        <element name="listedBundleItem2" type="text" selector="//tr[@data-repeat-index='2']//div"/>
+        <!--FirstProductOption-->
+        <element name="firstProductOption" type="checkbox" selector="//div[@class='admin__data-grid-outer-wrap']//tr[@data-repeat-index='0']//input[@type='checkbox']"/>
+        <element name="dynamicSkuToggle" type="checkbox" selector="div[data-index='sku_type'] .admin__actions-switch-label" timeout="30"/>
+        <element name="dynamicPriceToggle" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']"/>
+        <element name="taxClassDropDown" type="select" selector="//select[@name='product[tax_class_id]']" timeout="30"/>
+        <element name="taxableGoodsOption" type="text" selector="//select[@name='product[tax_class_id]']//option[@data-title='Taxable Goods']"/>
+        <element name="stockStatusField" type="select" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="inStockOption" type="text" selector="//select[@name='product[quantity_and_stock_status][is_in_stock]']//option[@data-title='{{stock}}']" parameterized="true" timeout="30"/>
+        <element name="dynamicWeightToggle" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']" timeout="30"/>
+        <element name="weightField" type="input" selector="//div[@data-index='weight']//input"/>
+        <element name="categoriesDropDown" type="block" selector="//div[@data-index='category_ids']//div[@class='admin__field-control']" timeout="30"/>
+        <element name="defaultCategory" type="text" selector="//div[@data-index='category_ids']//span[contains(text(), 'Default Category')]"/>
+        <element name="visibilityDropDown" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="catalogOption1" type="text" selector="//select[@name='product[visibility]']//option[1]"/>
+        <element name="catalogOption2" type="text" selector="//select[@name='product[visibility]']//option[2]"/>
+        <element name="fromDate" type="input" selector="//div[@data-index='news_from_date']//input"/>
+        <element name="toDate" type="input" selector="//div[@data-index='news_to_date']//input"/>
+        <element name="countryOfManufactureDropDown" type="select" selector="//select[@name='product[country_of_manufacture]']"/>
+        <element name="selectCountryOfManufacture" type="text" selector="//select[@name='product[country_of_manufacture]']//option[@data-title='{{country}}']" parameterized="true"/>
+        <element name="dynamicSkuToggleOn" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='0']"/>
+        <element name="dynamicSkuToggleOff" type="checkbox" selector="//div[@data-index='sku_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="dynamicWeightToggleOn" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='0']"/>
+        <element name="dynamicWeightToggleOff" type="checkbox" selector="//div[@data-index='weight_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <element name="categoryFieldName" type="text" selector="//fieldset[@data-index='container_category_ids']//label//span" timeout="30"/>
+        <element name="categoryDone" type="button" selector=".admin__action-multiselect-actions-wrap [type='button'] span" timeout="30"/>
+        <element name="dynamicPriceToggleOff" type="checkbox" selector="//div[@data-index='price_type']//div[@data-role='switcher']//input[@value='1']"/>
+        <!--Category Selection-->
+        <element name="categoryByName" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
+        <element name="searchForCategory" type="input" selector="div.action-menu._active > div.admin__action-multiselect-search-wrap input" timeout="30"/>
+        <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>
+        <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>
+        <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
+    </section>
+</sections>

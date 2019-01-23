@@ -14,6 +14,11 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Render a component.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Render extends AbstractAction
 {
     /**
@@ -100,7 +105,7 @@ class Render extends AbstractAction
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $result = [
-                'error' => _('UI component could not be rendered because of system exception'),
+                'error' => __('UI component could not be rendered because of system exception'),
                 'errorcode' => $this->escaper->escapeHtml($e->getCode())
             ];
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */

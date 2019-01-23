@@ -154,3 +154,10 @@ if ($product->getLinksPurchasedSeparately()) {
     $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
 }
 $product->save();
+
+$stockRegistry = $objectManager->get(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
+$stockItem = $stockRegistry->getStockItem($product->getId());
+$stockItem->setUseConfigManageStock(true);
+$stockItem->setQty(100);
+$stockItem->setIsInStock(true);
+$stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);

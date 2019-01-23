@@ -432,7 +432,8 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
-                        'disabled' => false,
+                        'disabled' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/disabled', $this->meta),
                         'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
@@ -500,7 +501,8 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-digits' => false,
+                                            'validate-number' => true,
                                         ],
                                     ],
                                 ],

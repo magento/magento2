@@ -65,16 +65,34 @@ class Table extends GenericElement implements
     private $comment;
 
     /**
+     * @var string
+     */
+    private $onCreate;
+
+    /**
+     * @var string
+     */
+    private $charset;
+
+    /**
+     * @var string
+     */
+    private $collation;
+
+    /**
      * @param string $name
-     * @param string $nameWithoutPrefix
      * @param string $type
+     * @param string $nameWithoutPrefix
      * @param string $resource
      * @param string $engine
+     * @param string $charset
+     * @param string $collation
+     * @param string $onCreate
      * @param string|null $comment
      * @param array $columns
      * @param array $indexes
      * @param array $constraints
-     * @internal param string $nameWithPrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,
@@ -82,6 +100,9 @@ class Table extends GenericElement implements
         string $nameWithoutPrefix,
         string $resource,
         string $engine,
+        string $charset,
+        string $collation,
+        string $onCreate,
         string $comment = null,
         array $columns = [],
         array $indexes = [],
@@ -95,10 +116,14 @@ class Table extends GenericElement implements
         $this->engine = $engine;
         $this->nameWithoutPrefix = $nameWithoutPrefix;
         $this->comment = $comment;
+        $this->onCreate = $onCreate;
+        $this->charset = $charset;
+        $this->collation = $collation;
     }
 
     /**
      * Return different table constraints.
+     *
      * It can be constraint like unique key or reference to another table, etc
      *
      * @return Constraint[]
@@ -109,12 +134,14 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Get constraint by name.
+     *
      * @param string $name
      * @return Constraint | bool
      */
     public function getConstraintByName($name)
     {
-        return isset($this->constraints[$name]) ? $this->constraints[$name] : false;
+        return $this->constraints[$name] ?? false;
     }
 
     /**
@@ -136,6 +163,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Returns primary constraint
+     *
      * As primary constraint always have one name
      * and can be only one for table
      * it name is allocated into it constraint
@@ -144,22 +173,40 @@ class Table extends GenericElement implements
      */
     public function getPrimaryConstraint()
     {
-        return isset($this->constraints[Internal::PRIMARY_NAME]) ?
-            $this->constraints[Internal::PRIMARY_NAME] :
-            false;
+        return $this->constraints[Internal::PRIMARY_NAME] ?? false;
     }
 
     /**
+     * Retrieve internal constraints
+     *
+     * @return array
+     */
+    public function getInternalConstraints() : array
+    {
+        $constraints = [];
+        foreach ($this->getConstraints() as $constraint) {
+            if ($constraint instanceof Internal) {
+                $constraints[] = $constraint;
+            }
+        }
+
+        return $constraints;
+    }
+
+    /**
+     * Get index by name
+     *
      * @param string $name
      * @return Index | bool
      */
     public function getIndexByName($name)
     {
-        return isset($this->indexes[$name]) ? $this->indexes[$name] : false;
+        return $this->indexes[$name] ?? false;
     }
 
     /**
      * Return all columns.
+     *
      * Note, table always must have columns
      *
      * @return Column[]
@@ -190,6 +237,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Add constraints
+     *
      * This is workaround, as any DTO object couldnt be changed after instantiation.
      * However there is case, when we have 2 tables with constraints in different tables,
      * that depends to each other table. So we need to setup DTO first and only then pass
@@ -213,6 +262,16 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Retrieve information about trigger
+     *
+     * @return string
+     */
+    public function getOnCreate()
+    {
+        return $this->onCreate;
+    }
+
+    /**
      * If column exists - retrieve column
      *
      * @param  string $nameOrId
@@ -229,6 +288,7 @@ class Table extends GenericElement implements
 
     /**
      * Retrieve elements by specific type
+     *
      * Allowed types: columns, constraints, indexes...
      *
      * @param  string $type
@@ -244,6 +304,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Add indexes
+     *
      * This is workaround, as any DTO object couldnt be changed after instantiation.
      * However there is case, when we depends on column definition we need modify our indexes
      *
@@ -263,6 +325,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Get engine name
+     *
      * @return string
      */
     public function getEngine(): string
@@ -278,11 +342,35 @@ class Table extends GenericElement implements
         return [
             'resource' => $this->getResource(),
             'engine' => $this->getEngine(),
-            'comment' => $this->getComment()
+            'comment' => $this->getComment(),
+            'charset' => $this->getCharset(),
+            'collation' => $this->getCollation()
         ];
     }
 
     /**
+     * Return charset of table
+     *
+     * @return string
+     */
+    public function getCharset() : string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Return charset of table
+     *
+     * @return string
+     */
+    public function getCollation() : string
+    {
+        return $this->collation;
+    }
+
+    /**
+     * Get name without prefix
+     *
      * @return string
      */
     public function getNameWithoutPrefix(): string
@@ -291,6 +379,8 @@ class Table extends GenericElement implements
     }
 
     /**
+     * Get comment
+     *
      * @return null|string
      */
     public function getComment()

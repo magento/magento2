@@ -169,6 +169,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function getUrlDataProvider()
     {
         return [

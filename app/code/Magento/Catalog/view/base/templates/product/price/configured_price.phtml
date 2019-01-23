@@ -6,19 +6,58 @@
 ?>
 <?php
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+$schema = ($block->getZone() == 'item_view') ? true : false;
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $block->getPrice();
-$schema = ($block->getZone() == 'item_view') ? true : false;
-$priceLabel = ($block->getPriceLabel() !== null)
-    ? $block->getPriceLabel()
-    : '';
+/** @var \Magento\Catalog\Pricing\Price\ConfiguredRegularPrice $configuredRegularPrice */
+$configuredRegularPrice = $block->getPriceType(
+    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE
+);
 ?>
-<p class="price-as-configured">
-    <?= /* @escapeNotVerified */ $block->renderAmount($configuredPrice->getAmount(), [
-        'display_label'     => $priceLabel,
-        'price_id'          => $block->getPriceId('product-price-'),
-        'price_type'        => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema
-    ]); ?>
-</p>
+<?php if ($configuredPrice->getAmount()->getValue() < $configuredRegularPrice->getAmount()->getValue()) : ?>
+    <p class="price-as-configured">
+        <span class="special-price">
+            <?= /* @noEscape */ $block->renderAmount(
+                $configuredPrice->getAmount(),
+                [
+                    'display_label'     => $block->escapeHtml(__('Special Price')),
+                    'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                    'price_type'        => 'finalPrice',
+                    'include_container' => true,
+                    'schema' => $schema,
+                ]
+            ); ?>
+        </span>
+        <span class="old-price">
+            <?= /* @noEscape */ $block->renderAmount(
+                $configuredRegularPrice->getAmount(),
+                [
+                    'display_label'     => $block->escapeHtml(__('Regular Price')),
+                    'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
+                    'price_type'        => 'oldPrice',
+                    'include_container' => true,
+                    'skip_adjustments'  => true,
+                ]
+            ); ?>
+        </span>
+    </p>
+<?php else : ?>
+    <?php
+    $priceLabel = ($block->getPriceLabel() !== null)
+        ? $block->getPriceLabel()
+        : '';
+    ?>
+    <p class="price-as-configured">
+        <?= /* @noEscape */ $block->renderAmount(
+            $configuredPrice->getAmount(),
+            [
+                'display_label'     => $block->escapeHtml($priceLabel),
+                'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                'price_type'        => 'finalPrice',
+                'include_container' => true,
+                'schema' => $schema,
+            ]
+        ); ?>
+    </p>
+<?php endif; ?>

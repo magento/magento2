@@ -82,7 +82,7 @@ class AuthSession
                 $this->sessionsManager->getCurrentSession()->getStatus()
             );
         } elseif ($message = $this->sessionsManager->getLogoutReasonMessage()) {
-            $this->messageManager->addError($message);
+            $this->messageManager->addErrorMessage($message);
         }
 
         return $this;

@@ -29,6 +29,9 @@ class DocRootLocatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $model->isPub());
     }
 
+    /**
+     * @return array
+     */
     public function isPubDataProvider()
     {
         return [

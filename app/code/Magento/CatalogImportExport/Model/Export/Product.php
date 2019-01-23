@@ -5,10 +5,12 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Export entity product model
@@ -18,6 +20,7 @@ use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
@@ -202,7 +205,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @var Collection
      */
     protected $_optionColFactory;
 
@@ -347,12 +350,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private $productEntityLinkField;
 
     /**
+     * Product constructor.
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\ResourceModel\ProductFactory $productFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFactory
@@ -361,10 +365,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      * @param Product\Type\Factory $_typeFactory
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-     * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param ProductEntity\LinkTypeProvider $linkTypeProvider
+     * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -518,10 +522,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
+        
+        $productEntityJoinField = $this->getProductEntityLinkField();
+
         $select = $this->_connection->select()->from(
             ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                "mgvte.{$this->getProductEntityLinkField()}",
+                "mgvte.$productEntityJoinField",
                 'mgvte.value_id'
             ]
         )->joinLeft(
@@ -533,7 +540,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             ]
         )->joinLeft(
             ['mgv' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value')],
-            '(mg.value_id = mgv.value_id)',
+            "(mg.value_id = mgv.value_id) and (mgvte.$productEntityJoinField = mgv.$productEntityJoinField)",
             [
                 'mgv.label',
                 'mgv.position',
@@ -541,14 +548,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.store_id',
             ]
         )->where(
-            "mgvte.{$this->getProductEntityLinkField()} IN (?)",
+            "mgvte.$productEntityJoinField IN (?)",
             $productIds
         );
 
         $rowMediaGallery = [];
         $stmt = $this->_connection->query($select);
         while ($mediaRow = $stmt->fetch()) {
-            $rowMediaGallery[$mediaRow[$this->getProductEntityLinkField()]][] = [
+            $rowMediaGallery[$mediaRow[$productEntityJoinField]][] = [
                 '_media_attribute_id' => $mediaRow['attribute_id'],
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],
@@ -690,7 +697,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Get header columns
+     *
+     * @return string[]
      */
     public function _getHeaderColumns()
     {
@@ -749,7 +758,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Get entity collection
+     *
+     * @param bool $resetCollection
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     protected function _getEntityCollection($resetCollection = false)
     {
@@ -794,7 +806,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
-            $this->_itemsPerPage = intval(
+            $this->_itemsPerPage = (int)(
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
             );
             if ($this->_itemsPerPage < $minProductsLimit) {
@@ -856,7 +868,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * Apply filter to collection and add not skipped attributes to select.
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @since 100.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
@@ -918,6 +933,28 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Load products' data from the collection and filter it (if needed).
+     *
+     * @return array Keys are product IDs, values arrays with keys as store IDs
+     *               and values as store-specific versions of Product entity.
+     */
+    protected function loadCollection(): array
+    {
+        $data = [];
+
+        $collection = $this->_getEntityCollection();
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setStoreId($storeId);
+            foreach ($collection as $itemId => $item) {
+                $data[$itemId][$storeId] = $item;
+            }
+        }
+        $collection->clear();
+
+        return $data;
+    }
+
+    /**
      * Collect export data for all products
      *
      * @return array
@@ -927,14 +964,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectRawData()
     {
         $data = [];
-        $collection = $this->_getEntityCollection();
-        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
-            $collection->setStoreId($storeId);
-            /**
-             * @var int $itemId
-             * @var \Magento\Catalog\Model\Product $item
-             */
-            foreach ($collection as $itemId => $item) {
+        $items = $this->loadCollection();
+
+        /**
+         * @var int $itemId
+         * @var ProductEntity[] $itemByStore
+         */
+        foreach ($items as $itemId => $itemByStore) {
+            foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+                $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
                 $productLinkId = $item->getData($this->getProductEntityLinkField());
                 foreach ($this->_getExportAttrCodes() as $code) {
@@ -1012,7 +1050,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
-            $collection->clear();
         }
 
         return $data;
@@ -1038,6 +1075,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect multi raw data from
+     *
      * @return array
      */
     protected function collectMultirawData()
@@ -1079,6 +1118,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Check the current data has multiselect value
+     *
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
@@ -1091,6 +1132,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect multiselect values based on value
+     *
      * @param \Magento\Catalog\Model\Product $item
      * @param string $attrCode
      * @param int $storeId
@@ -1115,6 +1158,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Check attribute is valid.
+     *
      * @param string $code
      * @param mixed $value
      * @return bool
@@ -1130,10 +1175,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $isValid = false;
         }
 
+        if (is_array($value)) {
+            $isValid = false;
+        }
+
         return $isValid;
     }
 
     /**
+     * Append multi row data
+     *
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1263,6 +1314,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Add multi row data to export
+     *
      * @deprecated 100.1.0
      * @param array $dataRow
      * @param array $multiRawData
@@ -1310,6 +1363,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Convert option row to cell string
+     *
      * @param array $option
      * @return string
      */
@@ -1325,6 +1380,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect custom options data for products that will be exported.
+     *
+     * Option name and type will be collected for all store views, all other data (which can't be changed on store view
+     * level will be collected for DEFAULT_STORE_ID only.
+     * Store view specified data will be saved to the additional store view row.
+     *
      * @param int[] $productIds
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1335,49 +1396,48 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $customOptionsData = [];
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
-            if (Store::DEFAULT_STORE_ID != $storeId) {
-                continue;
-            }
             $options = $this->_optionColFactory->create();
-            /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->reset();
-            $options->addOrder('sort_order', 'ASC');
-            $options->addTitleToResult($storeId);
-            $options->addPriceToResult($storeId);
-            $options->addProductToFilter($productIds);
-            $options->addValuesToResult($storeId);
+            /* @var Collection $options*/
+            $options->reset()
+                ->addOrder('sort_order', Collection::SORT_ORDER_ASC)
+                ->addTitleToResult($storeId)
+                ->addPriceToResult($storeId)
+                ->addProductToFilter($productIds)
+                ->addValuesToResult($storeId);
 
             foreach ($options as $option) {
                 $row = [];
                 $productId = $option['product_id'];
-
                 $row['name'] = $option['title'];
                 $row['type'] = $option['type'];
-                $row['required'] = $option['is_require'];
-                $row['price'] = $option['price'];
-                $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
-                $row['sku'] = $option['sku'];
-                if ($option['max_characters']) {
-                    $row['max_characters'] = $option['max_characters'];
-                }
-
-                foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
-                    if (!isset($option[$fileOptionKey])) {
-                        continue;
+                if (Store::DEFAULT_STORE_ID === $storeId) {
+                    $row['required'] = $option['is_require'];
+                    $row['price'] = $option['price'];
+                    $row['price_type'] = ($option['price_type'] === 'percent') ? 'percent' : 'fixed';
+                    $row['sku'] = $option['sku'];
+                    if ($option['max_characters']) {
+                        $row['max_characters'] = $option['max_characters'];
                     }
 
-                    $row[$fileOptionKey] = $option[$fileOptionKey];
-                }
+                    foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+                        if (!isset($option[$fileOptionKey])) {
+                            continue;
+                        }
 
+                        $row[$fileOptionKey] = $option[$fileOptionKey];
+                    }
+                }
                 $values = $option->getValues();
 
                 if ($values) {
                     foreach ($values as $value) {
-                        $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
                         $row['option_title'] = $value['title'];
-                        $row['price'] = $value['price'];
-                        $row['price_type'] = $valuePriceType;
-                        $row['sku'] = $value['sku'];
+                        if (Store::DEFAULT_STORE_ID === $storeId) {
+                            $row['option_title'] = $value['title'];
+                            $row['price'] = $value['price'];
+                            $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
+                            $row['sku'] = $value['sku'];
+                        }
                         $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                     }
                 } else {

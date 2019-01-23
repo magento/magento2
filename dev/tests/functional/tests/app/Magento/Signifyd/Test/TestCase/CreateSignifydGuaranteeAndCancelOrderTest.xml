@@ -62,7 +62,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
     </testCase>
 </config>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddressStateFieldShouldNotAcceptJustIntegerValuesTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="MAGETWO-91465"/>
+            <title value="Guest Checkout"/>
+            <description value="Address State field should not allow just integer values"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93203"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}"/>
+        <waitForPageLoad stepKey="waitFormToReload"/>
+        <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="1" stepKey="enterStateAsIntegerValue"/>
+        <waitForPageLoad stepKey="waitforFormValidation"/>
+        <see userInput="First character must be letter." stepKey="seeTheErrorMessageDisplayed"/>
+        <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput=" 1" stepKey="enterStateAsIntegerValue1"/>
+        <waitForPageLoad stepKey="waitforFormValidation1"/>
+        <see userInput="First character must be letter." stepKey="seeTheErrorMessageDisplayed1"/>
+        <fillField selector="{{CheckoutShippingSection.stateInput}}" userInput="ABC1" stepKey="enterStateAsIntegerValue2"/>
+        <waitForPageLoad stepKey="waitforFormValidation2"/>
+        <dontSee userInput="First character must be letter." stepKey="seeTheErrorMessageIsNotDisplayed"/>
+    </test>
+</tests>

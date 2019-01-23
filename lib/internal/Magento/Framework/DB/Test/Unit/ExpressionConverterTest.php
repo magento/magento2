@@ -22,6 +22,9 @@ class ExpressionConverterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function shortenEntityNameDataProvider()
     {
         $length64 = '________________________________________________________________';

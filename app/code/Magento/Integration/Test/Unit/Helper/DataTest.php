@@ -33,6 +33,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->dataHelper->isConfigType($integrationsData));
     }
 
+    /**
+     * @return array
+     */
     public function integrationDataProvider()
     {
         return [

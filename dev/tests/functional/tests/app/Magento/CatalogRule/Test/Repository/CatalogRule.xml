@@ -150,5 +150,19 @@
             <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
         </dataset>
+
+        <dataset name="apply_as_10_percentage">
+            <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
+            <field name="description" xsi:type="string">Catalog Price Rule Description</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
+            <field name="discount_amount" xsi:type="string">10</field>
+        </dataset>
     </repository>
 </config>

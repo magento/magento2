@@ -6,18 +6,45 @@
 /*eslint max-nested-callbacks: 0*/
 
 define([
-    'Magento_Ui/js/form/element/boolean'
-], function (BooleanElement) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/boolean', function () {
-        var params, model;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            model,
+            dataScope = 'dataScope';
 
-        beforeEach(function () {
-            params = {
-                dataScope: 'abstract'
-            };
-            model = new BooleanElement(params);
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/boolean',
+                'knockoutjs/knockout-es5'
+            ], function (Constr) {
+                model = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope
+                });
+
+                done();
+            });
         });
 
         describe('getInitialValue method', function () {

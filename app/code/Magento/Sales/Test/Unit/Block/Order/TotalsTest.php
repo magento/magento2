@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Framework\Registry;
@@ -51,6 +53,10 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param array $expected
+     * @param array $actual
+     */
     private function assertEqualsSorted(array $expected, array $actual)
     {
         $this->assertEquals($expected, $actual, 'Array contents should be equal.');

@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+/**
+ * Tests \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType.
+ */
 class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -44,9 +47,17 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider prepareAttributesWithDefaultValueForSaveDataProvider
+     *
+     * @param array $rowData
+     * @param bool  $withDefaultValue
+     * @param array $expectedAttributes
+     * @return void
      */
-    public function testPrepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue, $expectedAttributes)
-    {
+    public function testPrepareAttributesWithDefaultValueForSave(
+        array $rowData,
+        bool $withDefaultValue,
+        array $expectedAttributes
+    ): void {
         $actualAttributes = $this->_model->prepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue);
         foreach ($expectedAttributes as $key => $value) {
             $this->assertArrayHasKey($key, $actualAttributes);
@@ -54,7 +65,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function prepareAttributesWithDefaultValueForSaveDataProvider()
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function prepareAttributesWithDefaultValueForSaveDataProvider(): array
     {
         return [
             'Updating existing product with attributes that do not have default values' => [
@@ -136,19 +151,54 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                     'options_container' => 'container2',
                     'msrp_display_actual_price_type' => 2
                 ],
-            ]
+            ],
+            'Adding new product with empty attribute value for attribute_type = select' => [
+                [
+                    'sku' => 'simple_product_5',
+                    'store_view_code' => '',
+                    '_attribute_set' => 'Default',
+                    'product_type' => 'simple',
+                    'categories' => '_root_category',
+                    'website_code' => '',
+                    'name' => 'Simple Product 5',
+                    'price' => 150,
+                    'status' => 1,
+                    'tax_class_id' => ' ',
+                    'weight' => 1,
+                    'description' => 'a',
+                    'short_description' => 'a',
+                    'visibility' => 'not visible individually',
+                    'addition_attribute' => '',
+                ],
+                true,
+                [
+                    'name' => 'Simple Product 5',
+                    'price' => 150,
+                    'status' => 1,
+                    'tax_class_id' => ' ',
+                    'weight' => 1,
+                    'description' => 'a',
+                    'short_description' => 'a',
+                    'visibility' => 1,
+                    'options_container' => 'container2',
+                    'msrp_display_actual_price_type' => 0,
+                ],
+            ],
         ];
     }
 
     /**
      * Test cleaning imported attribute data from empty values (note '0' is not empty).
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation  enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
-     * @dataProvider clearEmptyDataDataProvider
+     * @magentoDataFixture  Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
+     * @dataProvider        clearEmptyDataDataProvider
+     * @param array $rowData
+     * @param array $expectedAttributes
+     * @return void
      */
-    public function testClearEmptyData($rowData, $expectedAttributes)
+    public function testClearEmptyData(array $rowData, array $expectedAttributes): void
     {
         $actualAttributes = $this->_model->clearEmptyData($rowData);
         foreach ($expectedAttributes as $key => $value) {
@@ -162,7 +212,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function clearEmptyDataDataProvider()
+    public function clearEmptyDataDataProvider(): array
     {
         // We use sku attribute to test static attributes.
         return [

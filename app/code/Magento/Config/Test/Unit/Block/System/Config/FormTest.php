@@ -102,6 +102,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\Config\Block\System\Config\Form\Fieldset\Factory::class
         );
         $this->_fieldFactoryMock = $this->createMock(\Magento\Config\Block\System\Config\Form\Field\Factory::class);
+        $settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_coreConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_backendConfigMock = $this->createMock(\Magento\Config\Model\Config::class);
@@ -153,6 +156,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'fieldsetFactory' => $this->_fieldsetFactoryMock,
             'fieldFactory' => $this->_fieldFactoryMock,
             'context' => $context,
+            'settingChecker' => $settingCheckerMock,
         ];
 
         $objectArguments = $helper->getConstructArguments(\Magento\Config\Block\System\Config\Form::class, $data);
@@ -227,6 +231,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_formMock, $object->getForm());
     }
 
+    /**
+     * @return array
+     */
     public function initFormDataProvider()
     {
         return [
@@ -340,6 +347,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $object->initForm();
     }
 
+    /**
+     * @return array
+     */
     public function initGroupDataProvider()
     {
         return [
@@ -526,7 +536,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $elementVisibilityMock->expects($this->once())
+        $elementVisibilityMock->expects($this->any())
             ->method('isDisabled')
             ->willReturn($isDisabled);
 

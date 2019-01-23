@@ -13,6 +13,9 @@ namespace Magento\Framework\MessageQueue;
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetConsumers()
     {
         $consumers = $this->getConfigData()->getConsumers();
@@ -20,6 +23,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedParsedConfig['consumers'], $consumers);
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetPublishers()
     {
         $publishers = $this->getConfigData()->getPublishers();
@@ -27,6 +33,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedParsedConfig['publishers'], $publishers);
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetBinds()
     {
         $binds = $this->getConfigData()->getBinds();
@@ -34,6 +43,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedParsedConfig['binds'], $binds);
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetMaps()
     {
         $topicName = 'topic.broker.test';
@@ -45,6 +57,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetTopic()
     {
         $topicName = 'topic.broker.test';
@@ -155,7 +170,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
         return $objectManager->create(
-            \Magento\Framework\MessageQueue\ConfigInterface::class,
+            \Magento\Framework\MessageQueue\Config::class,
             ['queueConfigData' => $configData]
         );
     }

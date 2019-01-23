@@ -307,7 +307,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get first col from from first row for option table
+     * Get first col from first row for option table
      *
      * @param string $tableName
      * @param int $optionId

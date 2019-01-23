@@ -17,6 +17,11 @@ class Sample
     protected $messages = [];
 
     /**
+     * @var array
+     */
+    private $config = [];
+
+    /**
      * @param array $messages
      */
     public function setMessages(array $messages)
@@ -30,5 +35,21 @@ class Sample
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * @param array $config
+     */
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
     }
 }

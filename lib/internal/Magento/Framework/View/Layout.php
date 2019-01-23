@@ -13,7 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Layout\Element;
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Psr\Log\LoggerInterface as Logger;
 
 /**

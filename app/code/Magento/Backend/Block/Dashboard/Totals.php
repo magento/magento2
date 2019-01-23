@@ -16,7 +16,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     /**
      * @var string
      */
-    protected $_template = 'dashboard/totalbar.phtml';
+    protected $_template = 'Magento_Backend::dashboard/totalbar.phtml';
 
     /**
      * @var \Magento\Framework\Module\Manager

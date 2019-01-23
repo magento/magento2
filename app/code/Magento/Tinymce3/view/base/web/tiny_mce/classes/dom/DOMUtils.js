@@ -1106,7 +1106,7 @@
 
 		/**
 		 * Returns a unique id. This can be useful when generating elements on the fly.
-		 * This method will not check if the element allready exists.
+		 * This method will not check if the element already exists.
 		 *
 		 * @method uniqueId
 		 * @param {String} p Optional prefix to add infront of all ids defaults to "mce_".

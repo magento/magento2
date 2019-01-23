@@ -5,10 +5,24 @@
  */
 namespace Magento\Ups\Test\Unit\Model;
 
-use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Ups\Model\Carrier;
 use Magento\Directory\Model\Country;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\ClientFactory;
+use Magento\Framework\HTTP\ClientInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
+use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Shipping\Model\Simplexml\Element;
+use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Ups\Model\Carrier;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,125 +36,134 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     * @var Error|MockObject
      */
-    protected $error;
+    private $error;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
-    protected $helper;
+    private $helper;
 
     /**
      * Model under test
      *
-     * @var \Magento\Ups\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var Carrier|MockObject
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ErrorFactory|MockObject
      */
-    protected $errorFactory;
+    private $errorFactory;
 
     /**
-     * @var \Magento\Ups\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $carrier;
+    private $scope;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CountryFactory
      */
-    protected $scope;
-
-    /**
-     * @var \Magento\Directory\Model\CountryFactory
-     */
-    protected $countryFactory;
+    private $countryFactory;
 
     /**
      * @var Country|MockObject
      */
-    protected $country;
+    private $country;
 
     /**
-     * @var \Magento\Framework\Model\AbstractModel
+     * @var AbstractModel
      */
-    protected $abstractModel;
+    private $abstractModel;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\Result
+     * @var Result
      */
-    protected $rate;
+    private $rate;
+
+    /**
+     * @var ClientInterface|MockObject
+     */
+    private $httpClient;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
 
     protected function setUp()
     {
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new ObjectManager($this);
 
-        $this->scope = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->scope->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->will(
-            $this->returnCallback([$this, 'scopeConfiggetValue'])
-        );
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
-        $this->error = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\Error::class)
+        $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
 
-        $this->errorFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory::class)
+        $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+        $this->errorFactory->method('create')
+            ->willReturn($this->error);
 
-        $this->rate = $this->createPartialMock(\Magento\Shipping\Model\Rate\Result::class, ['getError']);
-        $rateFactory = $this->createPartialMock(\Magento\Shipping\Model\Rate\ResultFactory::class, ['create']);
+        $rateFactory = $this->getRateFactory();
 
-        $rateFactory->expects($this->any())->method('create')->willReturn($this->rate);
-
-        $this->country = $this->getMockBuilder(\Magento\Directory\Model\Country::class)
+        $this->country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getData'])
             ->getMock();
 
-        $this->abstractModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
 
-        $this->country->expects($this->any())->method('load')->willReturn($this->abstractModel);
+        $this->country->method('load')
+            ->willReturn($this->abstractModel);
 
-        $this->countryFactory = $this->getMockBuilder(\Magento\Directory\Model\CountryFactory::class)
+        $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->countryFactory->expects($this->any())->method('create')->willReturn($this->country);
+        $this->countryFactory->method('create')
+            ->willReturn($this->country);
+
+        $xmlFactory = $this->getXmlFactory();
+        $httpClientFactory = $this->getHttpClientFactory();
+
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->model = $this->helper->getObject(
-            \Magento\Ups\Model\Carrier::class,
+            Carrier::class,
             [
                 'scopeConfig' => $this->scope,
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
-                'rateFactory' => $rateFactory
+                'rateFactory' => $rateFactory,
+                'xmlElFactory' => $xmlFactory,
+                'logger' => $this->logger,
+                'httpClientFactory' => $httpClientFactory,
             ]
         );
     }
 
     /**
-     * Callback function, emulates getValue function
-     * @param $path
+     * Callback function, emulates getValue function.
+     *
+     * @param string $path
      * @return null|string
      */
-    public function scopeConfiggetValue($path)
+    public function scopeConfigGetValue(string $path)
     {
         $pathMap = [
             'carriers/ups/free_method' => 'free_method',
@@ -150,6 +173,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
             'carriers/ups/type' => 'UPS',
+            'carriers/ups/debug' => 1,
+            'carriers/ups/username' => 'user',
+            'carriers/ups/password' => 'pass',
+            'carriers/ups/access_license_number' => 'acn',
         ];
 
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
@@ -162,7 +189,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param bool $freeShippingEnabled
      * @param int $requestSubtotal
      * @param int $expectedPrice
-     * @covers       \Magento\Shipping\Model\Carrier\AbstractCarrierOnline::getMethodPrice
      */
     public function testGetMethodPrice(
         $cost,
@@ -172,11 +198,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $expectedPrice
     ) {
         $path = 'carriers/' . $this->model->getCarrierCode() . '/';
-        $this->scope->expects($this->any())->method('isSetFlag')->with($path . 'free_shipping_enable')->will(
-            $this->returnValue($freeShippingEnabled)
-        );
+        $this->scope->method('isSetFlag')
+            ->with($path . 'free_shipping_enable')
+            ->willReturn($freeShippingEnabled);
 
-        $request = new \Magento\Quote\Model\Quote\Address\RateRequest();
+        $request = new RateRequest();
         $request->setBaseSubtotalInclTax($requestSubtotal);
         $this->model->setRawRequest($request);
         $price = $this->model->getMethodPrice($cost, $shippingMethod);
@@ -220,11 +246,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectRatesErrorMessage()
     {
-        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(false);
+        $this->scope->method('isSetFlag')
+            ->willReturn(false);
 
-        $this->error->expects($this->once())->method('setCarrier')->with('ups');
-        $this->error->expects($this->once())->method('setCarrierTitle');
-        $this->error->expects($this->once())->method('setErrorMessage');
+        $this->error->method('setCarrier')
+            ->with('ups');
+        $this->error->method('setCarrierTitle');
+        $this->error->method('setErrorMessage');
 
         $request = new RateRequest();
         $request->setPackageWeight(1);
@@ -234,7 +262,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     public function testCollectRatesFail()
     {
-        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
+        $this->scope->method('isSetFlag')
+            ->willReturn(true);
 
         $request = new RateRequest();
         $request->setPackageWeight(1);
@@ -260,7 +289,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $result = $refMethod->invoke($this->model, $data);
         $expectedXml = new \SimpleXMLElement($expected);
         $resultXml = new \SimpleXMLElement($result);
-        static::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
     }
 
     /**
@@ -313,7 +342,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Ups\Model\Carrier::setRequest
      * @param string $countryCode
      * @param string $foundCountryCode
      * @dataProvider countryDataProvider
@@ -330,13 +358,12 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'dest_country_id' => $countryCode,
         ]);
 
-        $this->country->expects(static::at(1))
+        $this->country->expects($this->at(1))
             ->method('load')
             ->with($countryCode)
             ->willReturnSelf();
 
-        $this->country->expects(static::any())
-            ->method('getData')
+        $this->country->method('getData')
             ->with('iso2_code')
             ->willReturn($foundCountryCode);
 
@@ -353,5 +380,119 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ['countryCode' => 'PR', 'foundCountryCode' => null],
             ['countryCode' => 'US', 'foundCountryCode' => 'US'],
         ];
+    }
+
+    /**
+     * Checks a case when UPS processes request to create shipment.
+     *
+     * @return void
+     */
+    public function testRequestToShipment()
+    {
+        // the same tracking number is specified in the fixtures XML file.
+        $trackingNumber = '1Z207W886698856557';
+        $packages = $this->getPackages();
+        $request = new DataObject(['packages' => $packages]);
+        $shipmentResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentConfirmResponse.xml');
+        $acceptResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentAcceptResponse.xml');
+
+        $this->httpClient->method('getBody')
+            ->willReturnOnConsecutiveCalls($shipmentResponse->asXML(), $acceptResponse->asXML());
+
+        $this->logger->expects($this->atLeastOnce())
+            ->method('debug')
+            ->with($this->stringContains('<UserId>****</UserId>'));
+
+        $result = $this->model->requestToShipment($request);
+        $this->assertEmpty($result->getErrors());
+
+        $info = $result->getInfo()[0];
+        $this->assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
+    }
+
+    /**
+     * Creates mock for XML factory.
+     *
+     * @return ElementFactory|MockObject
+     */
+    private function getXmlFactory(): MockObject
+    {
+        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $xmlElFactory->method('create')
+            ->willReturnCallback(
+                function ($data) {
+                    $helper = new ObjectManager($this);
+
+                    return $helper->getObject(
+                        Element::class,
+                        ['data' => $data['data']]
+                    );
+                }
+            );
+
+        return $xmlElFactory;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPackages(): array
+    {
+        $packages = [
+            'package' => [
+                'params' => [
+                    'width' => '3',
+                    'length' => '3',
+                    'height' => '3',
+                    'dimension_units' => 'INCH',
+                    'weight_units' => 'POUND',
+                    'weight' => '0.454000000001',
+                    'customs_value' => '10.00',
+                    'container' => 'Small Express Box',
+                ],
+                'items' => [
+                    'item1' => [
+                        'name' => 'item_name',
+                    ],
+                ],
+            ],
+        ];
+
+        return $packages;
+    }
+
+    /**
+     * Creates mocks for http client factory and client.
+     *
+     * @return ClientFactory|MockObject
+     */
+    private function getHttpClientFactory(): MockObject
+    {
+        $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
+        $httpClientFactory->method('create')
+            ->willReturn($this->httpClient);
+
+        return $httpClientFactory;
+    }
+
+    /**
+     * @return MockObject
+     */
+    private function getRateFactory(): MockObject
+    {
+        $this->rate = $this->createPartialMock(Result::class, ['getError']);
+        $rateFactory = $this->createPartialMock(ResultFactory::class, ['create']);
+
+        $rateFactory->method('create')
+            ->willReturn($this->rate);
+
+        return $rateFactory;
     }
 }

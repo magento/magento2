@@ -33,13 +33,25 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
 
     public function testValidate()
     {
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
+        );
         $refTable = new Table(
             'ref_table',
             'name',
             'table',
             'default',
-            'innodb'
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
         );
 
         $column = new Real('decimal', 'decimal', $table, 10, 5);
@@ -48,6 +60,7 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
             'ref',
             'foreign',
             $table,
+            'ref',
             $column,
             $refTable,
             $refColumn,

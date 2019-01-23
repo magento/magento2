@@ -32,8 +32,16 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
         WishlistIndex $wishlistIndex,
         InjectableFixture $product
     ) {
+        $cmsIndex->open();
         $cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
+
+        $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+            ->isVisible();
+        while (!$isProductVisible && $wishlistIndex->getTopToolbar()->nextPage()) {
+            $isProductVisible = $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)
+                ->isVisible();
+        }
 
         \PHPUnit\Framework\Assert::assertTrue(
             $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->isVisible(),

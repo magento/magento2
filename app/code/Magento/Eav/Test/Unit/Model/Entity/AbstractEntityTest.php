@@ -61,6 +61,9 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->attributesCompare($attribute1, $attribute2));
     }
 
+    /**
+     * @return array
+     */
     public static function compareAttributesDataProvider()
     {
         return [
@@ -313,6 +316,9 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         $model->save($object);
     }
 
+    /**
+     * @return array
+     */
     public function productAttributesDataProvider()
     {
         $attributeSetId = 10;

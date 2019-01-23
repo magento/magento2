@@ -70,7 +70,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testInvalidGetAllItems($items)
     {
         $taxContainer = new \Magento\Framework\DataObject(
-            ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
+            ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amount' => 0.1]
         );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
@@ -85,6 +85,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.3, $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAllItemsDataProvider()
     {
         return [
@@ -143,20 +146,23 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $values['base_tax_amount'] +
             $values['base_discount_tax_compensation_amount'] +
-            $values['base_shipping_discount_tax_compensation_amnt'],
+            $values['base_shipping_discount_tax_compensation_amount'],
             $this->_model->getTax()
         );
         $this->assertEquals($values['base_shipping_amount'], $this->_model->getShipping());
         $this->assertEquals($transferDiscount ? 0.0 : $values['base_discount_amount'], $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidTotalsGetAllItemsDataProvider()
     {
         return [
             [
                 [
                     'base_discount_tax_compensation_amount' => 0,
-                    'base_shipping_discount_tax_compensation_amnt' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
@@ -168,7 +174,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'base_discount_tax_compensation_amount' => 1,
-                    'base_shipping_discount_tax_compensation_amnt' => 2,
+                    'base_shipping_discount_tax_compensation_amount' => 2,
                     'base_subtotal' => 3,
                     'base_tax_amount' => 4,
                     'base_shipping_amount' => 5,
@@ -222,6 +228,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAmountsDataProvider()
     {
         $data = [];
@@ -246,8 +255,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             [
                 'base_discount_tax_compensation_amount' =>
                     $values['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' =>
-                    $values['base_shipping_discount_tax_compensation_amnt'],
+                'base_shipping_discount_tax_compensation_amount' =>
+                    $values['base_shipping_discount_tax_compensation_amount'],
             ]
         );
         $expectedSubtotal = $values['base_subtotal'];

@@ -42,15 +42,21 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
-        $this->operationFactory= $operationFactory;
+        $this->operationFactory = $operationFactory;
         $this->logger = $logger;
     }
     
     /**
      * @inheritDoc
      */
-    public function changeOperationStatus($operationId, $status, $errorCode = null, $message = null, $data = null)
-    {
+    public function changeOperationStatus(
+        $operationId,
+        $status,
+        $errorCode = null,
+        $message = null,
+        $data = null,
+        $resultData = null
+    ) {
         try {
             $operationEntity = $this->operationFactory->create();
             $this->entityManager->load($operationEntity, $operationId);
@@ -58,6 +64,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
             $operationEntity->setStatus($status);
             $operationEntity->setResultMessage($message);
             $operationEntity->setSerializedData($data);
+            $operationEntity->setResultSerializedData($resultData);
             $this->entityManager->save($operationEntity);
         } catch (\Exception $exception) {
             $this->logger->critical($exception->getMessage());

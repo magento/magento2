@@ -35,19 +35,27 @@ class Constraint extends GenericElement implements
     private $table;
 
     /**
+     * @var string
+     */
+    private $nameWithoutPrefix;
+
+    /**
      * Constructor.
      *
      * @param string $name
      * @param string $type
-     * @param Table  $table
+     * @param Table $table
+     * @param string $nameWithoutPrefix
      */
     public function __construct(
         string $name,
         string $type,
-        Table $table
+        Table $table,
+        string $nameWithoutPrefix
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
+        $this->nameWithoutPrefix = $nameWithoutPrefix;
     }
 
     /**
@@ -66,5 +74,15 @@ class Constraint extends GenericElement implements
     public function getElementType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * Retrieve the constraint name which is calculated without table prefix.
+     *
+     * @return string
+     */
+    public function getNameWithoutPrefix()
+    {
+        return $this->nameWithoutPrefix;
     }
 }

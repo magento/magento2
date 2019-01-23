@@ -52,7 +52,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
-        $this->expectException('\LogicException', $expectedExceptionMessage);
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $this->model->validate($configData);
     }
 

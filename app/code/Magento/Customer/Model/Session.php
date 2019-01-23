@@ -487,7 +487,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
-            if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
+            if ($this->_createUrl()->getUseSession()) {
                 $arguments += [
                     '_query' => [
                         $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId(),
@@ -555,7 +555,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Reset core session hosts after reseting session ID
+     * Reset core session hosts after resetting session ID
      *
      * @return $this
      */

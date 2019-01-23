@@ -27,9 +27,9 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @var array
      */
-    protected $registry = array(
+    protected $registry = [
         
-    );
+    ];
 
     /**
      * Extension attributes join processor.

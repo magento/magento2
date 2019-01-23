@@ -31,16 +31,18 @@ class Internal extends Constraint implements ElementDiffAwareInterface
      *
      * @param string $name
      * @param string $type
-     * @param Table  $table
-     * @param array  $columns
+     * @param Table $table
+     * @param string $nameWithoutPrefix
+     * @param array $columns
      */
     public function __construct(
         $name,
         $type,
         Table $table,
+        string $nameWithoutPrefix,
         array $columns
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $nameWithoutPrefix);
         $this->columns = $columns;
     }
 

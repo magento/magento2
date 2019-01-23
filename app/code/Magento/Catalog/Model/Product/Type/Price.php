@@ -341,7 +341,7 @@ class Price
             }
         }
 
-        return $prices ? $prices : [];
+        return $prices ?: [];
     }
 
     /**
@@ -474,14 +474,15 @@ class Price
      *
      * @param   float $qty
      * @param   Product $product
+     *
      * @return  array|float
      */
-    public function getFormatedTierPrice($qty, $product)
+    public function getFormattedTierPrice($qty, $product)
     {
         $price = $product->getTierPrice($qty);
         if (is_array($price)) {
             foreach (array_keys($price) as $index) {
-                $price[$index]['formated_price'] = $this->priceCurrency->convertAndFormat(
+                $price[$index]['formatted_price'] = $this->priceCurrency->convertAndFormat(
                     $price[$index]['website_price']
                 );
             }
@@ -493,14 +494,44 @@ class Price
     }
 
     /**
+     * Get formatted by currency tier price
+     *
+     * @param   float $qty
+     * @param   Product $product
+     *
+     * @return  array|float
+     *
+     * @deprecated
+     * @see getFormattedTierPrice()
+     */
+    public function getFormatedTierPrice($qty, $product)
+    {
+        return $this->getFormattedTierPrice($qty, $product);
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @param   Product $product
+     * @return  array|float
+     */
+    public function getFormattedPrice($product)
+    {
+        return $this->priceCurrency->format($product->getFinalPrice());
+    }
+
+    /**
      * Get formatted by currency product price
      *
      * @param   Product $product
      * @return  array || float
+     *
+     * @deprecated
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
     {
-        return $this->priceCurrency->format($product->getFinalPrice());
+        return $this->getFormattedPrice($product);
     }
 
     /**

@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Address;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
@@ -26,7 +28,7 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormPost extends \Magento\Customer\Controller\Address
+class FormPost extends \Magento\Customer\Controller\Address implements HttpPostActionInterface
 {
     /**
      * @var RegionFactory
@@ -197,17 +199,17 @@ class FormPost extends \Magento\Customer\Controller\Address
         try {
             $address = $this->_extractAddress();
             $this->_addressRepository->save($address);
-            $this->messageManager->addSuccess(__('You saved the address.'));
+            $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($error->getMessage());
+                $this->messageManager->addErrorMessage($error->getMessage());
             }
         } catch (\Exception $e) {
             $redirectUrl = $this->_buildUrl('*/*/index');
-            $this->messageManager->addException($e, __('We can\'t save the address.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t save the address.'));
         }
 
         $url = $redirectUrl;

@@ -3,17 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
+use Magento\Framework\GraphQl\Query\FieldTranslator;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
@@ -21,102 +20,101 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 class Filter
 {
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var SearchResultFactory
      */
     private $searchResultFactory;
 
     /**
-     * @var Product
+     * @var \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product
      */
     private $productDataProvider;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var FieldTranslator
      */
-    private $searchCriteriaBuilder;
+    private $fieldTranslator;
 
     /**
-     * @var FormatterInterface
+     * @var \Magento\Catalog\Model\Layer\Resolver
      */
-    private $formatter;
+    private $layerResolver;
 
     /**
-     * @var PostFetchProcessorInterface[]
-     */
-    private $postProcessors;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FormatterInterface $formatter
-     * @param PostFetchProcessorInterface[] $postProcessors
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param FieldTranslator $fieldTranslator
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        FormatterInterface $formatter,
-        array $postProcessors = []
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
+        FieldTranslator $fieldTranslator
     ) {
-        $this->productRepository = $productRepository;
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->postProcessors = $postProcessors;
-        $this->formatter = $formatter;
+        $this->fieldTranslator = $fieldTranslator;
+        $this->layerResolver = $layerResolver;
     }
 
     /**
      * Filter catalog product data based off given search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param ResolveInfo $info
+     * @param bool $isSearch
      * @return SearchResult
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria)
-    {
-        $realPageSize = $searchCriteria->getPageSize();
-        $realCurrentPage = $searchCriteria->getCurrentPage();
-        // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround for
-        // inaccurate search
-        $searchCriteria->setPageSize(PHP_INT_MAX);
-        $searchCriteria->setCurrentPage(1);
-        $products = $this->productDataProvider->getList($searchCriteria);
+    public function getResult(
+        SearchCriteriaInterface $searchCriteria,
+        ResolveInfo $info,
+        bool $isSearch = false
+    ): SearchResult {
+        $fields = $this->getProductFields($info);
+        $products = $this->productDataProvider->getList($searchCriteria, $fields, $isSearch);
         $productArray = [];
-        $searchCriteria->setPageSize($realPageSize);
-        $searchCriteria->setCurrentPage($realCurrentPage);
-        $paginatedProducts = $this->paginateList($products->getItems(), $searchCriteria);
         /** @var \Magento\Catalog\Model\Product $product */
-        foreach ($paginatedProducts as $product) {
-            $productArray[] = $this->formatter->format($product);
-        }
-
-        foreach ($this->postProcessors as $postProcessor) {
-            $productArray = $postProcessor->process($productArray);
+        foreach ($products->getItems() as $product) {
+            $productArray[$product->getId()] = $product->getData();
+            $productArray[$product->getId()]['model'] = $product;
         }
 
         return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
     }
 
     /**
-     * Paginates array of Ids pulled back in search based off search criteria and total count.
+     * Return field names for all requested product fields.
      *
-     * @param array $ids
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return int[]
+     * @param ResolveInfo $info
+     * @return string[]
      */
-    private function paginateList(array $ids, SearchCriteriaInterface $searchCriteria)
+    private function getProductFields(ResolveInfo $info) : array
     {
-        $length = $searchCriteria->getPageSize();
-        // Search starts pages from 0
-        $offset = $length * ($searchCriteria->getCurrentPage() - 1);
-        return array_slice($ids, $offset, $length);
+        $fieldNames = [];
+        foreach ($info->fieldNodes as $node) {
+            if ($node->name->value !== 'products') {
+                continue;
+            }
+            foreach ($node->selectionSet->selections as $selection) {
+                if ($selection->name->value !== 'items') {
+                    continue;
+                }
+
+                foreach ($selection->selectionSet->selections as $itemSelection) {
+                    if ($itemSelection->kind === 'InlineFragment') {
+                        foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
+                            if ($inlineSelection->kind === 'InlineFragment') {
+                                continue;
+                            }
+                            $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
+                        }
+                        continue;
+                    }
+                    $fieldNames[] = $this->fieldTranslator->translate($itemSelection->name->value);
+                }
+            }
+        }
+
+        return $fieldNames;
     }
 }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultImageConfigurableTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add default images for a Configurable Product"/>
+            <description value="Admin should be able to add default images for a Configurable Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-101"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="BaseConfigurableProduct" stepKey="baseConfigProductHandle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
+            <deleteData createDataKey="childProductHandle2" stepKey="deleteChild2"/>
+            <deleteData createDataKey="baseConfigProductHandle" stepKey="deleteConfig"/>
+            <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGrid">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid1"/>
+
+        <!-- Add image to product -->
+        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!-- Assert product image in admin product form -->
+        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+
+        <!-- Assert product image in storefront product page -->
+        <actionGroup ref="assertProductImageStorefrontProductPage2" stepKey="assertProductImageStorefrontProductPage">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+    </test>
+</tests>

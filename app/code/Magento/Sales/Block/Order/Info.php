@@ -23,7 +23,7 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/info.phtml';
+    protected $_template = 'Magento_Sales::order/info.phtml';
 
     /**
      * Core registry

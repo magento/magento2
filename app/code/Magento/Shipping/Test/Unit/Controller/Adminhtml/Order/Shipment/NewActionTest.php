@@ -87,6 +87,11 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     protected $pageTitleMock;
 
     /**
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentProviderMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -128,6 +133,10 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Session::class,
             ['setIsUrlNotice', 'getCommentText']
         );
+        $this->shipmentProviderMock = $this->getMockBuilder(\Magento\Shipping\Model\ShipmentProviderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipmentData'])
+            ->getMockForAbstractClass();
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
         $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
@@ -166,7 +175,7 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction::class,
             [
                 'context' => $this->context, 'shipmentLoader' => $this->shipmentLoader, 'request' => $this->request,
-                'response' => $this->response, 'view' => $this->view
+                'response' => $this->response, 'view' => $this->view, 'shipmentProvider' => $this->shipmentProviderMock
             ]
         );
     }
@@ -188,7 +197,6 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
                     [
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipmentData],
                         ['tracking', null, $tracking],
                     ]
                 )
@@ -261,6 +269,9 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->method('getBlock')
             ->with('menu')
             ->will($this->returnValue($menuBlock));
+        $this->shipmentProviderMock->expects($this->once())
+            ->method('getShipmentData')
+            ->willReturn($shipmentData);
 
         $this->assertNull($this->newAction->execute());
     }

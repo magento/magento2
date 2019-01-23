@@ -110,8 +110,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCircular($startingClass, $terminationClass)
     {
-        $this->expectException(
-            '\LogicException',
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage(
             sprintf('Circular dependency: %s depends on %s and vice versa.', $startingClass, $terminationClass)
         );
         $this->factory->create($startingClass);

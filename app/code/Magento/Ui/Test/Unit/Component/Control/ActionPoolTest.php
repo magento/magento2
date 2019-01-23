@@ -83,8 +83,7 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
         $this->items[$this->key] = $this->createPartialMock(\Magento\Ui\Component\Control\Item::class, ['setData']);
         $this->actionPool = new ActionPool(
             $this->contextMock,
-            $this->itemFactoryMock,
-            $this->toolbarBlockMock
+            $this->itemFactoryMock
         );
     }
 

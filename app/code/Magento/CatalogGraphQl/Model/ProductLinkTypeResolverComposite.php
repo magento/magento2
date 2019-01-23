@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model;
 
-use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ProductLinkTypeResolverComposite implements TypeResolverInterface
 {
@@ -28,10 +29,9 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws GraphQlInputException
+     * @inheritdoc
      */
-    public function resolveType(array $data)
+    public function resolveType(array $data) : string
     {
         $resolvedType = null;
 
@@ -47,11 +47,6 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
                 return $resolvedType;
             }
         }
-
-        if (!$resolvedType) {
-            throw new GraphQlInputException(
-                __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
-            );
-        }
+        throw new GraphQlInputException(__('Cannot resolve type'));
     }
 }

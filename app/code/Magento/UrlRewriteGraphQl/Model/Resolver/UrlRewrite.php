@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
-use Magento\GraphQl\Model\ResolverContextInterface;
-use Magento\GraphQl\Model\ResolverInterface;
-use Magento\GraphQl\Model\ContextInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
 
 /**
- * UrlRewrite field resolver, used for GraphQL request processing.
+ * Returns URL rewrites list for the specified product
  */
 class UrlRewrite implements ResolverInterface
 {
@@ -23,100 +26,68 @@ class UrlRewrite implements ResolverInterface
     private $urlFinder;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param UrlFinderInterface $urlFinder
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        UrlFinderInterface $urlFinder,
-        StoreManagerInterface $storeManager
+        UrlFinderInterface $urlFinder
     ) {
         $this->urlFinder = $urlFinder;
-        $this->storeManager = $storeManager;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolve(array $args, ResolverContextInterface $context)
-    {
-        if (isset($args['url'])) {
-            $urlRewrite = $this->findCanonicalUrl($args['url']->getValue());
-            if ($urlRewrite) {
-                return [
-                    'id' => $urlRewrite->getEntityId(),
-                    'canonical_url' => $urlRewrite->getTargetPath(),
-                    'type' => $this->sanitizeType($urlRewrite->getEntityType())
-                ];
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ): array {
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+
+        /** @var AbstractModel $entity */
+        $entity = $value['model'];
+        $entityId = $entity->getEntityId();
+
+        $urlRewriteCollection = $this->urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $entityId]);
+        $urlRewrites = [];
+
+        /** @var UrlRewriteDTO $urlRewrite */
+        foreach ($urlRewriteCollection as $urlRewrite) {
+            if ($urlRewrite->getRedirectType() !== 0) {
+                continue;
             }
+
+            $urlRewrites[] = [
+                'url' => $urlRewrite->getRequestPath(),
+                'parameters' => $this->getUrlParameters($urlRewrite->getTargetPath())
+            ];
         }
-        return null;
+
+        return $urlRewrites;
     }
 
     /**
-     * Find the canonical url passing through all redirects if any
-     *
-     * @param string $requestPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
-     */
-    private function findCanonicalUrl(string $requestPath)
-    {
-        $urlRewrite = $this->findUrlFromRequestPath($requestPath);
-        if ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-            while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath());
-            }
-        }
-        if (!$urlRewrite) {
-            $urlRewrite = $this->findUrlFromTargetPath($requestPath);
-        }
-        return $urlRewrite;
-    }
-
-    /**
-     * Find a url from a request url on the current store
-     *
-     * @param string $requestPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
-     */
-    private function findUrlFromRequestPath(string $requestPath)
-    {
-        return $this->urlFinder->findOneByData(
-            [
-                'request_path' => $requestPath,
-                'store_id' => $this->storeManager->getStore()->getId()
-            ]
-        );
-    }
-
-    /**
-     * Find a url from a target url on the current store
+     * Parses target path and extracts parameters
      *
      * @param string $targetPath
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @return array
      */
-    private function findUrlFromTargetPath(string $targetPath)
+    private function getUrlParameters(string $targetPath): array
     {
-        return $this->urlFinder->findOneByData(
-            [
-                'target_path' => $targetPath,
-                'store_id' => $this->storeManager->getStore()->getId()
-            ]
-        );
-    }
+        $urlParameters = [];
+        $targetPathParts = explode('/', trim($targetPath, '/'));
 
-    /**
-     * Sanitize the type to fit schema specifications
-     *
-     * @param string $type
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
-     */
-    private function sanitizeType(string $type)
-    {
-        return strtoupper(str_replace('-', '_', $type));
+        for ($i = 3; ($i < sizeof($targetPathParts) - 1); $i += 2) {
+            $urlParameters[] = [
+                'name' => $targetPathParts[$i],
+                'value' => $targetPathParts[$i + 1]
+            ];
+        }
+
+        return $urlParameters;
     }
 }

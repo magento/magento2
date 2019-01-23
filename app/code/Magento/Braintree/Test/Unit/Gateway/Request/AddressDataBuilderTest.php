@@ -9,20 +9,21 @@ use Magento\Braintree\Gateway\Request\AddressDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class AddressDataBuilderTest
+ * Tests \Magento\Braintree\Gateway\Request\AddressDataBuilder.
  */
 class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAdapterInterface|MockObject
      */
     private $orderMock;
 
@@ -32,7 +33,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
@@ -138,7 +139,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'city' => 'Chicago',
                     'region_code' => 'IL',
                     'country_id' => 'US',
-                    'post_code' => '00000'
+                    'post_code' => '00000',
                 ],
                 [
                     AddressDataBuilder::SHIPPING_ADDRESS => [
@@ -150,7 +151,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US'
+                        AddressDataBuilder::COUNTRY_CODE => 'US',
 
                     ],
                     AddressDataBuilder::BILLING_ADDRESS => [
@@ -162,46 +163,46 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
-                        AddressDataBuilder::COUNTRY_CODE => 'US'
-                    ]
-                ]
-            ]
+                        AddressDataBuilder::COUNTRY_CODE => 'US',
+                    ],
+                ],
+            ],
         ];
     }
 
     /**
      * @param array $addressData
-     * @return AddressAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AddressAdapterInterface|MockObject
      */
     private function getAddressMock($addressData)
     {
         $addressMock = $this->createMock(AddressAdapterInterface::class);
 
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getFirstname')
             ->willReturn($addressData['first_name']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getLastname')
             ->willReturn($addressData['last_name']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getCompany')
             ->willReturn($addressData['company']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getStreetLine1')
             ->willReturn($addressData['street_1']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getStreetLine2')
             ->willReturn($addressData['street_2']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getCity')
             ->willReturn($addressData['city']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getRegionCode')
             ->willReturn($addressData['region_code']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getPostcode')
             ->willReturn($addressData['post_code']);
-        $addressMock->expects(static::exactly(2))
+        $addressMock->expects(self::exactly(2))
             ->method('getCountryId')
             ->willReturn($addressData['country_id']);
 

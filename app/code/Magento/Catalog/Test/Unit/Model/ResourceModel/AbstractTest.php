@@ -25,7 +25,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         foreach ($codes as $code) {
             $mock = $this->createPartialMock(
                 \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-                ['isInSet', 'getBackend', '__wakeup']
+                ['isInSet', 'getApplyTo', 'getBackend', '__wakeup']
             );
 
             $mock->setAttributeId($code);

@@ -115,6 +115,15 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     public function testExecuteWithException()
     {
+        $this->directoryReadMock->expects($this->once())
+            ->method('readFile')
+            ->with('composer.json')
+            ->willReturn('{"version": "0.0.1"}');
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::ROOT)
+            ->willReturn($this->directoryReadMock);
+        
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
             ->with(PackagesAuth::PATH_TO_AUTH_FILE)

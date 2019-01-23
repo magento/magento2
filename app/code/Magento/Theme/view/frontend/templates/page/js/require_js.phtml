@@ -5,6 +5,7 @@
  */
 ?>
 <script>
+    var BASE_URL = '<?= $block->escapeUrl($block->getBaseUrl()) ?>';
     var require = {
         "baseUrl": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('/') ?>"
     };

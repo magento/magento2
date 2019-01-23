@@ -10,7 +10,7 @@ namespace Magento\Framework\Bulk;
  * @api
  * @since 100.2.0
  */
-interface OperationInterface
+interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -19,6 +19,7 @@ interface OperationInterface
     const BULK_ID = 'bulk_uuid';
     const TOPIC_NAME = 'topic_name';
     const SERIALIZED_DATA = 'serialized_data';
+    const RESULT_SERIALIZED_DATA = 'result_serialized_data';
     const STATUS = 'status';
     const RESULT_MESSAGE = 'result_message';
     const ERROR_CODE = 'error_code';
@@ -31,6 +32,7 @@ interface OperationInterface
     const STATUS_TYPE_RETRIABLY_FAILED = 2;
     const STATUS_TYPE_NOT_RETRIABLY_FAILED = 3;
     const STATUS_TYPE_OPEN = 4;
+    const STATUS_TYPE_REJECTED = 5;
     /**#@-*/
 
     /**
@@ -100,6 +102,23 @@ interface OperationInterface
      * @since 100.2.0
      */
     public function setSerializedData($serializedData);
+
+    /**
+     * Result serialized Data
+     *
+     * @return string
+     * @since 100.3.0
+     */
+    public function getResultSerializedData();
+
+    /**
+     * Set result serialized data
+     *
+     * @param string $resultSerializedData
+     * @return $this
+     * @since 100.3.0
+     */
+    public function setResultSerializedData($resultSerializedData);
 
     /**
      * Get operation status

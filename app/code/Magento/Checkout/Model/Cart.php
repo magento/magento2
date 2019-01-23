@@ -380,6 +380,10 @@ class Cart extends DataObject implements CartInterface
             }
 
             try {
+                $this->_eventManager->dispatch(
+                    'checkout_cart_product_add_before',
+                    ['info' => $requestInfo, 'product' => $product]
+                );
                 $result = $this->getQuote()->addProduct($product, $request);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_checkoutSession->setUseNotice(false);
@@ -445,10 +449,10 @@ class Cart extends DataObject implements CartInterface
             }
 
             if (!$allAvailable) {
-                $this->messageManager->addError(__("We don't have some of the products you want."));
+                $this->messageManager->addErrorMessage(__("We don't have some of the products you want."));
             }
             if (!$allAdded) {
-                $this->messageManager->addError(__("We don't have as many of some products as you want."));
+                $this->messageManager->addErrorMessage(__("We don't have as many of some products as you want."));
             }
         }
         return $this;
@@ -534,7 +538,7 @@ class Cart extends DataObject implements CartInterface
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
                     $qtyRecalculatedFlag = true;
-                    $this->messageManager->addNotice(
+                    $this->messageManager->addNoticeMessage(
                         __('Quantity was recalculated from %1 to %2', $itemInfo['before_suggest_qty'], $qty),
                         'quote_item' . $item->getId()
                     );
@@ -543,7 +547,7 @@ class Cart extends DataObject implements CartInterface
         }
 
         if ($qtyRecalculatedFlag) {
-            $this->messageManager->addNotice(
+            $this->messageManager->addNoticeMessage(
                 __('We adjusted product quantities to fit the required increments.')
             );
         }
@@ -615,6 +619,8 @@ class Cart extends DataObject implements CartInterface
     }
 
     /**
+     * Get product ids.
+     *
      * @return int[]
      */
     public function getProductIds()

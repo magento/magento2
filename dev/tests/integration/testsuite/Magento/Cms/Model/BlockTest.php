@@ -7,8 +7,10 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\BlockFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -81,18 +83,29 @@ class BlockTest extends TestCase
      */
     public function testUpdateTime(array $blockData)
     {
+        /**
+         * @var $db \Magento\Framework\DB\Adapter\AdapterInterface
+         */
+        $db = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
+
         # Prepare and save the temporary block
-        $tempBlock = $this->blockFactory->create();
+        $tempBlock       = $this->blockFactory->create();
         $tempBlock->setData($blockData);
+        $beforeTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $this->blockResource->save($tempBlock);
+        $afterTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
 
         # Load previously created block and compare identifiers
-        $storeId = reset($blockData['stores']);
-        $block   = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
-        $date    = $this->objectManager->get(DateTime::class)->date();
-        $this->markTestIncomplete('MAGETWO-87353: \Magento\Cms\Model\BlockTest::testUpdateTime randomly fails on CI. '
-            . 'Invalid assertion. Application node timestamp may significantly differ from DB node.');
-        $this->assertEquals($date, $block->getUpdateTime());
+        $storeId        = reset($blockData['stores']);
+        $block          = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
+        $blockTimestamp = strtotime($block->getUpdateTime());
+
+        /*
+         * These checks prevent a race condition MAGETWO-87353
+         */
+        $this->assertGreaterThanOrEqual($beforeTimestamp, $blockTimestamp);
+        $this->assertLessThanOrEqual($afterTimestamp, $blockTimestamp);
     }
 
     /**

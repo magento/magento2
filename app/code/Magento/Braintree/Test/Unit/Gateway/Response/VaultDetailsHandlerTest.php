@@ -9,7 +9,7 @@ use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -80,8 +80,10 @@ class VaultDetailsHandlerTest extends TestCase
 
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
+
+        $this->payment->expects(self::any())->method('getExtensionAttributes')->willReturn($this->paymentExtension);
 
         $config = $this->getConfigMock();
 

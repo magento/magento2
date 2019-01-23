@@ -24,6 +24,9 @@ class ScheduleDesignUpdateTest extends AbstractModifierTest
 
     public function testModifyMeta()
     {
+        $this->arrayManagerMock->expects($this->any())
+            ->method('merge')
+            ->willReturnArgument(1);
         $this->assertSame([], $this->getModel()->modifyMeta([]));
     }
 

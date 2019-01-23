@@ -55,7 +55,7 @@ class UpdateItemQty extends Action
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = (int)$this->getRequest()->getParam('item_qty');
+        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
 
         try {
             $this->sidebar->checkQuoteItem($itemId);

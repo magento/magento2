@@ -14,7 +14,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  * Optionally generates inactive quotes for generated orders.
  *
  * Support the following format:
- * <!-- Is is nescessary to enable quotes for orders -->
+ * <!-- It is necessary to enable quotes for orders -->
  * <order_quotes_enable>{bool}</order_quotes_enable>
  *
  * <!-- Min number of simple products per each order -->

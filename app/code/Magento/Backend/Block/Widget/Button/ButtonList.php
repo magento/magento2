@@ -7,6 +7,8 @@
 namespace Magento\Backend\Block\Widget\Button;
 
 /**
+ * Button list widget
+ *
  * @api
  * @since 100.0.2
  */
@@ -127,12 +129,6 @@ class ButtonList
      */
     public function sortButtons(Item $itemA, Item $itemB)
     {
-        $sortOrderA = intval($itemA->getSortOrder());
-        $sortOrderB = intval($itemB->getSortOrder());
-
-        if ($sortOrderA == $sortOrderB) {
-            return 0;
-        }
-        return ($sortOrderA < $sortOrderB) ? -1 : 1;
+        return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
     }
 }

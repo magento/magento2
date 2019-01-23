@@ -40,12 +40,12 @@ class ProxyTesting
             $expectedParams = $params;
         }
         $builder = $proxiedObject->expects(
-            new \PHPUnit_Framework_MockObject_Matcher_InvokedCount(1)
+            new \PHPUnit\Framework\MockObject\Matcher\InvokedCount(1)
         )->method(
             $expectedMethod
         );
         $builder = call_user_func_array([$builder, 'with'], $expectedParams);
-        $builder->will(new \PHPUnit_Framework_MockObject_Stub_Return($proxiedResult));
+        $builder->will(new \PHPUnit\Framework\MockObject\Stub\ReturnStub($proxiedResult));
 
         return call_user_func_array([$object, $method], $params);
     }

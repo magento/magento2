@@ -56,9 +56,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */

@@ -72,6 +72,9 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
         $this->quote->execute($observer);
     }
 
+    /**
+     * @return array
+     */
     public function restoreCustomerGroupIdDataProvider()
     {
         return [

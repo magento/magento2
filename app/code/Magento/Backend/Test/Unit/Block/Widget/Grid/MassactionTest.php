@@ -243,6 +243,9 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->getSelected());
     }
 
+    /**
+     * @return array
+     */
     public function selectedDataProvider()
     {
         return [

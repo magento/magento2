@@ -164,6 +164,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->model->getDataByKey('action_type'), $type);
     }
 
+    /**
+     * @return array
+     */
     public function updateWebsitesDataProvider()
     {
         return [

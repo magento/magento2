@@ -82,6 +82,9 @@ class ColumnsRendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return [

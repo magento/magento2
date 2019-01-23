@@ -65,6 +65,9 @@ class PoolTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function getAdjustmentByCodeDataProvider()
     {
         return [

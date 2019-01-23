@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class PriceTest
+ * @magentoDbIsolation disabled
  */
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,6 +31,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPrice()
     {
@@ -40,6 +42,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 1
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPriceExcludingTax()
     {
@@ -50,6 +53,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 2
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPriceIncludingTax()
     {
@@ -61,6 +65,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 3
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPriceIncludingExcludingTax()
     {
@@ -71,6 +76,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPriceWithSelectedSimpleProduct()
     {
@@ -83,6 +89,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store tax/display/type 1
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
      */
     public function testGetFinalPriceWithCustomOption()
     {

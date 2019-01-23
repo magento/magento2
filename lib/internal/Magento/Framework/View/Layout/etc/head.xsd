@@ -18,6 +18,7 @@
         <xs:attribute name="sizes" type="xs:string"/>
         <xs:attribute name="target" type="xs:string"/>
         <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="order" type="xs:integer"/>
         <xs:attribute name="src_type" type="xs:string"/>
     </xs:complexType>
 

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /** This is project's console commands configuration for Robo task runner.
  *
  * @codingStandardsIgnoreStart
@@ -14,18 +16,6 @@ class RoboFile extends \Robo\Tasks
     use Robo\Task\Base\loadShortcuts;
 
     /**
-     * Duplicate the Example configuration files used to customize the Project for customization.
-     *
-     * @return void
-     */
-    function cloneFiles()
-    {
-        $this->_exec('cp -vn .env.example .env');
-        $this->_exec('cp -vf codeception.dist.yml codeception.yml');
-        $this->_exec('cp -vf tests'. DIRECTORY_SEPARATOR .'functional.suite.dist.yml tests'. DIRECTORY_SEPARATOR .'functional.suite.yml');
-    }
-
-    /**
      * Duplicate the Example configuration files for the Project.
      * Build the Codeception project.
      *
@@ -33,28 +23,40 @@ class RoboFile extends \Robo\Tasks
      */
     function buildProject()
     {
-        $this->cloneFiles();
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept build');
+        passthru($this->getBaseCmd("build:project"));
     }
 
     /**
-     * Generate all Tests in PHP.
+     * Generate all Tests in PHP OR Generate set of tests via passing array of tests
      *
+     * @param array $tests
      * @param array $opts
-     * @return void
+     * @return \Robo\Result
      */
-    function generateTests($opts = ['config' => null, 'force' => false, 'nodes' => null])
+    function generateTests(array $tests, $opts = [
+        'config' => null,
+        'force' => false,
+        'nodes' => null,
+        'lines' => null,
+        'tests' => null
+    ])
     {
-        $GLOBALS['GENERATE_TESTS'] = true;
+        $baseCmd = $this->getBaseCmd("generate:tests");
 
-        if ($opts['force'])
-        {
-            $GLOBALS['FORCE_PHP_GENERATE'] = true;
+        $mftfArgNames = ['config', 'nodes', 'lines', 'tests'];
+        // append arguments to the end of the command
+        foreach ($opts as $argName => $argValue) {
+            if (in_array($argName, $mftfArgNames) && $argValue !== null) {
+                $baseCmd .= " --$argName $argValue";
+            }
         }
 
-        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config'], $opts['nodes']);
-        $this->say("Generate Tests Command Run");
+        // use a separate conditional for the force flag (casting bool to string in php is hard)
+        if ($opts['force']) {
+            $baseCmd .= ' --force';
+        }
+
+        return $this->taskExec($baseCmd)->args($tests)->run();
     }
 
     /**
@@ -62,62 +64,28 @@ class RoboFile extends \Robo\Tasks
      *
      * @param array $args
      * @throws Exception
-     * @return void
+     * @return \Robo\Result
      */
     function generateSuite(array $args)
     {
         if (empty($args)) {
             throw new Exception("Please provide suite name(s) after generate:suite command");
         }
-
-        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        $sg = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance();
-
-        foreach ($args as $arg) {
-            $sg->generateSuite($arg);
-        }
+        $baseCmd = $this->getBaseCmd("generate:suite");
+        return $this->taskExec($baseCmd)->args($args)->run();
     }
 
     /**
-     * Run all Functional tests.
+     * Run all Tests with the specified @group tag'.
      *
-     * @return void
+     * @param array $args
+     * @return \Robo\Result
      */
-    function functional()
+    function group(array $args)
     {
-        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --skip-group skip');
-    }
-
-    /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip'.
-     *
-     * @param string $args
-     * @return void
-     */
-    function group($args = '')
-    {
-        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
-    }
-
-    /**
-     * Run all Functional tests located under the Directory Path provided.
-     *
-     * @param string $args
-     * @return void
-     */
-    function folder($args = '')
-    {
-        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional')->args($args)->run();
-    }
-
-    /**
-     * Run all Tests marked with the @group tag 'example'.
-     *
-     * @return void
-     */
-    function example()
-    {
-        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run --group example --skip-group skip');
+        $args = array_merge($args, ['-k']);
+        $baseCmd = $this->getBaseCmd("run:group");
+        return $this->taskExec($baseCmd)->args($args)->run();
     }
 
     /**
@@ -143,58 +111,65 @@ class RoboFile extends \Robo\Tasks
     /**
      * Open the HTML Allure report - Allure v1.4.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure1Open()
     {
-        $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+        return $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
      * Open the HTML Allure report - Allure v2.3.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure2Open()
     {
-        $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
+        return $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v1.4.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure1Report()
     {
         $result1 = $this->allure1Generate();
 
         if ($result1->wasSuccessful()) {
-            $this->allure1Open();
+            return $this->allure1Open();
+        } else {
+            return $result1;
         }
     }
 
     /**
      * Generate and open the HTML Allure report - Allure v2.3.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure2Report()
     {
         $result1 = $this->allure2Generate();
 
         if ($result1->wasSuccessful()) {
-            $this->allure2Open();
+            return $this->allure2Open();
+        } else {
+            return $result1;
         }
     }
 
     /**
-     * Run the Pre-Install system check script.
+     * Private function for returning the formatted command for the passthru to mftf bin execution.
      *
-     * @return void
+     * @param string $command
+     * @return string
      */
-    function preInstall()
+    private function getBaseCmd($command)
     {
-        $this->_exec('php pre-install.php');
+        $this->writeln("\033[01;31m Use of robo will be deprecated with next major release, please use <root>/vendor/bin/mftf $command \033[0m");
+        chdir(__DIR__);
+        return realpath('../../../vendor/bin/mftf') . " $command";
     }
 }

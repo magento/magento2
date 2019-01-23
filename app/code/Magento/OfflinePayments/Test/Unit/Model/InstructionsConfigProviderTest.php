@@ -82,6 +82,9 @@ class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->getConfig());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetConfig()
     {
         $oneCode = Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;

@@ -17,13 +17,13 @@ return ['CREATE TABLE `reference_table` (
 `bigint_default_nullable` bigint(2) UNSIGNED NULL DEFAULT 1  , 
 `bigint_not_default_not_nullable` bigint(2) UNSIGNED NOT NULL   , 
 CONSTRAINT  PRIMARY KEY (`tinyint_ref`)
-) ENGINE=innodb 
+) ENGINE=innodb DEFAULT CHARSET=utf8 DEFAULT COLLATE=utf8_general_ci 
 
 CREATE TABLE `auto_increment_test` (
 `int_auto_increment_with_nullable` int(12) UNSIGNED NOT NULL  AUTO_INCREMENT , 
 `int_disabled_auto_increment` smallint(12) UNSIGNED NULL DEFAULT 0  , 
-CONSTRAINT `unique_null_key` UNIQUE KEY (`int_auto_increment_with_nullable`)
-) ENGINE=innodb 
+CONSTRAINT `AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE` UNIQUE KEY (`int_auto_increment_with_nullable`)
+) ENGINE=innodb DEFAULT CHARSET=utf8 DEFAULT COLLATE=utf8_general_ci 
 
 CREATE TABLE `test_table` (
 `smallint` smallint(3)  NOT NULL  AUTO_INCREMENT , 
@@ -41,15 +41,15 @@ CREATE TABLE `test_table` (
 `mediumblob` mediumblob NULL , 
 `blob` blob NULL , 
 `boolean` BOOLEAN NULL  , 
-CONSTRAINT `some_unique_key` UNIQUE KEY (`smallint`,`bigint`), 
-CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`)  ON DELETE NO ACTION, 
-INDEX `speedup_index` (`tinyint`,`bigint`)
-) ENGINE=innodb 
+CONSTRAINT `TEST_TABLE_SMALLINT_BIGINT` UNIQUE KEY (`smallint`,`bigint`), 
+CONSTRAINT `TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`)  ON DELETE NO ACTION, 
+INDEX `TEST_TABLE_TINYINT_BIGINT` (`tinyint`,`bigint`)
+) ENGINE=innodb DEFAULT CHARSET=utf8 DEFAULT COLLATE=utf8_general_ci 
 
 CREATE TABLE `patch_list` (
 `patch_id` int(11)  NOT NULL  AUTO_INCREMENT COMMENT "Patch Auto Increment", 
 `patch_name` varchar(1024) NOT NULL  COMMENT "Patch Class Name", 
 CONSTRAINT  PRIMARY KEY (`patch_id`)
-) ENGINE=innodb COMMENT="List of data/schema patches"
+) ENGINE=innodb DEFAULT CHARSET=utf8 DEFAULT COLLATE=utf8_general_ci COMMENT="List of data/schema patches"
 
 '];

@@ -125,7 +125,10 @@ class StockTest extends \PHPUnit\Framework\TestCase
             sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)
         );
     }
-    
+
+    /**
+     * @return array
+     */
     public function eventsDataProvider()
     {
         return [

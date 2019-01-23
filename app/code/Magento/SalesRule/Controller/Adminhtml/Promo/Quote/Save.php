@@ -6,8 +6,41 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
+/**
+ * SalesRule save controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timezone;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param TimezoneInterface $timezone
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        TimezoneInterface $timezone = null
+    ) {
+        parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
+        $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            TimezoneInterface::class
+        );
+    }
+
     /**
      * Promo quote save action
      *
@@ -26,6 +59,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
+                if (empty($data['from_date'])) {
+                    $data['from_date'] = $this->timezone->formatDate();
+                }
 
                 $filterValues = ['from_date' => $this->_dateFilter];
                 if ($this->getRequest()->getParam('to_date')) {
@@ -50,7 +86,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                     $session->setPageData($data);
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
@@ -82,7 +118,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $session->setPageData($model->getData());
 
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the rule.'));
+                $this->messageManager->addSuccessMessage(__('You saved the rule.'));
                 $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
@@ -91,7 +127,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->_redirect('sales_rule/*/');
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $id]);
@@ -100,7 +136,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 }
                 return;
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

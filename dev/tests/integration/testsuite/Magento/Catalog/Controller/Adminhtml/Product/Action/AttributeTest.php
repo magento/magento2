@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -14,6 +16,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveActionRedirectsSuccessfully()
     {
@@ -22,6 +25,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         /** @var $session \Magento\Backend\Model\Session */
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([1]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
@@ -51,6 +55,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      * @dataProvider saveActionVisibilityAttrDataProvider
      * @param array $attributes
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveActionChangeVisibility($attributes)
     {
@@ -67,6 +72,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $session = $objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([$product->getId()]);
         $this->getRequest()->setParam('attributes', $attributes);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
         /** @var \Magento\Catalog\Model\Category $category */
@@ -87,12 +93,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
+     * @param array $attributes Request parameter.
+     *
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
      *
      * @dataProvider validateActionDataProvider
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @magentoDbIsolation disabled
      */
     public function testValidateActionWithMassUpdate($attributes)
     {

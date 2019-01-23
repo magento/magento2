@@ -34,6 +34,9 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
@@ -62,6 +65,9 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function unserializeDataProvider()
     {
         return [
@@ -95,6 +101,9 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         $this->json->unserialize($value);
     }
 
+    /**
+     * @return array
+     */
     public function unserializeExceptionDataProvider()
     {
         return [

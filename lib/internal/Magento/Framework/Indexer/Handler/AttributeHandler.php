@@ -35,7 +35,7 @@ class AttributeHandler implements HandlerInterface
                 'left'
             );
         } else {
-            $source->addAttributeToSelect($fieldInfo['origin'], 'left');
+            $source->addFieldToSelect($fieldInfo['origin'], 'left');
         }
     }
 }

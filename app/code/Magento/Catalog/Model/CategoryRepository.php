@@ -129,7 +129,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = null !== $storeId ? $storeId : 'all';
+        $cacheKey = $storeId ?? 'all';
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();

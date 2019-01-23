@@ -50,6 +50,9 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueEqual()
     {
         return [['0', '0'], ['', '0'], ['0', ''], ['1', '1']];
@@ -84,6 +87,9 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->model->processValue();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueOn()
     {
         return [['0', '1'], ['', '1']];
@@ -134,6 +140,9 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->model->processValue();
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderProcessValueOff()
     {
         return [['1', '0'], ['1', '']];

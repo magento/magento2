@@ -237,6 +237,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Goes to specified host/path and fetches reports from there.
+     *
      * Save reports to database.
      *
      * @param \Magento\Framework\Filesystem\Io\Sftp $connection
@@ -369,7 +370,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
-                    for ($i = 1; $i < count($line); $i++) {
+                    $count = count($line);
+                    for ($i = 1; $i < $count; $i++) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
@@ -445,11 +447,11 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      */
     private function formatAmountColumn($lineItem)
     {
-        return intval($lineItem) / 100;
+        return (int)$lineItem / 100;
     }
 
     /**
-     * Load report by unique key (accoutn + report date)
+     * Load report by unique key (account + report date)
      *
      * @return $this
      */
@@ -516,6 +518,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Iterate through website configurations and collect all SFTP configurations
+     *
      * Filter config values if necessary
      *
      * @param bool $automaticMode Whether to skip settings with disabled Automatic Fetching or not

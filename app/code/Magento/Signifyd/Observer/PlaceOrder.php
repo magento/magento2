@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -55,10 +56,6 @@ class PlaceOrder implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->signifydIntegrationConfig->isActive()) {
-            return;
-        }
-
         $orders = $this->extractOrders(
             $observer->getEvent()
         );
@@ -68,7 +65,10 @@ class PlaceOrder implements ObserverInterface
         }
 
         foreach ($orders as $order) {
-            $this->createCaseForOrder($order);
+            $storeId = $order->getStoreId();
+            if ($this->signifydIntegrationConfig->isActive($storeId)) {
+                $this->createCaseForOrder($order);
+            }
         }
     }
 
@@ -81,7 +81,9 @@ class PlaceOrder implements ObserverInterface
     private function createCaseForOrder($order)
     {
         $orderId = $order->getEntityId();
-        if (null === $orderId || $order->getPayment()->getMethodInstance()->isOffline()) {
+        if (null === $orderId
+            || $order->getPayment()->getMethodInstance()->isOffline()
+            || $order->getState() === Order::STATE_PENDING_PAYMENT) {
             return;
         }
 

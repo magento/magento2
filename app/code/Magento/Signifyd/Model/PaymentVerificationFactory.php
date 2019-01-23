@@ -60,7 +60,7 @@ class PaymentVerificationFactory
      *
      * @param string $paymentCode
      * @return PaymentVerificationInterface
-     * @throws \Exception
+     * @throws ConfigurationMismatchException
      */
     public function createPaymentCvv($paymentCode)
     {
@@ -73,7 +73,7 @@ class PaymentVerificationFactory
      *
      * @param string $paymentCode
      * @return PaymentVerificationInterface
-     * @throws \Exception
+     * @throws ConfigurationMismatchException
      */
     public function createPaymentAvs($paymentCode)
     {

@@ -83,8 +83,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateUndefinedClass()
     {
-        $this->expectException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Cannot create profiler driver, class "Magento_Framework_Profiler_Driver_Test_Baz" doesn\'t exist.'
         );
         $this->_factory->create(['type' => 'baz']);

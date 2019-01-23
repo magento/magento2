@@ -95,7 +95,7 @@ define([
                 type: 'GET',
                 url: this._buildGridUrl(filterData),
                 context: $('body')
-            }).success(function (data) {
+            }).done(function (data) {
                 bootstrap(JSON.parse(data));
             });
         },

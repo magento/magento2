@@ -79,9 +79,9 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider errorDataProvider
      * @param string $reportName
      * @param array $result
-     * @param \PHPUnit_Framework_MockObject_Stub $queryReturnStub
+     * @param \PHPUnit\Framework\MockObject\Stub $queryReturnStub
      */
-    public function testValidate($reportName, $result, \PHPUnit_Framework_MockObject_Stub $queryReturnStub)
+    public function testValidate($reportName, $result, \PHPUnit\Framework\MockObject\Stub $queryReturnStub)
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())

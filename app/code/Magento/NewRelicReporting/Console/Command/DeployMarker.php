@@ -48,21 +48,21 @@ class DeployMarker extends Command
     {
         $this->setName("newrelic:create:deploy-marker");
         $this->setDescription("Check the deploy queue for entries and create an appropriate deploy marker.")
-             ->addArgument(
-                 'message',
-                 InputArgument::REQUIRED,
-                 'Deploy Message?'
-             )
-             ->addArgument(
-                 'change_log',
-                 InputArgument::REQUIRED,
-                 'Change Log?'
-             )
-             ->addArgument(
-                 'user',
-                 InputArgument::OPTIONAL,
-                 'Deployment User'
-             );
+            ->addArgument(
+                'message',
+                InputArgument::REQUIRED,
+                'Deploy Message?'
+            )
+            ->addArgument(
+                'change_log',
+                InputArgument::REQUIRED,
+                'Change Log?'
+            )
+            ->addArgument(
+                'user',
+                InputArgument::OPTIONAL,
+                'Deployment User'
+            );
         parent::configure();
     }
 

@@ -42,7 +42,7 @@ class Fingerprint extends Template
      * @var string
      * @since 100.2.0
      */
-    protected $_template = 'fingerprint.phtml';
+    protected $_template = 'Magento_Signifyd::fingerprint.phtml';
 
     /**
      * @param Context $context
@@ -85,6 +85,8 @@ class Fingerprint extends Template
      */
     public function isModuleActive()
     {
-        return $this->config->isActive();
+        $storeId = $this->quoteSession->getQuote()->getStoreId();
+
+        return $this->config->isActive($storeId);
     }
 }

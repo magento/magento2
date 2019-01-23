@@ -7,7 +7,7 @@
 namespace Magento\Framework\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Module\ModuleResource;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Setup\Exception;
@@ -19,6 +19,16 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  */
 class PatchApplier
 {
+    /**
+     * Flag means, that we need to read schema patches
+     */
+    const SCHEMA_PATCH = 'schema';
+
+    /**
+     * Flag means, that we need to read data patches
+     */
+    const DATA_PATCH = 'data';
+
     /**
      * @var PatchRegistryFactory
      */
@@ -38,11 +48,6 @@ class PatchApplier
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var ModuleResource
-     */
-    private $moduleResource;
 
     /**
      * @var PatchHistory
@@ -70,17 +75,28 @@ class PatchApplier
     private $objectManager;
 
     /**
+     * @var PatchBackwardCompatability
+     */
+    private $patchBackwardCompatability;
+
+    /**
+     * @var ModuleList
+     */
+    private $moduleList;
+
+    /**
      * PatchApplier constructor.
      * @param PatchReader $dataPatchReader
      * @param PatchReader $schemaPatchReader
      * @param PatchRegistryFactory $patchRegistryFactory
      * @param ResourceConnection $resourceConnection
-     * @param ModuleResource $moduleResource
+     * @param PatchBackwardCompatability $patchBackwardCompatability
      * @param PatchHistory $patchHistory
      * @param PatchFactory $patchFactory
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleList $moduleList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(Magento.TypeDuplication)
      */
@@ -89,51 +105,25 @@ class PatchApplier
         PatchReader $schemaPatchReader,
         PatchRegistryFactory $patchRegistryFactory,
         ResourceConnection $resourceConnection,
-        ModuleResource $moduleResource,
+        PatchBackwardCompatability $patchBackwardCompatability,
         PatchHistory $patchHistory,
         PatchFactory $patchFactory,
         ObjectManagerInterface $objectManager,
         \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        ModuleList $moduleList
     ) {
         $this->patchRegistryFactory = $patchRegistryFactory;
         $this->dataPatchReader = $dataPatchReader;
         $this->schemaPatchReader = $schemaPatchReader;
         $this->resourceConnection = $resourceConnection;
-        $this->moduleResource = $moduleResource;
         $this->patchHistory = $patchHistory;
         $this->patchFactory = $patchFactory;
         $this->schemaSetup = $schemaSetup;
         $this->moduleDataSetup = $moduleDataSetup;
         $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Check is patch skipable by data setup version in DB
-     *
-     * @param string $patchClassName
-     * @param string $moduleName
-     * @return bool
-     */
-    private function isSkipableByDataSetupVersion(string $patchClassName, $moduleName)
-    {
-        $dbVersion = $this->moduleResource->getDataVersion($moduleName);
-        return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
-            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
-    }
-
-    /**
-     * Check is patch skipable by schema setup version in DB
-     *
-     * @param string $patchClassName
-     * @param string $moduleName
-     * @return bool
-     */
-    private function isSkipableBySchemaSetupVersion(string $patchClassName, $moduleName)
-    {
-        $dbVersion = $this->moduleResource->getDbVersion($moduleName);
-        return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
-            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
+        $this->patchBackwardCompatability = $patchBackwardCompatability;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -144,13 +134,12 @@ class PatchApplier
      */
     public function applyDataPatch($moduleName = null)
     {
-        $dataPatches = $this->dataPatchReader->read($moduleName);
-        $registry = $this->prepareRegistry($dataPatches);
+        $registry = $this->prepareRegistry($moduleName, self::DATA_PATCH);
         foreach ($registry as $dataPatch) {
             /**
-             * Due to bacward compatabilities reasons some patches should be skipped
+             * Due to backward compatabilities reasons some patches should be skipped
              */
-            if ($this->isSkipableByDataSetupVersion($dataPatch, $moduleName)) {
+            if ($this->patchBackwardCompatability->isSkipableByDataSetupVersion($dataPatch, $moduleName)) {
                 $this->patchHistory->fixPatch($dataPatch);
                 continue;
             }
@@ -187,12 +176,24 @@ class PatchApplier
      * Register all patches in registry in order to manipulate chains and dependencies of patches
      * of patches
      *
-     * @param array $patchNames
+     * @param string $moduleName
+     * @param string $patchType
      * @return PatchRegistry
      */
-    private function prepareRegistry(array $patchNames)
+    private function prepareRegistry($moduleName, $patchType)
     {
+        $reader = $patchType === self::DATA_PATCH ? $this->dataPatchReader : $this->schemaPatchReader;
         $registry = $this->patchRegistryFactory->create();
+
+        //Prepare modules to read
+        if ($moduleName === null) {
+            $patchNames = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                $patchNames += $reader->read($moduleName);
+            }
+        } else {
+            $patchNames = $reader->read($moduleName);
+        }
 
         foreach ($patchNames as $patchName) {
             $registry->registerPatch($patchName);
@@ -204,20 +205,20 @@ class PatchApplier
     /**
      * Apply all patches for one module
      *
+     * Please note: that schema patches are not revertable
+     *
      * @param null | string $moduleName
      * @throws Exception
      */
     public function applySchemaPatch($moduleName = null)
     {
-        $schemaPatches = $this->schemaPatchReader->read($moduleName);
-        $registry = $this->prepareRegistry($schemaPatches);
-
+        $registry = $this->prepareRegistry($moduleName, self::SCHEMA_PATCH);
         foreach ($registry as $schemaPatch) {
             try {
                 /**
                  * Skip patches that were applied in old style
                  */
-                if ($this->isSkipableBySchemaSetupVersion($schemaPatch, $moduleName)) {
+                if ($this->patchBackwardCompatability->isSkipableBySchemaSetupVersion($schemaPatch, $moduleName)) {
                     $this->patchHistory->fixPatch($schemaPatch);
                     continue;
                 }
@@ -252,8 +253,7 @@ class PatchApplier
      */
     public function revertDataPatches($moduleName = null)
     {
-        $dataPatches = $this->dataPatchReader->read($moduleName);
-        $registry = $this->prepareRegistry($dataPatches);
+        $registry = $this->prepareRegistry($moduleName, self::DATA_PATCH);
         $adapter = $this->moduleDataSetup->getConnection();
 
         foreach ($registry->getReverseIterator() as $dataPatch) {

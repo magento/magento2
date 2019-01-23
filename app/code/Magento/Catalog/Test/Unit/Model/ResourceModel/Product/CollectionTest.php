@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\DB\Select;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -58,12 +59,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -167,7 +173,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
-                'entityFactory' => $entityFactory,
+                'entityFactory' => $this->entityFactory,
                 'logger' => $logger,
                 'fetchStrategy' => $fetchStrategy,
                 'eventManager' => $eventManager,
@@ -239,7 +245,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $mediaGalleriesMock = [[$linkField => $rowId]];
         $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->setMethods(['getOrigData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -254,8 +260,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
         $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
-        $itemMock->expects($this->atLeastOnce())->method('getData')->willReturn($rowId);
-        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$rowId]);
+        $itemMock->expects($this->atLeastOnce())->method('getOrigData')->willReturn($rowId);
+        $selectMock->expects($this->once())->method('reset')->with(Select::ORDER)->willReturnSelf();
+        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$rowId])
+            ->willReturnSelf();
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
 
@@ -375,5 +383,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $backend->expects($this->once())->method('setPriceData')->with($itemMock, [['product_id' => 1]]);
 
         $this->assertSame($this->collection, $this->collection->addTierPriceData());
+    }
+
+    /**
+     * Test for getNewEmptyItem() method
+     *
+     * @return void
+     */
+    public function testGetNewEmptyItem()
+    {
+        $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($item);
+        $firstItem = $this->collection->getNewEmptyItem();
+        $secondItem = $this->collection->getNewEmptyItem();
+        $this->assertEquals($firstItem, $secondItem);
     }
 }

@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="test_table" resource="sales">
+    <table name="test_table" resource="default">
         <!--Columns-->
         <column xsi:type="smallint" name="smallint" default="0" padding="3"/>
     </table>

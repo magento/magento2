@@ -13,6 +13,9 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 
+/**
+ * Test diff manager methods
+ */
 class DiffManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -47,7 +50,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
     public function testShouldBeCreated()
     {
         $elements = ['first' => new \stdClass(), 'second' => new \stdClass()];
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $element = new Column('third', 'int', $table);
         $existingElement = new Column('second', 'int', $table);
         self::assertTrue($this->model->shouldBeCreated($elements, $element));
@@ -60,7 +72,16 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $element = new Column('third', 'int', $table);
         $generatedElement = new Column('third', 'int', $table, 'Previous column');
         $diff->expects(self::once())
@@ -75,10 +96,19 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $index = new Index('index_type', 'index', $table, [$column], 'btree');
-        $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash');
+        $index = new Index('index_type', 'index', $table, [$column], 'btree', 'index_type');
+        $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash', 'index_type');
         $diff->expects(self::exactly(2))
             ->method('register')
             ->withConsecutive([$generatedIndex, 'drop_element', $generatedIndex], [$index, 'add_complex_element']);
@@ -91,20 +121,32 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $refTable = new Table(
             'ref_table',
             'ref_table',
             'table',
             'default',
-            'innodb'
+            'innodb',
+            'utf-8',
+            'utf-8',
+            ''
         );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $reference = new Reference('ref', 'foreign', $table, $column, $refTable, $column, 'CASCADE');
+        $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $refTable, $column, 'CASCADE');
         $diff->expects(self::exactly(2))
             ->method('register')
             ->withConsecutive(
-                [$reference, 'drop_reference', $reference, 'ref_table'],
+                [$reference, 'drop_reference', $reference],
                 [$table, 'drop_table', $table]
             );
         $this->model->registerRemoval($diff, [$reference, $table]);
@@ -116,9 +158,18 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $column = new Column('third', 'int', $table, 'Previous column');
-        $reference = new Reference('ref', 'foreign', $table, $column, $table, $column, 'CASCADE');
+        $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $table, $column, 'CASCADE');
         $diff->expects(self::exactly(3))
             ->method('register')
             ->withConsecutive(
@@ -137,18 +188,30 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $generateTable = new Table(
             'name',
             'name',
             'table',
             'sales',
-            'innodb'
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
         );
         $diff->expects(self::once())
             ->method('register')
             ->with($table, 'recreate_table', $generateTable);
-        $this->model->registerTableModification($table, $generateTable, $diff);
+        $this->model->registerRecreation($table, $generateTable, $diff);
     }
 
     public function testRegisterTableModificationWhenChangeEngine()
@@ -157,13 +220,25 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $diff = $this->getMockBuilder(Diff::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table = new Table('name', 'name', 'table', 'default', 'innodb');
+        $table = new Table(
+            'name',
+            'name',
+            'table',
+            'default',
+            'innodb',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
+        );
         $generateTable = new Table(
             'name',
             'name',
             'table',
             'default',
-            'memory'
+            'memory',
+            'utf-8',
+            'utf_8_general_ci',
+            ''
         );
         $diff->expects(self::once())
             ->method('register')

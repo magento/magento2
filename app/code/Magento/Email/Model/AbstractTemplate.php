@@ -531,14 +531,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param string $templateId
      * @return $this
-     * @throws \Magento\Framework\Exception\MailException
      */
     public function setForcedArea($templateId)
     {
-        if ($this->area) {
-            throw new \LogicException(__('The area is already set.'));
+        if ($this->area === null) {
+            $this->area = $this->emailConfig->getTemplateArea($templateId);
         }
-        $this->area = $this->emailConfig->getTemplateArea($templateId);
+
         return $this;
     }
 

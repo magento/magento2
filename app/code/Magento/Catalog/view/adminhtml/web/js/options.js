@@ -13,12 +13,15 @@ define([
     'jquery/ui',
     'prototype',
     'form',
-    'validation'
+    'validation',
+    'mage/translate'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
     return function (config) {
-        var attributeOption = {
+        var optionPanel = jQuery('#manage-options-panel'),
+            editForm = jQuery('#edit_form'),
+            attributeOption = {
                 table: $('attribute-options-table'),
                 itemCount: 0,
                 totalItems: 0,
@@ -141,7 +144,9 @@ define([
 
                     return optionDefaultInputType;
                 }
-            };
+            },
+            tableBody = jQuery(),
+            activePanelClass = 'selected-type-options';
 
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
@@ -150,7 +155,7 @@ define([
             attributeOption.remove(event);
         });
 
-        jQuery('#manage-options-panel').on('render', function () {
+        optionPanel.on('render', function () {
             attributeOption.ignoreValidate();
 
             if (attributeOption.rendered) {
@@ -176,7 +181,33 @@ define([
                 });
             });
         }
+        editForm.on('beforeSubmit', function () {
+            var optionContainer = optionPanel.find('table tbody'),
+                optionsValues;
 
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionsValues = jQuery.map(
+                    optionContainer.find('tr'),
+                    function (row) {
+                        return jQuery(row).find('input, select, textarea').serialize();
+                    }
+                );
+                jQuery('<input>')
+                    .attr({
+                        type: 'hidden',
+                        name: 'serialized_options'
+                    })
+                    .val(JSON.stringify(optionsValues))
+                    .prependTo(editForm);
+            }
+            tableBody = optionContainer.detach();
+        });
+        editForm.on('afterValidate.error highlight.validate', function () {
+            if (optionPanel.hasClass(activePanelClass)) {
+                optionPanel.find('table').append(tableBody);
+                jQuery('input[name="serialized_options"]').remove();
+            }
+        });
         window.attributeOption = attributeOption;
         window.optionDefaultInputType = attributeOption.getOptionInputType();
 

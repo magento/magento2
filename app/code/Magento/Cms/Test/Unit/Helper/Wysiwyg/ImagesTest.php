@@ -379,10 +379,8 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCurrentPathThrowException()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            'The directory PATH/wysiwyg is not writable by server.'
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The directory PATH is not writable by server.');
 
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
@@ -398,6 +396,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->fail('An expected exception has not been raised.');
     }
 
+    /**
+     * @return array
+     */
     public function providerGetCurrentPath()
     {
         return [
@@ -451,6 +452,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
@@ -497,6 +501,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function providerGetImageHtmlDeclaration()
     {
         return [

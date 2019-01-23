@@ -73,7 +73,8 @@ class StatusMapperTest extends \PHPUnit\Framework\TestCase
             $this->model->bulkSummaryStatusToOperationStatus(BulkSummaryInterface::FINISHED_WITH_FAILURE),
             [
                 OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
-                OperationInterface::STATUS_TYPE_RETRIABLY_FAILED
+                OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
+                OperationInterface::STATUS_TYPE_REJECTED
             ]
         );
 

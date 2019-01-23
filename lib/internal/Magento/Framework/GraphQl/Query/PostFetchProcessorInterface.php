@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
@@ -17,5 +18,5 @@ interface PostFetchProcessorInterface
      * @param array $resultData
      * @return array
      */
-    public function process(array $resultData);
+    public function process(array $resultData) : array;
 }

@@ -5,12 +5,13 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends TermController
+class Edit extends TermController implements HttpGetActionInterface
 {
     /**
      * Core registry
@@ -43,7 +44,7 @@ class Edit extends TermController
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This search no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This search no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 $resultRedirect->setPath('search/*');

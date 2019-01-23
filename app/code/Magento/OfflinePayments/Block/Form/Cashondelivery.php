@@ -15,5 +15,5 @@ class Cashondelivery extends \Magento\OfflinePayments\Block\Form\AbstractInstruc
      *
      * @var string
      */
-    protected $_template = 'form/cashondelivery.phtml';
+    protected $_template = 'Magento_OfflinePayments::form/cashondelivery.phtml';
 }

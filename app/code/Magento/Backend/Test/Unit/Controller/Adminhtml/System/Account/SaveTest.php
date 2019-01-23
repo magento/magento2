@@ -71,7 +71,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_messagesMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess'])
+            ->setMethods(['addSuccessMessage'])
             ->getMockForAbstractClass();
 
         $this->_authSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
@@ -221,7 +221,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->setParams($requestParams);
 
-        $this->_messagesMock->expects($this->once())->method('addSuccess')->with($this->equalTo($testedMessage));
+        $this->_messagesMock->expects($this->once())->method('addSuccessMessage')->with($this->equalTo($testedMessage));
 
         $this->_controller->execute();
     }

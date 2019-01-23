@@ -10,10 +10,10 @@
       style="width:<?= /* @escapeNotVerified */ $block->getWidth() ?>px;">
     <span class="product-image-wrapper"
           style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100) ?>%;">
-        <img class="product-image-photo"
+        <img class="<?= /* @escapeNotVerified */ $block->getClass() ?>"
             <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
             src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
-            width="<?= /* @escapeNotVerified */ $block->getResizedImageWidth() ?>"
-            height="<?= /* @escapeNotVerified */ $block->getResizedImageHeight() ?>"
+            max-width="<?= /* @escapeNotVerified */ $block->getWidth() ?>"
+            max-height="<?= /* @escapeNotVerified */ $block->getHeight() ?>"
             alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
 </span>

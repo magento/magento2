@@ -28,5 +28,13 @@
             <data name="customersReport/report_period" xsi:type="string">Day</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertOrderedProductResult" />
         </variation>
+        <variation name="OrderedProductsReportEntityTestVariation4" summary="Ordered Product Report for Configurable Product" ticketId="MAGETWO-89752">
+            <data name="order/dataset" xsi:type="string">configurable_product</data>
+            <data name="customersReport/report_from" xsi:type="string">m/d/Y -1 day</data>
+            <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_period" xsi:type="string">Day</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertOrderedProductResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertOrderedProductReportForConfigurableProduct" />
+        </variation>
     </testCase>
 </config>

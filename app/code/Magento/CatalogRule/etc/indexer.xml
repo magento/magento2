@@ -14,4 +14,9 @@
         <title translate="true">Catalog Product Rule</title>
         <description translate="true">Indexed product/rule association</description>
     </indexer>
+    <indexer id="catalog_product_price">
+        <dependencies>
+            <indexer id="catalogrule_rule" />
+        </dependencies>
+    </indexer>
 </config>

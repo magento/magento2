@@ -179,7 +179,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -282,9 +282,9 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * Default value existing is flag for using store value in data
      *
-     * @param   string $attributeCode
-     * @param   mixed  $value
-     * @return  $this
+     * @param string $attributeCode
+     * @param mixed $value
+     * @return $this
      *
      * @deprecated 101.0.0
      */
@@ -332,11 +332,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     }
 
     /**
-     * Set attribute code flag if attribute has value in current store and does not use
-     * value of default store as value
+     * Set attribute code flag if attribute has value in current store and does not use value of default store as value
      *
-     * @param   string $attributeCode
-     * @return  $this
+     * @param string $attributeCode
+     * @return $this
      *
      * @deprecated 101.0.0
      */

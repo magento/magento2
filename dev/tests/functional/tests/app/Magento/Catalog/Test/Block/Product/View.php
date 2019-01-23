@@ -89,7 +89,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attribute.description';
+    protected $productDescription = '.product.attribute.description .value';
 
     /**
      * Product short-description element.
@@ -243,10 +243,23 @@ class View extends AbstractConfigureBlock
     /**
      * Get block price.
      *
+     * @param FixtureInterface|null $product
+     *
      * @return Price
      */
-    public function getPriceBlock()
+    public function getPriceBlock(FixtureInterface $product = null)
     {
+        $typeId = '';
+
+        if ($product) {
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        }
+
+        if ($this->hasRender($typeId)) {
+            return $this->callRender($typeId, 'getPriceBlock');
+        }
+
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]

@@ -160,10 +160,8 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->taxClassRepository->deleteById($taxClassId));
 
         // Verify if the tax class is deleted
-        $this->expectException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            "No such entity with class_id = $taxClassId"
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage("No such entity with class_id = $taxClassId");
         $this->taxClassRepository->deleteById($taxClassId);
     }
 

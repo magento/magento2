@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<ShipmentConfirmResponse>
+    <Response>
+        <ResponseStatusCode>1</ResponseStatusCode>
+        <ResponseStatusDescription>Success</ResponseStatusDescription>
+    </Response>
+    <ShipmentCharges>
+        <TransportationCharges>
+            <CurrencyCode>USD</CurrencyCode>
+            <MonetaryValue>193.22</MonetaryValue>
+        </TransportationCharges>
+        <ServiceOptionsCharges>
+            <CurrencyCode>USD</CurrencyCode>
+            <MonetaryValue>0.00</MonetaryValue>
+        </ServiceOptionsCharges>
+        <TotalCharges>
+            <CurrencyCode>USD</CurrencyCode>
+            <MonetaryValue>193.22</MonetaryValue>
+        </TotalCharges>
+    </ShipmentCharges>
+    <NegotiatedRates>
+        <NetSummaryCharges>
+            <GrandTotal>
+                <CurrencyCode>USD</CurrencyCode>
+                <MonetaryValue>191.29</MonetaryValue>
+            </GrandTotal>
+        </NetSummaryCharges>
+    </NegotiatedRates>
+    <BillingWeight>
+        <UnitOfMeasurement>
+            <Code>LBS</Code>
+        </UnitOfMeasurement>
+        <Weight>4.0</Weight>
+    </BillingWeight>
+    <ShipmentIdentificationNumber>1Z207W886698856557</ShipmentIdentificationNumber>
+</ShipmentConfirmResponse>

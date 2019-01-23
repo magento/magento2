@@ -15,8 +15,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-Bootstrap::getInstance()->reinitialize();
-
 require __DIR__ . '/configurable_attribute.php';
 
 /** @var ProductRepositoryInterface $productRepository */

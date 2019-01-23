@@ -11,44 +11,14 @@ namespace Magento\Mtf\Util\ModuleResolver;
 class SequenceSorter implements SequenceSorterInterface
 {
     /**
-     * Magento ObjectManager.
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $magentoObjectManager;
-
-    /**
-     * @constructor
-     */
-    public function __construct()
-    {
-        $this->initObjectManager();
-    }
-
-    /**
-     * Initialize Magento ObjectManager.
-     *
-     * @return void
-     */
-    protected function initObjectManager()
-    {
-        if (!$this->magentoObjectManager) {
-            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(
-                BP,
-                $_SERVER
-            );
-            $this->magentoObjectManager = $objectManagerFactory->create($_SERVER);
-        }
-    }
-
-    /**
      * Get Magento module sequence load.
      *
      * @return array
      */
     protected function getModuleSequence()
     {
-        return $this->magentoObjectManager->create(\Magento\Framework\Module\ModuleList\Loader::class)->load();
+        $ds = DIRECTORY_SEPARATOR;
+        return json_decode(file_get_contents(MTF_BP . $ds . 'generated' . $ds . 'moduleSequence.json'), true);
     }
 
     /**

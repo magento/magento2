@@ -25,7 +25,7 @@
         </span>
     </a>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart empty"
+        <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
                 "appendTo":"[data-block=minicart]",
@@ -41,6 +41,14 @@
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
+    <?php else: ?>
+        <script>
+            require(['jquery'], function ($) {
+                $('a.action.showcart').click(function() {
+                    $(document.body).trigger('processStart');
+                });
+            });
+        </script>
     <?php endif ?>
     <script>
         window.checkout = <?= /* @escapeNotVerified */ $block->getSerializedConfig() ?>;

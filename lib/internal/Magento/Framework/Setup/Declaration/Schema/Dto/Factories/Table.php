@@ -21,6 +21,16 @@ class Table implements FactoryInterface
     const DEFAULT_ENGINE = 'innodb';
 
     /**
+     * Default charset for SQL
+     */
+    const DEFAULT_CHARSET = 'utf8';
+
+    /**
+     * Default collation
+     */
+    const DEFAULT_COLLATION = 'utf8_general_ci';
+
+    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -57,13 +67,26 @@ class Table implements FactoryInterface
      */
     public function create(array $data)
     {
-        if ($data['engine'] === null) {
+        if (!isset($data['engine'])) {
             $data['engine'] = self::DEFAULT_ENGINE;
         }
+        //Prepare charset
+        if (!isset($data['charset'])) {
+            $data['charset'] = self::DEFAULT_CHARSET;
+        }
+        //Prepare collation
+        if (!isset($data['collation'])) {
+            $data['collation'] = self::DEFAULT_COLLATION;
+        }
+        //Prepare triggers
+        if (!isset($data['onCreate'])) {
+            $data['onCreate'] = '';
+        }
+
         $tablePrefix = $this->resourceConnection->getTablePrefix();
         $nameWithoutPrefix = $data['name'];
         if (!empty($tablePrefix) && strpos($nameWithoutPrefix, $tablePrefix) === 0) {
-            $data['nameWithoutPrefix'] = str_replace($tablePrefix, "", $data['name']);
+            $data['nameWithoutPrefix'] = preg_replace('/^' . $tablePrefix . '/i', '', $data['name']);
         } else {
             $data['name'] = $tablePrefix . $data['name'];
             $data['nameWithoutPrefix'] = $nameWithoutPrefix;
