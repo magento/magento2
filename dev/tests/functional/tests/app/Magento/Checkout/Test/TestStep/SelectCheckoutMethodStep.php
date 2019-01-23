@@ -117,7 +117,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
         if ($this->checkoutMethod === 'login') {
             if ($this->checkoutOnepage->getAuthenticationPopupBlock()->isVisible()) {
                 $this->checkoutOnepage->getAuthenticationPopupBlock()->loginCustomer($this->customer);
-                sleep(5);
                 $this->clickProceedToCheckoutStep->run();
             } else {
                 $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
