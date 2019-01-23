@@ -288,6 +288,15 @@
             .details-qty {
                 margin-top: @indent__s;
             }
+
+            .product {
+                .options {
+                    &.list {
+                        &:extend(.abs-product-options-list all);
+                        &:extend(.abs-add-clearfix all);
+                    }
+                }
+            }
         }
 
         .product {
