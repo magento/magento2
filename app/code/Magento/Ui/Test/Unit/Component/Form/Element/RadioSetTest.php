@@ -15,7 +15,7 @@ use Magento\Ui\Component\Form\Element\RadioSet;
 class RadioSetTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
@@ -23,7 +23,7 @@ class RadioSetTest extends AbstractElementTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function testGetComponentName()
     {
