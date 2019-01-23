@@ -1460,7 +1460,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $prices[] = $item->getMsrp();
             }
         }
-        return $prices ? min($prices) : 0;
+        return $prices ? max($prices) : 0;
     }
 
 }

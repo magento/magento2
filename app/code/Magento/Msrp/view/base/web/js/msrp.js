@@ -306,7 +306,7 @@ define([
                 return price.msrpPrice.amount;
             }).reject(function (p) {
                 return p === null;
-            }).min().value();
+            }).max().value();
 
             defaultPrice = _.chain(prices).map(function (p) {
                 return p.finalPrice.amount;
