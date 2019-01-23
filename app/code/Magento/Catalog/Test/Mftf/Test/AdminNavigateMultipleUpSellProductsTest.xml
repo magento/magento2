@@ -106,8 +106,6 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForTheProductToLoad"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheSimpleProduct2"/>
-        <comment userInput="PROBLEM HERE!" stepKey="problem1"/>
-        <!--<pauseExecution stepKey="pause1"/>-->
         <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}"/>
         <waitForPageLoad stepKey="waitForProductToBeAdded"/>
         <click stepKey="clickOnAddUpSellProductsButton" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
