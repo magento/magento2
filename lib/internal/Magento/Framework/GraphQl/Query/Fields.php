@@ -79,7 +79,7 @@ class Fields
     {
         $fields = [];
         foreach ($variables as $key => $value) {
-            if (is_array($value)){
+            if (is_array($value)) {
                 $fields = array_merge($fields, $this->extractVariables($value));
             }
             $fields[$key] = $key;
