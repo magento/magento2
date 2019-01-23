@@ -9,7 +9,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
-use Magento\Paypal\Block\Express\InContext;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\Locale\ResolverInterface;
@@ -17,6 +16,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Button
+ * @deprecated @see \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton
  */
 class Button extends Template implements ShortcutInterface
 {

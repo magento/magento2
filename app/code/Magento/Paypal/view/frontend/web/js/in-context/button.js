@@ -4,38 +4,62 @@
  */
 define([
     'uiComponent',
-    'jquery'
-], function (Component, $) {
+    'jquery',
+    'Magento_Paypal/js/in-context/express-checkout-smart-buttons',
+    'Magento_Customer/js/customer-data'
+], function (Component, $, checkoutSmartButtons, customerData) {
     'use strict';
 
     return Component.extend({
         /**
          * @returns {Object}
          */
-        initialize: function () {
+        initialize: function (config, element) {
             this._super();
 
-            return this.initEvents();
+            this.prepareClientConfig();
+
+            checkoutSmartButtons(this.prepareClientConfig(), element);
         },
 
         /**
-         * @returns {Object}
+         *  Validates Smart Buttons
          */
-        initEvents: function () {
-            $('a[data-action="' + this.linkDataAction + '"]').off('click.' + this.id)
-                .on('click.' + this.id, this.click.bind(this));
-
-            return this;
+        validate: function (actions) {
+            this.clientConfig.buttonActions = actions || this.clientConfig.buttonActions;
+            this.clientConfig.buttonActions.enable();
         },
 
         /**
-         * @param {Object} event
-         * @returns void
+         * Populate client config with all required data
+         *
+         * @return {Object}
          */
-        click: function (event) {
-            event.preventDefault();
+        prepareClientConfig: function () {
+            this.clientConfig.client = {};
+            this.clientConfig.client[this.clientConfig.environment] = this.clientConfig.merchantId;
+            this.clientConfig.rendererComponent = this;
+            this.clientConfig.formKey = $.mage.cookies.get('form_key');
+            this.clientConfig.commit = false;
+            return this.clientConfig;
+        },
 
-            $('#' + this.paypalButton).click();
+        /**
+         * Adding logic to be triggered onClick action for smart buttons component
+         */
+        onClick: function() {},
+
+        /**
+         * Adds error message
+         *
+         * @param {string} message
+         */
+        addError: function(message) {
+            customerData.set('messages', {messages: [{
+                    type: 'error',
+                    text: message
+                }],
+                data_id: Math.floor(Date.now() / 1000)});
         }
     });
 });

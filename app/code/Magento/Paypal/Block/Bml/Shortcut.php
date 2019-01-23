@@ -8,6 +8,8 @@ namespace Magento\Paypal\Block\Bml;
 
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
+use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\Config;
 
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
@@ -67,16 +69,23 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     private $_shortcutValidator;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * Shortcut constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param ValidatorInterface $shortcutValidator
-     * @param string $paymentMethodCode
-     * @param string $startAction
-     * @param string $alias
-     * @param string $bmlMethodCode
-     * @param string $shortcutTemplate
+     * @param $paymentMethodCode
+     * @param $startAction
+     * @param $alias
+     * @param $bmlMethodCode
+     * @param $shortcutTemplate
      * @param array $data
+     * @param ConfigFactory|null $config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,7 +98,8 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $alias,
         $bmlMethodCode,
         $shortcutTemplate,
-        array $data = []
+        array $data = [],
+        \Magento\Paypal\Model\ConfigFactory $config = null
     ) {
         $this->_paymentData = $paymentData;
         $this->_mathRandom = $mathRandom;
@@ -100,6 +110,10 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->_alias = $alias;
         $this->setTemplate($shortcutTemplate);
         $this->_bmlMethodCode = $bmlMethodCode;
+        $this->config = $config
+            ? $config
+            : \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigFactory::class)->create();
+        $this->config->setMethod($this->_paymentMethodCode);
         parent::__construct($context, $data);
     }
 
@@ -110,7 +124,9 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     {
         $result = parent::_beforeToHtml();
         $isInCatalog = $this->getIsInCatalogProduct();
-        if (!$this->_shortcutValidator->validate($this->_paymentMethodCode, $isInCatalog)) {
+        if (!$this->_shortcutValidator->validate($this->_paymentMethodCode, $isInCatalog)
+            || (bool)(int)$this->config->getValue('in_context')
+        ) {
             $this->_shouldRender = false;
             return $result;
         }

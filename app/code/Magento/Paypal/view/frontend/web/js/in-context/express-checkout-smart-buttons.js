@@ -4,9 +4,8 @@
  */
 define([
     'paypalInContextExpressCheckout',
-    'Magento_Ui/js/model/messageList',
     'mage/translate'
-], function (paypal, messageList, $t) {
+], function (paypal, $t) {
     'use strict';
 
     /**
@@ -33,7 +32,7 @@ define([
             style: clientConfig.styles,
 
             // Enable Pay Now checkout flow (optional)
-            commit: true,
+            commit: clientConfig.commit,
 
             /**
              * Validate payment method
@@ -48,9 +47,7 @@ define([
              * Execute logic on Paypal button click
              */
             onClick: function () {
-                if (typeof clientConfig.onClick === 'function') {
-                    clientConfig.onClick();
-                }
+                clientConfig.rendererComponent.onClick();
             },
 
             /**
@@ -75,10 +72,7 @@ define([
                                     return resolve(res.token);
                                 }
 
-                                messageList.addErrorMessage({
-                                    message: res['error_message']
-                                });
-
+                                clientConfig.rendererComponent.addError(res['error_message']);
                                 return reject(new Error(res['error_message']));
                             });
                         }).fail(function (response) {
@@ -89,10 +83,8 @@ define([
                             } catch (exception) {
                                 error = $t('Something went wrong with your request. Please try again later.');
                             }
-                            messageList.addErrorMessage({
-                                message: error
-                            });
 
+                            clientConfig.rendererComponent.addError(error);
                             return reject(new Error(error));
                         });
                     });
@@ -102,10 +94,7 @@ define([
                     if (res.success) {
                         return res.token;
                     }
-
-                    messageList.addErrorMessage({
-                        message: res['error_message']
-                    });
+                    clientConfig.rendererComponent.addError(res['error_message']);
                 });
             },
 
@@ -121,7 +110,6 @@ define([
                     paymentToken: data.paymentToken,
                     payerId: data.payerID,
                     quoteId: clientConfig.quoteId,
-                    method: clientConfig.payment.method,
                     customerId: clientConfig.customerId || '',
                     'form_key': clientConfig.formKey
                 };
@@ -131,10 +119,7 @@ define([
 
                         return actions.redirect(window, res.redirectUrl);
                     }
-
-                    messageList.addErrorMessage({
-                        message: res['error_message']
-                    });
+                    clientConfig.rendererComponent.addError(res['error_message']);
                 });
 
             },

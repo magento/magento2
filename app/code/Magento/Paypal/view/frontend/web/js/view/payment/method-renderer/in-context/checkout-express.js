@@ -85,33 +85,38 @@ define([
          * @return {Object}
          */
         prepareClientConfig: function () {
-            this.clientConfig.payment = {
-                method: this.item.method
-            };
             this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
             this.clientConfig.formKey = window.checkoutConfig.formKey;
             this.clientConfig.customerId = window.customerData.id;
             this.clientConfig.button = 0;
             this.clientConfig.merchantId = this.merchantId;
-            this.clientConfig.validator = additionalValidators;
             this.clientConfig.client = {};
             this.clientConfig.client[this.clientConfig.environment] = this.merchantId;
             this.clientConfig.additionalAction = setPaymentMethodAction;
             this.clientConfig.rendererComponent = this;
             this.clientConfig.messageContainer = this.messageContainer;
-
-            /** Add logic to be triggered onClick action for smart buttons component*/
-            this.clientConfig.onClick = function () {
-                additionalValidators.validate();
-                this.selectPaymentMethod();
-            };
-            _.each(this.clientConfig, function (fn, name) {
-                if (_.isFunction(fn)) {
-                    this.clientConfig[name] = fn.bind(this);
-                }
-            }, this);
+            this.clientConfig.commit = true;
 
             return this.clientConfig;
+        },
+
+        /**
+         * Adding logic to be triggered onClick action for smart buttons component
+         */
+        onClick: function() {
+            additionalValidators.validate();
+            this.selectPaymentMethod();
+        },
+
+        /**
+         * Adds error message
+         *
+         * @param {string} message
+         */
+        addError: function(message) {
+            messageList.addErrorMessage({
+                message: message
+            });
         }
     });
 });
