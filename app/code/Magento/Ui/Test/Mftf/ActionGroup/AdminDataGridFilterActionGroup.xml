@@ -31,8 +31,6 @@
     <actionGroup name="clearFiltersAdminDataGrid">
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <waitForElementNotVisible selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="waitClearFiltersDisappear"/>
     </actionGroup>
 
     <actionGroup name="AdminGridFilterSearchResultsByInput">
