@@ -15,7 +15,7 @@
             <description value="Test log in to Create virtual product and Create virtual product without manage stock"/>
             <testCaseId value="MC-6035"/>
             <severity value="CRITICAL"/>
-            <group value="tax"/>
+            <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -25,6 +25,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
@@ -46,9 +47,9 @@
         <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminCategoryProductsGridSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
-        <click selector="{{AdminCategoryProductsGridSection.selectCategory}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminCategoryProductsGridSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductWithoutManageStock.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
@@ -59,9 +60,9 @@
 
         <!-- Verify customer see created virtual product without manage stock on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(virtualProductWithoutManageStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="seeVirtualProductSku"/>
-
         <!-- Verify customer see product special price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
         <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
@@ -74,7 +75,6 @@
             <expectedResult type="string">${{virtualProductWithoutManageStock.price}}</expectedResult>
             <actualResult type="variable">oldPriceAmount</actualResult>
         </assertEquals>
-
         <!-- Verify customer see product in stock status on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">

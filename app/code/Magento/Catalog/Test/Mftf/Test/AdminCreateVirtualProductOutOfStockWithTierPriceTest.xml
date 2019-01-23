@@ -15,7 +15,7 @@
             <description value="Test log in to Create virtual product and Create virtual product out of stock with tier price"/>
             <testCaseId value="MC-6036"/>
             <severity value="CRITICAL"/>
-            <group value="tax"/>
+            <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -25,6 +25,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
@@ -52,9 +53,9 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductOutOfStock.quantity}}" stepKey="fillVirtualProductQuantity"/>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{virtualProductOutOfStock.status}}" stepKey="selectStockStatusOutOfStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminCategoryProductsGridSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
-        <click selector="{{AdminCategoryProductsGridSection.selectCategory}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminCategoryProductsGridSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductOutOfStock.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
@@ -65,9 +66,9 @@
 
         <!-- Verify we see created virtual product out of stock with tier price on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(virtualProductOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductOutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
-
         <!--  Verify customer see product tier price on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceOnDefault.qty_0)}}" stepKey="firstTierPriceText"/>
         <assertEquals stepKey="assertTierPriceTextOnProductPage1">
@@ -79,7 +80,6 @@
             <expectedResult type="string">Buy {{tierPriceOnDefault.qty_1}} for ${{tierPriceOnDefault.price_1}} each and save 100%</expectedResult>
             <actualResult type="variable">secondTierPriceText</actualResult>
         </assertEquals>
-
         <!--  Verify customer see product out of stock status on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">

@@ -70,6 +70,7 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
@@ -156,11 +157,14 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="searchAndSelectCategory"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="option1" stepKey="fillOptionTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openTypeDropDown"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeTextField}}" stepKey="selectTypeTextField"/>
         <fillField userInput="20" selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput}}" stepKey="fillMaxChars"/>
+
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         <seeInField userInput="{{simpleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="assertFieldName"/>
