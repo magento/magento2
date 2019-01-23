@@ -37,7 +37,15 @@ define([
             this.config = config;
             this.schema = config.schema || html5Schema;
 
-            _.bindAll(this, 'beforeSetContent', 'saveContent', 'onChangeContent', 'openFileBrowser', 'updateTextArea');
+            _.bindAll(
+                this,
+                'beforeSetContent',
+                'saveContent',
+                'onChangeContent',
+                'openFileBrowser',
+                'updateTextArea',
+                'removeEvents'
+            );
 
             varienGlobalEvents.attachEventHandler('tinymceChange', this.onChangeContent);
             varienGlobalEvents.attachEventHandler('tinymceBeforeSetContent', this.beforeSetContent);
@@ -70,6 +78,17 @@ define([
             }
 
             tinyMCE3.init(this.getSettings(mode));
+        },
+
+        /**
+         * Remove events from instance.
+         *
+         * @param {String} wysiwygId
+         */
+        removeEvents: function (wysiwygId) {
+            var editor = tinyMceEditors.get(wysiwygId);
+
+            varienGlobalEvents.removeEventHandler('tinymceChange', editor.onChangeContent);
         },
 
         /**

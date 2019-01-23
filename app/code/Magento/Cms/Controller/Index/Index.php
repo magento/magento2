@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Controller\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -15,8 +17,12 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Cms\Helper\Page;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Action\Action;
 
-class Index extends \Magento\Framework\App\Action\Action
+/**
+ * Home page. Needs to be accessible by POST because of the store switching.
+ */
+class Index extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var ForwardFactory

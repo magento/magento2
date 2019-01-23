@@ -10,6 +10,10 @@
 
     <rule ref="PSR2"/>
 
+    <rule ref="PSR2.Files.ClosingTag">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+
     <rule ref="Magento.Files.LineLength">
         <properties>
             <property name="lineLimit" value="120"/>
@@ -23,8 +27,24 @@
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
     <rule ref="Magento.Annotation.MethodArguments">
-        <!--Disabled due to MAGETWO-94083-->
-        <exclude-pattern>*</exclude-pattern>
+        <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
+        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
+    </rule>
+    <rule ref="Magento.Annotation.MethodAnnotationStructure">
+        <include-pattern>*\.(php)</include-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
+        <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
+    </rule>
+    <rule ref="Magento.Annotation.ClassAnnotationStructure">
+        <include-pattern>*\.(php)</include-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
+        <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Magento/Inventory*/*</exclude-pattern>
     </rule>
     <rule ref="Magento.Functions.OutputBuffering">
         <include-pattern>*/(app/code|vendor|setup/src|lib/internal/Magento)/*</include-pattern>

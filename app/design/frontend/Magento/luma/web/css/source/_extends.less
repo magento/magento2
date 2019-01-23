@@ -277,7 +277,7 @@
 }
 
 //
-//  Marging for blocks & widgets
+//  Margin for blocks & widgets
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -1506,6 +1506,10 @@
             position: relative;
             z-index: 1;
         }
+        .limiter {
+            display: inline-block;
+            float: right;
+        }
 
         .toolbar-amount {
             .lib-css(line-height, @pager__line-height);
@@ -1859,7 +1863,7 @@
 
             > .title {
                 strong {
-                    color: @color-blue1;
+                    color: @link__color;
                     font-weight: @font-weight__regular;
                 }
             }

@@ -5,10 +5,11 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Controller\Adminhtml\Index as ReportsIndexController;
 use Magento\Framework\Controller\ResultFactory;
 
-class Report extends ReportsIndexController
+class Report extends ReportsIndexController implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

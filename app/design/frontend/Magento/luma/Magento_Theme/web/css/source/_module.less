@@ -67,6 +67,16 @@
         .lib-css(background-color, @page__background-color);
     }
 
+    .page-wrapper {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        min-height: 100vh; // Stretch content area for sticky footer
+    }
+
+    .page-main {
+        .lib-vendor-prefix-flex-grow(1);
+    }
+
     //
     //  Header
     //  ---------------------------------------------
@@ -131,6 +141,12 @@
         .page-print & {
             display: inline-block;
             float: none;
+        }
+    }
+
+    .page-print {
+        .nav-toggle {
+            display: none;
         }
     }
 
@@ -302,11 +318,27 @@
             }
         }
     }
+    .page-header {
+        .switcher {
+            .options {
+                ul.dropdown {
+                    right: 0;
+                    &:before {
+                        left: auto;
+                        right: 10px;
+                    }
+                    &:after {
+                        left: auto;
+                        right: 9px;
+                    }
+                }
+            }
+        }
+    }
 
     //
     //  Widgets
     //  ---------------------------------------------
-
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
@@ -410,12 +442,6 @@
                 }
             }
         }
-    }
-    .page-footer,
-    .copyright {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
     }
 }
 
@@ -614,10 +640,7 @@
     }
 
     .page-wrapper {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
         margin: 0;
-        min-height: 100%; // Stretch content area for sticky footer
         position: relative;
         transition: margin .3s ease-out 0s;
 
@@ -626,10 +649,6 @@
         > .widget {
             box-sizing: border-box;
             width: 100%;
-        }
-
-        .ie11 & {
-            height: 100%;
         }
     }
 

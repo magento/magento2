@@ -22,6 +22,9 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 /**
  * Attribute query builder
  *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryBuilder

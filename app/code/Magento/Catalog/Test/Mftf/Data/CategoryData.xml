@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultCategory" type="category">
         <data key="name" unique="suffix">simpleCategory</data>
         <data key="name_lwr" unique="suffix">simplecategory</data>
@@ -41,5 +41,25 @@
         <data key="name_lwr" unique="suffix">subcategory</data>
         <data key="is_active">true</data>
         <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="FirstLevelSubCat" type="category">
+        <data key="name" unique="suffix">FirstLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="SecondLevelSubCat" type="category">
+        <data key="name" unique="suffix">SecondLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="ThirdLevelSubCat" type="category">
+        <data key="name" unique="suffix">ThirdLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FourthLevelSubCat" type="category">
+        <data key="name" unique="suffix">FourthLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+    </entity>
+    <entity name="FifthLevelCat" type="category">
+        <data key="name" unique="suffix">FifthLevelCategory</data>
+        <data key="name_lwr" unique="suffix">category</data>
     </entity>
 </entities>

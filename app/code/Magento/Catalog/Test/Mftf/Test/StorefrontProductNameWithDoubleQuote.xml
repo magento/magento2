@@ -7,16 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductNameWithDoubleQuote">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Create products"/>
             <title value="Product with double quote in name"/>
             <description value="Product with a double quote in the name should appear correctly on the storefront"/>
             <severity value="CRITICAL"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-92384"/>
-            <!-- Skipped due to MAGETWO-93261 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -66,6 +66,7 @@
     <test name="StorefrontProductNameWithHTMLEntities">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Create product"/>
             <title value=":Proudct with html special characters in name"/>
             <description value="Product with html entities in the name should appear correctly on the PDP breadcrumbs on storefront"/>
             <severity value="CRITICAL"/>

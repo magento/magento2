@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurableProductUpdateAttributeTest">
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -228,12 +228,12 @@
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
-            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
+            <argument name="product" value="$$createConfigProduct$$" />
+        </actionGroup>
 
         <!-- Open the wizard for editing configurations and fill out a new attribute -->
         <click stepKey="clickEditConfig" selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"/>

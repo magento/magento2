@@ -14,10 +14,10 @@
                 comment="Widget code for template directive"/>
         <column xsi:type="varchar" name="widget_type" nullable="true" length="255" comment="Widget Type"/>
         <column xsi:type="text" name="parameters" nullable="true" comment="Parameters"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="widget_id"/>
         </constraint>
-        <index name="WIDGET_WIDGET_CODE" indexType="btree">
+        <index referenceId="WIDGET_WIDGET_CODE" indexType="btree">
             <column name="widget_code"/>
         </index>
     </table>
@@ -32,10 +32,10 @@
         <column xsi:type="text" name="widget_parameters" nullable="true" comment="Widget parameters"/>
         <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort order"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="instance_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="WIDGET_INSTANCE_THEME_ID_THEME_THEME_ID" table="widget_instance"
+        <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_THEME_ID_THEME_THEME_ID" table="widget_instance"
                     column="theme_id" referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
     </table>
     <table name="widget_instance_page" resource="default" engine="innodb" comment="Instance of Widget on Page">
@@ -49,13 +49,13 @@
         <column xsi:type="varchar" name="page_for" nullable="true" length="25" comment="For instance entities"/>
         <column xsi:type="text" name="entities" nullable="true" comment="Catalog entities (comma separated)"/>
         <column xsi:type="varchar" name="page_template" nullable="true" length="255" comment="Path to widget template"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="page_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="WIDGET_INSTANCE_PAGE_INSTANCE_ID_WIDGET_INSTANCE_INSTANCE_ID"
+        <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_INSTANCE_ID_WIDGET_INSTANCE_INSTANCE_ID"
                     table="widget_instance_page" column="instance_id" referenceTable="widget_instance"
                     referenceColumn="instance_id" onDelete="CASCADE"/>
-        <index name="WIDGET_INSTANCE_PAGE_INSTANCE_ID" indexType="btree">
+        <index referenceId="WIDGET_INSTANCE_PAGE_INSTANCE_ID" indexType="btree">
             <column name="instance_id"/>
         </index>
     </table>
@@ -64,17 +64,17 @@
                 comment="Page Id"/>
         <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Layout Update Id"/>
-        <constraint xsi:type="foreign" name="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID"
+        <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID"
                     table="widget_instance_page_layout" column="page_id" referenceTable="widget_instance_page"
                     referenceColumn="page_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID"
+        <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID"
                     table="widget_instance_page_layout" column="layout_update_id" referenceTable="layout_update"
                     referenceColumn="layout_update_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
+        <constraint xsi:type="unique" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
             <column name="layout_update_id"/>
             <column name="page_id"/>
         </constraint>
-        <index name="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID" indexType="btree">
+        <index referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID" indexType="btree">
             <column name="page_id"/>
         </index>
     </table>
@@ -87,10 +87,10 @@
                 default="0" comment="Sort Order"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="0"
                 comment="Last Update Timestamp"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="layout_update_id"/>
         </constraint>
-        <index name="LAYOUT_UPDATE_HANDLE" indexType="btree">
+        <index referenceId="LAYOUT_UPDATE_HANDLE" indexType="btree">
             <column name="handle"/>
         </index>
     </table>
@@ -105,20 +105,20 @@
                 default="0" comment="Layout Update Id"/>
         <column xsi:type="boolean" name="is_temporary" nullable="false" default="false"
                 comment="Defines whether Layout Update is Temporary"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="layout_link_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="LAYOUT_LINK_LAYOUT_UPDATE_ID_LAYOUT_UPDATE_LAYOUT_UPDATE_ID"
+        <constraint xsi:type="foreign" referenceId="LAYOUT_LINK_LAYOUT_UPDATE_ID_LAYOUT_UPDATE_LAYOUT_UPDATE_ID"
                     table="layout_link" column="layout_update_id" referenceTable="layout_update"
                     referenceColumn="layout_update_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="LAYOUT_LINK_STORE_ID_STORE_STORE_ID" table="layout_link" column="store_id"
+        <constraint xsi:type="foreign" referenceId="LAYOUT_LINK_STORE_ID_STORE_STORE_ID" table="layout_link" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="LAYOUT_LINK_THEME_ID_THEME_THEME_ID" table="layout_link" column="theme_id"
+        <constraint xsi:type="foreign" referenceId="LAYOUT_LINK_THEME_ID_THEME_THEME_ID" table="layout_link" column="theme_id"
                     referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
-        <index name="LAYOUT_LINK_LAYOUT_UPDATE_ID" indexType="btree">
+        <index referenceId="LAYOUT_LINK_LAYOUT_UPDATE_ID" indexType="btree">
             <column name="layout_update_id"/>
         </index>
-        <index name="LAYOUT_LINK_STORE_ID_THEME_ID_LAYOUT_UPDATE_ID_IS_TEMPORARY" indexType="btree">
+        <index referenceId="LAYOUT_LINK_STORE_ID_THEME_ID_LAYOUT_UPDATE_ID_IS_TEMPORARY" indexType="btree">
             <column name="store_id"/>
             <column name="theme_id"/>
             <column name="layout_update_id"/>

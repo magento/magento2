@@ -180,10 +180,21 @@ class SessionManager implements SessionManagerInterface
             // Need to apply the config options so they can be ready by session_start
             $this->initIniOptions();
             $this->registerSaveHandler();
+            if (isset($_SESSION['new_session_id'])) {
+                // Not fully expired yet. Could be lost cookie by unstable network.
+                session_commit();
+                session_id($_SESSION['new_session_id']);
+            }
             $sid = $this->sidResolver->getSid($this);
             // potential custom logic for session id (ex. switching between hosts)
             $this->setSessionId($sid);
             session_start();
+            if (isset($_SESSION['destroyed'])
+                && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
+            ) {
+                $this->destroy(['clear_storage' => true]);
+            }
+
             $this->validator->validate($this);
             $this->renewCookie($sid);
 
@@ -498,7 +509,33 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
 
-        $this->isSessionExists() ? session_regenerate_id(true) : session_start();
+        if ($this->isSessionExists()) {
+            // Regenerate the session
+            session_regenerate_id();
+            $newSessionId = session_id();
+            $_SESSION['new_session_id'] = $newSessionId;
+
+            // Set destroy timestamp
+            $_SESSION['destroyed'] = time();
+
+            // Write and close current session;
+            session_commit();
+
+            // Called after destroy()
+            $oldSession = $_SESSION;
+
+            // Start session with new session ID
+            session_id($newSessionId);
+            session_start();
+            $_SESSION = $oldSession;
+
+            // New session does not need them
+            unset($_SESSION['destroyed']);
+            unset($_SESSION['new_session_id']);
+        } else {
+            session_start();
+        }
+
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {

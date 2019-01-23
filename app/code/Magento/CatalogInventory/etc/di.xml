@@ -35,7 +35,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
-    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
+    <type name="Magento\Catalog\Model\FilterProductCustomAttribute">
         <arguments>
             <argument name="blackList" xsi:type="array">
                 <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>

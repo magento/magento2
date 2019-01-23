@@ -31,6 +31,7 @@ class State
 
     /**
      * Set the state to use temporary Index
+     *
      * @return void
      */
     public function useTemporaryIndex()
@@ -40,6 +41,7 @@ class State
 
     /**
      * Set the state to use regular Index
+     *
      * @return void
      */
     public function useRegularIndex()
@@ -48,6 +50,8 @@ class State
     }
 
     /**
+     * Get state.
+     *
      * @return string
      */
     public function getState()

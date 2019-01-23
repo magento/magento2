@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxQuoteCartLoggedInSimple">
         <annotations>
             <features value="Tax"/>
@@ -75,7 +75,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -92,8 +92,10 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
+        <waitForText userInput="$5.00" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" time="30" stepKey="waitForCorrectShippingAmount"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.30"/>
         <click stepKey="expandTax" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxNY.rate}}%)"/>
@@ -191,7 +193,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -208,6 +210,7 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.37"/>
@@ -297,7 +300,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -314,8 +317,12 @@
         <!-- Assert that taxes are applied correctly for CA -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.15"/>
         <click stepKey="expandTax2" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent2" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxCA.rate}}%)"/>
@@ -403,7 +410,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
-            <!-- Ensure tax wont be shown in the cart -->
+            <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="changeToDefaultTaxConfigurationUI" stepKey="changeToDefaultTaxConfiguration"/>
 
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -420,9 +427,13 @@
         <!-- Assert that taxes are applied correctly for NY -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>
         <click stepKey="expandTax2" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTaxPercent2" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxCA.rate}}%)"/>

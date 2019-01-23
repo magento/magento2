@@ -6,6 +6,8 @@
 namespace Magento\User\Block;
 
 /**
+ * Buttons block
+ *
  * @api
  * @since 100.0.2
  */
@@ -33,6 +35,8 @@ class Buttons extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -53,7 +57,7 @@ class Buttons extends \Magento\Backend\Block\Template
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
-        if (intval($this->getRequest()->getParam('rid'))) {
+        if ((int)$this->getRequest()->getParam('rid')) {
             $this->getToolbar()->addChild(
                 'deleteButton',
                 \Magento\Backend\Block\Widget\Button::class,
@@ -85,6 +89,8 @@ class Buttons extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get back button html
+     *
      * @return string
      */
     public function getBackButtonHtml()
@@ -93,6 +99,8 @@ class Buttons extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get reset button html
+     *
      * @return string
      */
     public function getResetButtonHtml()
@@ -101,6 +109,8 @@ class Buttons extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get save button html
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -109,17 +119,21 @@ class Buttons extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get delete button html
+     *
      * @return string|void
      */
     public function getDeleteButtonHtml()
     {
-        if (intval($this->getRequest()->getParam('rid')) == 0) {
+        if ((int)$this->getRequest()->getParam('rid') == 0) {
             return;
         }
         return $this->getChildHtml('deleteButton');
     }
 
     /**
+     * Get user
+     *
      * @return mixed
      */
     public function getUser()

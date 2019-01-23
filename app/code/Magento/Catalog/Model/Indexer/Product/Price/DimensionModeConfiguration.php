@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
-
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -41,6 +40,7 @@ class DimensionModeConfiguration
             CustomerGroupDimensionProvider::DIMENSION_NAME
         ],
     ];
+
     /**
      * @var ScopeConfigInterface
      */
@@ -60,11 +60,22 @@ class DimensionModeConfiguration
     }
 
     /**
+     * Return dimension modes configuration.
+     *
+     * @return array
+     */
+    public function getDimensionModes(): array
+    {
+        return $this->modesMapping;
+    }
+
+    /**
      * Get names of dimensions which used for provided mode.
      * By default return dimensions for current enabled mode
      *
      * @param string|null $mode
      * @return string[]
+     * @throws \InvalidArgumentException
      */
     public function getDimensionConfiguration(string $mode = null): array
     {
@@ -82,7 +93,7 @@ class DimensionModeConfiguration
     private function getCurrentMode(): string
     {
         if (null === $this->currentMode) {
-            $this->currentMode = $this->scopeConfig->getValue(ModeSwitcher::XML_PATH_PRICE_DIMENSIONS_MODE)
+            $this->currentMode = $this->scopeConfig->getValue(ModeSwitcherConfiguration::XML_PATH_PRICE_DIMENSIONS_MODE)
                 ?: self::DIMENSION_NONE;
         }
 

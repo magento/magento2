@@ -7,17 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ConfigurableProductPriceAdditionalStoreViewTest">
         <annotations>
             <features value="ConfigurableProductPriceStoreFront"/>
+            <stories value="View products"/>
             <title value="Configurable product prices should not disappear on storefront for additional store"/>
             <description value="Configurable product price should not disappear for additional stores on frontEnd if disabled for default store"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-92247"/>
-            <skip>
-                <issueId value="MAGETWO-92247"/>
-            </skip>
+            <group value="ConfigurableProduct"/>
         </annotations>
         <before>
             
@@ -132,12 +131,13 @@
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreviewSwitcher"/>
         <click selector="{{AdminProductFormActionSection.selectStoreView('Second Store View')}}" stepKey="chooseStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage"/>
-        <!--<waitForPageLoad stepKey="waitForStoreViewSwitched"/>-->
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
 
         <!-- enable the config product for the second store -->
-       <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
+       <waitForElementVisible selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="waitForDefaultValueCheckBox"/>
+        <click selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="unCheckUseDefaultValueCheckBox"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreView"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProductIsEnabled"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="enabledConfigProductSecondStore"/>
@@ -150,7 +150,6 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptStoreSwitchingMessage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName1"/>
-
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActionsForFirstVariation2"/>
         <click selector="{{AdminProductFormConfigurationsSection.enableProductBtn}}" stepKey="clickEnableChildProduct1"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('2')}}" stepKey="clickToExpandActionsForSecondVariation2"/>
@@ -180,7 +179,6 @@
         <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP1"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP1"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP1"/>
-        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP1"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct1IsEnabled"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild1"/>
 
@@ -200,7 +198,6 @@
         <waitForPageLoad time="30" stepKey="waitForStoreViewSwitchedP2"/>
         <see userInput="Second Store View" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewNameP2"/>
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSliderP2"/>
-        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="enableProductForSecondStoreViewP2"/>
         <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProduct2IsEnabled"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="save2UpdatedChild2"/>
 
@@ -210,6 +207,6 @@
         <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent"/>
-        <dontSee userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
+        <See userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>

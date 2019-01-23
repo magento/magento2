@@ -7,9 +7,10 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductAddFPTValueSection">
         <element name="addFPT" type="button" selector="[data-index='{{FPTAttributeCode}}'] [data-action='add_new_row']" parameterized="true"/>
+        <element name="removeRowByIndex" type="button" selector="[data-index='{{FPTAttributeCode}}'] [data-action='remove_row']:nth-of-type({{rowIndex}})" parameterized="true"/>
         <element name="selectCountryForFPT" type="select" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[country]')])[last()]" parameterized="true"/>
         <element name="selectStateForFPT" type="select" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[state]')])[last()]" parameterized="true"/>
         <element name="setTaxValueForFPT" type="text" selector="(//input[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[value]')])[last()]" parameterized="true"/>

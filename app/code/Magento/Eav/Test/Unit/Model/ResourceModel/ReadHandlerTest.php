@@ -110,7 +110,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $attributeMock->method('getAttributeCode')
             ->willReturn('attributeCode');
         $this->configMock->expects($this->exactly($callNum))
-            ->method('getAttributes')
+            ->method('getEntityAttributes')
             ->willReturn([$attributeMock]);
         $this->assertEquals($expected, $this->readHandler->execute('entity_type', $entityData));
     }

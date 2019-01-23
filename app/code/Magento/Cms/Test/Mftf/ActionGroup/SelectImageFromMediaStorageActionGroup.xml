@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="clickBrowseBtnOnUploadPopup">
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
         <waitForPageLoad stepKey="waitForPageLoad1" />
@@ -17,7 +17,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn" />
         <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn" />
-        <see selector="{{MediaGallerySection.InsertFile}}" userInput="Add Selected" stepKey="seeAddSelectedBtn" />
     </actionGroup>
     <actionGroup name="CreateImageFolder">
         <arguments>

@@ -33,6 +33,9 @@ class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
     {
         /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
-        $product->setUrlKey($this->productUrlPathGenerator->getUrlKey($product));
+        $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
+        if (null !== $urlKey) {
+            $product->setUrlKey($urlKey);
+        }
     }
 }

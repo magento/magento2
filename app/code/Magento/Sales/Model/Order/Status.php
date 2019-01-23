@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class Status
  *
  * @method string getStatus()
+ * @method $this setStatus(string $status)
  * @method string getLabel()
  */
 class Status extends \Magento\Sales\Model\AbstractModel

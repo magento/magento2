@@ -102,7 +102,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             true,
-            ['addSuccess', 'getMessages']
+            ['addSuccessMessage', 'getMessages']
         );
 
         $this->save = $this->objectManager->getObject(
@@ -392,7 +392,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('save');
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the category.'));
         $categoryMock->expects($this->at(1))
             ->method('getId')

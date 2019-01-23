@@ -7,7 +7,9 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpPostActionInterface
 {
     /**
      * Save Newsletter queue
