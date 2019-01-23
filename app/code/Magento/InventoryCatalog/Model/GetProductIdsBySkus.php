@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryCatalog\Model\LocalCache\GetProductIdsBySkusCache;
 use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 
 /**
@@ -17,22 +18,25 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 class GetProductIdsBySkus implements GetProductIdsBySkusInterface
 {
     /**
-     * @var array
-     */
-    private $productIdsBySkus = [];
-
-    /**
      * @var ProductResourceModel
      */
     private $productResource;
 
     /**
+     * @var GetProductIdsBySkusCache
+     */
+    private $getProductIdsBySkusCache;
+
+    /**
      * @param ProductResourceModel $productResource
+     * @param GetProductIdsBySkusCache $getProductIdsBySkusCache
      */
     public function __construct(
-        ProductResourceModel $productResource
+        ProductResourceModel $productResource,
+        GetProductIdsBySkusCache $getProductIdsBySkusCache
     ) {
         $this->productResource = $productResource;
+        $this->getProductIdsBySkusCache = $getProductIdsBySkusCache;
     }
 
     /**
@@ -42,7 +46,7 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
     {
         $cacheKey = hash('md5', implode(',', $skus));
 
-        if (!isset($this->productIdsBySkus[$cacheKey])) {
+        if (null === $this->getProductIdsBySkusCache->get($cacheKey)) {
             $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
             $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
 
@@ -52,9 +56,9 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
                 );
             }
 
-            $this->productIdsBySkus[$cacheKey] = $idsBySkus;
+            $this->getProductIdsBySkusCache->set($cacheKey, $idsBySkus);
         }
 
-        return $this->productIdsBySkus[$cacheKey];
+        return $this->getProductIdsBySkusCache->get($cacheKey);
     }
 }
