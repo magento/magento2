@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
@@ -47,6 +46,7 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductCustomImportOptions.urlKey}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
+
         <!-- Create virtual product with customizable options dataSet1 -->
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton"/>
         <waitForPageLoad stepKey="waitForFirstOption"/>
@@ -58,6 +58,7 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_price_type}}" stepKey="selectOptionPriceTypeForFirstDataSet"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_sku}}" stepKey="fillOptionSkuForFirstDataSet"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('0')}}" userInput="{{virtualProductCustomizableOption1.option_0_max_characters}}" stepKey="fillOptionMaxCharactersForFirstDataSet"/>
+
         <!-- Create virtual product with customizable options dataSet2 -->
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForSecondDataSet"/>
         <waitForPageLoad stepKey="waitForSecondDataSetToLoad"/>
@@ -69,6 +70,7 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_price_type}}" stepKey="selectOptionPriceTypeForSecondDataSet"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_sku}}" stepKey="fillOptionSkuForSecondDataSet"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput('1')}}" userInput="{{virtualProductCustomizableOption2.option_0_max_characters}}" stepKey="fillOptionMaxCharactersForSecondDataSet"/>
+
         <!-- Create virtual product with customizable options dataSet3 -->
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForThirdSetOfData"/>
         <waitForPageLoad stepKey="waitForThirdSetOfDataToLoad"/>
@@ -86,6 +88,7 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price}}" stepKey="fillOptionPriceForThirdDataSetSecondRow"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_price_type}}" stepKey="selectOptionPriceTypeForThirdDataSetSecondRow"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption3.title,'1')}}" userInput="{{virtualProductCustomizableOption3.option_1_sku}}" stepKey="fillOptionSkuForThirdDataSetSecondRow"/>
+
         <!-- Create virtual product with customizable options dataSet4 -->
         <scrollToTopOfPage stepKey="scrollToAddOptionButton"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForFourthDataSet"/>
@@ -107,6 +110,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 

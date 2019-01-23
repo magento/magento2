@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -38,6 +37,7 @@
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductWithRequiredFields.price}}" stepKey="fillProductPrice"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved" />
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 

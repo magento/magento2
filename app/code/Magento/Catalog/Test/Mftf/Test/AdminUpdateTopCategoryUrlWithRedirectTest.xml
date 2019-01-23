@@ -81,7 +81,6 @@
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$$createThreeLevelNestedCategories.name$$" stepKey="fillOldUrlInRedirectPathFilter"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton1"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
-
         <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/$$createThreeLevelNestedCategories.name$$.html" stepKey="seeTheRedirectPathForOldUrl"/>
         <see selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheTargetPathForOldUrl"/>
         <see selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)" stepKey="seeTheRedirectTypeForOldUrl"/>

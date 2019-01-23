@@ -69,6 +69,7 @@
             <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0" />
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Category Page and select created category-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
@@ -76,6 +77,7 @@
         <waitForPageLoad stepKey="waitForPageToLoad0"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
+
         <!--Select Products-->
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
@@ -94,28 +96,34 @@
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
+
         <!--Open Category Store Front Page-->
         <amOnPage url="{{_defaultCategory.name}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
+
         <!--Select 9 items per page and verify number of products displayed in each page -->
         <conditionalClick selector="{{StorefrontCategoryTopToolbarSection.gridMode}}" visible="true" dependentSelector="{{StorefrontCategoryTopToolbarSection.gridMode}}" stepKey="seeProductGridIsActive"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="9" stepKey="selectPerPageOption"/>
+
         <!--Verify number of products displayed in First Page -->
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInFirstPage"/>
+
         <!--Verify number of products displayed in Second Page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInSecondPage"/>
+
         <!--Verify number of products displayed in third  Page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton1"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="2" stepKey="seeNumberOfProductsInThirdPage"/>
+
         <!--Change Pages using Previous Page selector and verify number of products displayed in each page-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage1"/>
@@ -125,21 +133,25 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad6"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInFirstPage1"/>
+
         <!--Select Pages by using page Number and verify number of products displayed-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToPreviousPage2"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('2')}}" stepKey="clickOnPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad7"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsInSecondPage2"/>
+
         <!--Select Third Page using page number-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToPreviousPage3"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('3')}}" stepKey="clickOnThirdPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad8"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="2" stepKey="seeNumberOfProductsInThirdPage2"/>
+
         <!--Select First Page using page number-->
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage4"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="clickOnFirstPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad9"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="9" stepKey="seeNumberOfProductsFirstPage2"/>
+
         <!--Select 15 items per page and verify number of products displayed in each page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="15" stepKey="selectPerPageOption1"/>
@@ -149,6 +161,7 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad11"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="5" stepKey="seeNumberOfProductsInSecondPage3"/>
+
         <!--Select 30 items per page  and verify number of products displayed in each page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage4"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="30" stepKey="selectPerPageOption2"/>

@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
@@ -61,6 +60,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
@@ -69,6 +69,7 @@
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductOutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
+
         <!--  Verify customer see product tier price on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceOnDefault.qty_0)}}" stepKey="firstTierPriceText"/>
         <assertEquals stepKey="assertTierPriceTextOnProductPage1">
@@ -80,6 +81,7 @@
             <expectedResult type="string">Buy {{tierPriceOnDefault.qty_1}} for ${{tierPriceOnDefault.price_1}} each and save 100%</expectedResult>
             <actualResult type="variable">secondTierPriceText</actualResult>
         </assertEquals>
+
         <!--  Verify customer see product out of stock status on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">

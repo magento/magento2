@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
@@ -61,6 +60,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
@@ -72,6 +72,7 @@
         <waitForPageLoad stepKey="waitForProductSearch"/>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
         <!-- Verify we see created virtual product with tier price for general group(from the above step) in the product form page -->
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="seeProductName"/>
         <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductGeneralGroup.sku}}" stepKey="seeProductSku"/>
@@ -114,6 +115,7 @@
         <waitForPageLoad stepKey="waitForSearch"/>
         <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{virtualProductGeneralGroup.name}}" stepKey="seeVirtualProductName"/>
         <grabTextFrom selector="{{StorefrontQuickSearchResultsSection.asLowAsLabel}}" stepKey="tierPriceTextOnStorefrontPage"/>
+
         <!-- Verify customer see created virtual product with tier price -->
         <assertEquals stepKey="assertTierPriceTextOnCategoryPage">
             <expectedResult type="string">As low as ${{tierPriceOnGeneralGroup.price}}</expectedResult>

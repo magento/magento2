@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
@@ -55,6 +54,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
@@ -63,18 +63,21 @@
         <waitForPageLoad stepKey="waitForStoreFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="seeVirtualProductSku"/>
+
         <!-- Verify customer see product special price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
         <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
             <expectedResult type="string">${{virtualProductWithoutManageStock.special_price}}</expectedResult>
             <actualResult type="variable">specialPriceAmount</actualResult>
         </assertEquals>
+
         <!-- Verify customer see product old price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="oldPriceAmount"/>
         <assertEquals stepKey="assertOldPriceTextOnProductPage">
             <expectedResult type="string">${{virtualProductWithoutManageStock.price}}</expectedResult>
             <actualResult type="variable">oldPriceAmount</actualResult>
         </assertEquals>
+
         <!-- Verify customer see product in stock status on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">

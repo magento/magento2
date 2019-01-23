@@ -18,7 +18,6 @@
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
-
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
@@ -57,6 +56,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
@@ -68,6 +68,7 @@
         <waitForPageLoad stepKey="waitForProductSearch"/>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened" />
+
         <!-- Verify we see created virtual product with tier price(from the above step) in the product form page -->
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductBigQty.name}}" stepKey="seeProductName"/>
         <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductBigQty.sku}}" stepKey="seeProductSku"/>
@@ -111,6 +112,7 @@
         </assertEquals>
         <click selector="{{StorefrontQuickSearchResultsSection.productLink}}" stepKey="openSearchedProduct"/>
         <waitForPageLoad stepKey="waitForProductPageToBeLoaded" />
+
         <!-- Verify customer see product tier price on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
         <assertEquals stepKey="assertTierPriceTextOnProductPage">
