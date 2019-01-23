@@ -350,6 +350,7 @@ define([
 
             if (this.disabled()) {
                 this.notifyError($t('The file upload field is disabled.'));
+                
                 return;
             }
 
