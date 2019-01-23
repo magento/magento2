@@ -44,20 +44,20 @@
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update virtual product with regular price(out of stock) -->
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="fillProductName"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.sku}}" stepKey="fillProductSku"/>
-        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.price}}" stepKey="fillProductPrice"/>
-        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.productTaxClass}}" stepKey="selectProductStockClass"/>
-        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.status}}" stepKey="selectStockStatusInStock"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.price}}" stepKey="fillProductPrice"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.productTaxClass}}" stepKey="selectProductStockClass"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
-        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.visibility}}" stepKey="selectVisibility"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
-        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.urlKey}}" stepKey="fillUrlKey"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
@@ -69,18 +69,18 @@
         <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
-        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
-        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.sku}}" stepKey="fillVirtualProductSku"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.sku}}" stepKey="fillVirtualProductSku"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedVirtualProductVisibleInGrid"/>
         <waitForPageLoad stepKey="waitUntilVirtualProductPageIsOpened"/>
 
         <!-- Verify we see updated virtual product with regular price(from the above step) in the product form page -->
-        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="seeProductName"/>
-        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.sku}}" stepKey="seeProductSku"/>
-        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.price}}" stepKey="seeProductPrice"/>
-        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.productTaxClass}}" stepKey="seeProductTaxClass"/>
-        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.status}}" stepKey="seeProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.price}}" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.status}}" stepKey="seeProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
         <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
         <assertEquals stepKey="assertSelectedCategories">
@@ -88,40 +88,40 @@
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
         </assertEquals>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
-        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.visibility}}" stepKey="seeVisibility"/>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
-        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.urlKey}}" stepKey="seeUrlKey"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer don't see updated virtual product link(from above step) on category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="dontseeVirtualProductNameOnCategoryPage"/>
+        <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="dontseeVirtualProductNameOnCategoryPage"/>
 
         <!--Verify customer see updated virtual product (from above step) on product storefront page -->
-        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductWithRegularPriceOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice5OutOfStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
-            <expectedResult type="string">{{updateVirtualProductWithRegularPriceOutOfStock.storefrontStatus}}</expectedResult>
+            <expectedResult type="string">{{updateVirtualProductRegularPrice5OutOfStock.storefrontStatus}}</expectedResult>
             <actualResult type="variable">productStockAvailableStatus</actualResult>
         </assertEquals>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
         <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{updateVirtualProductWithRegularPriceOutOfStock.price}}</expectedResult>
+            <expectedResult type="string">${{updateVirtualProductRegularPrice5OutOfStock.price}}</expectedResult>
             <actualResult type="variable">productPriceAmount</actualResult>
         </assertEquals>
 
         <!--Verify customer don't see updated virtual product link(from above step) on magento storefront page and is searchable by sku -->
-        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductWithRegularPriceOutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice5OutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.sku}}" stepKey="fillVirtualProductName"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.sku}}" stepKey="fillVirtualProductName"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
         <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
         <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductWithRegularPriceOutOfStock.name}}" stepKey="dontSeeVirtualProductName"/>
+        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="dontSeeVirtualProductName"/>
     </test>
 </tests>

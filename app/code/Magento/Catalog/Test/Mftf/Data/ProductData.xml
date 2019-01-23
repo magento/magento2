@@ -574,7 +574,7 @@
         <data key="urlKey" unique="suffix">virtual-product</data>
         <data key="type_id">virtual</data>
     </entity>
-    <entity name="updateRegularPriceVirtualProductOutOfStock" type="product">
+    <entity name="updateVirtualProductRegularPrice99OutOfStock" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
         <data key="price">99.99</data>
@@ -623,5 +623,77 @@
         <data key="file">magento3.jpg</data>
         <data key="filename">magento3</data>
         <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="updateVirtualProductRegularPrice" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">99.99</data>
+        <data key="productTaxClass">None</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="visibility">Catalog</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductRegularPrice5OutOfStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">5.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="status">Out of Stock</data>
+        <data key="storefrontStatus">OUT OF STOCK</data>
+        <data key="visibility">Catalog</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductSpecialPrice" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">120.00</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="special_price">45.00</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductSpecialPriceOutOfStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">99.99</data>
+        <data key="productTaxClass">None</data>
+        <data key="status">Out of Stock</data>
+        <data key="storefrontStatus">OUT OF STOCK</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="special_price">45.00</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualProductTierPriceInStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">145.00</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="quantity">999</data>
+        <data key="status">In Stock</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
+    </entity>
+    <entity name="updateVirtualTierPriceOutOfStock" type="product">
+        <data key="name" unique="suffix">VirtualProduct</data>
+        <data key="sku" unique="suffix">virtual_sku</data>
+        <data key="price">185.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="quantity">999</data>
+        <data key="status">Out of Stock</data>
+        <data key="storefrontStatus">OUT OF STOCK</data>
+        <data key="visibility">Catalog, Search</data>
+        <data key="urlKey" unique="suffix">virtual-product</data>
+        <data key="type_id">virtual</data>
     </entity>
 </entities>
