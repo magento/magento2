@@ -55,7 +55,7 @@
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.urlKey}}" stepKey="fillUpdatedCategoryUrlKey"/>
         <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn(1)}}" userInput="{{SimpleRootSubCategory.urlKey}}.html" />
+        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.urlKey}}.html" />
 
         <!--Verify Updated Category UrlKey directs to category Store Front-->
         <amOnPage url="{{SimpleRootSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
