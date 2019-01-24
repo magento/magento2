@@ -9,8 +9,11 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
@@ -33,19 +36,28 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $productUrlPathGenerator;
 
     /**
+     * @var CollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param CollectionFactory|null $productCollectionFactory
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null
+        ProductUrlPathGenerator $productUrlPathGenerator = null,
+        CollectionFactory $productCollectionFactory = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
             ->get(ProductUrlPathGenerator::class);
+        $this->productCollectionFactory = $productCollectionFactory ?: ObjectManager::getInstance()
+            ->get(CollectionFactory::class);
     }
 
     /**
@@ -69,7 +81,28 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 $product->unsUrlPath();
                 $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+                return;
             }
+        }
+
+        $this->validateUrlKey($product);
+    }
+
+    /**
+     * @param Product $product
+     * @throws UrlAlreadyExistsException
+     */
+    private function validateUrlKey(Product $product)
+    {
+        $productCollection = $this->productCollectionFactory->create();
+        $productCollection->addFieldToFilter(
+            'url_key',
+            [Term::CONDITION_OPERATOR_EQUALS => $product->getUrlKey()]
+        );
+        $productCollection->getSelect()->where('e.entity_id != ?', $product->getId());
+
+        if ($productCollection->getItems()) {
+            throw new UrlAlreadyExistsException();
         }
     }
 }
