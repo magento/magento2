@@ -109,7 +109,7 @@ class Config
      * @param   string $state
      * @return  string|null
      */
-    public function getStateDefaultStatus($state)
+    public function getStateDefaultStatus($state): ?string
     {
         $status = false;
         $stateNode = $this->_getState($state);
@@ -123,11 +123,11 @@ class Config
     /**
      * Get status label for a specified area
      *
-     * @param string $code
+     * @param string|null $code
      * @param string $area
-     * @return string
+     * @return string|null
      */
-    private function getStatusLabelForArea(string $code, string $area): string
+    private function getStatusLabelForArea(?string $code, string $area): ?string
     {
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
@@ -142,8 +142,8 @@ class Config
     /**
      * Retrieve status label for detected area
      *
-     * @param string $code
-     * @return string
+     * @param string|null $code
+     * @return string|null
      * @throws LocalizedException
      */
     public function getStatusLabel($code)
@@ -155,10 +155,10 @@ class Config
     /**
      * Retrieve status label for area
      *
-     * @param string $code
-     * @return string
+     * @param string|null $code
+     * @return string|null
      */
-    public function getStatusFrontendLabel(string $code): string
+    public function getStatusFrontendLabel(?string $code): ?string
     {
         return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
     }
