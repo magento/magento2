@@ -12,6 +12,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Event\ManagerInterface;
 
+/**
+ * Assign customer to order.
+ */
 class CustomerAssignment
 {
     /**
@@ -39,6 +42,8 @@ class CustomerAssignment
     }
 
     /**
+     * Assign customer to order.
+     *
      * @param OrderInterface $order
      * @param CustomerInterface $customer
      */

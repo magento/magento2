@@ -14,6 +14,9 @@ use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Assign coupon data after order customer assign.
+ */
 class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterface
 {
     const EVENT_KEY_CUSTOMER = 'customer';

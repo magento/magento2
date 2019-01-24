@@ -43,7 +43,7 @@ class AssignOrderToCustomerObserver implements ObserverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(Observer $observer)
     {
