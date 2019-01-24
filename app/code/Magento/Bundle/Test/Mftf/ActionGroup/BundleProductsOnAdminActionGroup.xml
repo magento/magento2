@@ -12,7 +12,7 @@
         <arguments>
             <argument name="bundleProduct"/>
             <argument name="simpleProductFirst"/>
-            <argument name="simpleProductSecond"/>
+            <argument name="simpleProductSecond" type="string" defaultValue=""/>
         </arguments>
         <fillField userInput="{{bundleProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
         <fillField userInput="{{bundleProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
