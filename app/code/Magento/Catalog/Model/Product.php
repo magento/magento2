@@ -727,7 +727,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCategoryId()
     {
         $category = $this->_registry->registry('current_category');
-        if ($category) {
+        if ($category && in_array($category->getId(), $this->getCategoryIds())) {
             return $category->getId();
         }
         return false;

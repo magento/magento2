@@ -97,6 +97,7 @@
                 .field {
                     .radio {
                         float: left;
+                        margin-top: 4px;
                     }
 
                     .radio {
@@ -145,12 +146,6 @@
         }
 
         &:extend(.abs-adjustment-incl-excl-tax all);
-
-        .action {
-            &.multicheckout {
-                color: @color-blue2;
-            }
-        }
     }
 
     //  Totals block
@@ -497,6 +492,17 @@
             }
         }
     }
+
+    .cart.table-wrapper,
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: left;
+        }
+    }
+
 }
 
 //

@@ -127,19 +127,19 @@
     <actionGroup name="changeShippingTaxClass">
         <!--Select Configuration menu from Store-->
         <click selector="{{AdminMenuSection.stores}}" stepKey="clickOnSTORES" />
-        <waitForPageLoad stepKey="waitForConfiguration" time="5"/>
-        <click selector="{{StoresSubmenuSection.configuration}}" stepKey="clickOnConfigurations"/>
-        <waitForPageLoad stepKey="waitForSales" time="5"/>
+        <waitForPageLoad stepKey="waitForConfiguration"/>
+        <click selector="{{AdminMenuSection.configuration}}" stepKey="clickOnConfigurations"/>
+        <waitForPageLoad stepKey="waitForSales"/>
         <!--Double click the same to fix flaky issue with redirection to Dashboard-->
         <click selector="{{AdminMenuSection.stores}}" stepKey="clickOnSTORES1" />
-        <waitForPageLoad stepKey="waitForConfiguration1" time="5"/>
-        <click selector="{{StoresSubmenuSection.configuration}}" stepKey="clickOnConfigurations1"/>
+        <waitForPageLoad stepKey="waitForConfiguration1"/>
+        <click selector="{{AdminMenuSection.configuration}}" stepKey="clickOnConfigurations1"/>
         <waitForPageLoad stepKey="waitForSales1" time="5"/>
         <!--Change default tax class for Shipping on Taxable Goods-->
         <click selector="{{ConfigurationListSection.sales}}" stepKey="clickOnSales" />
-        <waitForPageLoad stepKey="waitForPaymentMethods" time="5"/>
+        <waitForPageLoad stepKey="waitForPaymentMethods"/>
         <click selector="{{AdminConfigureTaxSection.salesTax}}" stepKey="clickOnTax"/>
-        <waitForPageLoad stepKey="waitForTax" time="5"/>
+        <waitForPageLoad stepKey="waitForTax"/>
         <seeInCurrentUrl url="{{AdminTaxConfigurationPage.url}}" stepKey="adminTaxConfiguration"/>
         <seeElement selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="taxClassSectionC"/>
         <click selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="openTaxClassSection"/>
@@ -155,19 +155,19 @@
     <actionGroup name="setDefaultShippingTaxClass">
         <!--Select Configuration menu from Store-->
         <click selector="{{AdminMenuSection.stores}}" stepKey="clickOnSTORES" />
-        <waitForPageLoad stepKey="waitForConfiguration" time="5"/>
-        <click selector="{{StoresSubmenuSection.configuration}}" stepKey="clickOnConfigurations"/>
-        <waitForPageLoad stepKey="waitForSales" time="5"/>
+        <waitForPageLoad stepKey="waitForConfiguration"/>
+        <click selector="{{AdminMenuSection.configuration}}" stepKey="clickOnConfigurations"/>
+        <waitForPageLoad stepKey="waitForSales"/>
         <!--Double click the same to fix flaky issue with redirection to Dashboard-->
         <click selector="{{AdminMenuSection.stores}}" stepKey="clickOnSTORES1" />
-        <waitForPageLoad stepKey="waitForConfiguration1" time="5"/>
-        <click selector="{{StoresSubmenuSection.configuration}}" stepKey="clickOnConfigurations1"/>
-        <waitForPageLoad stepKey="waitForSales1" time="5"/>
+        <waitForPageLoad stepKey="waitForConfiguration1"/>
+        <click selector="{{AdminMenuSection.configuration}}" stepKey="clickOnConfigurations1"/>
+        <waitForPageLoad stepKey="waitForSales1"/>
         <!--Change default tax class for Shipping on Taxable Goods-->
         <click selector="{{ConfigurationListSection.sales}}" stepKey="clickOnSales" />
-        <waitForPageLoad stepKey="waitForPaymentMethods" time="5"/>
+        <waitForPageLoad stepKey="waitForPaymentMethods"/>
         <click selector="{{AdminConfigureTaxSection.salesTax}}" stepKey="clickOnTax"/>
-        <waitForPageLoad stepKey="waitForTax" time="5"/>
+        <waitForPageLoad stepKey="waitForTax"/>
         <seeElement selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="taxClassSectionC"/>
         <click selector="{{AdminConfigureTaxSection.taxShippingClassSystem}}" stepKey="checkSystemDefaultValue"/>
         <click selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="closeTaxClassSection"/>
