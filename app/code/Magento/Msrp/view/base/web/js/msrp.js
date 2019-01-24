@@ -300,7 +300,8 @@ define([
 
             var defaultMsrp,
                 defaultPrice,
-                msrpPrice;
+                msrpPrice,
+                finalPrice;
 
             defaultMsrp = _.chain(prices).map(function (price) {
                 return price.msrpPrice.amount;
@@ -314,15 +315,15 @@ define([
 
             if (typeof priceIndex !== 'undefined') {
                 msrpPrice = prices[priceIndex].msrpPrice.amount;
+                finalPrice = prices[priceIndex].finalPrice.amount;
 
-                if(msrpPrice !== null) {
-                    this.updateMsrpPrice(
-                        priceUtils.formatPrice(prices[priceIndex].finalPrice.amount),
-                        priceUtils.formatPrice(prices[priceIndex].msrpPrice.amount),
-                        false);
+                if(msrpPrice === null || msrpPrice <= finalPrice) {
+                    this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice));
                 } else {
-                    this.updateNonMsrpPrice(
-                        priceUtils.formatPrice(prices[priceIndex].finalPrice.amount));
+                    this.updateMsrpPrice(
+                        priceUtils.formatPrice(finalPrice),
+                        priceUtils.formatPrice(msrpPrice),
+                        false);
                 }
             } else {
                 this.updateMsrpPrice(
