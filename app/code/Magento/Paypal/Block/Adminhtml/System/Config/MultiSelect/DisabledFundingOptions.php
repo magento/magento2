@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pganapat
- * Date: 1/23/19
- * Time: 3:21 PM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect;
