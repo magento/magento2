@@ -10,6 +10,7 @@ use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,9 +23,11 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
+ * New newsletter subscription action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewAction extends SubscriberController
+class NewAction extends SubscriberController implements HttpPostActionInterface
 {
     /**
      * @var CustomerAccountManagement
@@ -77,8 +80,9 @@ class NewAction extends SubscriberController
     protected function validateEmailAvailable($email)
     {
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
-            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
+        if ($this->_customerSession->isLoggedIn()
+            && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId))
         ) {
             throw new LocalizedException(
                 __('This email address is already assigned to another user.')
@@ -151,10 +155,7 @@ class NewAction extends SubscriberController
                 $status = (int) $this->_subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage(
-                    $e,
-                    __('There was a problem with the subscription: %1', $e->getMessage())
-                );
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
@@ -163,6 +164,8 @@ class NewAction extends SubscriberController
     }
 
     /**
+     * Get success message
+     *
      * @param int $status
      * @return Phrase
      */

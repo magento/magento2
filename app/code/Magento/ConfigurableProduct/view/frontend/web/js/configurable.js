@@ -291,6 +291,8 @@ define([
             images = this.options.spConfig.images[this.simpleProduct];
 
             if (images) {
+                images = this._sortImages(images);
+
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
@@ -309,7 +311,17 @@ define([
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
-            galleryObject.first();
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
