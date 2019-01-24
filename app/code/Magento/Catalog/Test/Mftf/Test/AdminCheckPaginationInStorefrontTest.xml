@@ -18,7 +18,6 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1 "/>
             <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 1 "/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
@@ -42,31 +41,32 @@
             <createData entity="PaginationProduct" stepKey="simpleProduct18"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct19"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct20"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
-            <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <deleteData  createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
-            <deleteData  createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
-            <deleteData  createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
-            <deleteData  createDataKey="simpleProduct6" stepKey="deleteSimpleProduct6"/>
-            <deleteData  createDataKey="simpleProduct7" stepKey="deleteSimpleProduct7"/>
-            <deleteData  createDataKey="simpleProduct8" stepKey="deleteSimpleProduct8"/>
-            <deleteData  createDataKey="simpleProduct9" stepKey="deleteSimpleProduct9"/>
-            <deleteData  createDataKey="simpleProduct10" stepKey="deleteSimpleProduct10"/>
-            <deleteData  createDataKey="simpleProduct11" stepKey="deleteSimpleProduct11"/>
-            <deleteData  createDataKey="simpleProduct12" stepKey="deleteSimpleProduct12"/>
-            <deleteData  createDataKey="simpleProduct13" stepKey="deleteSimpleProduct13"/>
-            <deleteData  createDataKey="simpleProduct14" stepKey="deleteSimpleProduct14"/>
-            <deleteData  createDataKey="simpleProduct15" stepKey="deleteSimpleProduct15"/>
-            <deleteData  createDataKey="simpleProduct16" stepKey="deleteSimpleProduct16"/>
-            <deleteData  createDataKey="simpleProduct17" stepKey="deleteSimpleProduct17"/>
-            <deleteData  createDataKey="simpleProduct18" stepKey="deleteSimpleProduct18"/>
-            <deleteData  createDataKey="simpleProduct19" stepKey="deleteSimpleProduct19"/>
-            <deleteData  createDataKey="simpleProduct20" stepKey="deleteSimpleProduct20"/>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0" />
             <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0" />
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteSimpleProduct6"/>
+            <deleteData createDataKey="simpleProduct7" stepKey="deleteSimpleProduct7"/>
+            <deleteData createDataKey="simpleProduct8" stepKey="deleteSimpleProduct8"/>
+            <deleteData createDataKey="simpleProduct9" stepKey="deleteSimpleProduct9"/>
+            <deleteData createDataKey="simpleProduct10" stepKey="deleteSimpleProduct10"/>
+            <deleteData createDataKey="simpleProduct11" stepKey="deleteSimpleProduct11"/>
+            <deleteData createDataKey="simpleProduct12" stepKey="deleteSimpleProduct12"/>
+            <deleteData createDataKey="simpleProduct13" stepKey="deleteSimpleProduct13"/>
+            <deleteData createDataKey="simpleProduct14" stepKey="deleteSimpleProduct14"/>
+            <deleteData createDataKey="simpleProduct15" stepKey="deleteSimpleProduct15"/>
+            <deleteData createDataKey="simpleProduct16" stepKey="deleteSimpleProduct16"/>
+            <deleteData createDataKey="simpleProduct17" stepKey="deleteSimpleProduct17"/>
+            <deleteData createDataKey="simpleProduct18" stepKey="deleteSimpleProduct18"/>
+            <deleteData createDataKey="simpleProduct19" stepKey="deleteSimpleProduct19"/>
+            <deleteData createDataKey="simpleProduct20" stepKey="deleteSimpleProduct20"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -161,6 +161,11 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad11"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="5" stepKey="seeNumberOfProductsInSecondPage3"/>
+
+        <!--Select First Page using page number-->
+        <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="scrollToPreviousPage5"/>
+        <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="clickOnFirstPage2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad13"/>
 
         <!--Select 30 items per page  and verify number of products displayed in each page -->
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage4"/>
