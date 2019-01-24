@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Abstract Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,6 +12,8 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Validator\EmailAddress;
 
 /**
+ * Form Element Abstract Data Model.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractData
@@ -138,7 +138,8 @@ abstract class AbstractData
     }
 
     /**
-     * Set scope visibility
+     * Set scope visibility.
+     *
      * Search value only in scope or search value in scope and global
      *
      * @param boolean $flag
@@ -283,9 +284,13 @@ abstract class AbstractData
         );
 
         if (!is_null($inputValidation)) {
+            $allowWhiteSpace = false;
             switch ($inputValidation) {
+                case 'alphanum-with-spaces':
+                    $allowWhiteSpace = true;
+                    // continue to alphanumeric validation
                 case 'alphanumeric':
-                    $validator = new \Zend_Validate_Alnum(true);
+                    $validator = new \Zend_Validate_Alnum($allowWhiteSpace);
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Alnum::INVALID);
                     $validator->setMessage(
                         __('"%1" contains non-alphabetic or non-numeric characters.', $label),
