@@ -18,12 +18,6 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->validationRules = $this->getMockBuilder(
-            \Magento\Customer\Ui\Component\Listing\Column\ValidationRules::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -31,18 +25,25 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
         $this->validationRules = new ValidationRules();
     }
 
-    public function testGetValidationRules()
+    /**
+     * Tests input validation rules.
+     *
+     * @param string $validationRule
+     * @param string $validationClass
+     * @return void
+     * @dataProvider validationRulesDataProvider
+     */
+    public function testGetValidationRules(string $validationRule, string $validationClass)
     {
         $expectsRules = [
             'required-entry' => true,
-            'validate-number' => true,
+            $validationClass => true,
         ];
-        $this->validationRule->expects($this->atLeastOnce())
-            ->method('getName')
+        $this->validationRule->method('getName')
             ->willReturn('input_validation');
-        $this->validationRule->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn('numeric');
+
+        $this->validationRule->method('getValue')
+            ->willReturn($validationRule);
 
         $this->assertEquals(
             $expectsRules,
@@ -65,5 +66,22 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
             $expectsRules,
             $this->validationRules->getValidationRules(true, [])
         );
+    }
+
+    /**
+     * Provides possible validation rules.
+     *
+     * @return array
+     */
+    public function validationRulesDataProvider(): array
+    {
+        return [
+            ['alpha', 'validate-alpha'],
+            ['numeric', 'validate-number'],
+            ['alphanumeric', 'validate-alphanum'],
+            ['alphanum-with-spaces', 'validate-alphanum-with-spaces'],
+            ['url', 'validate-url'],
+            ['email', 'validate-email'],
+        ];
     }
 }
