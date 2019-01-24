@@ -35,7 +35,7 @@ define([
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
-        postcodeElement = null,
+        postcodeElements = [],
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
@@ -101,7 +101,7 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
-                postcodeElement = element;
+                postcodeElements.push(element);
             }
         },
 
@@ -136,7 +136,13 @@ define([
                     if (!formPopUpState.isVisible()) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation();
+                            if (element.index === postcodeElementName) {
+                                self.postcodeValidation(element);
+                            } else {
+                                $.each(postcodeElements, function (index, elem) {
+                                    self.postcodeValidation(elem);
+                                });
+                            }
                             self.validateFields();
                         }, delay);
                     }
@@ -148,8 +154,8 @@ define([
         /**
          * @return {*}
          */
-        postcodeValidation: function () {
-            var countryId = $('select[name="country_id"]').val(),
+        postcodeValidation: function (postcodeElement) {
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 
@@ -178,8 +184,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                    this.collectObservedData(),
-                    'shippingAddress'
+                this.collectObservedData(),
+                'shippingAddress'
                 ),
                 address;
 

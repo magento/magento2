@@ -15,9 +15,7 @@
             <description value="All products added to wishlist should be visible on any store. Even if product visibility was set to 'Not Visible Individually' for this store"/>
             <group value="wishlist"/>
             <severity value="AVERAGE"/>
-            <skip>
-                <issueId value="MAGETWO-93980"/>
-            </skip>
+            <testCaseId value="MAGETWO-95678"/>
         </annotations>
         <before>
             <createData entity="customStoreGroup" stepKey="storeGroup"/>

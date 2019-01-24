@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93677"/>
             <group value="braintree"/>
-            <skip>
-                <issueId value="MQE-1187" />
-            </skip>
         </annotations>
 
 
@@ -28,11 +25,13 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--CreateNewProduct-->
-            <actionGroup ref="CreateNewProductActionGroup" stepKey="CreateNewProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
 
             <!--Create New Customer-->
-            <actionGroup ref="CreateCustomerActionGroup" stepKey="CreateCustomer"/>
-
+            <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
         </before>
 
 
@@ -48,30 +47,49 @@
         <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
 
         <!--SignOut-->
-        <actionGroup ref="SignOut" stepKey="signOutFromAdmin"/>
+        <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
 
         <!--SignIn New User-->
         <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
-        <actionGroup ref="CreateNewOrderActionGroup" stepKey="createNewOrder"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
 
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+
+        <waitForPageLoad stepKey="waitForShippingToFinish"/>
+
+        <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
+
+        <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage"/>
 
         <after>
+            <!-- Disable BrainTree -->
+            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
-            <actionGroup ref="DeleteProductActionGroup" stepKey="DeleteAllProducts">
-                <argument name="productName" value="NewProductData.ProductName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete Customer-->
-            <actionGroup ref="DeleteCustomerActionGroup" stepKey="DeleteCustomer">
-                <argument name="lastName" value="NewCustomerData.LastName"/>
-            </actionGroup>
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete User -->
             <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
@@ -80,8 +98,6 @@
             <!--Delete Role-->
             <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
-
         </after>
-
     </test>
 </tests>

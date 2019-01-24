@@ -14,6 +14,7 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
+ * Updates status for a batch of products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
@@ -87,7 +88,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
 
-        if (null !== $storeId && null !== $filterRequest) {
+        if (null === $storeId && null !== $filterRequest) {
             $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 
