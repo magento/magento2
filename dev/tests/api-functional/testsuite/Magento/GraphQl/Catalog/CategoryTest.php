@@ -83,8 +83,8 @@ QUERY;
         $responseDataObject = new DataObject($response);
         //Some sort of smoke testing
         self::assertEquals(
-            'Ololo',
-            $responseDataObject->getData('category/children/7/children/1/description')
+            'Its a description of Test Category 1.2',
+            $responseDataObject->getData('category/children/0/children/1/description')
         );
         self::assertEquals(
             'default-category',
@@ -99,16 +99,54 @@ QUERY;
             $responseDataObject->getData('category/children/0/default_sort_by')
         );
         self::assertCount(
-            8,
+            7,
             $responseDataObject->getData('category/children')
         );
         self::assertCount(
             2,
-            $responseDataObject->getData('category/children/7/children')
+            $responseDataObject->getData('category/children/0/children')
         );
         self::assertEquals(
-            5,
-            $responseDataObject->getData('category/children/7/children/1/children/0/id')
+            13,
+            $responseDataObject->getData('category/children/0/children/1/id')
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testGetCategoryById()
+    {
+        $rootCategoryId = 13;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $responseDataObject = new DataObject($response);
+        //Some sort of smoke testing
+        self::assertEquals(
+            'Category 1.2',
+            $responseDataObject->getData('category/name')
+        );
+        self::assertEquals(
+            13,
+            $responseDataObject->getData('category/id')
         );
     }
 
