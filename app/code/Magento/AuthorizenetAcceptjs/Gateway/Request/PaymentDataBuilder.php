@@ -75,16 +75,10 @@ class PaymentDataBuilder implements BuilderInterface
             $this->passthroughData->setData('opaqueDataValue', $encValue);
 
             $data['transactionRequest']['payment'] = [
-                'creditCard' => [
-                    'cardNumber' => '4111111111111111',
-                    'expirationDate' => '2019-12',
-                    'cardCode' => '123'
-                ],
-                // @TODO integrate the real payment values from accept.js
-                /*'opaqueData' => [
+                'opaqueData' => [
                     'dataDescriptor' => $dataDescriptor,
                     'dataValue' => $dataValue
-                ]*/
+                ]
             ];
         }
 

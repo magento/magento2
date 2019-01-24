@@ -118,7 +118,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return bool
      */
-    public function shouldEmailCustomer($storeId = null): ?bool
+    public function shouldEmailCustomer($storeId = null): bool
     {
         return (bool)$this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
     }

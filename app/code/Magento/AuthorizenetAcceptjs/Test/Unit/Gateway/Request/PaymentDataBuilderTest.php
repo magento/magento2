@@ -62,24 +62,16 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $this->paymentMock->method('getAdditionalInformation')
-            ->willReturnCallback(function ($name) {
-                $info = [
-                    'opaqueDataDescriptor' => 'foo',
-                    'opaqueDataValue' => 'bar',
-                ];
-
-                return $info[$name];
-            });
+            ->will($this->returnValueMap([
+                ['opaqueDataDescriptor', 'foo'],
+                ['opaqueDataValue', 'bar']
+            ]));
 
         $this->paymentMock->method('encrypt')
-            ->willReturnCallback(function ($name) {
-                $info = [
-                    'foo' => 'encfoo',
-                    'bar' => 'encbar',
-                ];
-
-                return $info[$name];
-            });
+            ->will($this->returnValueMap([
+                ['foo', 'encfoo'],
+                ['bar', 'encbar']
+            ]));
 
         $this->orderMock->method('getBaseShippingAmount')
             ->willReturn('43.12');

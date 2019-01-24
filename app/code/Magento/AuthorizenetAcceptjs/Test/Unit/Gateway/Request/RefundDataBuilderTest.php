@@ -33,11 +33,6 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $paymentDOMock;
 
     /**
-     * @var PassthroughDataObject
-     */
-    private $passthroughData;
-
-    /**
      * @var Order
      */
     private $orderMock;
@@ -51,35 +46,25 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->paymentMock);
         $this->paymentDOMock->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->passthroughData = new PassthroughDataObject();
 
         $this->builder = new RefundDataBuilder(
-            new SubjectReader(),
-            $this->passthroughData
+            new SubjectReader()
         );
     }
 
     public function testBuild()
     {
         $this->paymentMock->method('getAdditionalInformation')
-            ->willReturnCallback(function ($name) {
-                $info = [
-                    'opaqueDataDescriptor' => 'encfoo',
-                    'opaqueDataValue' => 'encbar',
-                ];
-
-                return $info[$name];
-            });
+            ->will($this->returnValueMap([
+                ['opaqueDataDescriptor', 'encfoo'],
+                ['opaqueDataValue', 'encbar']
+            ]));
 
         $this->paymentMock->method('decrypt')
-            ->willReturnCallback(function ($name) {
-                $info = [
-                    'encfoo' => 'foo',
-                    'encbar' => 'bar',
-                ];
-
-                return $info[$name];
-            });
+            ->will($this->returnValueMap([
+                ['encfoo', 'foo'],
+                ['encbar', 'bar']
+            ]));
 
         $this->orderMock->method('getBaseShippingAmount')
             ->willReturn('43.12');
@@ -106,7 +91,5 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals($expected, $this->builder->build($buildSubject));
-        $this->assertEquals('encfoo', $this->passthroughData->getData('opaqueDataDescriptor'));
-        $this->assertEquals('encbar', $this->passthroughData->getData('opaqueDataValue'));
     }
 }
