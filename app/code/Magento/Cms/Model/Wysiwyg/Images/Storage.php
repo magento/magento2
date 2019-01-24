@@ -12,11 +12,15 @@ use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Wysiwyg Images model
+ * Wysiwyg Images model.
+ *
+ * Tightly connected with controllers responsible for managing files so it uses session and is (sort of) a part
+ * of the presentation layer.
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
