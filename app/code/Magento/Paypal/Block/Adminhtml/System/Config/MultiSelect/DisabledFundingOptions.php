@@ -7,6 +7,9 @@
 namespace Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect;
 
 use Magento\Paypal\Model\Config\StructurePlugin;
+use Magento\Backend\Block\Template\Context;
+use Magento\Paypal\Model\Config;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Class DisabledFundingOptions
@@ -14,22 +17,22 @@ use Magento\Paypal\Model\Config\StructurePlugin;
 class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var \Magento\Paypal\Model\ConfigFactory
+     * @var \Magento\Paypal\Model\Config
      */
-    private $configFactory;
+    private $config;
 
     /**
      * DisabledFundingOptions constructor.
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
+     * @param \Magento\Paypal\Model\Config $config
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Paypal\Model\ConfigFactory $configFactory,
+        Context $context,
+        Config $config,
         $data = []
     ) {
-        $this->configFactory = $configFactory;
+        $this->config = $config;
         parent::__construct($context, $data);
     }
 
@@ -39,7 +42,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         if (!$this->isSelectedMerchantCountry('US')) {
             $fundingOptions = $element->getValues();
@@ -70,7 +73,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
     private function isSelectedMerchantCountry(string $country): bool
     {
         $merchantCountry = $this->getRequest()->getParam(StructurePlugin::REQUEST_PARAM_COUNTRY)
-            ?: $this->configFactory->create()->getMerchantCountry();
+            ?: $this->config->getMerchantCountry();
         return $merchantCountry === $country;
     }
 }
