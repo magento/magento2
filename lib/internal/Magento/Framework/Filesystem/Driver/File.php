@@ -400,15 +400,28 @@ class File implements DriverInterface
      */
     public function deleteDirectory($path)
     {
+        $exceptionMessages = [];
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
         $iterator = new \FilesystemIterator($path, $flags);
         /** @var \FilesystemIterator $entity */
         foreach ($iterator as $entity) {
-            if ($entity->isDir()) {
-                $this->deleteDirectory($entity->getPathname());
-            } else {
-                $this->deleteFile($entity->getPathname());
+            try {
+                if ($entity->isDir()) {
+                    $this->deleteDirectory($entity->getPathname());
+                } else {
+                    $this->deleteFile($entity->getPathname());
+                }
+            } catch (FileSystemException $exception) {
+                $exceptionMessages[] = $exception->getMessage();
             }
+        }
+
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
         }
 
         $fullPath = $this->getScheme() . $path;
@@ -417,7 +430,6 @@ class File implements DriverInterface
         } else {
             $result = @rmdir($fullPath);
         }
-
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(

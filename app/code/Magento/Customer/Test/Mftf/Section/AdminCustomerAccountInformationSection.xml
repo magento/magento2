@@ -20,6 +20,7 @@
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
         <element name="saveCustomer" type="button" selector="//button[@title='Save Customer']"/>
+        <element name="saveCustomerAndContinueEdit" type="button" selector="//button[@title='Save and Continue Edit']"/>
         <element name="storeView" type="select" selector="//select[@name='customer[sendemail_store_id]']"/>
     </section>
 </sections>

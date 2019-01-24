@@ -18,8 +18,7 @@
             <testCaseId value="MAGETWO-94176"/>
             <group value="backup"/>
             <skip>
-                <issueId value="MQE-1187"/>
-                <issueId value="DEVOPS-3512"/>
+                <issueId value="MC-5807"/>
             </skip>
         </annotations>
 

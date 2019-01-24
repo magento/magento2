@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCustomerActionGroup">
+        <arguments>
+            <argument name="lastName" defaultValue=""/>
+        </arguments>
+        <!--Clear filter if exist-->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+
+        <click stepKey="chooseCustomer" selector="{{CustomersPageSection.customerCheckbox(lastName)}}"/>
+        <waitForAjaxLoad stepKey="waitForThick" time="2"/>
+        <click stepKey="OpenActions" selector="{{CustomersPageSection.actions}}"/>
+        <waitForAjaxLoad stepKey="waitForDelete" time="5"/>
+        <click stepKey="ChooseDelete" selector="{{CustomersPageSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
+        <click stepKey="clickOnOk" selector="{{CustomersPageSection.ok}}"/>
+        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="10"/>
+    </actionGroup>
+</actionGroups>
