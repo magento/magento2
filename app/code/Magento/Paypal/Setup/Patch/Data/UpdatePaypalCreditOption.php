@@ -38,27 +38,30 @@ class UpdatePaypalCreditOption implements DataPatchInterface, PatchVersionInterf
     {
         $this->moduleDataSetup->getConnection()->startSetup();
         $connection = $this->moduleDataSetup->getConnection();
-        $select = $connection->select()->from(
-            $this->moduleDataSetup->getTable('core_config_data'),
-            ['scope', 'scope_id', 'value']
-        )->where(
-            'path = ?',
-            'payment/paypal_express_bml/active'
-        );
+        $select = $connection->select()
+            ->from(
+                $this->moduleDataSetup->getTable('core_config_data'),
+                ['scope', 'scope_id', 'value']
+            )->where(
+                'path = ?',
+                'payment/paypal_express_bml/active'
+            );
         foreach ($connection->fetchAll($select) as $pair) {
             if (!$pair['value']) {
-                $this->moduleDataSetup->getConnection()->insert(
-                    $this->moduleDataSetup->getTable('core_config_data'),
-                    [
-                        'scope' => $pair['scope'],
-                        'scope_id' => $pair['scope_id'],
-                        'path' => 'payment/paypal_express/disable_funding_options',
-                        'value' => \Magento\Paypal\Model\Express\Checkout::PAYPAL_FUNDING_CREDIT
-                    ]
-                );
+                $this->moduleDataSetup->getConnection()
+                    ->insertOnDuplicate(
+                        $this->moduleDataSetup->getTable('core_config_data'),
+                        [
+                            'scope' => $pair['scope'],
+                            'scope_id' => $pair['scope_id'],
+                            'path' => 'paypal/style/disable_funding_options',
+                            'value' => 'CREDIT'
+                        ]
+                    );
             }
         }
-        $this->moduleDataSetup->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()
+            ->endSetup();
     }
 
     /**

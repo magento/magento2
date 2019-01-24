@@ -21,6 +21,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Checkout
 {
@@ -48,14 +49,6 @@ class Checkout
      * @var string
      */
     const PAYMENT_INFO_BUTTON = 'button';
-
-    /**
-     * When multiple funding sources are available to the buyer, PayPal automatically determines which additional
-     * buttons are appropriate to display. It is available opt of displaying specific funding sources
-     */
-    const PAYPAL_FUNDING_CREDIT = 'CREDIT';
-    const PAYPAL_FUNDING_CARD = 'CARD';
-    const PAYPAL_FUNDING_ELV = 'ELV';
 
     /**
      * @var \Magento\Quote\Model\Quote
@@ -617,6 +610,7 @@ class Checkout
      * @param string|null $payerIdentifier
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function returnFromPaypal($token, string $payerIdentifier = null)
     {

@@ -1635,6 +1635,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _mapGenericStyleFieldset($fieldName)
     {

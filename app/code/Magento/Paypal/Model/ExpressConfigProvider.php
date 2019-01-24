@@ -11,7 +11,6 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Paypal\Helper\Data as PaypalHelper;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ExpressConfigProvider
@@ -89,7 +88,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
         PaypalHelper $paypalHelper,
         PaymentHelper $paymentHelper,
         UrlInterface $urlBuilder,
-        SmartButtonConfig $smartButtonConfig = null
+        SmartButtonConfig $smartButtonConfig
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -97,12 +96,11 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $this->paypalHelper = $paypalHelper;
         $this->paymentHelper = $paymentHelper;
         $this->urlBuilder = $urlBuilder;
+        $this->smartButtonConfig = $smartButtonConfig;
 
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $this->paymentHelper->getMethodInstance($code);
         }
-
-        $this->smartButtonConfig = $smartButtonConfig ?: ObjectManager::getInstance()->get(SmartButtonConfig::class);
     }
 
     /**

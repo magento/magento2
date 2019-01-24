@@ -10,7 +10,6 @@ use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Paypal\Model\Express\Checkout;
 
 /**
  * Class AbstractConfig
@@ -299,7 +298,7 @@ abstract class AbstractConfig implements ConfigInterface
                     $this->_storeId
                 );
                 $isExpressCreditEnabled = $disabledFunding
-                    ? !!strpos(Checkout::PAYPAL_FUNDING_CREDIT, $disabledFunding)
+                    ? !!strpos('CREDIT', $disabledFunding)
                     : true;
                 $isEnabled = $isExpressCreditEnabled
                 || $this->_scopeConfig->isSetFlag(

@@ -43,13 +43,16 @@ class ExpressConfigProviderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject $urlBuilderMock */
         $urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
 
+        $smartButtonConfigMock = $this->createMock(\Magento\Paypal\Model\SmartButtonConfig::class);
+
         $configProvider = new ExpressConfigProvider(
             $configFactory,
             $localeResolver,
             $currentCustomer,
             $paypalHelper,
             $paymentHelper,
-            $urlBuilderMock
+            $urlBuilderMock,
+            $smartButtonConfigMock
         );
         $configProvider->getConfig();
     }
