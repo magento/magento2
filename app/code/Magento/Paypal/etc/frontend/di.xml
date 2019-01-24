@@ -97,6 +97,14 @@
             <argument name="payment" xsi:type="object">Magento\Paypal\Model\Express</argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Block\Express\InContext\SmartButton">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="alias" xsi:type="string">product.info.addtocart.paypalexpress</item>
+                <item name="template" xsi:type="string">express/shortcut_button.phtml</item>
+            </argument>
+        </arguments>
+    </type>
 
 
     <type name="Magento\Vault\Model\Ui\TokensConfigProvider">

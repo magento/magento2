@@ -145,7 +145,9 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
         $isInCatalog = $this->getIsInCatalogProduct();
 
-        if (!$this->_shortcutValidator->validate($this->_paymentMethodCode, $isInCatalog)) {
+        if (!$this->_shortcutValidator->validate($this->_paymentMethodCode, $isInCatalog)
+            || (bool)(int)$this->config->getValue('in_context')
+        ) {
             $this->_shouldRender = false;
             return $result;
         }

@@ -3,9 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'paypalInContextExpressCheckout',
-    'mage/translate'
-], function (paypal, $t) {
+    'underscore',
+    'paypalInContextExpressCheckout'
+], function (_, paypal) {
     'use strict';
 
     /**
@@ -15,7 +15,7 @@ define([
      * @return {Array}
      */
     function getFunding(config) {
-        return config.map(function (name) {
+        return _.map(config, function (name) {
             return paypal.FUNDING[name];
         });
     }
@@ -40,14 +40,14 @@ define([
              * @param {Object} actions
              */
             validate: function (actions) {
-                clientConfig.rendererComponent.validate(actions);
+                clientConfig.rendererComponent.validate && clientConfig.rendererComponent.validate(actions);
             },
 
             /**
              * Execute logic on Paypal button click
              */
             onClick: function () {
-                clientConfig.rendererComponent.onClick();
+                clientConfig.rendererComponent.onClick && clientConfig.rendererComponent.onClick();
             },
 
             /**
@@ -65,27 +65,16 @@ define([
 
                 if (!clientConfig.button) {
                     return new paypal.Promise(function (resolve, reject) {
-                        clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
+                        clientConfig.rendererComponent.beforePayment(resolve, reject).then(function () {
                             paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
                                 if (res.success) {
-
                                     return resolve(res.token);
                                 }
 
                                 clientConfig.rendererComponent.addError(res['error_message']);
+
                                 return reject(new Error(res['error_message']));
                             });
-                        }).fail(function (response) {
-                            var error;
-
-                            try {
-                                error = JSON.parse(response.responseText);
-                            } catch (exception) {
-                                error = $t('Something went wrong with your request. Please try again later.');
-                            }
-
-                            clientConfig.rendererComponent.addError(error);
-                            return reject(new Error(error));
                         });
                     });
                 }

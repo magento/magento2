@@ -12,14 +12,14 @@ define([
 
     return Component.extend({
         /**
-         * @returns {Object}
+         * @return {Object}
          */
         initialize: function (config, element) {
             this._super();
-
             this.prepareClientConfig();
-
             checkoutSmartButtons(this.prepareClientConfig(), element);
+
+            return this;
         },
 
         /**
@@ -41,25 +41,28 @@ define([
             this.clientConfig.rendererComponent = this;
             this.clientConfig.formKey = $.mage.cookies.get('form_key');
             this.clientConfig.commit = false;
+
             return this.clientConfig;
         },
 
         /**
          * Adding logic to be triggered onClick action for smart buttons component
          */
-        onClick: function() {},
+        onClick: function () {},
 
         /**
          * Adds error message
          *
-         * @param {string} message
+         * @param {String} message
          */
-        addError: function(message) {
-            customerData.set('messages', {messages: [{
+        addError: function (message) {
+            customerData.set('messages', {
+                messages: [{
                     type: 'error',
                     text: message
                 }],
-                data_id: Math.floor(Date.now() / 1000)});
+                'data_id': Math.floor(Date.now() / 1000)
+            });
         }
     });
 });

@@ -52,6 +52,7 @@ class AddPaypalShortcutsObserver implements ObserverInterface
         $blocks = [
             \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton::class =>
                 PaypalConfig::METHOD_WPS_EXPRESS,
+            \Magento\Paypal\Block\Express\InContext\SmartButton::class => PaypalConfig::METHOD_WPS_EXPRESS,
             \Magento\Paypal\Block\Express\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\WpsExpress\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
