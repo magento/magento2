@@ -56,10 +56,8 @@ $orderList = [];
 $orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 /** @var array $orderData */
 foreach ($orders as $orderData) {
-    /** @var $order \Magento\Sales\Model\Order */
-    $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        \Magento\Sales\Model\Order::class
-    );
+    /** @var Order $order */
+    $order = $objectManager->create(Order::class);
 
     // Reset addresses
     /** @var Order\Address $billingAddress */
