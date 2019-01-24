@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Eav\Model\Validator\Attribute\Code;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -83,7 +83,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $dateTimeFormatter;
 
     /**
-     * @var Code|null
+     * @var AttributeCodeValidator|null
      */
     private $attributeCodeValidator;
 
@@ -106,7 +106,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param Code|null $attributeCodeValidator
+     * @param AttributeCodeValidator|null $attributeCodeValidator
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
@@ -131,7 +131,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Code $attributeCodeValidator = null
+        AttributeCodeValidator $attributeCodeValidator = null
     ) {
         parent::__construct(
             $context,
@@ -155,7 +155,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->reservedAttributeList = $reservedAttributeList;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
-            Code::class
+            AttributeCodeValidator::class
         );
     }
 
