@@ -12,6 +12,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 /**
  * Session Manager
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SessionManager implements SessionManagerInterface
 {
