@@ -93,6 +93,6 @@
         <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99.0000" stepKey="seeProductSkuInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
     </test>
 </tests>
