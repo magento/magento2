@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Locale currency source
- */
 namespace Magento\Config\Model\Config\Source\Locale;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ListsInterface;
+
 /**
+ * Locale currency source.
+ *
  * @api
  * @since 100.0.2
  */
@@ -21,35 +24,34 @@ class Currency implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface
+     * @var ListsInterface
      */
     protected $_localeLists;
-    
+
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $_config;
+    private $config;
 
     /**
-     * @var Currency
+     * @var array
      */
-    protected $_installedCurrencies;
-
+    private $installedCurrencies;
 
     /**
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param ListsInterface $localeLists
+     * @param ScopeConfigInterface $config
      */
     public function __construct(
-    	\Magento\Framework\Locale\ListsInterface $localeLists,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
-    )
-    {
+        ListsInterface $localeLists,
+        ScopeConfigInterface $config = null
+    ) {
         $this->_localeLists = $localeLists;
-        $this->_config = $config;
+        $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray()
     {
@@ -57,36 +59,35 @@ class Currency implements \Magento\Framework\Option\ArrayInterface
             $this->_options = $this->_localeLists->getOptionCurrencies();
         }
 
-        $selected = $this->_getInstalledCurrencies();
-        
+        $selected = $this->getInstalledCurrencies();
+
         $options = array_filter(
             $this->_options,
             function ($option) use ($selected) {
                 return in_array($option['value'], $selected);
             }
         );
- 
+
         return $options;
     }
-    
-    /**
-     * Retrieve Installed Currencies
-     *
-     * @return string[]
-     */
-    protected function _getInstalledCurrencies()
-    {
-        if (!$this->_installedCurrencies)
-        {
-        	$this->_installedCurrencies = explode(
-            	',',
-            	$this->_config->getValue(
-                	'system/currency/installed',
-                	\Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            	)
-        	);
-        }
-        return $this->_installedCurrencies;
-    }
 
+    /**
+     * Retrieve Installed Currencies.
+     *
+     * @return array
+     */
+    private function getInstalledCurrencies()
+    {
+        if (!$this->installedCurrencies) {
+            $this->installedCurrencies = explode(
+                ',',
+                $this->config->getValue(
+                    'system/currency/installed',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
+        }
+
+        return $this->installedCurrencies;
+    }
 }
