@@ -57,8 +57,8 @@ class Client
         $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
         $requestArray = [
             'query' => $query,
-            'variables' => empty($variables) ? $variables : null,
-            'operationName' => empty($operationName) ? $operationName : null
+            'variables' => !empty($variables) ? $variables : null,
+            'operationName' => !empty($operationName) ? $operationName : null
         ];
         $postData = $this->json->jsonEncode($requestArray);
 
