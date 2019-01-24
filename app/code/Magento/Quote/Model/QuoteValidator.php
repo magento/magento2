@@ -25,7 +25,7 @@ class QuoteValidator
     /**
      * Maximum available number
      */
-    const MAXIMUM_AVAILABLE_NUMBER = 99999999;
+    const MAXIMUM_AVAILABLE_NUMBER = 10000000000000000;
 
     /**
      * @var AllowedCountries
