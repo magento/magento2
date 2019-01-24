@@ -11,6 +11,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -421,6 +422,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testCanCreditMemo()
     {
         $totalPaid = 10;
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
         $this->assertTrue($this->order->canCreditmemo());
@@ -436,6 +438,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $grandTotal = 0;
         $totalPaid = 0;
         $totalRefunded = 0;
+        $this->prepareOrderItem();
         $this->order->setGrandTotal($grandTotal);
         $this->order->setTotalPaid($totalPaid);
         $this->assertFalse($this->order->canCreditmemoForZeroTotal($totalRefunded));
@@ -444,6 +447,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     public function testCanNotCreditMemoWithTotalNull()
     {
         $totalPaid = 0;
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
         $this->assertFalse($this->order->canCreditmemo());
@@ -455,6 +459,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $adjustmentNegative = 10;
         $totalRefunded = 90;
 
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->order->setTotalRefunded($totalRefunded);
         $this->order->setAdjustmentNegative($adjustmentNegative);
@@ -469,6 +474,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $adjustmentNegative = 9;
         $totalRefunded = 90;
 
+        $this->prepareOrderItem();
         $this->order->setTotalPaid($totalPaid);
         $this->order->setTotalRefunded($totalRefunded);
         $this->order->setAdjustmentNegative($adjustmentNegative);
