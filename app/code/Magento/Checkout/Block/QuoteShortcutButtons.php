@@ -8,6 +8,8 @@ namespace Magento\Checkout\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
+ * Displays buttons on shopping cart page
+ *
  * @api
  */
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons

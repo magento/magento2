@@ -11,6 +11,9 @@ use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class shortcut
+ */
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
     /**
@@ -74,19 +77,19 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     private $config;
 
     /**
-     * Shortcut constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param ValidatorInterface $shortcutValidator
-     * @param $paymentMethodCode
-     * @param $startAction
-     * @param $alias
-     * @param $bmlMethodCode
-     * @param $shortcutTemplate
+     * @param string $paymentMethodCode
+     * @param string $startAction
+     * @param string $alias
+     * @param string $bmlMethodCode
+     * @param string $shortcutTemplate
      * @param array $data
      * @param ConfigFactory|null $config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codingStandardsIgnoreStart
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -104,7 +107,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->_paymentData = $paymentData;
         $this->_mathRandom = $mathRandom;
         $this->_shortcutValidator = $shortcutValidator;
-
         $this->_paymentMethodCode = $paymentMethodCode;
         $this->_startAction = $startAction;
         $this->_alias = $alias;
@@ -116,9 +118,10 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->config->setMethod($this->_paymentMethodCode);
         parent::__construct($context, $data);
     }
+    //@codingStandardsIgnoreEnd
 
     /**
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
