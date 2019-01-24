@@ -738,6 +738,7 @@
                                 offered and the currency offered by the merchant is USD.]]>
                             </comment>
                             <config_path>paypal/style/disable_funding_options</config_path>
+                            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect\DisabledFundingOptions</frontend_model>
                             <source_model>Magento\Paypal\Model\System\Config\Source\DisableFundingOptions</source_model>
                             <attribute type="shared">1</attribute>
                         </field>
