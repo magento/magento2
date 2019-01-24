@@ -137,9 +137,12 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break >= @screen__m) {
     .field-tooltip {
         .field-tooltip-content {
+            .lib-css(right, @checkout-tooltip-content-mobile__right);
+            .lib-css(top, @checkout-tooltip-content-mobile__top);
+            left: auto;
             &:extend(.abs-checkout-tooltip-content-position-top-mobile all);
         }
     }

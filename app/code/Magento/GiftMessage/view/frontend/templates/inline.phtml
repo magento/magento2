@@ -152,6 +152,7 @@
         </div>
 
         <dl class="options-items" id="allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
+            <?php if ($block->isMessagesOrderAvailable() || $block->isMessagesAvailable()): ?>
             <dt id="add-gift-options-for-order-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
@@ -192,7 +193,7 @@
                     </div>
                  <?php endif; ?>
             </dd>
-
+            <?php endif; ?>
             <?php if ($block->isItemsAvailable()): ?>
             <dt id="add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title individual">
                 <div class="field choice">

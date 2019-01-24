@@ -236,7 +236,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function flushAssociatedProductsCache($product)
     {
-        return $product->unsData($this->_keyAssociatedProducts);
+        return $product->unsetData($this->_keyAssociatedProducts);
     }
 
     /**
@@ -347,7 +347,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($isStrictProcessMode && !$subProduct->getQty()) {
                     return __('Please specify the quantity of product(s).')->render();
                 }
-                $productsInfo[$subProduct->getId()] = (int)$subProduct->getQty();
+                $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
             }
         }
 
