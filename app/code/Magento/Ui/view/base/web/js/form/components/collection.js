@@ -153,6 +153,7 @@ define([
          * Creates function that removes element
          * from collection using '_removeChild' method.
          * @param  {Object} elem - Element that should be removed.
+         * @deprecated Not used anymore
          */
         removeAddress: function (elem) {
             var self = this;

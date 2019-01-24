@@ -19,7 +19,7 @@ define([
     };
 
     /**
-     * Parses incoming data and Returns result merged with default preview config
+     * Parses incoming data and returns result merged with default preview config
      *
      * @param  {Object|String} data
      * @return {Object}
