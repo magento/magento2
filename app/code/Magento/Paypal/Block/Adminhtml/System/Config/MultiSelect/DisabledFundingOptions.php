@@ -10,21 +10,26 @@ use Magento\Paypal\Model\Config\StructurePlugin;
 
 /**
  * Class DisabledFundingOptions
-
- * @package Magento\Paypal\Block\Adminhtml\System\Config\MultiSelect
  */
 class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const FIELD_CONFIG_PATH = 'general/country/default';
+    /**
+     * @var \Magento\Paypal\Model\ConfigFactory
+     */
+    private $configFactory;
+
     /**
      * DisabledFundingOptions constructor.
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\Paypal\Model\ConfigFactory $configFactory,
         $data = []
     ) {
+        $this->configFactory = $configFactory;
         parent::__construct($context, $data);
     }
 
@@ -44,7 +49,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
     }
 
     /**
-     * Filters array for PAYPAL_FUNDING_CREDIT
+     * Filters array for CREDIT
      *
      * @param array $options
      * @return array
@@ -52,7 +57,7 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
     private function filterValuesForPaypalCredit($options)
     {
         return array_filter($options, function ($opt) {
-            return ($opt['value'] != 'CREDIT');
+            return ($opt['value'] !== 'CREDIT');
         });
     }
 
@@ -62,13 +67,10 @@ class DisabledFundingOptions extends \Magento\Config\Block\System\Config\Form\Fi
      * @param string $country
      * @return bool
      */
-    private function isSelectedMerchantCountry($country): bool
+    private function isSelectedMerchantCountry(string $country): bool
     {
-        $paypalCountry = $this->getRequest()->getParam(StructurePlugin::REQUEST_PARAM_COUNTRY);
-        $defaultCountry = $this->_scopeConfig->getValue(self::FIELD_CONFIG_PATH);
-        if ($paypalCountry) {
-            return $paypalCountry === $country;
-        }
-        return $defaultCountry === $country;
+        $merchantCountry = $this->getRequest()->getParam(StructurePlugin::REQUEST_PARAM_COUNTRY)
+            ?: $this->configFactory->create()->getMerchantCountry();
+        return $merchantCountry === $country;
     }
 }
