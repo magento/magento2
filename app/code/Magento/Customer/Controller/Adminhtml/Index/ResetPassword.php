@@ -5,11 +5,16 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 
-class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
+/**
+ * Reset password controller
+ *
+ * @package Magento\Customer\Controller\Adminhtml\Index
+ */
+class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
      * Reset password handler

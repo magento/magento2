@@ -79,8 +79,26 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         //Second time installation should not find anything as we do not change anything
         self::assertNull($diff->getAll());
+        $this->compareStructures();
+    }
+
+    /**
+     * Compare structure of DB and declared structure.
+     */
+    private function compareStructures()
+    {
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        foreach ($this->getTrimmedData() as $tableName => $sql) {
+            $this->assertArrayHasKey($tableName, $shardData);
+            /**
+             * MySQL 8.0 and above does not provide information about the ON DELETE instruction
+             * if ON DELETE NO ACTION
+             */
+            if (preg_match('#ON DELETE\s+NO ACTION#i', $shardData[$tableName] === 1)) {
+                preg_replace('#ON DELETE\s+NO ACTION#i', '', $sql);
+                self::assertEquals($sql, $shardData[$tableName]);
+            }
+        }
     }
 
     /**
@@ -110,8 +128,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->getAll());
-        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->compareStructures();
     }
 
     /**
@@ -156,8 +173,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->getAll());
-        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->compareStructures();
     }
 
     /**
@@ -295,5 +311,69 @@ class DeclarativeInstallerTest extends SetupTestCase
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
         self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule8
+     */
+    public function testForeignKeyReferenceId()
+    {
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'unpatterned_fk_name',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        $tableStatements = $this->describeTable->describeShard('default');
+        $tableSql = $tableStatements['dependent'];
+        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
+        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID`/', $tableSql);
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @moduleName Magento_TestSetupDeclarationModule8
+     */
+    public function testDisableIndexByExternalModule()
+    {
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'index_to_disable',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'db_schema_whitelist.json',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'module.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        $tableStatements = $this->describeTable->describeShard('default');
+        $tableSql = $tableStatements['test_table'];
+        $this->assertNotRegExp(
+            '/KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/',
+            $tableSql,
+            'Index is not being disabled by external module'
+        );
     }
 }

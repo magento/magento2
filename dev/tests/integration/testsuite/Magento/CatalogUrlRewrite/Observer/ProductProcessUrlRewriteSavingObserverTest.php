@@ -90,6 +90,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
+        $product->setUrlPath('new-path');
         $product->save();
 
         $expected = [
@@ -152,6 +153,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
+        $product->setUrlPath('new-path');
         $product->save();
 
         $expected = [
@@ -207,6 +209,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
 
         $product->setData('save_rewrites_history', false);
         $product->setUrlKey('new-url');
+        $product->setUrlPath('new-path');
         $product->save();
 
         $expected = [

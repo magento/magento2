@@ -129,7 +129,7 @@
                         <field id="*/*/template_hints_storefront">1</field>
                         <field id="*/*/template_hints_storefront_show_with_parameter">1</field>
                     </depends>
-                    <comment>Add the following paramater to the URL to show template hints ?templatehints=[parameter_value]</comment>
+                    <comment>Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]</comment>
                 </field>
                 <field id="template_hints_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enabled Template Path Hints for Admin</label>
@@ -338,15 +338,26 @@
             </group>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="max_width" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable Frontend Resize</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Resize performed via javascript before file upload.</comment>
+                </field>
+                <field id="max_width" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Width</label>
                     <validate>validate-greater-than-zero validate-number required-entry</validate>
                     <comment>Maximum allowed width for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
+                    </depends>
                 </field>
-                <field id="max_height" translate="label comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="max_height" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Height</label>
                     <validate>validate-greater-than-zero validate-number required-entry</validate>
                     <comment>Maximum allowed height for uploaded image.</comment>
+                    <depends>
+                        <field id="enable_resize">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

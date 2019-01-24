@@ -61,10 +61,12 @@
         <!--Fill cart data-->
         <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="SelectBraintreePaymentMethod"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="ScrollToCreditCardSection"/>
         <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="StorefrontFillCartDataActionGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <!--Place order-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
+        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethodContainer}}{{CheckoutPaymentSection.placeOrder}}"
+               stepKey="PlaceOrder"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
 
         <!--Add product to cart again-->

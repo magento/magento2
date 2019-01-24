@@ -143,7 +143,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_heght' => 2],
+                'rules' => ['max_image_height' => 2],
                 'expectedResult' => ['"Label" height exceeds allowed value of 2 px.']
             ],
             [
@@ -151,7 +151,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_heght' => 2000],
+                'rules' => ['max_image_height' => 2000],
                 'expectedResult' => true
             ],
             [
@@ -159,7 +159,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'originalValue' => 'value',
                 'isRequired' => true,
                 'isAjaxRequest' => false,
-                'rules' => ['max_image_heght' => 2, 'max_image_width' => 2],
+                'rules' => ['max_image_height' => 2, 'max_image_width' => 2],
                 'expectedResult' => [
                     '"Label" width exceeds allowed value of 2 px.',
                     '"Label" height exceeds allowed value of 2 px.',
