@@ -111,7 +111,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->setTemplate($shortcutTemplate);
         $this->_bmlMethodCode = $bmlMethodCode;
         $this->config = $config
-            ? $config
+            ? $config->create()
             : \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigFactory::class)->create();
         $this->config->setMethod($this->_paymentMethodCode);
         parent::__construct($context, $data);
