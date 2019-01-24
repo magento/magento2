@@ -568,6 +568,13 @@
 
 //  In rows
 .admin__control-fields {
+    &._no-header {
+        .admin__field {
+            .admin__field-label {
+                display: none;
+            }
+        }
+    }
     .admin__field-label ~ .admin__field-control {
         width: 100%;
     }
