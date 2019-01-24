@@ -27,6 +27,7 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -107,12 +108,18 @@ class Save extends Attribute
 
     /**
      * @return Redirect
+     * @throws NotFoundException
+     * @throws \Zend_Validate_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             $setId = $this->getRequest()->getParam('set');
