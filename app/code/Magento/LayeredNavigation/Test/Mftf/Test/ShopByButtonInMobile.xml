@@ -51,8 +51,7 @@
         <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad"/>
-        <fillField userInput="Test Simple Product" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Test Simple Product']" stepKey="fillSearchBar" />
         <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad2"/>
         <seeElement selector="{{StorefrontCategorySidebarMobileSection.shopByButton}}" stepKey="seeShopByButton"/>

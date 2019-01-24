@@ -1,0 +1,4 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,url_key
+simple1,simple,,"simple 1",25,Default,cuvée merlot-cabernet igp pays d'oc frankrijk
+simple2,simple,,"simple 2",34,Default,normal-url
+simple3,simple,,"simple 3",58,Default,some!wrong'url

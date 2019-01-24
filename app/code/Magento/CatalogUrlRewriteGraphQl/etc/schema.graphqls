@@ -4,6 +4,7 @@
 interface ProductInterface {
     url_key: String @doc(description: "The part of the URL that identifies the product")
     url_path: String @doc(description: "The part of the URL that precedes the url_key")
+    url_rewrites: [UrlRewrite] @doc(description: "URL rewrites list") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
 }
 
 input ProductFilterInput {

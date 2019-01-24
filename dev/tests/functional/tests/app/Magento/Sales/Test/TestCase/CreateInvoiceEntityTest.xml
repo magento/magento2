@@ -88,6 +88,7 @@
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
+            <data name="order/data/payment_auth_expiration/po_number" xsi:type="string">po_number</data>
             <data name="order/data/invoice" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="items_data" xsi:type="array">
