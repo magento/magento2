@@ -6,10 +6,12 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -18,11 +20,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongFrontendInput()
     {
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
         $postData = $this->_getAttributeData() + [
                 'attribute_id' => 100500,
                 'frontend_input' => 'some_input',
+                'form_key' => $formKey->getFormKey()
             ];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -42,12 +48,16 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWithPopup()
     {
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
         $postData = $this->_getAttributeData() + [
             'attribute_id' => 5,
             'popup' => 'true',
             'new_attribute_set_name' => 'new_attribute_set',
+            'form_key' => $formKey->getFormKey()
         ];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -66,7 +76,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWithExceptionWhenSaveAttribute()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => 0, 'frontend_input' => 'boolean'];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => 0,
+            'frontend_input' => 'boolean',
+            'form_key' => $formKey->getFormKey()
+         ];
+
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -84,7 +102,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongAttributeId()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => 100500];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => 100500,
+            'form_key' => $formKey->getFormKey()
+        ];
+
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -105,11 +130,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testAttributeWithoutId()
     {
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
         $postData = $this->_getAttributeData() + [
                 'attribute_code' => uniqid('attribute_'),
                 'set' => 4,
                 'frontend_input' => 'boolean',
+                'form_key' => $formKey->getFormKey()
             ];
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -130,8 +159,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongAttributeCode()
     {
-        $postData = $this->_getAttributeData() + ['attribute_code' => '_()&&&?'];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_code' => '_()&&&?',
+            'form_key' => $formKey->getFormKey()
+        ];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -155,8 +190,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testAttributeWithoutEntityTypeId()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => '2',
+            'new_attribute_set_name' => ' ',
+            'form_key' => $formKey->getFormKey()
+        ];
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
@@ -170,8 +212,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionApplyToDataSystemAttribute()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => '2',
+            'form_key' => $formKey->getFormKey()
+        ];
+
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $model->load($postData['attribute_id']);
@@ -183,8 +232,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionApplyToDataUserDefinedAttribute()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '1'];
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => '1',
+            'form_key' => $formKey->getFormKey()
+        ];
+
         $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/product_attribute/save');
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
         $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -218,6 +274,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + ['attribute_id' => 1];
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals('new string translation', $this->_translate('string to translate'));
@@ -293,7 +350,11 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionsData[] = http_build_query($optionRowData);
         }
         $attributeData['serialized_options'] = json_encode($optionsData);
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($attributeData);
+        $this->getRequest()->setParam('form_key', $formKey->getFormKey());
         $this->dispatch('backend/catalog/product_attribute/save');
         $entityTypeId = $this->_objectManager->create(
             \Magento\Eav\Model\Entity::class
