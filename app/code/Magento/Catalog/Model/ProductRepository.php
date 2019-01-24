@@ -647,7 +647,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
-                __('The "%1" product couldn\'t be removed.', $sku)
+                __('The "%1" product couldn\'t be removed.', $sku),
+                $e
             );
         }
         $this->removeProductFromLocalCache($sku);
