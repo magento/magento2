@@ -28,11 +28,6 @@ class SmartButton extends Template implements ShortcutInterface
     const ALIAS_ELEMENT_INDEX = 'alias';
 
     /**
-     * @var bool
-     */
-    private $isMiniCart = false;
-
-    /**
      * @var Config
      */
     private $config;
@@ -122,15 +117,13 @@ class SmartButton extends Template implements ShortcutInterface
     }
 
     /**
-     * Check is Paypal In-Context Express Checkout button
-     * should render in cart/mini-cart
+     * Check is Paypal In-Context Express Checkout button should render in cart/mini-cart
      *
      * @return bool
      */
-    protected function shouldRender() : bool
+    private function shouldRender() : bool
     {
         return $this->payment->isAvailable($this->session->getQuote())
-            && $this->isMiniCart
             && $this->isInContext()
             && $this->isVisibleOnCart();
     }
@@ -158,22 +151,13 @@ class SmartButton extends Template implements ShortcutInterface
     }
 
     /**
-     * @param bool $isCatalog
-     * @return $this
-     */
-    public function setIsInCatalogProduct($isCatalog)
-    {
-        $this->isMiniCart = !$isCatalog;
-
-        return $this;
-    }
-
-    /**
+     * Returns string to initialize js component
+     *
      * @return string
      */
     public function getJsInitParams(): string
     {
-        $json = "";
+        $config = [];
         $quoteId = $this->getQuoteId();
         if (!empty($quoteId)) {
             $clientConfig = [
@@ -202,13 +186,14 @@ class SmartButton extends Template implements ShortcutInterface
                     'clientConfig' => $clientConfig
                 ]
             ];
-            $json = $this->serializer->serialize($config);
         }
-
+        $json = $this->serializer->serialize($config);
         return $json;
     }
 
     /**
+     * Returns container id
+     *
      * @return string
      */
     public function getContainerId()

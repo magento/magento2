@@ -45,7 +45,6 @@ class SmartButtonConfig
         $this->defaultStyles = $defaultStyles;
     }
 
-
     /**
      * Get smart button config
      *
@@ -62,8 +61,8 @@ class SmartButtonConfig
             'disallowedFunding' => $this->getDisallowedFunding(),
             'styles' => $this->getButtonStyles($page)
         ];
-
     }
+
     /**
      * Returns disallowed funding from configuration
      *
@@ -88,6 +87,7 @@ class SmartButtonConfig
     /**
      * Returns button styles based on configuration
      *
+     * @param string $page
      * @return array
      */
     public function getButtonStyles(string $page) : array

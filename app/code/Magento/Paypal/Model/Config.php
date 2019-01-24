@@ -1702,11 +1702,11 @@ class Config extends AbstractConfig
     /**
      * Map PayPal button style config fields
      *
-     * @param $fieldName
+     * @param string $fieldName
      * @return null|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function _mapButtonStyles($fieldName)
+    private function _mapButtonStyles(string $fieldName)
     {
         $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
 

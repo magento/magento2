@@ -137,7 +137,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     }
 
     /**
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @inheritdoc
      */
     protected function _beforeToHtml()
     {
@@ -188,6 +188,8 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     }
 
     /**
+     * Check if we should render component
+     *
      * @return bool
      */
     protected function shouldRender()

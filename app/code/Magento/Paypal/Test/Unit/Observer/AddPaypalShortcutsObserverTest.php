@@ -163,6 +163,11 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
                         self::PAYMENT_AVAILABLE => true,
                         self::PAYMENT_IS_BML => false,
                     ],
+                    \Magento\Paypal\Block\Express\InContext\SmartButton::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
                     \Magento\Paypal\Block\Express\Shortcut::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
@@ -200,6 +205,11 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
                     \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Express\InContext\SmartButton::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
                         self::PAYMENT_IS_BML => false,
                     ],
                     \Magento\Paypal\Block\Express\Shortcut::class => [
