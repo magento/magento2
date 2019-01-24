@@ -176,8 +176,7 @@ class PackageInfo
     protected function convertPackageNameToModuleName($packageName)
     {
         $moduleName = str_replace('magento/module-', '', $packageName);
-        $moduleName = str_replace('-', ' ', $moduleName);
-        $moduleName = str_replace(' ', '', ucwords($moduleName));
+        $moduleName = str_replace('-', '', ucwords($moduleName, '-'));
 
         return 'Magento_' . $moduleName;
     }
