@@ -121,7 +121,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    protected function shouldRender() : bool
+    private function shouldRender() : bool
     {
         return $this->payment->isAvailable($this->session->getQuote())
             && $this->isInContext()
@@ -157,7 +157,7 @@ class SmartButton extends Template implements ShortcutInterface
      */
     public function getJsInitParams(): string
     {
-        $json = "";
+        $config = [];
         $quoteId = $this->getQuoteId();
         if (!empty($quoteId)) {
             $clientConfig = [
@@ -186,9 +186,8 @@ class SmartButton extends Template implements ShortcutInterface
                     'clientConfig' => $clientConfig
                 ]
             ];
-            $json = $this->serializer->serialize($config);
         }
-
+        $json = $this->serializer->serialize($config);
         return $json;
     }
 

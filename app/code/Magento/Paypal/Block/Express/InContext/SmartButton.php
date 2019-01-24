@@ -69,25 +69,16 @@ class SmartButton extends Template implements ShortcutInterface
     }
 
     /**
-     * Check `in_context` config value
-     *
-     * @return bool
-     */
-    private function isInContext() : bool
-    {
-        return (bool)(int) $this->config->getValue('in_context');
-    }
-
-    /**
-     * Check is Paypal In-Context Express Checkout button
-     * should render in cart/mini-cart
+     * Check is Paypal In-Context Express Checkout button should render in cart/mini-cart
      *
      * @return bool
      */
     protected function shouldRender() : bool
     {
-        return true;
-        //TODO: add config check
+        $isInCatalog = $this->getIsInCatalogProduct();
+        $isInContext = (bool)(int) $this->config->getValue('in_context');
+
+        return ($isInContext && $isInCatalog);
     }
 
     /**
@@ -113,6 +104,8 @@ class SmartButton extends Template implements ShortcutInterface
     }
 
     /**
+     * Returns string to initialize js component
+     *
      * @return string
      */
     public function getJsInitParams(): string
