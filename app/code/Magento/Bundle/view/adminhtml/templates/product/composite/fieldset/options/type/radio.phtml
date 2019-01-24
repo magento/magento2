@@ -19,11 +19,13 @@
     <div class="control admin__field-control">
         <div class="nested<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
         <?php if ($block->showSingle()): ?>
-            <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
-            <input type="hidden"
-                   name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
-                   value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
-                   price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
+            <div class="field choice admin__field admin__field-option">
+                <?= /* @escapeNotVerified */ $block->getSelectionTitlePrice($_selections[0]) ?>
+                <input type="hidden"
+                       name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                       value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
+                       price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
+            </div>
         <?php else:?>
             <?php if (!$_option->getRequired()): ?>
                 <div class="field choice admin__field admin__field-option">
