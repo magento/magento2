@@ -8,9 +8,52 @@
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework;
+use Magento\Framework\Controller\ResultFactory;
 
 class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
+    
+    /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @codeCoverageIgnore
+     */
+    public function __construct(
+        Framework\App\Action\Context $context,
+        Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Framework\Registry $coreRegistry = null
+    ) {
+
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart
+        );
+         $this->_coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
+                              ->get(\Magento\Framework\Registry::class);
+         $this->_coreRegistry->register('configure_item',true);
+    }
+    
     /**
      * Update product configuration for a cart item
      *
