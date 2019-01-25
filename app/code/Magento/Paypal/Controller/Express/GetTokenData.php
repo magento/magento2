@@ -164,14 +164,19 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     private function getToken(): ?string
     {
         $quoteId = $this->getRequest()->getParam('quote_id');
-        $customerId = $this->getRequest()->getParam('customer_id');
+        $customerId = $this->getRequest()->getParam('customer_id') ?: $this->_customerSession->getId();
         $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
 
-        $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
+        if ($quoteId) {
+            $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
+        } else {
+            $quote = $this->_getQuote();
+        }
+
         $this->_initCheckout($quote);
 
         if ($quote->getIsMultiShipping()) {
-            $quote->setIsMultiShipping(false);
+            $quote->setIsMultiShipping(0);
             $quote->removeAllAddresses();
         }
 

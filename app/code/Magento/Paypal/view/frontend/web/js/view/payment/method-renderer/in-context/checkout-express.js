@@ -4,29 +4,16 @@
  */
 define([
     'jquery',
-    'underscore',
     'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
+    'Magento_Paypal/js/in-context/express-checkout-wrapper',
     'Magento_Paypal/js/action/set-payment-method',
     'Magento_Checkout/js/model/payment/additional-validators',
-    'Magento_Ui/js/lib/view/utils/dom-observer',
-    'Magento_Customer/js/customer-data',
     'Magento_Ui/js/model/messageList',
-    'Magento_Paypal/js/in-context/express-checkout-smart-buttons',
     'Magento_Ui/js/lib/view/utils/async'
-], function (
-    $,
-    _,
-    Component,
-    setPaymentMethodAction,
-    additionalValidators,
-    domObserver,
-    customerData,
-    messageList,
-    checkoutSmartButtons
-) {
+], function ($, Component, Wrapper, setPaymentMethod, additionalValidators, messageList) {
     'use strict';
 
-    return Component.extend({
+    return Component.extend(Wrapper).extend({
         defaults: {
             template: 'Magento_Paypal/payment/paypal-express-in-context',
             validationElements: 'input'
@@ -48,35 +35,35 @@ define([
         /**
          *  Validates Smart Buttons
          */
-        validate: function (actions) {
-            this.clientConfig.buttonActions = actions || this.clientConfig.buttonActions;
+        validate: function () {
+            this._super();
 
-            if (this.clientConfig.buttonActions) {
-                additionalValidators.validate(true) ?
-                    this.clientConfig.buttonActions.enable() :
-                    this.clientConfig.buttonActions.disable();
+            if (this.actions) {
+                additionalValidators.validate(true) ? this.actions.enable() : this.actions.disable();
             }
         },
 
-        /**
-         * Render PayPal buttons using checkout.js
-         */
-        renderPayPalButtons: function () {
-            checkoutSmartButtons(this.prepareClientConfig(), '#' + this.getButtonId());
-        },
+        /** @inheritdoc */
+        beforePayment: function (resolve, reject) {
+            var promise = $.Deferred();
 
-        /**
-         * @returns {String}
-         */
-        getButtonId: function () {
-            return this.inContextId;
-        },
+            setPaymentMethod(this.messageContainer).done(function () {
+                return promise.resolve();
+            }).fail(function (response) {
+                var error;
 
-        /**
-         * @returns {String}
-         */
-        getAgreementId: function () {
-            return this.inContextId + '-agreement';
+                try {
+                    error = JSON.parse(response.responseText);
+                } catch (exception) {
+                    error = this.paymentActionError;
+                }
+
+                this.addError(error);
+
+                return reject(new Error(error));
+            }.bind(this));
+
+            return promise;
         },
 
         /**
@@ -85,16 +72,12 @@ define([
          * @return {Object}
          */
         prepareClientConfig: function () {
+            this._super();
             this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
             this.clientConfig.formKey = window.checkoutConfig.formKey;
             this.clientConfig.customerId = window.customerData.id;
-            this.clientConfig.button = 0;
             this.clientConfig.merchantId = this.merchantId;
-            this.clientConfig.client = {};
-            this.clientConfig.client[this.clientConfig.environment] = this.merchantId;
-            this.clientConfig.additionalAction = setPaymentMethodAction;
-            this.clientConfig.rendererComponent = this;
-            this.clientConfig.messageContainer = this.messageContainer;
+            this.clientConfig.button = 0;
             this.clientConfig.commit = true;
 
             return this.clientConfig;
@@ -103,7 +86,7 @@ define([
         /**
          * Adding logic to be triggered onClick action for smart buttons component
          */
-        onClick: function() {
+        onClick: function () {
             additionalValidators.validate();
             this.selectPaymentMethod();
         },
@@ -111,9 +94,9 @@ define([
         /**
          * Adds error message
          *
-         * @param {string} message
+         * @param {String} message
          */
-        addError: function(message) {
+        addError: function (message) {
             messageList.addErrorMessage({
                 message: message
             });

@@ -6,69 +6,69 @@ define([
     'underscore',
     'jquery',
     'uiComponent',
-    'Magento_Paypal/js/in-context/express-checkout-smart-buttons'
-], function (_, $, Component, checkoutSmartButtons) {
+    'Magento_Paypal/js/in-context/express-checkout-wrapper',
+    'Magento_Customer/js/customer-data',
+    'mage/cookies'
+], function (_, $, Component, Wrapper, customerData) {
     'use strict';
 
-    return Component.extend({
+    return Component.extend(Wrapper).extend({
         defaults: {
             productFormSelector: '#product_addtocart_form',
-            validationElements: 'input',
-            getQuoteUrl: '',
+            declinePayment: false,
             formInvalid: false
         },
 
+        /** @inheritdoc */
         initialize: function (config, element) {
+            var cart = customerData.get('cart'),
+                customer = customerData.get('customer');
+
             this._super();
-            checkoutSmartButtons(this.prepareClientConfig(), element);
+            this.renderPayPalButtons(element);
+            this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+            return this;
         },
 
-        validate: function (actions) {
-            this.actions = actions;
-        },
-
+        /** @inheritdoc */
         onClick: function () {
             var $form = $(this.productFormSelector);
 
-            $form.submit();
-            this.formInvalid = !$form.validation('isValid') ? true : false;
+            if (!this.declinePayment) {
+                $form.submit();
+                this.formInvalid = !$form.validation('isValid');
+            }
         },
 
+        /** @inheritdoc */
         beforePayment: function (resolve, reject) {
             var promise = $.Deferred();
 
-            if (this.formInvalid) {
+            if (this.declinePayment) {
+                this.addError(this.signInMessage, 'warning');
+                reject();
+            } else if (this.formInvalid) {
                 reject();
             } else {
-                promise.resolve();
+                $(document).on('ajax:addToCart', function (e, data) {
+                    if (_.isEmpty(data.response)) {
+                        return promise.resolve();
+                    }
+
+                    return reject();
+                });
+                $(document).on('ajax:addToCart:error', reject);
             }
 
             return promise;
         },
 
-        /**
-         * @returns {String}
-         */
-        getButtonId: function () {
-            return this.inContextId;
-        },
-
-        /**
-         * @returns {String}
-         */
-        getAgreementId: function () {
-            return this.inContextId + '-agreement';
-        },
-
-        /**
-         * Populate client config with all required data
-         *
-         * @return {Object}
-         */
+        /** @inheritdoc */
         prepareClientConfig: function () {
-            this.clientConfig.client = {};
-            this.clientConfig.client[this.clientConfig.environment] = this.clientConfig.merchantId;
-            this.clientConfig.rendererComponent = this;
+            this._super();
+            this.clientConfig.quoteId = '';
+            this.clientConfig.customerId = '';
             this.clientConfig.formKey = $.mage.cookies.get('form_key');
             this.clientConfig.commit = false;
 

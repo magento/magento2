@@ -40,14 +40,14 @@ define([
              * @param {Object} actions
              */
             validate: function (actions) {
-                clientConfig.rendererComponent.validate && clientConfig.rendererComponent.validate(actions);
+                clientConfig.rendererComponent.validate(actions);
             },
 
             /**
              * Execute logic on Paypal button click
              */
             onClick: function () {
-                clientConfig.rendererComponent.onClick && clientConfig.rendererComponent.onClick();
+                clientConfig.rendererComponent.onClick();
             },
 
             /**
@@ -63,27 +63,14 @@ define([
                     button: clientConfig.button
                 };
 
-                if (!clientConfig.button) {
-                    return new paypal.Promise(function (resolve, reject) {
-                        clientConfig.rendererComponent.beforePayment(resolve, reject).then(function () {
-                            paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
-                                if (res.success) {
-                                    return resolve(res.token);
-                                }
-
-                                clientConfig.rendererComponent.addError(res['error_message']);
-
-                                return reject(new Error(res['error_message']));
-                            });
+                return new paypal.Promise(function (resolve, reject) {
+                    clientConfig.rendererComponent.beforePayment(resolve, reject).then(function () {
+                        paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
+                            return clientConfig.rendererComponent.afterPayment(res, resolve, reject);
+                        }).catch(function (err) {
+                            return clientConfig.rendererComponent.catchPayment(err, resolve, reject);
                         });
                     });
-                }
-
-                return paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
-                    if (res.success) {
-                        return res.token;
-                    }
-                    clientConfig.rendererComponent.addError(res['error_message']);
                 });
             },
 
@@ -98,17 +85,19 @@ define([
                 var params = {
                     paymentToken: data.paymentToken,
                     payerId: data.payerID,
-                    quoteId: clientConfig.quoteId,
+                    quoteId: clientConfig.quoteId || '',
                     customerId: clientConfig.customerId || '',
                     'form_key': clientConfig.formKey
                 };
 
-                return paypal.request.post(clientConfig.onAuthorizeUrl, params).then(function (res) {
-                    if (res.success) {
-
-                        return actions.redirect(window, res.redirectUrl);
-                    }
-                    clientConfig.rendererComponent.addError(res['error_message']);
+                return new paypal.Promise(function (resolve, reject) {
+                    clientConfig.rendererComponent.beforeOnAuthorize(resolve, reject, actions).then(function () {
+                        paypal.request.post(clientConfig.onAuthorizeUrl, params).then(function (res) {
+                            clientConfig.rendererComponent.afterOnAuthorize(res, resolve, reject, actions);
+                        }).catch(function (err) {
+                            return clientConfig.rendererComponent.catchOnAuthorize(err, resolve, reject);
+                        });
+                    });
                 });
 
             },
@@ -120,14 +109,14 @@ define([
              * @param {Object} actions
              */
             onCancel: function (data, actions) {
-                actions.redirect(window, clientConfig.onCancelUrl);
+                clientConfig.rendererComponent.onCancel(data, actions);
             },
 
             /**
              * Process errors
              */
-            onError: function () {
-                // Uncaught error isn't displayed in the console
+            onError: function (err) {
+                clientConfig.rendererComponent.onError(err);
             }
         }, element);
     };
