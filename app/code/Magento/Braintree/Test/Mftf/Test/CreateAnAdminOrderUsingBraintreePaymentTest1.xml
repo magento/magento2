@@ -74,8 +74,8 @@
         <actionGroup ref="useBraintreeForMasterCard" stepKey="selectCardWithBraintree"/>
 
         <click stepKey="submitOrder" selector="{{NewOrderSection.submitOrder}}"/>
-        <waitForPageLoad stepKey="waitForSaveConfig" time="5"/>
-        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage" time="1"/>
+        <waitForPageLoad stepKey="waitForSaveConfig"/>
+        <waitForElementVisible selector="{{NewOrderSection.successMessage}}" stepKey="waitForSuccessMessage"/>
 
         <after>
             <!-- Disable BrainTree -->
