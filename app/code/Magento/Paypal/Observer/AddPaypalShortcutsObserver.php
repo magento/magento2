@@ -50,8 +50,9 @@ class AddPaypalShortcutsObserver implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
         $blocks = [
-            \Magento\Paypal\Block\Express\InContext\Minicart\Button::class =>
+            \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton::class =>
                 PaypalConfig::METHOD_WPS_EXPRESS,
+            \Magento\Paypal\Block\Express\InContext\SmartButton::class => PaypalConfig::METHOD_WPS_EXPRESS,
             \Magento\Paypal\Block\Express\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\WpsExpress\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
@@ -81,6 +82,8 @@ class AddPaypalShortcutsObserver implements ObserverInterface
                 $observer->getEvent()->getIsCatalogProduct()
             )->setShowOrPosition(
                 $observer->getEvent()->getOrPosition()
+            )->setIsShoppingCart(
+                (bool) $observer->getEvent()->getIsShoppingCart()
             );
             $shortcutButtons->addShortcut($shortcut);
         }

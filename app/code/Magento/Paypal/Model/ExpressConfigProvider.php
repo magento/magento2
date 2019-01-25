@@ -71,15 +71,15 @@ class ExpressConfigProvider implements ConfigProviderInterface
     private $smartButtonConfig;
 
     /**
-     * Constructor
-     *
+     * ExpressConfigProvider constructor.
      * @param ConfigFactory $configFactory
      * @param ResolverInterface $localeResolver
      * @param CurrentCustomer $currentCustomer
      * @param PaypalHelper $paypalHelper
      * @param PaymentHelper $paymentHelper
      * @param UrlInterface $urlBuilder
-     * @param SmartButtonConfig $smartButtonConfig
+     * @param SmartButtonConfig|null $smartButtonConfig
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         ConfigFactory $configFactory,
@@ -131,21 +131,17 @@ class ExpressConfigProvider implements ConfigProviderInterface
             $config['payment']['paypalExpress']['inContextConfig'] = [
                 'inContextId' => self::IN_CONTEXT_BUTTON_ID,
                 'merchantId' => $this->config->getValue('merchant_id'),
-                'path' => $this->urlBuilder->getUrl('paypal/express/gettoken', ['_secure' => true]),
-                'clientConfig' => [
-                    'environment' => ((int) $this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
-                    'locale' => $locale,
-                    'button' => [
-                        self::IN_CONTEXT_BUTTON_ID
-                    ],
-                    'allowedFunding' => [],
-                    'disallowedFunding' => $this->smartButtonConfig->getDisallowedFunding(),
-                    'styles' => $this->smartButtonConfig->getButtonStyles('checkout'),
-                    'getTokenUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
-                    'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization'),
-                    'onCancelUrl' => $this->urlBuilder->getUrl('paypal/express/cancel')
-                ],
             ];
+            $clientConfig = [
+                'button' => [
+                    self::IN_CONTEXT_BUTTON_ID
+                ],
+                'getTokenUrl' => $this->urlBuilder->getUrl('paypal/express/getTokenData'),
+                'onAuthorizeUrl' => $this->urlBuilder->getUrl('paypal/express/onAuthorization'),
+                'onCancelUrl' => $this->urlBuilder->getUrl('paypal/express/cancel')
+            ];
+            $clientConfig = array_replace_recursive($clientConfig, $this->smartButtonConfig->getConfig('checkout'));
+            $config['payment']['paypalExpress']['inContextConfig']['clientConfig'] = $clientConfig;
         }
 
         foreach ($this->methodCodes as $code) {

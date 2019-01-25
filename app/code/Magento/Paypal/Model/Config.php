@@ -1646,18 +1646,10 @@ class Config extends AbstractConfig
             case 'paypal_hdrbackcolor':
             case 'paypal_hdrbordercolor':
             case 'paypal_payflowcolor':
-            case 'checkout_page_button_customize':
-            case 'checkout_page_button_layout':
-            case 'checkout_page_button_size':
-            case 'checkout_page_button_color':
-            case 'checkout_page_button_shape':
-            case 'checkout_page_button_label':
-            case 'checkout_page_button_mx_installment_period':
-            case 'checkout_page_button_br_installment_period':
             case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
-                return null;
+                return $this->_mapButtonStyles($fieldName);
         }
     }
 
@@ -1702,6 +1694,36 @@ class Config extends AbstractConfig
             case 'debug':
             case 'verify_peer':
                 return "payment/{$this->_methodCode}/{$fieldName}";
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Map PayPal button style config fields
+     *
+     * @param string $fieldName
+     * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function _mapButtonStyles(string $fieldName)
+    {
+        $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
+
+        if (!$page) {
+            return null;
+        }
+
+        switch ($fieldName) {
+            case "{$page}_page_button_customize":
+            case "{$page}_page_button_layout":
+            case "{$page}_page_button_size":
+            case "{$page}_page_button_color":
+            case "{$page}_page_button_shape":
+            case "{$page}_page_button_label":
+            case "{$page}_page_button_mx_installment_period":
+            case "{$page}_page_button_br_installment_period":
+                return "paypal/style/{$fieldName}";
             default:
                 return null;
         }

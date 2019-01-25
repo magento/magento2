@@ -728,7 +728,166 @@
                             <attribute type="shared">1</attribute>
                         </field>
                     </group>
-                    <group id="features" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                    <group id="product_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
+                        <label>PayPal Button - Product Page</label>
+                        <field id="product_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
+                            <comment/>
+                            <config_path>paypal/style/product_page_button_customize</config_path>
+                        </field>
+                        <field id="product_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
+                            <config_path>paypal/style/product_page_button_label</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_mx_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_mx_installment_period">
+                            <config_path>paypal/style/product_page_button_mx_installment_period</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                                <field id="product_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_br_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_br_installment_period">
+                            <config_path>paypal/style/product_page_button_br_installment_period</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                                <field id="product_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_layout" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_layout">
+                            <config_path>paypal/style/product_page_button_layout</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                                <field id="product_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
+                            <config_path>paypal/style/product_page_button_size</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">
+                            <config_path>paypal/style/product_page_button_shape</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="product_page_button_color" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_color">
+                            <config_path>paypal/style/product_page_button_color</config_path>
+                            <depends>
+                                <field id="product_page_button_customize">1</field>
+                                <field id="product_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                    </group>
+                    <group id="cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="110">
+                        <label>PayPal Button - Cart Page</label>
+                        <field id="cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
+                            <comment/>
+                            <config_path>paypal/style/cart_page_button_customize</config_path>
+                        </field>
+                        <field id="cart_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
+                            <config_path>paypal/style/cart_page_button_label</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_mx_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_mx_installment_period">
+                            <config_path>paypal/style/cart_page_button_mx_installment_period</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                                <field id="cart_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_br_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_br_installment_period">
+                            <config_path>paypal/style/cart_page_button_br_installment_period</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                                <field id="cart_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_layout" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_layout">
+                            <config_path>paypal/style/cart_page_button_layout</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                                <field id="cart_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
+                            <config_path>paypal/style/cart_page_button_size</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">
+                            <config_path>paypal/style/cart_page_button_shape</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="cart_page_button_color" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_color">
+                            <config_path>paypal/style/cart_page_button_color</config_path>
+                            <depends>
+                                <field id="cart_page_button_customize">1</field>
+                                <field id="cart_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                    </group>
+                    <group id="mini_cart_page_button" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="120">
+                        <label>PayPal Button - Mini Cart</label>
+                        <field id="mini_cart_page_button_customize" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_customize">
+                            <comment/>
+                            <config_path>paypal/style/mini_cart_page_button_customize</config_path>
+                        </field>
+                        <field id="mini_cart_page_button_label" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_label">
+                            <config_path>paypal/style/mini_cart_page_button_label</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_mx_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_mx_installment_period">
+                            <config_path>paypal/style/mini_cart_page_button_mx_installment_period</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                                <field id="mini_cart_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_br_installment_period" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_br_installment_period">
+                            <config_path>paypal/style/mini_cart_page_button_br_installment_period</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                                <field id="mini_cart_page_button_label">installment</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_layout" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_layout">
+                            <config_path>paypal/style/mini_cart_page_button_layout</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                                <field id="mini_cart_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
+                            <config_path>paypal/style/mini_cart_page_button_size</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">
+                            <config_path>paypal/style/mini_cart_page_button_shape</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                            </depends>
+                        </field>
+                        <field id="mini_cart_page_button_color" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_color">
+                            <config_path>paypal/style/mini_cart_page_button_color</config_path>
+                            <depends>
+                                <field id="mini_cart_page_button_customize">1</field>
+                                <field id="mini_cart_page_button_label" negative="1">credit</field>
+                            </depends>
+                        </field>
+                    </group>
+                    <group id="features" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="130">
                         <label>Features</label>
                         <field id="disable_funding_options" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Disable Funding Options</label>

@@ -25,17 +25,42 @@ class SmartButtonConfig
     private $config;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @var array
+     */
+    private $defaultStyles;
+
+    /**
+     * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
+     * @param array $defaultStyles
      */
     public function __construct(
         ResolverInterface $localeResolver,
-        ConfigFactory $configFactory
+        ConfigFactory $configFactory,
+        $defaultStyles = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+        $this->defaultStyles = $defaultStyles;
+    }
+
+    /**
+     * Get smart button config
+     *
+     * @param string $page
+     * @return array
+     */
+    public function getConfig(string $page): array
+    {
+        return [
+            'merchantId' => $this->config->getValue('merchant_id'),
+            'environment' => ((int)$this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
+            'locale' => $this->localeResolver->getLocale(),
+            'allowedFunding' => $this->getAllowedFunding(),
+            'disallowedFunding' => $this->getDisallowedFunding(),
+            'styles' => $this->getButtonStyles($page)
+        ];
     }
 
     /**
@@ -43,10 +68,20 @@ class SmartButtonConfig
      *
      * @return array
      */
-    public function getDisallowedFunding() : array
+    private function getDisallowedFunding() : array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
         return $disallowedFunding ? explode(',', $disallowedFunding) : [];
+    }
+
+    /**
+     * Returns allowed funding
+     *
+     * @return array
+     */
+    private function getAllowedFunding() : array
+    {
+        return [];
     }
 
     /**
@@ -55,16 +90,10 @@ class SmartButtonConfig
      * @param string $page
      * @return array
      */
-    public function getButtonStyles(string $page) : array
+    private function getButtonStyles(string $page) : array
     {
-        $styles = [
-            'layout' => 'vertical',
-            'size' => 'responsive',
-            'color' => 'gold',
-            'shape' => 'rect',
-            'label' => 'paypal'
-        ];
-        if (!!$this->config->getValue("{$page}_page_button_customize")) {
+        $styles = $this->defaultStyles[$page];
+        if ((boolean)$this->config->getValue("{$page}_page_button_customize")) {
             $styles['layout'] = $this->config->getValue("{$page}_page_button_layout");
             $styles['size'] = $this->config->getValue("{$page}_page_button_size");
             $styles['color'] = $this->config->getValue("{$page}_page_button_color");

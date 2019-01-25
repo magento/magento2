@@ -3,10 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'paypalInContextExpressCheckout',
-    'Magento_Ui/js/model/messageList',
-    'mage/translate'
-], function (paypal, messageList, $t) {
+    'underscore',
+    'paypalInContextExpressCheckout'
+], function (_, paypal) {
     'use strict';
 
     /**
@@ -16,7 +15,7 @@ define([
      * @return {Array}
      */
     function getFunding(config) {
-        return config.map(function (name) {
+        return _.map(config, function (name) {
             return paypal.FUNDING[name];
         });
     }
@@ -33,7 +32,7 @@ define([
             style: clientConfig.styles,
 
             // Enable Pay Now checkout flow (optional)
-            commit: true,
+            commit: clientConfig.commit,
 
             /**
              * Validate payment method
@@ -48,9 +47,7 @@ define([
              * Execute logic on Paypal button click
              */
             onClick: function () {
-                if (typeof clientConfig.onClick === 'function') {
-                    clientConfig.onClick();
-                }
+                clientConfig.rendererComponent.onClick();
             },
 
             /**
@@ -66,45 +63,13 @@ define([
                     button: clientConfig.button
                 };
 
-                if (!clientConfig.button) {
-                    return new paypal.Promise(function (resolve, reject) {
-                        clientConfig.additionalAction(clientConfig.messageContainer).done(function () {
-                            paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
-                                if (res.success) {
-
-                                    return resolve(res.token);
-                                }
-
-                                messageList.addErrorMessage({
-                                    message: res['error_message']
-                                });
-
-                                return reject(new Error(res['error_message']));
-                            });
-                        }).fail(function (response) {
-                            var error;
-
-                            try {
-                                error = JSON.parse(response.responseText);
-                            } catch (exception) {
-                                error = $t('Something went wrong with your request. Please try again later.');
-                            }
-                            messageList.addErrorMessage({
-                                message: error
-                            });
-
-                            return reject(new Error(error));
+                return new paypal.Promise(function (resolve, reject) {
+                    clientConfig.rendererComponent.beforePayment(resolve, reject).then(function () {
+                        paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
+                            return clientConfig.rendererComponent.afterPayment(res, resolve, reject);
+                        }).catch(function (err) {
+                            return clientConfig.rendererComponent.catchPayment(err, resolve, reject);
                         });
-                    });
-                }
-
-                return paypal.request.post(clientConfig.getTokenUrl, params).then(function (res) {
-                    if (res.success) {
-                        return res.token;
-                    }
-
-                    messageList.addErrorMessage({
-                        message: res['error_message']
                     });
                 });
             },
@@ -120,20 +85,18 @@ define([
                 var params = {
                     paymentToken: data.paymentToken,
                     payerId: data.payerID,
-                    quoteId: clientConfig.quoteId,
-                    method: clientConfig.payment.method,
+                    quoteId: clientConfig.quoteId || '',
                     customerId: clientConfig.customerId || '',
                     'form_key': clientConfig.formKey
                 };
 
-                return paypal.request.post(clientConfig.onAuthorizeUrl, params).then(function (res) {
-                    if (res.success) {
-
-                        return actions.redirect(window, res.redirectUrl);
-                    }
-
-                    messageList.addErrorMessage({
-                        message: res['error_message']
+                return new paypal.Promise(function (resolve, reject) {
+                    clientConfig.rendererComponent.beforeOnAuthorize(resolve, reject, actions).then(function () {
+                        paypal.request.post(clientConfig.onAuthorizeUrl, params).then(function (res) {
+                            clientConfig.rendererComponent.afterOnAuthorize(res, resolve, reject, actions);
+                        }).catch(function (err) {
+                            return clientConfig.rendererComponent.catchOnAuthorize(err, resolve, reject);
+                        });
                     });
                 });
 
@@ -146,14 +109,14 @@ define([
              * @param {Object} actions
              */
             onCancel: function (data, actions) {
-                actions.redirect(window, clientConfig.onCancelUrl);
+                clientConfig.rendererComponent.onCancel(data, actions);
             },
 
             /**
              * Process errors
              */
-            onError: function () {
-                // Uncaught error isn't displayed in the console
+            onError: function (err) {
+                clientConfig.rendererComponent.onError(err);
             }
         }, element);
     };
