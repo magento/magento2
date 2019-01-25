@@ -29,14 +29,10 @@ class InfoTest extends TestCase
 
         // only foo should be used
         $configMock->method('getValue')
-            ->willReturnCallback(function ($name) {
-                $config = [
-                    'paymentInfoKeys' => 'foo',
-                    'privateInfoKeys' => ''
-                ];
-
-                return $config[$name];
-            });
+            ->will($this->returnValueMap([
+                ['paymentInfoKeys', null,  'foo'],
+                ['privateInfoKeys', null, '']
+            ]));
 
         // Give more info to ensure only foo is translated
         $payment->method('getAdditionalInformation')

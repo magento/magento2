@@ -3,23 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\StoreConfigBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class StoreConfigBuilderTest extends TestCase
+class PoDataBuilderTest extends TestCase
 {
     /**
-     * @var StoreConfigBuilder
+     * @var PoDataBuilder
      */
     private $builder;
 
@@ -33,31 +32,25 @@ class StoreConfigBuilderTest extends TestCase
      */
     private $paymentDOMock;
 
-    /**
-     * @var OrderAdapterInterface|MockObject
-     */
-    private $orderMock;
-
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->createMock(InfoInterface::class);
+        $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
-        $this->paymentDOMock->method('getOrder')
-            ->willReturn($this->orderMock);
 
-        $this->builder = new StoreConfigBuilder(new SubjectReader());
+        $this->builder = new PoDataBuilder(new SubjectReader());
     }
 
     public function testBuild()
     {
-        $this->orderMock->method('getStoreID')
-            ->willReturn(123);
+        $this->paymentMock->method('getPoNumber')
+            ->willReturn('abc');
 
         $expected = [
-            'store_id' => 123
+            'transactionRequest' => [
+                'poNumber' => 'abc'
+            ]
         ];
 
         $buildSubject = [

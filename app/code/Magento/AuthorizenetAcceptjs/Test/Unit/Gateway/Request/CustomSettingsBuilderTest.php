@@ -10,8 +10,10 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomSettingsBuilderTest extends \PHPUnit\Framework\TestCase
+class CustomSettingsBuilderTest extends TestCase
 {
     /**
      * @var CustomSettingsBuilder
@@ -19,19 +21,19 @@ class CustomSettingsBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     protected function setUp()
     {
         $this->configMock = $this->createMock(Config::class);
-        /** @var \PHPUnit\Framework\MockObject\MockObject|SubjectReader subjectReaderMock */
+        /** @var MockObject|SubjectReader subjectReaderMock */
         $this->subjectReaderMock = $this->createMock(SubjectReader::class);
         $this->subjectReaderMock->method('readStoreId')
             ->willReturn('123');

@@ -13,6 +13,7 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
+use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger as PaymentLogger;
 use Psr\Log\LoggerInterface;
 
@@ -62,11 +63,11 @@ class Client implements ClientInterface
     /**
      * Places request to gateway. Returns result as ENV array
      *
-     * @param \Magento\Payment\Gateway\Http\TransferInterface $transferObject
+     * @param TransferInterface $transferObject
      * @return array
      * @throws \Magento\Payment\Gateway\Http\ClientException
      */
-    public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject)
+    public function placeRequest(TransferInterface $transferObject)
     {
         $request = $transferObject->getBody();
         $log = [

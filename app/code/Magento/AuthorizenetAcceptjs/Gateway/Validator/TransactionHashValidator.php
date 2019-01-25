@@ -89,10 +89,14 @@ class TransactionHashValidator extends AbstractValidator
         $storedHash = $this->config->getLegacyTransactionHash($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        try {
-            $amount = $this->subjectReader->readAmount($validationSubject);
-        } catch (\InvalidArgumentException $e) {
-            // Void will not contain the amount and will use 0.00 for hashing
+        if (empty($transactionResponse['refTransID'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+        } else {
             $amount = 0;
         }
 
@@ -129,10 +133,16 @@ class TransactionHashValidator extends AbstractValidator
         $storedKey = $this->config->getTransactionSignatureKey($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        try {
-            $amount = $this->subjectReader->readAmount($validationSubject);
-        } catch (\InvalidArgumentException $e) {
-            // Void will not contain the amount and will use 0.00 for hashing
+        // Yes, their naming uses inconsistent casing.
+        if (empty($transactionResponse['refTransID'])) {
+            try {
+                $amount = $this->subjectReader->readAmount($validationSubject);
+            } catch (\InvalidArgumentException $e) {
+                // Void will not contain the amount and will use 0.00 for hashing
+                $amount = 0;
+            }
+        } else {
+            // Reference transactions don't use the amount
             $amount = 0;
         }
 

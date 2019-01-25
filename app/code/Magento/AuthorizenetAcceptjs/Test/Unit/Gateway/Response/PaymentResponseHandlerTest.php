@@ -6,15 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
+namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Response;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Response\PaymentResponseHandler;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentResponseHandlerTest extends \PHPUnit\Framework\TestCase
+class PaymentResponseHandlerTest extends TestCase
 {
     private const RESPONSE_CODE_APPROVED = 1;
     private const RESPONSE_CODE_HELD = 4;
@@ -37,9 +38,7 @@ class PaymentResponseHandlerTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 

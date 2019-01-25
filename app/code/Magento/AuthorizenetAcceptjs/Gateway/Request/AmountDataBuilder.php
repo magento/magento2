@@ -10,12 +10,15 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
- * Adds the basic payment information to the request
+ * Adds the amount of the transaction to the Request
  */
-class OrderDataBuilder implements BuilderInterface
+class AmountDataBuilder implements BuilderInterface
 {
+    use Formatter;
+
     /**
      * @var SubjectReader
      */
@@ -34,14 +37,9 @@ class OrderDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $paymentDO = $this->subjectReader->readPayment($buildSubject);
-        $order = $paymentDO->getOrder();
-
         return [
             'transactionRequest' => [
-                'order' => [
-                    'invoiceNumber' => $order->getOrderIncrementId()
-                ]
+                'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             ]
         ];
     }

@@ -12,12 +12,13 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GeneralResponseValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     private $resultFactoryMock;
 
@@ -28,9 +29,7 @@ class GeneralResponseValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
         $this->validator = new GeneralResponseValidator($this->resultFactoryMock, new SubjectReader());
     }
 

@@ -12,6 +12,7 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\TransactionResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TransactionResponseValidatorTest extends TestCase
@@ -23,7 +24,7 @@ class TransactionResponseValidatorTest extends TestCase
     private const RESPONSE_REASON_CODE_PENDING_REVIEW = 253;
 
     /**
-     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     private $resultFactoryMock;
 
@@ -39,11 +40,8 @@ class TransactionResponseValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
+        $this->resultMock = $this->createMock(ResultInterface::class);
 
         $this->validator = new TransactionResponseValidator(
             $this->resultFactoryMock,
