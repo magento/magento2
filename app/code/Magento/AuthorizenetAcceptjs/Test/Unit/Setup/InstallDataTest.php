@@ -64,11 +64,11 @@ class InstallDataTest extends TestCase
 
     public function testMigrateData(): void
     {
-        $this->scopeConfig->expects($this->exactly(10))
+        $this->scopeConfig->expects($this->exactly(13))
             ->method('getValue')
             ->willReturn('TestValue');
 
-        $this->resourceConfig->expects($this->exactly(10))
+        $this->resourceConfig->expects($this->exactly(13))
             ->method('saveConfig')
             ->willReturn(null);
 
@@ -92,11 +92,11 @@ class InstallDataTest extends TestCase
 
     public function testMigrateDataNullFields(): void
     {
-        $this->scopeConfig->expects($this->exactly(10))
+        $this->scopeConfig->expects($this->exactly(13))
             ->method('getValue')
-            ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6, 7));
+            ->will($this->onConsecutiveCalls(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
-        $this->resourceConfig->expects($this->exactly(7))
+        $this->resourceConfig->expects($this->exactly(10))
             ->method('saveConfig')
             ->willReturn(null);
 

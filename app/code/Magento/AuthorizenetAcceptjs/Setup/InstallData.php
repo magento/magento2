@@ -74,7 +74,10 @@ class InstallData implements InstallDataInterface
             'order_status',
             'payment_action',
             'currency',
-            'allow_specific'
+            'allow_specific',
+            'specificcountry',
+            'min_order_total',
+            'max_order_total'
         ];
 
         $encryptedConfigFieldsToMigrate = [
