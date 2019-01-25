@@ -9,7 +9,7 @@ namespace Magento\Authorizenet\Model\Response;
 
 /**
  * Factory class for @see \Magento\Authorizenet\Model\Response
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Factory
 {

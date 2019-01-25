@@ -11,7 +11,7 @@ use Magento\Authorizenet\Model\Request as AuthorizenetRequest;
 
 /**
  * Authorize.net request model for DirectPost model
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Request extends AuthorizenetRequest
 {
@@ -22,6 +22,7 @@ class Request extends AuthorizenetRequest
 
     /**
      * Return merchant transaction key.
+     *
      * Needed to generate sign.
      *
      * @return string
@@ -34,6 +35,7 @@ class Request extends AuthorizenetRequest
 
     /**
      * Set merchant transaction key.
+     *
      * Needed to generate sign.
      *
      * @param string $transKey
@@ -169,6 +171,7 @@ class Request extends AuthorizenetRequest
 
     /**
      * Set sign hash into the request object.
+     *
      * All needed fields should be placed in the object fist.
      *
      * @return $this

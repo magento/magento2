@@ -11,7 +11,7 @@ use Magento\Authorizenet\Model\Response\Factory as AuthorizenetResponseFactory;
 
 /**
  * Factory class for @see \Magento\Authorizenet\Model\Directpost\Response
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Factory extends AuthorizenetResponseFactory
 {

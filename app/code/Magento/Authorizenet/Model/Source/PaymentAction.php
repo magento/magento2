@@ -10,14 +10,13 @@ namespace Magento\Authorizenet\Model\Source;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- *
  * Authorize.net Payment Action Dropdown source
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class PaymentAction implements ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @deprecated
      */
     public function toOptionArray()

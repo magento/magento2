@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
+use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData as BaseProcessData;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
  * Class ProcessData
  * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class ProcessData extends \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData
+class ProcessData extends BaseProcessData implements HttpPostActionInterface
 {
 }

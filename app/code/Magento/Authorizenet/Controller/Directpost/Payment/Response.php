@@ -11,13 +11,15 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
+use Magento\Authorizenet\Controller\Directpost\Payment;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Response
  * @package Magento\Authorizenet\Controller\Directpost\Payment
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Response extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
+class Response extends Payment implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * @inheritDoc
@@ -40,6 +42,7 @@ class Response extends \Magento\Authorizenet\Controller\Directpost\Payment imple
 
     /**
      * Response action.
+     *
      * Action for Authorize.net SIM Relay Request.
      *
      * @return \Magento\Framework\Controller\ResultInterface

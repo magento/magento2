@@ -7,15 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Directpost;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Payment\Block\Transparent\Iframe;
+use Magento\Framework\App\Action\Action;
 
 /**
  * DirectPost Payment Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-abstract class Payment extends \Magento\Framework\App\Action\Action
+abstract class Payment extends Action implements HttpPostActionInterface
 {
     /**
      * Core registry
@@ -48,6 +50,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get checkout model
+     *
      * @return \Magento\Checkout\Model\Session
      * @deprecated
      */
@@ -69,6 +73,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
     /**
      * Response action.
+     *
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area

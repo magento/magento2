@@ -7,6 +7,7 @@ namespace Magento\Payment\Gateway\Validator;
 
 /**
  * Class AbstractValidator
+ *
  * @package Magento\Payment\Gateway\Validator
  * @api
  * @since 100.0.2

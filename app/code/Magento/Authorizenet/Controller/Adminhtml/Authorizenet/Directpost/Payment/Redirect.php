@@ -12,12 +12,15 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Payment\Block\Transparent\Iframe;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create;
 
 /**
+ * Class Redirect
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Redirect extends Create implements HttpPostActionInterface
 {
     /**
      * Core registry

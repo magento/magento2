@@ -10,9 +10,11 @@ namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
 use Magento\Authorizenet\Model\Directpost;
 
 /**
+ * Fraud information block for Authorize.net payment method
+ *
  * @api
  * @since 100.0.2
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
@@ -38,6 +40,8 @@ class FraudDetails extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return payment method model
+     *
      * @return \Magento\Sales\Model\Order\Payment
      * @deprecated
      */
@@ -48,6 +52,8 @@ class FraudDetails extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Produce and return the block's HTML output
+     *
      * @return string
      * @deprecated
      */

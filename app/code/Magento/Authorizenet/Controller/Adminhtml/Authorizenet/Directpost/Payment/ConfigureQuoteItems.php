@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
+use Magento\Framework\App\Action\HttpPutActionInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureQuoteItems as BaseConfigureQuoteItems;
+
 /**
  * Class ConfigureQuoteItems
  * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
- * @deprecated 2.3 Auth.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3 Authorize.net is removing all support for this payment method
  */
-class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureQuoteItems
+class ConfigureQuoteItems extends BaseConfigureQuoteItems implements HttpPutActionInterface
 {
 }

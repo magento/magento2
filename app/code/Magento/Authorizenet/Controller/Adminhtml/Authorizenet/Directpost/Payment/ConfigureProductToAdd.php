@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
+use Magento\Framework\App\Action\HttpPutActionInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd as BaseConfigureProductToAdd;
+
 /**
  * Class ConfigureProductToAdd
  * @package Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method in July 2019
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
+class ConfigureProductToAdd extends BaseConfigureProductToAdd implements HttpPutActionInterface
 {
 }
