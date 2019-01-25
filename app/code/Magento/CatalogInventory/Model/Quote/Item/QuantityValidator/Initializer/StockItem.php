@@ -8,6 +8,8 @@ namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initialize
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Registry;
 
 class StockItem
 {
@@ -25,20 +27,41 @@ class StockItem
      * @var StockStateInterface
      */
     protected $stockState;
+    
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+    
+    /**
+     * Core registry
+     *
+     * @var Registry
+     */
+    protected $_coreRegistry;
 
     /**
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
+     * @param RequestInterface $request
+     * @param Registry $coreRegistry
      */
     public function __construct(
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
-        StockStateInterface $stockState
+        StockStateInterface $stockState,
+        RequestInterface $request = null,
+        Registry $coreRegistry = null
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
         $this->stockState = $stockState;
+        $this->request = $request ?: \Magento\Framework\App\ObjectManager::getInstance()
+                              ->get(\Magento\Framework\App\RequestInterface::class);
+        $this->_coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
+                              ->get(\Magento\Framework\Registry::class);
+        
     }
 
     /**
@@ -72,12 +95,16 @@ class StockItem
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
-            $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $product->getId(),
-                $quoteItem->getId(),
-                $quoteItem->getQuoteId(),
-                $increaseQty
-            );
+            $origIdquoteItemId = 0;
+            if($this->_coreRegistry->registry('configure_item')){
+                $origquoteItemId = $this->request->getParam('id'); 
+            }
+            if($origquoteItemId == $quoteItem->getId()){
+                $qtyForCheck = 0;
+            }else{  
+                $qtyForCheck = $this->quoteItemQtyList->getQty($product->getId(),$quoteItem->getId(),
+                   $quoteItem->getQuoteId(),$increaseQty);
+           }
         }
 
         $productTypeCustomOption = $product->getCustomOption('product_type');
