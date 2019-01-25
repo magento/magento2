@@ -68,6 +68,11 @@ return [
                 'type' => 'module',
                 'name' => 'Magento_AuthorizenetAcceptjs',
                 'path' => 'Gateway/Validator/TransactionHashValidator.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Authorizenet',
+                'path' => 'Model/Directpost/Response.php'
             ]
         ]
     ],
