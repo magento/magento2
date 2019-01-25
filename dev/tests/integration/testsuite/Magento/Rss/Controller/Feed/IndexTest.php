@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Rss\Controller\Feed;
 
+/**
+ * Test for \Magento\Rss\Controller\Feed\Index
+ */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
@@ -50,6 +53,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @magentoDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
+     * @return void
      */
     public function testRssResponse()
     {
@@ -71,6 +75,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @magentoDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
+     * @return void
      */
     public function testRssResponseWithIncorrectWishlistId()
     {
