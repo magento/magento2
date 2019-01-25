@@ -28,7 +28,7 @@
                 <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                        <?= $block->escapeHtml($block->getCustomizedOptionValue($_option)) ?>
+                    <?= /* @escapeNotVerified */ $block->getCustomizedOptionValue($_option) ?>
                     <?php else: ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?= $block->escapeHtml($_option['value']) ?>
