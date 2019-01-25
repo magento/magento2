@@ -309,7 +309,8 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             ->with(
                 self::equalTo('payment/paypal_express/disable_funding_options'),
                 self::equalTo('store')
-            )->willReturn($disableFundingOptions);
+            )
+            ->willReturn($disableFundingOptions);
 
         $this->scopeConfigMock->method('isSetFlag')
             ->with('payment/paypal_express_bml/active')
