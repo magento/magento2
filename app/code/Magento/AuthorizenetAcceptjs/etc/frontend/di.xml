@@ -13,4 +13,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="authorizenet_acceptjs" xsi:type="string">authorizenet_acceptjs</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -4,9 +4,12 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            acceptjs: 'https://js.authorize.net/v1/Accept.js'
+    shim: {
+        acceptjs: {
+            exports: 'Accept'
         }
+    },
+    paths: {
+        acceptjs: 'https://js.authorize.net/v1/Accept'
     }
 };
