@@ -155,6 +155,7 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{product.sku}}"  stepKey="seeProductSkuInGrid"/>
         <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
