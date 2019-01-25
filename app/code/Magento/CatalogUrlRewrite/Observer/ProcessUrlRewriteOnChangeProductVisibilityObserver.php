@@ -32,7 +32,7 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
     /**
      * @var ProductUrlRewriteGenerator
      */
-    private $productUrlRewriteGenerator;
+    private $urlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
@@ -42,24 +42,24 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
     /**
      * @var ProductUrlPathGenerator
      */
-    private $productUrlPathGenerator;
+    private $urlPathGenerator;
 
     /**
      * @param CollectionFactory $collectionFactory
-     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param ProductUrlRewriteGenerator $urlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param ProductUrlPathGenerator|null $urlPathGenerator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        ProductUrlRewriteGenerator $urlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator
+        ProductUrlPathGenerator $urlPathGenerator
     ) {
         $this->productCollectionFactory = $collectionFactory;
-        $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
+        $this->urlRewriteGenerator = $urlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->productUrlPathGenerator = $productUrlPathGenerator;
+        $this->urlPathGenerator = $urlPathGenerator;
     }
 
     /**
@@ -100,11 +100,11 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
                 );
             } elseif ($visibility !== Visibility::VISIBILITY_NOT_VISIBLE) {
                 $product->setVisibility($visibility);
-                $productUrlPathGenerator = $this->productUrlPathGenerator->getUrlPath($product);
-                $productUrlRewriteGenerator = $this->productUrlRewriteGenerator->generate($product);
+                $productUrlPath = $this->urlPathGenerator->getUrlPath($product);
+                $productUrlRewrite = $this->urlRewriteGenerator->generate($product);
                 $product->unsUrlPath();
-                $product->setUrlPath($productUrlPathGenerator);
-                $this->urlPersist->replace($productUrlRewriteGenerator);
+                $product->setUrlPath($productUrlPath);
+                $this->urlPersist->replace($productUrlRewrite);
             }
         }
 
