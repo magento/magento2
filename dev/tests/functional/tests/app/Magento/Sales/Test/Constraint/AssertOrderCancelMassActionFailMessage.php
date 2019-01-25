@@ -11,17 +11,17 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertOrderCancelMassActionFailMessage
- * Assert cancel fail message is displayed on order index page
+ * Assert cancel fail message is displayed on order index page.
  */
 class AssertOrderCancelMassActionFailMessage extends AbstractConstraint
 {
     /**
-     * Text value to be checked
+     * Text value to be checked.
      */
-    const FAIL_CANCEL_MESSAGE = '1 order(s) cannot be canceled.';
+    const FAIL_CANCEL_MESSAGE = 'You cannot cancel the order(s).';
 
     /**
-     * Assert cancel fail message is displayed on order index page
+     * Assert cancel fail message is displayed on order index page.
      *
      * @param OrderIndex $orderIndex
      * @return void
@@ -35,7 +35,7 @@ class AssertOrderCancelMassActionFailMessage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
