@@ -71,7 +71,7 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
 
         $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->with($customerId)
-            ->willReturn($customerMock);
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
         $this->model->validate($address);
     }
 
@@ -111,7 +111,6 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
         $customerAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $this->customerRepositoryMock->expects($this->exactly(2))->method('getById')->willReturn($customerMock);
-        $customerMock->expects($this->once())->method('getId')->willReturn($addressCustomer);
 
         $this->addressRepositoryMock->expects($this->once())->method('getById')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->any())->method('getCustomerId')->willReturn($addressCustomer);

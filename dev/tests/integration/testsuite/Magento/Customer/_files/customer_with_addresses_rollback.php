@@ -22,9 +22,6 @@ try {
     $customer = $customerRepo->get('customer_with_addresses@test.com');
     /** @var AddressRepositoryInterface $addressRepo */
     $addressRepo = $objectManager->get(AddressRepositoryInterface::class);
-    foreach ($customer->getAddresses() as $address) {
-        $addressRepo->delete($address);
-    }
     $customerRepo->delete($customer);
 } catch (NoSuchEntityException $exception) {
     //Already deleted
