@@ -295,7 +295,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->willReturn($customerServiceMock);
         $customerServiceMock->expects($this->once())->method('getId')->willReturn($customerId);
 
-        $this->scopeConfig->expects($this->once())->method('getValue')
+        $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
 
