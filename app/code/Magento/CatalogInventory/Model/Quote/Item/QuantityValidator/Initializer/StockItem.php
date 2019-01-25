@@ -95,7 +95,7 @@ class StockItem
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
-            $origIdquoteItemId = 0;
+            $origquoteItemId = 0;
             if($this->_coreRegistry->registry('configure_item')){
                 $origquoteItemId = $this->request->getParam('id'); 
             }
