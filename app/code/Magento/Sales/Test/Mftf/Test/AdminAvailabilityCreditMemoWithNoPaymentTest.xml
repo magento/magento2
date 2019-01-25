@@ -72,18 +72,14 @@
         <click selector="{{AdminOrderFormActionSection.submitOrder}}" after="selectFreeShippingOption" stepKey="clickSubmitOrder"/>
 
         <!--Click *Invoice* button-->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" after="clickInvoiceButton" stepKey="seeNewInvoiceInPageTitle"/>
-        <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
-
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <see userInput="The invoice has been created." stepKey="seeCorrectMessage"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
 
         <!--Verify that *Credit Memo* button is displayed-->
         <seeElement selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="seeCreditMemo"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see userInput="New Memo" stepKey="seeNewMemoPage"/>
-        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeUrlOnPage"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
     </test>
 </tests>
