@@ -236,6 +236,34 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $name
+     * @param string $expectedValue
+     * @param string|null $expectedResult
+     *
+     * @dataProvider payPalStylesDataProvider
+     */
+    public function testGetSpecificConfigPathPayPalStyles($name, $expectedValue, $expectedResult)
+    {
+        // _mapGenericStyleFieldset
+        $this->scopeConfig->method('getValue')
+            ->with("paypal/style/{$name}")
+            ->willReturn($expectedValue);
+
+        $this->assertEquals($expectedResult, $this->model->getValue($name));
+    }
+
+    /**
+     * @return array
+     */
+    public function payPalStylesDataProvider()
+    {
+        return [
+            ['checkout_page_button_customize', 'value', 'value'],
+            ['test', 'value', null],
+        ];
+    }
+
+    /**
      * @dataProvider skipOrderReviewStepDataProvider
      */
     public function testGetPayPalBasicStartUrl($value, $url)

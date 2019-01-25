@@ -298,7 +298,7 @@ abstract class AbstractConfig implements ConfigInterface
                     $this->_storeId
                 );
                 $isExpressCreditEnabled = $disabledFunding
-                    ? !!strpos('CREDIT', $disabledFunding)
+                    ? strpos($disabledFunding, 'CREDIT') === false
                     : true;
                 $isEnabled = $isExpressCreditEnabled
                 || $this->_scopeConfig->isSetFlag(
