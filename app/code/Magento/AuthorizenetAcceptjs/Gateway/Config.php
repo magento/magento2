@@ -27,8 +27,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
-    // TODO populate with real data
-    private const SOLUTION_ID_PRODUCTION = '';
+    private const SOLUTION_ID_PRODUCTION = 'AAA175350';
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -119,9 +118,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return bool
      */
-    public function shouldEmailCustomer($storeId = null): ?bool
+    public function shouldEmailCustomer($storeId = null): bool
     {
-        return $this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
+        return (bool)$this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
     }
 
     /**

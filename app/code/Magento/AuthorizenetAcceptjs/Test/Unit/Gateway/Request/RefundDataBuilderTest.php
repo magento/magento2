@@ -3,24 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Request\VoidDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
+use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class VoidDataBuilderTest extends TestCase
+class RefundDataBuilderTest extends TestCase
 {
-    private const REQUEST_TYPE_VOID = 'voidTransaction';
-
     /**
-     * @var VoidDataBuilder
+     * @var RefundDataBuilder
      */
     private $builder;
 
@@ -41,28 +40,41 @@ class VoidDataBuilderTest extends TestCase
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->builder = new VoidDataBuilder(new SubjectReader());
+        $this->builder = new RefundDataBuilder(
+            new SubjectReader()
+        );
     }
 
     public function testBuild()
     {
-        $transactionMock = $this->createMock(Payment\Transaction::class);
-        $this->paymentMock->method('getAuthorizationTransaction')
-            ->willReturn($transactionMock);
-        $transactionMock->method('getAdditionalInformation')
-            ->with('real_transaction_id')
-            ->willReturn('myref');
+        $this->paymentMock->method('getAdditionalInformation')
+            ->will($this->returnValueMap([
+                ['opaqueDataDescriptor', 'encfoo'],
+                ['opaqueDataValue', 'encbar']
+            ]));
 
-        $buildSubject = [
-            'payment' => $this->paymentDOMock
-        ];
+        $this->paymentMock->method('decrypt')
+            ->will($this->returnValueMap([
+                ['encfoo', 'foo'],
+                ['encbar', 'bar']
+            ]));
 
         $expected = [
             'transactionRequest' => [
-                'transactionType' => self::REQUEST_TYPE_VOID,
-                'refTransId' => 'myref',
+                'payment' => [
+                    'opaqueData' => [
+                        'dataDescriptor' => 'foo',
+                        'dataValue' => 'bar'
+                    ]
+                ]
             ]
         ];
+
+        $buildSubject = [
+            'payment' => $this->paymentDOMock,
+            'amount' => 123.45
+        ];
+
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }

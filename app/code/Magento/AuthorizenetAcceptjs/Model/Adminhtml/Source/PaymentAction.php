@@ -10,6 +10,8 @@ namespace Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source;
 
 /**
  * Authorize.net Payment Action Dropdown source
+ *
+ * @codeCoverageIgnore
  */
 class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
 {

@@ -12,12 +12,13 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Gateway\Validator\GeneralResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GeneralResponseValidatorTest extends TestCase
 {
     /**
-     * @var ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     private $resultFactoryMock;
 
@@ -28,9 +29,7 @@ class GeneralResponseValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
         $this->validator = new GeneralResponseValidator($this->resultFactoryMock, new SubjectReader());
     }
 
@@ -38,8 +37,7 @@ class GeneralResponseValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -71,8 +69,7 @@ class GeneralResponseValidatorTest extends TestCase
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;
@@ -100,12 +97,43 @@ class GeneralResponseValidatorTest extends TestCase
         $this->assertSame(['bar'], $args['failsDescription']);
     }
 
+    public function testValidateParsesMessages()
+    {
+        $args = [];
+
+        $this->resultFactoryMock->method('create')
+            ->with($this->callback(function ($a) use (&$args) {
+                // Spy on method call
+                $args = $a;
+
+                return true;
+            }))
+            ->willReturn($this->createMock(ResultInterface::class));
+
+        $this->validator->validate([
+            'response' => [
+                'messages' => [
+                    'resultCode' => 'Error',
+                    'message' => [
+                        [
+                            'code' => 'foo',
+                            'text' => 'bar'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertFalse($args['isValid']);
+        $this->assertSame(['foo'], $args['errorCodes']);
+        $this->assertSame(['bar'], $args['failsDescription']);
+    }
+
     public function testValidateParsesErrorsWhenOnlyOneIsReturned()
     {
         $args = [];
 
-        $this->resultFactoryMock->expects($this->once())
-            ->method('create')
+        $this->resultFactoryMock->method('create')
             ->with($this->callback(function ($a) use (&$args) {
                 // Spy on method call
                 $args = $a;

@@ -9,8 +9,9 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Request\RefundTransactionTypeDataBuilder;
+use PHPUnit\Framework\TestCase;
 
-class RefundTransactionTypeDataBuilderTest extends \PHPUnit\Framework\TestCase
+class RefundTransactionTypeDataBuilderTest extends TestCase
 {
     private const REQUEST_TYPE_REFUND = 'refundTransaction';
 

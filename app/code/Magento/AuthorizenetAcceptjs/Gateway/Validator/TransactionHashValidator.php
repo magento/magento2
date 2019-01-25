@@ -89,15 +89,10 @@ class TransactionHashValidator extends AbstractValidator
         $storedHash = $this->config->getLegacyTransactionHash($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        if (empty($transactionResponse['refTransID'])) {
-            try {
-                $amount = $this->subjectReader->readAmount($validationSubject);
-            } catch (\InvalidArgumentException $e) {
-                // Void will not contain the amount and will use 0.00 for hashing
-                $amount = 0;
-            }
-        // Edge case with some transactions
-        } else {
+        try {
+            $amount = $this->subjectReader->readAmount($validationSubject);
+        } catch (\InvalidArgumentException $e) {
+            // Void will not contain the amount and will use 0.00 for hashing
             $amount = 0;
         }
 
@@ -134,15 +129,10 @@ class TransactionHashValidator extends AbstractValidator
         $storedKey = $this->config->getTransactionSignatureKey($storeId);
         $transactionResponse = $response['transactionResponse'];
 
-        if (empty($transactionResponse['refTransID'])) {
-            try {
-                $amount = $this->subjectReader->readAmount($validationSubject);
-            } catch (\InvalidArgumentException $e) {
-                // Void will not contain the amount and will use 0.00 for hashing
-                $amount = 0;
-            }
-            // Edge case with some transactions
-        } else {
+        try {
+            $amount = $this->subjectReader->readAmount($validationSubject);
+        } catch (\InvalidArgumentException $e) {
+            // Void will not contain the amount and will use 0.00 for hashing
             $amount = 0;
         }
 

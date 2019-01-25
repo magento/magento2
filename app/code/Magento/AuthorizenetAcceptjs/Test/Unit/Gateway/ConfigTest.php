@@ -11,8 +11,10 @@ use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     private const METHOD_CODE = 'authorizenet_acceptjs';
 
@@ -22,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
@@ -105,7 +107,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['sandbox', 'AAA102993'],
-            ['production', ''],
+            ['production', 'AAA175350'],
         ];
     }
 

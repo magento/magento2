@@ -10,6 +10,8 @@ namespace Magento\AuthorizenetAcceptjs\Model\Adminhtml\Source;
 
 /**
  * Authorize.net Environment Dropdown source
+ *
+ * @codeCoverageIgnore
  */
 class Environment implements \Magento\Framework\Data\OptionSourceInterface
 {

@@ -13,8 +13,10 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
+class AddressDataBuilderTest extends TestCase
 {
     /**
      * @var AddressDataBuilder
@@ -22,17 +24,17 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderAdapterInterface|MockObject
      */
     private $orderMock;
 

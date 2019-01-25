@@ -13,9 +13,9 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the basic refund information to the request
+ * Adds the basic payment information to the request
  */
-class RefundDataBuilder implements BuilderInterface
+class PoDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -40,17 +40,9 @@ class RefundDataBuilder implements BuilderInterface
         $data = [];
 
         if ($payment instanceof Payment) {
-            $dataDescriptor = $payment->decrypt($payment->getAdditionalInformation('opaqueDataDescriptor'));
-            $dataValue = $payment->decrypt($payment->getAdditionalInformation('opaqueDataValue'));
-
             $data = [
                 'transactionRequest' => [
-                    'payment' => [
-                        'opaqueData' => [
-                            'dataDescriptor' => $dataDescriptor,
-                            'dataValue' => $dataValue
-                        ]
-                    ]
+                    'poNumber' => $payment->getPoNumber()
                 ]
             ];
         }

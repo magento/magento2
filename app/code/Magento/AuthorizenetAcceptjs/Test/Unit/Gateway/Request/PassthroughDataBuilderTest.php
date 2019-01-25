@@ -9,8 +9,9 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
+use PHPUnit\Framework\TestCase;
 
-class PassthroughDataBuilderTest extends \PHPUnit\Framework\TestCase
+class PassthroughDataBuilderTest extends TestCase
 {
     public function testBuild()
     {
