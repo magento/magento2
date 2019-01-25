@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
@@ -25,5 +25,8 @@
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
         <element name="openChooser" type="button" selector=".rule-chooser-trigger"/>
         <element name="selectAll" type="checkbox" selector=".admin__control-checkbox"/>
+        <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
+        <element name="restrictTypes" type="select" selector="select[id*='types']"/>
+        <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
     </section>
 </sections>

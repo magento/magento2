@@ -7,6 +7,7 @@
 use Magento\Sales\Model\Order;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Sales\Model\Order\Payment;
 
 require 'order.php';
 /** @var Order $order */
@@ -68,13 +69,26 @@ foreach ($orders as $orderData) {
     $shippingAddress = clone $billingAddress;
     $shippingAddress->setId(null)->setAddressType('shipping');
 
+    /** @var Payment $payment */
+    $payment = $objectManager->create(Payment::class);
+    $payment->setMethod('checkmo')
+        ->setAdditionalInformation('last_trans_id', '11122')
+        ->setAdditionalInformation(
+            'metadata',
+            [
+                'type' => 'free',
+                'fraudulent' => false,
+            ]
+        );
+
     $order
         ->setData($orderData)
         ->addItem($orderItem)
         ->setCustomerIsGuest(true)
         ->setCustomerEmail('customer@null.com')
         ->setBillingAddress($billingAddress)
-        ->setShippingAddress($shippingAddress);
+        ->setShippingAddress($shippingAddress)
+        ->setPayment($payment);
 
     $orderRepository->save($order);
     $orderList[] = $order;
