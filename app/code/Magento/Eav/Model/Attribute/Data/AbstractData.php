@@ -143,6 +143,7 @@ abstract class AbstractData
 
     /**
      * Set scope visibility
+     *
      * Search value only in scope or search value in scope and global
      *
      * @param bool $flag
@@ -296,7 +297,7 @@ abstract class AbstractData
      * Validate value by attribute input validation rule
      *
      * @param string $value
-     * @return string|true
+     * @return array|true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
