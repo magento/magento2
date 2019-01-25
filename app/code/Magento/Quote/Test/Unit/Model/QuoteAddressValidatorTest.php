@@ -77,17 +77,13 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid address id 101
+     * @expectedExceptionMessage Invalid customer address id 101
      */
     public function testValidateInvalidAddress()
     {
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->customerRepositoryMock->expects($this->never())->method('getById');
-        $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn(101);
-        $address->expects($this->once())->method('getId')->willReturn(101);
-
-        $this->addressRepositoryMock->expects($this->once())->method('getById')
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
+        $address->expects($this->exactly(2))->method('getCustomerAddressId')->willReturn(101);
 
         $this->model->validate($address);
     }
