@@ -14,6 +14,8 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldse
 /**
  * @api
  * @since 100.0.2
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
  */
 class Downloadable extends \Magento\Downloadable\Block\Catalog\Product\Links
 {
