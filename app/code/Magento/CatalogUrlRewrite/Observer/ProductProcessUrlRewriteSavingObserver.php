@@ -40,25 +40,25 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     /**
      * @var CollectionFactory
      */
-    private $productCollectionFactory;
+    private $collectionFactory;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param ProductUrlPathGenerator|null $productUrlPathGenerator
-     * @param CollectionFactory|null $productCollectionFactory
+     * @param ProductUrlPathGenerator|null $urlPathGenerator
+     * @param CollectionFactory|null $collectionFactory
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null,
-        CollectionFactory $productCollectionFactory = null
+        ProductUrlPathGenerator $urlPathGenerator = null,
+        CollectionFactory $collectionFactory = null
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
+        $this->productUrlPathGenerator = $urlPathGenerator ?: ObjectManager::getInstance()
             ->get(ProductUrlPathGenerator::class);
-        $this->productCollectionFactory = $productCollectionFactory ?: ObjectManager::getInstance()
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
             ->get(CollectionFactory::class);
     }
 
@@ -96,7 +96,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
      */
     private function validateUrlKey(Product $product)
     {
-        $productCollection = $this->productCollectionFactory->create();
+        $productCollection = $this->collectionFactory->create();
         $productCollection->addFieldToFilter(
             'url_key',
             [Term::CONDITION_OPERATOR_EQUALS => $product->getUrlKey()]
