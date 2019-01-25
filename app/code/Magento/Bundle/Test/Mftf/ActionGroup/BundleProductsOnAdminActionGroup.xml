@@ -53,9 +53,6 @@
     </actionGroup>
 
     <actionGroup name="CreateBundleProductForOneSimpleProductsWithRadioTypeOption" extends="CreateBundleProductForTwoSimpleProducts">
-        <arguments>
-            <argument name="simpleProductSecond" type="string" defaultValue=""/>
-        </arguments>
         <remove keyForRemoval="clickOnFiltersButton2"/>
         <remove keyForRemoval="clearFilters2"/>
         <remove keyForRemoval="fillNameFilter2"/>
