@@ -237,8 +237,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($attribute->getFilterOptions()) {
             $options = [];
 
-            foreach ($attribute->getFilterOptions() as $filterOptions => $label) {
-                $options[] = ['value' => $filterOptions, 'label' => $label];
+            foreach ($attribute->getFilterOptions() as $optionValue => $label) {
+                $options[] = ['value' => $optionValue, 'label' => $label];
             }
         } else {
             $options = $attribute->getSource()->getAllOptions(false);
