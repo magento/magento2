@@ -11,8 +11,9 @@ use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomSettingsBuilderTest extends \PHPUnit\Framework\TestCase
+class CustomSettingsBuilderTest extends TestCase
 {
     /**
      * @var CustomSettingsBuilder

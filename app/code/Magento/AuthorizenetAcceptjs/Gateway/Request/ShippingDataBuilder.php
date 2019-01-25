@@ -10,12 +10,13 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
- * Adds the basic refund information to the request
+ * Adds the shipping information to the request
  */
-class RefundDataBuilder implements BuilderInterface
+class ShippingDataBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -37,19 +38,14 @@ class RefundDataBuilder implements BuilderInterface
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
+        $order = $paymentDO->getOrder();
         $data = [];
 
-        if ($payment instanceof Payment) {
-            $dataDescriptor = $payment->decrypt($payment->getAdditionalInformation('opaqueDataDescriptor'));
-            $dataValue = $payment->decrypt($payment->getAdditionalInformation('opaqueDataValue'));
-
+        if ($payment instanceof Payment && $order instanceof Order) {
             $data = [
                 'transactionRequest' => [
-                    'payment' => [
-                        'opaqueData' => [
-                            'dataDescriptor' => $dataDescriptor,
-                            'dataValue' => $dataValue
-                        ]
+                    'shipping' => [
+                        'amount' => $order->getBaseShippingAmount()
                     ]
                 ]
             ];

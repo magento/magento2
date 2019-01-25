@@ -14,8 +14,9 @@ use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TransactionTypeDataBuilderTest extends \PHPUnit\Framework\TestCase
+class TransactionTypeDataBuilderTest extends TestCase
 {
     /**
      * @var TransactionTypeDataBuilder

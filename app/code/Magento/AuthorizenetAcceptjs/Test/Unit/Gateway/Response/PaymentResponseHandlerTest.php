@@ -13,8 +13,9 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentResponseHandlerTest extends \PHPUnit\Framework\TestCase
+class PaymentResponseHandlerTest extends TestCase
 {
     private const RESPONSE_CODE_APPROVED = 1;
     private const RESPONSE_CODE_HELD = 4;

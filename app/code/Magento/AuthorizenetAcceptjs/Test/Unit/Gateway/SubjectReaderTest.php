@@ -10,8 +10,9 @@ namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use PHPUnit\Framework\TestCase;
 
-class SubjectReaderTest extends \PHPUnit\Framework\TestCase
+class SubjectReaderTest extends TestCase
 {
     /**
      * @var SubjectReader

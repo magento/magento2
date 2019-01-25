@@ -13,8 +13,9 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
+class VoidDataBuilderTest extends TestCase
 {
     private const REQUEST_TYPE_VOID = 'voidTransaction';
 

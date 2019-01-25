@@ -14,8 +14,9 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
+class RefundDataBuilderTest extends TestCase
 {
     /**
      * @var RefundDataBuilder
@@ -32,20 +33,12 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $paymentDOMock;
 
-    /**
-     * @var Order
-     */
-    private $orderMock;
-
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
-        $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->paymentDOMock->method('getOrder')
-            ->willReturn($this->orderMock);
 
         $this->builder = new RefundDataBuilder(
             new SubjectReader()
@@ -66,15 +59,8 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
                 ['encbar', 'bar']
             ]));
 
-        $this->orderMock->method('getBaseShippingAmount')
-            ->willReturn('43.12');
-
         $expected = [
             'transactionRequest' => [
-                'amount' => '123.45',
-                'shipping' => [
-                    'amount' => '43.12'
-                ],
                 'payment' => [
                     'opaqueData' => [
                         'dataDescriptor' => 'foo',
@@ -86,7 +72,6 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $buildSubject = [
             'payment' => $this->paymentDOMock,
-            'order' => $this->orderMock,
             'amount' => 123.45
         ];
 

@@ -11,8 +11,6 @@ namespace Magento\AuthorizenetAcceptjs\Gateway\Request;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetAcceptjs\Model\PassthroughDataObject;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Payment\Helper\Formatter;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -20,8 +18,6 @@ use Magento\Sales\Model\Order\Payment;
  */
 class PaymentDataBuilder implements BuilderInterface
 {
-    use Formatter;
-
     /**
      * @var SubjectReader
      */
@@ -49,27 +45,14 @@ class PaymentDataBuilder implements BuilderInterface
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $payment = $paymentDO->getPayment();
-        $order = $paymentDO->getOrder();
         $data = [];
 
         if ($payment instanceof Payment) {
-            $data = [
-                'transactionRequest' => [
-                    'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
-                ]
-            ];
-
-            if ($order instanceof Order) {
-                $data['transactionRequest']['shipping'] = [
-                    'amount' => $order->getBaseShippingAmount()
-                ];
-            }
-
             $dataDescriptor = $payment->getAdditionalInformation('opaqueDataDescriptor');
             $dataValue = $payment->getAdditionalInformation('opaqueDataValue');
 
-            $encDescriptor = $payment->encrypt($dataDescriptor);
-            $encValue = $payment->encrypt($dataValue);
+            $encDescriptor = $payment->encrypt($dataDescriptor ?? '');
+            $encValue = $payment->encrypt($dataValue ?? '');
 
             $this->passthroughData->setData('opaqueDataDescriptor', $encDescriptor);
             $this->passthroughData->setData('opaqueDataValue', $encValue);

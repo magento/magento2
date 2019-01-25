@@ -13,8 +13,9 @@ use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TransferFactoryTest extends \PHPUnit\Framework\TestCase
+class TransferFactoryTest extends TestCase
 {
     /**
      * @var TransferFactory

@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Gateway\Request;
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
-use Magento\AuthorizenetAcceptjs\Gateway\Request\SolutionDataBuilder;
+use Magento\AuthorizenetAcceptjs\Gateway\Request\ShippingDataBuilder;
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class SolutionDataBuilderTest extends TestCase
+class ShippingDataBuilderTest extends TestCase
 {
     /**
-     * @var SolutionDataBuilder
+     * @var v
      */
     private $builder;
 
@@ -33,43 +33,43 @@ class SolutionDataBuilderTest extends TestCase
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|MockObject
+     * @var Order
      */
-    private $subjectReaderMock;
-
-    /**
-     * @var Config|MockObject
-     */
-    private $configMock;
+    private $orderMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->createMock(Config::class);
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
-        /** @var MockObject|SubjectReader subjectReaderMock */
-        $this->subjectReaderMock = $this->createMock(SubjectReader::class);
+        $this->orderMock = $this->createMock(Order::class);
+        $this->paymentDOMock->method('getPayment')
+            ->willReturn($this->paymentMock);
+        $this->paymentDOMock->method('getOrder')
+            ->willReturn($this->orderMock);
 
-        $this->builder = new SolutionDataBuilder($this->subjectReaderMock, $this->configMock);
+        $this->builder = new ShippingDataBuilder(
+            new SubjectReader()
+        );
     }
 
     public function testBuild()
     {
-        $this->subjectReaderMock->method('readStoreId')
-            ->willReturn('123');
-        $this->configMock->method('getSolutionId')
-            ->with('123')
-            ->willReturn('solutionid');
+        $this->orderMock->method('getBaseShippingAmount')
+            ->willReturn('43.12');
 
         $expected = [
             'transactionRequest' => [
-                'solution' => [
-                    'id' => 'solutionid',
+                'shipping' => [
+                    'amount' => '43.12'
                 ]
             ]
         ];
 
-        $buildSubject = [];
+        $buildSubject = [
+            'payment' => $this->paymentDOMock,
+            'order' => $this->orderMock,
+        ];
+
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }

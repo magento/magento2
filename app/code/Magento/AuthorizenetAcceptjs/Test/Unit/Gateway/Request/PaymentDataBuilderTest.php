@@ -14,8 +14,9 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
+class PaymentDataBuilderTest extends TestCase
 {
     /**
      * @var PaymentDataBuilder
@@ -37,11 +38,6 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $passthroughData;
 
-    /**
-     * @var Order
-     */
-    private $orderMock;
-
     protected function setUp()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
@@ -49,8 +45,6 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->paymentDOMock->method('getOrder')
-            ->willReturn($this->orderMock);
         $this->passthroughData = new PassthroughDataObject();
 
         $this->builder = new PaymentDataBuilder(
@@ -73,15 +67,8 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
                 ['bar', 'encbar']
             ]));
 
-        $this->orderMock->method('getBaseShippingAmount')
-            ->willReturn('43.12');
-
         $expected = [
             'transactionRequest' => [
-                'amount' => '123.45',
-                'shipping' => [
-                    'amount' => '43.12'
-                ],
                 'payment' => [
                     'opaqueData' => [
                         'dataDescriptor' => 'foo',
@@ -93,7 +80,6 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $buildSubject = [
             'payment' => $this->paymentDOMock,
-            'order' => $this->orderMock,
             'amount' => 123.45
         ];
 

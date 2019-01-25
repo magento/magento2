@@ -14,8 +14,9 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OrderDataBuilderTest extends \PHPUnit\Framework\TestCase
+class OrderDataBuilderTest extends TestCase
 {
     /**
      * @var OrderDataBuilder
@@ -54,21 +55,20 @@ class OrderDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->method('getOrderIncrementId')
             ->willReturn('10000015');
-        $this->paymentMock->method('getPoNumber')
-            ->willReturn('abc');
 
         $expected = [
             'transactionRequest' => [
                 'order' => [
                     'invoiceNumber' => '10000015'
-                ],
-                'poNumber' => 'abc'
+                ]
             ]
         ];
 
         $buildSubject = [
             'payment' => $this->paymentDOMock,
+            'order' => $this->orderMock,
         ];
+
         $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }
