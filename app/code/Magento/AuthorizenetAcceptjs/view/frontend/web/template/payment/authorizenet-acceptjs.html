@@ -14,24 +14,30 @@
             <span text="getTitle()"></span>
         </label>
     </div>
-
-    <div class="payment-method-billing-address">
-        <each args="$parent.getRegion(getBillingAddressFormName())" render="" />
-    </div>
-    <form class="form" id="co-payment-form" data-bind="" method="post" afterRender="initFormElement">
-        <render args="ccForm" />
-    </form>
-    <div class="actions-toolbar">
-        <div class="primary">
-            <button type="button" data-role="review-save"
-                    attr="
-                         title: $t('Place Order')"
-                        enable="isActive()"
-                        click="beforePlaceOrder"
-                    class="action primary checkout"
-                    disabled>
-                <span translate="'Place Order'"></span>
-            </button>
+    <div class="payment-method-content">
+        <each args="getRegion('messages')" render="" />
+        <div class="payment-method-billing-address">
+            <each args="$parent.getRegion(getBillingAddressFormName())" render="" />
+        </div>
+        <form class="form" id="co-payment-form" data-bind="" method="post" afterRender="initFormElement">
+            <render args="ccForm" />
+            <input type="submit" id="authorizenet_acceptjs_submit"  style="display:none" />
+        </form>
+        <div class="checkout-agreements-block">
+            <each args="$parent.getRegion('before-place-order')" render="" />
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                            click: beforePlaceOrder,
+                            attr: {title: $t('Place Order')}
+                        "
+                        >
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -16,6 +16,7 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
+    const METHOD = 'authorizenet_acceptjs';
     private const KEY_LOGIN_ID = 'login';
     private const KEY_TRANSACTION_KEY = 'trans_key';
     private const KEY_ENVIRONMENT = 'environment';
@@ -24,6 +25,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const KEY_PAYMENT_ACTION = 'payment_action';
     private const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
     private const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
+    private const KEY_CLIENT_KEY = 'public_client_key';
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
@@ -51,6 +53,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getLoginId($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_LOGIN_ID, $storeId);
+    }
+
+    /**
+     * Gets the current environment
+     *
+     * @param int|null $storeId
+     * @return string
+     */
+    public function getEnvironment($storeId = null): string
+    {
+        return $this->getValue(Config::KEY_ENVIRONMENT, $storeId);
     }
 
     /**
@@ -110,6 +123,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getPaymentAction($storeId = null): ?string
     {
         return $this->getValue(Config::KEY_PAYMENT_ACTION, $storeId);
+    }
+
+    /**
+     * Gets the configured client key
+     *
+     * @param int|null $storeId
+     * @return string
+     */
+    public function getClientKey($storeId = null): ?string
+    {
+        return $this->getValue(Config::KEY_CLIENT_KEY, $storeId);
     }
 
     /**

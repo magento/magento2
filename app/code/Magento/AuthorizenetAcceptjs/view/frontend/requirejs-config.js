@@ -5,11 +5,15 @@
 
 var config = {
     shim: {
-        acceptjs: {
+        acceptjstest: {
+            exports: 'Accept'
+        },
+        acceptjssandbox: {
             exports: 'Accept'
         }
     },
     paths: {
-        acceptjs: 'https://js.authorize.net/v1/Accept'
+        acceptjssandbox: 'https://jstest.authorize.net/v1/Accept',
+        acceptjs: 'https://jst.authorize.net/v1/Accept'
     }
 };

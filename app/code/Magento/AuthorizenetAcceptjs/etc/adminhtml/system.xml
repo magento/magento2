@@ -45,7 +45,7 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/authorizenet_acceptjs/trans_key</config_path>
                     </field>
-                    <field id="public_client_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="public_client_key" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Public Client Key</label>
                         <config_path>payment/authorizenet_acceptjs/public_client_key</config_path>
                     </field>

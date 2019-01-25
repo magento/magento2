@@ -6,18 +6,20 @@
 define([
     'jquery',
     'Magento_Payment/js/view/payment/cc-form',
-    'acceptjs',
+    'Magento_AuthorizenetAcceptjs/js/view/payment/acceptjs-factory',
     'Magento_AuthorizenetAcceptjs/js/view/payment/validator-handler',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Payment/js/model/credit-card-validation/validator'
-], function ($, Component, acceptjs, validatorHandler, fullScreenLoader) {
+], function ($, Component, acceptjsFactory, validatorHandler, fullScreenLoader) {
     'use strict';
 
     return Component.extend({
         defaults: {
+            active: false,
             template: 'Magento_AuthorizenetAcceptjs/payment/authorizenet-acceptjs',
             authnetResponse: null,
-            ccForm: 'Magento_Payment/payment/cc-form'
+            ccForm: 'Magento_Payment/payment/cc-form',
+            acceptjsClient: null
         },
 
         /**
@@ -26,9 +28,11 @@ define([
          * @returns {exports.initObservable}
          */
         initObservable: function () {
+            this._super()
+                .observe(['active']);
             validatorHandler.initialize();
 
-            return this._super();
+            return this;
         },
 
         /**
@@ -60,16 +64,38 @@ define([
         },
 
         /**
+         * Check if payment is active
+         *
          * @returns {Boolean}
          */
         isActive: function () {
-            return this.getCode() === this.isChecked();
+            var active = this.getCode() === this.isChecked();
+
+            this.active(active);
+
+            return active;
         },
 
         /**
          * Prepare data to place order
          */
         beforePlaceOrder: function () {
+            var self = this;
+
+            if (self.acceptjsClient) {
+                self.processPayment();
+            } else {
+                acceptjsFactory().done(function (client) {
+                    self.acceptjsClient = client;
+                    self.processPayment.call(self);
+                });
+            }
+        },
+
+        /**
+         * Creates a token from the payment information in the form
+         */
+        processPayment: function () {
             var authData = {},
                 cardData = {},
                 secureData = {};
@@ -86,7 +112,7 @@ define([
                 secureData.authData = authData;
                 secureData.cardData = cardData;
 
-                acceptjs.dispatchData(secureData, this.handleResponse.bind(this));
+                this.acceptjsClient.dispatchData(secureData, this.handleResponse.bind(this));
             }
         },
 
