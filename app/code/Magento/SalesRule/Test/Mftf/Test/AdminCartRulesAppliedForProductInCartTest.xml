@@ -63,7 +63,7 @@
         <actionGroup ref="CreateBundleProductForOneSimpleProductsWithRadioTypeOption" stepKey="createBundleProductWithRadioTypeOption">
             <argument name="bundleProduct" value="BundleProduct"/>
             <argument name="simpleProductFirst" value="$$simpleProduct$$"/>
-            <argument name="simpleProductSecond" value=""/>
+            <argument name="simpleProductSecond"/>
         </actionGroup>
         <selectOption selector="{{AdminProductFormBundleSection.bundleSelectionPriceType}}" userInput="Fixed" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleSelectionPriceValue}}" userInput="200" stepKey="fillPriceValue"/>
