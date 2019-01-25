@@ -49,7 +49,7 @@ class System implements ConfigTypeInterface
      *
      * @var int
      */
-    private static $delayTimeout = 50000;
+    private static $delayTimeout = 100000;
     /**
      * Lifetime of the lock for write in cache.
      *
@@ -57,7 +57,7 @@ class System implements ConfigTypeInterface
      *
      * @var int
      */
-    private static $lockTimeout = 8;
+    private static $lockTimeout = 42;
 
     /**
      * @var array
