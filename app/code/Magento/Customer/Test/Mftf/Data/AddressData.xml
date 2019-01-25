@@ -102,6 +102,7 @@
         <data key="state"></data>
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">444-44-444-44</data>
     </entity>
     <entity name="US_Default_Billing_Address_TX" type="address" extends="US_Address_TX">

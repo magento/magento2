@@ -95,13 +95,18 @@
             <argument name="quantity" type="string"/>
             <argument name="errorNum" type="string"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="mouseOverOnProduct" />
         <fillField selector="{{StorefrontCustomerWishlistProductSection.productDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
         <fillField selector="{{StorefrontCustomerWishlistProductSection.productQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
-        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver1"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.productUpdateWishList}}" stepKey="clickAddToWishlistButton"/>
-        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="wishlistMoveMouseOverProduct" />
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" stepKey="waitForErrorMessage"/>
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+
         <!--Check error message-->
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productInfoByName(product.name)}}" stepKey="wishlistMoveMouseOverProduct" />
         <see selector="{{StorefrontCustomerWishlistProductSection.productQtyError(product.name)}}" userInput="The maximum you may purchase is {{errorNum}}." stepKey="checkQtyError"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productAddAllToCart}}" stepKey="mouseOver2"/>
     </actionGroup>
 </actionGroups>

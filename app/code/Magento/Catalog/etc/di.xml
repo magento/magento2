@@ -907,6 +907,14 @@
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="remove_redundant_image" type="Magento\Catalog\Plugin\Model\ResourceModel\Category\RemoveRedundantImagePlugin"/>
+    </type>
+    <type name="Magento\Catalog\Plugin\Model\ResourceModel\Category\RemoveRedundantImagePlugin">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeWithWebsiteProcessor" />
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
