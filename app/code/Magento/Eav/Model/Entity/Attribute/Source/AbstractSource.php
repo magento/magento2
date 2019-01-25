@@ -80,6 +80,8 @@ abstract class AbstractSource implements
     }
 
     /**
+     * Get option id.
+     *
      * @param string $value
      * @return null|string
      */
