@@ -66,21 +66,16 @@ class RewriteUrl implements StoreSwitcherInterface
             UrlRewrite::STORE_ID => $oldStoreId,
         ]);
         if ($oldRewrite) {
+            $targetUrl = $targetStore->getBaseUrl();
             // look for url rewrite match on the target store
-            $currentRewrites = $this->urlFinder->findAllByData([
+            $currentRewrite = $this->urlFinder->findOneByData([
                 UrlRewrite::TARGET_PATH => $oldRewrite->getTargetPath(),
                 UrlRewrite::STORE_ID => $targetStore->getId(),
             ]);
-            if (null === $currentRewrites || empty($currentRewrites)) {
-                /** @var \Magento\Framework\App\Response\Http $response */
-                $targetUrl = $targetStore->getBaseUrl();
-                return $targetUrl;
-            }
-            foreach ($currentRewrites as $rewrite) {
-                $targetUrl = $targetStore->getBaseUrl() . $rewrite->getRequestPath();
+            if ($currentRewrite) {
+                $targetUrl .= $currentRewrite->getRequestPath();
             }
         }
-
         return $targetUrl;
     }
 }
