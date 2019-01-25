@@ -104,7 +104,9 @@ define([
          */
         afterOnAuthorize: function (res, resolve, reject, actions) {
             if (res.success) {
-                return resolve(actions.redirect(window, res.redirectUrl));
+                resolve();
+
+                return actions.redirect(window, res.redirectUrl);
             }
 
             this.addError(res['error_message']);
