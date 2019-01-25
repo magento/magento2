@@ -173,29 +173,28 @@ class TransportBuilder
     /**
      * Set mail from address
      *
-     * @deprecated This function sets the from address for the first store only.
-     * new function setFromByStore introduced to allow setting of from address
-     * based on store.
-     * @see setFromByStore()
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
+     * @see setFromByScope()
      *
      * @param string|array $from
      * @return $this
      */
     public function setFrom($from)
     {
-        return $this->setFromByStore($from, null);
+        return $this->setFromByScope($from, null);
     }
 
     /**
-     * Set mail from address by store
+     * Set mail from address by Scope
      *
      * @param string|array $from
-     * @param string|int $store
+     * @param string|int $scopeId
      * @return $this
      */
-    public function setFromByStore($from, $store = null)
+    public function setFromByScope($from, $scopeId = null)
     {
-        $result = $this->_senderResolver->resolve($from, $store);
+        $result = $this->_senderResolver->resolve($from, $scopeId);
         $this->message->setFromAddress($result['email'], $result['name']);
         return $this;
     }
