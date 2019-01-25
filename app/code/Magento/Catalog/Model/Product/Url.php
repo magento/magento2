@@ -162,10 +162,10 @@ class Url extends \Magento\Framework\DataObject
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
 
-                if ($categoryId) {
-                    $filterData[UrlRewrite::METADATA]['category_id'] = $categoryId;
-                } elseif (!$useCategories) {
+                if (!$useCategories) {
                     $filterData[UrlRewrite::METADATA]['category_id'] = '';
+                } elseif ($categoryId) {
+                    $filterData[UrlRewrite::METADATA]['category_id'] = $categoryId;
                 }
 
                 $rewrite = $this->urlFinder->findOneByData($filterData);
