@@ -27,7 +27,6 @@ class Data extends FrontendDataHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @deprecated
      */
     public function __construct(
         Context $context,
@@ -45,7 +44,6 @@ class Data extends FrontendDataHelper
      * @param string $route
      * @param array $params
      * @return string
-     * @deprecated
      */
     protected function _getUrl($route, $params = [])
     {
@@ -56,7 +54,6 @@ class Data extends FrontendDataHelper
      * Retrieve place order url in admin
      *
      * @return  string
-     * @deprecated
      */
     public function getPlaceOrderAdminUrl()
     {
@@ -68,7 +65,6 @@ class Data extends FrontendDataHelper
      *
      * @param array $params
      * @return  string
-     * @deprecated
      */
     public function getSuccessOrderUrl($params)
     {
@@ -84,7 +80,6 @@ class Data extends FrontendDataHelper
      *
      * @param array $params
      * @return string
-     * @deprecated
      */
     public function getRedirectIframeUrl($params)
     {
@@ -98,7 +93,6 @@ class Data extends FrontendDataHelper
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated
      */
     public function getRelayUrl($storeId = null)
     {

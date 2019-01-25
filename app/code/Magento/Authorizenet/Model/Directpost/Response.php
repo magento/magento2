@@ -24,7 +24,6 @@ class Response extends AuthorizenetResponse
      * @param string $amount
      * @param string $transactionId
      * @return string
-     * @deprecated
      */
     public function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
@@ -41,7 +40,6 @@ class Response extends AuthorizenetResponse
      * @param string $merchantMd5
      * @param string $merchantApiLogin
      * @return bool
-     * @deprecated
      */
     public function isValidHash($merchantMd5, $merchantApiLogin)
     {
@@ -54,7 +52,6 @@ class Response extends AuthorizenetResponse
      * Return if this is approved response from Authorize.net auth request.
      *
      * @return bool
-     * @deprecated
      */
     public function isApproved()
     {

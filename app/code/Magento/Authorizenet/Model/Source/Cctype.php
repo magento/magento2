@@ -19,7 +19,6 @@ class Cctype extends PaymentCctype
      * Return all supported credit card types
      *
      * @return string[]
-     * @deprecated
      */
     public function getAllowedTypes()
     {

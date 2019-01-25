@@ -21,7 +21,6 @@ class PaymentDetails extends ConfigurableInfo
      *
      * @param string $field
      * @return string | Phrase
-     * @deprecated
      */
     protected function getLabel($field)
     {

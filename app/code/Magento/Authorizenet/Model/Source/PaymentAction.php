@@ -17,7 +17,6 @@ class PaymentAction implements ArrayInterface
 {
     /**
      * @inheritdoc
-     * @deprecated
      */
     public function toOptionArray()
     {

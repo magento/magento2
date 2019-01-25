@@ -48,7 +48,6 @@ class Redirect extends Create implements HttpPostActionInterface
      * @param \Magento\Framework\Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param \Magento\Authorizenet\Helper\Backend\Data $helper
-     * @deprecated
      */
     public function __construct(
         Action\Context $context,
@@ -78,7 +77,6 @@ class Redirect extends Create implements HttpPostActionInterface
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
-     * @deprecated
      */
     protected function _returnQuote($cancelOrder, $errorMsg)
     {
@@ -100,7 +98,6 @@ class Redirect extends Create implements HttpPostActionInterface
      * Retrieve params and put javascript into iframe
      *
      * @return \Magento\Framework\View\Result\Layout
-     * @deprecated
      */
     public function execute()
     {

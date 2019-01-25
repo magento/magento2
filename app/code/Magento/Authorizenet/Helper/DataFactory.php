@@ -36,7 +36,6 @@ class DataFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @deprecated
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -49,7 +48,6 @@ class DataFactory
      * @param string $area
      * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
      * @throws LocalizedException
-     * @deprecated
      */
     public function create($area)
     {

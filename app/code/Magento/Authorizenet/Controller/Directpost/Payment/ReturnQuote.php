@@ -22,7 +22,6 @@ class ReturnQuote extends Payment implements HttpGetActionInterface
      * Return customer quote by ajax
      *
      * @return void
-     * @deprecated
      */
     public function execute()
     {

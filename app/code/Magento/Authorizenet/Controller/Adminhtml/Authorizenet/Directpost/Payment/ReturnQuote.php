@@ -22,7 +22,6 @@ class ReturnQuote extends Create implements HttpGetActionInterface
      * Return quote
      *
      * @return void
-     * @deprecated
      */
     protected function _returnQuote()
     {
@@ -41,7 +40,6 @@ class ReturnQuote extends Create implements HttpGetActionInterface
      * Return order quote by ajax
      *
      * @return void
-     * @deprecated
      */
     public function execute()
     {

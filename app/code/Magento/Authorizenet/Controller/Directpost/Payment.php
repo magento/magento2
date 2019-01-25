@@ -37,7 +37,6 @@ abstract class Payment extends Action implements HttpPostActionInterface
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
-     * @deprecated
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -53,7 +52,6 @@ abstract class Payment extends Action implements HttpPostActionInterface
      * Get checkout model
      *
      * @return \Magento\Checkout\Model\Session
-     * @deprecated
      */
     protected function _getCheckout()
     {
@@ -64,7 +62,6 @@ abstract class Payment extends Action implements HttpPostActionInterface
      * Get session model
      *
      * @return \Magento\Authorizenet\Model\Directpost\Session
-     * @deprecated
      */
     protected function _getDirectPostSession()
     {
@@ -78,7 +75,6 @@ abstract class Payment extends Action implements HttpPostActionInterface
      *
      * @param string $area
      * @return void
-     * @deprecated
      */
     protected function _responseAction($area = 'frontend')
     {
@@ -133,7 +129,6 @@ abstract class Payment extends Action implements HttpPostActionInterface
      * @param bool $cancelOrder
      * @param string $errorMsg
      * @return void
-     * @deprecated
      */
     protected function _returnCustomerQuote($cancelOrder = false, $errorMsg = '')
     {

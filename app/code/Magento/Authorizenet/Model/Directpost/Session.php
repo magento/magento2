@@ -20,7 +20,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
-     * @deprecated
      */
     public function addCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -37,7 +36,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return void
-     * @deprecated
      */
     public function removeCheckoutOrderIncrementId($orderIncrementId)
     {
@@ -58,7 +56,6 @@ class Session extends SessionManager
      *
      * @param string $orderIncrementId
      * @return bool
-     * @deprecated
      */
     public function isCheckoutOrderIncrementIdExist($orderIncrementId)
     {
@@ -74,7 +71,6 @@ class Session extends SessionManager
      *
      * @param int|string $id
      * @return $this
-     * @deprecated
      */
     public function setQuoteId($id)
     {

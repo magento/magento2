@@ -23,7 +23,6 @@ class Response extends Payment implements CsrfAwareActionInterface, HttpPostActi
 {
     /**
      * @inheritDoc
-     * @deprecated
      */
     public function createCsrfValidationException(
         RequestInterface $request
@@ -33,7 +32,6 @@ class Response extends Payment implements CsrfAwareActionInterface, HttpPostActi
 
     /**
      * @inheritDoc
-     * @deprecated
      */
     public function validateForCsrf(RequestInterface $request): ?bool
     {
@@ -46,7 +44,6 @@ class Response extends Payment implements CsrfAwareActionInterface, HttpPostActi
      * Action for Authorize.net SIM Relay Request.
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @deprecated
      */
     public function execute()
     {

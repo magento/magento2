@@ -38,7 +38,6 @@ class Place extends Create implements HttpPostActionInterface
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param DataHelper $helper
-     * @deprecated
      */
     public function __construct(
         Context $context,
@@ -58,7 +57,6 @@ class Place extends Create implements HttpPostActionInterface
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @deprecated
      */
     public function execute()
     {

@@ -19,13 +19,11 @@ class Iframe extends TransparentIframe
 {
     /**
      * @var \Magento\Authorizenet\Helper\DataFactory
-     * @deprecated
      */
     protected $dataFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
-     * @deprecated
      */
     private $messageManager;
 
@@ -37,7 +35,6 @@ class Iframe extends TransparentIframe
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param array $data
-     * @deprecated
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -56,7 +53,6 @@ class Iframe extends TransparentIframe
      *
      * @param string $area
      * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
-     * @deprecated
      */
     public function getHelper($area)
     {
@@ -65,8 +61,6 @@ class Iframe extends TransparentIframe
 
     /**
      * {inheritdoc}
-     *
-     * @deprecated
      */
     protected function _beforeToHtml()
     {
@@ -78,7 +72,6 @@ class Iframe extends TransparentIframe
      * Add success message
      *
      * @return void
-     * @deprecated
      */
     private function addSuccessMessage()
     {

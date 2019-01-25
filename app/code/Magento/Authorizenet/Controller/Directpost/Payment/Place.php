@@ -65,7 +65,6 @@ class Place extends Payment implements HttpPostActionInterface
      * @param Onepage $onepageCheckout
      * @param JsonHelper $jsonHelper
      * @param LoggerInterface|null $logger
-     * @deprecated
      */
     public function __construct(
         Context $context,
@@ -88,7 +87,6 @@ class Place extends Payment implements HttpPostActionInterface
      * Send request to authorize.net
      *
      * @return string
-     * @deprecated
      */
     public function execute()
     {
@@ -129,7 +127,6 @@ class Place extends Payment implements HttpPostActionInterface
      * Place order for checkout flow
      *
      * @return void
-     * @deprecated
      */
     protected function placeCheckoutOrder()
     {

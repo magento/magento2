@@ -63,7 +63,6 @@ class TransactionService
      * @param Security $xmlSecurityHelper
      * @param Logger $logger
      * @param ZendClientFactory $httpClientFactory
-     * @deprecated
      */
     public function __construct(
         Security $xmlSecurityHelper,
@@ -82,7 +81,6 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated
      */
     public function getTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -98,7 +96,6 @@ class TransactionService
      * @param string $transactionId
      * @return \Magento\Framework\Simplexml\Element
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated
      */
     protected function loadTransactionDetails(Authorizenet $context, $transactionId)
     {
@@ -153,7 +150,6 @@ class TransactionService
      * @param string $transactionKey
      * @param string $transactionId
      * @return string
-     * @deprecated
      */
     private function getRequestBody($login, $transactionKey, $transactionId)
     {
@@ -177,7 +173,6 @@ class TransactionService
      *
      * @param string $xml
      * @return string
-     * @deprecated
      */
     private function removePrivateDataFromXml($xml)
     {

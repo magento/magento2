@@ -20,7 +20,6 @@ class Factory extends AuthorizenetResponseFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @deprecated
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,

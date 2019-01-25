@@ -20,7 +20,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**
      * @var \Magento\Framework\Registry
-     * @deprecated
      */
     protected $registry;
 
@@ -28,7 +27,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @deprecated
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -43,7 +41,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
      * Return payment method model
      *
      * @return \Magento\Sales\Model\Order\Payment
-     * @deprecated
      */
     public function getPayment()
     {
@@ -55,7 +52,6 @@ class FraudDetails extends \Magento\Backend\Block\Template
      * Produce and return the block's HTML output
      *
      * @return string
-     * @deprecated
      */
     protected function _toHtml()
     {

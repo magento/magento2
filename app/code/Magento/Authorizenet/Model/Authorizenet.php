@@ -127,7 +127,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @deprecated
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -175,7 +174,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param string $currencyCode
      * @return bool
-     * @deprecated
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -189,7 +187,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Return array of currency codes supplied by Payment Gateway
      *
      * @return array
-     * @deprecated
      */
     public function getAcceptedCurrencyCodes()
     {
@@ -206,7 +203,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @return $this
-     * @deprecated
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -219,7 +215,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param string $transactionId
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
@@ -246,7 +241,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\Simplexml\Element $fraudFilters
      * @return array
-     * @deprecated
      */
     protected function getFraudFilters($fraudFilters)
     {
@@ -266,7 +260,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Return authorize payment request
      *
      * @return \Magento\Authorizenet\Model\Request
-     * @deprecated
      */
     protected function getRequest()
     {
@@ -289,7 +282,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @deprecated
      */
     protected function buildRequest(\Magento\Framework\DataObject $payment)
     {
@@ -388,7 +380,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Model\Request $request
      * @return \Magento\Authorizenet\Model\Response
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @deprecated
      */
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
@@ -450,7 +441,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param  \Magento\Payment\Model\InfoInterface $payment
      * @return bool
-     * @deprecated
      */
     protected function isGatewayActionsLocked($payment)
     {

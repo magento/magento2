@@ -32,7 +32,6 @@ class Factory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @deprecated
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,7 +46,6 @@ class Factory
      *
      * @param array $data
      * @return \Magento\Authorizenet\Model\Request
-     * @deprecated
      */
     public function create(array $data = [])
     {

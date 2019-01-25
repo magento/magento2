@@ -17,7 +17,6 @@ class Debug extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Resource initialization
      *
      * @return void
-     * @deprecated
      */
     protected function _construct()
     {

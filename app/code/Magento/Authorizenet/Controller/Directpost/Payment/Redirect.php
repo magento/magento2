@@ -22,7 +22,6 @@ class Redirect extends Payment implements HttpPostActionInterface
      * Retrieve params and put javascript into iframe
      *
      * @return void
-     * @deprecated
      */
     public function execute()
     {
