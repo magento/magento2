@@ -114,8 +114,9 @@ class Samples extends Form
         foreach ($this->sortRowsData as &$sortRowData) {
             if ($sortRowData['sort_order'] > $currentSortRowData['sort_order']) {
                 // need to reload block because we are changing dom
-                $target = $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->getSortHandle();
-                $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
+                $target = $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)
+                    ->getSortHandle();
+                $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
 
                 $currentSortRowData['current_position_in_grid']--;
                 $sortRowData['current_position_in_grid']++;
