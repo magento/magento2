@@ -39,10 +39,9 @@
     </actionGroup>
     <actionGroup name="DeleteCustomerFromAdminActionGroup">
         <arguments>
-            <argument name="customer"/>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
         </arguments>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSubmit"/>

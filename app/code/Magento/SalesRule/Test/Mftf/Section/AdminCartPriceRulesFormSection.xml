@@ -27,6 +27,19 @@
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
 
+        <!-- Conditions sub-form -->
+        <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
+        <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
+        <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>
+        <element name="ruleCondition" type="select" selector="rule[conditions][{{arg}}][new_child]" parameterized="true"/>
+        <element name="ruleParameter" type="text" selector="//span[@class='rule-param']/a[contains(text(), '{{arg}}')]" parameterized="true"/>
+        <element name="ruleParameterSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
+        <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
+        <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+
         <!-- Actions sub-form -->
         <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>
         <element name="actionsHeader" type="button" selector="div[data-index='actions']" timeout="30"/>
@@ -43,6 +56,7 @@
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
+        <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
 
         <!-- Manage Coupon Codes sub-form -->
