@@ -560,7 +560,7 @@ class Eav extends AbstractModifier
      * Loads attributes for specified groups at once
      *
      * @param AttributeGroupInterface[] $groups
-     * @return @return ProductAttributeInterface[]
+     * @return ProductAttributeInterface[]
      */
     private function loadAttributesForGroups(array $groups)
     {

@@ -12,7 +12,7 @@
         <!-- GoTo ConfigureBraintree fields -->
         <click stepKey="clickOnSTORES" selector="{{AdminMenuSection.stores}}"/>
         <waitForPageLoad stepKey="waitForConfiguration" time="2"/>
-        <click stepKey="clickOnConfigurations" selector="{{StoresSubmenuSection.configuration}}" />
+        <click stepKey="clickOnConfigurations" selector="{{AdminMenuSection.configuration}}" />
         <waitForPageLoad stepKey="waitForSales" time="2"/>
         <click stepKey="clickOnSales" selector="{{ConfigurationListSection.sales}}" />
         <waitForPageLoad stepKey="waitForPaymentMethods" time="2"/>

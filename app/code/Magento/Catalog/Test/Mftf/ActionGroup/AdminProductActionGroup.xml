@@ -70,6 +70,7 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
@@ -159,7 +160,7 @@
 
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
-        <fillField userInput="option1" selector="{{AdminProductCustomizableOptionsSection.optionTitleInput}}" stepKey="fillOptionTitle"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="option1" stepKey="fillOptionTitle"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openTypeDropDown"/>
         <click selector="{{AdminProductCustomizableOptionsSection.optionTypeTextField}}" stepKey="selectTypeTextField"/>
         <fillField userInput="20" selector="{{AdminProductCustomizableOptionsSection.maxCharactersInput}}" stepKey="fillMaxChars"/>
