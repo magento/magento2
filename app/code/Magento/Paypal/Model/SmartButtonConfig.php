@@ -90,16 +90,10 @@ class SmartButtonConfig
      * @param string $page
      * @return array
      */
-    public function getButtonStyles(string $page) : array
+    private function getButtonStyles(string $page) : array
     {
-        $styles = [
-            'layout' => 'vertical',
-            'size' => 'responsive',
-            'color' => 'gold',
-            'shape' => 'rect',
-            'label' => 'paypal'
-        ];
-        if (!!$this->config->getValue("{$page}_page_button_customize")) {
+        $styles = $this->defaultStyles[$page];
+        if ((boolean)$this->config->getValue("{$page}_page_button_customize")) {
             $styles['layout'] = $this->config->getValue("{$page}_page_button_layout");
             $styles['size'] = $this->config->getValue("{$page}_page_button_size");
             $styles['color'] = $this->config->getValue("{$page}_page_button_color");
