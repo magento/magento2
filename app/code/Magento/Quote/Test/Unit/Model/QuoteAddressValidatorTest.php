@@ -67,7 +67,6 @@ class QuoteAddressValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 100;
         $address = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
 
         $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->with($customerId)
