@@ -21,9 +21,7 @@ try {
     $customer = $customerRepository->get('customer_two@example.com');
     $customerRepository->delete($customer);
 } catch (NoSuchEntityException $e) {
-    /**
-     * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
-     */
+    /** Tests which are wrapped with MySQL transaction clear all data by transaction rollback. */
 }
 
 $registry->unregister('isSecureArea');

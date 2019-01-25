@@ -115,8 +115,8 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
-        return (bool)$this->scopeConfig->getValue('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
-            && $this->getWishlist()->getCustomerId() === $this->wishlistHelper->getCustomer()->getId();
+        return (bool)$this->scopeConfig->isSetFlag('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
+            && $this->getWishlist()->getCustomerId() == $this->wishlistHelper->getCustomer()->getId();
     }
 
     /**
