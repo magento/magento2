@@ -497,4 +497,13 @@
         <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
         <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
     </entity>
+    <entity name="Magento3" type="image">
+        <data key="title" unique="suffix">Magento3</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento3.jpg</data>
+        <data key="filename">magento3</data>
+        <data key="file_extension">jpg</data>
+    </entity>
 </entities>
