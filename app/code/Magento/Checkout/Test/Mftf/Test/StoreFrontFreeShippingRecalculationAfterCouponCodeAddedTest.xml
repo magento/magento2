@@ -34,9 +34,9 @@
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
             <magentoCLI command="cache:flush" stepKey="flushCache1"/>
-            <actionGroup ref="AdminCreateCartPriceRuleWithCouponActionGroup" stepKey="createCartPriceRule">
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCode" stepKey="createCartPriceRule">
                 <argument name="ruleName" value="CatPriceRule"/>
-                <argument name="couponType" value="CatPriceRule.coupon_type"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
             </actionGroup>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
                 <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
@@ -73,7 +73,7 @@
         <see userInput='You canceled the coupon code.' stepKey="seeCancellationMessage"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
         <waitForPageLoad stepKey="waitForShippingMethods"/>
-        <click stepKey="chooseFreeShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free Shipping')}}"/>
+        <click stepKey="chooseFreeShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForReviewAndPayments1"/>
         <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickIfDiscountTabClosed2"/>
