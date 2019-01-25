@@ -67,26 +67,20 @@ class QuoteAddressValidator
             try {
                 $customer = $this->customerRepository->getById($customerId);
             } catch (NoSuchEntityException $exception) {
-                throw new NoSuchEntityException(
-                    __('Invalid customer id %1', $customerId)
-                );
+                throw new NoSuchEntityException(__('Invalid customer id %1', $customerId));
             }
         }
 
         if ($address->getCustomerAddressId()) {
             //Existing address cannot belong to a guest
             if (!$customerId) {
-                throw new NoSuchEntityException(
-                    __('Invalid customer address id %1', $address->getCustomerAddressId())
-                );
+                throw new NoSuchEntityException(__('Invalid customer address id %1', $address->getCustomerAddressId()));
             }
             //Validating address ID
             try {
                 $this->addressRepository->getById($address->getCustomerAddressId());
             } catch (NoSuchEntityException $e) {
-                throw new NoSuchEntityException(
-                    __('Invalid address id %1', $address->getId())
-                );
+                throw new NoSuchEntityException(__('Invalid address id %1', $address->getId()));
             }
             //Finding available customer's addresses
             $applicableAddressIds = array_map(function ($address) {
@@ -94,9 +88,7 @@ class QuoteAddressValidator
                 return $address->getId();
             }, $this->customerRepository->getById($customerId)->getAddresses());
             if (!in_array($address->getCustomerAddressId(), $applicableAddressIds)) {
-                throw new NoSuchEntityException(
-                    __('Invalid customer address id %1', $address->getCustomerAddressId())
-                );
+                throw new NoSuchEntityException(__('Invalid customer address id %1', $address->getCustomerAddressId()));
             }
         }
     }
