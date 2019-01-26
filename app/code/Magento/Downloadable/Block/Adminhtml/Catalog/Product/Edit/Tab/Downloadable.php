@@ -136,6 +136,8 @@ class Downloadable extends Widget implements TabInterface
     }
 
     /**
+     * Get group code
+     *
      * @return string
      */
     public function getGroupCode()
@@ -154,6 +156,8 @@ class Downloadable extends Widget implements TabInterface
     }
 
     /**
+     * Is downloadable
+     *
      * @return bool
      */
     public function isDownloadable()
@@ -162,7 +166,7 @@ class Downloadable extends Widget implements TabInterface
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

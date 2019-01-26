@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml block for fieldset of downloadable product
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
 
 /**
+ * Adminhtml block for fieldset of downloadable product
+ *
  * @api
  * @since 100.0.2
  * @deprecated
