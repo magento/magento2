@@ -217,7 +217,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetCalculatedTaxesForOrderItems($orderData, $invoiceData, $expectedResults)
     {
         $orderId = $orderData['order_id'];
-        $orderShippingTaxAmount = $orderData['shipping_tax_amount'] ?? 0;
+        $shippingTaxAmount = $orderData['shipping_tax_amount'] ?? 0;
         $orderTaxDetails = $orderData['order_tax_details'];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
@@ -229,7 +229,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($orderId);
         $orderMock->expects($this->once())
             ->method('getShippingTaxAmount')
-            ->willReturn($orderShippingTaxAmount);
+            ->willReturn($shippingTaxAmount);
 
         $orderTaxDetailsMock = $this->mapOrderTaxItemDetail($orderTaxDetails);
         $this->orderTaxManagementMock->expects($this->any())
