@@ -11,6 +11,9 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory as CustomerGrou
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 
+/**
+ * Class CustomerGroupDimensionProvider
+ */
 class CustomerGroupDimensionProvider implements DimensionProviderInterface
 {
     /**
@@ -55,6 +58,8 @@ class CustomerGroupDimensionProvider implements DimensionProviderInterface
     }
 
     /**
+     * Get Customer Groups
+     *
      * @return array
      */
     private function getCustomerGroups(): array
