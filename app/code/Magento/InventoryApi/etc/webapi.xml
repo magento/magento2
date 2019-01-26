@@ -69,12 +69,6 @@
             <resource ref="Magento_InventoryApi::stock_edit"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stocks/:stockId" method="DELETE">
-        <service class="Magento\InventoryApi\Api\StockRepositoryInterface" method="deleteById"/>
-        <resources>
-            <resource ref="Magento_InventoryApi::stock_delete"/>
-        </resources>
-    </route>
     <!-- StockSourceLink -->
     <route url="/V1/inventory/stock-source-links" method="GET">
         <service class="Magento\InventoryApi\Api\GetStockSourceLinksInterface" method="execute"/>
