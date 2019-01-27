@@ -32,8 +32,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_requestMock);
+        unset($this->_model, $this->_requestMock);
+        
     }
 
     public function testGetPathInfo()

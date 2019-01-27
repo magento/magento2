@@ -680,8 +680,8 @@ class OrdersFixture extends Fixture
 
             $quoteConfigurableBuyRequest = $configurableBuyRequest['info_buyRequest'];
             $quoteSimpleBuyRequest = $simpleBuyRequest['info_buyRequest'];
-            unset($quoteConfigurableBuyRequest['selected_configurable_option']);
-            unset($quoteSimpleBuyRequest['selected_configurable_option']);
+            unset($quoteConfigurableBuyRequest['selected_configurable_option'], $quoteSimpleBuyRequest['selected_configurable_option']);
+            
 
             $productsResult[$key]['id'] = $configurableId;
             $productsResult[$key]['sku'] = $simpleSku;

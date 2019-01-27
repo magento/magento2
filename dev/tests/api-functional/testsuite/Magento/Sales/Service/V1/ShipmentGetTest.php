@@ -54,9 +54,9 @@ class ShipmentGetTest extends WebapiAbstract
         $data = $result;
         $this->assertArrayHasKey('items', $result);
         $this->assertArrayHasKey('tracks', $result);
-        unset($data['items']);
-        unset($data['packages']);
-        unset($data['tracks']);
+        unset($data['items'], $data['packages'], $data['tracks']);
+        
+        
         foreach ($data as $key => $value) {
             if (!empty($value)) {
                 if ($key === ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY) {

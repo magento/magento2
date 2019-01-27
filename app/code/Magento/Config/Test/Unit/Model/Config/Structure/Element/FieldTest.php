@@ -73,12 +73,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_backendFactoryMock);
-        unset($this->_sourceFactoryMock);
-        unset($this->_commentFactoryMock);
-        unset($this->_depMapperMock);
-        unset($this->_model);
-        unset($this->_blockFactoryMock);
+        unset($this->_backendFactoryMock, $this->_sourceFactoryMock, $this->_commentFactoryMock, $this->_depMapperMock, $this->_model, $this->_blockFactoryMock);
+        
+        
+        
+        
+        
     }
 
     public function testGetLabelTranslatesLabelAndPrefix()

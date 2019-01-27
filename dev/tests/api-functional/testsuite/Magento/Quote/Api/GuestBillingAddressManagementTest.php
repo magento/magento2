@@ -144,8 +144,8 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         foreach ($addressData['street'] as $streetLine) {
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
-        unset($addressData['street']);
-        unset($addressData['email']);
+        unset($addressData['street'], $addressData['email']);
+        
         $this->assertEquals('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {

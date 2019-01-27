@@ -75,8 +75,8 @@ class FaultTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_soapFault);
-        unset($this->_requestMock);
+        unset($this->_soapFault, $this->_requestMock);
+        
         parent::tearDown();
     }
 

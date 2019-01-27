@@ -69,9 +69,9 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_iteratorMock);
-        unset($this->_storeManagerMock);
-        unset($this->_model);
+        unset($this->_iteratorMock, $this->_storeManagerMock, $this->_model);
+        
+        
     }
 
     public function testSetDataInitializesChildIterator()

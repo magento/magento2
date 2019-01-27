@@ -81,8 +81,8 @@ class AssertCartIsEmpty extends AbstractConstraint
         $urlArray1 = parse_url($expectedUrl);
         $urlArray2 = parse_url($actualUrl);
         if ($ignoreScheme) {
-            unset($urlArray1['scheme']);
-            unset($urlArray2['scheme']);
+            unset($urlArray1['scheme'], $urlArray2['scheme']);
+            
         }
         \PHPUnit\Framework\Assert::assertTrue(
             $urlArray1 === $urlArray2,

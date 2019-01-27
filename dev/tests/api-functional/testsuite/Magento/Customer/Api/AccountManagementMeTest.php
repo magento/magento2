@@ -174,8 +174,8 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         ];
         $customerDetailsResponse = $this->_webApiCall($serviceInfo);
 
-        unset($expectedCustomerDetails['custom_attributes']);
-        unset($customerDetailsResponse['custom_attributes']); //for REST
+        unset($expectedCustomerDetails['custom_attributes'], $customerDetailsResponse['custom_attributes']);
+         //for REST
 
         $this->assertEquals($expectedCustomerDetails, $customerDetailsResponse);
     }

@@ -54,8 +54,8 @@ class AssertCustomerInGrid extends AbstractConstraint
         $pageCustomerIndex->open();
         $pageCustomerIndex->getCustomerGridBlock()->isRowVisible($filter);
         if ($customer->hasData('dob')) {
-            unset($filter['dob_from']);
-            unset($filter['dob_to']);
+            unset($filter['dob_from'], $filter['dob_to']);
+            
             $filter['dob'] = $this->prepareDob($customer->getData('dob'));
             $errorMessage .= ', dob \'' . $filter['dob'] . '\' ';
         }

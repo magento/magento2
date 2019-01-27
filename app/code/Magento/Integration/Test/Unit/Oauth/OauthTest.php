@@ -145,13 +145,13 @@ class OauthTest extends \PHPUnit\Framework\TestCase
 
     public function tearDown()
     {
-        unset($this->_consumerFactory);
-        unset($this->_nonceFactory);
-        unset($this->_tokenFactory);
-        unset($this->_oauthHelperMock);
-        unset($this->_httpUtilityMock);
-        unset($this->_dateMock);
-        unset($this->_oauth);
+        unset($this->_consumerFactory, $this->_nonceFactory, $this->_tokenFactory, $this->_oauthHelperMock, $this->_httpUtilityMock, $this->_dateMock, $this->_oauth);
+        
+        
+        
+        
+        
+        
     }
 
     /**

@@ -24,8 +24,8 @@ class WsdlFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_objectManagerMock);
-        unset($this->_soapWsdlFactory);
+        unset($this->_objectManagerMock, $this->_soapWsdlFactory);
+        
         parent::tearDown();
     }
 

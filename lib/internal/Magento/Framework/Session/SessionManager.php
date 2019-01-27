@@ -530,8 +530,8 @@ class SessionManager implements SessionManagerInterface
             $_SESSION = $oldSession;
 
             // New session does not need them
-            unset($_SESSION['destroyed']);
-            unset($_SESSION['new_session_id']);
+            unset($_SESSION['destroyed'], $_SESSION['new_session_id']);
+            
         } else {
             session_start();
         }

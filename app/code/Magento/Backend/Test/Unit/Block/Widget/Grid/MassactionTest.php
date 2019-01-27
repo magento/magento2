@@ -115,11 +115,11 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_layoutMock);
-        unset($this->_eventManagerMock);
-        unset($this->_gridMock);
-        unset($this->_urlModelMock);
-        unset($this->_block);
+        unset($this->_layoutMock, $this->_eventManagerMock, $this->_gridMock, $this->_urlModelMock, $this->_block);
+        
+        
+        
+        
     }
 
     public function testMassactionDefaultValues()

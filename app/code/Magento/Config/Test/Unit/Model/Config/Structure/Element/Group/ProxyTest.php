@@ -25,8 +25,8 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_objectManagerMock);
+        unset($this->_model, $this->_objectManagerMock);
+        
     }
 
     public function testProxyInitializesProxiedObjectOnFirstCall()

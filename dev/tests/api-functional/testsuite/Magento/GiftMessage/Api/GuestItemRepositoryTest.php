@@ -67,8 +67,8 @@ class GuestItemRepositoryTest extends WebapiAbstract
         $requestData = ["cartId" => $cartId, "itemId" => $itemId];
         $resultMessage = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertCount(5, $resultMessage);
-        unset($resultMessage['gift_message_id']);
-        unset($resultMessage['customer_id']);
+        unset($resultMessage['gift_message_id'], $resultMessage['customer_id']);
+        
         $this->assertEquals($expectedMessage, $resultMessage);
     }
 

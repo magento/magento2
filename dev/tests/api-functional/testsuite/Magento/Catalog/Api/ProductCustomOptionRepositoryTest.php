@@ -89,8 +89,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             ],
         ];
         $option = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'optionId' => $optionId]);
-        unset($option['product_sku']);
-        unset($option['option_id']);
+        unset($option['product_sku'], $option['option_id']);
+        
         $excepted = include '_files/product_options.php';
         $this->assertEquals($excepted[0], $option);
     }
@@ -119,8 +119,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         /** Unset dynamic data */
         foreach ($options as $key => $value) {
-            unset($options[$key]['product_sku']);
-            unset($options[$key]['option_id']);
+            unset($options[$key]['product_sku'], $options[$key]['option_id']);
+            
             if (!empty($options[$key]['values'])) {
                 foreach ($options[$key]['values'] as $newKey => $valueData) {
                     unset($options[$key]['values'][$newKey]['option_type_id']);
@@ -162,8 +162,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         $result = $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
-        unset($result['product_sku']);
-        unset($result['option_id']);
+        unset($result['product_sku'], $result['option_id']);
+        
         if (!empty($result['values'])) {
             foreach (array_keys($result['values']) as $key) {
                 unset($result['values'][$key]['option_type_id']);
@@ -284,8 +284,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $updatedOption = $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
         }
 
-        unset($updatedOption['values']);
-        unset($updatedOption['option_id']);//update change option id now
+        unset($updatedOption['values'], $updatedOption['option_id']);
+        //update change option id now
         $this->assertEquals($optionDataPost, $updatedOption);
     }
 

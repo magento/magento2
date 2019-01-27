@@ -84,10 +84,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_configStructureMock);
-        unset($this->_fieldFactoryMock);
-        unset($this->_testData);
+        unset($this->_model, $this->_configStructureMock, $this->_fieldFactoryMock, $this->_testData);
+        
+        
+        
     }
 
     /**

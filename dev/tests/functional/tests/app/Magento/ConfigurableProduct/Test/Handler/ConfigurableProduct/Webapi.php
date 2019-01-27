@@ -79,10 +79,10 @@ class Webapi extends ProductWebapi implements ConfigurableProductInterface
 
         $this->fields['product']['extension_attributes']['configurable_product_options'] = $configurableProductOptions;
         $this->fields['product']['extension_attributes']['configurable_product_links'] = $configurableProductLinks;
-        unset($this->fields['product']['configurable_attributes_data']);
-        unset($this->fields['attributes']);
-        unset($this->fields['variations-matrix']);
-        unset($this->fields['associated_product_ids']);
+        unset($this->fields['product']['configurable_attributes_data'], $this->fields['attributes'], $this->fields['variations-matrix'], $this->fields['associated_product_ids']);
+        
+        
+        
     }
 
     /**

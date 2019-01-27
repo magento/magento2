@@ -74,9 +74,9 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_configValueFactory);
-        unset($this->_model);
-        unset($this->_configCollection);
+        unset($this->_configValueFactory, $this->_model, $this->_configCollection);
+        
+        
     }
 
     public function testGetConfigByPathInFullMode()

@@ -77,7 +77,7 @@ class InvalidateLoggerTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->requestMock);
-        unset($this->loggerMock);
+        unset($this->requestMock, $this->loggerMock);
+        
     }
 }

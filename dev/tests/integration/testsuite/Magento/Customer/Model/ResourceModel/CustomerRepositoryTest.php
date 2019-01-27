@@ -220,8 +220,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             CustomerInterface::class
         );
         // ignore 'updated_at'
-        unset($attributesBefore['updated_at']);
-        unset($attributesAfter['updated_at']);
+        unset($attributesBefore['updated_at'], $attributesAfter['updated_at']);
+        
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = [
@@ -348,8 +348,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
-        unset($customerDetails['default_billing']);
-        unset($customerDetails['default_shipping']);
+        unset($customerDetails['default_billing'], $customerDetails['default_shipping']);
+        
 
         $beforeSaveCustomer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(

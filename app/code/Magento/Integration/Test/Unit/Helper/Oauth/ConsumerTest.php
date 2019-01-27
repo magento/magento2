@@ -114,13 +114,13 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_storeManagerMock);
-        unset($this->_consumerFactory);
-        unset($this->_tokenFactory);
-        unset($this->_dataHelper);
-        unset($this->_httpClientMock);
-        unset($this->_loggerMock);
-        unset($this->_oauthService);
+        unset($this->_storeManagerMock, $this->_consumerFactory, $this->_tokenFactory, $this->_dataHelper, $this->_httpClientMock, $this->_loggerMock, $this->_oauthService);
+        
+        
+        
+        
+        
+        
     }
 
     public function testCreateConsumer()

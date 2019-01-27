@@ -118,8 +118,8 @@ class UpdateChildProductStep implements TestStepInterface
             $product[$attributeKey]['attributes_data'][$this->attributeKey]['options'][$optionKey]['pricing_value']
                 = $this->productUpdate['newPrice'];
         } else {
-            unset($product[$attributeKey]['matrix'][$matrixIndex]);
-            unset($product[$attributeKey]['attributes_data'][$this->attributeKey]['options'][$optionKey]);
+            unset($product[$attributeKey]['matrix'][$matrixIndex], $product[$attributeKey]['attributes_data'][$this->attributeKey]['options'][$optionKey]);
+            
         }
 
         $product['category_ids']['category']

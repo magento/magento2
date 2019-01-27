@@ -35,8 +35,8 @@ class MultistoreTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_storeManagerMock);
+        unset($this->_model, $this->_storeManagerMock);
+        
     }
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()

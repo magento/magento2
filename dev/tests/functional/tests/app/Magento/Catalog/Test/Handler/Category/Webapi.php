@@ -99,8 +99,8 @@ class Webapi extends AbstractWebapi implements CategoryInterface
         $data = [];
 
         $fixtureData = array_merge($fixtureData, $fixtureData['general']);
-        unset($fixtureData['general']);
-        unset($fixtureData['category_products']);
+        unset($fixtureData['general'], $fixtureData['category_products']);
+        
 
         foreach ($this->basicFields as $fieldName) {
             if (isset($fixtureData[$fieldName])) {

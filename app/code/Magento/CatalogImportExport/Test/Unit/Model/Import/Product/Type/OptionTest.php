@@ -298,8 +298,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected function tearDown()
     {
-        unset($this->model);
-        unset($this->productEntity);
+        unset($this->model, $this->productEntity);
+        
     }
 
     /**

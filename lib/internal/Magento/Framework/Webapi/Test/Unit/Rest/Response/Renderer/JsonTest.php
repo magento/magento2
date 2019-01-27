@@ -29,8 +29,8 @@ class JsonTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->encoderMock);
-        unset($this->_restJsonRenderer);
+        unset($this->encoderMock, $this->_restJsonRenderer);
+        
         parent::tearDown();
     }
 

@@ -92,12 +92,12 @@ class ServerTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_soapServer);
-        unset($this->_requestMock);
-        unset($this->_domDocumentFactory);
-        unset($this->_storeMock);
-        unset($this->_storeManagerMock);
-        unset($this->_soapServerFactory);
+        unset($this->_soapServer, $this->_requestMock, $this->_domDocumentFactory, $this->_storeMock, $this->_storeManagerMock, $this->_soapServerFactory);
+        
+        
+        
+        
+        
         parent::tearDown();
     }
 

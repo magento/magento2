@@ -146,8 +146,8 @@ class Config extends \Magento\Framework\Config\AbstractXml
             }
         }
 
-        unset($groupConstraints);
-        unset($rulesConstraints);
+        unset($groupConstraints, $rulesConstraints);
+        
 
         return $result;
     }

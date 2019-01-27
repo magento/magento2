@@ -740,8 +740,8 @@ abstract class AbstractDb extends AbstractResource
         $dataObject = clone $object;
         $dataObject->setData($data);
         $data = $this->_prepareDataForTable($dataObject, $this->getMainTable());
-        unset($data[$this->getIdFieldName()]);
-        unset($dataObject);
+        unset($data[$this->getIdFieldName()], $dataObject);
+        
 
         return $data;
     }

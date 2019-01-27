@@ -56,10 +56,10 @@ class IoTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_generationDirectory);
-        unset($this->_filesystemMock);
-        unset($this->_object);
-        unset($this->_filesystemDriverMock);
+        unset($this->_generationDirectory, $this->_filesystemMock, $this->_object, $this->_filesystemDriverMock);
+        
+        
+        
     }
 
     public function testGetResultFileDirectory()

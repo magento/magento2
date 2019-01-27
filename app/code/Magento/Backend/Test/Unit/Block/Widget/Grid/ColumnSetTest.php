@@ -83,12 +83,12 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_block);
-        unset($this->_layoutMock);
-        unset($this->_columnMock);
-        unset($this->_factoryMock);
-        unset($this->_totalsMock);
-        unset($this->_subtotalsMock);
+        unset($this->_block, $this->_layoutMock, $this->_columnMock, $this->_factoryMock, $this->_totalsMock, $this->_subtotalsMock);
+        
+        
+        
+        
+        
     }
 
     public function testSetSortablePropagatesSortabilityToChildren()

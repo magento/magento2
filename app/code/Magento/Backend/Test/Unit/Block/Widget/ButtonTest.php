@@ -46,8 +46,8 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_layoutMock);
-        unset($this->_buttonMock);
+        unset($this->_layoutMock, $this->_buttonMock);
+        
     }
 
     /**

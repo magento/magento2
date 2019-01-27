@@ -124,8 +124,8 @@ class Curl extends AbstractCurl
         if ($widget->hasData('store_ids')) {
             $data['store_ids'][0] = $widget->getDataFieldConfig('store_ids')['source']->getStores()[0]->getStoreId();
         }
-        unset($data['code']);
-        unset($data['theme_id']);
+        unset($data['code'], $data['theme_id']);
+        
 
         $data = $this->prepareWidgetInstance($data);
         $data = $this->prepareParameters($data);

@@ -52,8 +52,8 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_parserMock);
-        unset($this->_factoryMock);
+        unset($this->_parserMock, $this->_factoryMock);
+        
     }
 
     public function testCountTotals()

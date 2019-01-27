@@ -173,8 +173,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     {
         $fields = [];
 
-        unset($this->fields['product']['website_ids']);
-        unset($this->fields['product']['checkout_data']);
+        unset($this->fields['product']['website_ids'], $this->fields['product']['checkout_data']);
+        
 
         foreach ($this->basicFields as $fieldName) {
             if (isset($this->fields['product'][$fieldName])) {
@@ -339,8 +339,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                     }
                 }
 
-                unset($option['option_id']);
-                unset($option['is_delete']);
+                unset($option['option_id'], $option['is_delete']);
+                
 
                 $this->fields['product']['options'][$ko] = $option;
             }

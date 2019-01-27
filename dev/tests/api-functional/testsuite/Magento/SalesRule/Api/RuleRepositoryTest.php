@@ -98,14 +98,14 @@ class RuleRepositoryTest extends WebapiAbstract
         $ruleId = $result['rule_id'];
         $this->assertArrayHasKey('rule_id', $result);
         $this->assertEquals($ruleId, $result['rule_id']);
-        unset($result['rule_id']);
-        unset($result['extension_attributes']);
+        unset($result['rule_id'], $result['extension_attributes']);
+        
         $this->assertEquals($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($ruleId);
-        unset($result['rule_id']);
-        unset($result['extension_attributes']);
+        unset($result['rule_id'], $result['extension_attributes']);
+        
         $this->assertEquals($inputData, $result);
 
         //test update
@@ -113,14 +113,14 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData['customer_group_ids'] = [0, 1, 3];
         $inputData['discount_amount'] = 30;
         $result = $this->updateRule($ruleId, $inputData);
-        unset($result['rule_id']);
-        unset($result['extension_attributes']);
+        unset($result['rule_id'], $result['extension_attributes']);
+        
         $this->assertEquals($inputData, $result);
 
         //test get
         $result = $this->getRule($ruleId);
-        unset($result['rule_id']);
-        unset($result['extension_attributes']);
+        unset($result['rule_id'], $result['extension_attributes']);
+        
         $this->assertEquals($inputData, $result);
 
         //test delete

@@ -39,12 +39,12 @@ class FormFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->_expectedData = $this->_requestData;
 
-        unset($this->_expectedData['id']);
-        unset($this->_expectedData['default_shipping']);
-        unset($this->_expectedData['default_billing']);
-        unset($this->_expectedData['middlename']);
-        unset($this->_expectedData['prefix']);
-        unset($this->_expectedData['suffix']);
+        unset($this->_expectedData['id'], $this->_expectedData['default_shipping'], $this->_expectedData['default_billing'], $this->_expectedData['middlename'], $this->_expectedData['prefix'], $this->_expectedData['suffix']);
+        
+        
+        
+        
+        
     }
 
     public function testCreate()

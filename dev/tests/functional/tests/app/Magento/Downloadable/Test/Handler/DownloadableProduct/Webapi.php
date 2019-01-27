@@ -89,9 +89,9 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
             $this->fields['product']['samples_title'] = $this->fields['product']['downloadable_sample']['title'];
         }
 
-        unset($this->fields['samples_title']);
-        unset($this->fields['downloadable']['sample']);
-        unset($this->fields['product']['downloadable_sample']);
+        unset($this->fields['samples_title'], $this->fields['downloadable']['sample'], $this->fields['product']['downloadable_sample']);
+        
+        
     }
 
     /**
@@ -132,8 +132,8 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
             : null;
         $this->fields['product']['extension_attributes']['downloadable_product_links'] = $downloadableProductLinks;
 
-        unset($this->fields['downloadable']);
-        unset($this->fields['product']['downloadable_links']);
+        unset($this->fields['downloadable'], $this->fields['product']['downloadable_links']);
+        
     }
 
     /**

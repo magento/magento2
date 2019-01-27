@@ -54,10 +54,10 @@ class TabsTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_object);
-        unset($this->_requestMock);
-        unset($this->_structureMock);
-        unset($this->_urlBuilderMock);
+        unset($this->_object, $this->_requestMock, $this->_structureMock, $this->_urlBuilderMock);
+        
+        
+        
     }
 
     public function testGetSectionUrl()

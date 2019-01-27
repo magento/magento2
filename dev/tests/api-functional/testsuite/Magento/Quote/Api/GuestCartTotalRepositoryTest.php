@@ -95,10 +95,10 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
 
         $actual = $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
 
-        unset($actual['items'][0]['options']);
-        unset($actual['weee_tax_applied_amount']);
+        unset($actual['items'][0]['options'], $actual['weee_tax_applied_amount'], $actual['total_segments']);
+        
 
-        unset($actual['total_segments']);
+        
         if (array_key_exists('extension_attributes', $actual)) {
             unset($actual['extension_attributes']);
         }

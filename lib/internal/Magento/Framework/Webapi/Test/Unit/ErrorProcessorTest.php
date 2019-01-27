@@ -59,9 +59,9 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_errorProcessor);
-        unset($this->encoderMock);
-        unset($this->_appStateMock);
+        unset($this->_errorProcessor, $this->encoderMock, $this->_appStateMock);
+        
+        
         parent::tearDown();
     }
 

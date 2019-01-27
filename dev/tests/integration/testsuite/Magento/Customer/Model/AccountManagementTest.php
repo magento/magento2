@@ -677,8 +677,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         // ignore 'updated_at'
-        unset($attributesBefore['updated_at']);
-        unset($attributesAfter['updated_at']);
+        unset($attributesBefore['updated_at'], $attributesAfter['updated_at']);
+        
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = [
@@ -930,8 +930,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
          * TODO : Data builder / populateWithArray currently does not detect
          * array type and returns street as string instead of array. Need to fix this.
          */
-        unset($expected[AddressInterface::STREET]);
-        unset($result[AddressInterface::STREET]);
+        unset($expected[AddressInterface::STREET], $result[AddressInterface::STREET]);
+        
         $this->assertEquals($expected, $result);
     }
 

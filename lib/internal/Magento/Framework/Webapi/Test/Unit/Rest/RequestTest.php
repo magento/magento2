@@ -60,8 +60,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_deserializerFactory);
-        unset($this->_request);
+        unset($this->_deserializerFactory, $this->_request);
+        
         parent::tearDown();
     }
 

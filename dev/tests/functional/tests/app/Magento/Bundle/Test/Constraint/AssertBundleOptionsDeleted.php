@@ -59,8 +59,8 @@ class AssertBundleOptionsDeleted extends AbstractConstraint
                 \PHPUnit\Framework\Assert::assertCount(0, $errorAssociatedProducts);
             }
 
-            unset($option['assigned_products']);
-            unset($formData[$index]['assigned_products']);
+            unset($option['assigned_products'], $formData[$index]['assigned_products']);
+            
             $errorFields = array_diff($option, $formData[$index]);
             \PHPUnit\Framework\Assert::assertCount(0, $errorFields);
         }

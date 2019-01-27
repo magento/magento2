@@ -48,9 +48,9 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
-        unset($this->_typeProcessor);
-        unset($this->_strategy);
-        unset($this->_wsdl);
+        unset($this->_typeProcessor, $this->_strategy, $this->_wsdl);
+        
+        
 
         parent::tearDown();
     }

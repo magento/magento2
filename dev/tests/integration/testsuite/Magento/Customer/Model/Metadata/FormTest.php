@@ -75,12 +75,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->_expected = array_merge($this->_attributes, $requestData);
 
-        unset($this->_expected['id']);
-        unset($this->_expected['default_shipping']);
-        unset($this->_expected['default_billing']);
-        unset($this->_expected['middlename']);
-        unset($this->_expected['prefix']);
-        unset($this->_expected['suffix']);
+        unset($this->_expected['id'], $this->_expected['default_shipping'], $this->_expected['default_billing'], $this->_expected['middlename'], $this->_expected['prefix'], $this->_expected['suffix']);
+        
+        
+        
+        
+        
     }
 
     /**

@@ -321,9 +321,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function testValidateRowAttributeRequired()
     {
         $this->_model->getErrorAggregator()->clear();
-        unset($this->_customerData['firstname']);
-        unset($this->_customerData['lastname']);
-        unset($this->_customerData['group_id']);
+        unset($this->_customerData['firstname'], $this->_customerData['lastname'], $this->_customerData['group_id']);
+        
+        
 
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());

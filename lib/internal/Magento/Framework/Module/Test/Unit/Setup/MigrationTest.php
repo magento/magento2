@@ -34,9 +34,9 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_actualUpdateResult);
-        unset($this->_actualWhere);
-        unset($this->_selectMock);
+        unset($this->_actualUpdateResult, $this->_actualWhere, $this->_selectMock);
+        
+        
     }
 
     /**

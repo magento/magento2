@@ -93,8 +93,8 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data, $this->dataObject->getData());
 
         $this->dataObject->unsetData(['key2', 'key3']);
-        unset($data['key2']);
-        unset($data['key3']);
+        unset($data['key2'], $data['key3']);
+        
         $this->assertEquals($data, $this->dataObject->getData());
 
         $this->dataObject->unsetData();

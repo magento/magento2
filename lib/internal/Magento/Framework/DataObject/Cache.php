@@ -231,9 +231,9 @@ class Cache
             return false;
         }
 
-        unset($this->_objects[$idx]);
+        unset($this->_objects[$idx], $this->_hashes[$this->_objectHashes[$idx]], $this->_objectHashes[$idx]);
 
-        unset($this->_hashes[$this->_objectHashes[$idx]], $this->_objectHashes[$idx]);
+        
 
         if (isset($this->_objectTags[$idx])) {
             foreach ($this->_objectTags[$idx] as $t => $dummy) {

@@ -24,8 +24,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_scopeConfigMock);
-        unset($this->_dataHelper);
+        unset($this->_scopeConfigMock, $this->_dataHelper);
+        
     }
 
     public function testIsCleanupProbabilityZero()

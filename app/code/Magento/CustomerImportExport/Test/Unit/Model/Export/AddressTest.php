@@ -95,8 +95,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_objectManager);
+        unset($this->_model, $this->_objectManager);
+        
     }
 
     /**

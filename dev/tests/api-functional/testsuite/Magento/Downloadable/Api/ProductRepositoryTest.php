@@ -179,9 +179,9 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
-        unset($resultLinks[0]['id']);
-        unset($resultLinks[0]['link_file']);
-        unset($resultLinks[0]['sample_file']);
+        unset($resultLinks[0]['id'], $resultLinks[0]['link_file'], $resultLinks[0]['sample_file']);
+        
+        
         $this->assertTrue(isset($resultLinks[1]['id']));
         unset($resultLinks[1]['id']);
 
@@ -194,8 +194,8 @@ class ProductRepositoryTest extends WebapiAbstract
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        unset($resultSamples[1]['sample_file']);
-        unset($resultSamples[1]['id']);
+        unset($resultSamples[1]['sample_file'], $resultSamples[1]['id']);
+        
 
         $expectedSampleData = $this->getExpectedSampleData();
         $this->assertEquals($expectedSampleData, $resultSamples);
@@ -246,16 +246,16 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($linkFile, $resultLinks[0]['link_file']);
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
         $this->assertEquals($sampleFile, $resultLinks[0]['sample_file']);
-        unset($resultLinks[0]['id']);
-        unset($resultLinks[0]['link_file']);
-        unset($resultLinks[0]['sample_file']);
+        unset($resultLinks[0]['id'], $resultLinks[0]['link_file'], $resultLinks[0]['sample_file']);
+        
+        
         $this->assertTrue(isset($resultLinks[1]['id']));
         $this->assertGreaterThan($link2Id, $resultLinks[1]['id']);
         $this->assertTrue(isset($resultLinks[1]['link_file']));
         $this->assertTrue(isset($resultLinks[1]['sample_file']));
-        unset($resultLinks[1]['id']);
-        unset($resultLinks[1]['link_file']);
-        unset($resultLinks[1]['sample_file']);
+        unset($resultLinks[1]['id'], $resultLinks[1]['link_file'], $resultLinks[1]['sample_file']);
+        
+        
         $this->assertTrue(isset($resultLinks[2]['id']));
         $this->assertGreaterThan($link2Id, $resultLinks[2]['id']);
         unset($resultLinks[2]['id']);
@@ -350,16 +350,16 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['sample_file'], $sampleFile));
         $this->assertStringEndsWith($extension, $resultLinks[0]['sample_file']);
-        unset($resultLinks[0]['id']);
-        unset($resultLinks[0]['link_file']);
-        unset($resultLinks[0]['sample_file']);
+        unset($resultLinks[0]['id'], $resultLinks[0]['link_file'], $resultLinks[0]['sample_file']);
+        
+        
         $this->assertTrue(isset($resultLinks[1]['id']));
         $this->assertEquals($link2Id, $resultLinks[1]['id']);
         $this->assertTrue(isset($resultLinks[1]['link_file']));
         $this->assertTrue(isset($resultLinks[1]['sample_file']));
-        unset($resultLinks[1]['id']);
-        unset($resultLinks[1]['link_file']);
-        unset($resultLinks[1]['sample_file']);
+        unset($resultLinks[1]['id'], $resultLinks[1]['link_file'], $resultLinks[1]['sample_file']);
+        
+        
 
         $expectedLinkData = [
             [
@@ -433,8 +433,8 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertTrue(isset($resultSamples[2]['id']));
         $this->assertGreaterThan($sample2Id, $resultSamples[2]['id']);
         $this->assertTrue(isset($resultSamples[2]['sample_file']));
-        unset($resultSamples[2]['sample_file']);
-        unset($resultSamples[2]['id']);
+        unset($resultSamples[2]['sample_file'], $resultSamples[2]['id']);
+        
 
         $expectedSampleData[] = [
             'title' => 'sample1_updated',

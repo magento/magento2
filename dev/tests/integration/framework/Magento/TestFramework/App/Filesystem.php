@@ -33,8 +33,8 @@ class Filesystem extends \Magento\Framework\Filesystem
     public function overridePath($code, $value)
     {
         $this->paths[$code] = str_replace('\\', '/', $value);
-        unset($this->readInstances[$code]);
-        unset($this->writeInstances[$code]);
+        unset($this->readInstances[$code], $this->writeInstances[$code]);
+        
     }
 
     /**

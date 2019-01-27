@@ -34,9 +34,9 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_xmlDeserializer);
-        unset($this->_xmlParserMock);
-        unset($this->_appStateMock);
+        unset($this->_xmlDeserializer, $this->_xmlParserMock, $this->_appStateMock);
+        
+        
         parent::tearDown();
     }
 

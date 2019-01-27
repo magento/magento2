@@ -28,8 +28,8 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_flyweightMock);
+        unset($this->_model, $this->_flyweightMock);
+        
     }
 
     public function testIteratorInitializesFlyweight()

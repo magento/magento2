@@ -57,10 +57,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_routeMock);
-        unset($this->_request);
-        unset($this->_apiConfigMock);
-        unset($this->_router);
+        unset($this->_routeMock, $this->_request, $this->_apiConfigMock, $this->_router);
+        
+        
+        
         parent::tearDown();
     }
 

@@ -306,8 +306,8 @@ class ConfigurableAttributesData extends DataSource
         if (isset($data['matrix'])) {
             foreach ($data['matrix'] as $key => $value) {
                 if (isset($value['sku']) && $value['sku'] === '') {
-                    unset($variationsMatrix[$key]['sku']);
-                    unset($data['matrix'][$key]['sku']);
+                    unset($variationsMatrix[$key]['sku'], $data['matrix'][$key]['sku']);
+                    
                 }
             }
         }

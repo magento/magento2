@@ -112,8 +112,8 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         if ($customer->hasData('website_id')) {
             $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
         }
-        unset($data['customer']['password']);
-        unset($data['customer']['password_confirmation']);
+        unset($data['customer']['password'], $data['customer']['password_confirmation']);
+        
         $data = $this->prepareAddressData($data);
         $data = $this->prepareExtensionAttributes($data);
         $data = $this->prepareCustomAttributes($data);

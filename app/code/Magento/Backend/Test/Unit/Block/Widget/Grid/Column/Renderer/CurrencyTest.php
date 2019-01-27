@@ -81,13 +81,13 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_localeMock);
-        unset($this->_curLocatorMock);
-        unset($this->_columnMock);
-        unset($this->_row);
-        unset($this->_storeManagerMock);
-        unset($this->_requestMock);
-        unset($this->_blockCurrency);
+        unset($this->_localeMock, $this->_curLocatorMock, $this->_columnMock, $this->_row, $this->_storeManagerMock, $this->_requestMock, $this->_blockCurrency);
+        
+        
+        
+        
+        
+        
     }
 
     /**

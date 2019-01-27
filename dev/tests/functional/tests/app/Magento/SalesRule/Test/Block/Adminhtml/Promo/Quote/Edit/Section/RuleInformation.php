@@ -34,8 +34,8 @@ class RuleInformation extends Section
         $context = ($element === null) ? $this->_rootElement : $element;
         $data = $this->dataMapping($fields);
         if ($this->getElement($context, $data['coupon_type'])->getValue() != 'Specific Coupon') {
-            unset($data['coupon_code']);
-            unset($data['uses_per_coupon']);
+            unset($data['coupon_code'], $data['uses_per_coupon']);
+            
         }
 
         return $this->_getData($data, $element);

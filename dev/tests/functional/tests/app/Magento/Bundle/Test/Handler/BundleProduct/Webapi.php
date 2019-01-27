@@ -69,9 +69,9 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
         }
 
         $this->fields['product']['extension_attributes']['bundle_product_options'] = $bundleProductOptions;
-        unset($this->fields['bundle_options']);
-        unset($this->fields['bundle_selections']);
-        unset($this->fields['product']['bundle_selections']);
+        unset($this->fields['bundle_options'], $this->fields['bundle_selections'], $this->fields['product']['bundle_selections']);
+        
+        
     }
 
     /**

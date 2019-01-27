@@ -357,8 +357,8 @@ class ScheduledStructure
      */
     public function unsetStructureElement($elementName)
     {
-        unset($this->scheduledStructure[$elementName]);
-        unset($this->scheduledData[$elementName]);
+        unset($this->scheduledStructure[$elementName], $this->scheduledData[$elementName]);
+        
     }
 
     /**

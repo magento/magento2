@@ -230,8 +230,8 @@ class AccountManagementTest extends WebapiAbstract
             $this->customerHelper->createSampleCustomerDataObject(),
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        unset($customerDataArray['store_id']);
-        unset($customerDataArray['website_id']);
+        unset($customerDataArray['store_id'], $customerDataArray['website_id']);
+        
         $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
         try {
             $customerData = $this->_webApiCall($serviceInfo, $requestData, null, 'all');

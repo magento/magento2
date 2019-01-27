@@ -43,9 +43,9 @@ class FieldTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_fieldMock);
-        unset($this->_groupMock);
-        unset($this->_model);
+        unset($this->_fieldMock, $this->_groupMock, $this->_model);
+        
+        
     }
 
     public function testIteratorInitializesCorrespondingFlyweights()

@@ -31,8 +31,8 @@ class TabTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown()
     {
-        unset($this->_model);
-        unset($this->_iteratorMock);
+        unset($this->_model, $this->_iteratorMock);
+        
     }
 
     public function testIsVisibleOnlyChecksPresenceOfChildren()
