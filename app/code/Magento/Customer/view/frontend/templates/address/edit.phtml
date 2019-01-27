@@ -70,7 +70,6 @@
                 </div>
             </div>
         </div>
-
         <?php if ($this->helper('Magento\Customer\Helper\Address')->isVatAttributeVisible()) : ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
@@ -86,15 +85,10 @@
                 </div>
             </div>
         <?php endif; ?>
-        <div class="field city required">
-            <label class="label" for="city"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span></label>
+        <div class="field country required">
+            <label class="label" for="country"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
             <div class="control">
-                <input type="text"
-                       name="city"
-                       value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('City')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>"
-                       id="city">
+                <?= $block->getCountryHtmlSelect() ?>
             </div>
         </div>
         <div class="field region required">
@@ -104,7 +98,7 @@
             <div class="control">
                 <select id="region_id" name="region_id"
                         title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
-                        class="validate-select region_id" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
+                        class="validate-select" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
                     <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                 </select>
                 <input type="text"
@@ -113,6 +107,17 @@
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
                        class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
+            </div>
+        </div>
+        <div class="field city required">
+            <label class="label" for="city"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span></label>
+            <div class="control">
+                <input type="text"
+                       name="city"
+                       value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('City')) ?>"
+                       class="input-text <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>"
+                       id="city">
             </div>
         </div>
         <div class="field zip required">
@@ -128,13 +133,7 @@
                        class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
             </div>
         </div>
-        <div class="field country required">
-            <label class="label" for="country"><span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
-            <div class="control">
-                <?= $block->getCountryHtmlSelect() ?>
-            </div>
-        </div>
-
+        
         <?php if ($block->isDefaultBilling()): ?>
             <div class="message info">
                 <span><?= $block->escapeHtml(__("It's a default billing address.")) ?></span>
