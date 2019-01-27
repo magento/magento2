@@ -155,7 +155,7 @@ class IndexStructure implements IndexStructureInterface
             if ($field['type'] !== 'filterable') {
                 continue;
             }
-            $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
+            $columnMap = isset($field['dataType'], $this->columnTypesMap[$field['dataType']])  
                 ? $this->columnTypesMap[$field['dataType']]
                 : ['type' => $field['type'], 'size' => isset($field['size']) ? $field['size'] : null];
             $name = $field['name'];

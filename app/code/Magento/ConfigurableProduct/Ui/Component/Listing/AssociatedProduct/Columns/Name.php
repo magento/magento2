@@ -50,7 +50,7 @@ class Name extends \Magento\Ui\Component\Listing\Columns\Column
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item[$fieldName]) && isset($item['entity_id'])) {
+                if (isset($item[$fieldName], $item['entity_id'])  ) {
                     $url = $this->urlBuilder->getUrl('catalog/product/edit', ['id' => $item['entity_id']]);
                     $item['product_link'] = '<a href="' . $url . '" target="_blank">' . $item[$fieldName] . '</a>';
                 }

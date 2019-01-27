@@ -141,7 +141,7 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
                         ->method('addFilter')
                         ->with($filterMock);
                     break;
-                case isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
+                case isset($filterData[$name]['from'], $filterData[$name]['to'])  :
                     $this->getFilterMock(
                         $name,
                         $expectedCondition['type_from'],

@@ -174,7 +174,7 @@ class ExtensionAttributesProcessor
     private function getPermissionsForTypeAndMethod($typeName, $attributeCode)
     {
         $attributes = $this->config->get();
-        if (isset($attributes[$typeName]) && isset($attributes[$typeName][$attributeCode])) {
+        if (isset($attributes[$typeName], $attributes[$typeName][$attributeCode])  ) {
             $attributeMetadata = $attributes[$typeName][$attributeCode];
             $permissions = [];
             foreach ($attributeMetadata[Converter::RESOURCE_PERMISSIONS] as $permission) {

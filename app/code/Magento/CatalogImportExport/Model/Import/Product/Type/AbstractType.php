@@ -235,7 +235,7 @@ abstract class AbstractType
      */
     public function retrieveAttribute($attributeCode, $attributeSet)
     {
-        if (isset($this->_attributes[$attributeSet]) && isset($this->_attributes[$attributeSet][$attributeCode])) {
+        if (isset($this->_attributes[$attributeSet], $this->_attributes[$attributeSet][$attributeCode])  ) {
             return $this->_attributes[$attributeSet][$attributeCode];
         }
         return [];

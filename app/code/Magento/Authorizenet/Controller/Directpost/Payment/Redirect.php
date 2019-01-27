@@ -26,8 +26,8 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
         $redirectParams = $this->getRequest()->getParams();
         $params = [];
         if (!empty($redirectParams['success'])
-            && isset($redirectParams['x_invoice_num'])
-            && isset($redirectParams['controller_action_name'])
+            && isset($redirectParams['x_invoice_num'], $redirectParams['controller_action_name'])
+             
         ) {
             $this->_getDirectPostSession()->unsetData('quote_id');
             $params['redirect_parent'] = $helper->getSuccessOrderUrl([]);

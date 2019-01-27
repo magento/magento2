@@ -375,7 +375,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
             $sourceModel = $this->_data['source_model'];
             $optionArray = $this->_getOptionsFromSourceModel($sourceModel);
             return $optionArray;
-        } elseif (isset($this->_data['options']) && isset($this->_data['options']['option'])) {
+        } elseif (isset($this->_data['options'], $this->_data['options']['option'])  ) {
             $options = $this->_data['options']['option'];
             $options = $this->_getStaticOptions($options);
             return $options;

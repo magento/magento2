@@ -40,7 +40,7 @@ class Price extends DataSource
             $this->data = $data['value'];
         }
 
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $this->priceData = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
         }
     }

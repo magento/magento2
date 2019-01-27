@@ -103,7 +103,7 @@ class ProductMetadata implements ProductMetadataInterface
     {
         $packages = $this->getComposerInformation()->getSystemPackages();
         foreach ($packages as $package) {
-            if (isset($package['name']) && isset($package['version'])) {
+            if (isset($package['name'], $package['version'])  ) {
                 return $package['version'];
             }
         }

@@ -242,7 +242,7 @@ class FileSystem
     {
         $one = explode('/', $pathOne);
         $two = explode('/', $pathTwo);
-        while (isset($one[0]) && isset($two[0]) && $one[0] == $two[0]) {
+        while (isset($one[0], $two[0])   && $one[0] == $two[0]) {
             array_shift($one);
             array_shift($two);
         }

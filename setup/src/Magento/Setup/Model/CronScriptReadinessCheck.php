@@ -112,8 +112,8 @@ class CronScriptReadinessCheck
             ];
         }
 
-        if (isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS])
-            && isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS][$key])
+        if (isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS], $jsonData[ReadinessCheck::KEY_READINESS_CHECKS][$key])
+             
         ) {
             if ($jsonData[ReadinessCheck::KEY_READINESS_CHECKS][$key]) {
                 return $this->checkCronTime($jsonData);
@@ -138,8 +138,8 @@ class CronScriptReadinessCheck
      */
     private function checkCronTime(array $jsonData)
     {
-        if (isset($jsonData[ReadinessCheck::KEY_CURRENT_TIMESTAMP])
-            && isset($jsonData[ReadinessCheck::KEY_LAST_TIMESTAMP])
+        if (isset($jsonData[ReadinessCheck::KEY_CURRENT_TIMESTAMP], $jsonData[ReadinessCheck::KEY_LAST_TIMESTAMP])
+             
         ) {
             $timeDifference = $jsonData[ReadinessCheck::KEY_CURRENT_TIMESTAMP] -
                 $jsonData[ReadinessCheck::KEY_LAST_TIMESTAMP];

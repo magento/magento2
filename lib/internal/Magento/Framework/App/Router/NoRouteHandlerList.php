@@ -47,7 +47,7 @@ class NoRouteHandlerList
             //sorting handlers list
             $sortedHandlersList = [];
             foreach ($this->_handlerList as $handlerInfo) {
-                if (isset($handlerInfo['class']) && isset($handlerInfo['sortOrder'])) {
+                if (isset($handlerInfo['class'], $handlerInfo['sortOrder'])  ) {
                     $sortedHandlersList[$handlerInfo['class']] = $handlerInfo['sortOrder'];
                 }
             }

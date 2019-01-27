@@ -204,7 +204,7 @@ class Widget
         $values = [];
         if (isset($data['values']) && is_array($data['values'])) {
             foreach ($data['values'] as $value) {
-                if (isset($value['label']) && isset($value['value'])) {
+                if (isset($value['label'], $value['value'])  ) {
                     $values[] = $value;
                 }
             }

@@ -304,7 +304,7 @@ abstract class Create extends \Magento\Backend\App\Action
 
         $data = $this->getRequest()->getPost('order');
         $couponCode = '';
-        if (isset($data) && isset($data['coupon']['code'])) {
+        if (isset($data, $data['coupon']['code'])  ) {
             $couponCode = trim($data['coupon']['code']);
         }
 

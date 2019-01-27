@@ -364,7 +364,7 @@ class Editor extends Textarea
     {
         $preparedOptions = [];
         foreach ($options as $name => $value) {
-            if (is_array($value) && isset($value['search']) && isset($value['subject'])) {
+            if (is_array($value) && isset($value['search'], $value['subject'])  ) {
                 $subject = $value['subject'];
                 foreach ($value['search'] as $part) {
                     $subject = str_replace('{{' . $part . '}}', $this->getDataUsingMethod($part), $subject);

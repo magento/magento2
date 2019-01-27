@@ -1079,11 +1079,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if (strpos(trim($response), '<?xml') === 0) {
                 $xml = $this->parseXml($response);
                 if (is_object($xml)) {
-                    if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
+                    if (isset($xml->Number, $xml->Description)   && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
-                    } elseif (isset($xml->TrackInfo)
-                        && isset($xml->TrackInfo->Error)
-                        && isset($xml->TrackInfo->Error->Description)
+                    } elseif (isset($xml->TrackInfo, $xml->TrackInfo->Error, $xml->TrackInfo->Error->Description)
+                         
+                         
                         && (string)$xml->TrackInfo->Error->Description != ''
                     ) {
                         $errorTitle = (string)$xml->TrackInfo->Error->Description;
@@ -1093,7 +1093,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         );
                     }
 
-                    if (isset($xml->TrackInfo) && isset($xml->TrackInfo->TrackSummary)) {
+                    if (isset($xml->TrackInfo, $xml->TrackInfo->TrackSummary)  ) {
                         $resultArr['tracksummary'] = (string)$xml->TrackInfo->TrackSummary;
                     }
                 }

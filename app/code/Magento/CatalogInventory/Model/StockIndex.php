@@ -172,8 +172,8 @@ class StockIndex implements StockIndexInterface
                 foreach ($requiredChildrenIds as $groupedChildrenIds) {
                     $optionStatus = false;
                     foreach ($groupedChildrenIds as $childId) {
-                        if (isset($childrenStatus[$childId])
-                            && isset($childrenWebsites[$childId])
+                        if (isset($childrenStatus[$childId], $childrenWebsites[$childId])
+                             
                             && in_array($websiteId, $childrenWebsites[$childId])
                             && $childrenStatus[$childId] == Status::STATUS_ENABLED
                             && isset($childrenStock[$childId])

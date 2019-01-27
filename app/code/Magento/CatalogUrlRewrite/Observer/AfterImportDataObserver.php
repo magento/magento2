@@ -523,8 +523,8 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function isCategoryProperForGenerating($category, $storeId)
     {
-        if (isset($this->acceptableCategories[$storeId]) &&
-            isset($this->acceptableCategories[$storeId][$category->getId()])) {
+        if (isset($this->acceptableCategories[$storeId], $this->acceptableCategories[$storeId][$category->getId()]) 
+            ) {
             return $this->acceptableCategories[$storeId][$category->getId()];
         }
         $acceptable = false;

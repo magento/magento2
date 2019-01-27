@@ -197,8 +197,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private function checkUniqueOption(DataObject $response, array $options = null)
     {
         if (is_array($options)
-            && isset($options['value'])
-            && isset($options['delete'])
+            && isset($options['value'], $options['delete'])
+             
             && !empty($options['value'])
             && !empty($options['delete'])
         ) {

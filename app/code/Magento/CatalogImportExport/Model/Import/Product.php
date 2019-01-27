@@ -2766,8 +2766,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ? StockItemInterface::USE_CONFIG_ENABLE_QTY_INC
                 : self::INVENTORY_USE_CONFIG_PREFIX . $key;
 
-            if (isset($this->defaultStockData[$key])
-                && isset($this->defaultStockData[$useConfigName])
+            if (isset($this->defaultStockData[$key], $this->defaultStockData[$useConfigName])
+                 
                 && !empty($value)
                 && empty($rowData[$useConfigName])
             ) {

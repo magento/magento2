@@ -99,7 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
             if (!empty($data['image']['delete'])) {
                 $data['image'] = null;
             } else {
-                if (isset($data['image'][0]['name']) && isset($data['image'][0]['tmp_name'])) {
+                if (isset($data['image'][0]['name'], $data['image'][0]['tmp_name'])  ) {
                     $data['image'] = $data['image'][0]['name'];
                 } else {
                     unset($data['image']);

@@ -742,7 +742,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $protocol = $isSecure ? 'https' : 'http';
         if (isset($params['url'])) {
             return $protocol . '://' . $params['url'];
-        } elseif (isset($params['http']) && isset($params['https'])) {
+        } elseif (isset($params['http'], $params['https'])  ) {
             if ($isSecure) {
                 return $params['https'];
             }

@@ -37,7 +37,7 @@ class Parameters extends DataSource
         array $data = []
     ) {
         $this->params = $params;
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             if (isset($this->data['entities'])) {
                 foreach ($this->data['entities'] as $index => $entity) {

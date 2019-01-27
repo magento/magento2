@@ -358,7 +358,7 @@ class Elasticsearch implements ClientInterface
     private function prepareSearchQuery($query)
     {
         if (strcmp($this->getServerVersion(), '5') < 0) {
-            if (isset($query['body']) && isset($query['body']['stored_fields'])) {
+            if (isset($query['body'], $query['body']['stored_fields'])  ) {
                 $query['body']['fields'] = $query['body']['stored_fields'];
                 unset($query['body']['stored_fields']);
             }

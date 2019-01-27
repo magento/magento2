@@ -76,7 +76,7 @@ class DataLoader
         }
 
         $storedData = $this->dataPersistor->get('theme_design_config');
-        if (isset($storedData['scope']) && isset($storedData['scope_id'])
+        if (isset($storedData['scope'], $storedData['scope_id'])  
             && $storedData['scope'] == $scope && $storedData['scope_id'] == $scopeId
         ) {
             $data[$scope] = $storedData;

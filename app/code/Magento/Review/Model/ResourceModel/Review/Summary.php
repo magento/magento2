@@ -55,7 +55,7 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['entity_pk_value', 'store_id']
         );
         foreach ($connection->fetchAll($select) as $row) {
-            if (isset($summary[$row['store_id']]) && isset($summary[$row['store_id']][$row['entity_pk_value']])) {
+            if (isset($summary[$row['store_id']], $summary[$row['store_id']][$row['entity_pk_value']])  ) {
                 $summaryItem = $summary[$row['store_id']][$row['entity_pk_value']];
                 if ($summaryItem->getCount()) {
                     $ratingSummary = round($summaryItem->getSum() / $summaryItem->getCount());

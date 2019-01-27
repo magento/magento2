@@ -123,7 +123,7 @@ class Shipping extends Form
      */
     public function selectShippingMethod(array $shipping)
     {
-        if (isset($shipping['shipping_service']) && isset($shipping['shipping_method'])) {
+        if (isset($shipping['shipping_service'], $shipping['shipping_method'])  ) {
             $selector = sprintf($this->shippingMethod, $shipping['shipping_service'], $shipping['shipping_method']);
             if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
                 $this->openEstimateShippingAndTax();

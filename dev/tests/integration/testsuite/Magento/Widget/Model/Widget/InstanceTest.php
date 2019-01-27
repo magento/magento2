@@ -48,14 +48,14 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($config));
         $element = null;
         if (isset(
-            $config['parameters']
-        ) && isset(
-            $config['parameters']['template']
-        ) && isset(
-            $config['parameters']['template']['values']
-        ) && isset(
-            $config['parameters']['template']['values']['list']
-        )
+            $config['parameters'], $config['parameters']['template'], $config['parameters']['template']['values'], $config['parameters']['template']['values']['list']
+        )  
+            
+          
+            
+          
+            
+        
         ) {
             $element = $config['parameters']['template']['values']['list'];
         }

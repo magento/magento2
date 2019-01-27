@@ -166,7 +166,7 @@ class PackagesAuth
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
         if ($directory->isExist(self::PATH_TO_AUTH_FILE) && $directory->isReadable(self::PATH_TO_AUTH_FILE)) {
             $authJsonData = $this->getAuthJson();
-            if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
+            if (isset($authJsonData['http-basic'], $authJsonData['http-basic'][$serviceUrl])  ) {
                 unset($authJsonData['http-basic'][$serviceUrl]);
                 if ($authJsonData === ['http-basic' => []]) {
                     return $directory->delete(self::PATH_TO_AUTH_FILE);

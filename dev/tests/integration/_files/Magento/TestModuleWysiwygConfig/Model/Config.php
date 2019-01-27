@@ -70,7 +70,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
         \Magento\Framework\DataObject $config
     ) : \Magento\Framework\DataObject {
         $tinymce4 = $config->getData('tinymce4');
-        if (isset($tinymce4['toolbar']) && isset($tinymce4['plugins'])) {
+        if (isset($tinymce4['toolbar'], $tinymce4['plugins'])  ) {
             $toolbar = $tinymce4['toolbar'];
             $plugins = $tinymce4['plugins'];
             $tinymce4['toolbar'] = str_replace('charmap', '', $toolbar);

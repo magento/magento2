@@ -28,7 +28,7 @@ class Composite
         $declaredComponents = array_filter(
             $declaredComponents,
             function ($component) {
-                return (isset($component['type']) && isset($component['sortOrder']));
+                return (isset($component['type'], $component['sortOrder'])  );
             }
         );
         /** Sort all components according to the provided sort order */

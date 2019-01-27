@@ -58,7 +58,7 @@ class Authentication
             }
         }
 
-        if (isset($server['PHP_AUTH_USER']) && isset($server['PHP_AUTH_PW'])) {
+        if (isset($server['PHP_AUTH_USER'], $server['PHP_AUTH_PW'])  ) {
             $user = $server['PHP_AUTH_USER'];
             $pass = $server['PHP_AUTH_PW'];
         } elseif (!empty($server['HTTP_AUTHORIZATION'])) {

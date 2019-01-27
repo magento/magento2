@@ -337,7 +337,7 @@ class MethodArgumentsSniff implements Sniff
         $parameterNames = $this->getMethodParameters($paramDefinitions);
         $paramDefinitionsCount = count($paramDefinitions);
         for ($ptr = 0; $ptr < $paramDefinitionsCount; $ptr++) {
-            if (isset($methodArguments[$ptr]) && isset($parameterNames[$ptr])
+            if (isset($methodArguments[$ptr], $parameterNames[$ptr])  
                 && in_array($methodArguments[$ptr], $parameterNames)
             ) {
                 if ($methodArguments[$ptr] != $parameterNames[$ptr]) {

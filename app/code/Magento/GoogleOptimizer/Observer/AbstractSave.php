@@ -190,7 +190,7 @@ abstract class AbstractSave implements ObserverInterface
     private function isDataAvailable()
     {
         $params = $this->getRequestData();
-        return is_array($params) && isset($params['experiment_script']) && isset($params['code_id']);
+        return is_array($params) && isset($params['experiment_script'], $params['code_id'])  ;
     }
 
     /**

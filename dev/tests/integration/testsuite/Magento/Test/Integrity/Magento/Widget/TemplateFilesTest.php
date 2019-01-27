@@ -51,12 +51,12 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
             $class = $row['type'];
             if (is_subclass_of($class, \Magento\Framework\View\Element\Template::class)) {
                 if (isset(
-                    $config['parameters']
-                ) && isset(
-                    $config['parameters']['template']
-                ) && isset(
-                    $config['parameters']['template']['values']
-                )
+                    $config['parameters'], $config['parameters']['template'], $config['parameters']['template']['values']
+                )  
+                    
+                  
+                    
+                
                 ) {
                     $templates = $config['parameters']['template']['values'];
                     foreach ($templates as $template) {

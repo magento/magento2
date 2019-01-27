@@ -59,8 +59,8 @@ class AnonymousResourceSecurity
                         $nodes['routes'][$route] = $result;
                     }
 
-                    if (isset($result[$requestType]['service']['class'])
-                        && isset($result[$requestType]['service']['method'])
+                    if (isset($result[$requestType]['service']['class'], $result[$requestType]['service']['method'])
+                         
                     ) {
                         $serviceName = $result[$requestType]['service']['class'];
                         $serviceMethod = $result[$requestType]['service']['method'];

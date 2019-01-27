@@ -98,7 +98,7 @@ class ConfigurableAttributesData extends DataSource
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
         $dataset = [];
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $dataset = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             unset($data['dataset']);
         }

@@ -98,7 +98,7 @@ class GridStructure implements IndexStructureInterface
             if ($field['type'] === 'searchable') {
                 $searchableFields[] = $field['name'];
             }
-            $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
+            $columnMap = isset($field['dataType'], $this->columnTypesMap[$field['dataType']])  
                 ? $this->columnTypesMap[$field['dataType']]
                 : ['type' => $field['dataType'], 'size' => isset($field['size']) ? $field['size'] : null];
             $name = $field['name'];

@@ -27,7 +27,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
         $params = $model->update($params);
         $this->assertEquals(
             $argument,
-            (isset($params['change_mode_onthefly']) && isset($params['change_mode_changelog']))
+            (isset($params['change_mode_onthefly'], $params['change_mode_changelog'])  )
         );
     }
 

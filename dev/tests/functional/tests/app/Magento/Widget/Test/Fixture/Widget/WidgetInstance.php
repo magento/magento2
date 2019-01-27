@@ -30,7 +30,7 @@ class WidgetInstance extends DataSource
     ) {
         $this->params = $params;
 
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             foreach ($this->data as $index => $layouts) {
                 if (isset($layouts['entities'])) {

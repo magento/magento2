@@ -435,7 +435,7 @@ class Edit extends Widget implements ContainerInterface
                 $sectionName = array_shift($pathDataParts);
 
                 $urlParams = ['section' => $sectionName];
-                if (isset($pathData['scope']) && isset($pathData['scope_id'])) {
+                if (isset($pathData['scope'], $pathData['scope_id'])  ) {
                     switch ($pathData['scope']) {
                         case 'stores':
                             $store = $this->_storeManager->getStore($pathData['scope_id']);

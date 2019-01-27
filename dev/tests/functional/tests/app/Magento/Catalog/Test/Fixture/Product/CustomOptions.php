@@ -43,7 +43,7 @@ class CustomOptions extends DataSource
         $this->data = (!isset($data['dataset']) && !isset($data['import_products'])) ? $data : [];
         $this->customOptions = $this->data;
 
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             $this->data = $this->replaceData($this->data, mt_rand());
             $this->customOptions = $this->data;

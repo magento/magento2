@@ -62,7 +62,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $attrStrings = [];
                 foreach ($attributes as $attributeCode => $attribute) {
-                    if (isset($item[$attributeCode]) && isset($attribute['options'][$item[$attributeCode]])) {
+                    if (isset($item[$attributeCode], $attribute['options'][$item[$attributeCode]])  ) {
                         $attrStrings[] = $attribute['label'] . ': ' . $attribute['options'][$item[$attributeCode]];
                     }
 

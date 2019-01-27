@@ -290,7 +290,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
             return $this;
         }
 
-        if (isset($data['file_id']) && isset($data['filename'])) {
+        if (isset($data['file_id'], $data['filename'])  ) {
             unset($data['file_id']);
             $data['filename'] = $newFilename;
             $data['directory'] = $newPath;

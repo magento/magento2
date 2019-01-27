@@ -54,7 +54,7 @@ class BuilderFactory
     protected function mergeTypes(array $typeMap)
     {
         foreach ($typeMap as $typeInfo) {
-            if (isset($typeInfo['type']) && isset($typeInfo['class'])) {
+            if (isset($typeInfo['type'], $typeInfo['class'])  ) {
                 $this->typeMap[$typeInfo['type']] = $typeInfo['class'];
             }
         }

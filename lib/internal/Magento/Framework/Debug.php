@@ -86,7 +86,7 @@ class Debug
             }
 
             // prepare method's name
-            if (isset($data['class']) && isset($data['function'])) {
+            if (isset($data['class'], $data['function'])  ) {
                 if (isset($data['object']) && get_class($data['object']) != $data['class']) {
                     $className = get_class($data['object']) . '[' . $data['class'] . ']';
                 } else {

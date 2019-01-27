@@ -141,8 +141,8 @@ class Environment extends AbstractActionController
         $read = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
         try {
             $jsonData = json_decode($read->readFile(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE), true);
-            if (isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS])
-                && isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type])
+            if (isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS], $jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type])
+                 
             ) {
                 return  $jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type];
             }

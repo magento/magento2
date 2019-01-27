@@ -1783,10 +1783,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
         if (isset(
-            $this->_productLimitationFilters['store_id']
-        ) && isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
+            $this->_productLimitationFilters['store_id'], $this->_productLimitationFilters['visibility']
+        )  
+            
+         && !isset(
             $this->_productLimitationFilters['category_id']
         )
         ) {

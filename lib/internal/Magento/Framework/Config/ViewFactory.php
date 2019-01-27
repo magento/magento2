@@ -36,7 +36,7 @@ class ViewFactory
     {
         $viewConfigArguments = [];
 
-        if (isset($arguments['themeModel']) && isset($arguments['area'])) {
+        if (isset($arguments['themeModel'], $arguments['area'])  ) {
             if (!($arguments['themeModel'] instanceof \Magento\Framework\View\Design\ThemeInterface)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase('%1 doesn\'t implement ThemeInterface', [$arguments['themeModel']])

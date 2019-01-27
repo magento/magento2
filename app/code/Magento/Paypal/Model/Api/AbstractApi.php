@@ -375,7 +375,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
         }
         $result = \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
         foreach ($privateRequestMap as $key) {
-            if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
+            if (isset($this->_exportToRequestFilters[$key], $result[$key])  ) {
                 $callback = $this->_exportToRequestFilters[$key];
                 $privateKey = $result[$key];
                 $publicKey = $map[$this->_globalMap[$key]];
@@ -399,7 +399,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
             if (isset($this->_globalMap[$key])) {
                 $map[$key] = $this->_globalMap[$key];
             }
-            if (isset($response[$key]) && isset($this->_importFromRequestFilters[$key])) {
+            if (isset($response[$key], $this->_importFromRequestFilters[$key])  ) {
                 $callback = $this->_importFromRequestFilters[$key];
                 $response[$key] = call_user_func([$this, $callback], $response[$key], $key, $map[$key]);
             }

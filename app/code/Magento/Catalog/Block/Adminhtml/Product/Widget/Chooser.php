@@ -111,7 +111,7 @@ class Chooser extends Extended
         if ($element->getValue()) {
             $value = explode('/', $element->getValue());
             $productId = false;
-            if (isset($value[0]) && isset($value[1]) && $value[0] == 'product') {
+            if (isset($value[0], $value[1])   && $value[0] == 'product') {
                 $productId = $value[1];
             }
             $categoryId = isset($value[2]) ? $value[2] : false;

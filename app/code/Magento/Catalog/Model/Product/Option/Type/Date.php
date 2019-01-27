@@ -75,22 +75,22 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
             } else {
                 $dateValid = isset(
-                    $value['day']
-                ) && isset(
-                    $value['month']
-                ) && isset(
-                    $value['year']
-                ) && $value['day'] > 0 && $value['month'] > 0 && $value['year'] > 0;
+                    $value['day'], $value['month'], $value['year']
+                )  
+                    
+                  
+                    
+                 && $value['day'] > 0 && $value['month'] > 0 && $value['year'] > 0;
             }
         }
 
         $timeValid = true;
         if ($this->_timeExists()) {
             $timeValid = isset(
-                $value['hour']
-            ) && isset(
-                $value['minute']
-            ) && is_numeric(
+                $value['hour'], $value['minute']
+            )  
+                
+             && is_numeric(
                 $value['hour']
             ) && is_numeric(
                 $value['minute']
@@ -287,7 +287,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
             $value = $this->serializer->unserialize($infoBuyRequest->getValue());
-            if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
+            if (is_array($value) && isset($value['options'], $value['options'][$this->getOption()->getId()])  
             ) {
                 return $value['options'][$this->getOption()->getId()];
             } else {

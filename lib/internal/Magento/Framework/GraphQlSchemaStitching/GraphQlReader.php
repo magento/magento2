@@ -169,9 +169,9 @@ class GraphQlReader implements ReaderInterface
         foreach ($source as $interface) {
             if ($interface['type'] == 'graphql_interface') {
                 foreach ($source as $typeName => $type) {
-                    if (isset($type['implements'])
-                        && isset($type['implements'][$interface['name']])
-                        && isset($type['implements'][$interface['name']]['copyFields'])
+                    if (isset($type['implements'], $type['implements'][$interface['name']], $type['implements'][$interface['name']]['copyFields'])
+                         
+                         
                         && $type['implements'][$interface['name']]['copyFields'] === true
                     ) {
                         $source[$typeName]['fields'] = isset($type['fields'])

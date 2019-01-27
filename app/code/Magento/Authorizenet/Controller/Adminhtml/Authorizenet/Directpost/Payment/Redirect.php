@@ -98,8 +98,8 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $redirectParams = $this->getRequest()->getParams();
         $params = [];
         if (!empty($redirectParams['success'])
-            && isset($redirectParams['x_invoice_num'])
-            && isset($redirectParams['controller_action_name'])
+            && isset($redirectParams['x_invoice_num'], $redirectParams['controller_action_name'])
+             
         ) {
             $params['redirect_parent'] = $this->helper->getSuccessOrderUrl($redirectParams);
             $directpostSession = $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);

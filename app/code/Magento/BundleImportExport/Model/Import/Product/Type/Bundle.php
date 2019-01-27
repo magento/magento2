@@ -204,7 +204,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
             $option = $this->parseOption($values);
-            if (isset($option['sku']) && isset($option['name'])) {
+            if (isset($option['sku'], $option['name'])  ) {
                 if (!isset($this->_cachedOptions[$entityId])) {
                     $this->_cachedOptions[$entityId] = [];
                 }

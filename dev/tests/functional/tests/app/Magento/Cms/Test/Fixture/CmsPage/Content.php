@@ -59,7 +59,7 @@ class Content extends DataSource
      */
     protected function prepareSourceData()
     {
-        if (isset($this->data['widget']['dataset']) && isset($this->params['repository'])) {
+        if (isset($this->data['widget']['dataset'], $this->params['repository'])  ) {
             $this->data['widget']['dataset'] = $this->repositoryFactory->get($this->params['repository'])->get(
                 $this->data['widget']['dataset']
             );
@@ -84,7 +84,7 @@ class Content extends DataSource
                 $categoryName = $category->getData('name');
                 $data['widget']['dataset'][$key]['chosen_option']['category_path'] = $categoryName;
             }
-            if (isset($widget['chosen_option']['category_path']) && isset($widget['chosen_option']['filter_sku'])) {
+            if (isset($widget['chosen_option']['category_path'], $widget['chosen_option']['filter_sku'])  ) {
                 $product = $this->createProduct($widget);
                 $categoryName = $product->getCategoryIds()[0]['name'];
                 $productSku = $product->getData('sku');

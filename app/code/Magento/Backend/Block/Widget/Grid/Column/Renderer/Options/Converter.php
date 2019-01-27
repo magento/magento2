@@ -22,7 +22,7 @@ class Converter
         $options = [];
         if (is_array($treeData)) {
             foreach ($treeData as $item) {
-                if (isset($item['value']) && isset($item['label'])) {
+                if (isset($item['value'], $item['label'])  ) {
                     $options[$item['value']] = $item['label'];
                 }
             }

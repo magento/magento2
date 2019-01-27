@@ -119,7 +119,7 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $data = $object->getData();
-        if (isset($data['store_id']) && isset($data['theme_id'])) {
+        if (isset($data['store_id'], $data['theme_id'])  ) {
             $this->getConnection()->insertOnDuplicate(
                 $this->getTable('layout_link'),
                 [

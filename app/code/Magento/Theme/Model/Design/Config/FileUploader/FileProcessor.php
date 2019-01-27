@@ -160,7 +160,7 @@ class FileProcessor
     protected function getBackendModel($code)
     {
         $metadata = $this->metadataProvider->get();
-        if (!(isset($metadata[$code]) && isset($metadata[$code]['backend_model']))) {
+        if (!(isset($metadata[$code], $metadata[$code]['backend_model'])  )) {
             throw new LocalizedException(__('The backend model isn\'t specified for "%1".', $code));
         }
         return $this->backendModelFactory->createByPath($metadata[$code]['path']);

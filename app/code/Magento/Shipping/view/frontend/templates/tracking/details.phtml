@@ -84,7 +84,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                 </tr>
             <?php endif; ?>
         <?php endif; ?>
-    <?php elseif (isset($track['title']) && isset($track['number']) && $track['number']): ?>
+    <?php elseif (isset($track['title'], $track['number'])   && $track['number']): ?>
         <?php /* if the tracking is custom value */ ?>
         <tr>
             <th class="col label" scope="row">

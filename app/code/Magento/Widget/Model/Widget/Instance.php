@@ -504,7 +504,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     {
         $templates = [];
         $widgetConfig = $this->getWidgetConfigAsArray();
-        if ($widgetConfig && isset($widgetConfig['parameters']) && isset($widgetConfig['parameters']['template'])) {
+        if ($widgetConfig && isset($widgetConfig['parameters'], $widgetConfig['parameters']['template'])  ) {
             $configTemplates = $widgetConfig['parameters']['template'];
             if (isset($configTemplates['values'])) {
                 foreach ($configTemplates['values'] as $name => $template) {
@@ -527,7 +527,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     {
         $containers = [];
         $widgetConfig = $this->getWidgetConfigAsArray();
-        if (isset($widgetConfig) && isset($widgetConfig['supported_containers'])) {
+        if (isset($widgetConfig, $widgetConfig['supported_containers'])  ) {
             $configNodes = $widgetConfig['supported_containers'];
             foreach ($configNodes as $node) {
                 if (isset($node['container_name'])) {

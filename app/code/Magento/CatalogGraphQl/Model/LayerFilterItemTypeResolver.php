@@ -19,9 +19,9 @@ class LayerFilterItemTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data) : string
     {
-        return isset($data['value_string'])
-            && isset($data['label'])
-            && isset($data['items_count'])
+        return isset($data['value_string'], $data['label'], $data['items_count'])
+             
+             
             && count($data) == 3
                 ? 'LayerFilterItem'
                 : '';

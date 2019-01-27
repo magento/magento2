@@ -129,7 +129,7 @@ class SimpleDataObjectConverter
             return $data;
         } else {
             foreach ($data as $key => $value) {
-                if (is_array($value) && count($value) == 2 && isset($value['key']) && isset($value['value'])) {
+                if (is_array($value) && count($value) == 2 && isset($value['key'], $value['value'])  ) {
                     $data[$value['key']] = $this->_unpackAssociativeArray($value['value']);
                     unset($data[$key]);
                 } else {

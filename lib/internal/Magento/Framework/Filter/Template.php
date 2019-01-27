@@ -339,7 +339,7 @@ class Template implements \Zend_Filter_Interface
         }
 
         if ($this->getVariable($construction[1], '') == '') {
-            if (isset($construction[3]) && isset($construction[4])) {
+            if (isset($construction[3], $construction[4])  ) {
                 return $construction[4];
             }
             return '';

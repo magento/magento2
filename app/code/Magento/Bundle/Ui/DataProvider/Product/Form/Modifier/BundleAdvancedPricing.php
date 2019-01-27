@@ -41,8 +41,8 @@ class BundleAdvancedPricing extends AbstractModifier
         $groupCode = $this->getGroupCodeByField($meta, self::CODE_ADVANCED_PRICING);
         if ($groupCode) {
             $parentNode = &$meta[$groupCode]['children'][self::CODE_ADVANCED_PRICING]['children'];
-            if (isset($parentNode['container_' . self::CODE_MSRP])
-                && isset($parentNode['container_' . self::CODE_MSRP_DISPLAY_ACTUAL_PRICE_TYPE])
+            if (isset($parentNode['container_' . self::CODE_MSRP], $parentNode['container_'.self::CODE_MSRP_DISPLAY_ACTUAL_PRICE_TYPE])
+                   
             ) {
                 $parentNode = $this->modifyMsrpMeta($parentNode);
             }

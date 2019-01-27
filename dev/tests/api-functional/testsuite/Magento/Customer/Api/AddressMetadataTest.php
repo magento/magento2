@@ -217,10 +217,10 @@ class AddressMetadataTest extends WebapiAbstract
 
         if (is_array($expectedRules) && is_array($actualRules)) {
             foreach ($expectedRules as $expectedRule) {
-                if (isset($expectedRule['name']) && isset($expectedRule['value'])) {
+                if (isset($expectedRule['name'], $expectedRule['value'])  ) {
                     $found = false;
                     foreach ($actualRules as $actualRule) {
-                        if (isset($actualRule['name']) && isset($actualRule['value'])) {
+                        if (isset($actualRule['name'], $actualRule['value'])  ) {
                             if ($expectedRule['name'] == $actualRule['name']
                                 && $expectedRule['value'] == $actualRule['value']
                             ) {

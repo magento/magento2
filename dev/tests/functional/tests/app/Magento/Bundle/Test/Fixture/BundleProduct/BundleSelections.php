@@ -59,7 +59,7 @@ class BundleSelections extends DataSource
      */
     protected function getDataset(array $data)
     {
-        if (isset($data['dataset']) && isset($this->params['repository'])) {
+        if (isset($data['dataset'], $this->params['repository'])  ) {
             $this->data = $this->repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             if (!empty($data['products'])) {
                 $this->data['products'] = [];

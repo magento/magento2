@@ -863,8 +863,8 @@ class Address extends AbstractCustomer
                         }
                     }
 
-                    if (isset($rowData[self::COLUMN_POSTCODE])
-                        && isset($rowData[self::COLUMN_COUNTRY_ID])
+                    if (isset($rowData[self::COLUMN_POSTCODE], $rowData[self::COLUMN_COUNTRY_ID])
+                         
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],
                             $rowData[self::COLUMN_POSTCODE]
@@ -873,7 +873,7 @@ class Address extends AbstractCustomer
                         $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, self::COLUMN_POSTCODE);
                     }
 
-                    if (isset($rowData[self::COLUMN_COUNTRY_ID]) && isset($rowData[self::COLUMN_REGION])) {
+                    if (isset($rowData[self::COLUMN_COUNTRY_ID], $rowData[self::COLUMN_REGION])  ) {
                         $countryRegions = isset(
                             $this->_countryRegions[strtolower($rowData[self::COLUMN_COUNTRY_ID])]
                         ) ? $this->_countryRegions[strtolower(

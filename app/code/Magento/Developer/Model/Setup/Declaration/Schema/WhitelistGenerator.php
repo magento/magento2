@@ -248,7 +248,7 @@ class WhitelistGenerator
     private function filterPrimaryTables(array $moduleDbSchema): array
     {
         $primaryDbSchema = $this->getPrimaryDbSchema();
-        if (isset($moduleDbSchema['table']) && isset($primaryDbSchema['table'])) {
+        if (isset($moduleDbSchema['table'], $primaryDbSchema['table'])  ) {
             foreach (array_keys($primaryDbSchema['table']) as $tableNameKey) {
                 unset($moduleDbSchema['table'][$tableNameKey]);
             }

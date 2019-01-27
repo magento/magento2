@@ -1117,10 +1117,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
-        if (isset($shipmentDetails->ProductShortName)
-            && isset($shipmentDetails->ShippingCharge)
-            && isset($shipmentDetails->GlobalProductCode)
-            && isset($shipmentDetails->CurrencyCode)
+        if (isset($shipmentDetails->ProductShortName, $shipmentDetails->ShippingCharge, $shipmentDetails->GlobalProductCode, $shipmentDetails->CurrencyCode)
+             
+             
+             
             && array_key_exists((string)$shipmentDetails->GlobalProductCode, $this->getAllowedMethods())
         ) {
             // DHL product code, e.g. '3', 'A', 'Q', etc.

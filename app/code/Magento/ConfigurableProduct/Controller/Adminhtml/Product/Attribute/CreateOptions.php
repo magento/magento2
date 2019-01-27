@@ -68,7 +68,7 @@ class CreateOptions extends Action implements HttpPostActionInterface
         $options = (array)$this->getRequest()->getParam('options');
         $savedOptions = [];
         foreach ($options as $option) {
-            if (isset($option['label']) && isset($option['is_new'])) {
+            if (isset($option['label'], $option['is_new'])  ) {
                 $attribute = $this->attributeFactory->create();
                 $attribute->load($option['attribute_id']);
                 $optionsBefore = $attribute->getSource()->getAllOptions(false);

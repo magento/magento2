@@ -326,7 +326,7 @@ class Helper
             $optionId = $option['option_id'];
             $option = $this->overwriteValue($optionId, $option, $overwriteOptions);
 
-            if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
+            if (isset($option['values'], $overwriteOptions[$optionId]['values'])  ) {
                 foreach ($option['values'] as $valueIndex => $value) {
                     if (isset($value['option_type_id'])) {
                         $valueId = $value['option_type_id'];
@@ -354,7 +354,7 @@ class Helper
     {
         if (isset($overwriteOptions[$optionId])) {
             foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
-                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                if ($overwrite && isset($option[$fieldName], $option['default_'.$fieldName])    ) {
                     $option[$fieldName] = $option['default_' . $fieldName];
                     if ('title' == $fieldName) {
                         $option['is_delete_store_title'] = 1;

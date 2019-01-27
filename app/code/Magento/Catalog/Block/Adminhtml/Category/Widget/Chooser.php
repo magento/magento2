@@ -89,7 +89,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         if ($element->getValue()) {
             $value = explode('/', $element->getValue());
             $categoryId = false;
-            if (isset($value[0]) && isset($value[1]) && $value[0] == 'category') {
+            if (isset($value[0], $value[1])   && $value[0] == 'category') {
                 $categoryId = $value[1];
             }
             if ($categoryId) {
