@@ -16,6 +16,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-97232"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="MAGETWO-97825"/>
+            </skip>
         </annotations>
         <before>
             <!--Create product with category-->
