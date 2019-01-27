@@ -74,7 +74,7 @@ class UnlockAdminAccountCommand extends Command
             self::ARGUMENT_ADMIN_USERNAME_DESCRIPTION
         );
         $this->setHelp(
-            <<<HELP
+            <<<'HELP'
 This command unlocks an admin account by its username.
 To unlock:
       <comment>%command.full_name% username</comment>

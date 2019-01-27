@@ -26,7 +26,7 @@ class CategoryProductsVariantsTest extends GraphQlAbstract
     {
 
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   category(id: 2) {
     id

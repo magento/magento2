@@ -65,7 +65,7 @@ class Config
     /**
      * Template for combined RequireJs config file
      */
-    const FULL_CONFIG_TEMPLATE = <<<config
+    const FULL_CONFIG_TEMPLATE = <<<'config'
 (function(require){
 %function%
 
@@ -76,7 +76,7 @@ config;
     /**
      * Template for wrapped partial config
      */
-    const PARTIAL_CONFIG_TEMPLATE = <<<config
+    const PARTIAL_CONFIG_TEMPLATE = <<<'config'
 (function() {
 %config%
 require.config(config);

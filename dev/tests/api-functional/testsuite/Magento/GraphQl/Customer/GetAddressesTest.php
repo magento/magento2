@@ -23,7 +23,7 @@ class GetAddressesTest extends GraphQlAbstract
     public function testGetCustomerWithAddresses()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   customer {
     id

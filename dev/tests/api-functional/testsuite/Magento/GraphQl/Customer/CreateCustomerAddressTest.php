@@ -136,7 +136,7 @@ MUTATION;
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
     {
         $mutation
-            = <<<MUTATION
+            = <<<'MUTATION'
 mutation{
   createCustomerAddress(input: {
     prefix: "Mr."
@@ -172,7 +172,7 @@ MUTATION;
     public function testCreateCustomerAddressWithMissingAttribute()
     {
         $mutation
-            = <<<MUTATION
+            = <<<'MUTATION'
 mutation {
   createCustomerAddress(input: {
     region: {

@@ -36,7 +36,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
      */
     protected function getXml()
     {
-        return <<<XML
+        return <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <_><one>1</one><two><three>3</three><four>4</four></two><five><five>5</five><five>6</five></five></_>
 XML;

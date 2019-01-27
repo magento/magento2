@@ -106,7 +106,7 @@ class CreateDefaultPages implements DataPatchInterface, PatchVersionInterface
         foreach ($cmsPages as $data) {
             $this->createPage()->setData($data)->save();
         }
-        $pageContent = <<<EOD
+        $pageContent = <<<'EOD'
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>

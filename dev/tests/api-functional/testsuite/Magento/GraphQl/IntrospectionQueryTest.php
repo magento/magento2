@@ -18,7 +18,7 @@ class IntrospectionQueryTest extends GraphQlAbstract
     public function testIntrospectionQueryWithFieldArgs()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 query IntrospectionQuery {
   __schema {
     queryType { name }

@@ -39,7 +39,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $request =
-            <<<QUERY
+            <<<'QUERY'
 query IntrospectionQuery {
 __schema {
 queryType { name }
@@ -141,7 +141,7 @@ QUERY;
         );
 
         $request =
-            <<<QUERY
+            <<<'QUERY'
 {
         __schema {
           types {
@@ -257,7 +257,7 @@ QUERY;
               ]
         );
         $request =
-            <<<QUERY
+            <<<'QUERY'
  {
   __type(name:"Query")
     {

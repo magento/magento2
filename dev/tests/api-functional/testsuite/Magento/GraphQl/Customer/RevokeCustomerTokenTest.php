@@ -21,7 +21,7 @@ class RevokeCustomerTokenTest extends GraphQlAbstract
      */
     public function testRevokeCustomerTokenValidCredentials()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
             mutation {
                 revokeCustomerToken {
                     result
@@ -46,7 +46,7 @@ QUERY;
      */
     public function testRevokeCustomerTokenForGuestCustomer()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
             mutation {
                 revokeCustomerToken {
                     result

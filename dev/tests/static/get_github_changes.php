@@ -11,7 +11,7 @@
 
 define(
     'USAGE',
-    <<<USAGE
+    <<<'USAGE'
         php -f get_github_changes.php --
     --output-file="<output_file>"
     --base-path="<base_path>"

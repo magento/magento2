@@ -54,7 +54,7 @@ class ConsumerListCommand extends Command
         $this->setName(self::COMMAND_QUEUE_CONSUMERS_LIST);
         $this->setDescription('List of MessageQueue consumers');
         $this->setHelp(
-            <<<HELP
+            <<<'HELP'
 This command shows list of MessageQueue consumers.
 HELP
         );

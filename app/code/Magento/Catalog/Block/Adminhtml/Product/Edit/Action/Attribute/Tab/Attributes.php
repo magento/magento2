@@ -141,7 +141,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 </span>
 HTML;
         if ($elementId === 'weight') {
-            $html .= <<<HTML
+            $html .= <<<'HTML'
 <script>require(['Magento_Catalog/js/product/weight-handler'], function (weightHandle) {
     weightHandle.hideWeightSwitcher();
 });</script>

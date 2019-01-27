@@ -107,7 +107,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 2,
-                <<<HTML
+                <<<'HTML'
                         <xhtml>
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">
@@ -121,7 +121,7 @@ HTML
             ],
             [
                 1,
-                <<<HTML
+                <<<'HTML'
                         <xhtml>
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">

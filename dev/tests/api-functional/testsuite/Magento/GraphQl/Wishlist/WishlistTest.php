@@ -51,7 +51,7 @@ class WishlistTest extends GraphQlAbstract
         $wishlistItem = $wishlist->getItemCollection()->getFirstItem();
         $wishlistItemProduct = $wishlistItem->getProduct();
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   wishlist {
     items_count

@@ -85,7 +85,7 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     public function testDispatchIntrospectionWithCustomSDL()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
  query IntrospectionQuery {
   __schema {
     queryType { name }

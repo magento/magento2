@@ -565,7 +565,7 @@ QUERY;
     {
         $firstProductSku = 'simple-249';
         $secondProductSku = 'simple-156';
-        $query = <<<QUERY
+        $query = <<<'QUERY'
        {
            products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
            {

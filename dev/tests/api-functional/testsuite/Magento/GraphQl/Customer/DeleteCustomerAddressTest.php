@@ -139,7 +139,7 @@ MUTATION;
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation
-            = <<<MUTATION
+            = <<<'MUTATION'
 mutation {
   deleteCustomerAddress(id: 9999)
 }

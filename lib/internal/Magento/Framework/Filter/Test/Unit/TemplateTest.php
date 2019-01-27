@@ -33,7 +33,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $template = <<<TEMPLATE
+        $template = <<<'TEMPLATE'
 {{var customer.firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var customer.getLastname()}}
 {{depend company}}{{var company}}{{/depend}}
 {{if street1}}{{var street1}}
@@ -48,7 +48,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}
 TEMPLATE;
 
-        $expectedResult = <<<EXPECTED_RESULT
+        $expectedResult = <<<'EXPECTED_RESULT'
 Felicia Henry
 A. L. Price
 687 Vernon Street
@@ -259,19 +259,19 @@ EXPECTED_RESULT;
                 $template = $expected = '';
                 break;
             case 'noBodyTag':
-                $template = <<<TEMPLATE
+                $template = <<<'TEMPLATE'
 <ul>
 {{for item in order.all_visible_items}}{{/for}}
 </ul>
 TEMPLATE;
-                $expected = <<<TEMPLATE
+                $expected = <<<'TEMPLATE'
 <ul>
 {{for item in order.all_visible_items}}{{/for}}
 </ul>
 TEMPLATE;
                 break;
             case 'noItemTag':
-                $template = <<<TEMPLATE
+                $template = <<<'TEMPLATE'
 <ul>
 {{for in order.all_visible_items}}
     <li>
@@ -280,7 +280,7 @@ TEMPLATE;
 {{/for}}
 </ul>
 TEMPLATE;
-                $expected = <<<TEMPLATE
+                $expected = <<<'TEMPLATE'
 <ul>
 {{for in order.all_visible_items}}
     <li>
@@ -291,14 +291,14 @@ TEMPLATE;
 TEMPLATE;
                 break;
             case 'noItemNoBodyTag':
-                $template = <<<TEMPLATE
+                $template = <<<'TEMPLATE'
 <ul>
 {{for in order.all_visible_items}}
     
 {{/for}}
 </ul>
 TEMPLATE;
-                $expected = <<<TEMPLATE
+                $expected = <<<'TEMPLATE'
 <ul>
 {{for in order.all_visible_items}}
     
@@ -307,14 +307,14 @@ TEMPLATE;
 TEMPLATE;
                 break;
             case 'noItemNoDataNoBodyTag':
-                $template = <<<TEMPLATE
+                $template = <<<'TEMPLATE'
 <ul>
 {{for in }}
     
 {{/for}}
 </ul>
 TEMPLATE;
-                $expected = <<<TEMPLATE
+                $expected = <<<'TEMPLATE'
 <ul>
 {{for in }}
     
@@ -323,7 +323,7 @@ TEMPLATE;
 TEMPLATE;
                 break;
             default:
-                $template = <<<TEMPLATE
+                $template = <<<'TEMPLATE'
 <ul>
     {{for item in order.all_visible_items}}
     <li>
@@ -333,7 +333,7 @@ TEMPLATE;
     {{/for}}
 </ul>
 TEMPLATE;
-                $expected = <<<TEMPLATE
+                $expected = <<<'TEMPLATE'
 <ul>
     
     <li>

@@ -70,7 +70,7 @@ class CommentParserTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $file = 'config.php';
-        $content = <<<TEXT
+        $content = <<<'TEXT'
 <?php
 return array (
   'ns1' => 

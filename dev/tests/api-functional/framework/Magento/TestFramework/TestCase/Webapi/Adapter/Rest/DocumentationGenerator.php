@@ -113,7 +113,7 @@ HTML;
         $resource = str_replace('/', '-', preg_replace('#/\w*/V\d+/(.*)#', '${1}', $resourcePath));
         $lowerCaseResource = strtolower($resource);
         $lowerCaseMethod = strtolower($httpMethod);
-        $beginningHtml = <<<HTML
+        $beginningHtml = <<<'HTML'
 <div class="col-xs-9" role="main">
     <div class="bs-docs-section">
 HTML;
@@ -141,7 +141,7 @@ HTML;
      */
     protected function generateHtmlFooter()
     {
-        $endHtml = <<<HTML
+        $endHtml = <<<'HTML'
         <h3 class="api3" id="products-responses">Response codes</h3>
         <table class="docutils field-list" frame="void" rules="none" width="400">
             <colgroup>

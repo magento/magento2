@@ -47,7 +47,7 @@ class GetCustomerTest extends GraphQlAbstract
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 query {
     customer {
         firstname
@@ -69,7 +69,7 @@ QUERY;
      */
     public function testGetCustomerIfUserIsNotAuthorized()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 query {
     customer {
         firstname
@@ -93,7 +93,7 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 query {
     customer {
         firstname

@@ -339,7 +339,7 @@ QUERY;
         /** @param \Magento\Cms\Api\Data\PageInterface $page */
         $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   urlResolver(url:"/")
   {

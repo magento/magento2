@@ -113,7 +113,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
-        $baseContent = <<<TEXT
+        $baseContent = <<<'TEXT'
 <?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -130,8 +130,8 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     <body>
         <a href="http://somelink.com/text.html">Text Link</a>
         <img src="test.png" alt="some text" />
-        <?php echo \$block->someMethod(); ?>
-        <div style="width: 800px" class="<?php echo \$block->getClass() ?>" />
+        <?php echo $block->someMethod(); ?>
+        <div style="width: 800px" class="<?php echo $block->getClass() ?>" />
         <script>
             var i = 1;// comment
             var j = 1;// <?php echo 'hi' ?>
@@ -145,7 +145,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
                 return {
                     'someProperty': test,
                     'someMethod': function () {
-                        alert(<?php echo \$block->getJsAlert() ?>);
+                        alert(<?php echo $block->getJsAlert() ?>);
                     }
                 }
             });
@@ -156,17 +156,17 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         <?php echo '//some.link.com/' ?>
         <em>inline text</em>
         <a href="http://www.<?php echo 'hi' ?>"></a>
-        <?php// if (\$block->getSomeVariable() > 1):?>
-            <?php echo \$block->getChildHtml('someChildBlock'); ?>
+        <?php// if ($block->getSomeVariable() > 1):?>
+            <?php echo $block->getChildHtml('someChildBlock'); ?>
         <?php //else:?>
-            <?php // echo \$block->getChildHtml('anotherChildBlock'); ?>
+            <?php // echo $block->getChildHtml('anotherChildBlock'); ?>
         <?php // endif; ?>
     </body>
 </html>
 TEXT;
 
-        $expectedContent = <<<TEXT
-<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+        $expectedContent = <<<'TEXT'
+<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo $block->someMethod(); ?> <div style="width: 800px" class="<?php echo $block->getClass() ?>" /><script>
             var i = 1;
             var j = 1;
 
@@ -179,12 +179,12 @@ TEXT;
                 return {
                     'someProperty': test,
                     'someMethod': function () {
-                        alert(<?php echo \$block->getJsAlert() ?>);
+                        alert(<?php echo $block->getJsAlert() ?>);
                     }
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body></html>
+</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo $block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())

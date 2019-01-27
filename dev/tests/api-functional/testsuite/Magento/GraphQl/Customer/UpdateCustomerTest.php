@@ -86,7 +86,7 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 mutation {
     updateCustomer(
         input: {

@@ -132,7 +132,7 @@ class StartConsumerCommand extends Command
             'The file path for saving PID'
         );
         $this->setHelp(
-            <<<HELP
+            <<<'HELP'
 This command starts MessageQueue consumer by its name.
 
 To start consumer which will process all queued messages and terminate execution:

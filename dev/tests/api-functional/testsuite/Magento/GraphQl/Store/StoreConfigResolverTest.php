@@ -45,7 +45,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
         /** @var StoreConfigInterface $storeConfig */
         $storeConfig = current($storeConfigsManager->getStoreConfigs([$store->getCode()]));
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   storeConfig{
     id,

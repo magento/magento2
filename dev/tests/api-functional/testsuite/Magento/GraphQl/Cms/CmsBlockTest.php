@@ -43,7 +43,7 @@ class CmsBlockTest extends GraphQlAbstract
         $renderedContent = $this->filterEmulate->setUseSessionInUrl(false)->filter($cmsBlock->getContent());
 
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsBlocks(identifiers: "enabled_block") {
     items {
@@ -75,7 +75,7 @@ QUERY;
     public function testGetDisabledCmsBlock()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsBlocks(identifiers: "disabled_block") {
     items {
@@ -98,7 +98,7 @@ QUERY;
     public function testGetCmsBlocksWithoutIdentifiers()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsBlocks(identifiers: []) {
     items {
@@ -121,7 +121,7 @@ QUERY;
     public function testGetCmsBlockByNonExistentIdentifier()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsBlocks(identifiers: "nonexistent_id") {
     items {
@@ -143,7 +143,7 @@ QUERY;
     public function testGetEnabledAndDisabledCmsBlockInOneRequest()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsBlocks(identifiers: ["enabled_block", "disabled_block"]) {
     items {

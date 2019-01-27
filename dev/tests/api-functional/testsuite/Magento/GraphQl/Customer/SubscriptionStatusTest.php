@@ -40,7 +40,7 @@ class SubscriptionStatusTest extends GraphQlAbstract
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 query {
     customer {
         is_subscribed
@@ -57,7 +57,7 @@ QUERY;
      */
     public function testGetSubscriptionStatusIfUserIsNotAuthorizedTest()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 query {
     customer {
         is_subscribed
@@ -75,7 +75,7 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 mutation {
     updateCustomer(
         input: {
@@ -98,7 +98,7 @@ QUERY;
      */
     public function testChangeSubscriptionStatuIfUserIsNotAuthorizedTest()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 mutation {
     updateCustomer(
         input: {

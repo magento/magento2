@@ -56,7 +56,7 @@ QUERY;
     public function testGetCmsPageWithoutId()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsPage {
     url_key
@@ -82,7 +82,7 @@ QUERY;
     public function testGetCmsPageByNonExistentId()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 {
   cmsPage(id: 0) {
     url_key

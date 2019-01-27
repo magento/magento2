@@ -35,7 +35,7 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 {
     products (
         filter: {
@@ -183,7 +183,7 @@ QUERY;
     public function testFilterProductsWithinSpecificPriceRangeSortedByNameDesc()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter:
@@ -257,7 +257,7 @@ QUERY;
     public function testFilterVisibleProductsWithMatchingSkuOrNameWithSpecialPrice()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter:
@@ -330,7 +330,7 @@ QUERY;
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
      search : "simple"
@@ -395,7 +395,7 @@ QUERY;
     public function testQueryProductsInCurrentPageSortedByPriceASC()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter:
@@ -483,7 +483,7 @@ QUERY;
     public function testQueryProductsSortedByNameASC()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter:
@@ -669,7 +669,7 @@ QUERY;
     public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   products(
         filter:
@@ -733,7 +733,7 @@ QUERY;
     public function testProductQueryUsingFromAndToFilterInput()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter: { 
@@ -853,7 +853,7 @@ QUERY;
     public function testProductsThatMatchWithPricesFromList()
     {
         $query
-            =<<<QUERY
+            =<<<'QUERY'
             {
     products(
         filter:
@@ -936,7 +936,7 @@ QUERY;
     public function testQueryFilterNoMatchingItems()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
 products(
     filter:
@@ -999,7 +999,7 @@ QUERY;
     public function testQueryPageOutOfBoundException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
     products(
         filter:
@@ -1054,7 +1054,7 @@ QUERY;
     public function testQueryWithNoSearchOrFilterArgumentException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   products(pageSize:1)
   {
@@ -1087,7 +1087,7 @@ QUERY;
     public function testFilterProductsThatAreOutOfStockWithConfigSettings()
     {
         $query
-            =<<<QUERY
+            =<<<'QUERY'
 {
   products(
         filter:

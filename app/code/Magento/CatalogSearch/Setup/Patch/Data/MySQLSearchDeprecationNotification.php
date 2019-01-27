@@ -39,7 +39,7 @@ class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Pat
     public function apply()
     {
         if ($this->searchEngineResolver->getCurrentSearchEngine() === 'mysql') {
-            $message = <<<MESSAGE
+            $message = <<<'MESSAGE'
 Catalog Search is currently configured to use the MySQL engine, which has been deprecated. Consider migrating to one of
 the Elasticsearch engines now to ensure there are no service interruptions during your next upgrade.
 MESSAGE;

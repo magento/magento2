@@ -19,7 +19,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
     public function testConvert()
     {
-        $xmlExample = <<<XML
+        $xmlExample = <<<'XML'
 <config>
     <group id="test">
         <schedule_generate_every>1</schedule_generate_every>

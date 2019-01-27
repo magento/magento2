@@ -42,7 +42,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
 
     public function testCreateEmptyCartForGuest()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 mutation {
   createEmptyCart
 }
@@ -64,7 +64,7 @@ QUERY;
      */
     public function testCreateEmptyCartForRegisteredCustomer()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 mutation {
   createEmptyCart
 }

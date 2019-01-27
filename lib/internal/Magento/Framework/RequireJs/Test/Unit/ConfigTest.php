@@ -135,7 +135,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with('js')
             ->willReturn(true);
 
-        $expected = <<<expected
+        $expected = <<<'expected'
 (function(require){
 (function() {
 file_one.js content
@@ -233,7 +233,7 @@ code;
         $this->context->expects($this->once())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://base.url/'));
-        $expected = <<<expected
+        $expected = <<<'expected'
 require.config({"baseUrl":"http://base.url/area/theme/locale"});
 expected;
         $actual = $this->object->getBaseConfig();

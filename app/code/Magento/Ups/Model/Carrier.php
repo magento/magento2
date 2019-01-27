@@ -668,7 +668,7 @@ XMLRequest;
                 "</Service>";
         }
 
-        $xmlParams .= <<<XMLRequest
+        $xmlParams .= <<<'XMLRequest'
       <Shipper>
 XMLRequest;
 
@@ -741,7 +741,7 @@ XMLRequest;
             $xmlParams .= "<TaxInformationIndicator/>";
         }
 
-        $xmlParams .= <<<XMLRequest
+        $xmlParams .= <<<'XMLRequest'
       </Shipment>
     </RatingServiceSelectionRequest>
 XMLRequest;

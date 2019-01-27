@@ -34,7 +34,7 @@ class OrdersTest extends GraphQlAbstract
     public function testOrdersQuery()
     {
         $query =
-            <<<QUERY
+            <<<'QUERY'
 query {
   customerOrders {
     items {

@@ -73,7 +73,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         $product = $productRepository->get('simple1');
 
         $query
-            = <<<QUERY
+            = <<<'QUERY'
  {
            products(filter: {sku: {eq: "simple1"}})
            {
@@ -118,7 +118,7 @@ QUERY;
     {
         $this->markTestSkipped('Causes failiure with php unit and php 7.2');
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {

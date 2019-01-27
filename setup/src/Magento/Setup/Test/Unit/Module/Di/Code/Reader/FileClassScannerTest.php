@@ -23,13 +23,13 @@ class FileClassScannerTest extends \PHPUnit\Framework\TestCase
             'getFileContents'
         ])->getMock();
         $scanner->expects(self::once())->method('getFileContents')->willReturn(
-            <<<PHP
+            <<<'PHP'
 <?php
 
 echo 'hello world';
 
 if (class_exists('some_class')) {
-    \$object = new some_class();
+    $object = new some_class();
 }
 PHP
         );
@@ -45,7 +45,7 @@ PHP
             'getFileContents'
         ])->getMock();
         $scanner->expects(self::once())->method('getFileContents')->willReturn(
-            <<<PHP
+            <<<'PHP'
 <?php
 
 class ThisIsATest {
@@ -67,7 +67,7 @@ PHP
             'getFileContents'
         ])->getMock();
         $scanner->expects(self::once())->method('getFileContents')->willReturn(
-            <<<PHP
+            <<<'PHP'
 <?php
 
 namespace NS;

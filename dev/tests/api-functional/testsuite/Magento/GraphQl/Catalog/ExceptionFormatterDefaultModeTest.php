@@ -14,7 +14,7 @@ class ExceptionFormatterDefaultModeTest extends GraphQlAbstract
     public function testDuplicateEntityTypeException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {
@@ -40,7 +40,7 @@ QUERY;
     public function testEmptyAttributeInputException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {
@@ -65,7 +65,7 @@ QUERY;
     public function testAttributeWithNoEntityTypeInputException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {
@@ -91,7 +91,7 @@ QUERY;
     public function testAttributeWithNoAttributeCodeInputException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {
@@ -117,7 +117,7 @@ QUERY;
     public function testInvalidEntityTypeException()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
   {
   customAttributeMetadata(attributes:[
     {

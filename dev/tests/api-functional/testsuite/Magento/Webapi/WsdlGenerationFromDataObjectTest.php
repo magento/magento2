@@ -160,11 +160,11 @@ TYPES_SECTION_DECLARATION;
     protected function _checkElementsDeclaration($wsdlContent)
     {
         if ($this->isSingleService) {
-            $requestElement = <<< REQUEST_ELEMENT
+            $requestElement = <<< 'REQUEST_ELEMENT'
 <xsd:element name="testModule5AllSoapAndRestV2ItemRequest" type="tns:TestModule5AllSoapAndRestV2ItemRequest"/>
 REQUEST_ELEMENT;
         } else {
-            $requestElement = <<< REQUEST_ELEMENT
+            $requestElement = <<< 'REQUEST_ELEMENT'
 <xsd:element name="testModule5AllSoapAndRestV1ItemRequest" type="tns:TestModule5AllSoapAndRestV1ItemRequest"/>
 REQUEST_ELEMENT;
         }
@@ -175,11 +175,11 @@ REQUEST_ELEMENT;
         );
 
         if ($this->isSingleService) {
-            $responseElement = <<< RESPONSE_ELEMENT
+            $responseElement = <<< 'RESPONSE_ELEMENT'
 <xsd:element name="testModule5AllSoapAndRestV2ItemResponse" type="tns:TestModule5AllSoapAndRestV2ItemResponse"/>
 RESPONSE_ELEMENT;
         } else {
-            $responseElement = <<< RESPONSE_ELEMENT
+            $responseElement = <<< 'RESPONSE_ELEMENT'
 <xsd:element name="testModule5AllSoapAndRestV1ItemResponse" type="tns:TestModule5AllSoapAndRestV1ItemResponse"/>
 RESPONSE_ELEMENT;
         }
@@ -487,11 +487,11 @@ RESPONSE_TYPE;
     protected function _checkPortTypeDeclaration($wsdlContent)
     {
         if ($this->isSingleService) {
-            $firstPortType = <<< FIRST_PORT_TYPE
+            $firstPortType = <<< 'FIRST_PORT_TYPE'
 <portType name="testModule5AllSoapAndRestV2PortType">
 FIRST_PORT_TYPE;
         } else {
-            $firstPortType = <<< FIRST_PORT_TYPE
+            $firstPortType = <<< 'FIRST_PORT_TYPE'
 <portType name="testModule5AllSoapAndRestV1PortType">
 FIRST_PORT_TYPE;
         }
@@ -502,7 +502,7 @@ FIRST_PORT_TYPE;
         );
 
         if (!$this->isSingleService) {
-            $secondPortType = <<< SECOND_PORT_TYPE
+            $secondPortType = <<< 'SECOND_PORT_TYPE'
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
             $this->assertContains(
@@ -513,7 +513,7 @@ SECOND_PORT_TYPE;
         }
 
         if ($this->isSingleService) {
-            $operationDeclaration = <<< OPERATION_DECLARATION
+            $operationDeclaration = <<< 'OPERATION_DECLARATION'
 <operation name="testModule5AllSoapAndRestV2Item">
     <input message="tns:testModule5AllSoapAndRestV2ItemRequest"/>
     <output message="tns:testModule5AllSoapAndRestV2ItemResponse"/>
@@ -526,7 +526,7 @@ SECOND_PORT_TYPE;
 </operation>
 OPERATION_DECLARATION;
         } else {
-            $operationDeclaration = <<< OPERATION_DECLARATION
+            $operationDeclaration = <<< 'OPERATION_DECLARATION'
 <operation name="testModule5AllSoapAndRestV2Item">
     <input message="tns:testModule5AllSoapAndRestV2ItemRequest"/>
     <output message="tns:testModule5AllSoapAndRestV2ItemResponse"/>
@@ -554,12 +554,12 @@ OPERATION_DECLARATION;
     protected function _checkBindingDeclaration($wsdlContent)
     {
         if ($this->isSingleService) {
-            $firstBinding = <<< FIRST_BINDING
+            $firstBinding = <<< 'FIRST_BINDING'
 <binding name="testModule5AllSoapAndRestV2Binding" type="tns:testModule5AllSoapAndRestV2PortType">
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 FIRST_BINDING;
         } else {
-            $firstBinding = <<< FIRST_BINDING
+            $firstBinding = <<< 'FIRST_BINDING'
 <binding name="testModule5AllSoapAndRestV1Binding" type="tns:testModule5AllSoapAndRestV1PortType">
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 FIRST_BINDING;
@@ -571,7 +571,7 @@ FIRST_BINDING;
         );
 
         if (!$this->isSingleService) {
-            $secondBinding = <<< SECOND_BINDING
+            $secondBinding = <<< 'SECOND_BINDING'
 <binding name="testModule5AllSoapAndRestV2Binding" type="tns:testModule5AllSoapAndRestV2PortType">
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 SECOND_BINDING;
@@ -583,7 +583,7 @@ SECOND_BINDING;
         }
 
         if ($this->isSingleService) {
-            $operationDeclaration = <<< OPERATION_DECLARATION
+            $operationDeclaration = <<< 'OPERATION_DECLARATION'
 <operation name="testModule5AllSoapAndRestV2Item">
     <soap12:operation soapAction="testModule5AllSoapAndRestV2Item"/>
     <input>
@@ -606,7 +606,7 @@ SECOND_BINDING;
 </operation>
 OPERATION_DECLARATION;
         } else {
-            $operationDeclaration = <<< OPERATION_DECLARATION
+            $operationDeclaration = <<< 'OPERATION_DECLARATION'
 <operation name="testModule5AllSoapAndRestV1Item">
     <soap12:operation soapAction="testModule5AllSoapAndRestV1Item"/>
     <input>
@@ -693,7 +693,7 @@ SECOND_SERVICE_DECLARATION;
      */
     protected function _checkMessagesDeclaration($wsdlContent)
     {
-        $itemMessagesDeclaration = <<< MESSAGES_DECLARATION
+        $itemMessagesDeclaration = <<< 'MESSAGES_DECLARATION'
 <message name="testModule5AllSoapAndRestV2ItemRequest">
     <part name="messageParameters" element="tns:testModule5AllSoapAndRestV2ItemRequest"/>
 </message>
@@ -706,7 +706,7 @@ MESSAGES_DECLARATION;
             $wsdlContent,
             'Messages section for "item" operation is invalid'
         );
-        $itemsMessagesDeclaration = <<< MESSAGES_DECLARATION
+        $itemsMessagesDeclaration = <<< 'MESSAGES_DECLARATION'
 <message name="testModule5AllSoapAndRestV2ItemsRequest">
     <part name="messageParameters" element="tns:testModule5AllSoapAndRestV2ItemsRequest"/>
 </message>
@@ -739,7 +739,7 @@ MESSAGES_DECLARATION;
      */
     protected function _checkFaultsPortTypeSection($wsdlContent)
     {
-        $faultsInPortType = <<< FAULT_IN_PORT_TYPE
+        $faultsInPortType = <<< 'FAULT_IN_PORT_TYPE'
 <fault name="GenericFault" message="tns:GenericFault"/>
 FAULT_IN_PORT_TYPE;
         $this->assertContains(
@@ -754,7 +754,7 @@ FAULT_IN_PORT_TYPE;
      */
     protected function _checkFaultsBindingSection($wsdlContent)
     {
-        $faultsInBinding = <<< FAULT_IN_BINDING
+        $faultsInBinding = <<< 'FAULT_IN_BINDING'
 <fault name="GenericFault"/>
 FAULT_IN_BINDING;
         $this->assertContains(
@@ -769,7 +769,7 @@ FAULT_IN_BINDING;
      */
     protected function _checkFaultsMessagesSection($wsdlContent)
     {
-        $genericFaultMessage = <<< GENERIC_FAULT_IN_MESSAGES
+        $genericFaultMessage = <<< 'GENERIC_FAULT_IN_MESSAGES'
 <message name="GenericFault">
     <part name="messageParameters" element="tns:GenericFault"/>
 </message>

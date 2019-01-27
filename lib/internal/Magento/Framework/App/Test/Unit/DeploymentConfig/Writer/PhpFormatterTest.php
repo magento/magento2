@@ -53,7 +53,7 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
             'ns4' => 'comment for namespace 4',
             'ns5' => 'comment for unexisted namespace 5',
         ];
-        $expectedResult1 = <<<TEXT
+        $expectedResult1 = <<<'TEXT'
 <?php
 return [
     'ns1' => [
@@ -80,7 +80,7 @@ return [
 ];
 
 TEXT;
-        $expectedResult2 = <<<TEXT
+        $expectedResult2 = <<<'TEXT'
 <?php
 return [
     /**
@@ -121,7 +121,7 @@ return [
 
 TEXT;
 
-        $expectedResult3 = <<<TEXT
+        $expectedResult3 = <<<'TEXT'
 <?php
 return [
     'ns1' => [

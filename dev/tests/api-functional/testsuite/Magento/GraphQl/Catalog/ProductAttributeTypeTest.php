@@ -19,7 +19,7 @@ class ProductAttributeTypeTest extends GraphQlAbstract
     public function testAttributeTypeResolver()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   customAttributeMetadata(attributes:
   [
@@ -41,7 +41,7 @@ class ProductAttributeTypeTest extends GraphQlAbstract
     }
     {
       attribute_code:"special_price",
-      entity_type:"Magento\\\\Catalog\\\\Api\\\\Data\\\\ProductInterface"
+      entity_type:"Magento\\Catalog\\Api\\Data\\ProductInterface"
     }
   ]
   )
@@ -82,7 +82,7 @@ QUERY;
     public function testComplexAttributeTypeResolver()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   customAttributeMetadata(attributes:
   [
@@ -168,7 +168,7 @@ QUERY;
     public function testUnDefinedAttributeType()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   customAttributeMetadata(attributes:
   [

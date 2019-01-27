@@ -137,7 +137,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidSecurityCheckDataProvider()
     {
-        $insecureHelper = <<<XML
+        $insecureHelper = <<<'XML'
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <handle id="handleId">
         <block class="Block_Class">
@@ -148,7 +148,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     </handle>
 </layout>
 XML;
-        $insecureUpdater = <<<XML
+        $insecureUpdater = <<<'XML'
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <handle id="handleId">
         <block class="Block_Class">
@@ -162,7 +162,7 @@ XML;
     </handle>
 </layout>
 XML;
-        $secureLayout = <<<XML
+        $secureLayout = <<<'XML'
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <handle id="handleId">
         <block class="Block_Class">

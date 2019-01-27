@@ -50,7 +50,7 @@ class ElementTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Simplexml\Element $xml  */
         $xml = simplexml_load_string($dataFile, \Magento\Framework\Simplexml\Element::class);
 
-        $expected = <<<XML
+        $expected = <<<'XML'
 <root>
    <node_1 id="1">Value 1
       <node_1_1>Value 1.1

@@ -25,7 +25,7 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
-        $query = <<<QUERY
+        $query = <<<'QUERY'
 {
     products (
         filter:{

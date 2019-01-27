@@ -9,7 +9,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
-        $xml = <<<XML
+        $xml = <<<'XML'
 <?xml version="1.0"?>
 <root><key>value</key></root>
 XML;

@@ -26,7 +26,7 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $string = <<<XML
+        $string = <<<'XML'
 <?xml version='1.0'?>
 <layout>
     <arguments>

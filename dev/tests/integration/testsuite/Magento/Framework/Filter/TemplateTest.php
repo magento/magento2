@@ -60,7 +60,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     public function getFilterForDataProvider()
     {
-        $template = <<<TEMPLATE
+        $template = <<<'TEMPLATE'
 <ul>
 {{for thing in things}}
     <li>
@@ -70,7 +70,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 </ul>
 TEMPLATE;
 
-        $expectedResult = <<<EXPECTED_RESULT
+        $expectedResult = <<<'EXPECTED_RESULT'
 <ul>
 
     <li>
@@ -88,7 +88,7 @@ TEMPLATE;
 </ul>
 EXPECTED_RESULT;
 
-        $template2 = <<<TEMPLATE
+        $template2 = <<<'TEMPLATE'
 <ul>
     {{for item in order.all_visible_items}}
     <li>
@@ -99,7 +99,7 @@ EXPECTED_RESULT;
 </ul>
 TEMPLATE;
 
-        $expectedResult2 = <<<EXPECTED_RESULT
+        $expectedResult2 = <<<'EXPECTED_RESULT'
 <ul>
     
     <li>

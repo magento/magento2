@@ -22,7 +22,7 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
     public function testQueryComplexityIsLimited()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   category(id: 2) {
     products {
@@ -402,7 +402,7 @@ QUERY;
     public function testQueryDepthIsLimited()
     {
         $query
-            = <<<QUERY
+            = <<<'QUERY'
 {
   category(id: 2) {
     products {
