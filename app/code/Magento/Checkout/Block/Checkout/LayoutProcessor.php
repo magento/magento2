@@ -298,10 +298,16 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                         'billingAddress' . $paymentCode,
                         [
                             'country_id' => [
-                                'sortOrder' => 115,
+                                'sortOrder' => 80,
                             ],
                             'region' => [
                                 'visible' => false,
+                            ],
+                            'city' => [
+                                 'sortOrder' => 100,
+                                 'validation' => [
+                                    'required-entry' => true,
+                                ],
                             ],
                             'region_id' => [
                                 'component' => 'Magento_Ui/js/form/element/region',
