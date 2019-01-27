@@ -53,7 +53,7 @@ class Quantity implements SecurityCheckerInterface
     {
         $isEnabled = $this->securityConfig->getPasswordResetProtectionType() != ResetMethod::OPTION_NONE;
         $allowedAttemptsNumber = $this->securityConfig->getMaxNumberPasswordResetRequests();
-        if ($isEnabled and $allowedAttemptsNumber) {
+        if ($isEnabled && $allowedAttemptsNumber) {
             $collection = $this->prepareCollection($securityEventType, $accountReference, $longIp);
             if ($collection->count() >= $allowedAttemptsNumber) {
                 throw new SecurityViolationException(
