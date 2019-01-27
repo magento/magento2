@@ -57,7 +57,7 @@
     <type name="Magento\Checkout\Block\Cart\Sidebar">
         <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
-    <type name="Magento\Framework\Session\SessionManager">
+    <type name="Magento\Framework\Session\SessionManagerInterface">
         <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
     </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
