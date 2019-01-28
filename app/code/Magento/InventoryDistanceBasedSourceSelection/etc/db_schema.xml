@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="inventory_geoname" resource="default" engine="innodb">
+        <column xsi:type="varchar" name="country_code" nullable="false" length="64"/>
+        <column xsi:type="varchar" name="postcode" nullable="false" length="64"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="64"/>
+        <column xsi:type="varchar" name="region" nullable="false" length="64"/>
+        <column xsi:type="varchar" name="province" nullable="false" length="64"/>
+        <column xsi:type="double" name="latitude" nullable="false" />
+        <column xsi:type="double" name="longitude" nullable="false"/>
+    </table>
+</schema>

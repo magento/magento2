@@ -7,12 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShippingAdminUi\Ui\DataProvider;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\GetDefaultSourceSelectionAlgorithmCodeInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
+/**
+ * Class GetSourcesByStockIdSkuAndQty
+ * @package Magento\InventoryShippingAdminUi\Ui\DataProvider
+ * @deprecated (see \Magento\InventoryShippingAdminUi\Ui\DataProvider\GetSourcesByOrderIdStockIdSkuAndQty)
+ */
 class GetSourcesByStockIdSkuAndQty
 {
     /**
@@ -46,11 +52,14 @@ class GetSourcesByStockIdSkuAndQty
     private $sources = [];
 
     /**
+     * GetSourcesByStockIdSkuAndQty constructor.
+     *
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param SourceRepositoryInterface $sourceRepository
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ItemRequestInterfaceFactory $itemRequestFactory,
@@ -71,7 +80,8 @@ class GetSourcesByStockIdSkuAndQty
      * @param string $sku
      * @param float $qty
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function execute(int $stockId, string $sku, float $qty): array
     {
@@ -108,7 +118,7 @@ class GetSourcesByStockIdSkuAndQty
      *
      * @param string $sourceCode
      * @return mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function getSourceName(string $sourceCode): string
     {

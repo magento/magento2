@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySourceSelection\Model;
+namespace Magento\InventorySourceSelectionApi\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
@@ -28,6 +28,7 @@ class SourceSelectionService implements SourceSelectionServiceInterface
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $sourceSelectionMethods
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
