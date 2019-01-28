@@ -44,7 +44,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId($incrementId);
 
         $this->model->setOrder($order);
-        $addressData = require(__DIR__ . '/../../_files/address_data.php');
+        $addressData = require __DIR__ . '/../../_files/address_data.php';
         static::assertEquals($incrementId, $this->model->getInvoice());
 
         $this->assertAddress($addressData, 'billing');

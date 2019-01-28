@@ -106,16 +106,16 @@ if (php_sapi_name() === 'cli-server') {
                 $route = preg_replace('#static/#', '', $route, 1);
                 $_GET['resource'] = $route;
                 $debug("static: $route");
-                include($magentoPackagePubDir.'/static.php');
+                include $magentoPackagePubDir.'/static.php';
                 exit;
             } elseif (strpos($route, 'media/') === 0) {
                 $debug("media: $route");
-                include($magentoPackagePubDir.'/get.php');
+                include $magentoPackagePubDir.'/get.php';
                 exit;
             }
         }
     } else {
         $debug("thunk to index in $route");
-        include($magentoPackagePubDir.'/index.php');
+        include $magentoPackagePubDir.'/index.php';
     }
 }

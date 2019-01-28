@@ -39,7 +39,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->defaultConfigProviderMock->expects($this->any())->method('getExchange')->willReturn('magento');
         $result = $this->converter->convert($dom);
 
-        $expectedData = include($fixtureDir . '/valid.php');
+        $expectedData = include $fixtureDir . '/valid.php';
         foreach ($expectedData as $key => $value) {
             $this->assertEquals($value, $result[$key], 'Invalid data for ' . $key);
         }

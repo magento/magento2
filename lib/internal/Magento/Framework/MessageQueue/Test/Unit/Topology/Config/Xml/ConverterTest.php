@@ -48,7 +48,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->interpreter->expects($this->any())->method('evaluate')->willReturn(10);
         $result = $this->converter->convert($dom);
 
-        $expectedData = include($fixtureDir . '/valid.php');
+        $expectedData = include $fixtureDir . '/valid.php';
         foreach ($expectedData as $key => $value) {
             $this->assertEquals($value, $result[$key], 'Invalid data for ' . $key);
         }

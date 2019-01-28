@@ -51,7 +51,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->load($xmlFile);
         $result = $this->converter->convert($dom);
 
-        $expectedData = include($fixtureDir . '/valid.php');
+        $expectedData = include $fixtureDir . '/valid.php';
         $this->assertEquals($expectedData, $result);
     }
 }

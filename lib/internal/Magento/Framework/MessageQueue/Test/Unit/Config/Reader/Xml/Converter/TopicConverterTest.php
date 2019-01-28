@@ -38,8 +38,8 @@ class TopicConverterTest extends \PHPUnit\Framework\TestCase
         $this->methodMapMock = $this->createMock(\Magento\Framework\Reflection\MethodsMap::class);
         $this->validatorMock = $this->createMock(\Magento\Framework\MessageQueue\Config\Validator::class);
         $this->communicationConfigMock = $this->createMock(\Magento\Framework\Communication\ConfigInterface::class);
-        $wildcardPatternMap = include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
-        $topicsMap = include(__DIR__ . '/../../../../_files/topic_definitions_map.php');
+        $wildcardPatternMap = include __DIR__ . '/../../../../_files/wildcard_pattern_map.php';
+        $topicsMap = include __DIR__ . '/../../../../_files/topic_definitions_map.php';
         $this->validatorMock->expects($this->any())
             ->method('buildWildcardPattern')
             ->willReturnMap($wildcardPatternMap);
@@ -65,7 +65,7 @@ class TopicConverterTest extends \PHPUnit\Framework\TestCase
     public function testConvert()
     {
         $xmlFile = __DIR__ . '/../../../../_files/topic_config.xml';
-        $expectedData = include(__DIR__ . '/../../../../_files/expected_topic_config.php');
+        $expectedData = include __DIR__ . '/../../../../_files/expected_topic_config.php';
         $dom = new \DOMDocument();
         $dom->load($xmlFile);
         $result = $this->converter->convert($dom);

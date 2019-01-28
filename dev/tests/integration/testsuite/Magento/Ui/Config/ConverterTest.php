@@ -135,7 +135,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $filename = $this->fixturePath . '/expected/' . $componentName . '.php';
         if (is_file($filename)) {
-            return include($filename);
+            return include $filename;
         }
 
         return [];
