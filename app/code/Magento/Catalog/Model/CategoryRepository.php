@@ -74,11 +74,12 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
+        $initialCategoryData = $category->getData();
+
         $storeId = (int)$this->storeManager->getStore()->getId();
         $existingData = $this->getExtensibleDataObjectConverter()
             ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
-        $existingData['store_id'] = $storeId;
 
         if ($category->getId()) {
             $metadata = $this->getMetadataPool()->getMetadata(
@@ -107,7 +108,21 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $existingData['path'] = $parentCategory->getPath();
             $existingData['parent_id'] = $parentId;
         }
+
         $category->addData($existingData);
+
+        /**
+         * grab attribute codes that was not
+         * in category data array initially
+         * but are going to be changed
+         * and make them to use default values
+         */
+        $attributesToSkipUpdate = array_diff_key($category->getData(), $initialCategoryData);
+
+        foreach ($attributesToSkipUpdate as $attributeCode => $attributeValue) {
+            $category->setData($attributeCode, null);
+        }
+
         try {
             $this->validateCategory($category);
             $this->categoryResource->save($category);
