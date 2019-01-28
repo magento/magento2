@@ -20,7 +20,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $suggestedQueries = $this->createMock(SuggestedQueriesInterface::CLASS);
+        $suggestedQueries = $this->createMock(SuggestedQueriesInterface::class);
         $suggestedQueries->expects($this->any())->method('getItems')->willReturn([
             new QueryResult('test item', 1),
             new QueryResult("<script>alert('Test');</script>", 1)
