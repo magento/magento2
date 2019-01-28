@@ -47,7 +47,7 @@ class QuoteGeneratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $result =  $this->getMockBuilder(\Magento\Setup\Fixtures\Quote\QuoteGenerator::class)
+        $result = $this->getMockBuilder(\Magento\Setup\Fixtures\Quote\QuoteGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->expects($this->once())

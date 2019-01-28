@@ -80,9 +80,9 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     public function getValueFromStorageDataProvider()
     {
         return [
-            'default mode'      => [State::MODE_DEFAULT],
-            'production mode'   => [State::MODE_PRODUCTION],
-            'arbitrary mode'    => ['test'],
+            'default mode' => [State::MODE_DEFAULT],
+            'production mode' => [State::MODE_PRODUCTION],
+            'arbitrary mode' => ['test'],
         ];
     }
 

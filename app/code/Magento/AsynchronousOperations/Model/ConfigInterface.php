@@ -31,13 +31,13 @@ interface ConfigInterface
     const SERVICE_PARAM_KEY_TOPIC = 'topic';
     const DEFAULT_HANDLER_NAME = 'async';
     const SYSTEM_TOPIC_NAME = 'async.system.required.wrapper.topic';
-    const SYSTEM_TOPIC_CONFIGURATION =  [
-        CommunicationConfig::TOPIC_NAME           => self::SYSTEM_TOPIC_NAME,
+    const SYSTEM_TOPIC_CONFIGURATION = [
+        CommunicationConfig::TOPIC_NAME => self::SYSTEM_TOPIC_NAME,
         CommunicationConfig::TOPIC_IS_SYNCHRONOUS => false,
-        CommunicationConfig::TOPIC_REQUEST        => OperationInterface::class,
-        CommunicationConfig::TOPIC_REQUEST_TYPE   => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
-        CommunicationConfig::TOPIC_RESPONSE       => null,
-        CommunicationConfig::TOPIC_HANDLERS       => [],
+        CommunicationConfig::TOPIC_REQUEST => OperationInterface::class,
+        CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+        CommunicationConfig::TOPIC_RESPONSE => null,
+        CommunicationConfig::TOPIC_HANDLERS => [],
     ];
     /**#@-*/
 

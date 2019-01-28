@@ -322,7 +322,7 @@ class PackagesData
     {
         $extraInfo = $this->getPackageExtraInfo($package['name'], $package['version']);
 
-        $package['package_title'] =  isset($extraInfo['x-magento-ext-title']) ?
+        $package['package_title'] = isset($extraInfo['x-magento-ext-title']) ?
             $extraInfo['x-magento-ext-title'] : $package['name'];
         $package['package_type'] = isset($extraInfo['x-magento-ext-type']) ? $extraInfo['x-magento-ext-type'] :
             $this->typeMapper->map($package['type']);

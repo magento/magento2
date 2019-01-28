@@ -64,8 +64,8 @@ class AttributeSet
             $originalSet = $this->attributeSetFactory->create();
             $originalSet->initFromSkeleton($subject->getId());
             $originalAttributeCodes = array_flip($this->_attributeFilter->filter($originalSet));
-            $subjectAttributeCodes  = array_flip($this->_attributeFilter->filter($subject));
-            $this->requiresReindex  = (bool)count(
+            $subjectAttributeCodes = array_flip($this->_attributeFilter->filter($subject));
+            $this->requiresReindex = (bool)count(
                 array_merge(
                     array_diff_key($subjectAttributeCodes, $originalAttributeCodes),
                     array_diff_key($originalAttributeCodes, $subjectAttributeCodes)

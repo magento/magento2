@@ -54,7 +54,7 @@ if ($product->isSaleable()) {
         $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
         $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
         $data = ['addToCart' => [
-            'origin'=> 'msrp',
+            'origin' => 'msrp',
             'popupId' => '#' . $popupId,
             'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
             'productId' => $productId,

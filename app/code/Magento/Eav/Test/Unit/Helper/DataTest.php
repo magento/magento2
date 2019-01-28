@@ -63,9 +63,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $attribute = new \Magento\Framework\DataObject([
             'entity_type_id' => '1',
-            'attribute_id'   => '2',
-            'backend'        => new \Magento\Framework\DataObject(['table' => 'customer_entity_varchar']),
-            'backend_type'   => 'varchar',
+            'attribute_id' => '2',
+            'backend' => new \Magento\Framework\DataObject(['table' => 'customer_entity_varchar']),
+            'backend_type' => 'varchar',
         ]);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')

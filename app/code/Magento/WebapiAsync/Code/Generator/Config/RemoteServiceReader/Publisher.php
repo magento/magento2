@@ -47,11 +47,11 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
             $topicName = $serviceData[WebApiAsyncConfig::SERVICE_PARAM_KEY_TOPIC];
             $result[$topicName] =
                 [
-                    'topic'       => $topicName,
-                    'disabled'    => false,
+                    'topic' => $topicName,
+                    'disabled' => false,
                     'connections' => [
                         'amqp' => [
-                            'name'     => 'amqp',
+                            'name' => 'amqp',
                             'exchange' => 'magento',
                             'disabled' => false,
                         ],

@@ -98,11 +98,11 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             $pathsToCheck[$themeDir . '/*'] = [
                 'allowed_files' => $allowedThemeFiles,
-                'allowed_dirs'  => ['layout', 'page_layout', 'templates', 'web', 'etc', 'i18n', 'media', '\w+_\w+'],
+                'allowed_dirs' => ['layout', 'page_layout', 'templates', 'web', 'etc', 'i18n', 'media', '\w+_\w+'],
             ];
             $pathsToCheck[$themeDir . '/*_*/*'] = [
                 'allowed_files' => $allowedThemeFiles,
-                'allowed_dirs'  => ['layout', 'page_layout', 'templates', 'web', 'email'],
+                'allowed_dirs' => ['layout', 'page_layout', 'templates', 'web', 'email'],
             ];
         }
 

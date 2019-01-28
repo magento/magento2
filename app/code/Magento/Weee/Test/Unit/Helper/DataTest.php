@@ -64,7 +64,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'weeeConfig' => $weeeConfig,
             'weeeTax' => $this->weeeTax,
             'taxData' => $this->taxData,
-            'serializer'  => $this->serializerMock
+            'serializer' => $this->serializerMock
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
@@ -249,7 +249,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getSelectionsCollection')
             ->will($this->returnValue([$productSimple]));
 
-        $store=$this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -268,13 +268,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeId')
             ->will($this->returnValue('bundle'));
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
 
-        $result =  $this->helperData->getWeeeAttributesForBundle($product);
+        $result = $this->helperData->getWeeeAttributesForBundle($product);
         $this->assertEquals($expectedArray, $result);
     }
 
@@ -322,8 +322,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $testArray = array_merge($testArray1, $testArray2);
 
-        $itemProductSimple1=$this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
-        $itemProductSimple2=$this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
+        $itemProductSimple1 = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
+        $itemProductSimple2 = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied']);
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxApplied')

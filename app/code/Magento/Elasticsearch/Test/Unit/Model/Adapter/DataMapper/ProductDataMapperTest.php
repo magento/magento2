@@ -256,7 +256,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 '1',
-                ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
+                ['price' => '11','created_at' => '00-00-00 00:00:00', 'color_value' => '11'],
                 '1',
                 false,
                 'datetime',
@@ -264,7 +264,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
+                ['price' => '11','created_at' => '00-00-00 00:00:00', 'color_value' => '11'],
                 '1',
                 false,
                 'time',
@@ -272,7 +272,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>null,'color_value'=>'11', ],
+                ['price' => '11','created_at' => null,'color_value' => '11', ],
                 '1',
                 true,
                 'datetime',
@@ -281,17 +281,17 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             [
                 '1',
                 [
-                    'tier_price'=>
+                    'tier_price' =>
                         [[
-                            'price_id'=>'1',
-                            'website_id'=>'1',
-                            'all_groups'=>'1',
-                            'cust_group'=>'1',
-                            'price_qty'=>'1',
-                            'website_price'=>'1',
-                            'price'=>'1'
+                            'price_id' => '1',
+                            'website_id' => '1',
+                            'all_groups' => '1',
+                            'cust_group' => '1',
+                            'price_qty' => '1',
+                            'website_price' => '1',
+                            'price' => '1'
                         ]],
-                        'created_at'=>'00-00-00 00:00:00'
+                        'created_at' => '00-00-00 00:00:00'
                 ],
                 '1',
                 false,
@@ -300,7 +300,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
+                ['image' => '11','created_at' => '00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -313,23 +313,23 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     'small_image' => '1',
                     'thumbnail' => '1',
                     'swatch_image' => '1',
-                    'media_gallery'=>
+                    'media_gallery' =>
                         [
                             'images' =>
                                 [[
-                                    'file'=>'1',
-                                    'media_type'=>'image',
-                                    'position'=>'1',
-                                    'disabled'=>'1',
-                                    'label'=>'1',
-                                    'title'=>'1',
-                                    'base_image'=>'1',
-                                    'small_image'=>'1',
-                                    'thumbnail'=>'1',
-                                    'swatch_image'=>'1'
+                                    'file' => '1',
+                                    'media_type' => 'image',
+                                    'position' => '1',
+                                    'disabled' => '1',
+                                    'label' => '1',
+                                    'title' => '1',
+                                    'base_image' => '1',
+                                    'small_image' => '1',
+                                    'thumbnail' => '1',
+                                    'swatch_image' => '1'
                                 ]]
                         ],
-                        'created_at'=>'00-00-00 00:00:00'
+                        'created_at' => '00-00-00 00:00:00'
                 ],
                 '1',
                 false,
@@ -343,28 +343,28 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     'small_image' => '1',
                     'thumbnail' => '1',
                     'swatch_image' => '1',
-                    'media_gallery'=>
+                    'media_gallery' =>
                         [
                             'images' =>
                                 [[
-                                    'file'=>'1',
-                                    'media_type'=>'video',
-                                    'position'=>'1',
-                                    'disabled'=>'1',
-                                    'label'=>'1',
-                                    'title'=>'1',
-                                    'base_image'=>'1',
-                                    'small_image'=>'1',
-                                    'thumbnail'=>'1',
-                                    'swatch_image'=>'1',
-                                    'video_title'=>'1',
-                                    'video_url'=>'1',
-                                    'video_description'=>'1',
-                                    'video_metadata'=>'1',
-                                    'video_provider'=>'1'
+                                    'file' => '1',
+                                    'media_type' => 'video',
+                                    'position' => '1',
+                                    'disabled' => '1',
+                                    'label' => '1',
+                                    'title' => '1',
+                                    'base_image' => '1',
+                                    'small_image' => '1',
+                                    'thumbnail' => '1',
+                                    'swatch_image' => '1',
+                                    'video_title' => '1',
+                                    'video_url' => '1',
+                                    'video_description' => '1',
+                                    'video_metadata' => '1',
+                                    'video_provider' => '1'
                                 ]]
                         ],
-                        'created_at'=>'00-00-00 00:00:00'
+                        'created_at' => '00-00-00 00:00:00'
                 ],
                 '1',
                 false,
@@ -373,7 +373,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
+                ['quantity_and_stock_status' => '11','created_at' => '00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -381,7 +381,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['quantity_and_stock_status'=>['is_in_stock' => '1', 'qty' => '12'],'created_at'=>'00-00-00 00:00:00'],
+                ['quantity_and_stock_status' => ['is_in_stock' => '1', 'qty' => '12'],'created_at' => '00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -389,7 +389,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>'1995-12-31 23:59:59','options'=>['value1','value2']],
+                ['price' => '11','created_at' => '1995-12-31 23:59:59','options' => ['value1','value2']],
                 '1',
                 false,
                 'string',

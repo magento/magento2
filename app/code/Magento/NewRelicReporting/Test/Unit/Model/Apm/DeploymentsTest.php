@@ -271,11 +271,11 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
         $statusOk = '200';
         $statusBad = '401';
         $params = [
-            'deployment[app_name]'       => $appName,
+            'deployment[app_name]' => $appName,
             'deployment[application_id]' => $appId,
-            'deployment[description]'    => $description,
-            'deployment[changelog]'      => $change,
-            'deployment[user]'           => $user
+            'deployment[description]' => $description,
+            'deployment[changelog]' => $change,
+            'deployment[user]' => $user
         ];
 
         return ['description' => $description,

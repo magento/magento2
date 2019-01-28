@@ -83,7 +83,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' =>  '/V1/carts/' . $cartId . '/items',
+                'resourcePath' => '/V1/carts/' . $cartId . '/items',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ],
             'soap' => [
@@ -122,7 +122,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' =>  '/V1/carts/' . $cartId . '/items/1000',
+                'resourcePath' => '/V1/carts/' . $cartId . '/items/1000',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
             ],
             'soap' => [
@@ -171,7 +171,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' =>  '/V1/carts/' . $cartId . '/items/' . $item->getId(),
+                'resourcePath' => '/V1/carts/' . $cartId . '/items/' . $item->getId(),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
             ],
             'soap' => [
@@ -248,7 +248,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' =>  '/V1/carts/' . $cartId . '/items/' . $item->getId(),
+                'resourcePath' => '/V1/carts/' . $cartId . '/items/' . $item->getId(),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
             ],
             'soap' => [

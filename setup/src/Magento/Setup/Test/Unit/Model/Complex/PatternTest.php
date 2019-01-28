@@ -53,7 +53,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                         'name' => 'yyy %s'
                     ],
                 ],
-                'expectedCount'      => 3,
+                'expectedCount' => 3,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                     ['id' => '',  'name' => 'xxx 1',  'calculated' => ''],

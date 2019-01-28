@@ -27,7 +27,7 @@ class CompiledTest extends AbstractFactoryRuntimeDefinitionsTestCases
             'arguments' => [
                 'Alias' => [
                     'requiredInterfaceParameter' => ['_i_' => InterfaceImplementation::class],
-                    'requiredObjectParameter' => ['_i_' =>  Basic::class],
+                    'requiredObjectParameter' => ['_i_' => Basic::class],
                     'optionalInterfaceParameter' => ['_i_' => InterfaceImplementation::class],
                     'optionalObjectParameter' => ['_i_' => Basic::class],
                     'optionalStringParameter' => ['_v_' => self::ALIAS_OVERRIDDEN_STRING],

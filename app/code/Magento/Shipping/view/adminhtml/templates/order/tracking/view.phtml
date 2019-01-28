@@ -49,7 +49,7 @@
     <?php if ($_tracks = $block->getShipment()->getAllTracks()): ?>
         <tbody>
         <?php $i = 0; foreach ($_tracks as $_track):$i++ ?>
-            <tr class="<?= /* @escapeNotVerified */ ($i%2 == 0) ? 'even' : 'odd' ?>">
+            <tr class="<?= /* @escapeNotVerified */ ($i % 2 == 0) ? 'even' : 'odd' ?>">
                 <td class="col-carrier"><?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?></td>
                 <td class="col-title"><?= $block->escapeHtml($_track->getTitle()) ?></td>
                 <td class="col-number">

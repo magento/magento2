@@ -66,7 +66,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable']
         );
-        $this->config =  $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
+        $this->config = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['reset'])
             ->getMock();

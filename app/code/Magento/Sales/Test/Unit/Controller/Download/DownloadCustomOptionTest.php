@@ -151,11 +151,11 @@ class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['endExecute'])
             ->setConstructorArgs(
                 [
-                    'context'              => $contextMock,
+                    'context' => $contextMock,
                     'resultForwardFactory' => $resultForwardFactoryMock,
-                    'download'             => $this->downloadMock,
-                    'unserialize'          => $this->createMock(Unserialize::class),
-                    'serializer'           => $this->serializerMock
+                    'download' => $this->downloadMock,
+                    'unserialize' => $this->createMock(Unserialize::class),
+                    'serializer' => $this->serializerMock
                 ]
             )
             ->getMock();

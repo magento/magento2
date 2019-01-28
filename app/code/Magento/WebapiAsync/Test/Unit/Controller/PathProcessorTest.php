@@ -62,9 +62,9 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
     public function processPathDataProvider()
     {
         return [
-            'All store code'              => ['all', Store::ADMIN_CODE],
-            'Default store code'          => ['', 'default', 0],
-            'Arbitrary store code'        => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
+            'All store code' => ['all', Store::ADMIN_CODE],
+            'Default store code' => ['', 'default', 0],
+            'Arbitrary store code' => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
             'Explicit default store code' => ['default', 'default'],
         ];
     }

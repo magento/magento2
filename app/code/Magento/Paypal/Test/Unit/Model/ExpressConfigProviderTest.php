@@ -19,7 +19,7 @@ class ExpressConfigProviderTest extends \PHPUnit\Framework\TestCase
         $currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
         $currentCustomer->expects($this->atLeastOnce())->method('getCustomerId')->willReturn(12);
 
-        $paymentHelper= $this->createMock(\Magento\Payment\Helper\Data::class);
+        $paymentHelper = $this->createMock(\Magento\Payment\Helper\Data::class);
 
         $paypalHelper = $this->createMock(\Magento\Paypal\Helper\Data::class);
         $paypalHelper->expects($this->atLeastOnce())->method('shouldAskToCreateBillingAgreement')->willReturn(false);

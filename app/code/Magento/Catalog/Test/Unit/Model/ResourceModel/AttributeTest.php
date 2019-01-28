@@ -141,7 +141,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $result = [
             'entity_attribute_id' => 196,
             'entity_type_id' => 4,
-            'attribute_set_id'=> 4,
+            'attribute_set_id' => 4,
             'attribute_group_id' => 7,
             'attribute_id' => 177,
             'sort_order' => 3,

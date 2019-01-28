@@ -152,7 +152,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
                     'is_filterable_in_grid' => true,
                     'is_searchable_in_grid' => true,
                     'validation_rules' => [],
-                    'required'=> false,
+                    'required' => false,
                     'entity_type_code' => 'customer_address',
                 ]
             ],

@@ -161,7 +161,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     public function invalidArgumentDataProvider()
     {
         return [
-            'themeId'   => [null, true],
+            'themeId' => [null, true],
             'isVirtual' => [1, false],
         ];
     }

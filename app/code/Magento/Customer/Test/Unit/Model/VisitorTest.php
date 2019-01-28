@@ -104,8 +104,8 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $request = new \Magento\Framework\DataObject(['route_name' => 'test_route_name']);
-        $action =  new \Magento\Framework\DataObject(['request' => $request]);
-        $event =  new \Magento\Framework\DataObject(['controller_action' => $action]);
+        $action = new \Magento\Framework\DataObject(['request' => $request]);
+        $event = new \Magento\Framework\DataObject(['controller_action' => $action]);
         $observer = new \Magento\Framework\DataObject(['event' => $event]);
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }

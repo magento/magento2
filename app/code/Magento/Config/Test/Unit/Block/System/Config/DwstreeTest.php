@@ -60,7 +60,7 @@ class DwstreeTest extends \PHPUnit\Framework\TestCase
         $this->context = $objectManager->getObject(
             \Magento\Backend\Block\Template\Context::class,
             [
-                'request'      => $this->requestMock,
+                'request' => $this->requestMock,
                 'storeManager' => $this->storeManagerMock,
             ]
         );
@@ -127,48 +127,48 @@ class DwstreeTest extends \PHPUnit\Framework\TestCase
     public function initTabsDataProvider()
     {
         return [
-            'matchAll'  => [
-                'scope'   => 'Test Scope',
+            'matchAll' => [
+                'scope' => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
-                    'actual'   => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
+                    'actual' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                 ],
-                'store'   => [
+                'store' => [
                     'expected' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
-                    'actual'   => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
+                    'actual' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
                 ],
             ],
-            'matchStore'  => [
-                'scope'   => 'Test Scope',
+            'matchStore' => [
+                'scope' => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
-                    'actual'   => ['name' => false, 'code' => false],
+                    'actual' => ['name' => false, 'code' => false],
                 ],
-                'store'   => [
+                'store' => [
                     'expected' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
-                    'actual'   => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
+                    'actual' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
                 ],
             ],
-            'matchWebsite'  => [
-                'scope'   => 'Test Scope',
+            'matchWebsite' => [
+                'scope' => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
-                    'actual'   => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
+                    'actual' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                 ],
-                'store'   => [
+                'store' => [
                     'expected' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
-                    'actual'   => ['name' => false, 'code' => false],
+                    'actual' => ['name' => false, 'code' => false],
                 ],
             ],
-            'noMatch'  => [
-                'scope'   => 'Test Scope',
+            'noMatch' => [
+                'scope' => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
-                    'actual'   => ['name' => false, 'code' => false],
+                    'actual' => ['name' => false, 'code' => false],
                 ],
-                'store'   => [
+                'store' => [
                     'expected' => ['name' => 'Test   Store Name', 'code' => 'Test   Store Code'],
-                    'actual'   => ['name' => false, 'code' => false],
+                    'actual' => ['name' => false, 'code' => false],
                 ],
             ],
         ];

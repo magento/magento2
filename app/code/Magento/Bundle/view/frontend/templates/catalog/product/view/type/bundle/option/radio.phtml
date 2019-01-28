@@ -9,8 +9,8 @@
 ?>
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
 <?php $_option = $block->getOption(); ?>
-<?php $_selections  = $_option->getSelections(); ?>
-<?php $_default     = $_option->getDefaultSelection(); ?>
+<?php $_selections = $_option->getSelections(); ?>
+<?php $_default = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">

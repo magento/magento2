@@ -55,15 +55,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->securityManager = $this->createPartialMock(
             \Magento\Security\Model\SecurityManager::class,
             ['performSecurityCheck']
         );
 
-        $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->createMock(ScopeInterface::class);
+        $this->accountManagement = $this->createMock(AccountManagement::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
     }
 
     /**

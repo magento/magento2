@@ -52,8 +52,8 @@ class Context
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager
     ) {
-        $this->session      = $session;
-        $this->httpContext  = $httpContext;
+        $this->session = $session;
+        $this->httpContext = $httpContext;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
     }

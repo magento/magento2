@@ -86,7 +86,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     protected function getMockObject($class, $methods = [])
     {
-        $builder =  $this->getMockBuilder($class)
+        $builder = $this->getMockBuilder($class)
             ->disableOriginalConstructor();
         if (count($methods)) {
             $builder->setMethods($methods);

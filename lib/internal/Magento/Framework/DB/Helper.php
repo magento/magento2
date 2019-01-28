@@ -62,7 +62,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     {
         $string = $field;
         if (!is_numeric($field) && (strpos($field, '.') !== false)) {
-            $size  = strpos($field, '.');
+            $size = strpos($field, '.');
             if ($reverse) {
                 $string = substr($field, 0, $size);
             } else {
@@ -118,7 +118,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         $columns = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         foreach ($columns as $columnEntry) {
             $correlationName = (string)$columnEntry[1];
-            $column          = $columnEntry[2];
+            $column = $columnEntry[2];
             foreach ($selectHavings as $having) {
                 /**
                  * Looking for column expression in the having clause
@@ -195,9 +195,9 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
             return $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         }
 
-        $columns          = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
-        $tables           = $select->getPart(\Magento\Framework\DB\Select::FROM);
-        $preparedColumns  = [];
+        $columns = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
+        $tables = $select->getPart(\Magento\Framework\DB\Select::FROM);
+        $preparedColumns = [];
 
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;

@@ -115,8 +115,8 @@ class CronEvent
     {
         $json = [
             'eventType' => 'Cron',
-            'appName'   => $this->config->getNewRelicAppName(),
-            'appId'     => $this->config->getNewRelicAppId(),
+            'appName' => $this->config->getNewRelicAppName(),
+            'appId' => $this->config->getNewRelicAppId(),
         ];
         $jsonArrayKeys = array_keys($json);
 

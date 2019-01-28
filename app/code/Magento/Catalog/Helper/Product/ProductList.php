@@ -38,7 +38,7 @@ class ProductList
      *
      * @var array
      */
-    protected $_defaultAvailableLimit  = [10 => 10,20 => 20,50 => 50];
+    protected $_defaultAvailableLimit = [10 => 10,20 => 20,50 => 50];
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -75,7 +75,7 @@ class ProductList
                 break;
 
             case 'grid-list':
-                $availableMode = ['grid' => __('Grid'), 'list' =>  __('List')];
+                $availableMode = ['grid' => __('Grid'), 'list' => __('List')];
                 break;
 
             case 'list-grid':

@@ -202,7 +202,7 @@ QUERY;
                 $attributeMetaData[$itemsIndex][0],
                 [
                   "attribute_code" => $expectedAttributeCodes[$itemsIndex],
-                  "attribute_type" =>$attributeTypes[0],
+                  "attribute_type" => $attributeTypes[0],
                   "entity_type" => $entityTypes[$itemsIndex]
                 ]
             );
@@ -225,7 +225,7 @@ QUERY;
                 $attributeMetaDataItems[$itemIndex][0],
                 [
                     "attribute_code" => $expectedAttributeCodes[$itemIndex],
-                    "attribute_type" =>$attributeTypes[$itemIndex],
+                    "attribute_type" => $attributeTypes[$itemIndex],
                     "entity_type" => $entityTypes[$itemIndex]
                 ]
             );

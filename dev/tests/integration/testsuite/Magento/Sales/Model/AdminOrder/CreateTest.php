@@ -46,7 +46,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
-        $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->model = $this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
     }
 
     /**

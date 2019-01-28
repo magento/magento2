@@ -137,8 +137,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
     public function testPrepareLayout()
     {
         $expectedHeader = 'Test Header';
-        $expectedLabel  = 'Test  Label';
-        $expectedBlock  = 'Test  Block';
+        $expectedLabel = 'Test  Label';
+        $expectedBlock = 'Test  Block';
 
         $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template::class)
             ->disableOriginalConstructor()

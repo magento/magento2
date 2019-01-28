@@ -37,7 +37,7 @@ class LimitExpression extends Expression
     ) {
         $this->sql = $sql;
         $this->count = $count;
-        $this->offset =  $offset;
+        $this->offset = $offset;
     }
 
     /**

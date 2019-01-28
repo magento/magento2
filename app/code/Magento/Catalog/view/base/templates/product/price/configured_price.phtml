@@ -21,9 +21,9 @@ $configuredRegularPrice = $block->getPriceType(
             <?= /* @noEscape */ $block->renderAmount(
                 $configuredPrice->getAmount(),
                 [
-                    'display_label'     => $block->escapeHtml(__('Special Price')),
-                    'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
-                    'price_type'        => 'finalPrice',
+                    'display_label' => $block->escapeHtml(__('Special Price')),
+                    'price_id' => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                    'price_type' => 'finalPrice',
                     'include_container' => true,
                     'schema' => $schema,
                 ]
@@ -33,11 +33,11 @@ $configuredRegularPrice = $block->getPriceType(
             <?= /* @noEscape */ $block->renderAmount(
                 $configuredRegularPrice->getAmount(),
                 [
-                    'display_label'     => $block->escapeHtml(__('Regular Price')),
-                    'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
-                    'price_type'        => 'oldPrice',
+                    'display_label' => $block->escapeHtml(__('Regular Price')),
+                    'price_id' => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
+                    'price_type' => 'oldPrice',
                     'include_container' => true,
-                    'skip_adjustments'  => true,
+                    'skip_adjustments' => true,
                 ]
             ); ?>
         </span>
@@ -52,9 +52,9 @@ $configuredRegularPrice = $block->getPriceType(
         <?= /* @noEscape */ $block->renderAmount(
             $configuredPrice->getAmount(),
             [
-                'display_label'     => $block->escapeHtml($priceLabel),
-                'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
-                'price_type'        => 'finalPrice',
+                'display_label' => $block->escapeHtml($priceLabel),
+                'price_id' => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                'price_type' => 'finalPrice',
                 'include_container' => true,
                 'schema' => $schema,
             ]

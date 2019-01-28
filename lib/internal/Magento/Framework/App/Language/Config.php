@@ -81,16 +81,16 @@ class Config
         /** @var $useNode \DOMElement */
         foreach ($languageNode->getElementsByTagName('use') as $useNode) {
             $use[] = [
-                'vendor'  => $useNode->getAttribute('vendor'),
+                'vendor' => $useNode->getAttribute('vendor'),
                 'package' => $useNode->getAttribute('package'),
             ];
         }
         return [
-            'code'       => $codeNode->nodeValue,
-            'vendor'     => $vendorNode->nodeValue,
-            'package'    => $packageNode->nodeValue,
+            'code' => $codeNode->nodeValue,
+            'vendor' => $vendorNode->nodeValue,
+            'package' => $packageNode->nodeValue,
             'sort_order' => $sortOrderNode ? $sortOrderNode->nodeValue : 0,
-            'use'        => $use
+            'use' => $use
         ];
     }
 

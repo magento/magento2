@@ -82,7 +82,7 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'payment' => [
                 'paypalBillingAgreement' => [
-                    'agreements'=> [],
+                    'agreements' => [],
                     'transportName' => AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID
                 ]
             ]

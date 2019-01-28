@@ -56,7 +56,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
-        $this->statusBaseSelectProcessor =  (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
+        $this->statusBaseSelectProcessor = (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
             'eavConfig' => $this->eavConfig,
             'metadataPool' => $this->metadataPool,
             'storeManager' => $this->storeManager,

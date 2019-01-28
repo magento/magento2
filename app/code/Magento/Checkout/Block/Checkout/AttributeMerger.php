@@ -18,10 +18,10 @@ class AttributeMerger
      * @var array
      */
     protected $formElementMap = [
-        'checkbox'    => 'Magento_Ui/js/form/element/select',
-        'select'      => 'Magento_Ui/js/form/element/select',
-        'textarea'    => 'Magento_Ui/js/form/element/textarea',
-        'multiline'   => 'Magento_Ui/js/form/components/group',
+        'checkbox' => 'Magento_Ui/js/form/element/select',
+        'select' => 'Magento_Ui/js/form/element/select',
+        'textarea' => 'Magento_Ui/js/form/element/textarea',
+        'multiline' => 'Magento_Ui/js/form/components/group',
         'multiselect' => 'Magento_Ui/js/form/element/multiselect',
         'image' => 'Magento_Ui/js/form/element/media',
         'file' => 'Magento_Ui/js/form/element/media',

@@ -12,7 +12,7 @@
         <?php foreach ($block->getTerms() as $_term): ?>
             <li class="item">
                 <a href="<?= /* @escapeNotVerified */ $block->getSearchUrl($_term) ?>"
-                   style="font-size:<?= /* @escapeNotVerified */ $_term->getRatio()*70+75 ?>%;">
+                   style="font-size:<?= /* @escapeNotVerified */ $_term->getRatio() * 70 + 75 ?>%;">
                     <?= $block->escapeHtml($_term->getQueryText()) ?>
                 </a>
             </li>

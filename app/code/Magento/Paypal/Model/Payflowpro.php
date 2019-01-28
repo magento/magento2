@@ -48,7 +48,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     const TRXTYPE_DELAYED_INQUIRY = 'I';
 
-    const TRXTYPE_ACCEPT_DENY       = 'U';
+    const TRXTYPE_ACCEPT_DENY = 'U';
 
     const UPDATEACTION_APPROVED = 'APPROVE';
 

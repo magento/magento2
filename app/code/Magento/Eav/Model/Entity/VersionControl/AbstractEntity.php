@@ -77,7 +77,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
                     $this->loadAllAttributes($object);
                 }
 
-                if ($this->getEntityTable() ==  \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
+                if ($this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
                     && !$object->getEntityTypeId()
                 ) {
                     $object->setEntityTypeId($this->getTypeId());

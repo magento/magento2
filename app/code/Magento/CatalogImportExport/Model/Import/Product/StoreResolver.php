@@ -119,7 +119,7 @@ class StoreResolver
             $this->_initStores();
         }
         if ($code) {
-            return $this->storeCodeToId[$code] ??  null;
+            return $this->storeCodeToId[$code] ?? null;
         }
         return $this->storeCodeToId;
     }

@@ -115,15 +115,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Field',
                 [
                     [
-                        'id'          => 'test_section/test_group/test_field_1',
-                        'type'        => null,
-                        'name'        => 'Test Field',
+                        'id' => 'test_section/test_group/test_field_1',
+                        'type' => null,
+                        'name' => 'Test Field',
                         'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                     [
-                        'id'          => 'test_section/test_group/test_field_2',
-                        'type'        => null,
-                        'name'        => 'Test Field',
+                        'id' => 'test_section/test_group/test_field_2',
+                        'type' => null,
+                        'name' => 'Test Field',
                         'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                 ],
@@ -132,9 +132,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Group',
                 [
                     [
-                        'id'          => 'test_section/test_group',
-                        'type'        => null,
-                        'name'        => 'Test Group',
+                        'id' => 'test_section/test_group',
+                        'type' => null,
+                        'name' => 'Test Group',
                         'description' => ' / Test Tab / Test Section',
                     ],
                 ],
@@ -143,9 +143,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Section',
                 [
                     [
-                        'id'          => '/test_section',
-                        'type'        => null,
-                        'name'        => 'Test Section',
+                        'id' => '/test_section',
+                        'type' => null,
+                        'name' => 'Test Section',
                         'description' => ' / Test Tab',
                     ],
                 ],

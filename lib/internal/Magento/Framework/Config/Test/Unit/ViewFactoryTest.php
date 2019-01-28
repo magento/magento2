@@ -90,7 +90,7 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'themeModel' => $this->theme,
-            'area'       => self::AREA
+            'area' => self::AREA
         ];
     }
 }

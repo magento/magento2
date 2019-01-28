@@ -212,7 +212,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
     public function executeAllDataProvider()
     {
         return [
-            'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
+            'enable' => [true, '%amodules have been enabled%aMagento_Module1%a'],
             'disable' => [false, '%amodules have been disabled%aMagento_Module1%a'],
         ];
     }
@@ -247,7 +247,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
     public function executeWithConstraintsDataProvider()
     {
         return [
-            'enable'  => [true],
+            'enable' => [true],
             'disable' => [false],
         ];
     }
@@ -283,7 +283,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
     public function executeExecuteForceDataProvider()
     {
         return [
-            'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
+            'enable' => [true, '%amodules have been enabled%aMagento_Module1%a'],
             'disable' => [false, '%amodules have been disabled%aMagento_Module1%a'],
         ];
     }

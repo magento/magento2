@@ -45,9 +45,9 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $this->emailSender = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Sales\Model\EmailSenderHandler::class,
             [
-                'emailSender'       => $invoiceSender,
-                'entityResource'    => $entityResource,
-                'entityCollection'  => $this->entityCollection,
+                'emailSender' => $invoiceSender,
+                'entityResource' => $entityResource,
+                'entityCollection' => $this->entityCollection,
                 'identityContainer' => $invoiceIdentity,
             ]
         );

@@ -10,7 +10,7 @@
 
 <?php
 /** @var $block \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable*/
-$_product    = $block->getProduct();
+$_product = $block->getProduct();
 $_attributes = $block->decorateArray($block->getAllowAttributes());
 ?>
 <?php if ($_product->isSaleable() && count($_attributes)):?>

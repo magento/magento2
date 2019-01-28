@@ -59,7 +59,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     public function testApplyFixedDiscount(array $productPrices): void
     {
         $expectedDiscount = '-15.00';
-        $couponCode =  'CART_FIXED_DISCOUNT_15';
+        $couponCode = 'CART_FIXED_DISCOUNT_15';
         $cartId = $this->cartManagement->createEmptyCart();
 
         foreach ($productPrices as $price) {
@@ -101,7 +101,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     public function testCouponCodeWithWildcard()
     {
         $expectedDiscount = '-5.00';
-        $couponCode =  '2?ds5!2d';
+        $couponCode = '2?ds5!2d';
         $cartId = $this->cartManagement->createEmptyCart();
         $productPrice = 10;
 

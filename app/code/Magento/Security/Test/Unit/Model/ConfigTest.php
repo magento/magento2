@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['getValue', 'isSetFlag']
         );
 
-        $this->scopeMock =  $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->scopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

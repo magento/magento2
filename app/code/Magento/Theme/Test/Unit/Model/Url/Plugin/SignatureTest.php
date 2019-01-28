@@ -56,7 +56,7 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
     public function afterGetBaseUrlInactiveDataProvider()
     {
         return [
-            'disabled in config, relevant URL type'  => [0, \Magento\Framework\UrlInterface::URL_TYPE_STATIC],
+            'disabled in config, relevant URL type' => [0, \Magento\Framework\UrlInterface::URL_TYPE_STATIC],
             'enabled in config, irrelevant URL type' => [1, \Magento\Framework\UrlInterface::URL_TYPE_LINK],
         ];
     }

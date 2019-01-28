@@ -151,9 +151,9 @@ class AmountTest extends \PHPUnit\Framework\TestCase
             ];
         } else {
             $expectedData = [
-                'key1'                   => 'data1',
-                'css_classes'            => 'class1 class2',
-                'module_name'            => null,
+                'key1' => 'data1',
+                'css_classes' => 'class1 class2',
+                'module_name' => null,
                 'adjustment_css_classes' => 'class1 class2 render1 render2',
             ];
         }

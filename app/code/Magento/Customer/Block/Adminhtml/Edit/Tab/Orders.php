@@ -124,7 +124,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'grand_total',
                 'type' => 'currency',
                 'currency' => 'order_currency_code',
-                'rate'  => 1
+                'rate' => 1
             ]
         );
 

@@ -50,7 +50,7 @@ class AssertBundleOptionsDeleted extends AbstractConstraint
 
             foreach ($option['assigned_products'] as $productIndex => $associatedProduct) {
                 $associatedProduct['data']['getProductName'] =
-                    $originalProductData[$index+1]['assigned_products'][$productIndex]['search_data']['name'];
+                    $originalProductData[$index + 1]['assigned_products'][$productIndex]['search_data']['name'];
                 $associatedProduct = $associatedProduct['data'];
                 $errorAssociatedProducts = array_diff(
                     $associatedProduct,

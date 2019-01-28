@@ -137,8 +137,8 @@ class FinalPriceBox extends BasePriceBox
         return $this->renderAmount(
             $amount,
             [
-                'display_label'     => __('As low as'),
-                'price_id'          => $id,
+                'display_label' => __('As low as'),
+                'price_id' => $id,
                 'include_container' => false,
                 'skip_adjustments' => true
             ]

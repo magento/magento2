@@ -42,5 +42,5 @@
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
     <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @escapeNotVerified */ $block->prepareSku($block->getSku()) ?></td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>"><?= /* @escapeNotVerified */ $_item->getQty() * 1 ?></td>
 </tr>

@@ -75,7 +75,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->reportController =  $this->objectManagerHelper->getObject(
+        $this->reportController = $this->objectManagerHelper->getObject(
             Report::class,
             [
                 '_eventManager' => $this->eventManagerMock,

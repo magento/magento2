@@ -474,7 +474,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [];
         $productsCount = $this->cacheLimit * 2;
 
-        $productMocks =  $this->getProductMocksForReducedCache($productsCount);
+        $productMocks = $this->getProductMocksForReducedCache($productsCount);
         $productFactoryInvMock = $this->productFactory->expects($this->exactly($productsCount))
             ->method('create');
         call_user_func_array([$productFactoryInvMock, 'willReturnOnConsecutiveCalls'], $productMocks);

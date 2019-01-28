@@ -72,7 +72,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             'less',
             'path'
         );
-        $invoke =  $this->once();
+        $invoke = $this->once();
         if (preg_match('/^(http:|https:|\/+)/', $foundPath)) {
             $invoke = $this->never();
         }

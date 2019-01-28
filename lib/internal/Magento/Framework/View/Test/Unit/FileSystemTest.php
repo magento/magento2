@@ -105,9 +105,9 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     public function testGetTemplateFileName()
     {
         $params = [
-            'area'       => 'some_area',
+            'area' => 'some_area',
             'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
-            'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
+            'module' => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                            // but PHPUnit has troubles with passing arguments by reference
         ];
         $file = 'Some_Module::some_file.ext';
@@ -240,10 +240,10 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     {
         $locale = \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE;
         $params = [
-            'area'       => 'some_area',
+            'area' => 'some_area',
             'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
-            'module'     => 'Some_Module',
-            'locale'     => $locale
+            'module' => 'Some_Module',
+            'locale' => $locale
         ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';

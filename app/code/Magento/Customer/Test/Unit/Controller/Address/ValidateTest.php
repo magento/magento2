@@ -54,10 +54,10 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             \Magento\Customer\Controller\Adminhtml\Address\Validate::class,
             [
-                'formFactory'           => $this->formFactoryMock,
-                'request'               => $this->requestMock,
+                'formFactory' => $this->formFactoryMock,
+                'request' => $this->requestMock,
                 'resultRedirectFactory' => $this->resultRedirectFactoryMock,
-                'resultJsonFactory'     => $this->resultJsonFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
             ]
         );
     }
@@ -73,16 +73,16 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $errors = ['Error Message 1', 'Error Message 2'];
 
         $addressExtractedData = [
-            'entity_id'        => $addressId,
-            'default_billing'  => true,
+            'entity_id' => $addressId,
+            'default_billing' => true,
             'default_shipping' => true,
-            'code'             => 'value',
-            'region'           => [
-                'region'    => 'region',
+            'code' => 'value',
+            'region' => [
+                'region' => 'region',
                 'region_id' => 'region_id',
             ],
-            'region_id'        => 'region_id',
-            'id'               => $addressId,
+            'region_id' => 'region_id',
+            'id' => $addressId,
         ];
 
         $customerAddressFormMock = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);

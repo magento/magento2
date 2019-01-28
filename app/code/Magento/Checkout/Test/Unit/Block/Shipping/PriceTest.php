@@ -39,7 +39,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->priceObj = $objectManager->getObject(
             \Magento\Checkout\Block\Shipping\Price::class,
-            ['priceCurrency'   => $this->priceCurrency]
+            ['priceCurrency' => $this->priceCurrency]
         );
     }
 

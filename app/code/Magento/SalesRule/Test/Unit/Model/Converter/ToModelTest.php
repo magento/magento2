@@ -38,7 +38,7 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
         $this->model = $helper->getObject(
             \Magento\SalesRule\Model\Converter\ToModel::class,
             [
-                'ruleFactory' =>  $this->ruleFactory,
+                'ruleFactory' => $this->ruleFactory,
                 'dataObjectProcessor' => $this->dataObjectProcessor,
             ]
         );
@@ -171,12 +171,12 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
         $ruleModel
             ->expects($this->atLeastOnce())
             ->method('getData')
-            ->willReturn(['data_1'=>1]);
+            ->willReturn(['data_1' => 1]);
 
         $this->dataObjectProcessor
             ->expects($this->any())
             ->method('buildOutputDataArray')
-            ->willReturn(['data_2'=>2]);
+            ->willReturn(['data_2' => 2]);
 
         $this->ruleFactory
             ->expects($this->any())
@@ -238,12 +238,12 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
         $ruleModel
             ->expects($this->atLeastOnce())
             ->method('getData')
-            ->willReturn(['data_1'=>1]);
+            ->willReturn(['data_1' => 1]);
 
         $this->dataObjectProcessor
             ->expects($this->any())
             ->method('buildOutputDataArray')
-            ->willReturn(['data_2'=>2]);
+            ->willReturn(['data_2' => 2]);
 
         $this->ruleFactory
             ->expects($this->any())

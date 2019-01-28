@@ -67,7 +67,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         }
         $this->configType->expects($this->once())
             ->method('get')
-            ->with($scope =='store' ? 'stores/path' : 'websites/myWebsite/path')
+            ->with($scope == 'store' ? 'stores/path' : 'websites/myWebsite/path')
             ->willReturn(true);
 
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));

@@ -54,23 +54,23 @@ class UpdateCommandTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
+        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->httpClientMock =  $this->getMockBuilder(ClientInterface::class)
+        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -53,7 +53,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
-                'state'  => $this->_stateMock
+                'state' => $this->_stateMock
             ]
         );
     }

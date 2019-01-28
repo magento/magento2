@@ -35,11 +35,11 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 <?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
     <span class="old-price sly-old-price no-display">
         <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
-            'display_label'     => __('Regular Price'),
-            'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
-            'price_type'        => 'oldPrice',
+            'display_label' => __('Regular Price'),
+            'price_id' => $block->getPriceId('old-price-' . $idSuffix),
+            'price_type' => 'oldPrice',
             'include_container' => true,
-            'skip_adjustments'  => true
+            'skip_adjustments' => true
         ]); ?>
     </span>
 <?php endif; ?>

@@ -95,7 +95,7 @@ class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByIdentifiersProduct()
     {
-        $data =[
+        $data = [
             [
                 'url_rewrite_id' => '1',
                 'entity_type' => 'product',
@@ -133,7 +133,7 @@ class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByIdentifiersCategory()
     {
-        $data =[
+        $data = [
             [
                 'url_rewrite_id' => '1',
                 'entity_type' => 'category',

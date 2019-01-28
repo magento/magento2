@@ -32,8 +32,8 @@ try {
         $filesystem = new \Magento\Framework\Filesystem\Driver\File();
         $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
         $loggerHandlers = [
-            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
-            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+            'system' => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug' => new \Magento\Framework\Logger\Handler\Debug($filesystem)
         ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
@@ -54,7 +54,7 @@ try {
     if (!file_exists($installConfigFile)) {
         $installConfigFile = $installConfigFile . '.dist';
     }
-    $dirList     = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
+    $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
     $application = new \Magento\TestFramework\WebApiApplication(
         $shell,
         $dirList->getPath(DirectoryList::VAR_DIR),

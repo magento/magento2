@@ -150,7 +150,7 @@ class ConvertToXml
         $excel = $this->excelFactory->create(
             [
                 'iterator' => $searchResultIterator,
-                'rowCallback'=> [$this, 'getRowData'],
+                'rowCallback' => [$this, 'getRowData'],
             ]
         );
 

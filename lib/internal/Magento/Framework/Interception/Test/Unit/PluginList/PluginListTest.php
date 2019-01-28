@@ -68,7 +68,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue(false));
 
-        $omConfigMock =  $this->getMockForAbstractClass(
+        $omConfigMock = $this->getMockForAbstractClass(
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
         );
 

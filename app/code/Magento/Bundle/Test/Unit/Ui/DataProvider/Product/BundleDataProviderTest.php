@@ -87,7 +87,7 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
             'requestFieldName' => 'testRequestFieldName',
             'collectionFactory' => $this->collectionFactoryMock,
             'request' => $this->requestMock,
-            'dataHelper' =>  $this->dataHelperMock,
+            'dataHelper' => $this->dataHelperMock,
             'addFieldStrategies' => [],
             'addFilterStrategies' => [],
             'meta' => [],

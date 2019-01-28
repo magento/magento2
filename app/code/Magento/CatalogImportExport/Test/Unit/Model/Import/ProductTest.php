@@ -929,7 +929,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
 
         $expectedData = [
-            'entity_id' =>  $oldSku[$sku]['entity_id'], //entity_id_val
+            'entity_id' => $oldSku[$sku]['entity_id'], //entity_id_val
             'type_id' => $oldSku[$sku]['type_id'],// type_id_val
             'attr_set_id' => $oldSku[$sku]['attr_set_id'], //attr_set_id_val
             'attr_set_code' => $_attrSetIdToName[$oldSku[$sku]['attr_set_id']],//attr_set_id_val

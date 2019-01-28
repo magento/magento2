@@ -106,13 +106,13 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
-        $downloadableProductLinks   = $product->getExtensionAttributes()->getDownloadableProductLinks();
-        $downloadableLinks          = $product->getDownloadableLinks();
+        $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
+        $downloadableLinks = $product->getDownloadableLinks();
         $downloadableProductSamples = $product->getExtensionAttributes()->getDownloadableProductSamples();
-        $downloadableSamples        = $product->getDownloadableSamples();
+        $downloadableSamples = $product->getDownloadableSamples();
 
         //TODO: Track Fields: id, link_id, link_file and sample_file)
-        $expectedLinks= [
+        $expectedLinks = [
             'file' => [
                 'title' => 'TEST Import Link Title File',
                 'sort_order' => '78',
@@ -122,7 +122,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
                 'is_shareable' => '0',
                 'link_type' => 'file'
             ],
-            'url'  => [
+            'url' => [
                 'title' => 'TEST Import Link Title URL',
                 'sort_order' => '42',
                 'sample_type' => 'url',
@@ -154,13 +154,13 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         }
 
         //TODO: Track Fields: id, sample_id and sample_file)
-        $expectedSamples= [
+        $expectedSamples = [
             'file' => [
                 'title' => 'TEST Import Sample File',
                 'sort_order' => '178',
                 'sample_type' => 'file'
             ],
-            'url'  => [
+            'url' => [
                 'title' => 'TEST Import Sample URL',
                  'sort_order' => '178',
                  'sample_type' => 'url',

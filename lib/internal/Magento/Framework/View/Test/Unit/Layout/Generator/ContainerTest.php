@@ -104,9 +104,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         [
                             'attributes' => [
                                 Layout\Element::CONTAINER_OPT_LABEL => 'dd_label',
-                                Container::CONTAINER_OPT_HTML_TAG   => 'dd',
+                                Container::CONTAINER_OPT_HTML_TAG => 'dd',
                                 Container::CONTAINER_OPT_HTML_CLASS => 'dd_class',
-                                Container::CONTAINER_OPT_HTML_ID    => 'dd_id',
+                                Container::CONTAINER_OPT_HTML_ID => 'dd_id',
                             ]
                         ],
                     ],
@@ -125,9 +125,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         'container',
                         [
                             'attributes' => [
-                                Container::CONTAINER_OPT_HTML_TAG   => 'dd',
+                                Container::CONTAINER_OPT_HTML_TAG => 'dd',
                                 Container::CONTAINER_OPT_HTML_CLASS => 'dd_class',
-                                Container::CONTAINER_OPT_HTML_ID    => 'dd_id',
+                                Container::CONTAINER_OPT_HTML_ID => 'dd_id',
                             ]
                         ],
                     ],
@@ -173,7 +173,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         'container',
                         [
                             'attributes' => [
-                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Container::CONTAINER_OPT_LABEL => 'label',
                                 Layout\Element::CONTAINER_OPT_HTML_TAG => 'custom_tag',
                             ]
                         ],
@@ -186,7 +186,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         'container',
                         [
                             'attributes' => [
-                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Container::CONTAINER_OPT_LABEL => 'label',
                                 Layout\Element::CONTAINER_OPT_HTML_ID => 'html_id',
                             ]
                         ],
@@ -199,7 +199,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         'container',
                         [
                             'attributes' => [
-                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Container::CONTAINER_OPT_LABEL => 'label',
                                 Layout\Element::CONTAINER_OPT_HTML_CLASS => 'html_class',
                             ]
                         ],

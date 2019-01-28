@@ -57,7 +57,7 @@ class Item extends SalesResource implements InvoiceItemResourceInterface
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Invoice\Item $object */
-        if (null !==$object->getOrderItem()) {
+        if (null !== $object->getOrderItem()) {
             $object->getOrderItem()->save();
         }
         return parent::_afterSave($object);

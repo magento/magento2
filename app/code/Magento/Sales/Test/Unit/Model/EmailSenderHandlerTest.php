@@ -96,12 +96,12 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
         $this->object = $objectManager->getObject(
             \Magento\Sales\Model\EmailSenderHandler::class,
             [
-                'emailSender'       => $this->emailSender,
-                'entityResource'    => $this->entityResource,
-                'entityCollection'  => $this->entityCollection,
-                'globalConfig'      => $this->globalConfig,
+                'emailSender' => $this->emailSender,
+                'entityResource' => $this->entityResource,
+                'entityCollection' => $this->entityCollection,
+                'globalConfig' => $this->globalConfig,
                 'identityContainer' => $this->identityContainerMock,
-                'storeManager'      => $this->storeManagerMock,
+                'storeManager' => $this->storeManagerMock,
             ]
         );
     }

@@ -170,9 +170,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             [9223372036854775807 + 1, '9223372036854775808'],
             [9223372036854775807, '9223372036854775807'],
             [9223372036854775807.3423424234, '9223372036854775808'],
-            [2147483647 * pow(10, 10)+12, '21474836470000001024'],
-            [9223372036854775807 * pow(10, 10)+12, '92233720368547758080000000000'],
-            [(0.099999999999999999999999995+0.2+0.3+0.4+0.5)*10, '15'],
+            [2147483647 * pow(10, 10) + 12, '21474836470000001024'],
+            [9223372036854775807 * pow(10, 10) + 12, '92233720368547758080000000000'],
+            [(0.099999999999999999999999995 + 0.2 + 0.3 + 0.4 + 0.5) * 10, '15'],
             ['21474836470000000012', '21474836470000001024'],
             [0x5468792130ABCDEF, '6082244480221302255'],
         ];
@@ -225,8 +225,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testMultipleQueryException()
     {
         $sql = "SELECT COUNT(*) AS _num FROM test; ";
-        $sql.= "INSERT INTO test(id) VALUES (1); ";
-        $sql.= "SELECT COUNT(*) AS _num FROM test; ";
+        $sql .= "INSERT INTO test(id) VALUES (1); ";
+        $sql .= "SELECT COUNT(*) AS _num FROM test; ";
         $this->_mockAdapter->query($sql);
     }
 
@@ -506,14 +506,14 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'columnData' => [
-                    'TYPE'        => 'integer',
-                    'IDENTITY'    => true,
-                    'UNSIGNED'    => true,
-                    'NULLABLE'    => false,
-                    'DEFAULT'     => null,
+                    'TYPE' => 'integer',
+                    'IDENTITY' => true,
+                    'UNSIGNED' => true,
+                    'NULLABLE' => false,
+                    'DEFAULT' => null,
                     'COLUMN_NAME' => 'Some field',
-                    'COMMENT'     => 'Some field',
-                    'AFTER'       => 'Previous field',
+                    'COMMENT' => 'Some field',
+                    'AFTER' => 'Previous field',
                 ],
                 'expectedQuery' => 'ALTER TABLE `tableName` ADD COLUMN `columnName` int UNSIGNED '
                     . 'NOT NULL default  auto_increment COMMENT Some field AFTER `Previous field` ',

@@ -25,7 +25,7 @@ class IframeConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentHelper= $this->createMock(\Magento\Payment\Helper\Data::class);
+        $paymentHelper = $this->createMock(\Magento\Payment\Helper\Data::class);
 
         $payment->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
 

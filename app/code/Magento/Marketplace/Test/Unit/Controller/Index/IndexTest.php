@@ -42,7 +42,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $titleMock = $this->getTitleMock(['prepend']);
         $titleMock->expects($this->once())
             ->method('prepend');
-        $configMock =  $this->getConfigMock(['getTitle']);
+        $configMock = $this->getConfigMock(['getTitle']);
         $configMock->expects($this->once())
             ->method('getTitle')
             ->will($this->returnValue($titleMock));

@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_source  = $block->getSource() ?>
+<?php $_source = $block->getSource() ?>
 <?php if ($_source): ?>
     <tr>
         <td class="label"><?= /* @escapeNotVerified */ $block->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
@@ -24,7 +24,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_positive]"
-                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentPositive()*1 ?>"
+                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentPositive() * 1 ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_positive" />
         </td>
@@ -34,7 +34,7 @@
         <td>
             <input type="text"
                    name="creditmemo[adjustment_negative]"
-                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentNegative()*1 ?>"
+                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentNegative() * 1 ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_negative"/>
             <script>

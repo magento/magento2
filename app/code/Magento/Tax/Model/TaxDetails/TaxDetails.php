@@ -16,10 +16,10 @@ class TaxDetails extends AbstractExtensibleModel implements TaxDetailsInterface
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_SUBTOTAL      = 'subtotal';
-    const KEY_TAX_AMOUNT    = 'tax_amount';
+    const KEY_SUBTOTAL = 'subtotal';
+    const KEY_TAX_AMOUNT = 'tax_amount';
     const KEY_APPLIED_TAXES = 'applied_taxes';
-    const KEY_ITEMS         = 'items';
+    const KEY_ITEMS = 'items';
     const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /**#@-*/
 

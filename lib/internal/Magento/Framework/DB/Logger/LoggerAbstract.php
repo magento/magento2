@@ -63,7 +63,7 @@ abstract class LoggerAbstract implements LoggerInterface
     public function getStats($type, $sql, $bind = [], $result = null)
     {
         $message = '## ' . getmypid() . ' ## ';
-        $nl   = "\n";
+        $nl = "\n";
         $time = sprintf('%.4f', microtime(true) - $this->timer);
 
         if (!$this->logAllQueries && $time < $this->logQueryTime) {

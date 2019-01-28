@@ -93,12 +93,12 @@ class DiCompileCommand extends Command
         ComponentRegistrar $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
-        $this->directoryList    = $directoryList;
-        $this->objectManager    = $objectManagerProvider->get();
-        $this->taskManager      = $taskManager;
-        $this->filesystem       = $filesystem;
-        $this->fileDriver       = $fileDriver;
-        $this->componentRegistrar  = $componentRegistrar;
+        $this->directoryList = $directoryList;
+        $this->objectManager = $objectManagerProvider->get();
+        $this->taskManager = $taskManager;
+        $this->filesystem = $filesystem;
+        $this->fileDriver = $fileDriver;
+        $this->componentRegistrar = $componentRegistrar;
         parent::__construct();
     }
 

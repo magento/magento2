@@ -27,15 +27,15 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $this->testData = [
             'before_element_html' => 'test_before_element_html',
-            'html_id'             => 'test_id',
-            'name'                => 'test_name',
-            'value'               => 'test_value',
-            'title'               => 'test_title',
-            'disabled'            => true,
-            'after_element_js'    => 'test_after_element_js',
-            'after_element_html'  => 'test_after_element_html',
-            'html_id_prefix'      => 'test_id_prefix_',
-            'html_id_suffix'      => '_test_id_suffix',
+            'html_id' => 'test_id',
+            'name' => 'test_name',
+            'value' => 'test_value',
+            'title' => 'test_title',
+            'disabled' => true,
+            'after_element_js' => 'test_after_element_js',
+            'after_element_html' => 'test_after_element_html',
+            'html_id_prefix' => 'test_id_prefix_',
+            'html_id_suffix' => '_test_id_suffix',
         ];
 
         $this->file = $objectManager->getObject(

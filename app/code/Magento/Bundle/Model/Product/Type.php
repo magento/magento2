@@ -240,7 +240,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
             ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
-        $this->arrayUtility= $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
+        $this->arrayUtility = $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
 
         parent::__construct(
             $catalogProductOption,

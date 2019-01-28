@@ -76,7 +76,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
 
         $expectedSharedInstances = [
             'class_name' => 'shared_object',
-            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class =>  $configLoaderMock
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class => $configLoaderMock
         ];
         $this->assertSame($expectedSharedInstances, $sharedInstances);
         if (isset($origObjectManager)) {

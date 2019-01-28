@@ -56,7 +56,7 @@
                                name="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
                                id="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
                                maxlength="12"
-                               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"
+                               value="<?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>"
                                title="<?= /* @escapeNotVerified */ __('Qty') ?>"
                                class="input-text admin__control-text qty" />
                         <input type="hidden" value="1" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]" />

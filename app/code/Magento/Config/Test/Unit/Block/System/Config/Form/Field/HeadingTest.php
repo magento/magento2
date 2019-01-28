@@ -14,7 +14,7 @@ class HeadingTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $htmlId = 'test_HTML_id';
-        $label  = 'test_label';
+        $label = 'test_label';
 
         $elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->disableOriginalConstructor()

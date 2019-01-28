@@ -194,12 +194,12 @@ class Block implements Layout\ReaderInterface
             }
         } else {
             $elementData['attributes'] = [
-                self::ATTRIBUTE_CLASS    => (string)$currentElement[self::ATTRIBUTE_CLASS],
-                self::ATTRIBUTE_GROUP    => (string)$currentElement[self::ATTRIBUTE_GROUP],
+                self::ATTRIBUTE_CLASS => (string)$currentElement[self::ATTRIBUTE_CLASS],
+                self::ATTRIBUTE_GROUP => (string)$currentElement[self::ATTRIBUTE_GROUP],
                 self::ATTRIBUTE_TEMPLATE => (string)$currentElement[self::ATTRIBUTE_TEMPLATE],
-                self::ATTRIBUTE_TTL      => (string)$currentElement[self::ATTRIBUTE_TTL],
-                self::ATTRIBUTE_DISPLAY  => (string)$currentElement[self::ATTRIBUTE_DISPLAY],
-                self::ATTRIBUTE_ACL  => (string)$currentElement[self::ATTRIBUTE_ACL],
+                self::ATTRIBUTE_TTL => (string)$currentElement[self::ATTRIBUTE_TTL],
+                self::ATTRIBUTE_DISPLAY => (string)$currentElement[self::ATTRIBUTE_DISPLAY],
+                self::ATTRIBUTE_ACL => (string)$currentElement[self::ATTRIBUTE_ACL],
             ];
         }
         return $elementData['attributes'];

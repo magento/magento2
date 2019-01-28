@@ -16,7 +16,7 @@
 $priceModel = $block->getPriceType('regular_price');
 
 /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
-    'price_id'          => $block->getPriceId('product-price-'),
+    'price_id' => $block->getPriceId('product-price-'),
     'include_container' => true
 ]);
 ?>

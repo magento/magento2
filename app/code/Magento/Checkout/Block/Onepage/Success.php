@@ -93,8 +93,8 @@ class Success extends \Magento\Framework\View\Element\Template
                     ['order_id' => $order->getEntityId()]
                 ),
                 'can_print_order' => $this->isVisible($order),
-                'can_view_order'  => $this->canViewOrder($order),
-                'order_id'  => $order->getIncrementId()
+                'can_view_order' => $this->canViewOrder($order),
+                'order_id' => $order->getIncrementId()
             ]
         );
     }

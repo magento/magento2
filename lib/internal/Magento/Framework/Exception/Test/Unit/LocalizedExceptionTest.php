@@ -79,13 +79,13 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
                  'parameter2'],
                 'message parameter1 parameter2',
             ],
-            'withNamedParameters'  => [
+            'withNamedParameters' => [
                 'message %key1 %key2',
                 ['key1' => 'parameter1',
                  'key2' => 'parameter2'],
                 'message parameter1 parameter2',
             ],
-            'withoutParameters'    => [
+            'withoutParameters' => [
                 'message',
                 [],
                 'message',
@@ -99,7 +99,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRawMessage()
     {
-        $message =  'message %1 %2';
+        $message = 'message %1 %2';
         $params = [
             'parameter1',
             'parameter2',
@@ -117,7 +117,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetParameters()
     {
-        $message =  'message %1 %2';
+        $message = 'message %1 %2';
         $params = [
             'parameter1',
             'parameter2',
@@ -136,7 +136,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetLogMessage()
     {
-        $message =  'message %1 %2';
+        $message = 'message %1 %2';
         $params = [
             'parameter1',
             'parameter2',

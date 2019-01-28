@@ -99,7 +99,7 @@ class ArgumentsReader
             return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();
         }
 
-        $type =  $parameter->detectType();
+        $type = $parameter->detectType();
 
         if ($type === 'null') {
             return null;

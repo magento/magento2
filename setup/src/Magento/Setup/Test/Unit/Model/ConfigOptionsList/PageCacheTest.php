@@ -89,7 +89,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                     'page_cache' => [
                         'backend' => 'Cm_Cache_Backend_Redis',
                         'backend_options' => [
-                            'server'=> '',
+                            'server' => '',
                             'port' => '',
                             'database' => '',
                             'compress_data' => '',

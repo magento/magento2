@@ -85,7 +85,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmulateWelcomeBlock(): void
     {
-        $welcomeMessage =  __('&nbsp;');
+        $welcomeMessage = __('&nbsp;');
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->disableOriginalConstructor()
             ->setMethods(['setWelcome'])

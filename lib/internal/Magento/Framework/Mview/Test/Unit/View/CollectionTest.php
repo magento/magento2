@@ -108,7 +108,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $orderedViews = [];
         foreach ($indexers as $indexerData) {
-            $state =  $this->getStateMock(['getMode'], $indexerData);
+            $state = $this->getStateMock(['getMode'], $indexerData);
             $state->method('getMode')
                 ->willReturn($stateMode[$indexerData['indexer_id']]);
             $view = $this->getViewMock(['setState', 'getState']);

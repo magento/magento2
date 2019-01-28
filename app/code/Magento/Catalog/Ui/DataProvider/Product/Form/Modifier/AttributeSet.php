@@ -88,7 +88,7 @@ class AttributeSet extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($name = $this->getGeneralPanelName($meta)) {
-            $meta[$name]['children']['attribute_set_id']['arguments']['data']['config']  = [
+            $meta[$name]['children']['attribute_set_id']['arguments']['data']['config'] = [
                 'component' => 'Magento_Catalog/js/components/attribute-set-select',
                 'disableLabel' => true,
                 'filterOptions' => true,

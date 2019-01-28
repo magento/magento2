@@ -219,7 +219,7 @@ class GraphQlReader implements ReaderInterface
                 if (!empty($implementationsMatches)) {
                     $annotationString = ' @implements(interfaces: [';
                     foreach ($implementationsMatches[0] as $interfaceName) {
-                        $annotationString.= "\"{$interfaceName}\", ";
+                        $annotationString .= "\"{$interfaceName}\", ";
                     }
                     $annotationString = rtrim($annotationString, ', ');
                     $annotationString .= ']) ';

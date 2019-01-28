@@ -131,7 +131,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedParams = [
             'backendHost' => 'example.com',
             'backendPort' => '8080',
-            'accessList' =>  explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
+            'accessList' => explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
             'designExceptions' => [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
             'sslOffloadedHeader' => 'X_Forwarded_Proto: https',
             'gracePeriod' => 120

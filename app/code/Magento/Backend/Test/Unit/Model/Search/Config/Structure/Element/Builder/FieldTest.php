@@ -42,8 +42,8 @@ class FieldTest extends TestCase
         $this->assertEquals(
             [
                 'section' => 'path_part_1',
-                'group'   => 'path_part_2',
-                'field'   => $structureElementId,
+                'group' => 'path_part_2',
+                'field' => $structureElementId,
             ],
             $this->model->build($this->structureElementMock)
         );

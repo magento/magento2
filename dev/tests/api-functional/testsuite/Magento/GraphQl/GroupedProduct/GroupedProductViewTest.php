@@ -85,7 +85,7 @@ QUERY;
                 [
                   'sku' => $associatedProductSku,
                   'type_id' => $groupedProductLinks[$itemIndex]->getLinkedProductType(),
-                  'url_key'=> $associatedProduct->getUrlKey(),
+                  'url_key' => $associatedProduct->getUrlKey(),
                   'name' => $associatedProduct->getName()
 
                 ]

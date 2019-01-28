@@ -113,7 +113,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             \Magento\Integration\Controller\Token\Request::class,
             [
                 'context' => $this->context,
-                'oauthService'=> $this->frameworkOauthSvcMock,
+                'oauthService' => $this->frameworkOauthSvcMock,
                 'helper' => $this->helperMock,
             ]
         );

@@ -94,11 +94,11 @@ class SetupCacheTest extends \PHPUnit\Framework\TestCase
     public function hasDataProvider()
     {
         return [
-            'existing'           => ['table', 'parent', 'row', 'field', true],
-            'nonexistent field'  => ['table', 'parent', 'row', 'other_field', false],
-            'nonexistent row'    => ['table', 'parent', 'other_row', 'field', false],
+            'existing' => ['table', 'parent', 'row', 'field', true],
+            'nonexistent field' => ['table', 'parent', 'row', 'other_field', false],
+            'nonexistent row' => ['table', 'parent', 'other_row', 'field', false],
             'nonexistent parent' => ['table', 'other_parent', 'row', 'field', false],
-            'nonexistent table'  => ['other_table', 'parent', 'row', 'field', false],
+            'nonexistent table' => ['other_table', 'parent', 'row', 'field', false],
         ];
     }
 }

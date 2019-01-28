@@ -120,7 +120,7 @@ class AccessTest extends \PHPUnit\Framework\TestCase
             \Magento\Integration\Controller\Token\Access::class,
             [
                 'context' => $this->context,
-                'oauthService'=> $this->frameworkOauthSvcMock,
+                'oauthService' => $this->frameworkOauthSvcMock,
                 'intOauthService' => $this->intOauthServiceMock,
                 'integrationService' => $this->integrationServiceMock,
                 'helper' => $this->helperMock,

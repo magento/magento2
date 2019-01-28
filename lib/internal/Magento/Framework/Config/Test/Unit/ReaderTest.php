@@ -33,8 +33,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     {
         $config = [
             'default' => [
-                'general/locale/code'=> 'ru_RU',
-                'general/locale/timezone'=> 'America/Chicago',
+                'general/locale/code' => 'ru_RU',
+                'general/locale/timezone' => 'America/Chicago',
             ]
         ];
         $this->source->expects($this->once())

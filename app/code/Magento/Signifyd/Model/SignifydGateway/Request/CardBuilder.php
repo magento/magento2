@@ -46,7 +46,7 @@ class CardBuilder
                 'cardHolderName' => $address->getFirstname() . ' ' . $address->getLastname(),
                 'last4' => $payment->getCcLast4(),
                 'expiryMonth' => $payment->getCcExpMonth(),
-                'expiryYear' =>  $payment->getCcExpYear(),
+                'expiryYear' => $payment->getCcExpYear(),
                 'billingAddress' => $this->addressBuilder->build($address)
             ]
         ];

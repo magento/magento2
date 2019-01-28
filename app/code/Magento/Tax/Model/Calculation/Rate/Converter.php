@@ -98,21 +98,21 @@ class Converter
 
         if ($returnNumericLogic) {
             //format for the ajax on multiple sites titles
-            $titleArray=($this->createTitleArrayFromServiceObject($taxRate));
+            $titleArray = ($this->createTitleArrayFromServiceObject($taxRate));
             if (is_array($titleArray)) {
                 foreach ($titleArray as $storeId => $title) {
-                    $taxRateFormData['title[' . $storeId . ']']=$title;
+                    $taxRateFormData['title[' . $storeId . ']'] = $title;
                 }
             }
         } else {
             //format for the form array on multiple sites titles
-            $titleArray=($this->createTitleArrayFromServiceObject($taxRate));
+            $titleArray = ($this->createTitleArrayFromServiceObject($taxRate));
             if (is_array($titleArray)) {
                 $titleData = [];
                 foreach ($titleArray as $storeId => $title) {
                     $titleData[] = [$storeId => $title];
                 }
-                if (count($titleArray)>0) {
+                if (count($titleArray) > 0) {
                     $taxRateFormData['title'] = $titleData;
                 }
             }

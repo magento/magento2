@@ -62,8 +62,8 @@ abstract class AbstractResult implements ResultInterface
     public function setHeader($name, $value, $replace = false)
     {
         $this->headers[] = [
-            'name'    => $name,
-            'value'   => $value,
+            'name' => $name,
+            'value' => $value,
             'replace' => $replace,
         ];
         return $this;

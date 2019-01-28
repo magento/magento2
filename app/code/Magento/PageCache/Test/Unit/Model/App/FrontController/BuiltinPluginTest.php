@@ -153,7 +153,7 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->createMock(\Magento\Framework\Controller\ResultInterface::class);
         $result->expects($this->never())->method('setHeader');
-        $closure =  function () use ($result) {
+        $closure = function () use ($result) {
             return $result;
         };
 

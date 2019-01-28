@@ -162,9 +162,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManagerHelper->getObject(
             DataProvider::class,
             [
-                'name'                      => 'test-name',
-                'primaryFieldName'          => 'primary-field-name',
-                'requestFieldName'          => 'request-field-name',
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
                 'addressCollectionFactory' => $this->addressCollectionFactory,
                 'customerRepository' => $this->customerRepository,
                 'eavConfig' => $this->eavConfig,

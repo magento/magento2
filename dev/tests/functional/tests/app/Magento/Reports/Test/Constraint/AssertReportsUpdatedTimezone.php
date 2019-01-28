@@ -24,7 +24,7 @@ class AssertReportsUpdatedTimezone extends AbstractConstraint
     {
         $reportStatistics->open();
         $dates = $reportStatistics->getGridBlock()->getRowsData(['updated_at']);
-        $currentDate  = new \DateTime();
+        $currentDate = new \DateTime();
         $currentDate->setTimezone(new \DateTimeZone($_ENV['magento_timezone']));
         foreach ($dates as $date) {
             \PHPUnit\Framework\Assert::assertContains(

@@ -19,7 +19,7 @@ class BundleCustomOptions extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode =  $this->getGroupCodeByField($meta, CustomOptions::CONTAINER_HEADER_NAME)) {
+        if ($groupCode = $this->getGroupCodeByField($meta, CustomOptions::CONTAINER_HEADER_NAME)) {
             $meta[$groupCode]['children']['message'] = $this->getErrorMessage(0);
 
             if (!empty($meta[$groupCode]['children'][CustomOptions::CONTAINER_HEADER_NAME])) {

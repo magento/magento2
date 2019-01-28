@@ -98,53 +98,53 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     {
         return [
             'url changed' => [
-                'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1,
+                'isChangedUrlKey' => true,
+                'isChangedVisibility' => false,
+                'isChangedWebsites' => false,
+                'isChangedCategories' => false,
+                'visibilityResult' => true,
+                'expectedReplaceCount' => 1,
 
             ],
             'no chnages' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 0
+                'isChangedUrlKey' => false,
+                'isChangedVisibility' => false,
+                'isChangedWebsites' => false,
+                'isChangedCategories' => false,
+                'visibilityResult' => true,
+                'expectedReplaceCount' => 0
             ],
             'visibility changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => true,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1
+                'isChangedUrlKey' => false,
+                'isChangedVisibility' => true,
+                'isChangedWebsites' => false,
+                'isChangedCategories' => false,
+                'visibilityResult' => true,
+                'expectedReplaceCount' => 1
             ],
             'websites changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => true,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1
+                'isChangedUrlKey' => false,
+                'isChangedVisibility' => false,
+                'isChangedWebsites' => true,
+                'isChangedCategories' => false,
+                'visibilityResult' => true,
+                'expectedReplaceCount' => 1
             ],
             'categories changed' => [
-                'isChangedUrlKey'       => false,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => true,
-                'visibilityResult'      => true,
-                'expectedReplaceCount'  => 1
+                'isChangedUrlKey' => false,
+                'isChangedVisibility' => false,
+                'isChangedWebsites' => false,
+                'isChangedCategories' => true,
+                'visibilityResult' => true,
+                'expectedReplaceCount' => 1
             ],
             'url changed invisible' => [
-                'isChangedUrlKey'       => true,
-                'isChangedVisibility'   => false,
-                'isChangedWebsites'     => false,
-                'isChangedCategories'   => false,
-                'visibilityResult'      => false,
-                'expectedReplaceCount'  => 0
+                'isChangedUrlKey' => true,
+                'isChangedVisibility' => false,
+                'isChangedWebsites' => false,
+                'isChangedCategories' => false,
+                'visibilityResult' => false,
+                'expectedReplaceCount' => 0
             ],
         ];
     }

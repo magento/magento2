@@ -28,7 +28,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => $this->_getSourceFactoryPropertyName(),
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  'Entity factory',
+                    'shortDescription' => 'Entity factory',
                     'tags' => [
                         [
                             'name' => 'var',
@@ -41,7 +41,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => $this->_getSourceResourcePropertyName(),
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  'Resource model',
+                    'shortDescription' => 'Resource model',
                     'tags' => [
                         [
                             'name' => 'var',
@@ -54,7 +54,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => 'resource',
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  'Application Resource',
+                    'shortDescription' => 'Application Resource',
                     'tags' => [
                         [
                             'name' => 'var',
@@ -67,7 +67,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => 'connection',
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  'Database Adapter',
+                    'shortDescription' => 'Database Adapter',
                     'tags' => [
                         [
                             'name' => 'var',

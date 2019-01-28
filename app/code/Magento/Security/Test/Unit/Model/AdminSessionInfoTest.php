@@ -41,10 +41,10 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
 

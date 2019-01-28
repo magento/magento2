@@ -79,7 +79,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->context,
                 'timeZone' => $this->timezone,
-                'filesystem' =>$this->filesystem
+                'filesystem' => $this->filesystem
             ]
         );
     }

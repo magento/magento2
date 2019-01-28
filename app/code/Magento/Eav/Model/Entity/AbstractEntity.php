@@ -1166,7 +1166,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                     $this->loadAllAttributes($object);
                 }
 
-                if ($this->getEntityTable() ==  \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
+                if ($this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
                     && !$object->getEntityTypeId()
                 ) {
                     $object->setEntityTypeId($this->getTypeId());
@@ -1910,7 +1910,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function getAttributeLoader()
     {
         if ($this->attributeLoader === null) {
-            $this->attributeLoader= ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
+            $this->attributeLoader = ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
         }
         return $this->attributeLoader;
     }

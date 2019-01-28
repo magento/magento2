@@ -110,7 +110,7 @@ class Menu extends \Magento\Backend\Block\Template
         $this->_authSession = $authSession;
         $this->_menuConfig = $menuConfig;
         $this->_localeResolver = $localeResolver;
-        $this->menuItemChecker =  $menuItemChecker;
+        $this->menuItemChecker = $menuItemChecker;
         $this->anchorRenderer = $anchorRenderer;
         $this->routeConfig = $routeConfig ?:
             \Magento\Framework\App\ObjectManager::getInstance()
@@ -169,7 +169,7 @@ class Menu extends \Magento\Backend\Block\Template
             $level
         ) ? '_current _active' : '';
 
-        $output =  $isItemActive .
+        $output = $isItemActive .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .

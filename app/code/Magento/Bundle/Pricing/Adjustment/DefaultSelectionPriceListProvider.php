@@ -141,7 +141,7 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
         $selectionsCollection->addPriceData();
 
         foreach ($selectionsCollection as $selection) {
-            $this->priceList[] =  $this->selectionFactory->create(
+            $this->priceList[] = $this->selectionFactory->create(
                 $bundleProduct,
                 $selection,
                 $selection->getSelectionQty(),

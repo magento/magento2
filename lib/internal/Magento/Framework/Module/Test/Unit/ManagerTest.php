@@ -111,7 +111,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'path literal, output disabled' => [false, false],
-            'path literal, output enabled'  => [true, true],
+            'path literal, output enabled' => [true, true],
         ];
     }
 }

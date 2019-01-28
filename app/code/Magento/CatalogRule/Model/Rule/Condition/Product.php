@@ -72,7 +72,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             return $this;
         }
 
-        $productValues  = $this->_entityAttributeValues[$model->getId()];
+        $productValues = $this->_entityAttributeValues[$model->getId()];
 
         if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
             return $this;

@@ -389,7 +389,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                 [
                     'table',
                     [
-                        'name' =>'first_table',
+                        'name' => 'first_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
                         'comment' => null,
@@ -442,7 +442,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                 [
                     'table',
                     [
-                        'name' =>'second_table',
+                        'name' => 'second_table',
                         'resource' => 'default',
                         'engine' => 'innodb',
                         'comment' => 'Not null comment',

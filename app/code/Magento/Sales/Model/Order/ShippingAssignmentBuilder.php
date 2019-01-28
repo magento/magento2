@@ -78,7 +78,7 @@ class ShippingAssignmentBuilder
         if ($this->getOrderId()) {
             $order = $this->orderFactory->create()->load($this->getOrderId());
             /** @var ShippingAssignmentInterface $shippingAssignment */
-            $shippingAssignment =  $this->shippingAssignmentFactory->create();
+            $shippingAssignment = $this->shippingAssignmentFactory->create();
 
             $shipping = $this->shippingBuilderFactory->create();
             $shipping->setOrderId($this->getOrderId());

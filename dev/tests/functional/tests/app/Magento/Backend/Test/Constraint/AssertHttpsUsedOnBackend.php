@@ -18,7 +18,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
     /**
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
+    const SCHEME_HTTP = 'http';
     const SCHEME_HTTPS = 'https';
 
     /**

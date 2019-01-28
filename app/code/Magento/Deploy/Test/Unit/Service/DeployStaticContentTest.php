@@ -195,7 +195,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 [
-                    'strategy' =>  'compact',
+                    'strategy' => 'compact',
                     'no-javascript' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
@@ -204,18 +204,18 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 [
-                    'strategy' =>  'compact',
+                    'strategy' => 'compact',
                     'no-javascript' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
-                    'content-version' =>  '123456',
+                    'content-version' => '123456',
                 ],
                 '123456'
             ],
             [
                 [
                     'refresh-content-version-only' => true,
-                    'content-version' =>  '654321',
+                    'content-version' => '654321',
                 ],
                 '654321'
             ]

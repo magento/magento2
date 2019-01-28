@@ -256,7 +256,7 @@ QUERY;
             [
                 'option_id' => $option->getOptionId(),
                 'title' => $option->getTitle(),
-                'required' =>(bool)$option->getRequired(),
+                'required' => (bool)$option->getRequired(),
                 'type' => $option->getType(),
                 'position' => $option->getPosition(),
                 'sku' => $option->getSku()

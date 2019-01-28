@@ -470,8 +470,8 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [
-                'id'    => 0,
-                'name'  => 'Test Name',
+                'id' => 0,
+                'name' => 'Test Name',
                 'value' => 'Test Value'
             ]
         );

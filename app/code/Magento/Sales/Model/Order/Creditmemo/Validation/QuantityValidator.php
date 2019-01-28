@@ -84,7 +84,7 @@ class QuantityValidator implements ValidatorInterface
             if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
                 !$this->isQtyAvailable($orderItem, $item->getQty())
             ) {
-                $messages[] =__(
+                $messages[] = __(
                     'The quantity to creditmemo must not be greater than the unrefunded quantity'
                     . ' for product SKU "%1".',
                     $orderItem->getSku()

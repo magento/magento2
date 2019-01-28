@@ -62,9 +62,9 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $groupCode = 'general';
         $firstName = 'First';
         $data = [
-            'email'                => 'customer@example.com',
-            'firstname'            => $firstName,
-            'lastname'             => 'Last',
+            'email' => 'customer@example.com',
+            'firstname' => $firstName,
+            'lastname' => 'Last',
             // see declaration in dev/tests/integration/testsuite/Magento/Framework/Api/etc/extension_attributes.xml
             'extension_attributes' => ['test_group_code' => $groupCode]
         ];

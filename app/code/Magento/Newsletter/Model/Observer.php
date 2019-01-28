@@ -37,7 +37,7 @@ class Observer
      */
     public function scheduledSend()
     {
-        $countOfQueue  = 3;
+        $countOfQueue = 3;
         $countOfSubscriptions = 20;
 
         /** @var \Magento\Newsletter\Model\ResourceModel\Queue\Collection $collection */

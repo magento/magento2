@@ -18,8 +18,8 @@ interface DesignInterface
     /**#@+
      * Public directories prefix group
      */
-    const PUBLIC_VIEW_DIR   = '_view';
-    const PUBLIC_THEME_DIR  = '_theme';
+    const PUBLIC_VIEW_DIR = '_view';
+    const PUBLIC_THEME_DIR = '_theme';
     /**#@-*/
 
     /**

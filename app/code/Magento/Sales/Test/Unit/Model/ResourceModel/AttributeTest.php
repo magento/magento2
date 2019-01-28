@@ -124,7 +124,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
-        $exception  = new \Exception('Expected Exception');
+        $exception = new \Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')
             ->will($this->throwException($exception));
@@ -137,7 +137,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'event_prefix_save_attribute_before',
                 [
-                    'event_object' =>  $this->attribute,
+                    'event_object' => $this->attribute,
                     'object' => $this->modelMock,
                     'attribute' => ['attribute']
                 ]

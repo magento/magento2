@@ -186,14 +186,14 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $communicationData = [
-            'topic01' =>  ['name' => 'topic01', 'is_synchronous' => true],
-            'topic02' =>  ['name' => 'topic02', 'is_synchronous' => true],
-            'topic03' =>  ['name' => 'topic03', 'is_synchronous' => true],
-            'topic04.04.04' =>  ['name' => 'topic04.04.04', 'is_synchronous' => true],
-            'topic05.05' =>  ['name' => 'topic05.05', 'is_synchronous' => true],
-            'topic06.06.06' =>  ['name' => 'topic06.06.06', 'is_synchronous' => false],
-            'topic07' =>  ['name' => 'topic07', 'is_synchronous' => false],
-            'topic08.part2.some.test' =>  ['name' => 'topic08.part2.some.test', 'is_synchronous' => true],
+            'topic01' => ['name' => 'topic01', 'is_synchronous' => true],
+            'topic02' => ['name' => 'topic02', 'is_synchronous' => true],
+            'topic03' => ['name' => 'topic03', 'is_synchronous' => true],
+            'topic04.04.04' => ['name' => 'topic04.04.04', 'is_synchronous' => true],
+            'topic05.05' => ['name' => 'topic05.05', 'is_synchronous' => true],
+            'topic06.06.06' => ['name' => 'topic06.06.06', 'is_synchronous' => false],
+            'topic07' => ['name' => 'topic07', 'is_synchronous' => false],
+            'topic08.part2.some.test' => ['name' => 'topic08.part2.some.test', 'is_synchronous' => true],
         ];
 
         $this->communicationConfig->expects($this->once())

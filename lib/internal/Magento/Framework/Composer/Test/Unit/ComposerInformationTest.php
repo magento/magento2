@@ -63,8 +63,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     {
         $expected = [
             'magento/product-test-package-name' => [
-                'name'    => 'magento/product-test-package-name',
-                'type'    => 'metapackage',
+                'name' => 'magento/product-test-package-name',
+                'type' => 'metapackage',
                 'version' => '123.456.789'
             ]
         ];

@@ -42,7 +42,7 @@ class ImageTypeProcessor
         );
         $bind = [':frontend_input' => 'media_image'];
 
-        $imageKeys   = $connection->fetchCol($select, $bind);
+        $imageKeys = $connection->fetchCol($select, $bind);
         $imageKeys[] = '_media_image';
 
         return $imageKeys;

@@ -32,7 +32,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->resultFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);

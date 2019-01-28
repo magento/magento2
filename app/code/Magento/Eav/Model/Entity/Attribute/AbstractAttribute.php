@@ -860,60 +860,60 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 $size = $prop['LENGTH'] ? $prop['LENGTH'] : null;
 
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => $this->_resourceHelper->getDdlTypeByColumnType($type),
-                    'length'   => $size,
+                    'type' => $this->_resourceHelper->getDdlTypeByColumnType($type),
+                    'length' => $size,
                     'unsigned' => $prop['UNSIGNED'] ? true : false,
                     'nullable' => $prop['NULLABLE'],
-                    'default'  => $prop['DEFAULT'],
-                    'extra'    => null,
+                    'default' => $prop['DEFAULT'],
+                    'extra' => null,
                 ];
                 break;
             case 'datetime':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'decimal':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    'length'   => '12,4',
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'length' => '12,4',
                     'unsigned' => false,
                     'nullable' => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'int':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'text':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'unsigned' => false,
                     'nullable' => true,
-                    'default'  => null,
-                    'extra'    => null,
-                    'length'   => \Magento\Framework\DB\Ddl\Table::MAX_TEXT_SIZE,
+                    'default' => null,
+                    'extra' => null,
+                    'length' => \Magento\Framework\DB\Ddl\Table::MAX_TEXT_SIZE,
                 ];
                 break;
             case 'varchar':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length'   => '255',
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => '255',
                     'unsigned' => false,
                     'nullable' => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             default:
@@ -943,56 +943,56 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 }
                 $prop = $describe[$this->getAttributeCode()];
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ""),
+                    'type' => $prop['DATA_TYPE'] . ($prop['LENGTH'] ? "({$prop['LENGTH']})" : ""),
                     'unsigned' => $prop['UNSIGNED'] ? true : false,
-                    'is_null'  => $prop['NULLABLE'],
-                    'default'  => $prop['DEFAULT'],
-                    'extra'    => null,
+                    'is_null' => $prop['NULLABLE'],
+                    'default' => $prop['DEFAULT'],
+                    'extra' => null,
                 ];
                 break;
             case 'datetime':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => 'datetime',
+                    'type' => 'datetime',
                     'unsigned' => false,
-                    'is_null'  => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'is_null' => true,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'decimal':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => 'decimal(12,4)',
+                    'type' => 'decimal(12,4)',
                     'unsigned' => false,
-                    'is_null'  => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'is_null' => true,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'int':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => 'int',
+                    'type' => 'int',
                     'unsigned' => false,
-                    'is_null'  => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'is_null' => true,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'text':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => 'text',
+                    'type' => 'text',
                     'unsigned' => false,
-                    'is_null'  => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'is_null' => true,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             case 'varchar':
                 $columns[$this->getAttributeCode()] = [
-                    'type'     => 'varchar(255)',
+                    'type' => 'varchar(255)',
                     'unsigned' => false,
-                    'is_null'  => true,
-                    'default'  => null,
-                    'extra'    => null,
+                    'is_null' => true,
+                    'default' => null,
+                    'extra' => null,
                 ];
                 break;
             default:

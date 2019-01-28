@@ -28,7 +28,7 @@ class BundleQuantityTest extends AbstractModifierTest
         $sourceMeta = [
             'testGroup' => [
                 'children' => [
-                    BundleQuantity::CODE_QTY_CONTAINER  => [
+                    BundleQuantity::CODE_QTY_CONTAINER => [
                         'componentType' => 'testComponent',
                     ],
                 ]

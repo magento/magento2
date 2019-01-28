@@ -11,7 +11,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $searchResultsMock  = $this->getMockBuilder(\Magento\Framework\Api\SearchResults::class)
+        $searchResultsMock = $this->getMockBuilder(\Magento\Framework\Api\SearchResults::class)
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();

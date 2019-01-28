@@ -62,7 +62,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->indexController =  $this->objectManagerHelper->getObject(
+        $this->indexController = $this->objectManagerHelper->getObject(
             Index::class,
             [
                 'resultFactory' => $this->resultFactoryMock

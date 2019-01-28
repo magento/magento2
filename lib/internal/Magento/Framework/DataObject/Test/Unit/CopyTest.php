@@ -89,7 +89,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $data = [
             'target' => new \Magento\Framework\DataObject([$this->targetMock]),
             'source' => $this->sourceMock,
-            'root'   => 'global',
+            'root' => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(
@@ -122,7 +122,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $data = [
             'target' => $this->targetMock,
             'source' => $this->sourceMock,
-            'root'   => 'global',
+            'root' => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(
@@ -158,7 +158,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
         $data = [
             'target' => new \Magento\Framework\DataObject($newTarget),
             'source' => $this->sourceMock,
-            'root'   => 'global',
+            'root' => 'global',
         ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(

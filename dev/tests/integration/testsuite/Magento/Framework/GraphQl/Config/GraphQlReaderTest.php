@@ -170,8 +170,8 @@ fragment TypeRef on __Type {
 
 QUERY;
         $postData = [
-            'query'         => $query,
-            'variables'     => null,
+            'query' => $query,
+            'variables' => null,
             'operationName' => 'IntrospectionQuery'
         ];
         /** @var Http $request */

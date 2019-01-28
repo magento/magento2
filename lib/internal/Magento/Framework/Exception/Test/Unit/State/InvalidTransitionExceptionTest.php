@@ -18,7 +18,7 @@ class InvalidTransitionExceptionTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $instanceClass = \Magento\Framework\Exception\State\InvalidTransitionException::class;
-        $message =  'message %1 %2';
+        $message = 'message %1 %2';
         $params = [
             'parameter1',
             'parameter2',

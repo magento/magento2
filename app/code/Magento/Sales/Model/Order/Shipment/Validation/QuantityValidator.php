@@ -66,7 +66,7 @@ class QuantityValidator implements ValidatorInterface
             $orderItem = $orderItemsById[$item->getOrderItemId()];
 
             if (!$this->isQtyAvailable($orderItem, $item->getQty())) {
-                $messages[] =__(
+                $messages[] = __(
                     'The quantity to ship must not be greater than the unshipped quantity'
                     . ' for product SKU "%1".',
                     $orderItem->getSku()

@@ -30,7 +30,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $arguments =  $objectManager->getConstructArguments(
+        $arguments = $objectManager->getConstructArguments(
             AbstractEntity::class,
             ['eavConfig' => $this->eavConfig]
         );
@@ -286,7 +286,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $arguments =  $objectManager->getConstructArguments(
+        $arguments = $objectManager->getConstructArguments(
             AbstractEntity::class,
             [
                 'eavConfig' => $eavConfig,

@@ -85,7 +85,7 @@ class SubcategoryNotIncludeInNavigationMenuTest extends Injectable
         $nestingLevel
     ) {
         $initialCategory->persist();
-        $topCategory =  $this->getParentCategoryByNestingLevel($initialCategory, $nestingLevel);
+        $topCategory = $this->getParentCategoryByNestingLevel($initialCategory, $nestingLevel);
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($topCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);

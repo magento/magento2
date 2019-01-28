@@ -24,7 +24,7 @@ class FooterTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $productMetadataMock =  $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
+        $productMetadataMock = $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
             ->setMethods(['getVersion'])
             ->disableOriginalConstructor()
             ->getMock();

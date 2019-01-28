@@ -76,7 +76,7 @@ class ResetButton extends Field
             [
                 'actionName' => 'reset',
                 'targetName' => '${ $.name }',
-                'params'     => [
+                'params' => [
                     json_encode($this->getRobotsDefaultCustomInstructions())
                 ]
             ]

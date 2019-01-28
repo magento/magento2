@@ -90,16 +90,16 @@ class Generator extends AbstractSchemaGenerator
      * @var string[]
      */
     protected $simpleTypeList = [
-        'bool'                              => 'boolean',
-        'boolean'                           => 'boolean',
-        'int'                               => 'integer',
-        'integer'                           => 'integer',
-        'double'                            => 'number',
-        'float'                             => 'number',
-        'number'                            => 'number',
-        'string'                            => 'string',
-        TypeProcessor::ANY_TYPE             => 'string',
-        TypeProcessor::NORMALIZED_ANY_TYPE  => 'string',
+        'bool' => 'boolean',
+        'boolean' => 'boolean',
+        'int' => 'integer',
+        'integer' => 'integer',
+        'double' => 'number',
+        'float' => 'number',
+        'number' => 'number',
+        'string' => 'string',
+        TypeProcessor::ANY_TYPE => 'string',
+        TypeProcessor::NORMALIZED_ANY_TYPE => 'string',
     ];
 
     /**
@@ -750,7 +750,7 @@ class Generator extends AbstractSchemaGenerator
     {
         $parts = explode('/', $uri);
         $count = count($parts);
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             if (strpos($parts[$i], ':') === 0) {
                 $parts[$i] = '{' . substr($parts[$i], 1) . '}';
             }

@@ -356,7 +356,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $code = $row->getAttributeCode();
         if (isset($this->_filterTypeByAttrCode[$code])) {
-            $filterType =$this->_filterTypeByAttrCode[$code];
+            $filterType = $this->_filterTypeByAttrCode[$code];
         } else {
             $filterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($row);
         }

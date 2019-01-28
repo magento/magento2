@@ -83,7 +83,7 @@ class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
                     'dataType' => 'text',
                     'align' => 'left',
                     'visible' => true,
-                    'options' =>  [
+                    'options' => [
                         [
                             'label' => 'Label',
                             'value' => 'Value'

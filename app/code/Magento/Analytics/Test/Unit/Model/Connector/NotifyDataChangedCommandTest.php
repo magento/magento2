@@ -45,19 +45,19 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
+        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->httpClientMock =  $this->getMockBuilder(ClientInterface::class)
+        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $successHandler = $this->getMockBuilder(\Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface::class)

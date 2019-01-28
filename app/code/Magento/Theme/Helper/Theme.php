@@ -72,7 +72,7 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
         );
 
         $params = [
-            'area'       => $theme->getArea(),
+            'area' => $theme->getArea(),
             'themeModel' => $theme,
         ];
 

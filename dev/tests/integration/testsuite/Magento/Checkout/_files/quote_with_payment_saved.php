@@ -15,7 +15,7 @@ $quote->setReservedOrderId(
 
 $paymentDetails = [
     'transaction_id' => 100500,
-    'consumer_key'   => '123123q',
+    'consumer_key' => '123123q',
 ];
 
 $quote->getPayment()

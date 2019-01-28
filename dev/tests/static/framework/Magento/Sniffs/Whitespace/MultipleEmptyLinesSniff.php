@@ -36,11 +36,11 @@ class MultipleEmptyLinesSniff implements Sniff
             ) {
                 // This is an empty line and the line before this one is not
                 // empty, so this could be the start of a multiple empty line block
-                $next  = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, true);
+                $next = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, true);
                 $lines = $tokens[$next]['line'] - $tokens[$stackPtr]['line'];
                 if ($lines > 1) {
                     $error = 'Code must not contain multiple empty lines in a row; found %s empty lines';
-                    $data  = [$lines];
+                    $data = [$lines];
                     $phpcsFile->addError($error, $stackPtr, 'MultipleEmptyLines', $data);
                 }
             }

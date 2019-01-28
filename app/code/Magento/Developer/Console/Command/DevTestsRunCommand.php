@@ -26,7 +26,7 @@ class DevTestsRunCommand extends Command
     /**
      * PHPUnit arguments parameter
      */
-    const INPUT_OPT_COMMAND_ARGUMENTS       = 'arguments';
+    const INPUT_OPT_COMMAND_ARGUMENTS = 'arguments';
     const INPUT_OPT_COMMAND_ARGUMENTS_SHORT = 'c';
 
     /**
@@ -133,25 +133,25 @@ class DevTestsRunCommand extends Command
     private function setupTestInfo()
     {
         $this->commands = [
-            'unit'                   => ['../tests/unit', ''],
-            'unit-static'            => ['../tests/static/framework/tests/unit', ''],
-            'unit-integration'       => ['../tests/integration/framework/tests/unit', ''],
-            'integration'            => ['../tests/integration', ''],
-            'integration-integrity'  => ['../tests/integration', ' testsuite/Magento/Test/Integrity'],
-            'static-default'         => ['../tests/static', ''],
-            'static-legacy'          => ['../tests/static', ' testsuite/Magento/Test/Legacy'],
-            'static-integration-js'  => ['../tests/static', ' testsuite/Magento/Test/Js/Exemplar'],
+            'unit' => ['../tests/unit', ''],
+            'unit-static' => ['../tests/static/framework/tests/unit', ''],
+            'unit-integration' => ['../tests/integration/framework/tests/unit', ''],
+            'integration' => ['../tests/integration', ''],
+            'integration-integrity' => ['../tests/integration', ' testsuite/Magento/Test/Integrity'],
+            'static-default' => ['../tests/static', ''],
+            'static-legacy' => ['../tests/static', ' testsuite/Magento/Test/Legacy'],
+            'static-integration-js' => ['../tests/static', ' testsuite/Magento/Test/Js/Exemplar'],
         ];
         $this->types = [
-            'all'             => array_keys($this->commands),
-            'unit'            => ['unit', 'unit-static', 'unit-integration'],
-            'integration'     => ['integration'],
+            'all' => array_keys($this->commands),
+            'unit' => ['unit', 'unit-static', 'unit-integration'],
+            'integration' => ['integration'],
             'integration-all' => ['integration', 'integration-integrity'],
-            'static'          => ['static-default'],
-            'static-all'      => ['static-default', 'static-legacy', 'static-integration-js'],
-            'integrity'       => ['static-default', 'static-legacy', 'integration-integrity'],
-            'legacy'          => ['static-legacy'],
-            'default'         => [
+            'static' => ['static-default'],
+            'static-all' => ['static-default', 'static-legacy', 'static-integration-js'],
+            'integrity' => ['static-default', 'static-legacy', 'integration-integrity'],
+            'legacy' => ['static-legacy'],
+            'default' => [
                 'unit',
                 'unit-static',
                 'unit-integration',

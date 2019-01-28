@@ -142,7 +142,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
             $image = [
                 'alt' => __('Download'),
                 'title' => __('Download'),
-                'src'   => $this->_assetRepo->getUrl('images/fam_bullet_disk.gif'),
+                'src' => $this->_assetRepo->getUrl('images/fam_bullet_disk.gif'),
                 'class' => 'v-middle'
             ];
             $url = $this->_getPreviewUrl();

@@ -771,9 +771,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         $result = parent::_exportLineItems($request, $i);
         if ($this->getIsLineItemsEnabled() && $this->_cart->hasNegativeItemAmount()) {
             $this->_lineItemTotalExportMap = [
-                Cart::AMOUNT_TAX      => 'TAXAMT',
+                Cart::AMOUNT_TAX => 'TAXAMT',
                 Cart::AMOUNT_SHIPPING => 'FREIGHTAMT',
-                'amount'              => 'PAYMENTREQUEST_0_ITEMAMT',
+                'amount' => 'PAYMENTREQUEST_0_ITEMAMT',
             ];
             $request = $requestBefore;
             $result = parent::_exportLineItems($request, $i);

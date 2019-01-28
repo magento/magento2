@@ -147,7 +147,7 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(66);
         $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
-        $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode+1);
+        $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode + 1);
 
         $this->attributeManagement->assign(
             $entityTypeCode,

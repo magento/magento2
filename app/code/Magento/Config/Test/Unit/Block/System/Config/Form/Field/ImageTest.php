@@ -39,10 +39,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->testData = [
             'html_id_prefix' => 'test_id_prefix_',
-            'html_id'        => 'test_id',
+            'html_id' => 'test_id',
             'html_id_suffix' => '_test_id_suffix',
-            'path'           => 'catalog/product/placeholder',
-            'value'          => 'test_value',
+            'path' => 'catalog/product/placeholder',
+            'value' => 'test_value',
         ];
 
         $formMock = new \Magento\Framework\DataObject();

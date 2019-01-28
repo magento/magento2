@@ -99,7 +99,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
                             'No such entity with %fieldName = %fieldValue',
                             [
                                 'fieldName' => 'customer_tax_class_ids',
-                                'value'     => $customerTaxClassId,
+                                'value' => $customerTaxClassId,
                             ]
                         );
                     }
@@ -131,7 +131,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
                             'No such entity with %fieldName = %fieldValue',
                             [
                                 'fieldName' => 'product_tax_class_ids',
-                                'value'     => $productTaxClassId,
+                                'value' => $productTaxClassId,
                             ]
                         );
                     }

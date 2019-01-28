@@ -155,14 +155,14 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider = $helper->getObject(
             DataProviderWithDefaultAddresses::class,
             [
-                'name'                      => 'test-name',
-                'primaryFieldName'          => 'primary-field-name',
-                'requestFieldName'          => 'request-field-name',
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig'                 => $this->eavConfigMock,
-                'countryFactory'            => $this->countryFactoryMock,
-                'session'                   => $this->sessionMock,
-                'fileUploaderDataResolver'  => $this->fileUploaderDataResolver,
+                'eavConfig' => $this->eavConfigMock,
+                'countryFactory' => $this->countryFactoryMock,
+                'session' => $this->sessionMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
                 'attributeMetadataResolver' => $this->attributeMetadataResolver,
                 true
             ]

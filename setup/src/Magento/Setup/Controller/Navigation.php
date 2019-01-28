@@ -76,7 +76,7 @@ class Navigation extends AbstractActionController
     public function sideMenuAction()
     {
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
-        $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
+        $this->view->setVariable('isInstaller', $this->navigation->getType() == NavModel::NAV_INSTALLER);
         $this->view->setTerminal(true);
         return $this->view;
     }

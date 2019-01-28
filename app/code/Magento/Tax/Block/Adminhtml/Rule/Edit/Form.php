@@ -221,7 +221,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'calculate_subtotal',
             'checkbox',
             [
-                'name'  => 'calculate_subtotal',
+                'name' => 'calculate_subtotal',
                 'label' => __('Calculate Off Subtotal Only'),
                 'onclick' => 'this.value = this.checked ? 1 : 0;',
                 'checked' => isset($formValues['calculate_subtotal']) ? $formValues['calculate_subtotal'] : 0

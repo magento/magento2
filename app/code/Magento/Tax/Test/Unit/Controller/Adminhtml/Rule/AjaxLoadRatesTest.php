@@ -105,7 +105,7 @@ class AjaxLoadRatesTest extends \PHPUnit\Framework\TestCase
             ->with($searchCriteria)
             ->willThrowException(new \Exception());
 
-        $jsonObject= $this->getMockBuilder(Json::class)
+        $jsonObject = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();

@@ -46,7 +46,7 @@ class MethodAnnotationStructureSniff implements Sniff
         $commentStartPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, ($stackPtr), 0);
         $commentEndPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, ($stackPtr), 0);
         $commentCloserPtr = $tokens[$commentStartPtr]['comment_closer'];
-        $functionPtrContent = $tokens[$stackPtr+2]['content'] ;
+        $functionPtrContent = $tokens[$stackPtr + 2]['content'] ;
         if (preg_match('/(?i)__construct/', $functionPtrContent)) {
             return;
         }

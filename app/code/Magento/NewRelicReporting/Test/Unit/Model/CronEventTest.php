@@ -89,7 +89,7 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
         $appName = 'app_name';
         $insightApiKey = 'insert_key_value';
 
-        $this->model->addData(['eventType'=>'Cron']);
+        $this->model->addData(['eventType' => 'Cron']);
 
         $this->zendClientMock->expects($this->once())->method('setUri')->with($uri)->willReturnSelf();
         $this->zendClientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();

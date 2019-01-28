@@ -27,7 +27,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => $this->_getSourceBuilderPropertyName(),
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  $this->_getSourceBuilderPropertyName(),
+                    'shortDescription' => $this->_getSourceBuilderPropertyName(),
                     'tags' => [
                         [
                             'name' => 'var',

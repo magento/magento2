@@ -188,7 +188,7 @@ HTML;
         $nodeFactory = $this->createMock(\Magento\Framework\Data\Tree\NodeFactory::class);
         $treeFactory = $this->createMock(\Magento\Framework\Data\TreeFactory::class);
 
-        $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
+        $topmenu = new Topmenu($this->context, $nodeFactory, $treeFactory);
         $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('baseUrl');
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()

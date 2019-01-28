@@ -31,7 +31,7 @@ $_order = $block->getOrder() ?>
             } else {
                 $i++;
             }?>
-            <tbody class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
+            <tbody class="<?= /* @noEscape */ $i % 2 ? 'even' : 'odd' ?>">
                 <?= $block->getItemHtml($_item) ?>
                 <?= $block->getItemExtraInfoHtml($_item) ?>
             </tbody>

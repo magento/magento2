@@ -27,14 +27,14 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $productPrice =  '//td[contains(@class,"col-price") and contains(.,"%s")]';
+    protected $productPrice = '//td[contains(@class,"col-price") and contains(.,"%s")]';
 
     /**
      * Product carts selector
      *
      * @var string
      */
-    protected $productCarts =  '//td[contains(@class,"col-carts") and contains(.,"%d")]';
+    protected $productCarts = '//td[contains(@class,"col-carts") and contains(.,"%d")]';
 
     /**
      * Check that product visible in grid

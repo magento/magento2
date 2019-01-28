@@ -119,7 +119,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
     {
         $redirect = $data['back'] ?? 'close';
 
-        if ($redirect ==='continue') {
+        if ($redirect === 'continue') {
             $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
         } else if ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');

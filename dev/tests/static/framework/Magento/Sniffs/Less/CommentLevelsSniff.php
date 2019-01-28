@@ -29,8 +29,8 @@ class CommentLevelsSniff implements Sniff
      * @var array
      */
     protected $levelComments = [
-        self::FIRST_LEVEL_COMMENT   => T_STRING,
-        self::SECOND_LEVEL_COMMENT  => T_DEC,
+        self::FIRST_LEVEL_COMMENT => T_STRING,
+        self::SECOND_LEVEL_COMMENT => T_DEC,
     ];
 
     /**

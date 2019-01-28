@@ -176,7 +176,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
                 [
-                    'display_minimal_price'  => true,
+                    'display_minimal_price' => true,
                     'use_link_for_as_low_as' => true,
                     'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                 ]

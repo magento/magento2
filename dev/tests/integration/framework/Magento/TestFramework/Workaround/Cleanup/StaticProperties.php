@@ -156,7 +156,7 @@ class StaticProperties
             ),
             function ($classFile) {
                 return StaticProperties::_isClassInCleanableFolders($classFile)
-                && strpos(file_get_contents($classFile), ' static ')  > 0;
+                && strpos(file_get_contents($classFile), ' static ') > 0;
             }
         );
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';

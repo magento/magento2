@@ -65,7 +65,7 @@ class PaymentVaultConfigurationProcessTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getActiveList'])
             ->getMockForAbstractClass();
-        $this->layoutProcessor =  $this
+        $this->layoutProcessor = $this
             ->getMockBuilder(\Magento\Checkout\Block\Checkout\LayoutProcessor::class)
             ->disableOriginalConstructor()
             ->setMethods(['process'])

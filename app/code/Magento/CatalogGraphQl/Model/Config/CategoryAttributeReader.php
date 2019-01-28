@@ -73,7 +73,7 @@ class CategoryAttributeReader implements ReaderInterface
      */
     public function read($scope = null) : array
     {
-        $config =[];
+        $config = [];
         $data = [];
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();

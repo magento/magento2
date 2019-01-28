@@ -135,14 +135,14 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         return [
             [
                 'arguments' => [
-                    'name'              => 'Name',
-                    'description'       => 'Description',
+                    'name' => 'Name',
+                    'description' => 'Description',
                     'short_description' => 'Short Description',
-                    'price'             => '512',
-                    'weight'            => '16',
-                    'meta_title'        => 'Meta Title',
-                    'meta_keyword'      => 'Meta Keywords',
-                    'meta_description'  => 'Meta Description',
+                    'price' => '512',
+                    'weight' => '16',
+                    'meta_title' => 'Meta Title',
+                    'meta_keyword' => 'Meta Keywords',
+                    'meta_description' => 'Meta Description',
                 ],
             ]
         ];

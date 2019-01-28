@@ -84,7 +84,7 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
             CreationService::class,
             [
                 'signifydGateway' => $gateway,
-                'logger'          => $this->logger
+                'logger' => $this->logger
             ]
         );
     }

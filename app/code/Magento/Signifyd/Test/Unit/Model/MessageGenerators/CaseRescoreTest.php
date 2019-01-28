@@ -20,7 +20,7 @@ class CaseRescoreTest extends \PHPUnit\Framework\TestCase
 {
     private static $data = [
         'caseId' => 100,
-        'score'  => 200
+        'score' => 200
     ];
 
     /**

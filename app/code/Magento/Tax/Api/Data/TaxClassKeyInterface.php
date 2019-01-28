@@ -18,7 +18,7 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**#@+
      * Constants defined for type of tax class key
      */
-    const TYPE_ID   = 'id';
+    const TYPE_ID = 'id';
     const TYPE_NAME = 'name';
     /**#@-*/
 

@@ -58,9 +58,9 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                     'method' => 'method2',
                 ],
                 'job3' => [
-                    'name'        => 'job3',
-                    'instance'    => 'Model3',
-                    'method'      => 'method3',
+                    'name' => 'job3',
+                    'instance' => 'Model3',
+                    'method' => 'method3',
                     'config_path' => 'some/config/path',
                 ],
             ],

@@ -106,9 +106,9 @@ class SemicolonSpacingSniff implements Sniff
         }
 
         if ($tokens[($semicolonPtr - 1)]['code'] === T_WHITESPACE) {
-            $length  = strlen($tokens[($semicolonPtr - 1)]['content']);
+            $length = strlen($tokens[($semicolonPtr - 1)]['content']);
             $error = 'Expected 0 spaces before semicolon in style definition; %s found';
-            $data  = [$length];
+            $data = [$length];
             $phpcsFile->addError($error, $stackPtr, 'SpaceFound', $data);
         }
     }

@@ -36,7 +36,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
         TimezoneInterface $timezone = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
-        $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->timezone = $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
             TimezoneInterface::class
         );
     }

@@ -16,12 +16,12 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_BILLING_ADDRESS        = 'billing_address';
-    const KEY_SHIPPING_ADDRESS       = 'shipping_address';
+    const KEY_BILLING_ADDRESS = 'billing_address';
+    const KEY_SHIPPING_ADDRESS = 'shipping_address';
     const KEY_CUSTOMER_TAX_CLASS_KEY = 'customer_tax_class_key';
-    const KEY_ITEMS                  = 'items';
-    const KEY_CUSTOMER_TAX_CLASS_ID  = 'customer_tax_class_id';
-    const KEY_CUSTOMER_ID            = 'customer_id';
+    const KEY_ITEMS = 'items';
+    const KEY_CUSTOMER_TAX_CLASS_ID = 'customer_tax_class_id';
+    const KEY_CUSTOMER_ID = 'customer_id';
     /**#@-*/
 
     /**

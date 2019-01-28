@@ -104,7 +104,7 @@ class ClassAnnotationStructureSniff implements Sniff
             T_DOC_COMMENT_WHITESPACE,
             T_DOC_COMMENT_STAR
         ];
-        $shortPtr = $phpcsFile->findNext($emptyTypeTokens, $commentStartPtr +1, $commentCloserPtr, true);
+        $shortPtr = $phpcsFile->findNext($emptyTypeTokens, $commentStartPtr + 1, $commentCloserPtr, true);
         if ($shortPtr === false) {
             $error = 'Annotation block is empty';
             $phpcsFile->addError($error, $commentStartPtr, 'MethodAnnotation');

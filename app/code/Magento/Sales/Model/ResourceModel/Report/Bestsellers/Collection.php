@@ -31,9 +31,9 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @var array
      */
     protected $tableForPeriod = [
-        'daily'   => 'sales_bestsellers_aggregated_daily',
+        'daily' => 'sales_bestsellers_aggregated_daily',
         'monthly' => 'sales_bestsellers_aggregated_monthly',
-        'yearly'  => 'sales_bestsellers_aggregated_yearly',
+        'yearly' => 'sales_bestsellers_aggregated_yearly',
     ];
 
     /**

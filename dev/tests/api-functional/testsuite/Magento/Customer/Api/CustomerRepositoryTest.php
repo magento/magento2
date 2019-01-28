@@ -339,7 +339,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 "SoapFault does not contain expected message."
             );
         } catch (\Exception $e) {
-            $errorObj =  $this->customerHelper->processRestExceptionResult($e);
+            $errorObj = $this->customerHelper->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message'], 'Invalid message: "' . $e->getMessage() . '"');
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
@@ -785,7 +785,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      */
     protected function _getCustomerData($customerId)
     {
-        $customerData =  $this->customerRepository->getById($customerId);
+        $customerData = $this->customerRepository->getById($customerId);
         $this->customerRegistry->remove($customerId);
         return $customerData;
     }

@@ -138,9 +138,9 @@ class Dictionary
             $visitedPacks[$packKey] = true;
             $result[$packKey] = [
                 'inheritance_level' => $level,
-                'sort_order'        => $languageConfig->getSortOrder(),
-                'language'          => $languageConfig,
-                'key'               => $packKey,
+                'sort_order' => $languageConfig->getSortOrder(),
+                'language' => $languageConfig,
+                'key' => $packKey,
             ];
             foreach ($languageConfig->getUses() as $reuse) {
                 if (isset($this->packList[$reuse['vendor']][$reuse['package']])) {

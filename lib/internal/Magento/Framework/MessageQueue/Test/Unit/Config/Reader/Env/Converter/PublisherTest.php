@@ -17,9 +17,9 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $connectionToExchangeMap =  [
+        $connectionToExchangeMap = [
             'amqp' => 'magento',
-            'db'=> 'magento-db'
+            'db' => 'magento-db'
         ];
         $this->converter = new EnvPublisherConverter(
             $connectionToExchangeMap
@@ -33,7 +33,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
             'amqp-magento' => [
                 'name' => 'amqp-magento',
                 'exchange' => 'magento-db',
-                'connection' =>'db'
+                'connection' => 'db'
             ]
         ];
         $actualResult = $this->converter->convert($source['config']);

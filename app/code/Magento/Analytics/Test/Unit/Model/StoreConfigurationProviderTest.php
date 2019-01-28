@@ -53,15 +53,15 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock =  $this->getMockBuilder(StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->websiteMock =  $this->getMockBuilder(WebsiteInterface::class)
+        $this->websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeMock =  $this->getMockBuilder(StoreInterface::class)
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

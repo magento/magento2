@@ -74,8 +74,8 @@ class Reader
             return $this->pageLayoutMerge;
         }
         $this->pageLayoutMerge = $this->processorFactory->create([
-            'theme'       => $this->themeResolver->get(),
-            'fileSource'  => $this->pageLayoutFileSource,
+            'theme' => $this->themeResolver->get(),
+            'fileSource' => $this->pageLayoutFileSource,
             'cacheSuffix' => self::MERGE_CACHE_SUFFIX,
         ]);
         return $this->pageLayoutMerge;

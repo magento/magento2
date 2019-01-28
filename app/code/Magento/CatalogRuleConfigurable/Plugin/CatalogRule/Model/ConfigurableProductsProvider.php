@@ -32,7 +32,7 @@ class ConfigurableProductsProvider
      */
     public function getIds(array $ids)
     {
-        $key =  md5(json_encode($ids));
+        $key = md5(json_encode($ids));
         if (!isset($this->productIds[$key])) {
             $connection = $this->resource->getConnection();
             $this->productIds[$key] = $connection->fetchCol(

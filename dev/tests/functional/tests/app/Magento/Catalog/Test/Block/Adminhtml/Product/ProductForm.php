@@ -35,7 +35,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $news_from_date ='[name="product[news_from_date]"]';
+    protected $news_from_date = '[name="product[news_from_date]"]';
 
     /**
      * Attributes Search modal locator.

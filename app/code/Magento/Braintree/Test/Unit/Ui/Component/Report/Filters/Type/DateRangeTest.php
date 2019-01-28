@@ -126,7 +126,7 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
                     ]);
             }
 
-            $i=0;
+            $i = 0;
             switch (true) {
                 case is_string($filterData[$name]):
                 case isset($filterData[$name]['from']) && !isset($filterData[$name]['to']):

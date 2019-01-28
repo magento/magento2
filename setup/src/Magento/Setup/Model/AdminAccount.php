@@ -97,8 +97,8 @@ class AdminAccount
         $passwordHash = $this->generatePassword();
         $adminData = [
             'firstname' => $this->data[self::KEY_FIRST_NAME],
-            'lastname'  => $this->data[self::KEY_LAST_NAME],
-            'password'  => $passwordHash,
+            'lastname' => $this->data[self::KEY_LAST_NAME],
+            'password' => $passwordHash,
             'is_active' => 1,
         ];
         $result = $this->connection->fetchRow(
@@ -224,12 +224,12 @@ class AdminAccount
         if (empty($result)) {
             // No user role exists for this user id, create it
             $adminRoleData = [
-                'parent_id'  => $this->retrieveAdministratorsRoleId(),
+                'parent_id' => $this->retrieveAdministratorsRoleId(),
                 'tree_level' => 2,
-                'role_type'  => User::ROLE_TYPE,
-                'user_id'    => $adminId,
-                'user_type'  => UserContextInterface::USER_TYPE_ADMIN,
-                'role_name'  => $this->data[self::KEY_USER],
+                'role_type' => User::ROLE_TYPE,
+                'user_id' => $adminId,
+                'user_type' => UserContextInterface::USER_TYPE_ADMIN,
+                'role_name' => $this->data[self::KEY_USER],
             ];
             $this->connection->insert($this->getTableName('authorization_role'), $adminRoleData);
         }
@@ -245,7 +245,7 @@ class AdminAccount
     {
         // Get Administrators role id to use as parent_id
         $administratorsRoleData = [
-            'parent_id'  => 0,
+            'parent_id' => 0,
             'tree_level' => 1,
             'role_type' => Group::ROLE_TYPE,
             'user_id' => 0,

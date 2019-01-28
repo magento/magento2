@@ -224,7 +224,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      */
     protected function getCustomerGroupId()
     {
-        $customerGroupId =   (int) $this->getRequest()->getParam('cid');
+        $customerGroupId = (int) $this->getRequest()->getParam('cid');
         if ($customerGroupId == null) {
             $customerGroupId = $this->httpContext->getValue(Context::CONTEXT_GROUP);
         }

@@ -70,8 +70,8 @@ class BulkCleanupTest extends \PHPUnit\Framework\TestCase
             ->willReturn($adapterMock);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with($this->stringContains('bulk/lifetime'))
             ->willReturn($bulkLifetimeMultiplier);
-        $this->timeMock->expects($this->once())->method('gmtTimestamp')->willReturn($bulkLifetime*10);
-        $this->dateTimeMock->expects($this->once())->method('formatDate')->with($bulkLifetime*9);
+        $this->timeMock->expects($this->once())->method('gmtTimestamp')->willReturn($bulkLifetime * 10);
+        $this->dateTimeMock->expects($this->once())->method('formatDate')->with($bulkLifetime * 9);
         $adapterMock->expects($this->once())->method('delete');
 
         $this->model->execute();

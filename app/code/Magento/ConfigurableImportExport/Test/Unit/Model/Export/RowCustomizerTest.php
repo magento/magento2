@@ -180,27 +180,27 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $productAttributesOptions = [
             [
                 [
-                    'pricing_is_percent'    => true,
-                    'sku'                   => '_sku_',
-                    'attribute_code'        => 'code_of_attribute',
-                    'option_title'          => 'Option Title',
-                    'pricing_value'         => 112345,
+                    'pricing_is_percent' => true,
+                    'sku' => '_sku_',
+                    'attribute_code' => 'code_of_attribute',
+                    'option_title' => 'Option Title',
+                    'pricing_value' => 112345,
                     'super_attribute_label' => 'Super attribute label'
                 ],
                 [
-                    'pricing_is_percent'    => false,
-                    'sku'                   => '_sku_',
-                    'attribute_code'        => 'code_of_attribute',
-                    'option_title'          => 'Option Title',
-                    'pricing_value'         => 212345,
+                    'pricing_is_percent' => false,
+                    'sku' => '_sku_',
+                    'attribute_code' => 'code_of_attribute',
+                    'option_title' => 'Option Title',
+                    'pricing_value' => 212345,
                     'super_attribute_label' => ''
                 ],
                 [
-                    'pricing_is_percent'    => false,
-                    'sku'                   => '_sku_2',
-                    'attribute_code'        => 'code_of_attribute_2',
-                    'option_title'          => 'Option Title 2',
-                    'pricing_value'         => 312345,
+                    'pricing_is_percent' => false,
+                    'sku' => '_sku_2',
+                    'attribute_code' => 'code_of_attribute_2',
+                    'option_title' => 'Option Title 2',
+                    'pricing_value' => 312345,
                     'super_attribute_label' => 'Super attribute label 2'
                 ]
             ]

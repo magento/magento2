@@ -24,13 +24,13 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected $elementData = [
-        'htmlId'      => 'test_field_id',
-        'name'        => 'test_name',
-        'label'       => 'test_label',
+        'htmlId' => 'test_field_id',
+        'name' => 'test_name',
+        'label' => 'test_label',
         'elementHTML' => 'test_html',
-        'legend'      => 'test_legend',
-        'comment'     => 'test_comment',
-        'tooltip'     => 'test_tooltip',
+        'legend' => 'test_legend',
+        'comment' => 'test_comment',
+        'tooltip' => 'test_tooltip',
     ];
 
     /**
@@ -142,13 +142,13 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
         );
 
         $data = [
-            'context'     => $context,
+            'context' => $context,
             'authSession' => $this->authSessionMock,
-            'jsHelper'    => $this->jsHelperMock,
-            'moduleList'  => $this->moduleListMock,
+            'jsHelper' => $this->jsHelperMock,
+            'moduleList' => $this->moduleListMock,
             'data' => [
-                'group'          => $groupMock,
-                'form'           => $formMock,
+                'group' => $groupMock,
+                'form' => $formMock,
             ],
         ];
 
@@ -232,18 +232,18 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
         return [
             'expandedNestedExtra' => [
                 'expanded' => true,
-                'nested'   => true,
-                'extra'    => [],
+                'nested' => true,
+                'extra' => [],
             ],
             'collapsedNotNestedExtra' => [
                 'expanded' => false,
-                'nested'   => false,
-                'extra'    => ['configState' => [$this->elementData['htmlId'] => true]],
+                'nested' => false,
+                'extra' => ['configState' => [$this->elementData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
                 'expanded' => false,
-                'nested'   => false,
-                'extra'    => [],
+                'nested' => false,
+                'extra' => [],
             ],
         ];
     }

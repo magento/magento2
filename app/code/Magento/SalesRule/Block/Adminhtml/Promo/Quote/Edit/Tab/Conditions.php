@@ -177,10 +177,10 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
             'conditions',
             'text',
             [
-                'name'           => 'conditions',
-                'label'          => __('Conditions'),
-                'title'          => __('Conditions'),
-                'required'       => true,
+                'name' => 'conditions',
+                'label' => __('Conditions'),
+                'title' => __('Conditions'),
+                'required' => true,
                 'data-form-part' => $formName
             ]
         )->setRule(

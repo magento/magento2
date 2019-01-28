@@ -32,11 +32,11 @@ class Details
      * @var array
      */
     private $statusMap = [
-        OperationInterface::STATUS_TYPE_COMPLETE             => 'operations_successful',
-        OperationInterface::STATUS_TYPE_RETRIABLY_FAILED     => 'failed_retriable',
+        OperationInterface::STATUS_TYPE_COMPLETE => 'operations_successful',
+        OperationInterface::STATUS_TYPE_RETRIABLY_FAILED => 'failed_retriable',
         OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED => 'failed_not_retriable',
-        OperationInterface::STATUS_TYPE_OPEN                 => 'open',
-        OperationInterface::STATUS_TYPE_REJECTED             => 'rejected',
+        OperationInterface::STATUS_TYPE_OPEN => 'open',
+        OperationInterface::STATUS_TYPE_REJECTED => 'rejected',
     ];
 
     /**
@@ -62,12 +62,12 @@ class Details
     public function getDetails($bulkUuid)
     {
         $details = [
-            'operations_total'      => 0,
+            'operations_total' => 0,
             'operations_successful' => 0,
-            'operations_failed'     => 0,
-            'failed_retriable'      => 0,
-            'failed_not_retriable'  => 0,
-            'rejected'              => 0,
+            'operations_failed' => 0,
+            'failed_retriable' => 0,
+            'failed_not_retriable' => 0,
+            'rejected' => 0,
         ];
 
         if (array_key_exists($bulkUuid, $this->operationCache)) {

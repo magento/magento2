@@ -126,16 +126,16 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
         $this->context = $objectManager->getObject(
             \Magento\Backend\Block\Template\Context::class,
             [
-                'layout'     => $this->layoutMock,
+                'layout' => $this->layoutMock,
                 'mathRandom' => $this->mathRandomMock,
                 'urlBuilder' => $this->urlBuilderMock,
-                'escaper'    => $this->escaper,
+                'escaper' => $this->escaper,
             ]
         );
         $this->this = $objectManager->getObject(
             \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
             [
-                'context'     => $this->context,
+                'context' => $this->context,
                 'pageFactory' => $this->pageFactoryMock
             ]
         );
@@ -153,13 +153,13 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     {
         //$elementValue = 12345;
         //$cmsPageId    = 1;
-        $elementId    = 1;
-        $uniqId       = '126hj4h3j73hk7b347jhkl37gb34';
-        $sourceUrl    = 'cms/page_widget/chooser/126hj4h3j73hk7b347jhkl37gb34';
-        $config       = ['key1' => 'value1'];
-        $fieldsetId   = 2;
-        $html         = 'some html';
-        $title        = 'some "><img src=y onerror=prompt(document.domain)>; title';
+        $elementId = 1;
+        $uniqId = '126hj4h3j73hk7b347jhkl37gb34';
+        $sourceUrl = 'cms/page_widget/chooser/126hj4h3j73hk7b347jhkl37gb34';
+        $config = ['key1' => 'value1'];
+        $fieldsetId = 2;
+        $html = 'some html';
+        $title = 'some "><img src=y onerror=prompt(document.domain)>; title';
         $titleEscaped = 'some &quot;&gt;&lt;img src=y onerror=prompt(document.domain)&gt;; title';
 
         $this->this->setConfig($config);

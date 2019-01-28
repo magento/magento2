@@ -177,7 +177,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                 ['some_notice', 'notice_cookie'],
                 MessageInterface::TYPE_NOTICE,
             ],
-            'message success type filtering'    => [
+            'message success type filtering' => [
                 ['success!', 'success_cookie'],
                 MessageInterface::TYPE_SUCCESS,
             ],
@@ -207,7 +207,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
     public function testAssertSessionMessagesEmpty()
     {
-        $messagesCollection =  new \Magento\Framework\Message\Collection();
+        $messagesCollection = new \Magento\Framework\Message\Collection();
         $this->messageManager->expects($this->any())->method('getMessages')
             ->will($this->returnValue($messagesCollection));
 

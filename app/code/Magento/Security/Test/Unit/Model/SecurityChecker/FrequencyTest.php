@@ -58,7 +58,7 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->setMethods(['getScopeByEventType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -81,11 +81,11 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
             ['addFieldToFilter', 'filterLastItem', 'getFirstItem']
         );
 
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+        $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
 

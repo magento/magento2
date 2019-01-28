@@ -83,7 +83,7 @@ class CatalogProductViewObserver implements ObserverInterface
         $productId = $observer->getEvent()->getProduct()->getId();
 
         $viewData['product_id'] = $productId;
-        $viewData['store_id']   = $this->_storeManager->getStore()->getId();
+        $viewData['store_id'] = $this->_storeManager->getStore()->getId();
         if ($this->_customerSession->isLoggedIn()) {
             $viewData['customer_id'] = $this->_customerSession->getCustomerId();
         } else {

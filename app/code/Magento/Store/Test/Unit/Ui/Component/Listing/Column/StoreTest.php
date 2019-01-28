@@ -76,7 +76,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->contextMock,
                 'uiComponent' => $this->uiComponentFactoryMock,
-                'systemStore' =>  $this->systemStoreMock,
+                'systemStore' => $this->systemStoreMock,
                 'escaper' => $this->escaperMock,
                 'components' => [],
                 'data' => ['name' => $this->name]

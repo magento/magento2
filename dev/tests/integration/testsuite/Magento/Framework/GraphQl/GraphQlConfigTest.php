@@ -54,7 +54,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
-         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
+         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' => $data]);
     }
 
     /**
@@ -147,7 +147,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($outputInterface->getName(), $typeThatImplements);
         $outputInterfaceValues = $outputInterface->getInterfaces();
         /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
-        $outputInterfaceFields =$outputInterface->getFields();
+        $outputInterfaceFields = $outputInterface->getFields();
         foreach (array_keys($outputInterfaceValues) as $outputInterfaceValue) {
             $this->assertEquals(
                 $expectedOutputArray['ProductLinks']['interfaces'][$outputInterfaceValue]['interface'],
@@ -181,7 +181,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGraphQlInterfaceConfigElement()
     {
-        $interfaceType ='ProductLinksInterface';
+        $interfaceType = 'ProductLinksInterface';
         /** @var InterfaceType $outputConfigElement */
         $outputConfigElement = $this->model->getConfigElement($interfaceType);
         $expectedOutput = require __DIR__ . '/_files/query_array_output.php';

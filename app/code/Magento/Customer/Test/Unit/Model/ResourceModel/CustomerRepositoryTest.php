@@ -107,7 +107,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         $this->customerRegistry = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
         $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
-        $this->customerFactory  =
+        $this->customerFactory =
             $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
         $this->customerSecureFactory = $this->createPartialMock(
             \Magento\Customer\Model\Data\CustomerSecureFactory::class,

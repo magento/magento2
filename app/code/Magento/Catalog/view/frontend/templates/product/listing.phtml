@@ -75,7 +75,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         $info['actions'] = '<div class="product action">' . $info['button'] . $info['links'] . '</div>';
 
                         if ($showDescription) {
-                            $info['description'] =  '<div class="product description">'
+                            $info['description'] = '<div class="product description">'
                                                     . $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description')
                                                     . ' <a href="' . $_product->getProductUrl() . '" class="action more">'
                                                     . __('Learn More') . '</a></div>';

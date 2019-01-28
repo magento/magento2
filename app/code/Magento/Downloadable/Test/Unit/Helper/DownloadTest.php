@@ -72,9 +72,9 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             \Magento\Downloadable\Helper\Download::class,
             [
                 'downloadableFile' => $this->_downloadableFileMock,
-                'filesystem'       => $this->_filesystemMock,
-                'session'          => $this->sessionManager,
-                'fileReadFactory'  => $this->fileReadFactory,
+                'filesystem' => $this->_filesystemMock,
+                'session' => $this->sessionManager,
+                'fileReadFactory' => $this->fileReadFactory,
             ]
         );
     }

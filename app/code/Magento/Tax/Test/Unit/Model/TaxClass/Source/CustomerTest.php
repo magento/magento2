@@ -227,8 +227,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($items);
 
-        $result=($this->customer->getAllOptions());
-        $expected=$value;
+        $result = ($this->customer->getAllOptions());
+        $expected = $value;
         $this->assertEquals([$expected], $result);
     }
 

@@ -60,11 +60,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements 
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->attributeSetFactory =  $attributeSetFactory ?: ObjectManager::getInstance()
+        $this->attributeSetFactory = $attributeSetFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Eav\Model\Entity\Attribute\SetFactory::class);
-        $this->filterManager =  $filterManager ?: ObjectManager::getInstance()
+        $this->filterManager = $filterManager ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Filter\FilterManager::class);
-        $this->jsonHelper =  $jsonHelper ?: ObjectManager::getInstance()
+        $this->jsonHelper = $jsonHelper ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Json\Helper\Data::class);
     }
 

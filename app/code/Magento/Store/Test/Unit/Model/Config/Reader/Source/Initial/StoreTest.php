@@ -26,7 +26,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 'general' => [
                     'locale' => [
-                        'code'=> 'en_US'
+                        'code' => 'en_US'
                     ]
                 ]
             ]);
@@ -39,7 +39,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 'general' => [
                     'locale' => [
-                        'code'=> 'ru_RU'
+                        'code' => 'ru_RU'
                     ]
                 ]
             ]);
@@ -71,7 +71,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             [
                 'general' => [
                     'locale' => [
-                        'code'=> 'en_US'
+                        'code' => 'en_US'
                     ]
                 ]
             ],

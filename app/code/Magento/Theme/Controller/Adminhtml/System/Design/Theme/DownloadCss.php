@@ -42,7 +42,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
             return $this->_fileFactory->create(
                 $relPath,
                 [
-                    'type'  => 'filename',
+                    'type' => 'filename',
                     'value' => $relPath
                 ],
                 DirectoryList::ROOT

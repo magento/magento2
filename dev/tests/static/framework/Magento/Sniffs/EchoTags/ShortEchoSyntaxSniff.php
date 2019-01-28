@@ -27,7 +27,7 @@ class ShortEchoSyntaxSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens  = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $openTag = $tokens[$stackPtr];
 
         // HHVM Will classify <?= as a T_OPEN_TAG

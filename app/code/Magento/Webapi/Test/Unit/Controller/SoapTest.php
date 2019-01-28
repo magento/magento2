@@ -87,7 +87,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['maskException'])
             ->getMock();
 
-        $this->_appStateMock =  $this->createMock(\Magento\Framework\App\State::class);
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $localeResolverMock = $this->getMockBuilder(
             \Magento\Framework\Locale\Resolver::class

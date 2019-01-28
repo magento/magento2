@@ -532,8 +532,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $this->eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
                 [
-                    'order'     => $order,
-                    'quote'     => $quote,
+                    'order' => $order,
+                    'quote' => $quote,
                     'exception' => $e
                 ]
             );

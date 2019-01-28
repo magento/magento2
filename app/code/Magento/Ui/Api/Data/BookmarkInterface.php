@@ -16,15 +16,15 @@ interface BookmarkInterface extends BookmarkExtensionInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const BOOKMARK_ID      = 'bookmark_id';
-    const USER_ID          = 'user_id';
-    const BOOKMARKSPACE    = 'namespace';
-    const IDENTIFIER       = 'identifier';
-    const TITLE            = 'title';
-    const CONFIG           = 'config';
-    const CREATED_AT       = 'created_at';
-    const UPDATED_AT       = 'updated_at';
-    const CURRENT          = 'current';
+    const BOOKMARK_ID = 'bookmark_id';
+    const USER_ID = 'user_id';
+    const BOOKMARKSPACE = 'namespace';
+    const IDENTIFIER = 'identifier';
+    const TITLE = 'title';
+    const CONFIG = 'config';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    const CURRENT = 'current';
     /**#@-*/
 
     /**

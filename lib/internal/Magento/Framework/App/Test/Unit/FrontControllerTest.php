@@ -55,7 +55,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     {
         $validCounter = 0;
         $callbackValid = function () use (&$validCounter) {
-            return $validCounter++%10 ? false : true;
+            return $validCounter++ % 10 ? false : true;
         };
         $this->routerList->expects($this->any())->method('valid')->will($this->returnCallback($callbackValid));
 

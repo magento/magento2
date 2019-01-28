@@ -144,7 +144,7 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
         $this->setUpQuence();
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->willReturn(['vendor/language-a' => ['type' =>  ComposerInformation::LANGUAGE_PACKAGE_TYPE]]);
+            ->willReturn(['vendor/language-a' => ['type' => ComposerInformation::LANGUAGE_PACKAGE_TYPE]]);
 
         $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
         $this->themeUninstallHelper->expects($this->never())->method($this->anything());

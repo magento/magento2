@@ -1317,7 +1317,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      */
     protected function _formatErrorMessage($errorCode, $shortErrorMessage, $longErrorMessage)
     {
-        $longErrorMessage  = preg_replace('/\.$/', '', $longErrorMessage);
+        $longErrorMessage = preg_replace('/\.$/', '', $longErrorMessage);
         $shortErrorMessage = preg_replace('/\.$/', '', $shortErrorMessage);
 
         return $longErrorMessage ? sprintf('%s (#%s: %s).', $longErrorMessage, $errorCode, $shortErrorMessage)
@@ -1488,7 +1488,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $shippingAddress, $this->_shippingAddressMap);
             $this->_applyStreetAndRegionWorkarounds($shippingAddress);
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
-            $shippingAddress->addData(['firstname'  => $data['SHIPTONAME']]);
+            $shippingAddress->addData(['firstname' => $data['SHIPTONAME']]);
             $this->setExportedShippingAddress($shippingAddress);
         }
     }

@@ -79,7 +79,7 @@
                     <li class="item">
                          <div class="product">
                              <div class="number">
-                                 <?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?>
+                                 <?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index + 1, $block->countItems()) ?>
                              </div>
                              <div class="img photo container">
                                  <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
@@ -208,7 +208,7 @@
                  <?php $_product = $_item->getProduct() ?>
                      <li class="item">
                          <div class="product">
-                             <div class="number"><?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?></div>
+                             <div class="number"><?= /* @escapeNotVerified */ __('<span>Item %1</span> of %2', $_index + 1, $block->countItems()) ?></div>
                              <div class="img photo container">
                                  <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
                              </div>

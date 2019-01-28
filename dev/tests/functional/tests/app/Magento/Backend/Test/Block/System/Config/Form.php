@@ -128,9 +128,9 @@ class Form extends Block
              * Slashes are concatenated to cover case when string 'index' presented in domain name
              * or somewhere else in url additionally.
              */
-            $tabUrl =  str_replace('/index/', '/' . $tabIndex . '/', $this->baseUrl);
+            $tabUrl = str_replace('/index/', '/' . $tabIndex . '/', $this->baseUrl);
         } elseif (strpos($this->baseUrl, '/edit/') !== false) {
-            $tabUrl =  str_replace('/edit/', '/' . $tabIndex . '/', $this->baseUrl);
+            $tabUrl = str_replace('/edit/', '/' . $tabIndex . '/', $this->baseUrl);
         } else {
             $tabUrl = $this->baseUrl . $tabIndex;
         }

@@ -123,7 +123,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->connectionName  = 'catalog';
+        $this->connectionName = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -274,7 +274,7 @@ class Category extends AbstractResource
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
             $path = explode('/', $object->getPath());
-            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $level = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {

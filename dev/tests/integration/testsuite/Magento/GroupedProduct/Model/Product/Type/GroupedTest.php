@@ -121,7 +121,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedData = [
             Grouped::PROCESS_MODE_FULL => [
-                1  => '{"super_product_config":{"product_type":"grouped","product_id":"'
+                1 => '{"super_product_config":{"product_type":"grouped","product_id":"'
                     . $product->getId() . '"}}',
                 21 => '{"super_product_config":{"product_type":"grouped","product_id":"'
                     . $product->getId() . '"}}',

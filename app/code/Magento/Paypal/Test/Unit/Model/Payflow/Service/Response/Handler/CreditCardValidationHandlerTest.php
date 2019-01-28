@@ -29,7 +29,7 @@ class CreditCardValidationHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responseMock->expects($this->exactly(count($expectedHandleResult)*2))
+        $responseMock->expects($this->exactly(count($expectedHandleResult) * 2))
             ->method('getData')
             ->willReturnMap(
                 [

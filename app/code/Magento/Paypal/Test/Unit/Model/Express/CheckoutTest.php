@@ -72,7 +72,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->checkoutModel = $this->objectManager->getObject(
             \Magento\Paypal\Model\Express\Checkout::class,
             [
-                'params'                 => [
+                'params' => [
                     'quote' => $this->quoteMock,
                     'config' => $paypalConfigMock,
                     'session' => $this->customerSessionMock,

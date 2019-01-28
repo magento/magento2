@@ -178,17 +178,17 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
                 'magento/package-1' => [
                     'name' => 'magento/package-1',
                     'type' => 'magento2-module',
-                    'version'=> '1.0.0'
+                    'version' => '1.0.0'
                 ],
                 'magento/package-2' => [
                     'name' => 'magento/package-2',
                     'type' => 'magento2-module',
-                    'version'=> '1.0.1'
+                    'version' => '1.0.1'
                 ],
                 'partner/package-3' => [
                     'name' => 'partner/package-3',
                     'type' => 'magento2-module',
-                    'version'=> '3.0.0'
+                    'version' => '3.0.0'
                 ],
             ]
         );
@@ -244,7 +244,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
             'partner/package-4' => [
                 'name' => 'partner/package-4',
                 'type' => 'magento2-module',
-                'version'=> '4.0.4'
+                'version' => '4.0.4'
             ],
         ];
         $this->composerInformation = $this->getComposerInformation($requiredPackages, $installedPackages);

@@ -90,7 +90,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
             ->setMethods(['getPriceInfo', 'getStoreId'])
             ->getMockForAbstractClass();
-        $weeAttribute  = $this->getMockBuilder(WeeeAdjustmentAttributeInterface::class)
+        $weeAttribute = $this->getMockBuilder(WeeeAdjustmentAttributeInterface::class)
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
         $this->weeeAdjustmentAttributeFactory->expects($this->atLeastOnce())

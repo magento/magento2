@@ -544,11 +544,11 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'  => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
                 'firstname' => 'John',
-                'lastname'  => 'Doe',
-                'email'     => 'johndoe@email.com',
-                'change_email'     => 1,
+                'lastname' => 'Doe',
+                'email' => 'johndoe@email.com',
+                'change_email' => 1,
                 'current_password' => 'password'
             ]);
 
@@ -588,14 +588,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                    'firstname'        => 'John',
-                    'lastname'         => 'Doe',
-                    'email'            => 'johndoe@email.com',
-                    'change_password'  => 1,
-                    'change_email'     => 1,
+                    'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'johndoe@email.com',
+                    'change_password' => 1,
+                    'change_email' => 1,
                     'current_password' => 'password',
-                    'password'         => 'new-Password1',
+                    'password' => 'new-Password1',
                     'password_confirmation' => 'new-Password1',
                 ]
             );
@@ -682,13 +682,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                'firstname'        => 'John',
-                'lastname'         => 'Doe',
-                'email'            => 'johndoe@email.com',
-                'change_password'  => 1,
+                'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'email' => 'johndoe@email.com',
+                'change_password' => 1,
                 'current_password' => 'password',
-                'password'         => 'new-password',
+                'password' => 'new-password',
                 'password_confirmation' => 'new-password-no-match',
             ]);
 

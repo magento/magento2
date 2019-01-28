@@ -89,7 +89,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'target_path' => "catalog/category/view/id/6",
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]
@@ -126,7 +126,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'target_path' => "catalog/category/view/id/6",
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]
@@ -174,7 +174,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
             ],
             [
                 'request_path' => "category-2.html",
-                'target_path' =>  "catalog/category/view/id/6",
+                'target_path' => "catalog/category/view/id/6",
                 'is_auto_generated' => 1,
                 'redirect_type' => 0
             ]

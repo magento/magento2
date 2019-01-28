@@ -342,7 +342,7 @@ class EavTest extends AbstractModifierTest
             ->method('load')
             ->willReturnSelf();
 
-        $this->eav =$this->getModel();
+        $this->eav = $this->getModel();
         $this->objectManager->setBackwardCompatibleProperty(
             $this->eav,
             'localeCurrency',

@@ -40,7 +40,7 @@ class GroupTest extends TestCase
         $this->assertEquals(
             [
                 'section' => 'path_part_1',
-                'group'   => 'path_part_2',
+                'group' => 'path_part_2',
             ],
             $this->model->build($this->structureElementMock)
         );

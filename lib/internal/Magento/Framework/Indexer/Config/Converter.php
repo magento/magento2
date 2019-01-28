@@ -111,10 +111,10 @@ class Converter implements ConverterInterface
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
-            'source'   => $this->getAttributeValue($node, 'source'),
-            'name'     => $this->getAttributeValue($node, 'name'),
+            'source' => $this->getAttributeValue($node, 'source'),
+            'name' => $this->getAttributeValue($node, 'name'),
             'provider' => $this->getAttributeValue($node, 'provider'),
-            'fields'   => [],
+            'fields' => [],
         ];
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
@@ -144,8 +144,8 @@ class Converter implements ConverterInterface
                     $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
                     [$this->getAttributeValue($childNode, 'fieldset')] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
-                        'from'     => $this->getAttributeValue($childNode, 'from'),
-                        'to'       => $this->getAttributeValue($childNode, 'to'),
+                        'from' => $this->getAttributeValue($childNode, 'from'),
+                        'to' => $this->getAttributeValue($childNode, 'to'),
                     ];
                     $this->addVirtualField(
                         $this->getAttributeValue($childNode, 'fieldset'),
@@ -214,11 +214,11 @@ class Converter implements ConverterInterface
     protected function convertField(\DOMElement $node, $data)
     {
         $data['fields'][$this->getAttributeValue($node, 'name')] = [
-            'name'     => $this->getAttributeValue($node, 'name'),
-            'handler'  => $this->getAttributeValue($node, 'handler'),
-            'origin'   => $this->getAttributeValue($node, 'origin') ?: $this->getAttributeValue($node, 'name'),
+            'name' => $this->getAttributeValue($node, 'name'),
+            'handler' => $this->getAttributeValue($node, 'handler'),
+            'origin' => $this->getAttributeValue($node, 'origin') ?: $this->getAttributeValue($node, 'name'),
             'dataType' => $this->getAttributeValue($node, 'dataType'),
-            'type'     => $node->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'type'),
+            'type' => $node->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'type'),
         ];
 
         $data['fields'][$this->getAttributeValue($node, 'name')]['filters'] = [];

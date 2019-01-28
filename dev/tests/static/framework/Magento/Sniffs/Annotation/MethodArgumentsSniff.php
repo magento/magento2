@@ -520,7 +520,7 @@ class MethodArgumentsSniff implements Sniff
                     $methodArguments,
                     $paramDefinitions
                 );
-                $paramContent = $tokens[$paramPointers[$ptr]+2]['content'];
+                $paramContent = $tokens[$paramPointers[$ptr] + 2]['content'];
                 $paramContentExplode = explode(' ', $paramContent);
                 $this->validateParameterAnnotationFormatIsCorrect(
                     $ptr,
@@ -540,29 +540,29 @@ class MethodArgumentsSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
         $numTokens = count($tokens);
-        $previousCommentOpenPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $stackPtr-1, 0);
-        $previousCommentClosePtr = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr-1, 0);
+        $previousCommentOpenPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $stackPtr - 1, 0);
+        $previousCommentClosePtr = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr - 1, 0);
         if (!$this->validateCommentBlockExists($phpcsFile, $previousCommentClosePtr, $stackPtr)) {
             $phpcsFile->addError('Comment block is missing', $stackPtr, 'MethodArguments');
             return;
         }
-        $openParenthesisPtr = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr+1, $numTokens);
-        $closedParenthesisPtr = $phpcsFile->findNext(T_CLOSE_PARENTHESIS, $stackPtr+1, $numTokens);
+        $openParenthesisPtr = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr + 1, $numTokens);
+        $closedParenthesisPtr = $phpcsFile->findNext(T_CLOSE_PARENTHESIS, $stackPtr + 1, $numTokens);
         $methodArguments = $this->getMethodArguments($phpcsFile, $openParenthesisPtr, $closedParenthesisPtr);
         $paramPointers = $paramDefinitions = [];
         for ($tempPtr = $previousCommentOpenPtr; $tempPtr < $previousCommentClosePtr; $tempPtr++) {
             if (strtolower($tokens[$tempPtr]['content']) === '@param') {
                 $paramPointers[] = $tempPtr;
-                $paramAnnotationParts = explode(' ', $tokens[$tempPtr+2]['content']);
+                $paramAnnotationParts = explode(' ', $tokens[$tempPtr + 2]['content']);
                 if (count($paramAnnotationParts) === 1) {
                     if ((preg_match('/^\$.*/', $paramAnnotationParts[0]))) {
                         $paramDefinitions[] = [
                             'type' => null,
-                            'paramName' => rtrim(ltrim($tokens[$tempPtr+2]['content'], '&'), ',')
+                            'paramName' => rtrim(ltrim($tokens[$tempPtr + 2]['content'], '&'), ',')
                         ];
                     } else {
                         $paramDefinitions[] = [
-                            'type' => $tokens[$tempPtr+2]['content'],
+                            'type' => $tokens[$tempPtr + 2]['content'],
                             'paramName' => null
                         ];
                     }

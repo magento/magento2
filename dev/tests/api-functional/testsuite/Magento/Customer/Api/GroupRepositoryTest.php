@@ -931,7 +931,7 @@ class GroupRepositoryTest extends WebapiAbstract
     {
         $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
                     ->setField($filterField)
@@ -991,7 +991,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $sortOrder = $sortOrderBuilder->setField(GroupInterface::CODE)->setDirection(SortOrder::SORT_ASC)->create();
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
         $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3]);
         $searchCriteriaBuilder->addFilters([$filter4]);
@@ -1032,7 +1032,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $this->_markTestAsRestOnly('SOAP is covered in ');
         $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
             ->setField($filterField)

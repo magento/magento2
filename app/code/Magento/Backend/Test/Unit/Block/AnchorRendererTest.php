@@ -62,7 +62,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->anchorRenderer =  $this->objectManagerHelper->getObject(
+        $this->anchorRenderer = $this->objectManagerHelper->getObject(
             AnchorRenderer::class,
             [
                 'menuItemChecker' => $this->menuItemCheckerMock,
@@ -74,13 +74,13 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
     public function testRenderAnchorLevelIsOne()
     {
         $title = 'Title';
-        $html =  'Test html';
+        $html = 'Test html';
         $this->menuItemMock->expects($this->once())->method('getUrl')->willReturn('#');
         $this->menuItemMock->expects($this->once())->method('getTitle')->willReturn($title);
         $this->menuItemMock->expects($this->once())->method('hasChildren')->willReturn(true);
         $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($html);
 
-        $expected =  '<strong class="submenu-group-title" role="presentation">'
+        $expected = '<strong class="submenu-group-title" role="presentation">'
             . '<span>' . $html . '</span>'
             . '</strong>';
 
@@ -95,7 +95,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
         $this->menuItemWithoutChildrenMock->expects($this->once())->method('getUrl')->willReturn('#');
         $this->menuItemWithoutChildrenMock->expects($this->once())->method('hasChildren')->willReturn(false);
 
-        $expected =  '';
+        $expected = '';
 
         $this->assertEquals(
             $expected,
@@ -111,7 +111,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
     {
         $level = 0;
         $title = 'Title';
-        $html =  'Test html';
+        $html = 'Test html';
         $url = 'test/url';
         $tooltip = 'Anchor title';
         $onclick = '';

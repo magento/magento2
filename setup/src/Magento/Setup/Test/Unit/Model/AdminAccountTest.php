@@ -75,13 +75,13 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
 
         // existing admin role data
         $existingAdminRoleData = [
-            'parent_id'  => 0,
+            'parent_id' => 0,
             'tree_level' => 2,
-            'role_type'  => 'U',
-            'user_id'    => 1,
-            'user_type'  => 2,
-            'role_name'  => 'admin',
-            'role_id'    => 1,
+            'role_type' => 'U',
+            'user_id' => 1,
+            'user_type' => 2,
+            'role_name' => 'admin',
+            'role_id' => 1,
         ];
 
         $returnValueMap = [
@@ -132,7 +132,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
 
         // speical admin role data
         $administratorRoleData = [
-            'parent_id'  => 0,
+            'parent_id' => 0,
             'tree_level' => 1,
             'role_type' => 'G',
             'user_id' => 0,
@@ -169,7 +169,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
                 'AND role_type = :role_type AND user_id = :user_id ' .
                 'AND user_type = :user_type AND role_name = :role_name',
                 [
-                    'parent_id'  => 0,
+                    'parent_id' => 0,
                     'tree_level' => 1,
                     'role_type' => 'G',
                     'user_id' => 0,
@@ -206,13 +206,13 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     {
         // existing admin role data
         $existingAdminRoleData = [
-            'parent_id'  => 0,
+            'parent_id' => 0,
             'tree_level' => 2,
-            'role_type'  => 'U',
-            'user_id'    => 1,
-            'user_type'  => 2,
-            'role_name'  => 'admin',
-            'role_id'    => 1,
+            'role_type' => 'U',
+            'user_id' => 1,
+            'user_type' => 2,
+            'role_name' => 'admin',
+            'role_id' => 1,
         ];
 
         $returnValueMap = [
@@ -254,7 +254,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
     {
         // special admin role data
         $administratorRoleData = [
-            'parent_id'  => 0,
+            'parent_id' => 0,
             'tree_level' => 1,
             'role_type' => 'G',
             'user_id' => 0,
@@ -284,7 +284,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
                 'AND role_type = :role_type AND user_id = :user_id ' .
                 'AND user_type = :user_type AND role_name = :role_name',
                 [
-                    'parent_id'  => 0,
+                    'parent_id' => 0,
                     'tree_level' => 1,
                     'role_type' => 'G',
                     'user_id' => 0,

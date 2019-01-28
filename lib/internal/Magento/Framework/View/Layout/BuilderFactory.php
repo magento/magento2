@@ -17,13 +17,13 @@ class BuilderFactory
      * Allowed builder types
      */
     const TYPE_LAYOUT = 'layout';
-    const TYPE_PAGE   = 'page';
+    const TYPE_PAGE = 'page';
     /**#@-*/
 
     /**#@-*/
     protected $typeMap = [
         self::TYPE_LAYOUT => \Magento\Framework\View\Layout\Builder::class,
-        self::TYPE_PAGE   => \Magento\Framework\View\Page\Builder::class,
+        self::TYPE_PAGE => \Magento\Framework\View\Page\Builder::class,
     ];
 
     /**

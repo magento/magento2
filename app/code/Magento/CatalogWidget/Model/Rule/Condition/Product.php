@@ -208,7 +208,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-        $storeId =  $this->storeManager->getStore()->getId();
+        $storeId = $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];
         if ($values) {

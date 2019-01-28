@@ -70,7 +70,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     private function trimStoreCodeFromPathInfo(string $pathInfo, string $storeCode) : ?string
     {
         if (substr($pathInfo, 0, strlen('/' . $storeCode)) == '/'. $storeCode) {
-            $pathInfo = substr($pathInfo, strlen($storeCode)+1);
+            $pathInfo = substr($pathInfo, strlen($storeCode) + 1);
         }
         return empty($pathInfo) ? '/' : $pathInfo;
     }

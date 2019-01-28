@@ -193,7 +193,7 @@ class StoresFixture extends Fixture
 
         //Get existing entities counts
         $storeGroups = $this->storeManager->getGroups();
-        $this->storeGroupsIds= array_keys($storeGroups);
+        $this->storeGroupsIds = array_keys($storeGroups);
 
         foreach ($storeGroups as $storeGroupId => $storeGroup) {
             $this->storeGroupsToWebsites[$storeGroupId] = $storeGroup->getWebsiteId();

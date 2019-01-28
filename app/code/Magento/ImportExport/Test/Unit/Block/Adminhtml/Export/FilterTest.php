@@ -244,7 +244,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'attributeCode' => [
-                    'code' =>'updated_at',
+                    'code' => 'updated_at',
                     'input' => '',
                     'options' => [],
                     'filter_options' => []

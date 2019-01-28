@@ -27,7 +27,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     /**
      * @deprecated
      */
-    const AREA_ADMIN    = 'admin';
+    const AREA_ADMIN = 'admin';
 
     /**
      * Area parameter.

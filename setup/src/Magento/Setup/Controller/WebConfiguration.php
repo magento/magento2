@@ -22,9 +22,9 @@ class WebConfiguration extends AbstractActionController
         $setupInfo = new SetupInfo($_SERVER);
         $view = new ViewModel(
             [
-                'autoBaseUrl'   => $setupInfo->getProjectUrl(),
+                'autoBaseUrl' => $setupInfo->getProjectUrl(),
                 'autoAdminPath' => $setupInfo->getProjectAdminPath(),
-                'sessionSave'   => [
+                'sessionSave' => [
                         ConfigOptionsListConstants::SESSION_SAVE_FILES,
                         ConfigOptionsListConstants::SESSION_SAVE_DB,
                     ],

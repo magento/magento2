@@ -121,7 +121,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
                 'cardHolderName' => 'firstname lastname',
                 'last4' => $payment->getCcLast4(),
                 'expiryMonth' => $payment->getCcExpMonth(),
-                'expiryYear' =>  $payment->getCcExpYear(),
+                'expiryYear' => $payment->getCcExpYear(),
                 'billingAddress' => [
                     'streetAddress' => 'street',
                     'city' => $billingAddress->getCity(),
@@ -133,7 +133,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
             ],
             'recipient' => [
                 'fullName' => $shippingAddress->getName(),
-                'confirmationEmail' =>  $shippingAddress->getEmail(),
+                'confirmationEmail' => $shippingAddress->getEmail(),
                 'confirmationPhone' => $shippingAddress->getTelephone(),
                 'deliveryAddress' => [
                     'streetAddress' => '6161 West Centinela Avenue',

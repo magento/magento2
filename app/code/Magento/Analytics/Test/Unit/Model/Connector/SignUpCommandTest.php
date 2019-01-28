@@ -62,7 +62,7 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
+        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->integrationManagerMock = $this->getMockBuilder(IntegrationManager::class)
@@ -178,7 +178,7 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
-            'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
+            'body' => ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];
     }
 }

@@ -47,7 +47,7 @@ class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->searchCriteriaBuilder =$this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
+        $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
@@ -108,7 +108,7 @@ class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
     {
         $userId = 1;
         $namespace = 'some_namespace';
-        $identifier ='current';
+        $identifier = 'current';
         $this->userContext->expects($this->once())
             ->method('getUserId')
             ->willReturn($userId);

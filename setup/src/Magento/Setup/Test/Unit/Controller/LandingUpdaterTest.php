@@ -21,7 +21,7 @@ class LandingUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject $productMetadataMock */
-        $productMetadataMock =  $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
+        $productMetadataMock = $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
             ->setMethods(['getVersion'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -220,7 +220,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private function getRouteMethod($route)
     {
         $method = $route->attributes->getNamedItem('method')->nodeValue;
-        $method =  mb_strlen((string) $method) === 0 ? null : $method;
+        $method = mb_strlen((string) $method) === 0 ? null : $method;
         return ($this->validateRouteMethod($method)) ? $method : null;
     }
 

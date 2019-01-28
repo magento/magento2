@@ -48,7 +48,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->reviewCollection = $this->objectManager->create(
             \Magento\Review\Model\ResourceModel\Review\Collection::class
         );
-        $this->reviewResource =  $this->objectManager->create(\Magento\Review\Model\ResourceModel\Review::class);
+        $this->reviewResource = $this->objectManager->create(\Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**

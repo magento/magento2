@@ -13,9 +13,9 @@ interface LoggerInterface
     /**#@+
      * Types of connections to be logged
      */
-    const TYPE_CONNECT     = 'connect';
+    const TYPE_CONNECT = 'connect';
     const TYPE_TRANSACTION = 'transaction';
-    const TYPE_QUERY       = 'query';
+    const TYPE_QUERY = 'query';
     /**#@-*/
 
     /**

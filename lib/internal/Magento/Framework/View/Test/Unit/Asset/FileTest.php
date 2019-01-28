@@ -141,7 +141,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'normal content' => ['content'],
-            'empty content'  => [''],
+            'empty content' => [''],
         ];
     }
 

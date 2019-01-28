@@ -204,11 +204,11 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
         // @codingStandardsIgnoreStart
         return [
             'http' => [
-                'url'            => 'http://some-name.com/page_cache/block/render',
-                'route'          => 'route',
-                'controller'     => 'controller',
-                'action'         => 'action',
-                'uri'            => 'uri',
+                'url' => 'http://some-name.com/page_cache/block/render',
+                'route' => 'route',
+                'controller' => 'controller',
+                'action' => 'action',
+                'uri' => 'uri',
                 'expectedResult' => '~"originalRequest":{"route":"route","controller":"controller","action":"action","uri":"uri"}~'
             ],
         ];

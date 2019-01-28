@@ -45,7 +45,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $provider = $objectManager->get(Provider::class);
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  $objectManager->create(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder = $objectManager->create(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->setPageSize($optionsCount);
         $searchCriteriaBuilder->setCurrentPage(1);
 

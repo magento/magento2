@@ -111,7 +111,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue([$url1, $url2, $url3]));
 
         $this->assertEquals(
-            ['category-1_1'  => $url1, 'category-2_2' => $url2],
+            ['category-1_1' => $url1, 'category-2_2' => $url2],
             $this->childrenUrlRewriteGenerator->generate($storeId, $this->category, 1)
         );
     }

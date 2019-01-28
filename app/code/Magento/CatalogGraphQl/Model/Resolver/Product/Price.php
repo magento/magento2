@@ -77,9 +77,9 @@ class Price implements ResolverInterface
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        $minimalPriceAmount =  $finalPrice->getMinimalPrice();
-        $maximalPriceAmount =  $finalPrice->getMaximalPrice();
-        $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+        $minimalPriceAmount = $finalPrice->getMinimalPrice();
+        $maximalPriceAmount = $finalPrice->getMaximalPrice();
+        $regularPriceAmount = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
 
         $prices = [
             'minimalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $minimalPriceAmount),

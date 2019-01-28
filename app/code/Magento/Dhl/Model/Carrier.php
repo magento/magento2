@@ -1074,7 +1074,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
         } catch (DocumentValidationException $e) {
             if ($e->getCode() > 0) {
-                $this->_errors[$e->getCode()] =  $e->getMessage();
+                $this->_errors[$e->getCode()] = $e->getMessage();
             } else {
                 $this->_errors[] = $e->getMessage();
             }

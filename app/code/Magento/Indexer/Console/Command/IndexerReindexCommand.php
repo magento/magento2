@@ -111,7 +111,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function getIndexers(InputInterface $input)
     {
-        $indexers =  parent::getIndexers($input);
+        $indexers = parent::getIndexers($input);
         $allIndexers = $this->getAllIndexers();
         if (!array_diff_key($allIndexers, $indexers)) {
             return $indexers;

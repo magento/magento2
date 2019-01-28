@@ -88,7 +88,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $request = [];
         if (!empty($requestQuantity) && is_array($requestQuantity)) {
-            $request= [
+            $request = [
                 'ship' => [
                     [$quoteItem->getId() => $requestQuantity],
                 ]

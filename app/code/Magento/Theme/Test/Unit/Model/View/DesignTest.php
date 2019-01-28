@@ -105,7 +105,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'single' => [true, ScopeInterface::SCOPE_WEBSITES],
-            'multi'  => [false, ScopeInterface::SCOPE_STORE],
+            'multi' => [false, ScopeInterface::SCOPE_STORE],
         ];
     }
 

@@ -144,7 +144,7 @@ class TableBuilder
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned'=>true]
+                ['unsigned' => true]
             );
 
             $temporaryTableBuilder->addColumn('type_id', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
@@ -155,7 +155,7 @@ class TableBuilder
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned'=>true]
+                ['unsigned' => true]
             );
 
             /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */

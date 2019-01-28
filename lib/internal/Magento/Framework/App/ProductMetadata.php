@@ -21,12 +21,12 @@ class ProductMetadata implements ProductMetadataInterface
     /**
      * Magento product edition
      */
-    const EDITION_NAME  = 'Community';
+    const EDITION_NAME = 'Community';
 
     /**
      * Magento product name
      */
-    const PRODUCT_NAME  = 'Magento';
+    const PRODUCT_NAME = 'Magento';
 
     /**
      * Product version
@@ -119,9 +119,9 @@ class ProductMetadata implements ProductMetadataInterface
     private function getComposerInformation()
     {
         if (!$this->composerInformation) {
-            $directoryList              = new DirectoryList(BP);
-            $composerFactory            = new ComposerFactory($directoryList, $this->composerJsonFinder);
-            $this->composerInformation  = new ComposerInformation($composerFactory);
+            $directoryList = new DirectoryList(BP);
+            $composerFactory = new ComposerFactory($directoryList, $this->composerJsonFinder);
+            $this->composerInformation = new ComposerInformation($composerFactory);
         }
         return $this->composerInformation;
     }

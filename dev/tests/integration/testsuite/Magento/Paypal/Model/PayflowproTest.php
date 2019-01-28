@@ -49,7 +49,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
 
         $mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $loggerMock = $this->createMock(\Magento\Payment\Model\Method\Logger::class);
-        $this->gatewayMock =$this->_objectManager->create(
+        $this->gatewayMock = $this->_objectManager->create(
             \Magento\Paypal\Model\Payflow\Service\Gateway::class,
             [
                 'httpClientFactory' => $httpClientFactoryMock,

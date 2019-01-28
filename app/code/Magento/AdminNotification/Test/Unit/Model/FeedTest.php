@@ -115,7 +115,7 @@ class FeedTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckUpdate($callInbox, $curlRequest)
     {
-        $mockName    = 'Test Product Name';
+        $mockName = 'Test Product Name';
         $mockVersion = '0.0.0';
         $mockEdition = 'Test Edition';
         $mockUrl = 'http://test-url';
@@ -126,9 +126,9 @@ class FeedTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('*/*/*')->willReturn($mockUrl);
 
         $configValues = [
-            'timeout'   => 2,
+            'timeout' => 2,
             'useragent' => $mockName . '/' . $mockVersion . ' (' . $mockEdition . ')',
-            'referer'   => $mockUrl
+            'referer' => $mockUrl
         ];
 
         $lastUpdate = 0;

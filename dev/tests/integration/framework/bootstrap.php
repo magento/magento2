@@ -32,8 +32,8 @@ try {
         $filesystem = new \Magento\Framework\Filesystem\Driver\File();
         $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
         $loggerHandlers = [
-            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
-            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+            'system' => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug' => new \Magento\Framework\Logger\Handler\Debug($filesystem)
         ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),

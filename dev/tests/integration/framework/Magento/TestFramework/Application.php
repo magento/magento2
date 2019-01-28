@@ -320,7 +320,7 @@ class Application
                             'filePath' => $this->installDir
                         ]
                     ),
-                    'debug'  => $objectManager->create(
+                    'debug' => $objectManager->create(
                         \Magento\Framework\Logger\Handler\Debug::class,
                         ['filePath' => $this->installDir]
                     ),

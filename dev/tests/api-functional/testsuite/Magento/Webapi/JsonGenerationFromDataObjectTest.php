@@ -36,7 +36,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->storeCode = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)
             ->getStore()->getCode();
 
-        $this->productMetadata =  Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
+        $this->productMetadata = Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
 
         parent::setUp();
     }
@@ -54,7 +54,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             ],
         ];
 
-        $schemaContent =  $this->_webApiCall($serviceInfo);
+        $schemaContent = $this->_webApiCall($serviceInfo);
         $this->checkActualData($this->getExpectedMultiServiceData(), $schemaContent);
     }
 
@@ -71,7 +71,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             ],
         ];
 
-        $schemaContent =  $this->_webApiCall($serviceInfo);
+        $schemaContent = $this->_webApiCall($serviceInfo);
 
         $this->checkActualData($this->getExpectedSingleServiceData(), $schemaContent);
     }
@@ -175,7 +175,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                 ],
             ],
             'paths' => [
-                '/V1/TestModule5/{parentId}/nestedResource/{entityId}' =>    [
+                '/V1/TestModule5/{parentId}/nestedResource/{entityId}' => [
                     'put' => [
                         'tags' => [
                             'testModule5AllSoapAndRestV1',

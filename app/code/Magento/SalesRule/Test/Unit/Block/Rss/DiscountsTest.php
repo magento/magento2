@@ -138,7 +138,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $rssUrl = 'http://rss.magento.com/discount';
         $url = 'http://rss.magento.com';
 
-        $ruleModel =  $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
+        $ruleModel = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
                 '__wakeup',
                 'getCouponCode',
                 'getToDate',

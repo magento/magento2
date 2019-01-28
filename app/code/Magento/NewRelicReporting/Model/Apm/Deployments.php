@@ -72,11 +72,11 @@ class Deployments
         $client->setHeaders(['x-api-key' => $this->config->getNewRelicApiKey()]);
 
         $params = [
-            'deployment[app_name]'       => $this->config->getNewRelicAppName(),
+            'deployment[app_name]' => $this->config->getNewRelicAppName(),
             'deployment[application_id]' => $this->config->getNewRelicAppId(),
-            'deployment[description]'    => $description,
-            'deployment[changelog]'      => $change,
-            'deployment[user]'           => $user
+            'deployment[description]' => $description,
+            'deployment[changelog]' => $change,
+            'deployment[user]' => $user
         ];
 
         $client->setParameterPost($params);

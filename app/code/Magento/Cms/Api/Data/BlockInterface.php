@@ -15,13 +15,13 @@ interface BlockInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const BLOCK_ID      = 'block_id';
-    const IDENTIFIER    = 'identifier';
-    const TITLE         = 'title';
-    const CONTENT       = 'content';
+    const BLOCK_ID = 'block_id';
+    const IDENTIFIER = 'identifier';
+    const TITLE = 'title';
+    const CONTENT = 'content';
     const CREATION_TIME = 'creation_time';
-    const UPDATE_TIME   = 'update_time';
-    const IS_ACTIVE     = 'is_active';
+    const UPDATE_TIME = 'update_time';
+    const IS_ACTIVE = 'is_active';
     /**#@-*/
 
     /**

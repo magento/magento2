@@ -246,10 +246,10 @@ class OrderService implements OrderManagementInterface
 
         $transport = new \Magento\Framework\DataObject(
             [
-                'state'     => $state,
-                'status'    => $status,
-                'comment'   => $comment,
-                'is_customer_notified'    => $isCustomerNotified
+                'state' => $state,
+                'status' => $status,
+                'comment' => $comment,
+                'is_customer_notified' => $isCustomerNotified
             ]
         );
 

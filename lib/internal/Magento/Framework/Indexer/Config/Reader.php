@@ -13,10 +13,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = [
-        '/config/indexer'                => 'id',
-        '/config/indexer/handler'        => 'name',
-        '/config/indexer/source'         => 'name',
-        '/config/indexer/fieldset'       => 'name',
+        '/config/indexer' => 'id',
+        '/config/indexer/handler' => 'name',
+        '/config/indexer/source' => 'name',
+        '/config/indexer/fieldset' => 'name',
         '/config/indexer/fieldset/field' => 'name',
         '/config/indexer/dependencies/indexer' => 'id',
     ];

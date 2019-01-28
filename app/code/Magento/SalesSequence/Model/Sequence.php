@@ -19,7 +19,7 @@ class Sequence implements SequenceInterface
     /**
      * Default pattern for Sequence
      */
-    const DEFAULT_PATTERN  = "%s%'.09d%s";
+    const DEFAULT_PATTERN = "%s%'.09d%s";
 
     /**
      * @var string

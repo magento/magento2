@@ -87,19 +87,19 @@ class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
         return [
             [['type' => 'uninstall',
                 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
-                'headerTitle'=>'Uninstall Package1', 'dataOption' => true
+                'headerTitle' => 'Uninstall Package1', 'dataOption' => true
             ], 0, false],
             [['type' => 'update',
                 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
-                'headerTitle'=>'Uninstall Package1'
+                'headerTitle' => 'Uninstall Package1'
             ], 0, false],
             [['type' => 'enable',
                 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
-                'headerTitle'=>'Uninstall Package1'
+                'headerTitle' => 'Uninstall Package1'
             ], 1, true],
             [['type' => 'disable',
                 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
-                'headerTitle'=>'Uninstall Package1'
+                'headerTitle' => 'Uninstall Package1'
             ], 1, true],
         ];
     }

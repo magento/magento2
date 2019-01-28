@@ -103,7 +103,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
         $documentIds = [1, 2, 3];
         $attributeSetIds = [4, 5];
         $requestName = 'request_name';
-        $select =  $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapter = $this->searchCriteriaBuilder = $this->getMockBuilder(

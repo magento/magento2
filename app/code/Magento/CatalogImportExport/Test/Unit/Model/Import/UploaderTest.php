@@ -203,16 +203,16 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                '$fileUrl'              => 'http://test_uploader_file',
-                '$expectedHost'         => 'test_uploader_file',
-                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Http::class,
-                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTP,
+                '$fileUrl' => 'http://test_uploader_file',
+                '$expectedHost' => 'test_uploader_file',
+                '$expectedDriverPool' => \Magento\Framework\Filesystem\Driver\Http::class,
+                '$expectedScheme' => \Magento\Framework\Filesystem\DriverPool::HTTP,
             ],
             [
-                '$fileUrl'              => 'https://!:^&`;file',
-                '$expectedHost'         => '!:^&`;file',
-                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Https::class,
-                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTPS,
+                '$fileUrl' => 'https://!:^&`;file',
+                '$expectedHost' => '!:^&`;file',
+                '$expectedDriverPool' => \Magento\Framework\Filesystem\Driver\Https::class,
+                '$expectedScheme' => \Magento\Framework\Filesystem\DriverPool::HTTPS,
             ],
         ];
     }

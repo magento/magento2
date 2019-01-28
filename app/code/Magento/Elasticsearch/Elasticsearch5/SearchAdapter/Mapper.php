@@ -196,7 +196,7 @@ class Mapper
                     MatchQueryBuilder::QUERY_CONDITION_MUST_NOT : $conditionType;
                 $filterQuery = $this->filterBuilder->build($query->getReference(), $conditionType);
                 foreach ($filterQuery['bool'] as $condition => $filter) {
-                    $selectQuery['bool'][$condition]= array_merge(
+                    $selectQuery['bool'][$condition] = array_merge(
                         isset($selectQuery['bool'][$condition]) ? $selectQuery['bool'][$condition] : [],
                         $filter
                     );

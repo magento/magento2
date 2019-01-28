@@ -54,7 +54,7 @@ class CouponManagementTest extends WebapiAbstract
                 }
                 $cnt++;
             }
-            $cnt=0;
+            $cnt = 0;
             foreach ($couponList as $coupon) {
                 if ($cnt >= $count / 2) {
                     $couponCodes[] = $coupon['code'];
@@ -123,12 +123,12 @@ class CouponManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'generate',
             ],
         ];
-        $requestData = [  "couponSpec"=>
+        $requestData = [  "couponSpec" =>
             [
                 "rule_id" => $ruleId,
-                "quantity"  => $count,
+                "quantity" => $count,
                 "length" => $length,
-                "format"  => $format
+                "format" => $format
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);

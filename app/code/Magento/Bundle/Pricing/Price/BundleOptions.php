@@ -130,7 +130,7 @@ class BundleOptions
                     $selection->getSelectionQty(),
                     ['useRegularPrice' => $useRegularPrice]
                 );
-            $this->optionSelectionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
+            $this->optionSelectionAmountCache[$cacheKey] = $selectionPrice->getAmount();
         }
 
         return $this->optionSelectionAmountCache[$cacheKey];

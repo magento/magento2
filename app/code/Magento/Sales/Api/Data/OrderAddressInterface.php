@@ -44,7 +44,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Customer ID.
      */
-    const CUSTOMER_ID  = 'customer_id';
+    const CUSTOMER_ID = 'customer_id';
 
     /**
      * Fax.

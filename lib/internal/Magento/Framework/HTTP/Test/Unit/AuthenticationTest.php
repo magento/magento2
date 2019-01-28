@@ -85,7 +85,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $headers = $response->getHeaders();
 
         $this->assertTrue($headers->has('WWW-Authenticate'));
-        $header  = $headers->get('WWW-Authenticate');
+        $header = $headers->get('WWW-Authenticate');
         $this->assertEquals('Basic realm="' . $realm . '"', $header->current()->getFieldValue());
         $this->assertContains('401', $response->getBody());
     }

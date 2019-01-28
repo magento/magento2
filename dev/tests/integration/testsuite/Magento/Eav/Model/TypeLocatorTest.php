@@ -109,7 +109,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                     'tax_class_id' => 'int'
                 ]
             ],
-            'customer'=> [
+            'customer' => [
                 'customer',
                 [
                     'confirmation' => 'string',

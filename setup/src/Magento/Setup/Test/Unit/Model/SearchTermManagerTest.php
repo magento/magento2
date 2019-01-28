@@ -58,7 +58,7 @@ class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testSearchTermApplied()
     {
-        for ($productIndex=1; $productIndex<=$this->totalProductsCount; $productIndex++) {
+        for ($productIndex = 1; $productIndex <= $this->totalProductsCount; $productIndex++) {
             $description = 'Fleet: ';
             $this->searchTermManager->applySearchTermsToDescription($description, $productIndex);
 

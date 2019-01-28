@@ -74,7 +74,7 @@ class RetryTest extends \PHPUnit\Framework\TestCase
             Retry::class,
             [
                 'resultFactory' => $this->resultFactoryMock,
-                'subscriptionHandler'  => $this->subscriptionHandlerMock,
+                'subscriptionHandler' => $this->subscriptionHandlerMock,
                 'messageManager' => $this->messageManagerMock,
             ]
         );

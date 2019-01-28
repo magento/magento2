@@ -604,7 +604,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         // Read module's routes.xml file
         $config = simplexml_load_file($configFile);
-        $nodes  = $config->xpath("/config/router/*");
+        $nodes = $config->xpath("/config/router/*");
         foreach ($nodes as $node) {
             $id = (string)$node['id'];
             if ($id != 'adminhtml' && '' == (string)$node['frontName']) {
@@ -737,8 +737,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             foreach (self::_getTypes() as $type) {
                 if (!isset(self::$mapDependencies[$moduleName][$type])) {
                     self::$mapDependencies[$moduleName][$type] = [
-                        self::MAP_TYPE_DECLARED  => [],
-                        self::MAP_TYPE_FOUND     => [],
+                        self::MAP_TYPE_DECLARED => [],
+                        self::MAP_TYPE_FOUND => [],
                         self::MAP_TYPE_REDUNDANT => [],
                     ];
                 }

@@ -86,7 +86,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         $linkedDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
-        $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
+        $linkedDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . 'linked_media';
         $directoryName = 'NewDirectory';
 

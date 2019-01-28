@@ -99,6 +99,6 @@ class DeleteChildConfigurableProductTest extends Injectable
         $this->productGrid->open();
 
         $this->productGrid->getProductGrid()->massaction($deleteProducts, 'Delete', true);
-        return ['product'=> $product];
+        return ['product' => $product];
     }
 }

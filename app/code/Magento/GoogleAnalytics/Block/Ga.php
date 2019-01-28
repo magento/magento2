@@ -235,13 +235,13 @@ class Ga extends \Magento\Framework\View\Element\Template
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
-                    'name' =>  $this->escapeJsQuote($item->getName()),
+                    'name' => $this->escapeJsQuote($item->getName()),
                     'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
-                'id' =>  $order->getIncrementId(),
+                'id' => $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 'revenue' => $order->getGrandTotal(),
                 'tax' => $order->getTaxAmount(),

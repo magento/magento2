@@ -87,8 +87,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
         /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
-            'consumers'     => $this->consumers,
-            'logFilePath'   => $this->logFilePath,
+            'consumers' => $this->consumers,
+            'logFilePath' => $this->logFilePath,
             'appInitParams' => $params,
         ]);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -203,7 +203,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::ASYNC_BULK_RESOURCE_PATH . '/' . $sku,
-                'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
@@ -276,13 +276,13 @@ class AsyncBulkScheduleTest extends WebapiAbstract
                             'product' =>
                                 $productBuilder([
                                     ProductInterface::TYPE_ID => 'simple',
-                                    ProductInterface::SKU     => 'psku-test-1-multiple',
+                                    ProductInterface::SKU => 'psku-test-1-multiple',
                                 ]),
                         ],
                         [
                             'product' => $productBuilder([
                                 ProductInterface::TYPE_ID => 'virtual',
-                                ProductInterface::SKU     => 'psku-test-2-multiple',
+                                ProductInterface::SKU => 'psku-test-2-multiple',
                             ]),
                         ],
                     ],
@@ -310,7 +310,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
                             'product' =>
                                 $productBuilder([
                                     ProductInterface::TYPE_ID => 'simple',
-                                    ProductInterface::SKU     => 'psku-test-1-single',
+                                    ProductInterface::SKU => 'psku-test-1-single',
                                 ]),
                         ],
                     ],
@@ -345,19 +345,19 @@ class AsyncBulkScheduleTest extends WebapiAbstract
                             'product' =>
                                 $productBuilder([
                                     ProductInterface::TYPE_ID => 'simple',
-                                    ProductInterface::SKU     => 'psku-test-1-wrong',
+                                    ProductInterface::SKU => 'psku-test-1-wrong',
                                 ]),
                         ],
                         [
                             'product' => $productBuilder([
                                 ProductInterface::TYPE_ID => 'virtual',
-                                ProductInterface::SKU     => 'psku-test-2-wrong',
+                                ProductInterface::SKU => 'psku-test-2-wrong',
                             ]),
                         ],
                         [
                             'product' =>
                                 $wrongProductBuilder([
-                                    'wrong_attribute'     => 'simple',
+                                    'wrong_attribute' => 'simple',
                                     ProductInterface::SKU => 'psku-test-3-wrong',
                                 ]),
                         ],
@@ -385,17 +385,17 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     private function getSimpleProductData($productData = [])
     {
         return [
-            ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
+            ProductInterface::SKU => isset($productData[ProductInterface::SKU])
                 ? $productData[ProductInterface::SKU] : uniqid('sku-', true),
-            ProductInterface::NAME             => isset($productData[ProductInterface::NAME])
+            ProductInterface::NAME => isset($productData[ProductInterface::NAME])
                 ? $productData[ProductInterface::NAME] : uniqid('sku-', true),
-            ProductInterface::VISIBILITY       => 4,
-            ProductInterface::TYPE_ID          => 'simple',
-            ProductInterface::PRICE            => 3.62,
-            ProductInterface::STATUS           => 1,
-            ProductInterface::TYPE_ID          => 'simple',
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 3.62,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            'custom_attributes'                => [
+            'custom_attributes' => [
                 ['attribute_code' => 'cost', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Description'],
             ],
@@ -426,7 +426,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::ASYNC_BULK_RESOURCE_PATH,
-                'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 

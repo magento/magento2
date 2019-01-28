@@ -14,8 +14,8 @@ use Magento\Framework\App\ObjectManager;
  */
 class Env implements \Magento\Framework\Config\ReaderInterface
 {
-    const ENV_QUEUE  = 'queue';
-    const ENV_PUBLISHERS  = 'publishers';
+    const ENV_QUEUE = 'queue';
+    const ENV_PUBLISHERS = 'publishers';
     const ENV_TOPICS = 'topics';
     const ENV_CONSUMERS = 'consumers';
     const ENV_CONSUMER_CONNECTION = 'connection';

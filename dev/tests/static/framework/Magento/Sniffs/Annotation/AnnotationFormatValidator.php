@@ -59,11 +59,11 @@ class AnnotationFormatValidator
         if (preg_match('/^[a-z]/', $shortPtrEndContent)
             && $shortPtrEnd != $shortPtr
             && !preg_match('/\bSee\b/', $shortPtrEndContent)
-            && $tokens[$shortPtr]['line']+1 === $tokens[$shortPtrEnd]['line']
+            && $tokens[$shortPtr]['line'] + 1 === $tokens[$shortPtrEnd]['line']
             && $tokens[$shortPtrEnd]['code'] !== T_DOC_COMMENT_TAG
         ) {
             $error = 'Short description should not be in multi lines';
-            $phpcsFile->addFixableError($error, $shortPtrEnd+1, 'MethodAnnotation');
+            $phpcsFile->addFixableError($error, $shortPtrEnd + 1, 'MethodAnnotation');
         }
     }
 
@@ -90,7 +90,7 @@ class AnnotationFormatValidator
         $shortPtrEndContent = $tokens[$shortPtrEnd]['content'];
         if (preg_match('/^[A-Z]/', $shortPtrEndContent)
             && !preg_match('/\bSee\b/', $shortPtrEndContent)
-            && $tokens[$shortPtr]['line']+1 === $tokens[$shortPtrEnd]['line']
+            && $tokens[$shortPtr]['line'] + 1 === $tokens[$shortPtrEnd]['line']
             && $tokens[$shortPtrEnd]['code'] !== T_DOC_COMMENT_TAG
         ) {
             $error = 'There must be exactly one blank line between lines';

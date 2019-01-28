@@ -61,8 +61,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
     protected function tearDown()
     {
         $this->auth = null;
-        $this->authSession  = null;
-        $this->adminSessionInfo  = null;
+        $this->authSession = null;
+        $this->adminSessionInfo = null;
         $this->adminSessionsManager = null;
         $this->objectManager = null;
         parent::tearDown();

@@ -34,7 +34,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
         $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
-        $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
+        $this->stockStatusBaseSelectProcessor = (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
                 'resource' => $this->resource

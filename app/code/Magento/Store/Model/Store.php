@@ -1073,7 +1073,7 @@ class Store extends AbstractExtensibleModel implements
         } else {
             $event = $this->_eventPrefix . '_edit';
         }
-        $store  = $this;
+        $store = $this;
         $this->getResource()->addCommitCallback(function () use ($event, $store) {
             $this->eventManager->dispatch($event, ['store' => $store]);
         });

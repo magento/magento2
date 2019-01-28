@@ -48,25 +48,25 @@ $_item = $block->getItem();
         <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
             <li class="item">
                 <span class="title"><?= /* @escapeNotVerified */ __('Ordered') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyOrdered()*1 ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyOrdered() * 1 ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyShipped() > 0): ?>
             <li class="item">
                 <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyShipped()*1 ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyShipped() * 1 ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyCanceled() > 0): ?>
             <li class="item">
                 <span class="title"><?= /* @escapeNotVerified */ __('Canceled') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyCanceled()*1 ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyCanceled() * 1 ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyRefunded() > 0): ?>
             <li class="item">
                 <span class="title"><?= /* @escapeNotVerified */ __('Refunded') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyRefunded()*1 ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $block->getItem()->getQtyRefunded() * 1 ?></span>
             </li>
         <?php endif; ?>
         </ul>

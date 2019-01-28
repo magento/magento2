@@ -110,7 +110,7 @@ class IframeConfigProvider implements ConfigProviderInterface
                     'timeoutTime' => [$this->methodCode => self::TIMEOUT_TIME],
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
-                    'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],
+                    'source' => [$this->methodCode => $this->getViewFileUrl('blank.html')],
                     'controllerName' => [$this->methodCode => self::CHECKOUT_IDENTIFIER],
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],

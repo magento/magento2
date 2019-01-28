@@ -13,7 +13,7 @@ $numColumns = sizeof($block->getColumns());
 ?>
 <?php if ($block->getCollection()): ?>
 <div class="dashboard-item-content">
-    <?php if ($block->getCollection()->getSize()>0): ?>
+    <?php if ($block->getCollection()->getSize() > 0): ?>
         <table class="admin__table-primary dashboard-data" id="<?= /* @escapeNotVerified */ $block->getId() ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */

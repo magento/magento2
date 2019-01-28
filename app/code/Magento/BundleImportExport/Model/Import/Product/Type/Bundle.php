@@ -133,7 +133,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_optionTypeMapping = [
         'dropdown' => 'select',
         'radiobutton' => 'radio',
-        'checkbox'  => 'checkbox',
+        'checkbox' => 'checkbox',
         'multiselect' => 'multi',
     ];
 
@@ -735,7 +735,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $optionTable = $this->_resource->getTableName('catalog_product_bundle_option');
         $optionValueTable = $this->_resource->getTableName('catalog_product_bundle_option_value');
         $selectionTable = $this->_resource->getTableName('catalog_product_bundle_selection');
-        $valuesIds =  $this->connection->fetchAssoc($this->connection->select()->from(
+        $valuesIds = $this->connection->fetchAssoc($this->connection->select()->from(
             ['bov' => $optionValueTable],
             ['value_id']
         )->joinLeft(

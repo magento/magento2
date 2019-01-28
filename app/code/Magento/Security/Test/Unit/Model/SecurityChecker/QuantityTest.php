@@ -54,7 +54,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getScopeByEventType'])
             ->getMockForAbstractClass();
@@ -77,7 +77,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
             ['addFieldToFilter', 'filterByLifetime', 'count']
         );
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+        $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
 

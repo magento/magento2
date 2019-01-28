@@ -266,7 +266,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     {
         $orderByIdentity = [];
         $orderByPosition = [];
-        $position        = 100;
+        $position = 100;
     
         /**
          * Set the initial positions for each tab.
@@ -277,7 +277,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         foreach ($this->_tabs as $key => $tab) {
             $tab->setPosition($position);
     
-            $orderByIdentity[$key]      = $tab;
+            $orderByIdentity[$key] = $tab;
             $orderByPosition[$position] = $tab;
             
             $position += 100;
@@ -311,7 +311,7 @@ class Tabs extends \Magento\Backend\Block\Widget
             }
 
             $grandPosition = $orderByIdentity[$tab->getAfter()]->getPosition();
-            $newPosition   = $grandPosition + $positionFactor;
+            $newPosition = $grandPosition + $positionFactor;
 
             unset($orderByPosition[$position]);
             $orderByPosition[$newPosition] = $tab;

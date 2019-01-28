@@ -62,7 +62,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     public function testSaveOptions()
     {
         $options = [1, 2];
-        $table_name= 'catalog_product_bundle_option';
+        $table_name = 'catalog_product_bundle_option';
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
@@ -86,7 +86,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     public function testSaveOptionValues()
     {
         $optionsValues = [1, 2];
-        $table_name= 'catalog_product_bundle_option_value';
+        $table_name = 'catalog_product_bundle_option_value';
 
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
@@ -107,7 +107,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     public function testSaveSelections()
     {
         $selections = [1, 2];
-        $table_name= 'catalog_product_bundle_selection';
+        $table_name = 'catalog_product_bundle_selection';
 
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())

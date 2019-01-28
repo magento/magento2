@@ -40,8 +40,8 @@ class BackupFactory
         $backupInstanceName,
         $backupDbInstanceName
     ) {
-        $this->objectManager        = $objectManager;
-        $this->backupInstanceName   = $backupInstanceName;
+        $this->objectManager = $objectManager;
+        $this->backupInstanceName = $backupInstanceName;
         $this->backupDbInstanceName = $backupDbInstanceName;
     }
 

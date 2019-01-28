@@ -122,55 +122,55 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 'tierPrices' => [
                     // will be ignored due to customer group
                     [
-                        'price'         => '1.3',
+                        'price' => '1.3',
                         'website_price' => '1.3',
-                        'price_qty'     => '1.',
-                        'cust_group'    => 999
+                        'price_qty' => '1.',
+                        'cust_group' => 999
                     ],
                     [
-                        'price'         => '50.',
+                        'price' => '50.',
                         'website_price' => '50.',
-                        'price_qty'     => '2.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '2.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '25.',
+                        'price' => '25.',
                         'website_price' => '25.',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '15.',
+                        'price' => '15.',
                         'website_price' => '15.',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '30.',
+                        'price' => '30.',
                         'website_price' => '30.',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '8.',
+                        'price' => '8.',
                         'website_price' => '8.',
-                        'price_qty'     => '11.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '11.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                 ],
                 'basePrice' => 20.,
                 'expectedResult' => [
                     [
-                        'price'         => '15.',
+                        'price' => '15.',
                         'website_price' => '15.',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '8.',
+                        'price' => '8.',
                         'website_price' => '8.',
-                        'price_qty'     => '11.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '11.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                 ],
             ]
@@ -212,7 +212,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'no fraction' => [9.0000, 8.1, 10],
-            'lower half'  => [9.1234, 8.3, 9],
+            'lower half' => [9.1234, 8.3, 9],
         ];
     }
 }

@@ -45,7 +45,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $weeeHelper=$this->createMock(\Magento\Weee\Helper\Data::class);
+        $weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -60,9 +60,9 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL));
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')
-            ->will($this->returnValue([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]));
+            ->will($this->returnValue([['fpt1' => $weeeObject1], ['fpt1' => $weeeObject1, 'fpt2' => $weeeObject2]]));
 
-        $taxHelper=$this->createMock(\Magento\Tax\Helper\Data::class);
+        $taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
         $taxHelper->expects($this->any())
             ->method('displayPriceExcludingTax')
             ->will($this->returnValue($priceDisplay == TaxConfig::DISPLAY_TYPE_EXCLUDING_TAX));
@@ -70,12 +70,12 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('priceIncludesTax')
             ->will($this->returnValue(true));
 
-        $responseObject=$this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getResponseObject']);
+        $responseObject = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getResponseObject']);
         $responseObject->expects($this->any())
             ->method('getResponseObject')
             ->will($this->returnValue($configObj));
 
-        $observerObject=$this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
+        $observerObject = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $observerObject->expects($this->any())
             ->method('getEvent')
             ->will($this->returnValue($responseObject));
@@ -88,7 +88,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeId')
             ->will($this->returnValue('bundle'));
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')

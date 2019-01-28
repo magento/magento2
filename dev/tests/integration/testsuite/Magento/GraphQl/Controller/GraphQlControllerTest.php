@@ -86,8 +86,8 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
        }
 QUERY;
         $postData = [
-            'query'         => $query,
-            'variables'     => null,
+            'query' => $query,
+            'variables' => null,
             'operationName' => null
         ];
         /** @var Http $request */
@@ -137,8 +137,8 @@ QUERY;
 QUERY;
 
         $postData = [
-            'query'         => $query,
-            'variables'     => null,
+            'query' => $query,
+            'variables' => null,
             'operationName' => null
         ];
         /** @var Http $request */

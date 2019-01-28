@@ -40,7 +40,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\AsynchronousOperations\Model\BulkSummary[] $bulks */
         $bulksUuidArray = ['bulk-uuid-1', 'bulk-uuid-2', 'bulk-uuid-3', 'bulk-uuid-4', 'bulk-uuid-5'];
-        $bulks =  $this->model->getBulksByUser(1);
+        $bulks = $this->model->getBulksByUser(1);
         $this->assertEquals(5, count($bulks));
         foreach ($bulks as $bulk) {
             $this->assertTrue(in_array($bulk->getBulkId(), $bulksUuidArray));
@@ -53,13 +53,13 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     public function testGetFailedOperationsByBulkId()
     {
         /** @var  \Magento\AsynchronousOperations\Api\Data\OperationInterface[] $operations */
-        $operations =  $this->model->getFailedOperationsByBulkId('bulk-uuid-1');
+        $operations = $this->model->getFailedOperationsByBulkId('bulk-uuid-1');
         $this->assertEquals([], $operations);
-        $operations =  $this->model->getFailedOperationsByBulkId('bulk-uuid-5', 3);
+        $operations = $this->model->getFailedOperationsByBulkId('bulk-uuid-5', 3);
         foreach ($operations as $operation) {
             $this->assertEquals(1111, $operation->getErrorCode());
         }
-        $operations =  $this->model->getFailedOperationsByBulkId('bulk-uuid-5', 2);
+        $operations = $this->model->getFailedOperationsByBulkId('bulk-uuid-5', 2);
         foreach ($operations as $operation) {
             $this->assertEquals(2222, $operation->getErrorCode());
         }

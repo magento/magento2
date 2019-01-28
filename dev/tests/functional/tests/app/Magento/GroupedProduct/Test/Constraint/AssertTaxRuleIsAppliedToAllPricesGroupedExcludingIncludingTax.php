@@ -37,7 +37,7 @@ class AssertTaxRuleIsAppliedToAllPricesGroupedExcludingIncludingTax extends
         foreach (array_keys($associatedProducts['products']) as $productIndex) {
             //Process assertions
             $this->catalogProductView ->itemPriceProductBlock(++$productIndex);
-            $actualPrices['sub_product_view_prices_' . $productIndex] =  $this->getProductPagePrices($actualPrices);
+            $actualPrices['sub_product_view_prices_' . $productIndex] = $this->getProductPagePrices($actualPrices);
         }
         return $actualPrices;
     }

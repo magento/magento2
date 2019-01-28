@@ -59,7 +59,7 @@ class AttributeReader implements ReaderInterface
     public function read($scope = null) : array
     {
         $typeNames = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
-        $config =[];
+        $config = [];
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         foreach ($this->collection->getAttributes() as $attribute) {
             $attributeCode = $attribute->getAttributeCode();

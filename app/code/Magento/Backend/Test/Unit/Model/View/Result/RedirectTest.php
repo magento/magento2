@@ -42,7 +42,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
                 'session' => $this->session,
                 'actionFlag' => $this->actionFlag,
                 'redirect' => $this->redirect,
-                'urlBuilder' =>$this->urlBuilder,
+                'urlBuilder' => $this->urlBuilder,
             ]
         );
     }

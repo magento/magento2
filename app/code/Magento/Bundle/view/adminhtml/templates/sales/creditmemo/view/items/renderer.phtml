@@ -65,7 +65,7 @@
         </td>
         <td class="col-qty">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+                <?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>

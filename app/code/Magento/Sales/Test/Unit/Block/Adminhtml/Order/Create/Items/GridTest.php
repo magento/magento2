@@ -407,7 +407,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
                 'discountTaxCompensationAmount' => 1.72,
                 'discountAmount' => -10.24
             ],
-            'displayTotalsIncludeTax'=> true,
+            'displayTotalsIncludeTax' => true,
             'expected' => 32.27
         ];
         $result['displayTotalsIncludeTaxFalse'] = [
@@ -417,7 +417,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
                 'discountTaxCompensationAmount' => 8,
                 'discountAmount' => -34.67
             ],
-            'displayTotalsIncludeTax'=> false,
+            'displayTotalsIncludeTax' => false,
             'expected' => 32
         ];
         return $result;

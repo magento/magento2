@@ -311,7 +311,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function prepareProductLinksData($parentId, $data, $typeId, $links)
     {
-        $connection =  $this->getConnection();
+        $connection = $this->getConnection();
         $attributes = $this->getAttributesByType($typeId);
 
         $insertData = [];

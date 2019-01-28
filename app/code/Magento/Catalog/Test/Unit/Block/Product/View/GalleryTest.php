@@ -82,7 +82,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder = $this->createMock(UrlBuilder::class);
 
         $objectManager = new ObjectManager($this);
-        $this->model =  $objectManager->getObject(Gallery::class, [
+        $this->model = $objectManager->getObject(Gallery::class, [
             'context' => $this->context,
             'arrayUtils' => $this->arrayUtils,
             'jsonEncoder' => $this->jsonEncoderMock,

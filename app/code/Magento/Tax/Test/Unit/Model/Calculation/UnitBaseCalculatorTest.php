@@ -104,12 +104,12 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
 
         $arguments = [
             'taxDetailsItemDataObjectFactory' => $this->taxDetailsItemDataObjectFactoryMock,
-            'calculationTool'       => $this->mockCalculationTool,
-            'config'                => $this->mockConfig,
-            'storeId'               => self::STORE_ID,
-            'addressRateRequest'    => $this->addressRateRequest,
-            'appliedRateDataObjectFactory'    => $this->appliedTaxRateDataObjectFactoryMock,
-            'appliedTaxDataObjectFactory'    => $appliedTaxDataObjectFactoryMock,
+            'calculationTool' => $this->mockCalculationTool,
+            'config' => $this->mockConfig,
+            'storeId' => self::STORE_ID,
+            'addressRateRequest' => $this->addressRateRequest,
+            'appliedRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactoryMock,
+            'appliedTaxDataObjectFactory' => $appliedTaxDataObjectFactoryMock,
         ];
         $this->model = $objectManager->getObject(\Magento\Tax\Model\Calculation\UnitBaseCalculator::class, $arguments);
     }

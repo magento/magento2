@@ -55,7 +55,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->caseRepository= $this->getMockBuilder(CaseRepositoryInterface::class)
+        $this->caseRepository = $this->getMockBuilder(CaseRepositoryInterface::class)
             ->getMockForAbstractClass();
 
         $this->gateway = new Gateway(

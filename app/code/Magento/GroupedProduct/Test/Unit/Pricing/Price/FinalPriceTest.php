@@ -36,7 +36,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->saleableItemMock =  $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);

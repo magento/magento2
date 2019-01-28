@@ -321,7 +321,7 @@ class XssOutputValidator
                 );
 
                 $origins[] = $phpBlock;
-                $replacements[]  = str_replace(
+                $replacements[] = str_replace(
                     $this->getOrigins(),
                     $this->getReplacements(),
                     $phpBlockQuoteReplaced
@@ -338,7 +338,7 @@ class XssOutputValidator
      */
     private function replacePhpCommentsWithPlaceholders($fileContent)
     {
-        $origins= [];
+        $origins = [];
         $replacements = [];
         if (preg_match_all('%/\*.*?\*/%simu', $fileContent, $docCommentMatches, PREG_SET_ORDER)) {
             foreach ($docCommentMatches as $docCommentMatch) {

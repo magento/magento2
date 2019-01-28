@@ -189,7 +189,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
         $attribute->expects($this->once())
             ->method('getAttributeCodesByFrontendType')
-            ->willReturn(['0'=>'fpt']);
+            ->willReturn(['0' => 'fpt']);
 
         $this->storeManager->expects($this->any())
             ->method('getWebsite')

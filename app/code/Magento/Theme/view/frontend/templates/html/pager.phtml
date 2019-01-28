@@ -23,7 +23,7 @@
         <?php if ($block->getShowAmounts()): ?>
         <p class="toolbar-amount">
             <span class="toolbar-number">
-            <?php if ($block->getLastPageNum()>1): ?>
+            <?php if ($block->getLastPageNum() > 1): ?>
                 <?= /* @escapeNotVerified */ __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum()) ?>
             <?php elseif ($block->getTotalNum() == 1): ?>
                 <?= /* @escapeNotVerified */ __('%1 Item', $block->getTotalNum()) ?>
@@ -34,7 +34,7 @@
         </p>
         <?php endif ?>
 
-        <?php if ($block->getLastPageNum()>1): ?>
+        <?php if ($block->getLastPageNum() > 1): ?>
         <div class="pages">
             <strong class="label pages-label" id="paging-label"><?= /* @escapeNotVerified */ __('Page') ?></strong>
             <ul class="items pages-items" aria-labelledby="paging-label">

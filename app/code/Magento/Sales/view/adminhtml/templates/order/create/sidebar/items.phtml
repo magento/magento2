@@ -108,7 +108,7 @@
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>][<?= /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>]"
-                                           value="<?= /* @escapeNotVerified */ $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
+                                           value="<?= /* @escapeNotVerified */ $block->canDisplayItemQty() ? $_item->getQty() * 1 : 1 ?>"
                                            title="<?= $block->escapeHtml(__('Add To Order')) ?>"/>
                                     <label class="admin__field-label"
                                            for="sidebar-<?= /* @escapeNotVerified */ $block->getSidebarStorageAction() ?>-<?= /* @escapeNotVerified */ $block->getIdentifierId($_item) ?>">

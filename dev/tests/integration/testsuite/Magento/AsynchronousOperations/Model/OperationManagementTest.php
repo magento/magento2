@@ -54,7 +54,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBulkStatus()
     {
-        $operations =  $this->bulkStatusManagement->getFailedOperationsByBulkId('bulk-uuid-5', 3);
+        $operations = $this->bulkStatusManagement->getFailedOperationsByBulkId('bulk-uuid-5', 3);
         if (empty($operations)) {
             $this->fail('Operation doesn\'t exist');
         }

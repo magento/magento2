@@ -39,7 +39,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
             'linked_product_sku' => 'simple-1',
             'position' => 3,
             'extension_attributes' => [
-                'qty' =>  (float) 300.0000,
+                'qty' => (float) 300.0000,
             ],
         ];
 

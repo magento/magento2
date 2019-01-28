@@ -52,7 +52,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        $scope  = $this->scopeResolver->getScope();
+        $scope = $this->scopeResolver->getScope();
         $select = $this->optionSelectBuilder->getSelect($superAttribute, $productId, $scope);
         $data = $this->attributeResource->getConnection()->fetchAll($select);
 

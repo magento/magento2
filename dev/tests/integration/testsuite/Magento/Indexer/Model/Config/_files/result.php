@@ -28,7 +28,7 @@ return [
             'indexer_4'
         ],
     ],
-    'catalogsearch_fulltext' =>  [
+    'catalogsearch_fulltext' => [
         'indexer_id' => 'catalogsearch_fulltext',
         'shared_index' => null,
         'primary' => 'first',

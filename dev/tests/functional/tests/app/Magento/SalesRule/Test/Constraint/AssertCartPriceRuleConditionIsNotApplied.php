@@ -18,8 +18,8 @@ class AssertCartPriceRuleConditionIsNotApplied extends AssertCartPriceRuleApplyi
      */
     protected function assert()
     {
-        $subTotal =  $this->checkoutCart->getTotalsBlock()->getSubtotal();
-        $grandTotal =  $this->checkoutCart->getTotalsBlock()->getGrandTotal();
+        $subTotal = $this->checkoutCart->getTotalsBlock()->getSubtotal();
+        $grandTotal = $this->checkoutCart->getTotalsBlock()->getGrandTotal();
 
         if ($this->checkoutCart->getTotalsBlock()->isVisibleShippingPriceBlock()) {
             $shippingPrice = $this->checkoutCart->getTotalsBlock()->getShippingPrice();

@@ -109,11 +109,11 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['getId']);
 
-        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+        $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
 

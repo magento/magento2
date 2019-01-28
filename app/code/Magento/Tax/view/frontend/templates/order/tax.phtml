@@ -8,7 +8,7 @@
 
 ?>
 <?php
-    $_order  = $block->getOrder();
+    $_order = $block->getOrder();
     $_source = $block->getSource();
     $_fullInfo = $this->helper('Magento\Tax\Helper\Data')->getCalculatedTaxes($_source);
     global $taxIter; $taxIter++;
@@ -17,10 +17,10 @@
 <?php if ($_fullInfo && $block->displayFullSummary()): ?>
         <?php foreach ($_fullInfo as $info): ?>
             <?php
-                $percent    = $info['percent'];
-                $amount     = $info['tax_amount'];
+                $percent = $info['percent'];
+                $amount = $info['tax_amount'];
                 $baseAmount = $info['base_tax_amount'];
-                $title      = $info['title'];
+                $title = $info['title'];
             ?>
             <tr class="totals tax details details-<?= /* @escapeNotVerified */ $taxIter ?> <?= ($block->getIsPlaneMode()) ? ' plane' : '' ?>">
                 <td <?= /* @escapeNotVerified */ $block->getLabelProperties() ?>>

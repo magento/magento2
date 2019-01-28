@@ -77,7 +77,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
         $this->_init($this->document, $resourceModel);
         $this->setMainTable(true);
         if ($connectionName) {
-            $connection  = $this->getResourceConnection()->getConnectionByName($connectionName);
+            $connection = $this->getResourceConnection()->getConnectionByName($connectionName);
         } else {
             $connection = $this->getResourceConnection()->getConnection();
         }

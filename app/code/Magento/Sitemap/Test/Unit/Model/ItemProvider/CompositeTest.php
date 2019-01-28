@@ -59,7 +59,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
                 for ($i = 1; $i < $maxItems; $i++) {
                     $sitemapItem = $this->getMockForAbstractClass(SitemapItemInterface::class);
                     $items[] = $sitemapItem;
-                    $expectedItems[]  = $sitemapItem;
+                    $expectedItems[] = $sitemapItem;
                 }
                 $itemProviders[] = $items;
             }

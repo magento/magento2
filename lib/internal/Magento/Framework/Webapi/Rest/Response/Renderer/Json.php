@@ -26,7 +26,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     public function __construct(\Magento\Framework\Json\Encoder $encoder)
     {
-        $this->encoder= $encoder;
+        $this->encoder = $encoder;
     }
 
     /**

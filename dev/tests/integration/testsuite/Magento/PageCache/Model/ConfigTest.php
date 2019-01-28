@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $expectedParams = [
             'backendHost' => 'example.com',
             'backendPort' => '8080',
-            'accessList' =>  explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+            'accessList' => explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
             'designExceptions' => json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
             'sslOffloadedHeader' => 'X-Forwarded-Proto',
             'gracePeriod' => 1234

@@ -27,7 +27,7 @@ class GridProcessAddressChange implements ObserverInterface
     public function __construct(
         GridPool $gridPool
     ) {
-        $this->gridPool= $gridPool;
+        $this->gridPool = $gridPool;
     }
 
     /**

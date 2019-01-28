@@ -120,7 +120,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     {
         $methods = ['getBulkId', 'getDescription', 'getStatus', 'getStartTime'];
         $bulkMock = $this->createPartialMock(\Magento\AsynchronousOperations\Model\BulkSummary::class, $methods);
-        $result = ['items' =>[], 'totalRecords' => 1];
+        $result = ['items' => [], 'totalRecords' => 1];
         $userBulks = [$bulkMock];
         $userId = 1;
         $bulkUuid = 2;

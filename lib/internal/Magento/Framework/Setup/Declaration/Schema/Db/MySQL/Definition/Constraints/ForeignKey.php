@@ -80,7 +80,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
 
         $createMySQL = $data['Create Table'];
         $ddl = [];
-        $regExp  = '#,\s*CONSTRAINT\s*`([^`]*)`\s*FOREIGN KEY\s*?\(`([^`]*)`\)\s*'
+        $regExp = '#,\s*CONSTRAINT\s*`([^`]*)`\s*FOREIGN KEY\s*?\(`([^`]*)`\)\s*'
             . 'REFERENCES\s*(`([^`]*)`\.)?`([^`]*)`\s*\(`([^`]*)`\)\s*'
             . '(\s*ON\s+DELETE\s*(RESTRICT|CASCADE|SET NULL|NO ACTION|SET DEFAULT))?'
             . '(\s*ON\s+UPDATE\s*(RESTRICT|CASCADE|SET NULL|NO ACTION|SET DEFAULT))?#';

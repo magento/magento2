@@ -82,11 +82,11 @@ class Helper
 
         // Prepare scheduled element with default parameters [type, alias, parentName, siblingName, isAfter]
         $row = [
-            self::SCHEDULED_STRUCTURE_INDEX_TYPE           => $currentNode->getName(),
-            self::SCHEDULED_STRUCTURE_INDEX_ALIAS          => '',
-            self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME    => '',
-            self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME   => null,
-            self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER       => true,
+            self::SCHEDULED_STRUCTURE_INDEX_TYPE => $currentNode->getName(),
+            self::SCHEDULED_STRUCTURE_INDEX_ALIAS => '',
+            self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME => '',
+            self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME => null,
+            self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER => true,
         ];
 
         $parentName = $parentNode->getElementName();

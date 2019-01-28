@@ -72,7 +72,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
         $this->commandTester->execute(
             [
                 'indexer' => 'catalog_product_price',
-                'mode'    => $currentMode,
+                'mode' => $currentMode,
             ]
         );
         $expectedOutput = 'Dimensions mode for indexer "Product Price" was changed from \''

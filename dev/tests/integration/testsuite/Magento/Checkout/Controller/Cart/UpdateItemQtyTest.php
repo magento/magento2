@@ -73,7 +73,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
 
         $request = [];
         if (!empty($requestQuantity) && is_array($requestQuantity)) {
-            $request= [
+            $request = [
                 'form_key' => $this->formKey->getFormKey(),
                 'cart' => [
                     $quoteItem->getId() => $requestQuantity,

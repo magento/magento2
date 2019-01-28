@@ -52,7 +52,7 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
 QUERY;
 
         /** @var \Magento\Store\Model\Store $store */
-        $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
+        $store = ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
         $storeCodeFromFixture = 'fixture_second_store';
         $storeId = $store->load($storeCodeFromFixture)->getStoreId();
 

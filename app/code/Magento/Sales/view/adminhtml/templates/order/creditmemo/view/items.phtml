@@ -32,7 +32,7 @@
                     } else {
                         $i++;
                     } ?>
-                    <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
+                    <tbody class="<?= /* @escapeNotVerified */ $i % 2 ? 'even' : 'odd' ?>">
                         <?= $block->getItemHtml($_item) ?>
                         <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>

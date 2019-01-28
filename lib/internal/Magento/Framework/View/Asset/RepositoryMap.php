@@ -76,7 +76,7 @@ class RepositoryMap
     public function getMap($fileId, array $params)
     {
         $area = $params['area'];
-        $locale =  $params['locale'];
+        $locale = $params['locale'];
         $themePath = isset($params['theme']) ? $params['theme'] : $this->design->getThemePath($params['themeModel']);
 
         $path = "$area/$themePath/$locale/" . self::MAP_NAME;

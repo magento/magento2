@@ -23,7 +23,7 @@ return [
         ],
     ],
     'binds' => [
-        'top.01--ex.01--q.01'   => ['queue' => 'q.01', 'exchange' => 'ex.01',   'topic' => 'top.01'],
+        'top.01--ex.01--q.01' => ['queue' => 'q.01', 'exchange' => 'ex.01',   'topic' => 'top.01'],
         'top.03--magento--q.03' => ['queue' => 'q.03', 'exchange' => 'magento', 'topic' => 'top.03'],
         'top.04--magento--q.04' => ['queue' => 'q.04', 'exchange' => 'magento', 'topic' => 'top.04'],
         'top.04--magento--q.05' => ['queue' => 'q.05', 'exchange' => 'magento', 'topic' => 'top.04'],

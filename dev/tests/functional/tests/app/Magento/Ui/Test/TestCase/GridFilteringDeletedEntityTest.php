@@ -99,7 +99,7 @@ class GridFilteringDeletedEntityTest extends Injectable
 
             $storesArray = $item->getDataFieldConfig('website_ids')['source']->getStores();
             $store = end($storesArray);
-            $filterArray['store_id']  = $store->getName();
+            $filterArray['store_id'] = $store->getName();
             $gridBlock->search($filterArray);
         }
 

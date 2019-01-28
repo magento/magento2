@@ -40,7 +40,7 @@ class GetUtilityPageIdentifiers implements GetUtilityPageIdentifiersInterface
             'web/default/cms_home_page',
             ScopeInterface::SCOPE_STORE
         );
-        $noRouteIdentifier  = $this->scopeConfig->getValue(
+        $noRouteIdentifier = $this->scopeConfig->getValue(
             'web/default/cms_no_route',
             ScopeInterface::SCOPE_STORE
         );

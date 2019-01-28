@@ -15,9 +15,9 @@
  */
 ?>
 <?php
-    $_helper    = $this->helper('Magento\Catalog\Helper\Output');
-    $_category  = $block->getCurrentCategory();
-    $_imgHtml   = '';
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_category = $block->getCurrentCategory();
+    $_imgHtml = '';
     if ($_imgUrl = $_category->getImageUrl()) {
         $_imgHtml = '<div class="category-image"><img src="' . $_imgUrl . '" alt="' . $block->escapeHtml($_category->getName()) . '" title="' . $block->escapeHtml($_category->getName()) . '" class="image" /></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');

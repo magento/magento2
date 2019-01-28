@@ -28,7 +28,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdate()
     {
-        $arguments =[
+        $arguments = [
             'cancel_order' => null,
             'hold_order' => null,
             'unhold_order' => null,

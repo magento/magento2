@@ -128,12 +128,12 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
                 'parent_id',
                 'select',
                 [
-                    'label'    => __('Parent Theme'),
-                    'title'    => __('Parent Theme'),
-                    'name'     => 'parent_id',
-                    'values'   => $themesCollections->toOptionArray(!$parentTheme->getId()),
+                    'label' => __('Parent Theme'),
+                    'title' => __('Parent Theme'),
+                    'name' => 'parent_id',
+                    'values' => $themesCollections->toOptionArray(!$parentTheme->getId()),
                     'required' => true,
-                    'class'    => 'no-changes',
+                    'class' => 'no-changes',
                     'onchange' => $onChangeScript
                 ]
             );
@@ -142,10 +142,10 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
                 'parent_title',
                 'note',
                 [
-                    'label'    => __('Parent Theme'),
-                    'title'    => __('Parent Theme'),
-                    'name'     => 'parent_title',
-                    'text'     => $parentTheme->getId() ? $parentTheme->getThemeTitle() : ''
+                    'label' => __('Parent Theme'),
+                    'title' => __('Parent Theme'),
+                    'name' => 'parent_title',
+                    'text' => $parentTheme->getId() ? $parentTheme->getThemeTitle() : ''
                 ]
             );
         }
@@ -174,12 +174,12 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
                 'preview_image',
                 'image',
                 [
-                    'label'    => __('Theme Preview Image'),
-                    'title'    => __('Theme Preview Image'),
-                    'name'     => 'preview',
+                    'label' => __('Theme Preview Image'),
+                    'title' => __('Theme Preview Image'),
+                    'name' => 'preview',
                     'required' => false,
-                    'note'     => $this->_getPreviewImageNote(),
-                    'theme'    => $theme
+                    'note' => $this->_getPreviewImageNote(),
+                    'theme' => $theme
                 ]
             );
         } elseif ($theme->hasPreviewImage()) {
@@ -187,9 +187,9 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
                 'preview_image',
                 'note',
                 [
-                    'label'    => __('Theme Preview Image'),
-                    'title'    => __('Theme Preview Image'),
-                    'name'     => 'preview',
+                    'label' => __('Theme Preview Image'),
+                    'title' => __('Theme Preview Image'),
+                    'name' => 'preview',
                     'after_element_html' => '<a href="'
                     . $theme->getThemeImage()->getPreviewImageUrl()
                     . '" onclick="imagePreview(\'theme_preview_image\'); return false;">'

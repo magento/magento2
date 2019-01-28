@@ -102,7 +102,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->menu =  $this->objectManagerHelper->getObject(
+        $this->menu = $this->objectManagerHelper->getObject(
             Menu::class,
             [
                 'url' => $this->urlMock,

@@ -41,7 +41,7 @@ class StoreConfigurationDataMapper
         Store::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,
         Store::XML_PATH_SECURE_BASE_URL => self::KEY_BASE_URL_SECURE,
         Data::XML_PATH_DEFAULT_LOCALE => self::KEY_LANGUAGE,
-        Store::XML_PATH_SECURE_IN_FRONTEND  => self::KEY_IS_SECURE,
+        Store::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
         Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN,
         Data::XML_PATH_DEFAULT_TIMEZONE => self::KEY_TIMEZONE,
         Currency::XML_PATH_CURRENCY_BASE => self::KEY_CURRENCY,

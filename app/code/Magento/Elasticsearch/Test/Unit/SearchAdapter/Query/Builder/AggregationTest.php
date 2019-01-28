@@ -55,7 +55,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
         $this->model = $helper->getObject(
             \Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation::class,
             [
-                'fieldMapper' =>$this->fieldMapper,
+                'fieldMapper' => $this->fieldMapper,
             ]
         );
     }

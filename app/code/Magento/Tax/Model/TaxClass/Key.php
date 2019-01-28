@@ -16,7 +16,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_TYPE  = 'type';
+    const KEY_TYPE = 'type';
     const KEY_VALUE = 'value';
     /**#@-*/
 

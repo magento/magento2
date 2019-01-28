@@ -48,10 +48,10 @@ $productOne->setTypeId(
     2
 )->setStockData(
     [
-        'use_config_manage_stock'   => 1,
-        'qty'                       => 99,
-        'is_qty_decimal'            => 0,
-        'is_in_stock'               => 1,
+        'use_config_manage_stock' => 1,
+        'qty' => 99,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 1,
     ]
 )->setMetaTitle(
     'Simple Product 1 Meta Title'

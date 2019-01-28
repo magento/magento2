@@ -129,7 +129,7 @@ class Product extends AbstractResource
             $modelFactory,
             $data
         );
-        $this->connectionName  = 'catalog';
+        $this->connectionName = 'catalog';
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 

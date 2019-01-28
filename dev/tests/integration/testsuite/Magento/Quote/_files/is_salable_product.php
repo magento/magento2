@@ -26,10 +26,10 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(
         [
-            'use_config_manage_stock'   => 1,
-            'qty'                       => 100,
-            'is_qty_decimal'            => 0,
-            'is_in_stock'               => 1,
+            'use_config_manage_stock' => 1,
+            'qty' => 100,
+            'is_qty_decimal' => 0,
+            'is_in_stock' => 1,
         ]
     )
     ->setCanSaveCustomOptions(true)

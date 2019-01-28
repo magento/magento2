@@ -35,20 +35,20 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             [
                 'website_id' => 0,
                 'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 2,
-                'price'      => 8,
+                'price_qty' => 2,
+                'price' => 8,
             ],
             [
                 'website_id' => 0,
                 'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 5,
-                'price'      => 5,
+                'price_qty' => 5,
+                'price' => 5,
             ],
             [
                 'website_id' => 0,
                 'cust_group' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-                'price_qty'  => 3,
-                'price'      => 5,
+                'price_qty' => 3,
+                'price' => 5,
             ],
         ]
     )
@@ -60,10 +60,10 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(
         [
-            'use_config_manage_stock'   => 1,
-            'qty'                       => 100,
-            'is_qty_decimal'            => 0,
-            'is_in_stock'               => 1,
+            'use_config_manage_stock' => 1,
+            'qty' => 100,
+            'is_qty_decimal' => 0,
+            'is_in_stock' => 1,
         ]
     )->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
@@ -71,68 +71,68 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 $oldOptions = [
     [
         'previous_group' => 'text',
-        'title'     => 'Test Field',
-        'type'      => 'field',
+        'title' => 'Test Field',
+        'type' => 'field',
         'is_require' => 1,
         'sort_order' => 0,
-        'price'     => 1,
+        'price' => 1,
         'price_type' => 'fixed',
-        'sku'       => '1-text',
+        'sku' => '1-text',
         'max_characters' => 100,
     ],
     [
         'previous_group' => 'date',
-        'title'     => 'Test Date and Time',
-        'type'      => 'date_time',
+        'title' => 'Test Date and Time',
+        'type' => 'date_time',
         'is_require' => 1,
         'sort_order' => 0,
-        'price'     => 2,
+        'price' => 2,
         'price_type' => 'fixed',
-        'sku'       => '2-date',
+        'sku' => '2-date',
     ],
     [
         'previous_group' => 'select',
-        'title'     => 'Test Select',
-        'type'      => 'drop_down',
+        'title' => 'Test Select',
+        'type' => 'drop_down',
         'is_require' => 1,
         'sort_order' => 0,
-        'values'    => [
+        'values' => [
             [
                 'option_type_id' => null,
-                'title'         => 'Option 1',
-                'price'         => 3,
-                'price_type'    => 'fixed',
-                'sku'           => '3-1-select',
+                'title' => 'Option 1',
+                'price' => 3,
+                'price_type' => 'fixed',
+                'sku' => '3-1-select',
             ],
             [
                 'option_type_id' => null,
-                'title'         => 'Option 2',
-                'price'         => 3,
-                'price_type'    => 'fixed',
-                'sku'           => '3-2-select',
+                'title' => 'Option 2',
+                'price' => 3,
+                'price_type' => 'fixed',
+                'sku' => '3-2-select',
             ],
         ]
     ],
     [
         'previous_group' => 'select',
-        'title'     => 'Test Radio',
-        'type'      => 'radio',
+        'title' => 'Test Radio',
+        'type' => 'radio',
         'is_require' => 1,
         'sort_order' => 0,
-        'values'    => [
+        'values' => [
             [
                 'option_type_id' => null,
-                'title'         => 'Option 1',
-                'price'         => 3,
-                'price_type'    => 'fixed',
-                'sku'           => '4-1-radio',
+                'title' => 'Option 1',
+                'price' => 3,
+                'price_type' => 'fixed',
+                'sku' => '4-1-radio',
             ],
             [
                 'option_type_id' => null,
-                'title'         => 'Option 2',
-                'price'         => 3,
-                'price_type'    => 'fixed',
-                'sku'           => '4-2-radio',
+                'title' => 'Option 2',
+                'price' => 3,
+                'price_type' => 'fixed',
+                'sku' => '4-2-radio',
             ],
         ]
     ]

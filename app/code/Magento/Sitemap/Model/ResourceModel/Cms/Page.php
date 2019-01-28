@@ -56,8 +56,8 @@ class Page extends AbstractDb
         $connectionName = null,
         GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
-        $this->metadataPool      = $metadataPool;
-        $this->entityManager     = $entityManager;
+        $this->metadataPool = $metadataPool;
+        $this->entityManager = $entityManager;
         $this->getUtilityPageIdentifiers = $getUtilityPageIdentifiers ?:
             ObjectManager::getInstance()->get(GetUtilityPageIdentifiersInterface::class);
         parent::__construct($context, $connectionName);

@@ -14,10 +14,10 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_TYPE               = 'type';
-    const KEY_ITEM_ID            = 'item_id';
+    const KEY_TYPE = 'type';
+    const KEY_ITEM_ID = 'item_id';
     const KEY_ASSOCIATED_ITEM_ID = 'associated_item_id';
-    const KEY_APPLIED_TAXES      = 'applied_taxes';
+    const KEY_APPLIED_TAXES = 'applied_taxes';
     /**#@-*/
 
     /**

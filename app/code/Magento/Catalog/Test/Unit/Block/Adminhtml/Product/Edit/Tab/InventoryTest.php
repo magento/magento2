@@ -76,7 +76,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
-        $this->stockRegistryMock =  $this->getMockForAbstractClass(
+        $this->stockRegistryMock = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             [],
             '',

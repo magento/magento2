@@ -233,7 +233,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
                 'storeName' => $storeName,
                 'groupName' => $groupName,
                 'websiteName' => $websiteName,
-                'storeGroupId' => $groupId+1,
+                'storeGroupId' => $groupId + 1,
                 'groupWebsiteId' => $websiteId,
                 'expectedResult' => []
             ],
@@ -247,7 +247,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
                 'groupName' => $groupName,
                 'websiteName' => $websiteName,
                 'storeGroupId' => $groupId,
-                'groupWebsiteId' => $websiteId+1,
+                'groupWebsiteId' => $websiteId + 1,
                 'expectedResult' => []
             ],
             'showEmptyAndAllAndWebsiteAndGroup' => [

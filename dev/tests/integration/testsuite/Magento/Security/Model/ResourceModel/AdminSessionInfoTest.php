@@ -37,11 +37,11 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     public function getTestData()
     {
         return [
-            'session_id'    => '569e273d752e9',
-            'user_id'       => 1,
-            'status'        => 1,
-            'created_at'    => '2016-01-21 15:00:00',
-            'updated_at'    => '2016-01-21 18:00:00'
+            'session_id' => '569e273d752e9',
+            'user_id' => 1,
+            'status' => 1,
+            'created_at' => '2016-01-21 15:00:00',
+            'updated_at' => '2016-01-21 18:00:00'
         ];
     }
 

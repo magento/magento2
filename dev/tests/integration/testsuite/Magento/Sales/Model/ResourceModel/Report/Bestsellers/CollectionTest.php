@@ -70,52 +70,52 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));
         return [
             [
-                'period'    => 'year',
-                'table'     => 'sales_bestsellers_aggregated_yearly',
+                'period' => 'year',
+                'table' => 'sales_bestsellers_aggregated_yearly',
                 'date_from' => null,
-                'date_to'   => null,
+                'date_to' => null,
             ],
             [
-                'period'    => 'month',
-                'table'     => 'sales_bestsellers_aggregated_monthly',
+                'period' => 'month',
+                'table' => 'sales_bestsellers_aggregated_monthly',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to' => null
             ],
             [
-                'period'    => 'day',
-                'table'     => 'sales_bestsellers_aggregated_daily',
+                'period' => 'day',
+                'table' => 'sales_bestsellers_aggregated_daily',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to' => null
             ],
             [
-                'period'    => 'undefinedPeriod',
-                'table'     => 'sales_bestsellers_aggregated_daily',
+                'period' => 'undefinedPeriod',
+                'table' => 'sales_bestsellers_aggregated_daily',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to' => null
             ],
             [
-                'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
+                'period' => null,
+                'table' => 'sales_bestsellers_aggregated_daily',
                 'date_from' => $dateYearAgo,
-                'date_to'   => $dateNow
+                'date_to' => $dateNow
             ],
             [
-                'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
+                'period' => null,
+                'table' => 'sales_bestsellers_aggregated_daily',
                 'date_from' => $dateNow,
-                'date_to'   => $dateNow
+                'date_to' => $dateNow
             ],
             [
-                'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_daily',
+                'period' => null,
+                'table' => 'sales_bestsellers_aggregated_daily',
                 'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo
+                'date_to' => $dateYearAgo
             ],
             [
-                'period'    => null,
-                'table'     => 'sales_bestsellers_aggregated_yearly',
+                'period' => null,
+                'table' => 'sales_bestsellers_aggregated_yearly',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to' => null
             ],
         ];
     }

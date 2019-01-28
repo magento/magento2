@@ -95,15 +95,15 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
         $interceptionDefinitions = new Definition\Runtime();
         $json = new \Magento\Framework\Serialize\Serializer\Json();
         $sharedInstances = [
-            \Magento\Framework\Config\CacheInterface::class                      => $cache,
-            \Magento\Framework\Config\ScopeInterface::class                      => $configScope,
-            \Magento\Framework\Config\ReaderInterface::class                     => $this->_configReader,
-            \Magento\Framework\ObjectManager\RelationsInterface::class           => $relations,
-            \Magento\Framework\ObjectManager\ConfigInterface::class              => $config,
+            \Magento\Framework\Config\CacheInterface::class => $cache,
+            \Magento\Framework\Config\ScopeInterface::class => $configScope,
+            \Magento\Framework\Config\ReaderInterface::class => $this->_configReader,
+            \Magento\Framework\ObjectManager\RelationsInterface::class => $relations,
+            \Magento\Framework\ObjectManager\ConfigInterface::class => $config,
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class => $config,
-            \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
-            \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
-            \Magento\Framework\Serialize\SerializerInterface::class              => $json,
+            \Magento\Framework\ObjectManager\DefinitionInterface::class => $definitions,
+            \Magento\Framework\Interception\DefinitionInterface::class => $interceptionDefinitions,
+            \Magento\Framework\Serialize\SerializerInterface::class => $json,
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,

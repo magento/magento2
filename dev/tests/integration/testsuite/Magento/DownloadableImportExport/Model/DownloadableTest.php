@@ -104,10 +104,10 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $expectedProductLinks   = $expectedProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $expectedProductLinks = $expectedProduct->getExtensionAttributes()->getDownloadableProductLinks();
         $expectedProductSamples = $expectedProduct->getExtensionAttributes()->getDownloadableProductSamples();
 
-        $actualProductLinks   = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $actualProductLinks = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
         $actualProductSamples = $actualProduct->getExtensionAttributes()->getDownloadableProductSamples();
 
         $this->assertEquals(count($expectedProductLinks), count($actualProductLinks));

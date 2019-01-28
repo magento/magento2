@@ -70,8 +70,8 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetValue($regularPrice, $specialPrice, $isScopeDateInInterval, $value, $percent)
     {
-        $specialFromDate =  'some date from';
-        $specialToDate =  'some date to';
+        $specialFromDate = 'some date from';
+        $specialToDate = 'some date to';
 
         $this->saleable->expects($this->once())
             ->method('getSpecialPrice')

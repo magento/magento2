@@ -37,7 +37,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterCallbackLikeDataProvider()
     {
-        $field     = 'field';
+        $field = 'field';
         $testValue = '\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'';
         return [
             [$field, '\'%test%\'', [$field => $testValue,], true],

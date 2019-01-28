@@ -63,7 +63,7 @@ class CustomerGroupsFixture extends Fixture
             return;
         }
 
-        for ($i = $existingCustomerGroupsCount; $i <  $customerGroupsCount; ++$i) {
+        for ($i = $existingCustomerGroupsCount; $i < $customerGroupsCount; ++$i) {
             $groupDataObject = $this->groupFactory->create();
             $groupDataObject
                 ->setCode('customer_group_' . $i)

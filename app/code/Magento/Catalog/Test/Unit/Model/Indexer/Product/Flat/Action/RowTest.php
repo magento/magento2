@@ -121,11 +121,11 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
             [
-                'resource'         => $this->resource,
-                'storeManager'     => $this->storeManager,
-                'productHelper'    => $this->productIndexerHelper,
-                'flatItemEraser'   => $this->flatItemEraser,
-                'flatItemWriter'   => $this->flatItemWriter,
+                'resource' => $this->resource,
+                'storeManager' => $this->storeManager,
+                'productHelper' => $this->productIndexerHelper,
+                'flatItemEraser' => $this->flatItemEraser,
+                'flatItemWriter' => $this->flatItemWriter,
                 'flatTableBuilder' => $this->flatTableBuilder,
             ]
         );

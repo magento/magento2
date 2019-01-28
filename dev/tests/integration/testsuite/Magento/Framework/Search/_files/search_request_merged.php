@@ -50,7 +50,7 @@ return [
             ],
             'must_query' => [
                 'name' => 'must_query',
-                'filterReference' =>  [
+                'filterReference' => [
                     0 => [
                         'clause' => 'must',
                         'ref' => 'must_filter',

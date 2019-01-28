@@ -208,7 +208,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
         } elseif ($this->_categoryAttributes[$attributeCode]['is_global'] || $storeId == 0) {
             $select->from(
-                ['t1' =>$this->getTable('catalog_category_entity')],
+                ['t1' => $this->getTable('catalog_category_entity')],
                 [$identifierFiled]
             )->joinLeft(
                 ['e' => $attributeTable],

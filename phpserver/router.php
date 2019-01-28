@@ -44,7 +44,7 @@ if (php_sapi_name() === 'cli-server') {
     }
 
     $path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
-    $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
+    $url = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
     $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
     $pathinfo = pathinfo($route);
     $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
@@ -84,7 +84,7 @@ if (php_sapi_name() === 'cli-server') {
             $debug('file exists');
             $mimeTypes = [
                 'css' => 'text/css',
-                'js'  => 'application/javascript',
+                'js' => 'application/javascript',
                 'jpg' => 'image/jpg',
                 'png' => 'image/png',
                 'gif' => 'image/gif',

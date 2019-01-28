@@ -75,7 +75,7 @@ class JoinAssembler implements AssemblerInterface
         foreach ($queryConfig['source']['link-source'] as $join) {
             $joinAlias = $this->nameResolver->getAlias($join);
 
-            $joins[$joinAlias]  = [
+            $joins[$joinAlias] = [
                 'link-type' => isset($join['link-type']) ? $join['link-type'] : 'left',
                 'table' => [
                     $joinAlias => $this->resourceConnection

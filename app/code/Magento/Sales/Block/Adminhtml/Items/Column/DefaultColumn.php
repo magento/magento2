@@ -135,7 +135,7 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getBaseTotalAmount($item)
     {
-        $baseTotalAmount =  $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
+        $baseTotalAmount = $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
 
         return $baseTotalAmount;
     }

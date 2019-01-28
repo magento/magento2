@@ -74,22 +74,22 @@ class CatalogPriceRulesFixture extends Fixture
         for ($i = 0; $i < $catalogPriceRulesCount; $i++) {
             $ruleName = sprintf('Catalog Price Rule %1$d', $i);
             $data = [
-                $idField                => null,
-                $linkField              => null,
-                'name'                  => $ruleName,
-                'description'           => '',
-                'is_active'             => '1',
-                'website_ids'           => $categoriesArray[$i % count($categoriesArray)][1],
-                'customer_group_ids'    => [
+                $idField => null,
+                $linkField => null,
+                'name' => $ruleName,
+                'description' => '',
+                'is_active' => '1',
+                'website_ids' => $categoriesArray[$i % count($categoriesArray)][1],
+                'customer_group_ids' => [
                     0 => '0',
                     1 => '1',
                     2 => '2',
                     3 => '3',
                 ],
-                'from_date'             => '',
-                'to_date'               => '',
-                'sort_order'            => '',
-                'rule'                  => [
+                'from_date' => '',
+                'to_date' => '',
+                'sort_order' => '',
+                'rule' => [
                     'conditions' => [
                         1 => [
                             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
@@ -105,20 +105,20 @@ class CatalogPriceRulesFixture extends Fixture
                         ],
                     ],
                 ],
-                'simple_action'             => 'by_percent',
-                'discount_amount'           => '15',
-                'stop_rules_processing'      => '0',
-                'page'                      => '1',
-                'limit'                     => '20',
-                'in_banners'                => '1',
-                'banner_id'                 => [
-                    'from'  => '',
-                    'to'    => '',
+                'simple_action' => 'by_percent',
+                'discount_amount' => '15',
+                'stop_rules_processing' => '0',
+                'page' => '1',
+                'limit' => '20',
+                'in_banners' => '1',
+                'banner_id' => [
+                    'from' => '',
+                    'to' => '',
                 ],
-                'banner_name'               => '',
-                'visible_in'                => '',
-                'banner_is_enabled'         => '',
-                'related_banners'           => [],
+                'banner_name' => '',
+                'visible_in' => '',
+                'banner_is_enabled' => '',
+                'related_banners' => [],
             ];
             if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
                 && isset($data['discount_amount'])

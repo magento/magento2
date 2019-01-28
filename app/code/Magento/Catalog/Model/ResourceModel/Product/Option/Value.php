@@ -161,7 +161,7 @@ class Value extends AbstractDb
             && isset($objectPrice)
             && $object->getStoreId() != Store::DEFAULT_STORE_ID
         ) {
-            $website  = $this->_storeManager->getStore($object->getStoreId())->getWebsite();
+            $website = $this->_storeManager->getStore($object->getStoreId())->getWebsite();
 
             $websiteBaseCurrency = $this->_config->getValue(
                 Currency::XML_PATH_CURRENCY_BASE,
@@ -261,7 +261,7 @@ class Value extends AbstractDb
             }
 
             /*** Checking whether title is not null ***/
-            if ($object->getTitle()!= null) {
+            if ($object->getTitle() != null) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
                         $where = [

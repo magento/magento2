@@ -56,7 +56,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
             $expectedOptionLabelOnStoreView = 'value_' . $i .'_store_1';
-            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
+            $expectedOptionsLabels[$i + 1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' .$i;
             $optionRowData = [];
             $optionRowData['optionvisual']['order'][$optionId] = $i + 1;
@@ -98,15 +98,15 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
             $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
-            $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
+            $expectedOptionsLabels[$i + 1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' . $i;
             $optionRowData = [];
             $optionRowData['optiontext']['order'][$optionId] = $i + 1;
             $optionRowData['defaulttext'][] = $optionId;
             $optionRowData['swatchtext']['value'][$optionId] = 'x' . $i ;
             $optionRowData['optiontext']['value'][$optionId][0] = 'value_' . $i . '_admin';
-            $optionRowData['optiontext']['value'][$optionId][1]= $expectedOptionLabelOnStoreView;
-            $optionRowData['optiontext']['delete'][$optionId]='';
+            $optionRowData['optiontext']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['optiontext']['delete'][$optionId] = '';
             $optionsData[] = http_build_query($optionRowData);
         }
         return [

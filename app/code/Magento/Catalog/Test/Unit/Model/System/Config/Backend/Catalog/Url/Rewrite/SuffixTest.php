@@ -90,10 +90,10 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager->method('getStores')->willReturn([]);
         
-        $this->appResource =$this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->appResource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlFinder =$this->getMockBuilder(\Magento\UrlRewrite\Model\UrlFinderInterface::class)
+        $this->urlFinder = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlFinderInterface::class)
             ->setMethods(['findAllByData', 'findOneByData'])
             ->getMock();
         $this->urlFinder->method('findAllByData')->willReturn([]);

@@ -18,22 +18,22 @@ class ResultFactory
     /**#@+
      * Allowed result types
      */
-    const TYPE_JSON     = 'json';
-    const TYPE_RAW      = 'raw';
+    const TYPE_JSON = 'json';
+    const TYPE_RAW = 'raw';
     const TYPE_REDIRECT = 'redirect';
-    const TYPE_FORWARD  = 'forward';
-    const TYPE_LAYOUT   = 'layout';
-    const TYPE_PAGE     = 'page';
+    const TYPE_FORWARD = 'forward';
+    const TYPE_LAYOUT = 'layout';
+    const TYPE_PAGE = 'page';
     /**#@-*/
 
     /**#@-*/
     protected $typeMap = [
-        self::TYPE_JSON     => Result\Json::class,
-        self::TYPE_RAW      => Result\Raw::class,
+        self::TYPE_JSON => Result\Json::class,
+        self::TYPE_RAW => Result\Raw::class,
         self::TYPE_REDIRECT => Result\Redirect::class,
-        self::TYPE_FORWARD  => Result\Forward::class,
-        self::TYPE_LAYOUT   => \Magento\Framework\View\Result\Layout::class,
-        self::TYPE_PAGE     => \Magento\Framework\View\Result\Page::class,
+        self::TYPE_FORWARD => Result\Forward::class,
+        self::TYPE_LAYOUT => \Magento\Framework\View\Result\Layout::class,
+        self::TYPE_PAGE => \Magento\Framework\View\Result\Page::class,
     ];
 
     /**

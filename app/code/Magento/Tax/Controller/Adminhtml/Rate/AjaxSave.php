@@ -27,7 +27,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
                 'success' => true,
                 'error_message' => '',
                 'tax_calculation_rate_id' => $taxRate->getId(),
-                'code' =>  htmlspecialchars($taxRate->getCode()),
+                'code' => htmlspecialchars($taxRate->getCode()),
             ];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent = [

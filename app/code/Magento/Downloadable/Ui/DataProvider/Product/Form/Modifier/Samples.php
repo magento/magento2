@@ -147,7 +147,7 @@ class Samples extends AbstractModifier
             'columnsHeader' => true,
             'additionalClasses' => 'admin__field-wide',
             'dataScope' => 'downloadable',
-            'deleteProperty'=> 'is_delete',
+            'deleteProperty' => 'is_delete',
             'deleteValue' => '1',
         ];
 

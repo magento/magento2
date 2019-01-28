@@ -34,8 +34,8 @@ class Entity
      */
     public function __construct(\Magento\Framework\Model\AbstractModel $model, array $updateData, $modelClass = null)
     {
-        $this->_model       = $model;
-        $this->_updateData  = $updateData;
+        $this->_model = $model;
+        $this->_updateData = $updateData;
         if ($modelClass) {
             if (!$model instanceof $modelClass) {
                 throw new \InvalidArgumentException("Class '$modelClass' is irrelevant to the tested model.");

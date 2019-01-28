@@ -108,7 +108,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
 
         $this->entityRelationComposite->expects($this->once())->method('processRelations')->with($object);
 
-        $arguments =  $objectManager->getConstructArguments(
+        $arguments = $objectManager->getConstructArguments(
             \Magento\Eav\Model\Entity\VersionControl\AbstractEntity::class,
             [
                 'eavConfig' => $eavConfig,

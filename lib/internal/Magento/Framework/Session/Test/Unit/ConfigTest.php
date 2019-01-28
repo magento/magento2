@@ -326,7 +326,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ->method('isValid')
                 ->willReturn($isValid);
         } else {
-            for ($x = 0; $x<6; $x++) {
+            for ($x = 0; $x < 6; $x++) {
                 if ($x % 2 == 0) {
                     $validatorMock->expects($this->at($x))
                         ->method('isValid')

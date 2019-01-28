@@ -22,7 +22,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('payment', ['method' => 'authorizenet_directpost']);
         $this->getRequest()->setParam('controller', 'order_create');
         $orderCreateMock = $this->getOrderCreateMock($requestToAuthorizenetData);
-        $directpostMock =  $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
+        $directpostMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->setMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -30,7 +30,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             ->method('getCode')
             ->willReturn('authorizenet_directpost');
         $jsonHelper = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class);
-        $objectManagerMock =  $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create', 'get'])
             ->getMockForAbstractClass();
         $objectManagerMock->expects($this->atLeastOnce())
@@ -72,7 +72,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     private function getOrderCreateMock($requestToAuthorizenetData)
     {
-        $methodInstanceMock =  $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
+        $methodInstanceMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directpostRequestMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Request::class)

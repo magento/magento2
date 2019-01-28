@@ -119,7 +119,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultJsonFactory
         );
         $this->resultRawFactory = $resultRawFactory;
-        $this->urlDecoder  = $urlDecoder;
+        $this->urlDecoder = $urlDecoder;
     }
 
     /**

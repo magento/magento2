@@ -66,15 +66,15 @@ class CountryCreditCard extends AbstractFieldArray
         $this->addColumn(
             'country_id',
             [
-                'label'     => __('Country'),
-                'renderer'  => $this->getCountryRenderer(),
+                'label' => __('Country'),
+                'renderer' => $this->getCountryRenderer(),
             ]
         );
         $this->addColumn(
             'cc_types',
             [
                 'label' => __('Allowed Credit Card Types'),
-                'renderer'  => $this->getCcTypesRenderer(),
+                'renderer' => $this->getCcTypesRenderer(),
             ]
         );
         $this->_addAfter = false;

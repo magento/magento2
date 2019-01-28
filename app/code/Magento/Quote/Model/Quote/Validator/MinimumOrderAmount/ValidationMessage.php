@@ -60,7 +60,7 @@ class ValidationMessage
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$message) {
-            $minimumAmount =  $this->priceHelper->currency($this->scopeConfig->getValue(
+            $minimumAmount = $this->priceHelper->currency($this->scopeConfig->getValue(
                 'sales/minimum_order/amount',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ), true, false);

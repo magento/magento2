@@ -22,7 +22,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
      *
      * @var string
      */
-    const SCHEME_HTTP  = 'http';
+    const SCHEME_HTTP = 'http';
 
     /**
      * Browser interface.

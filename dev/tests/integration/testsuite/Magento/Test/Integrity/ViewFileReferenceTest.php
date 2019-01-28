@@ -121,7 +121,7 @@ class ViewFileReferenceTest extends \PHPUnit\Framework\TestCase
         $localePlaceholder = '<locale_placeholder>';
         $params = ['area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder];
         $patternDirs = self::$_fallbackRule->getPatternDirs($params);
-        $themePath =  self::$_componentRegistrar->getPath(
+        $themePath = self::$_componentRegistrar->getPath(
             \Magento\Framework\Component\ComponentRegistrar::THEME,
             $theme->getFullPath()
         );

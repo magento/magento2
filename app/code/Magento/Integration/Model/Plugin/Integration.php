@@ -54,7 +54,7 @@ class Integration
         ConsolidatedConfig $consolidatedConfig
     ) {
         $this->integrationAuthorizationService = $integrationAuthorizationService;
-        $this->aclRetriever  = $aclRetriever;
+        $this->aclRetriever = $aclRetriever;
         $this->integrationConfig = $integrationConfig;
         $this->consolidatedConfig = $consolidatedConfig;
     }

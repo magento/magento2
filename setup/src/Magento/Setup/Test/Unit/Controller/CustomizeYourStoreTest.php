@@ -86,9 +86,9 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
      */
     public function indexActionDataProvider()
     {
-        $timezones = ['timezone' => ['America/New_York'=>'EST', 'America/Chicago' => 'CST']];
-        $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
-        $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
+        $timezones = ['timezone' => ['America/New_York' => 'EST', 'America/Chicago' => 'CST']];
+        $currency = ['currency' => ['USD' => 'US Dollar', 'EUR' => 'Euro']];
+        $language = ['language' => ['en_US' => 'English (USA)', 'en_UK' => 'English (UK)']];
         $sampleData = [
             'isSampleDataInstalled' => false,
             'isSampleDataErrorInstallation' => false

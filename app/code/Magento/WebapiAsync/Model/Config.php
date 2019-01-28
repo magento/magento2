@@ -125,8 +125,8 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
 
                     $services[$lookupKey] = [
                         self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
-                        self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
-                        self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
+                        self::SERVICE_PARAM_KEY_METHOD => $serviceMethod,
+                        self::SERVICE_PARAM_KEY_TOPIC => $topicName,
                     ];
                 }
             }

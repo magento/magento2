@@ -100,13 +100,13 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             \Magento\Customer\Controller\Adminhtml\Address\Save::class,
             [
-                'addressRepository'     => $this->addressRepositoryMock,
-                'formFactory'           => $this->formFactoryMock,
-                'customerRepository'    => $this->customerRepositoryMock,
-                'dataObjectHelper'      => $this->dataObjectHelperMock,
-                'addressDataFactory'    => $this->addressDataFactoryMock,
-                'logger'            => $this->loggerMock,
-                'request'               => $this->requestMock,
+                'addressRepository' => $this->addressRepositoryMock,
+                'formFactory' => $this->formFactoryMock,
+                'customerRepository' => $this->customerRepositoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'addressDataFactory' => $this->addressDataFactoryMock,
+                'logger' => $this->loggerMock,
+                'request' => $this->requestMock,
                 'resultJsonFactory' => $this->resultJsonFactory
             ]
         );
@@ -119,33 +119,33 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $addressExtractedData = [
             'entity_id' => $addressId,
-            'code'      => 'value',
-            'coolness'  => false,
-            'region'    => 'region',
+            'code' => 'value',
+            'coolness' => false,
+            'region' => 'region',
             'region_id' => 'region_id',
         ];
 
         $addressCompactedData = [
-            'entity_id'        => $addressId,
-            'default_billing'  => 'true',
+            'entity_id' => $addressId,
+            'default_billing' => 'true',
             'default_shipping' => 'true',
-            'code'             => 'value',
-            'coolness'         => false,
-            'region'           => 'region',
-            'region_id'        => 'region_id',
+            'code' => 'value',
+            'coolness' => false,
+            'region' => 'region',
+            'region_id' => 'region_id',
         ];
 
         $mergedAddressData = [
-            'entity_id'        => $addressId,
-            'default_billing'  => true,
+            'entity_id' => $addressId,
+            'default_billing' => true,
             'default_shipping' => true,
-            'code'             => 'value',
-            'region'           => [
-                'region'    => 'region',
+            'code' => 'value',
+            'region' => [
+                'region' => 'region',
                 'region_id' => 'region_id',
             ],
-            'region_id'        => 'region_id',
-            'id'               => $addressId,
+            'region_id' => 'region_id',
+            'id' => $addressId,
         ];
 
         $this->requestMock->method('getParam')

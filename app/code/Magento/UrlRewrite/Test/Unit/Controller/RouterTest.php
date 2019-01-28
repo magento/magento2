@@ -143,7 +143,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         UrlRewrite::REQUEST_PATH => $initialRequestPath,
-                        UrlRewrite::STORE_ID     => $currentStoreId,
+                        UrlRewrite::STORE_ID => $currentStoreId,
                     ],
                     $urlRewrite,
                 ]

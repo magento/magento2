@@ -193,7 +193,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
     {
         $queryResult = [
             'hits' => [
-                'total'=> '1',
+                'total' => '1',
                 'hits' => [
                     [
                         'fields' => [
@@ -234,7 +234,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadPrevFalse($data, $index, $lower)
     {
-        $queryResult = ['hits' => ['total'=> '0']];
+        $queryResult = ['hits' => ['total' => '0']];
 
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
@@ -265,7 +265,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
     {
         $queryResult = [
             'hits' => [
-                'total'=> '1',
+                'total' => '1',
                 'hits' => [
                     [
                         'fields' => [
@@ -306,7 +306,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadNextFalse($data, $rightIndex, $upper)
     {
-        $queryResult = ['hits' => ['total'=> '0']];
+        $queryResult = ['hits' => ['total' => '0']];
 
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()

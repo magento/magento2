@@ -123,7 +123,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnCallback(
                     function ($arg) {
-                        return $arg -1;
+                        return $arg - 1;
                     }
                 )
             );
@@ -295,50 +295,50 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 'tierPrices' => [
                     // will be ignored due to customer group
                     [
-                        'price'         => '1.3',
+                        'price' => '1.3',
                         'website_price' => '1.3',
-                        'price_qty'     => '1.3',
-                        'cust_group'    => $this->customerGroup + 1
+                        'price_qty' => '1.3',
+                        'cust_group' => $this->customerGroup + 1
                     ],
                     [
-                        'price'         => '25.4',
+                        'price' => '25.4',
                         'website_price' => '25.4',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     // cases to calculate save percent
                     [
-                        'price'         => '15.1',
+                        'price' => '15.1',
                         'website_price' => '15.1',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '30.2',
+                        'price' => '30.2',
                         'website_price' => '30.2',
-                        'price_qty'     => '5.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                     [
-                        'price'         => '8.3',
+                        'price' => '8.3',
                         'website_price' => '8.3',
-                        'price_qty'     => '2.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '2.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                 ],
                 'basePrice' => 20.,
                 'expectedResult' => [
                     [
-                        'price'          => '7.55',
-                        'website_price'  => '7.55',
-                        'price_qty'      => '5.',
-                        'cust_group'     => Group::CUST_GROUP_ALL,
+                        'price' => '7.55',
+                        'website_price' => '7.55',
+                        'price_qty' => '5.',
+                        'cust_group' => Group::CUST_GROUP_ALL,
                     ],
                     [
-                        'price'         => '4.15',
+                        'price' => '4.15',
                         'website_price' => '4.15',
-                        'price_qty'     => '2.',
-                        'cust_group'    => Group::CUST_GROUP_ALL
+                        'price_qty' => '2.',
+                        'cust_group' => Group::CUST_GROUP_ALL
                     ],
                 ],
             ]

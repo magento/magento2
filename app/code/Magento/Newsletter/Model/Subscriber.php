@@ -368,7 +368,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function loadByEmail($subscriberEmail)
     {
         $storeId = $this->_storeManager->getStore()->getId();
-        $customerData = ['store_id' => $storeId, 'email'=> $subscriberEmail];
+        $customerData = ['store_id' => $storeId, 'email' => $subscriberEmail];
 
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->customerFactory->create();

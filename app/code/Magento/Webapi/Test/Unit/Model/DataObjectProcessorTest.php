@@ -56,7 +56,7 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testDataObjectProcessor()
     {
-        $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Framework\Reflection\Test\Unit\TestDataObject $testDataObject */
         $testDataObject = $objectManager->getObject(\Magento\Framework\Reflection\Test\Unit\TestDataObject::class);
 

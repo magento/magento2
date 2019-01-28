@@ -243,7 +243,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'productUrlPathGenerator' => $this->productUrlPathGenerator,
                 'storeViewService' => $this->storeViewService,
-                'storeManager'=> $this->storeManager,
+                'storeManager' => $this->storeManager,
                 'urlPersist' => $this->urlPersist,
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'urlFinder' => $this->urlFinder,
@@ -297,7 +297,7 @@ class AfterImportDataObserverTest extends \PHPUnit\Framework\TestCase
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
             )->willReturn([]);
-        $getProductWebsitesCallsCount = $productsCount*2;
+        $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))
             ->method('getProductWebsites')

@@ -59,7 +59,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     public function testTryLockJobAlreadyLockedSucceeds()
     {
-        $offsetInThePast = 2*24*60*60;
+        $offsetInThePast = 2 * 24 * 60 * 60;
 
         $oldSchedule = $this->scheduleFactory->create()
             ->setCronExpr("* * * * *")

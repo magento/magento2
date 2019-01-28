@@ -83,10 +83,10 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $directpostMock =  $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
+        $directpostMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock =  $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
         $objectManagerMock->expects($this->atLeastOnce())

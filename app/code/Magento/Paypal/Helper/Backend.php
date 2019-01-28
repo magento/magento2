@@ -52,7 +52,7 @@ class Backend extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfigurationCountryCode()
     {
-        $countryCode  = $this->_request->getParam(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY);
+        $countryCode = $this->_request->getParam(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY);
         if ($countryCode === null || preg_match('/^[a-zA-Z]{2}$/', $countryCode) == 0) {
             $scope = $this->scopeDefiner->getScope();
             if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {

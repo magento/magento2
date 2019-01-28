@@ -100,7 +100,7 @@ class CartItemProcessor implements CartItemProcessorInterface
                 : $this->productOptionFactory->create();
 
             /** @var  \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensibleAttribute */
-            $extensibleAttribute =  $productOption->getExtensionAttributes()
+            $extensibleAttribute = $productOption->getExtensionAttributes()
                 ? $productOption->getExtensionAttributes()
                 : $this->extensionFactory->create();
 

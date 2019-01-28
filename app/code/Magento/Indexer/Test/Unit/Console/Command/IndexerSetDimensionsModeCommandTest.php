@@ -69,8 +69,8 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
             IndexerSetDimensionsModeCommand::class,
             [
                 'objectManagerFactory' => $this->objectManagerFactory,
-                'configReader'         => $this->configReaderMock,
-                'dimensionSwitchers'   => $this->dimensionProviders,
+                'configReader' => $this->configReaderMock,
+                'dimensionSwitchers' => $this->dimensionProviders,
             ]
         );
     }
@@ -104,7 +104,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
         $this->configureAdminArea();
         $commandTester = new CommandTester($this->command);
         $this->dimensionModes->method('getDimensions')->willReturn([
-            $previousMode    => 'dimension1',
+            $previousMode => 'dimension1',
             $command['mode'] => 'dimension2',
         ]);
         $this->dimensionModeSwitcherMock->method('getDimensionModes')->willReturn($this->dimensionModes);
@@ -124,14 +124,14 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     public function dimensionModesDataProvider(): array
     {
         return [
-            'was_changed'     => [
+            'was_changed' => [
                 'indexer_title' => 'indexer_title',
-                'previousMode'  => 'none',
-                'command'       => [
+                'previousMode' => 'none',
+                'command' => [
                     'indexer' => 'indexer_title',
-                    'mode'    => 'store',
+                    'mode' => 'store',
                 ],
-                'output'        =>
+                'output' =>
                     sprintf(
                         'Dimensions mode for indexer "%s" was changed from \'%s\' to \'%s\'',
                         'indexer_title',
@@ -142,12 +142,12 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
             ],
             'was_not_changed' => [
                 'indexer_title' => 'indexer_title',
-                'previousMode'  => 'none',
-                'command'       => [
+                'previousMode' => 'none',
+                'command' => [
                     'indexer' => 'indexer_title',
-                    'mode'    => 'none',
+                    'mode' => 'none',
                 ],
-                'output'        =>
+                'output' =>
                     sprintf(
                         'Dimensions mode for indexer "%s" has not been changed',
                         'indexer_title'
@@ -183,7 +183,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         $commandTester = new CommandTester($this->command);
         $this->dimensionModes->method('getDimensions')->willReturn([
-            'store'   => 'dimension1',
+            'store' => 'dimension1',
             'website' => 'dimension2',
         ]);
         $this->dimensionModeSwitcherMock->method('getDimensionModes')->willReturn($this->dimensionModes);
@@ -202,7 +202,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         $indexerTitle = 'indexer_title';
         $modesConfig = [
-            'store'   => 'dimension1',
+            'store' => 'dimension1',
             'website' => 'dimension2',
         ];
         $this->configureAdminArea();

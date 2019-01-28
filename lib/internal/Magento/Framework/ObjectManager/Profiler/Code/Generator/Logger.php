@@ -61,7 +61,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getDefaultConstructorDefinition()
     {
         return [
-            'name'       => '__construct',
+            'name' => '__construct',
             'parameters' => [
                 ['name' => 'subject'],
                 ['name' => 'log'],
@@ -117,7 +117,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
 
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
-        $publicMethods   = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
             if (!($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor())
                 && !in_array($method->getName(), ['__sleep', '__wakeup', '__clone'])

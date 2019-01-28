@@ -855,7 +855,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             return false;
         }
 
-        $transparancy = 127 - (($pct*127)/100);
+        $transparancy = 127 - (($pct * 127) / 100);
         if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparancy)) {
             return false;
         }

@@ -6,7 +6,7 @@
 
 require 'second_website_with_two_stores.php';
 
-$objectManager =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Config\Model\ResourceModel\Config $configResource */
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 $configResource->saveConfig(

@@ -816,7 +816,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([
                 ['system/cron/test_group/use_separate_process', 0],
                 ['system/cron/test_group/history_cleanup_every', 10],
-                ['system/cron/test_group/schedule_lifetime', 2*24*60],
+                ['system/cron/test_group/schedule_lifetime', 2 * 24 * 60],
                 ['system/cron/test_group/history_success_lifetime', 0],
                 ['system/cron/test_group/history_failure_lifetime', 0],
                 ['system/cron/test_group/schedule_generate_every', 0],

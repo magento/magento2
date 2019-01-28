@@ -143,7 +143,7 @@ class Processor
     public function __construct(\Magento\Framework\App\Response\Http $response, Json $serializer = null)
     {
         $this->_response = $response;
-        $this->_errorDir  = __DIR__ . '/';
+        $this->_errorDir = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
 
@@ -161,7 +161,7 @@ class Processor
         }
 
         $this->_indexDir = $this->_getIndexDir();
-        $this->_root  = is_dir($this->_indexDir . 'app');
+        $this->_root = is_dir($this->_indexDir . 'app');
 
         $this->_prepareConfig();
         if (isset($_GET['skin'])) {
@@ -218,7 +218,7 @@ class Processor
         $this->_response->setHttpResponseCode(500);
 
         $this->showErrorMsg = false;
-        $this->showSentMsg  = false;
+        $this->showSentMsg = false;
         $this->showSendForm = false;
         $this->reportAction = $this->_config->action;
         $this->_setReportUrl();
@@ -340,16 +340,16 @@ class Processor
      */
     protected function _prepareConfig()
     {
-        $local  = $this->_loadXml(self::MAGE_ERRORS_LOCAL_XML);
+        $local = $this->_loadXml(self::MAGE_ERRORS_LOCAL_XML);
         $design = $this->_loadXml(self::MAGE_ERRORS_DESIGN_XML);
 
         //initial settings
         $config = new \stdClass();
-        $config->action         = '';
-        $config->subject        = 'Store Debug Information';
-        $config->email_address  = '';
-        $config->trash          = 'leave';
-        $config->skin           = self::DEFAULT_SKIN;
+        $config->action = '';
+        $config->subject = 'Store Debug Information';
+        $config->email_address = '';
+        $config->trash = 'leave';
+        $config->skin = self::DEFAULT_SKIN;
 
         //combine xml data to one object
         if ($design !== null && (string)$design->skin) {
@@ -478,7 +478,7 @@ class Processor
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs((int)(microtime(true) * random_int(100, 1000)));
+        $this->reportId = abs((int)(microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 
@@ -527,14 +527,14 @@ class Processor
         $this->pageTitle = 'Error Submission Form';
 
         $this->postData['firstName'] = (isset($_POST['firstname'])) ? trim(htmlspecialchars($_POST['firstname'])) : '';
-        $this->postData['lastName']  = (isset($_POST['lastname'])) ? trim(htmlspecialchars($_POST['lastname'])) : '';
-        $this->postData['email']     = (isset($_POST['email'])) ? trim(htmlspecialchars($_POST['email'])) : '';
+        $this->postData['lastName'] = (isset($_POST['lastname'])) ? trim(htmlspecialchars($_POST['lastname'])) : '';
+        $this->postData['email'] = (isset($_POST['email'])) ? trim(htmlspecialchars($_POST['email'])) : '';
         $this->postData['telephone'] = (isset($_POST['telephone'])) ? trim(htmlspecialchars($_POST['telephone'])) : '';
-        $this->postData['comment']   = (isset($_POST['comment'])) ? trim(htmlspecialchars($_POST['comment'])) : '';
+        $this->postData['comment'] = (isset($_POST['comment'])) ? trim(htmlspecialchars($_POST['comment'])) : '';
 
         if (isset($_POST['submit'])) {
             if ($this->_validate()) {
-                $msg  = "URL: {$this->reportData['url']}\n"
+                $msg = "URL: {$this->reportData['url']}\n"
                     . "IP Address: {$this->_getClientIp()}\n"
                     . "First Name: {$this->postData['firstName']}\n"
                     . "Last Name: {$this->postData['lastName']}\n"
@@ -550,7 +550,7 @@ class Processor
                 @mail((string)$this->_config->email_address, $subject, $msg);
 
                 $this->showSendForm = false;
-                $this->showSentMsg  = true;
+                $this->showSentMsg = true;
             } else {
                 $this->showErrorMsg = true;
             }

@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($themeCode));
         $params = [
             'themeModel' => $themeMock,
-            'area'       => 'frontend'
+            'area' => 'frontend'
         ];
         $this->repositoryMock->expects($this->atLeastOnce())
             ->method('updateDesignParams')

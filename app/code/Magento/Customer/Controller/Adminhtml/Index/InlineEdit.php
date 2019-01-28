@@ -242,7 +242,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
     {
         foreach (['firstname', 'lastname'] as $requiredField) {
             if (empty($data[$requiredField])) {
-                $data[$requiredField] =  $this->getCustomer()->{'get' . ucfirst($requiredField)}();
+                $data[$requiredField] = $this->getCustomer()->{'get' . ucfirst($requiredField)}();
             }
         }
         return $data;

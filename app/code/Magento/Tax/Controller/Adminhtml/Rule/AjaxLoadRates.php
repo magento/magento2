@@ -74,7 +74,7 @@ class AjaxLoadRates extends Action
             $response = [
                 'success' => true,
                 'errorMessage' => '',
-                'result'=> $options,
+                'result' => $options,
             ];
         } catch (\Exception $e) {
             $response = [

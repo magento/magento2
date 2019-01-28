@@ -68,13 +68,13 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             ['isOtherSessionsTerminated']
         );
 
-        $this->authMock =  $this->createMock(\Magento\Backend\Model\Auth::class);
+        $this->authMock = $this->createMock(\Magento\Backend\Model\Auth::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Security\Model\Plugin\Auth::class,
             [
                 'sessionsManager' => $this->sessionsManager,
-                'messageManager' =>$this->messageManager
+                'messageManager' => $this->messageManager
             ]
         );
     }

@@ -253,7 +253,7 @@ class Manager implements ManagerInterface
     {
         if (!isset($this->uiReader[$name])) {
             $this->domMerger->unsetDom();
-            $this->uiReader[$name] =  $this->readerFactory->create(
+            $this->uiReader[$name] = $this->readerFactory->create(
                 [
                     'fileCollector' => $this->aggregatedFileCollectorFactory->create(
                         ['searchPattern' => sprintf(ManagerInterface::SEARCH_PATTERN, $name)]

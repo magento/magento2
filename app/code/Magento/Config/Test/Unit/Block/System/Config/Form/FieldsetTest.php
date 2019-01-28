@@ -40,7 +40,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         'elementHTML' => 'test_html',
         'legend' => 'test_legend',
         'comment' => 'test_comment',
-        'tooltip'     => 'test_tooltip',
+        'tooltip' => 'test_tooltip',
     ];
 
     /**
@@ -254,18 +254,18 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         return [
             'expandedNestedExtra' => [
                 'expanded' => true,
-                'nested'   => true,
-                'extra'    => [],
+                'nested' => true,
+                'extra' => [],
             ],
             'collapsedNotNestedExtra' => [
                 'expanded' => false,
-                'nested'   => false,
-                'extra'    => ['configState' => [$this->testData['htmlId'] => true]],
+                'nested' => false,
+                'extra' => ['configState' => [$this->testData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
                 'expanded' => true,
-                'nested'   => false,
-                'extra'    => [],
+                'nested' => false,
+                'extra' => [],
             ],
         ];
     }

@@ -526,7 +526,7 @@ class ConfigurableProductsFixture extends Fixture
                 $options = array_column($attributes, 'options');
                 $attributes = count($attributes);
             } elseif ($attributes && $options) {
-                $attributes  = (int)$attributes;
+                $attributes = (int)$attributes;
                 // convert attributes and options to array for process custom attribute set creation
                 $attributesData = array_map(function ($options) use ($config) {
                     return ['options' => $options, 'swatches' => $config['swatches']];
@@ -675,9 +675,9 @@ class ConfigurableProductsFixture extends Fixture
                     $data['used_in_product_listing'] = 1;
 
                     $swatch = $this->swatchesGenerator->generateSwatchData(
-                        (int) $attributes[$index-1]['options'],
+                        (int) $attributes[$index - 1]['options'],
                         $attributeSetName . $index,
-                        $attributes[$index-1]['swatches']
+                        $attributes[$index - 1]['swatches']
                     );
                 }
 

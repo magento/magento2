@@ -235,7 +235,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);
         $this->customerModel->expects($this->once())->method('isCustomerLocked')->willReturn($value);
-        $expectedResult =  new \Magento\Framework\Phrase($expectedResult);
+        $expectedResult = new \Magento\Framework\Phrase($expectedResult);
         $this->assertEquals($expectedResult, $this->block->getAccountLock());
     }
 

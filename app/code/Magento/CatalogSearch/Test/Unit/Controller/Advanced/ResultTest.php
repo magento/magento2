@@ -150,9 +150,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $instance = $objectManager->getObject(
             \Magento\CatalogSearch\Controller\Advanced\Result::class,
             [
-                'context'               => $contextMock,
+                'context' => $contextMock,
                 'catalogSearchAdvanced' => $catalogSearchAdvanced,
-                'urlFactory'            => $urlFactoryMock
+                'urlFactory' => $urlFactoryMock
             ]
         );
         $this->assertEquals($redirectResultMock, $instance->execute());

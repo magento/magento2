@@ -188,7 +188,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $this->_sectionCheckerMock->expects($this->any())->method('isSectionAllowed')->will($this->returnValue(false));
         $inputData = [
-            'some_key'   => 'some_value',
+            'some_key' => 'some_value',
             'some_key_0' => '0',
             'some_key_1' => 'some_value_1',
         ];

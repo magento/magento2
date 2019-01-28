@@ -141,20 +141,20 @@ class RestTest extends \PHPUnit\Framework\TestCase
             $objectManager->getObject(
                 \Magento\Webapi\Controller\Rest::class,
                 [
-                    'request'               => $this->_requestMock,
-                    'response'              => $this->_responseMock,
-                    'router'                => $routerMock,
-                    'objectManager'         => $objectManagerMock,
-                    'layout'                => $layoutMock,
-                    'oauthService'          => $this->_oauthServiceMock,
-                    'authorization'         => $this->_authorizationMock,
+                    'request' => $this->_requestMock,
+                    'response' => $this->_responseMock,
+                    'router' => $routerMock,
+                    'objectManager' => $objectManagerMock,
+                    'layout' => $layoutMock,
+                    'oauthService' => $this->_oauthServiceMock,
+                    'authorization' => $this->_authorizationMock,
                     'serviceInputProcessor' => $this->serviceInputProcessorMock,
-                    'errorProcessor'        => $errorProcessorMock,
-                    'areaList'              => $areaListMock,
-                    'paramsOverrider'       => $paramsOverriderMock,
-                    'dataObjectProcessor'   => $dataObjectProcessorMock,
-                    'storeManager'          => $this->storeManagerMock,
-                    'requestProcessorPool'  => $this->requestProcessorPool,
+                    'errorProcessor' => $errorProcessorMock,
+                    'areaList' => $areaListMock,
+                    'paramsOverrider' => $paramsOverriderMock,
+                    'dataObjectProcessor' => $dataObjectProcessorMock,
+                    'storeManager' => $this->storeManagerMock,
+                    'requestProcessorPool' => $this->requestProcessorPool,
                 ]
             );
 
@@ -246,7 +246,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
             \Magento\Webapi\Controller\Rest\SchemaRequestProcessor::class,
             [
                 'swaggerGenerator' => $this->swaggerGeneratorMock,
-                'response'         => $this->_responseMock,
+                'response' => $this->_responseMock,
             ]
         );
 
@@ -261,7 +261,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
             [
                 'requestProcessors' => [
                     'syncSchema' => $this->schemaRequestProcessor,
-                    'sync'       => $this->synchronousRequestProcessor,
+                    'sync' => $this->synchronousRequestProcessor,
                 ],
             ]
         );

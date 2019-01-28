@@ -83,10 +83,10 @@ class Front extends Generic
             'is_searchable',
             'select',
             [
-                'name'     => 'is_searchable',
-                'label'    => __('Use in Search'),
-                'title'    => __('Use in Search'),
-                'values'   => $yesnoSource,
+                'name' => 'is_searchable',
+                'label' => __('Use in Search'),
+                'title' => __('Use in Search'),
+                'values' => $yesnoSource,
             ]
         );
 

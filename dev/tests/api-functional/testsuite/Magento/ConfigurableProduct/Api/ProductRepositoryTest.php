@@ -79,15 +79,15 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $configurableProductOptions = [
             [
-                "attribute_id" =>  $this->configurableAttribute->getId(),
+                "attribute_id" => $this->configurableAttribute->getId(),
                 "label" => $label,
                 "position" => 0,
                 "values" => [
                     [
-                        "value_index" =>  $options[0]['option_id'],
+                        "value_index" => $options[0]['option_id'],
                     ],
                     [
-                        "value_index" =>  $options[1]['option_id'],
+                        "value_index" => $options[1]['option_id'],
                     ]
                 ],
             ]
@@ -462,7 +462,7 @@ class ProductRepositoryTest extends WebapiAbstract
     protected function saveProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            for ($i = 0; $i < sizeof($product['custom_attributes']); $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {

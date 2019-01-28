@@ -54,11 +54,11 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     0 => [
-                        'name'    => 'magento/product-community-edition',
+                        'name' => 'magento/product-community-edition',
                         'version' => '123.456.789'
                     ],
                     1 => [
-                        'name'    => 'magento/product-other-edition',
+                        'name' => 'magento/product-other-edition',
                         'version' => '987.654.321'
                     ],
                 ],

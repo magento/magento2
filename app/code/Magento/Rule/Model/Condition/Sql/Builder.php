@@ -29,20 +29,20 @@ class Builder
      * @var array
      */
     protected $_conditionOperatorMap = [
-        '=='    => ':field = ?',
-        '!='    => ':field <> ?',
-        '>='    => ':field >= ?',
+        '==' => ':field = ?',
+        '!=' => ':field <> ?',
+        '>=' => ':field >= ?',
         '&gt;=' => ':field >= ?',
-        '>'     => ':field > ?',
-        '&gt;'  => ':field > ?',
-        '<='    => ':field <= ?',
+        '>' => ':field > ?',
+        '&gt;' => ':field > ?',
+        '<=' => ':field <= ?',
         '&lt;=' => ':field <= ?',
-        '<'     => ':field < ?',
-        '&lt;'  => ':field < ?',
-        '{}'    => ':field IN (?)',
-        '!{}'   => ':field NOT IN (?)',
-        '()'    => ':field IN (?)',
-        '!()'   => ':field NOT IN (?)',
+        '<' => ':field < ?',
+        '&lt;' => ':field < ?',
+        '{}' => ':field IN (?)',
+        '!{}' => ':field NOT IN (?)',
+        '()' => ':field IN (?)',
+        '!()' => ':field NOT IN (?)',
     ];
 
     /**
@@ -223,13 +223,13 @@ class Builder
         foreach ($conditions as $key => $condition) {
             /** @var $condition AbstractCondition|Combine */
             $con = ($getAggregator == 'any' ? Select::SQL_OR : Select::SQL_AND);
-            $con = (isset($conditions[$key+1]) ? $con : '');
+            $con = (isset($conditions[$key + 1]) ? $con : '');
             if ($condition instanceof Combine) {
                 $out .= $this->_getMappedSqlCombination($condition, $value, $isDefaultStoreUsed);
             } else {
                 $out .= $this->_getMappedSqlCondition($condition, $value, $isDefaultStoreUsed);
             }
-            $out .=  $out ? (' ' . $con) : '';
+            $out .= $out ? (' ' . $con) : '';
         }
 
         return $this->_expressionFactory->create(['expression' => $out]);

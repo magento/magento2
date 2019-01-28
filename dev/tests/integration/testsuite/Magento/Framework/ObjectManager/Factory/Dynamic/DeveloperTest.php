@@ -32,7 +32,7 @@ class DeveloperTest extends AbstractFactoryRuntimeDefinitionsTestCases
                 'type' => HasOptionalParameters::class,
                 'arguments' => [
                     'requiredInterfaceParameter' => ['instance' => InterfaceImplementation::class],
-                    'requiredObjectParameter' => ['instance' =>  Basic::class],
+                    'requiredObjectParameter' => ['instance' => Basic::class],
                     'optionalInterfaceParameter' => ['instance' => InterfaceImplementation::class],
                     'optionalObjectParameter' => ['instance' => Basic::class],
                     'optionalStringParameter' => self::ALIAS_OVERRIDDEN_STRING,

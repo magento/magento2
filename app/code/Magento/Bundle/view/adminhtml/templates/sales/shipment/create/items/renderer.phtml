@@ -60,7 +60,7 @@
                 <input type="text"
                        class="input-text admin__control-text"
                        name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
-                       value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" />
+                       value="<?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>" />
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>

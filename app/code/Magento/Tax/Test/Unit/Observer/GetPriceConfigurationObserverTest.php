@@ -57,7 +57,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         $className = \Magento\Tax\Helper\Data::class;
         $this->taxData = $this->createMock($className);
 
-        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
+        $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
@@ -181,7 +181,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
+                                    'finalPrice' => ['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],
                         ],
@@ -200,7 +200,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
+                                    'finalPrice' => ['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],
                         ],

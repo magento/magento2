@@ -212,7 +212,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getAllowedCountries'])
             ->getMock();
         $allowedCountryReaderMock->method('getAllowedCountries')
-            ->willReturn(['EN'=>'EN']);
+            ->willReturn(['EN' => 'EN']);
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['mergeDataObjects'])

@@ -8,7 +8,7 @@
 
 // @deprecated
 ?>
-<?php if (count($block->getStores())>1): ?>
+<?php if (count($block->getStores()) > 1): ?>
 <div class="form-language">
     <label for="select-language"><?= $block->escapeHtml(__('Your Language:')) ?></label>
     <select id="select-language" title="<?= $block->escapeHtmlAttr(__('Your Language')) ?>" onchange="window.location.href=this.value" class="flags">

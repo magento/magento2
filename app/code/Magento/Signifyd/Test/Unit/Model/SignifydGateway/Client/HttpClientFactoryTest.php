@@ -77,9 +77,9 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->httpClient = $this->objectManager->getObject(HttpClientFactory::class, [
-            'config'        => $this->config,
+            'config' => $this->config,
             'clientFactory' => $this->clientFactory,
-            'dataEncoder'   => $this->dataEncoder
+            'dataEncoder' => $this->dataEncoder
         ]);
     }
 

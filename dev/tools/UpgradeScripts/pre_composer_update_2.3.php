@@ -252,7 +252,7 @@ try {
         $composerData['description'] = $description;
     }
 
-    file_put_contents($composerFile, json_encode($composerData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
+    file_put_contents($composerFile, json_encode($composerData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
     // Update Magento/Updater if it's installed
     $updateDir = "$rootDir/update";

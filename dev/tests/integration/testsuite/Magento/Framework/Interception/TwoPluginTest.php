@@ -15,11 +15,11 @@ class TwoPluginTest extends AbstractPlugin
         $this->setUpInterceptionConfig(
             [\Magento\Framework\Interception\Fixture\Intercepted::class => [
                     'plugins' => [
-                        'first'     => [
-                            'instance'  => \Magento\Framework\Interception\Fixture\Intercepted\FirstPlugin::class,
+                        'first' => [
+                            'instance' => \Magento\Framework\Interception\Fixture\Intercepted\FirstPlugin::class,
                             'sortOrder' => 10,
                         ], 'second' => [
-                            'instance'  => \Magento\Framework\Interception\Fixture\Intercepted\Plugin::class,
+                            'instance' => \Magento\Framework\Interception\Fixture\Intercepted\Plugin::class,
                             'sortOrder' => 20,
                         ]
                     ],

@@ -108,11 +108,11 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             ->with($data, $this->anything(), $prefixedTags)
             ->will($this->returnValue(true));
         $frontend = new \Magento\Framework\Cache\Core([
-            'disable_save'              => false,
-            'caching'                   => true,
-            'cache_id_prefix'           => $prefix,
+            'disable_save' => false,
+            'caching' => true,
+            'cache_id_prefix' => $prefix,
             'automatic_cleaning_factor' => 0,
-            'write_control'             => false,
+            'write_control' => false,
         ]);
         $frontend->setBackend($backendMock);
         $result = $frontend->save($data, 'id', $tags);
@@ -133,7 +133,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             ->with($mode, $prefixedTags)
             ->will($this->returnValue($expectedResult));
         $frontend = new \Magento\Framework\Cache\Core([
-            'caching'         => true,
+            'caching' => true,
             'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);
@@ -158,7 +158,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             ->method('getCapabilities')
             ->will($this->returnValue(['tags' => true]));
         $frontend = new \Magento\Framework\Cache\Core([
-            'caching'         => true,
+            'caching' => true,
             'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);
@@ -183,7 +183,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             ->method('getCapabilities')
             ->will($this->returnValue(['tags' => true]));
         $frontend = new \Magento\Framework\Cache\Core([
-            'caching'         => true,
+            'caching' => true,
             'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);

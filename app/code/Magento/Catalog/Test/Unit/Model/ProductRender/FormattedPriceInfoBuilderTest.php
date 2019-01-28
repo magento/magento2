@@ -59,7 +59,7 @@ class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->any())
             ->method('getData')
             ->willReturn([
-                'key'=>'1233123'
+                'key' => '1233123'
             ]);
         $this->priceCurrencyMock->expects($this->atLeastOnce())
             ->method('format')

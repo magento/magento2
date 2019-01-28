@@ -111,7 +111,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddStoreFilter($ignoreData, $ignoreSql)
     {
         $typeId = 1;
-        $subjectId =2;
+        $subjectId = 2;
         $subtype = 3;
         $limit = 0;
         $stores = [1, 2];

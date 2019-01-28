@@ -100,10 +100,10 @@ class Collect
         /** @var \Magento\NewRelicReporting\Model\Module $newModule */
         $newModule = $this->moduleFactory->create();
         $data = [
-            'name'          =>  $moduleName,
-            'active'        =>  $active,
-            'setup_version' =>  $setupVersion,
-            'state'         =>  $state,
+            'name' => $moduleName,
+            'active' => $active,
+            'setup_version' => $setupVersion,
+            'state' => $state,
         ];
 
         $newModule->setData($data);

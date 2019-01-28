@@ -89,7 +89,7 @@ class Data implements DataInterface
     {
         $clone = [];
         foreach ($data as $key => $value) {
-            $clone[$key]= $value;
+            $clone[$key] = $value;
         }
         return $clone;
     }

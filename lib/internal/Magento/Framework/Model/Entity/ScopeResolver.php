@@ -51,7 +51,7 @@ class ScopeResolver
         $entityContext = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
         foreach ($metadata->getEntityContext() as $contextProviderClass) {
-            $contextProvider =  $this->objectManager->get($contextProviderClass);
+            $contextProvider = $this->objectManager->get($contextProviderClass);
             if (!$contextProvider instanceof ScopeProviderInterface) {
                 throw new ConfigurationMismatchException(
                     new Phrase(

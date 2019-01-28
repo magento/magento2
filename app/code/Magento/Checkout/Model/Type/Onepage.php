@@ -24,7 +24,7 @@ class Onepage
     /**
      * Checkout types: Checkout as Guest, Register, Logged In Customer
      */
-    const METHOD_GUEST    = 'guest';
+    const METHOD_GUEST = 'guest';
     const METHOD_REGISTER = 'register';
     const METHOD_CUSTOMER = 'customer';
     const USE_FOR_SHIPPING = 1;

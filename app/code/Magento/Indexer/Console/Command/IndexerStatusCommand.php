@@ -43,11 +43,11 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
             $view = $indexer->getView();
 
             $rowData = [
-                'Title'             => $indexer->getTitle(),
-                'Status'            => $this->getStatus($indexer),
-                'Update On'         => $indexer->isScheduled() ? 'Schedule' : 'Save',
-                'Schedule Status'   => '',
-                'Updated'           => '',
+                'Title' => $indexer->getTitle(),
+                'Status' => $this->getStatus($indexer),
+                'Update On' => $indexer->isScheduled() ? 'Schedule' : 'Save',
+                'Schedule Status' => '',
+                'Updated' => '',
             ];
 
             if ($indexer->isScheduled()) {

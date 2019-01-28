@@ -124,7 +124,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWithNonConfigurableProduct()
     {
-        $productId= 'test';
+        $productId = 'test';
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();

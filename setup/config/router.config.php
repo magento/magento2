@@ -8,27 +8,27 @@ return [
     'router' => [
         'routes' => [
             'literal' => [
-                'type'    => 'Literal',
+                'type' => 'Literal',
                 'options' => [
-                    'route'    => '/',
+                    'route' => '/',
                     'defaults' => [
                         'controller' => \Magento\Setup\Controller\Index::class,
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
             ],
             'setup' => [
-                'type'    => 'Segment',
+                'type' => 'Segment',
                 'options' => [
-                    'route'    => '[/:controller[/:action]]',
+                    'route' => '[/:controller[/:action]]',
                     'defaults' => [
                         '__NAMESPACE__' => 'Magento\Setup\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
+                        'controller' => 'Index',
+                        'action' => 'index',
                     ],
                     'constraints' => [
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                 ],
             ],

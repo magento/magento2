@@ -64,7 +64,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'abstractProduct' => $this->abstractProductMock,
                 'compare' => $this->catalogProductHelperMock,
                 'postHelper' => $this->postHelperMock,
-                'buttonFactory' =>$this->buttonFactoryMock,
+                'buttonFactory' => $this->buttonFactoryMock,
             ]
         );
     }

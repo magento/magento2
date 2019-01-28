@@ -68,9 +68,9 @@ class Base implements ActionInterface
      * @deprecated 100.2.0
      */
     protected $columnTypesMap = [
-        'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
+        'varchar' => ['type' => Table::TYPE_TEXT, 'size' => 255],
         'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
-        'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
+        'text' => ['type' => Table::TYPE_TEXT, 'size' => 65536],
     ];
 
     /**

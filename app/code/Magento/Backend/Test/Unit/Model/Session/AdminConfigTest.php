@@ -46,7 +46,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getHttpHost')
             ->will($this->returnValue('init.host'));
-        $this->objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(\Magento\Framework\ValidatorFactory::class)
             ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()

@@ -57,7 +57,7 @@ class OrderStatusHistoryRepositoryInterfaceTest extends \PHPUnit\Framework\TestC
             ->create();
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
         $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
         $searchCriteriaBuilder->addFilters([$filter5]);

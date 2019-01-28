@@ -267,8 +267,8 @@ class CartRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::$mineCartUrl,
-                'httpMethod'   => Request::HTTP_METHOD_PUT,
-                'token'        => $token
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+                'token' => $token
             ],
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -298,14 +298,14 @@ class CartRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::$mineCartUrl,
-                'httpMethod'   => Request::HTTP_METHOD_PUT,
-                'token'        => $token
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+                'token' => $token
             ],
             'soap' => [
-                'service'        => 'quoteCartRepositoryV1',
+                'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation'      => 'quoteCartRepositoryV1Save',
-                'token'          => $token
+                'operation' => 'quoteCartRepositoryV1Save',
+                'token' => $token
             ]
         ];
 
@@ -341,14 +341,14 @@ class CartRepositoryTest extends WebapiAbstract
     private function getRequestData($quoteId)
     {
         $requestData['quote'] = [
-            'id'       => $quoteId,
+            'id' => $quoteId,
             'store_id' => 1,
             'customer' => [
-                'id'         => 1,
+                'id' => 1,
                 'middlename' => 'Middlename_Test',
-                'firstname'  => 'Firstname_Test',
-                'lastname'   => 'Lastname_Test',
-                'email'      => 'customer@test.com'
+                'firstname' => 'Firstname_Test',
+                'lastname' => 'Lastname_Test',
+                'email' => 'customer@test.com'
             ]
         ];
 

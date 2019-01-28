@@ -89,7 +89,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'visible' => $this->isCityActive(),
                 'formElement' => 'input',
                 'label' => __('City'),
-                'value' =>  null
+                'value' => null
             ],
             'country_id' => [
                 'visible' => true,

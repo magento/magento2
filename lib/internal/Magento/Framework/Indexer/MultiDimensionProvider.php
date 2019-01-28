@@ -97,7 +97,7 @@ class MultiDimensionProvider implements \IteratorAggregate
         for ($i = ($this->dimensionsProvidersCount - 1); $i > 0; $i--) {
             if (!$this->dimensionsIterators[$i]->valid()) {
                 $this->dimensionsIterators[$i] = $this->dimensionsDataProviders[$i]->getIterator();
-                $this->dimensionsIterators[$i-1]->next();
+                $this->dimensionsIterators[$i - 1]->next();
             }
         }
     }

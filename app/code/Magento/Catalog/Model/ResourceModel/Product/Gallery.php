@@ -149,7 +149,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function createBaseLoadSelect($entityId, $storeId, $attributeId)
     {
-        $select =  $this->createBatchBaseSelect($storeId, $attributeId);
+        $select = $this->createBatchBaseSelect($storeId, $attributeId);
 
         $select = $select->where(
             'entity.' . $this->metadata->getLinkField() . ' = ?',

@@ -643,7 +643,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                'sku_2' =>                 [
+                'sku_2' => [
                     'code' => 'sku_2',
                     'row_tax' => 16.6,
                     'price' => 11,

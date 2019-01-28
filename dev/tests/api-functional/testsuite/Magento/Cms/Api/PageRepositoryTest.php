@@ -129,7 +129,7 @@ class PageRepositoryTest extends WebapiAbstract
 
         $requestData = ['page' => [
                 PageInterface::IDENTIFIER => $pageDataObject->getIdentifier(),
-                PageInterface::TITLE      => $pageDataObject->getTitle(),
+                PageInterface::TITLE => $pageDataObject->getTitle(),
             ],
         ];
         $page = $this->_webApiCall($serviceInfo, $requestData);

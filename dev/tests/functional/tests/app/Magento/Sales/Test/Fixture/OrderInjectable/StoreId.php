@@ -39,7 +39,7 @@ class StoreId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
     {
         $this->params = $params;
-        $storeData =  isset($data['dataset']) ? ['dataset' => $data['dataset']] : [];
+        $storeData = isset($data['dataset']) ? ['dataset' => $data['dataset']] : [];
         if (isset($data['data'])) {
             $storeData = array_replace_recursive($storeData, $data);
         }

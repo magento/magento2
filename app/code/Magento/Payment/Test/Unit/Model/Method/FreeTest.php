@@ -22,7 +22,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $paymentData  = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $paymentData = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->currencyPrice = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMock();

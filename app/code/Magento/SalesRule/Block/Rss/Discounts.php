@@ -116,7 +116,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
      */
     protected function getCustomerGroupId()
     {
-        $customerGroupId =   (int) $this->getRequest()->getParam('cid');
+        $customerGroupId = (int) $this->getRequest()->getParam('cid');
         if ($customerGroupId == null) {
             $customerGroupId = $this->httpContext->getValue(Context::CONTEXT_GROUP);
         }

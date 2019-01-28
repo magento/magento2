@@ -51,8 +51,8 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     protected function tearDown()
     {
         $this->objectManager = null;
-        $this->accountManagement  = null;
-        $this->securityManager  = null;
+        $this->accountManagement = null;
+        $this->securityManager = null;
         parent::tearDown();
     }
 

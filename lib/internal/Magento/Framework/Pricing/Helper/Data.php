@@ -28,7 +28,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         PriceCurrencyInterface $priceCurrency
     ) {
         parent::__construct($context);
-        $this->priceCurrency =  $priceCurrency;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**

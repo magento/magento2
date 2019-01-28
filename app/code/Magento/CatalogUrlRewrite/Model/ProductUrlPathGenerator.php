@@ -110,7 +110,7 @@ class ProductUrlPathGenerator
      */
     public function getCanonicalUrlPath($product, $category = null)
     {
-        $path =  'catalog/product/view/id/' . $product->getId();
+        $path = 'catalog/product/view/id/' . $product->getId();
         return $category ? $path . '/category/' . $category->getId() : $path;
     }
 

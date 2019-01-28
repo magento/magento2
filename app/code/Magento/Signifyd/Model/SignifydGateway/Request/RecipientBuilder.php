@@ -43,7 +43,7 @@ class RecipientBuilder
         $result = [
             'recipient' => [
                 'fullName' => $address->getName(),
-                'confirmationEmail' =>  $address->getEmail(),
+                'confirmationEmail' => $address->getEmail(),
                 'confirmationPhone' => $address->getTelephone(),
                 'organization' => $address->getCompany(),
                 'deliveryAddress' => $this->addressBuilder->build($address)

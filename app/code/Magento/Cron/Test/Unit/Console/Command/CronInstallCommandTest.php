@@ -120,7 +120,7 @@ class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['existingTasks' => [], 'options' => []],
-            ['existingTasks' => ['* * * * * /bin/php /var/www/run.php'], 'options' => ['-f'=> true]]
+            ['existingTasks' => ['* * * * * /bin/php /var/www/run.php'], 'options' => ['-f' => true]]
         ];
     }
 }

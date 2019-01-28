@@ -57,7 +57,7 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectHelper =  $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)

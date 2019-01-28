@@ -19,8 +19,8 @@ $productModel->setTierPrice(
         [
             'website_id' => $website->getId(),
             'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-            'price_qty'  => 3,
-            'price'      => 5
+            'price_qty' => 3,
+            'price' => 5
         ]
     ]
 );

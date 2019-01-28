@@ -32,13 +32,13 @@ class Config extends Cli
         $configurationString = '';
 
         if ($scope !== null) {
-            $configurationString.= sprintf('--scope=%s ', $scope);
+            $configurationString .= sprintf('--scope=%s ', $scope);
         }
 
         if ($scopeCode !== null) {
-            $configurationString.= sprintf('--scope-code=%s ', $scopeCode);
+            $configurationString .= sprintf('--scope-code=%s ', $scopeCode);
         }
-        $configurationString.= sprintf('%s %s', $path, $value);
+        $configurationString .= sprintf('%s %s', $path, $value);
 
         parent::execute(Config::PARAM_CONFIG_SET . ' ' . $configurationString);
     }

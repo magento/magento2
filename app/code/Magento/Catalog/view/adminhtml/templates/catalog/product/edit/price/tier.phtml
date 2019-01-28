@@ -9,10 +9,10 @@
 /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
 $element = $block->getElement();
 ?>
-<?php $_htmlId      = $block->getElement()->getHtmlId() ?>
-<?php $_htmlClass   = $block->getElement()->getClass() ?>
-<?php $_htmlName    = $block->getElement()->getName() ?>
-<?php $_readonly    = $block->getElement()->getReadonly() ?>
+<?php $_htmlId = $block->getElement()->getHtmlId() ?>
+<?php $_htmlClass = $block->getElement()->getClass() ?>
+<?php $_htmlName = $block->getElement()->getName() ?>
+<?php $_readonly = $block->getElement()->getReadonly() ?>
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_editWebsite = $block->isAllowChangeWebsite(); ?>
 <?php $_priceValueValidation = $block->getPriceValidation('validate-greater-than-zero'); ?>
@@ -151,7 +151,7 @@ var tierPriceControl = {
     }
 };
 <?php foreach ($block->getValues() as $_item): ?>
-tierPriceControl.addItem('<?= /* @escapeNotVerified */ $_item['website_id'] ?>', '<?= /* @escapeNotVerified */ $_item['cust_group'] ?>', '<?= /* @escapeNotVerified */ $_item['price_qty']*1 ?>', '<?= /* @escapeNotVerified */ $_item['price'] ?>', <?= (int)!empty($_item['readonly']) ?>);
+tierPriceControl.addItem('<?= /* @escapeNotVerified */ $_item['website_id'] ?>', '<?= /* @escapeNotVerified */ $_item['cust_group'] ?>', '<?= /* @escapeNotVerified */ $_item['price_qty'] * 1 ?>', '<?= /* @escapeNotVerified */ $_item['price'] ?>', <?= (int)!empty($_item['readonly']) ?>);
 <?php endforeach; ?>
 <?php if ($_readonly): ?>
 $('<?= /* @escapeNotVerified */ $_htmlId ?>_container').up('table').select('button')

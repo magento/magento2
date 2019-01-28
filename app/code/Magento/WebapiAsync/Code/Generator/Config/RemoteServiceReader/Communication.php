@@ -64,7 +64,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
                 $serviceMethod,
                 [
                     WebApiAsyncConfig::DEFAULT_HANDLER_NAME => [
-                        CommunicationConfig::HANDLER_TYPE   => $serviceClass,
+                        CommunicationConfig::HANDLER_TYPE => $serviceClass,
                         CommunicationConfig::HANDLER_METHOD => $serviceMethod,
                     ],
                 ],
@@ -72,7 +72,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
             );
             $rewriteTopicParams = [
                 CommunicationConfig::TOPIC_IS_SYNCHRONOUS => false,
-                CommunicationConfig::TOPIC_RESPONSE       => null,
+                CommunicationConfig::TOPIC_RESPONSE => null,
             ];
             $result[$topicName] = array_merge($topicConfig, $rewriteTopicParams);
         }

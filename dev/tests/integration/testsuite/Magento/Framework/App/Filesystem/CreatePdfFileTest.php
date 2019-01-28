@@ -28,7 +28,7 @@ class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var FileFactory $fileFactory */
-        $fileFactory =  $objectManager->get(FileFactory::class);
+        $fileFactory = $objectManager->get(FileFactory::class);
         /** @var Filesystem $filesystem */
         $filesystem = $objectManager->get(Filesystem::class);
         $filename = 'test.pdf';

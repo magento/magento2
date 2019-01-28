@@ -351,7 +351,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         $priceRender->setItem($item);
         $arguments += [
-            'zone'         => $renderZone,
+            'zone' => $renderZone,
             'render_block' => $priceRender
         ];
         return $priceRender ? $priceRender->render($priceType, $item->getProduct(), $arguments) : null;

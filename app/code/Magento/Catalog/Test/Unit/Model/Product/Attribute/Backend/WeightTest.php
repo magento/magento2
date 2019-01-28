@@ -33,8 +33,8 @@ class WeightTest extends \PHPUnit\Framework\TestCase
         $localeFormat = $objectHelper->getObject(
             \Magento\Framework\Locale\Format::class,
             [
-                'scopeResolver'   => $scopeResolver,
-                'localeResolver'  => $localeResolver,
+                'scopeResolver' => $scopeResolver,
+                'localeResolver' => $localeResolver,
                 'currencyFactory' => $currencyFactory,
             ]
         );
@@ -74,11 +74,11 @@ class WeightTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'US simple' => ['1234.56'],
-            'US full'   => ['123,456.78'],
-            'Brazil'    => ['123.456,78'],
-            'India'     => ['1,23,456.78'],
-            'Lebanon'   => ['1 234'],
-            'zero'      => ['0.00'],
+            'US full' => ['123,456.78'],
+            'Brazil' => ['123.456,78'],
+            'India' => ['1,23,456.78'],
+            'Lebanon' => ['1 234'],
+            'zero' => ['0.00'],
             'NaN becomes zero' => ['kiwi'],
         ];
     }
@@ -105,10 +105,10 @@ class WeightTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'negative US simple' => ['-1234.56'],
-            'negative US full'   => ['-123,456.78'],
-            'negative Brazil'    => ['-123.456,78'],
-            'negative India'     => ['-1,23,456.78'],
-            'negative Lebanon'   => ['-1 234'],
+            'negative US full' => ['-123,456.78'],
+            'negative Brazil' => ['-123.456,78'],
+            'negative India' => ['-1,23,456.78'],
+            'negative Lebanon' => ['-1 234'],
         ];
     }
 }

@@ -78,8 +78,8 @@ class GridStructureTest extends \PHPUnit\Framework\TestCase
         $index = 'index';
         $fields = [
             [
-                'type'     => 'searchable',
-                'name'     => 'field',
+                'type' => 'searchable',
+                'name' => 'field',
                 'dataType' => 'int'
             ]
         ];

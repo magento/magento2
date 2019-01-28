@@ -224,7 +224,7 @@ EXPECTED_RESULT;
         return [
             'no loop tag' => $this->getTemplateAndExpectedResults('noLoopTag'),
             'no loop body tag' => $this->getTemplateAndExpectedResults('noBodyTag'),
-            'no item tag' =>  $this->getTemplateAndExpectedResults('noItemTag'),
+            'no item tag' => $this->getTemplateAndExpectedResults('noItemTag'),
             'no item, no body tags' => $this->getTemplateAndExpectedResults('noItemNoBodyTag'),
             'no item, no data, no body tags' => $this->getTemplateAndExpectedResults('noItemNoDataNoBodyTag'),
         ];

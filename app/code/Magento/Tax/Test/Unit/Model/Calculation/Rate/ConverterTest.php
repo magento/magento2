@@ -54,10 +54,10 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManager = new ObjectManager($this);
-        $this->converter =  $this->objectManager->getObject(
+        $this->converter = $this->objectManager->getObject(
             \Magento\Tax\Model\Calculation\Rate\Converter::class,
             [
-                'taxRateDataObjectFactory' =>  $this->taxRateDataObjectFactory,
+                'taxRateDataObjectFactory' => $this->taxRateDataObjectFactory,
                 'taxRateTitleDataObjectFactory' => $this->taxRateTitleDataObjectFactory,
                 'format' => $this->format,
             ]
@@ -106,7 +106,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ['data' => ['store_id' => 1, 'value' => 'texas']]
         )
         ];
-        $dataArray=[
+        $dataArray = [
             'tax_country_id' => 'US',
             'tax_region_id' => 2,
             'tax_postcode' => null,

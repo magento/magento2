@@ -19,7 +19,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         $authorization = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\AuthorizationInterface::class,
-            ['aclPolicy' =>  new \Magento\Framework\Authorization\Policy\DefaultPolicy()]
+            ['aclPolicy' => new \Magento\Framework\Authorization\Policy\DefaultPolicy()]
         );
 
         $block = $objectManager->create(

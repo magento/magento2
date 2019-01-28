@@ -602,7 +602,7 @@ class SessionManager implements SessionManagerInterface
         }
 
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            if ($option=='session.save_handler') {
+            if ($option == 'session.save_handler') {
                 continue;
             } else {
                 $result = ini_set($option, $value);

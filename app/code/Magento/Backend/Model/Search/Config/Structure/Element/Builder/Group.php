@@ -18,7 +18,7 @@ class Group implements ElementBuilderInterface
         $elementPathParts = explode('/', $structureElement->getPath());
         return [
             'section' => $elementPathParts[0],
-            'group'   => $elementPathParts[1],
+            'group' => $elementPathParts[1],
         ];
     }
 }

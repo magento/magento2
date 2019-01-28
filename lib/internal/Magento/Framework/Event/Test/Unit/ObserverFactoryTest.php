@@ -50,7 +50,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $className = 'Magento\Class';
-        $observerMock =  $this->getMockBuilder('Observer')->getMock();
+        $observerMock = $this->getMockBuilder('Observer')->getMock();
         $arguments = ['arg1', 'arg2'];
 
         $this->objectManagerMock->expects($this->once())

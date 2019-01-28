@@ -201,10 +201,10 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->messageManager)
         );
-        $this->titleMock =  $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $this->titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
-        $this->viewInterfaceMock =  $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
+        $this->viewInterfaceMock = $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

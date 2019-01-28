@@ -31,7 +31,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                     'name' => 'first',
                     'value' => 'first_value',
                 ],
-                'second'=> [
+                'second' => [
                     'name' => 'second',
                     'value' => 'second_value',
                 ],

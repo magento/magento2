@@ -68,7 +68,7 @@ class TranslationFiles extends \PHPUnit\Framework\TestCase
             $failures['missing'] = array_keys($missing);
         }
         if (!empty($extra)) {
-            $failures['extra'] =  array_keys($extra);
+            $failures['extra'] = array_keys($extra);
         }
         return $failures;
     }

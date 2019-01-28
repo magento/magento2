@@ -53,7 +53,7 @@ class EntityAttributeList
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder
     ) {
-        $this->attributeManagement =  $attributeManagement;
+        $this->attributeManagement = $attributeManagement;
         $this->attributeSetRepository = $attributeSetRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;

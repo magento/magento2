@@ -191,7 +191,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $timestamp = 1000000;
         $pragma = 'cache';
         $cacheControl = 'max-age=' . $ttl . ', public, s-maxage=' . $ttl;
-        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+        $expiresResult = 'Thu, 01 Jan 1970 00:00:00 GMT';
 
         $this->dateTimeMock->expects($this->once())
             ->method('strToTime')
@@ -227,7 +227,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $timestamp = 1000000;
         $pragma = 'cache';
         $cacheControl = 'max-age=' . $ttl . ', private';
-        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+        $expiresResult = 'Thu, 01 Jan 1970 00:00:00 GMT';
 
         $this->dateTimeMock->expects($this->once())
             ->method('strToTime')
@@ -262,7 +262,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $timestamp = 1000000;
         $pragma = 'no-cache';
         $cacheControl = 'max-age=0, must-revalidate, no-cache, no-store';
-        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+        $expiresResult = 'Thu, 01 Jan 1970 00:00:00 GMT';
 
         $this->dateTimeMock->expects($this->once())
             ->method('strToTime')

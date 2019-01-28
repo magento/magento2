@@ -374,8 +374,8 @@ class Data
     private function collectImageData(ProductAttributeMediaGalleryEntryInterface $mediaEntry): array
     {
         $image = $this->getAllSizeImages($mediaEntry->getFile());
-        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] =  $mediaEntry->getPosition();
-        $image['isMain'] =$this->isMainImage($mediaEntry);
+        $image[ProductAttributeMediaGalleryEntryInterface::POSITION] = $mediaEntry->getPosition();
+        $image['isMain'] = $this->isMainImage($mediaEntry);
         return $image;
     }
 

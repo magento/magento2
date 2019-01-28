@@ -153,7 +153,7 @@ class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
                     14 => '#0000FF',
                     15 => '#000000',
                 ],
-                15 =>'Black'
+                15 => 'Black'
             ];
         }
         $result = $this->block->getStoreOptionValues(1);

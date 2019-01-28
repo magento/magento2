@@ -557,7 +557,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var ProductInterface $product */
         $product = $productRepository->get('simple333');
-        $categoryIds  = $product->getCategoryIds();
+        $categoryIds = $product->getCategoryIds();
         foreach ($categoryIds as $index => $value) {
             $categoryIds[$index] = [ 'id' => (int)$value];
         }
@@ -633,7 +633,7 @@ QUERY;
             $product = $productRepository->get($links[$itemIndex]->getSku());
             $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
-            $categoryIds  = $product->getCategoryIds();
+            $categoryIds = $product->getCategoryIds();
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
             }
@@ -791,7 +791,7 @@ QUERY;
     {
         $textToSearch = 'Simple';
         $query
-            =<<<QUERY
+            = <<<QUERY
 {
     products(
       search: "{$textToSearch}"
@@ -853,7 +853,7 @@ QUERY;
     public function testProductsThatMatchWithPricesFromList()
     {
         $query
-            =<<<QUERY
+            = <<<QUERY
             {
     products(
         filter:
@@ -920,7 +920,7 @@ QUERY;
                             ]
                         ]
                     ],
-                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'type_id' => $filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
@@ -1087,7 +1087,7 @@ QUERY;
     public function testFilterProductsThatAreOutOfStockWithConfigSettings()
     {
         $query
-            =<<<QUERY
+            = <<<QUERY
 {
   products(
         filter:
@@ -1156,7 +1156,7 @@ QUERY;
                             ]
                         ]
                     ],
-                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'type_id' => $filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );
@@ -1188,7 +1188,7 @@ QUERY;
                             ]
                         ]
                     ],
-                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                    'type_id' => $filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );

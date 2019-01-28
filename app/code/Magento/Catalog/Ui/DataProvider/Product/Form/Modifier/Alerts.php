@@ -15,7 +15,7 @@ use Magento\Ui\Component\Form\Fieldset;
 
 class Alerts extends AbstractModifier
 {
-    const DATA_SCOPE       = 'data';
+    const DATA_SCOPE = 'data';
     const DATA_SCOPE_STOCK = 'stock';
     const DATA_SCOPE_PRICE = 'price';
 

@@ -34,7 +34,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWebsites()
     {
-        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
+        $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
         $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
         $this->assertEquals($websites, $this->switcherBlock->getWebsites());
@@ -42,7 +42,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWebsitesIfSetWebsiteIds()
     {
-        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
+        $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
         $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
 

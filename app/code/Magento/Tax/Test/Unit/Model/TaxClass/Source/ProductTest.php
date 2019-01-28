@@ -157,8 +157,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($items);
 
-        $result=($this->product->getAllOptions(false));
-        $expected=$value;
+        $result = ($this->product->getAllOptions(false));
+        $expected = $value;
         $this->assertEquals([$expected], $result);
     }
 

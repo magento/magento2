@@ -8,7 +8,7 @@
 
 /** @var \Magento\Store\Block\Switcher $block */
 ?>
-<?php if (count($block->getStores())>1): ?>
+<?php if (count($block->getStores()) > 1): ?>
 <?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '' ?>
 <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?= $block->escapeHtmlAttr($id) ?>">
     <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Language')) ?></span></strong>

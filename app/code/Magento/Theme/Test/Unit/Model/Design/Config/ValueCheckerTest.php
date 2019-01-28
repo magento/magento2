@@ -34,7 +34,7 @@ class ValueCheckerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->valueChecker  = new ValueChecker(
+        $this->valueChecker = new ValueChecker(
             $this->fallbackResolver,
             $this->appConfig,
             $this->valueProcessor

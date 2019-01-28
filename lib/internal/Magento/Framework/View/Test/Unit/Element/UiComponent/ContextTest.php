@@ -69,15 +69,15 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->context = $objectManagerHelper->getObject(
             \Magento\Framework\View\Element\UiComponent\Context::class,
             [
-                'pageLayout'            => $pageLayout,
-                'request'               => $request,
+                'pageLayout' => $pageLayout,
+                'request' => $request,
                 'buttonProviderFactory' => $buttonProviderFactory,
-                'actionPoolFactory'     => $actionPoolFactory,
-                'contentTypeFactory'    => $contentTypeFactory,
-                'urlBuilder'            => $urlBuilder,
-                'processor'             => $processor,
-                'uiComponentFactory'    => $uiComponentFactory,
-                'authorization'         => $this->authorization,
+                'actionPoolFactory' => $actionPoolFactory,
+                'contentTypeFactory' => $contentTypeFactory,
+                'urlBuilder' => $urlBuilder,
+                'processor' => $processor,
+                'uiComponentFactory' => $uiComponentFactory,
+                'authorization' => $this->authorization,
             ]
         );
     }

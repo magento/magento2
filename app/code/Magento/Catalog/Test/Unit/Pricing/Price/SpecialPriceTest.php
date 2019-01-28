@@ -39,7 +39,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Pricing\Price\SpecialPrice::class,
             [
                 'saleableItem' => $this->prepareSaleableItem($specialPrice),
-                'localeDate'  => $this->prepareLocaleDate($isValidInterval),
+                'localeDate' => $this->prepareLocaleDate($isValidInterval),
                 'priceCurrency' => $this->priceCurrencyMock,
             ]
         );
@@ -112,17 +112,17 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
             'validInterval' => [
                 'is_valid_date' => true,
                 'special_price' => 50.15,
-                'expected'      => 50.15,
+                'expected' => 50.15,
             ],
             'validZeroValue' => [
                 'is_valid_date' => true,
                 'special_price' => 0.,
-                'expected'      => 0.,
+                'expected' => 0.,
             ],
             'invalidInterval' => [
                 'is_valid_date' => false,
                 'special_price' => 20.,
-                'expected'      => false,
+                'expected' => false,
             ]
         ];
     }

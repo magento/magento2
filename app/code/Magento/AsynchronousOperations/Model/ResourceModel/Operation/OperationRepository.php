@@ -78,16 +78,16 @@ class OperationRepository
         $encodedMessage = $this->messageEncoder->encode($topicName, $entityParams);
 
         $serializedData = [
-            'entity_id'        => null,
-            'entity_link'      => '',
+            'entity_id' => null,
+            'entity_link' => '',
             'meta_information' => $encodedMessage,
         ];
         $data = [
             'data' => [
-                OperationInterface::BULK_ID         => $groupId,
-                OperationInterface::TOPIC_NAME      => $topicName,
+                OperationInterface::BULK_ID => $groupId,
+                OperationInterface::TOPIC_NAME => $topicName,
                 OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),
-                OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
+                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
             ],
         ];
 

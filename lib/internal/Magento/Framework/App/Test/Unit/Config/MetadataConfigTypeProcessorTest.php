@@ -53,7 +53,7 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_initialConfigMock = $this->getMockBuilder(Initial::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_backendModelMock= $this->getMockBuilder(ProcessorInterface::class)
+        $this->_backendModelMock = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();

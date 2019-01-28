@@ -10,9 +10,9 @@
 ?>
 <?php
 /** @var $_source \Magento\Sales\Model\Order\Invoice */
-$_source    = $block->getSource();
-$_order     = $block->getOrder();
-$_fullInfo  = $block->getFullTaxInfo();
+$_source = $block->getSource();
+$_order = $block->getOrder();
+$_fullInfo = $block->getFullTaxInfo();
 ?>
 
 <?php if ($block->displayFullSummary() && $_fullInfo): ?>
@@ -41,11 +41,11 @@ $_fullInfo  = $block->getFullTaxInfo();
                 continue;
             } ?>
             <?php
-            $percent    = $info['percent'];
-            $amount     = $info['amount'];
+            $percent = $info['percent'];
+            $amount = $info['amount'];
             $baseAmount = $info['base_amount'];
-            $rates      = $info['rates'];
-            $isFirst    = 1;
+            $rates = $info['rates'];
+            $isFirst = 1;
             ?>
 
             <?php foreach ($rates as $rate): ?>
@@ -68,10 +68,10 @@ $_fullInfo  = $block->getFullTaxInfo();
     <?php else: ?>
         <?php foreach ($_fullInfo as $info): ?>
             <?php
-            $percent    = $info['percent'];
-            $amount     = $info['tax_amount'];
+            $percent = $info['percent'];
+            $amount = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
-            $isFirst    = 1;
+            $isFirst = 1;
             ?>
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">

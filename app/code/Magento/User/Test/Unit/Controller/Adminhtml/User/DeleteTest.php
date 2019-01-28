@@ -98,11 +98,11 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->controller = $objectManager->getObject(
             \Magento\User\Controller\Adminhtml\User\Delete::class,
             [
-                'request'        => $this->requestMock,
-                'response'       => $this->responseMock,
-                'objectManager'  => $this->objectManagerMock,
+                'request' => $this->requestMock,
+                'response' => $this->responseMock,
+                'objectManager' => $this->objectManagerMock,
                 'messageManager' => $this->messageManagerMock,
-                'userFactory'  => $this->userFactoryMock,
+                'userFactory' => $this->userFactoryMock,
             ]
         );
     }
@@ -191,21 +191,21 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'currentUserPassword' => '123123q',
-                'userId'              => 1,
-                'currentUserId'       => 2,
-                'resultMethod'        => 'addSuccess',
+                'userId' => 1,
+                'currentUserId' => 2,
+                'resultMethod' => 'addSuccess',
             ],
             [
                 'currentUserPassword' => '123123q',
-                'userId'              => 0,
-                'currentUserId'       => 2,
-                'resultMethod'        => 'addError',
+                'userId' => 0,
+                'currentUserId' => 2,
+                'resultMethod' => 'addError',
             ],
             [
                 'currentUserPassword' => '123123q',
-                'userId'              => 1,
-                'currentUserId'       => 1,
-                'resultMethod'        => 'addError',
+                'userId' => 1,
+                'currentUserId' => 1,
+                'resultMethod' => 'addError',
             ],
         ];
     }

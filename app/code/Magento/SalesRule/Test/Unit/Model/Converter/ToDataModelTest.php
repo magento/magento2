@@ -104,7 +104,7 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
         $this->model = $helper->getObject(
             \Magento\SalesRule\Model\Converter\ToDataModel::class,
             [
-                'ruleFactory' =>  $this->ruleFactory,
+                'ruleFactory' => $this->ruleFactory,
                 'ruleDataFactory' => $this->ruleDataFactory,
                 'conditionDataFactory' => $this->conditionDataFactory,
                 'ruleLabelFactory' => $this->ruleLabelFactory,
@@ -252,7 +252,7 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
     public function testArrayToConditionDataModel()
     {
 
-        $array=[
+        $array = [
             'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
             'attribute' => null,
             'operator' => null,

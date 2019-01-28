@@ -256,9 +256,9 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      */
     public function testCallTransactionHasBeenCompleted()
     {
-        $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
+        $response = "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
             . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';
-        $processableErrors =[10415];
+        $processableErrors = [10415];
         $this->curl->expects($this->once())
             ->method('read')
             ->will($this->returnValue($response));

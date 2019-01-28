@@ -282,7 +282,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             $handler = $this->getAttributeValue($queueNode, 'handler');
             $queueName = $this->getAttributeValue($queueNode, 'name');
             $queue = [
-               'name'=> $queueName,
+               'name' => $queueName,
                'handlerName' => $this->getAttributeValue($queueNode, 'handlerName'),
                'handlers' => $handler ? ['default' => $handler] : $topicConfig['handlers'],
                'exchange' => $this->getAttributeValue($queueNode, 'exchange'),

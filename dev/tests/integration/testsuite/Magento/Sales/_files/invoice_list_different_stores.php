@@ -19,34 +19,34 @@ $secondStoreId = $store->load('fixture_second_store')->getId();
 
 $orders = [
     [
-        'increment_id'     => '100000002',
-        'state'            => \Magento\Sales\Model\Order::STATE_NEW,
-        'status'           => 'processing',
-        'grand_total'      => 120.00,
-        'subtotal'         => 120.00,
+        'increment_id' => '100000002',
+        'state' => \Magento\Sales\Model\Order::STATE_NEW,
+        'status' => 'processing',
+        'grand_total' => 120.00,
+        'subtotal' => 120.00,
         'base_grand_total' => 120.00,
-        'store_id'         => 0,
-        'website_id'       => 1,
+        'store_id' => 0,
+        'website_id' => 1,
     ],
     [
-        'increment_id'     => '100000003',
-        'state'            => \Magento\Sales\Model\Order::STATE_PROCESSING,
-        'status'           => 'processing',
-        'grand_total'      => 140.00,
+        'increment_id' => '100000003',
+        'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        'status' => 'processing',
+        'grand_total' => 140.00,
         'base_grand_total' => 140.00,
-        'subtotal'         => 140.00,
-        'store_id'         => 1,
-        'website_id'       => 0,
+        'subtotal' => 140.00,
+        'store_id' => 1,
+        'website_id' => 0,
     ],
     [
-        'increment_id'     => '100000004',
-        'state'            => \Magento\Sales\Model\Order::STATE_PROCESSING,
-        'status'           => 'closed',
-        'grand_total'      => 140.00,
+        'increment_id' => '100000004',
+        'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        'status' => 'closed',
+        'grand_total' => 140.00,
         'base_grand_total' => 140.00,
-        'subtotal'         => 140.00,
-        'store_id'         => $secondStoreId,
-        'website_id'       => 1,
+        'subtotal' => 140.00,
+        'store_id' => $secondStoreId,
+        'website_id' => 1,
     ],
 ];
 
@@ -63,7 +63,7 @@ $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 $payment->setAdditionalInformation('last_trans_id', '11122');
 $payment->setAdditionalInformation('metadata', [
-    'type'       => 'free',
+    'type' => 'free',
     'fraudulent' => false,
 ]);
 

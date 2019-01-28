@@ -32,7 +32,7 @@ $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitSt
 
 /** @var IndexerRegistry $indexerRegistry */
 $indexerRegistry = $objectManager->create(IndexerRegistry::class);
-$indexer =  $indexerRegistry->get('catalogsearch_fulltext');
+$indexer = $indexerRegistry->get('catalogsearch_fulltext');
 
 $indexer->reindexAll();
 

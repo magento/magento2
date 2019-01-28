@@ -44,7 +44,7 @@ class AccountLock extends Column
                 if (array_key_exists('lock_expires', $item)) {
                     $lockExpires = new \DateTime($item['lock_expires']);
                     if ($lockExpires > new \DateTime()) {
-                        $item['lock_expires'] =  __('Locked');
+                        $item['lock_expires'] = __('Locked');
                     } else {
                         $item['lock_expires'] = __('Unlocked');
                     }

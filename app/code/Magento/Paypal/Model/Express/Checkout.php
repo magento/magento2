@@ -35,7 +35,7 @@ class Checkout
      * Keys for passthrough variables in sales/quote_payment and sales/order_payment
      * Uses additional_information as storage
      */
-    const PAYMENT_INFO_TRANSPORT_TOKEN    = 'paypal_express_checkout_token';
+    const PAYMENT_INFO_TRANSPORT_TOKEN = 'paypal_express_checkout_token';
     const PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDDEN = 'paypal_express_checkout_shipping_overridden';
     const PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD = 'paypal_express_checkout_shipping_method';
     const PAYMENT_INFO_TRANSPORT_PAYER_ID = 'paypal_express_checkout_payer_id';
@@ -1019,9 +1019,9 @@ class Checkout
             $options[] = new \Magento\Framework\DataObject(
                 [
                     'is_default' => true,
-                    'name'       => __('N/A'),
-                    'code'       => 'no_rate',
-                    'amount'     => 0.00,
+                    'name' => __('N/A'),
+                    'code' => 'no_rate',
+                    'amount' => 0.00,
                 ]
             );
             if ($calculateTax) {

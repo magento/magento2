@@ -51,8 +51,8 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
             IndexerShowDimensionsModeCommand::class,
             [
                 'objectManagerFactory' => $this->objectManagerFactory,
-                'configReader'         => $this->configReaderMock,
-                'indexers'             => $this->indexers,
+                'configReader' => $this->configReaderMock,
+                'indexers' => $this->indexers,
             ]
         );
     }
@@ -101,9 +101,9 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     public function dimensionModesDataProvider(): array
     {
         return [
-            'get_all'                => [
+            'get_all' => [
                 'command' => [],
-                'output'  =>
+                'output' =>
                     sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'
@@ -114,11 +114,11 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                     ) . 'none' . PHP_EOL
                 ,
             ],
-            'get_by_index'           => [
+            'get_by_index' => [
                 'command' => [
                     'indexer' => ['indexer_1'],
                 ],
-                'output'  =>
+                'output' =>
                     sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'
@@ -129,7 +129,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1', 'indexer_2'],
                 ],
-                'output'  =>
+                'output' =>
                     sprintf(
                         '%-50s ',
                         'indexer_title1' . ':'

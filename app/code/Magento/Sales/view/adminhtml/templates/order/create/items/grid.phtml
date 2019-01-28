@@ -39,7 +39,7 @@
     </div>
 <?php else: ?>
     <div class="admin__table-wrapper" id="order-items_grid">
-    <?php if (count($_items)>10): ?>
+    <?php if (count($_items) > 10): ?>
         <div class="actions update actions-update">
             <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
         </div>
@@ -71,7 +71,7 @@
             </tfoot>
                 <?php $i = 0 ?>
                 <?php foreach ($_items as $_item):$i++ ?>
-                <tbody class="<?= /* @escapeNotVerified */ ($i%2) ? 'even' : 'odd' ?>">
+                <tbody class="<?= /* @escapeNotVerified */ ($i % 2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
                             <span id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
@@ -119,7 +119,7 @@
                         <td class="col-qty">
                             <input name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
                                    class="input-text item-qty admin__control-text"
-                                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"
+                                   value="<?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>"
                                    maxlength="12" />
                         </td>
                         <td class="col-subtotal col-price">

@@ -27,13 +27,13 @@ class GridStructure implements IndexStructureInterface
      * @var array
      */
     protected $columnTypesMap = [
-        'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
+        'varchar' => ['type' => Table::TYPE_TEXT, 'size' => 255],
         'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
-        'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
-        'int'        => ['type' => Table::TYPE_INTEGER, 'size' => null],
-        'date'       => ['type' => Table::TYPE_DATE, 'size' => null],
-        'datetime'   => ['type' => Table::TYPE_DATETIME, 'size' => null],
-        'timestamp'  => ['type' => Table::TYPE_TIMESTAMP, 'size' => null],
+        'text' => ['type' => Table::TYPE_TEXT, 'size' => 65536],
+        'int' => ['type' => Table::TYPE_INTEGER, 'size' => null],
+        'date' => ['type' => Table::TYPE_DATE, 'size' => null],
+        'datetime' => ['type' => Table::TYPE_DATETIME, 'size' => null],
+        'timestamp' => ['type' => Table::TYPE_TIMESTAMP, 'size' => null],
     ];
 
     /**

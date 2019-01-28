@@ -23,7 +23,7 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**#@+
      * Constants defined for type of context
      */
-    const USER_TYPE_ID  = 'user_type';
+    const USER_TYPE_ID = 'user_type';
     const USER_ID = 'user_id';
     /**#@-*/
 

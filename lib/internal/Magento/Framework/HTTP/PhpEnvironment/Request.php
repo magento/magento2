@@ -21,7 +21,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     /**#@+
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
+    const SCHEME_HTTP = 'http';
     const SCHEME_HTTPS = 'https';
     /**#@-*/
 
@@ -119,7 +119,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
                 $uri = UriFactory::factory($uri);
             }
             if ($uri->isValid()) {
-                $path  = $uri->getPath();
+                $path = $uri->getPath();
                 $query = $uri->getQuery();
                 if (!empty($query)) {
                     $path .= '?' . $query;

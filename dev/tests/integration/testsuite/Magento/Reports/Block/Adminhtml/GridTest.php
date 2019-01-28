@@ -80,9 +80,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function getSalesRepresentativeIdDataProvider()
     {
         return [
-            'Data for US locale' =>             ['08/15/2018', '08/20/2018', 'day', 'en_US', 6],
-            'Data for Australian locale' =>     ['15/08/2018', '31/08/2018', 'day', 'en_AU', 17],
-            'Data for French locale' =>         ['20.08.2018', '30.08.2018', 'day', 'fr_FR', 11],
+            'Data for US locale' => ['08/15/2018', '08/20/2018', 'day', 'en_US', 6],
+            'Data for Australian locale' => ['15/08/2018', '31/08/2018', 'day', 'en_AU', 17],
+            'Data for French locale' => ['20.08.2018', '30.08.2018', 'day', 'fr_FR', 11],
         ];
     }
 }

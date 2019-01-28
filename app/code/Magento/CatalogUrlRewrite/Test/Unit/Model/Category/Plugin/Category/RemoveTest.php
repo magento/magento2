@@ -61,7 +61,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     public function testAroundDelete()
     {
         $closureSubject = $this->subjectMock;
-        $proceed  = function () use ($closureSubject) {
+        $proceed = function () use ($closureSubject) {
             return $closureSubject;
         };
         $plugin = $this->objectManager->getObject(

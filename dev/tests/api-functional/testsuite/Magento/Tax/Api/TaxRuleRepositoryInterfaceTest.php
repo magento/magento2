@@ -338,7 +338,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
      */
     public function testSearchTaxRulesCodeWithJoins()
     {
-        $customerTaxClass =  clone $this->taxClass->load('CustomerTaxClass2', 'class_name');
+        $customerTaxClass = clone $this->taxClass->load('CustomerTaxClass2', 'class_name');
         $productTaxClass = clone $this->taxClass->load('Taxable Goods', 'class_name');
         $taxRate = $this->taxRate->load('*', 'code');
 

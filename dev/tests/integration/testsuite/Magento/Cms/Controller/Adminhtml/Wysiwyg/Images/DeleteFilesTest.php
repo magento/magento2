@@ -61,7 +61,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
-        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
+        $filePath = $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
         $path = $this->fullDirectoryPath . '/.htaccess';
@@ -140,7 +140,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $directoryName = 'linked_media';
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
-        $filePath =  $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
+        $filePath = $fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
 

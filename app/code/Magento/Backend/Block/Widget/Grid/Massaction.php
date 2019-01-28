@@ -33,7 +33,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
      * @var array
      */
     private $restrictions = [
-        'enable'  => 'Magento_Backend::toggling_cache_type',
+        'enable' => 'Magento_Backend::toggling_cache_type',
         'disable' => 'Magento_Backend::toggling_cache_type',
         'refresh' => 'Magento_Backend::refresh_cache_type',
     ];

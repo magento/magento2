@@ -12,7 +12,7 @@ class Bml extends Express
      * Payment method code
      * @var string
      */
-    protected $_code  = Config::METHOD_WPP_BML;
+    protected $_code = Config::METHOD_WPP_BML;
 
     /**
      * Checkout payment form

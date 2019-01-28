@@ -47,8 +47,8 @@ class BlockTest extends TestCase
         /** @var BlockFactory $blockFactory */
         /** @var Block $blockResource */
         /** @var GetBlockByIdentifier $getBlockByIdentifierCommand */
-        $this->blockResource   = $this->objectManager->create(Block::class);
-        $this->blockFactory    = $this->objectManager->create(BlockFactory::class);
+        $this->blockResource = $this->objectManager->create(Block::class);
+        $this->blockFactory = $this->objectManager->create(BlockFactory::class);
         $this->blockIdentifier = $this->objectManager->create(GetBlockByIdentifier::class);
     }
 
@@ -69,7 +69,7 @@ class BlockTest extends TestCase
 
         # Load previously created block and compare identifiers
         $storeId = reset($blockData['stores']);
-        $block   = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
+        $block = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
         $this->assertEquals($blockData['identifier'], $block->getIdentifier());
     }
 
@@ -90,15 +90,15 @@ class BlockTest extends TestCase
             ->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         # Prepare and save the temporary block
-        $tempBlock       = $this->blockFactory->create();
+        $tempBlock = $this->blockFactory->create();
         $tempBlock->setData($blockData);
         $beforeTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
         $this->blockResource->save($tempBlock);
         $afterTimestamp = $db->fetchCol('SELECT UNIX_TIMESTAMP()')[0];
 
         # Load previously created block and compare identifiers
-        $storeId        = reset($blockData['stores']);
-        $block          = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
+        $storeId = reset($blockData['stores']);
+        $block = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
         $blockTimestamp = strtotime($block->getUpdateTime());
 
         /*
@@ -117,11 +117,11 @@ class BlockTest extends TestCase
         return [
             [
                 'data' => [
-                    'title'      => 'Test title',
-                    'stores'     => [0],
+                    'title' => 'Test title',
+                    'stores' => [0],
                     'identifier' => 'test-identifier',
-                    'content'    => 'Test content',
-                    'is_active'  => 1
+                    'content' => 'Test content',
+                    'is_active' => 1
                 ]
             ]
         ];

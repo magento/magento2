@@ -84,7 +84,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quote->setCustomerTaxClassId($fixtureTaxClassId);
         $quote->setCustomer($customerDataSet);
         $shipping = new \Magento\Framework\DataObject([
-            'quote' =>  $quote,
+            'quote' => $quote,
         ]);
         $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class

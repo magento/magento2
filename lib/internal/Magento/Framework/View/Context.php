@@ -174,11 +174,11 @@ class Context
         $this->session = $session;
         $this->scopeConfig = $scopeConfig;
         $this->frontController = $frontController;
-        $this->viewConfig      = $viewConfig;
-        $this->cacheState      = $cacheState;
-        $this->logger          = $logger;
-        $this->appState        = $appState;
-        $this->layout          = $layout;
+        $this->viewConfig = $viewConfig;
+        $this->cacheState = $cacheState;
+        $this->logger = $logger;
+        $this->appState = $appState;
+        $this->layout = $layout;
     }
 
     /**

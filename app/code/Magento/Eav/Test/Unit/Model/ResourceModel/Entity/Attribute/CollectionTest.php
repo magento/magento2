@@ -118,12 +118,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class,
             [
                 'entityFactory' => $this->entityFactoryMock,
-                'logger'        => $this->loggerMock,
+                'logger' => $this->loggerMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
-                'eventManager'  => $this->eventManagerMock,
-                'eavConfig'     => $this->eavConfigMock,
-                'connection'    => $this->connectionMock,
-                'resource'      => $this->resourceMock,
+                'eventManager' => $this->eventManagerMock,
+                'eavConfig' => $this->eavConfigMock,
+                'connection' => $this->connectionMock,
+                'resource' => $this->resourceMock,
             ]
         );
     }

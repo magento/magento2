@@ -53,7 +53,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             ConfigGenerator::class,
             [
-                'deploymentConfig'  => $this->deploymentConfigMock,
+                'deploymentConfig' => $this->deploymentConfigMock,
                 'configDataFactory' => $configDataFactoryMock,
             ]
         );

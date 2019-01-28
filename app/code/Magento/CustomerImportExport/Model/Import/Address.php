@@ -645,7 +645,7 @@ class Address extends AbstractCustomer
                 if ($attributeParams['is_static']) {
                     $entityRow[$attributeAlias] = $value;
                 } else {
-                    $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]= $value;
+                    $attributes[$attributeParams['table']][$addressId][$attributeParams['id']] = $value;
                 }
             }
         }

@@ -31,7 +31,7 @@ class AssertUserInvalidEmailHostnameMessage extends AbstractConstraint
     public function processAssert(UserEdit $userEdit, User $user)
     {
         $email = $user->getEmail();
-        $hostname = substr($email, strpos($email, '@')+1);
+        $hostname = substr($email, strpos($email, '@') + 1);
         $expectedMessage = sprintf(self::ERROR_MESSAGE, $hostname, $email);
         $actualMessage = $userEdit->getMessagesBlock()->getErrorMessage();
         \PHPUnit\Framework\Assert::assertEquals(

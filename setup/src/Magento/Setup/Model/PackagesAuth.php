@@ -171,7 +171,7 @@ class PackagesAuth
                 if ($authJsonData === ['http-basic' => []]) {
                     return $directory->delete(self::PATH_TO_AUTH_FILE);
                 } else {
-                    $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+                    $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
                     return $data !== false && $directory->writeFile(self::PATH_TO_AUTH_FILE, $data);
                 }
             }

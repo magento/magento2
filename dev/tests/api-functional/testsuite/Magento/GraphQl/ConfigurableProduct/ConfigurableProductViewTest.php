@@ -228,9 +228,9 @@ QUERY;
         $priceInfo = $priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        $minimalPriceAmount =  $finalPrice->getMinimalPrice();
-        $maximalPriceAmount =  $finalPrice->getMaximalPrice();
-        $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+        $minimalPriceAmount = $finalPrice->getMinimalPrice();
+        $maximalPriceAmount = $finalPrice->getMaximalPrice();
+        $regularPriceAmount = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         // ['product_object_field_name', 'expected_value']
@@ -314,7 +314,7 @@ QUERY;
             /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
             $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
             $this->assertCount(1, $links, "Precondition failed, incorrect number of categories.");
-            $id =$links[0]->getCategoryId();
+            $id = $links[0]->getCategoryId();
 
             $actualValue
                 = $actualResponse['variants'][$variantKey]['product']['categories'][0];
@@ -364,9 +364,9 @@ QUERY;
                 [0]
                 ['video_content'],
                 [
-                    'media_type' =>$videoContent->getMediaType(),
+                    'media_type' => $videoContent->getMediaType(),
                     'video_description' => $videoContent->getVideoDescription(),
-                    'video_metadata' =>$videoContent->getVideoMetadata(),
+                    'video_metadata' => $videoContent->getVideoMetadata(),
                     'video_provider' => $videoContent->getVideoProvider(),
                     'video_title' => $videoContent->getVideoTitle(),
                     'video_url' => $videoContent->getVideoUrl()

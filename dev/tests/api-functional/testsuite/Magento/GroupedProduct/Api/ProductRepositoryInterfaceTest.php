@@ -64,7 +64,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response =  $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
 
@@ -118,7 +118,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductLinks()
     {
         // Create simple product
-        $productData =  [
+        $productData = [
             ProductInterface::SKU => "product_simple_500",
             ProductInterface::NAME => "Product Simple 500",
             ProductInterface::VISIBILITY => 4,
@@ -138,7 +138,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productLinkData = ["sku" => "group_product_500", "link_type" => "associated",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => ["qty" => 1]];
-        $productWithGroupData =  [
+        $productWithGroupData = [
             ProductInterface::SKU => "group_product_500",
             ProductInterface::NAME => "Group Product 500",
             ProductInterface::VISIBILITY => 4,
@@ -163,7 +163,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productLinkData2 = ["sku" => "group_product_500", "link_type" => "upsell",
                              "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                              "position" => 0];
-        $productWithGroupData =  [
+        $productWithGroupData = [
             ProductInterface::SKU => "group_product_500",
             ProductInterface::NAME => "Group Product 500",
             ProductInterface::VISIBILITY => 4,
@@ -184,7 +184,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData2, $links[0]);
 
         // Remove link
-        $productWithNoLinkData =  [
+        $productWithNoLinkData = [
             ProductInterface::SKU => "group_product_500",
             ProductInterface::NAME => "Group Product 500",
             ProductInterface::VISIBILITY => 4,

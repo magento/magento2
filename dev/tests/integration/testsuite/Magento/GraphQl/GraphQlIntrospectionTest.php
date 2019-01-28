@@ -32,7 +32,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
                 'query' => new ObjectType(
                     [
                         'name' => 'Query',
-                        'description' =>'Description at type level',
+                        'description' => 'Description at type level',
                         'fields' => ['a' => \GraphQL\Type\Definition\Type::string()]
                     ]
                 )
@@ -176,56 +176,56 @@ QUERY;
         $response = \GraphQL\GraphQL::executeQuery($testSchema, $request);
         $expectedResult =
             [
-                'kind'=> 'INPUT_OBJECT',
-                'name'=> 'ProductFilterInput',
-                'inputFields'=> [
+                'kind' => 'INPUT_OBJECT',
+                'name' => 'ProductFilterInput',
+                'inputFields' => [
                     [
-                        'name'=> 'attributeA',
-                        'description'=> 'testDescriptionForA',
-                        'type'=> [
-                            'kind'=> 'NON_NULL',
-                            'name'=> null,
-                            'ofType'=> [
-                                'kind'=> 'SCALAR',
-                                'name'=> 'String',
-                                'ofType'=> null
+                        'name' => 'attributeA',
+                        'description' => 'testDescriptionForA',
+                        'type' => [
+                            'kind' => 'NON_NULL',
+                            'name' => null,
+                            'ofType' => [
+                                'kind' => 'SCALAR',
+                                'name' => 'String',
+                                'ofType' => null
                             ]
                         ],
-                        'defaultValue'=> null
+                        'defaultValue' => null
                     ],
                     [
-                        'name'=> 'attributeB',
-                        'description'=> null,
-                        'type'=> [
-                            'kind'=> 'LIST',
-                            'name'=> null,
-                            'ofType'=> [
-                                'kind'=> 'SCALAR',
-                                'name'=> 'String',
-                                'ofType'=> null
+                        'name' => 'attributeB',
+                        'description' => null,
+                        'type' => [
+                            'kind' => 'LIST',
+                            'name' => null,
+                            'ofType' => [
+                                'kind' => 'SCALAR',
+                                'name' => 'String',
+                                'ofType' => null
                             ]
                         ],
-                        'defaultValue'=> null
+                        'defaultValue' => null
                     ],
                     [
-                        'name'=> 'attributeC',
-                        'description'=> null,
-                        'type'=> [
-                            'kind'=> 'SCALAR',
-                            'name'=> 'String',
-                            'ofType'=> null
+                        'name' => 'attributeC',
+                        'description' => null,
+                        'type' => [
+                            'kind' => 'SCALAR',
+                            'name' => 'String',
+                            'ofType' => null
                         ],
-                        'defaultValue'=> 'null'
+                        'defaultValue' => 'null'
                     ],
                     [
-                        'name'=> 'attributeD',
-                        'description'=> 'testDescriptionForD',
-                        'type'=> [
-                            'kind'=> 'SCALAR',
-                            'name'=> 'String',
-                            'ofType'=> null
+                        'name' => 'attributeD',
+                        'description' => 'testDescriptionForD',
+                        'type' => [
+                            'kind' => 'SCALAR',
+                            'name' => 'String',
+                            'ofType' => null
                         ],
-                        'defaultValue'=> '"test"'
+                        'defaultValue' => '"test"'
                     ]
                 ]
             ];
@@ -246,7 +246,7 @@ QUERY;
                     'fields' => [
                        'deprecated' => [
                          'type' => \GraphQL\Type\Definition\Type::string(),
-                         'deprecationReason' =>'Deprecated in an older version'
+                         'deprecationReason' => 'Deprecated in an older version'
                        ],
                          'nonDeprecated' => [
                             'type' => \GraphQL\Type\Definition\Type::string()
@@ -282,28 +282,28 @@ QUERY;
         $output = $response->toArray()['data']['__type'];
         $expectedResult =
             [
-                "name" =>"Query",
-                "kind" =>"OBJECT",
+                "name" => "Query",
+                "kind" => "OBJECT",
                 "fields" => [
            [
-            'name'=> 'deprecated',
-            'type'=> [
-                'kind'=> 'SCALAR',
-                'name'=> 'String'
+            'name' => 'deprecated',
+            'type' => [
+                'kind' => 'SCALAR',
+                'name' => 'String'
             ],
-            'description'=> null,
-            'isDeprecated'=> true,
-            'deprecationReason'=> 'Deprecated in an older version'
+            'description' => null,
+            'isDeprecated' => true,
+            'deprecationReason' => 'Deprecated in an older version'
            ],
            [
-            'name'=> 'nonDeprecated',
-            'type'=> [
-                'kind'=> 'SCALAR',
-                'name'=> 'String'
+            'name' => 'nonDeprecated',
+            'type' => [
+                'kind' => 'SCALAR',
+                'name' => 'String'
             ],
-            'description'=> null,
-            'isDeprecated'=> false,
-            'deprecationReason'=> null
+            'description' => null,
+            'isDeprecated' => false,
+            'deprecationReason' => null
            ]
                 ]
                 ];

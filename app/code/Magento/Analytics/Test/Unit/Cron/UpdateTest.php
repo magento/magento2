@@ -47,13 +47,13 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->connectorMock =  $this->getMockBuilder(Connector::class)
+        $this->connectorMock = $this->getMockBuilder(Connector::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
+        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)

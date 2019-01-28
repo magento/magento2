@@ -214,8 +214,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     public function getStatusesArray()
     {
         return [
-            self::STATUS_ACTIVE     => __('Active'),
-            self::STATUS_CANCELED   => __('Canceled')
+            self::STATUS_ACTIVE => __('Active'),
+            self::STATUS_CANCELED => __('Canceled')
         ];
     }
 

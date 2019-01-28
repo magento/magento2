@@ -16,8 +16,8 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_CODE    = 'code';
-    const KEY_TITLE   = 'title';
+    const KEY_CODE = 'code';
+    const KEY_TITLE = 'title';
     const KEY_PERCENT = 'percent';
     /**#@-*/
 

@@ -56,7 +56,7 @@ class Information
     public function getPreference($className)
     {
         if (!isset($this->preferences[$className])) {
-            $this->preferences[$className] =  $this->objectManagerConfig->getPreference($className);
+            $this->preferences[$className] = $this->objectManagerConfig->getPreference($className);
         }
         return $this->preferences[$className];
     }

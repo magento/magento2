@@ -24,7 +24,7 @@ $productConfigs = [
     ],
     [
         'id' => '100000002',
-        'stock_config' =>  ['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]
+        'stock_config' => ['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]
     ]
 ];
 

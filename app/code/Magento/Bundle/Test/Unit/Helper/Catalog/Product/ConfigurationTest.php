@@ -188,7 +188,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $optionIds = '{"0":"1"}';
-        $selectionIds =  '{"0":"2"}';
+        $selectionIds = '{"0":"2"}';
         $selectionId = '2';
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,

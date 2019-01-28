@@ -88,7 +88,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
             [
                 'ruleFactory' => $this->ruleFactory,
                 'toDataModelConverter' => $this->toDataModelConverter,
-                'toModelConverter' =>  $this->toModelConverter,
+                'toModelConverter' => $this->toModelConverter,
                 'searchResultFactory' => $this->searchResultFactory,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                 'ruleCollectionFactory' => $this->collectionFactory,

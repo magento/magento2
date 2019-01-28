@@ -102,12 +102,12 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $searchString = "simple";
-        $firstItemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
+        $firstItemMock = $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('FirstItem')
             ->setMethods(['toArray'])
             ->getMock();
-        $secondItemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
+        $secondItemMock = $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('SecondItem')
             ->setMethods(['toArray'])

@@ -51,7 +51,7 @@ class AddressAttributeData implements ArgumentInterface
     public function getFrontendLabel(string $attributeCode): string
     {
         try {
-            $attribute =  $this->addressMetadata->getAttributeMetadata($attributeCode);
+            $attribute = $this->addressMetadata->getAttributeMetadata($attributeCode);
             $frontendLabel = $attribute->getFrontendLabel();
         } catch (NoSuchEntityException $e) {
             $frontendLabel = '';

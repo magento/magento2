@@ -44,7 +44,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->cellParameters = [
-            'size'  => 'testSize',
+            'size' => 'testSize',
             'style' => 'testStyle',
             'class' => 'testClass',
         ];
@@ -69,8 +69,8 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 
         $data = [
             'elementFactory' => $this->elementFactoryMock,
-            'labelFactory'   => $this->labelFactoryMock,
-            'data'           => [
+            'labelFactory' => $this->labelFactoryMock,
+            'data' => [
                 'element' => $this->elementMock
             ],
         ];
@@ -82,7 +82,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderCellTemplateValueColumn()
     {
-        $columnName     = 'value';
+        $columnName = 'value';
         $expectedResult = 'testValueElementHtml';
 
         $this->elementFactoryMock->expects($this->once())->method('create')->willReturn($this->elementMock);
@@ -108,7 +108,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderCellTemplateOtherColumn()
     {
-        $columnName     = 'testCellName';
+        $columnName = 'testCellName';
 
         $this->object->addColumn(
             $columnName,
@@ -123,7 +123,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderCellTemplateWrongColumnName()
     {
-        $columnName      = 'testCellName';
+        $columnName = 'testCellName';
         $wrongColumnName = 'wrongTestCellName';
 
         $this->object->addColumn($wrongColumnName, $this->cellParameters);

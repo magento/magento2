@@ -33,7 +33,7 @@ class RelationsDataSaver
         \Magento\Framework\App\ResourceConnection $resource,
         Relation $productRelation = null
     ) {
-        $this->resource        = $resource;
+        $this->resource = $resource;
         $this->productRelation = $productRelation
             ?: ObjectManager::getInstance()->get(Relation::class);
     }

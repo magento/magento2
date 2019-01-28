@@ -15,10 +15,10 @@ interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const CODE  = 'code';
+    const CODE = 'code';
     const TITLE = 'title';
     const VALUE = 'value';
-    const AREA  = 'area';
+    const AREA = 'area';
     /**#@-*/
 
     /**

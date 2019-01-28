@@ -47,7 +47,7 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?= (++$_index==$_count && !$_showlastRow)?' class="border"':'' ?>>
+    <tr<?= (++$_index == $_count && !$_showlastRow)?' class="border"':'' ?>>
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title" id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title">
@@ -89,30 +89,30 @@
                 <table class="qty-table">
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getQtyInvoiced()): ?>
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Invoiced') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyInvoiced()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyInvoiced() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyShipped() && $block->isShipmentSeparately($_item)): ?>
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyRefunded()): ?>
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Refunded') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyRefunded() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyCanceled()): ?>
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Canceled') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyCanceled() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
@@ -120,12 +120,12 @@
                 <table class="qty-table">
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getQtyShipped()): ?>
                     <tr>
                         <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></td>
+                        <td><?= /* @escapeNotVerified */ $_item->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>

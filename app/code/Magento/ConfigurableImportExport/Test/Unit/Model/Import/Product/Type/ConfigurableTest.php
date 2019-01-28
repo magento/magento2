@@ -209,9 +209,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
 
         $products = [];
         $testProducts = [
-            ['id' => 1, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
-            ['id' => 2, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
-            ['id' => 20, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
+            ['id' => 1, 'attribute_set_id' => 4, 'testattr2' => 1, 'testattr3' => 1],
+            ['id' => 2, 'attribute_set_id' => 4, 'testattr2' => 1, 'testattr3' => 1],
+            ['id' => 20, 'attribute_set_id' => 4, 'testattr2' => 1, 'testattr3' => 1],
         ];
         foreach ($testProducts as $product) {
             $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getAttributeSetId']);

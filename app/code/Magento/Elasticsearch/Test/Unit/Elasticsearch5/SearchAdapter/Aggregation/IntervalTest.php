@@ -261,7 +261,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
                 'upper' => '24',
                 'queryResult' => [
                     'hits' => [
-                        'total'=> '1',
+                        'total' => '1',
                         'hits' => [
                             [
                                 'fields' => [
@@ -278,7 +278,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
                 'rightIndex' => '1',
                 'upper' => '24',
                 'queryResult' => [
-                    'hits' => ['total'=> '0'],
+                    'hits' => ['total' => '0'],
                 ],
                 'expected' => false,
             ],
@@ -297,7 +297,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
                 'upper' => '42',
                 'queryResult' => [
                     'hits' => [
-                        'total'=> '1',
+                        'total' => '1',
                         'hits' => [
                             [
                                 'fields' => [
@@ -314,7 +314,7 @@ class IntervalTest extends \PHPUnit\Framework\TestCase
                 'rightIndex' => '2',
                 'upper' => '42',
                 'queryResult' => [
-                    'hits' => ['total'=> '0'],
+                    'hits' => ['total' => '0'],
                 ],
                 'expected' => false,
             ],

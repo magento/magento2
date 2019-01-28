@@ -102,7 +102,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         );
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->baseTmpPath = 'base/tmp/';
-        $this->basePath =  'base/real/';
+        $this->basePath = 'base/real/';
         $this->allowedExtensions = ['.jpg'];
         $this->allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 

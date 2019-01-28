@@ -130,7 +130,7 @@ class BlockRepositoryTest extends WebapiAbstract
 
         $requestData = ['block' => [
                 BlockInterface::IDENTIFIER => $blockDataObject->getIdentifier(),
-                BlockInterface::TITLE      => $blockDataObject->getTitle(),
+                BlockInterface::TITLE => $blockDataObject->getTitle(),
             ],
         ];
         $block = $this->_webApiCall($serviceInfo, $requestData);

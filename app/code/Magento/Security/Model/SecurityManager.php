@@ -22,7 +22,7 @@ class SecurityManager
     /**
      * Security control records time life
      */
-    const SECURITY_CONTROL_RECORDS_LIFE_TIME =  86400;
+    const SECURITY_CONTROL_RECORDS_LIFE_TIME = 86400;
 
     /**
      * @var ConfigInterface

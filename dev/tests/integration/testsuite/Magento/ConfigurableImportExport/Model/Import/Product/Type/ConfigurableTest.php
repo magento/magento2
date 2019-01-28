@@ -174,7 +174,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
-                'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views.csv',
+                'file' => __DIR__ . '/../../_files/import_configurable_for_multiple_store_views.csv',
                 'directory' => $directory
             ]
         );
@@ -223,7 +223,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $source = $this->objectManager->create(
                 \Magento\ImportExport\Model\Import\Source\Csv::class,
                 [
-                    'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv',
+                    'file' => __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv',
                     'directory' => $directory
                 ]
             );

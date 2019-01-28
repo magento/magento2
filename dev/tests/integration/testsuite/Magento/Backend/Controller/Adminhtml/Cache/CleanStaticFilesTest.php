@@ -28,7 +28,7 @@ class CleanStaticFilesTest extends \Magento\TestFramework\TestCase\AbstractBacke
         $dirStatic->create($subStaticDir);
         $this->assertTrue($dirStatic->isExist($subStaticDir));
 
-        $dirVar= $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $dirVar = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $subVarDir = DirectoryList::TMP_MATERIALIZATION_DIR . '/subdir';
         $dirVar->create($subVarDir);
         $this->assertTrue($dirVar->isExist($subVarDir));

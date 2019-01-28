@@ -104,7 +104,7 @@ class CartItemProcessor implements CartItemProcessorInterface
             ? $cartItem->getProductOption()
             : $this->productOptionFactory->create();
 
-        $extensibleAttribute =  ($productOption->getExtensionAttributes())
+        $extensibleAttribute = ($productOption->getExtensionAttributes())
             ? $productOption->getExtensionAttributes()
             : $this->extensionFactory->create();
 

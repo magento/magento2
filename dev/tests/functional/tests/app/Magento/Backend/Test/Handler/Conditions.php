@@ -69,7 +69,7 @@ abstract class Conditions extends Curl
             'ALL' => 'all',
             'ANY' => 'any',
         ],
-        'attribute'=> [
+        'attribute' => [
             'total quantity' => 'qty',
         ],
     ];

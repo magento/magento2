@@ -18,8 +18,8 @@ class Field implements ElementBuilderInterface
         $elementPathParts = explode('/', $structureElement->getPath());
         return [
             'section' => $elementPathParts[0],
-            'group'   => $elementPathParts[1],
-            'field'   => $structureElement->getId(),
+            'group' => $elementPathParts[1],
+            'field' => $structureElement->getId(),
         ];
     }
 }

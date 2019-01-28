@@ -25,18 +25,18 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         $displayPriceExcludingTax
     ) {
 
-        $frameworkObject= new \Magento\Framework\DataObject();
+        $frameworkObject = new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
-        $product=$this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
 
-        $taxData=$this->createMock(\Magento\Tax\Helper\Data::class);
+        $taxData = $this->createMock(\Magento\Tax\Helper\Data::class);
         $taxData->expects($this->any())
             ->method('getCalculationAlgorithm')
             ->will($this->returnValue('TOTAL_BASE_CALCULATION'));
@@ -53,12 +53,12 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('displayPriceExcludingTax')
             ->will($this->returnValue($displayPriceExcludingTax));
 
-        $eventObject=$this->createPartialMock(\Magento\Framework\Event::class, ['getResponseObject']);
+        $eventObject = $this->createPartialMock(\Magento\Framework\Event::class, ['getResponseObject']);
         $eventObject->expects($this->any())
             ->method('getResponseObject')
             ->will($this->returnValue($frameworkObject));
 
-        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
+        $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $observerObject->expects($this->any())
             ->method('getEvent')

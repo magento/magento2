@@ -62,7 +62,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             [
                 'sessionConfig' => $this->configMock,
                 'cookieManager' => $this->cookieManagerMock,
-                'context'       => $context,
+                'context' => $context,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'request' => $this->createMock(\Magento\Framework\App\Request\Http::class),
                 'resource' => $resourceMock,

@@ -32,7 +32,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
 
         $changelog->expects($this->any())
             ->method('getList')
-            ->willReturn(range(0, $data['view']['changelog']['list_size']-1));
+            ->willReturn(range(0, $data['view']['changelog']['list_size'] - 1));
 
         /** @var \Magento\Indexer\Model\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject $stateMock */
         $stateMock = $this->getMockBuilder(\Magento\Indexer\Model\Mview\View\State::class)

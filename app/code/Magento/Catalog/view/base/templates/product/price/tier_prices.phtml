@@ -37,16 +37,16 @@ $product = $block->getSaleableItem();
                         'realPrice' => $block->renderAmount(
                             $price['price'],
                             [
-                                'price_id'          => $index,
-                                'id_suffix'         => '-' . $index,
+                                'price_id' => $index,
+                                'id_suffix' => '-' . $index,
                                 'include_container' => true
                             ]
                         ),
                         'msrpPrice' => $block->renderAmount(
                             $block->getPriceType('msrp_price')->getAmount(),
                             [
-                                'price_id'          => $index,
-                                'id_suffix'         => '-' . $index,
+                                'price_id' => $index,
+                                'id_suffix' => '-' . $index,
                                 'include_container' => true
                             ]
                         ),
@@ -64,8 +64,8 @@ $product = $block->getSaleableItem();
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],
                         [
-                            'price_id'          => $index,
-                            'id_suffix'         => '-' . $index,
+                            'price_id' => $index,
+                            'id_suffix' => '-' . $index,
                             'include_container' => true,
                             'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
                         ]

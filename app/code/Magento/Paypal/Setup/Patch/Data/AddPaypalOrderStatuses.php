@@ -78,7 +78,7 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
         $statuses = [
             'pending_paypal' => __('Pending PayPal'),
             'paypal_reversed' => __('PayPal Reversed'),
-            'paypal_canceled_reversal'  => __('PayPal Canceled Reversal'),
+            'paypal_canceled_reversal' => __('PayPal Canceled Reversal'),
         ];
         foreach ($statuses as $code => $info) {
             $data[] = ['status' => $code, 'label' => $info];

@@ -327,7 +327,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
             $data = [
                 'pageConfigStructure' => $this->getReaderContext()->getPageConfigStructure()->__toArray(),
-                'scheduledStructure'  => $this->getReaderContext()->getScheduledStructure()->__toArray(),
+                'scheduledStructure' => $this->getReaderContext()->getScheduledStructure()->__toArray(),
             ];
             $this->cache->save($this->serializer->serialize($data), $cacheId, $this->getUpdate()->getHandles());
         }

@@ -17,9 +17,9 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      * Constants defined for keys of array, makes typos less likely
      */
     const KEY_TAX_RATE_KEY = 'tax_rate_key';
-    const KEY_PERCENT      = 'percent';
-    const KEY_AMOUNT       = 'amount';
-    const KEY_RATES        = 'rates';
+    const KEY_PERCENT = 'percent';
+    const KEY_AMOUNT = 'amount';
+    const KEY_RATES = 'rates';
     /**#@-*/
 
     /**

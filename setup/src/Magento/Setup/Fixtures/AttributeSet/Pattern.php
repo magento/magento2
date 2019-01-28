@@ -46,9 +46,9 @@ class Pattern
             'attributes' => []
         ];
         for ($index = 1; $index <= $attributesPerSet; $index++) {
-            $attributeData =  $this->generateAttribute(
+            $attributeData = $this->generateAttribute(
                 $index,
-                is_array($optionsPerAttribute) ? $optionsPerAttribute[$index-1] : $optionsPerAttribute
+                is_array($optionsPerAttribute) ? $optionsPerAttribute[$index - 1] : $optionsPerAttribute
             );
             if (is_callable($attributePattern)) {
                 $attributeData = $attributePattern($index, $attributeData);

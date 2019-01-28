@@ -23,19 +23,19 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             [
                 'website_id' => 0,
                 'cust_group' => Group::NOT_LOGGED_IN_ID,
-                'price_qty'  => 2,
-                'price'      => 8,
+                'price_qty' => 2,
+                'price' => 8,
             ],
             [
                 'website_id' => 0,
                 'cust_group' => Group::CUST_GROUP_ALL,
-                'price_qty'  => 21,
-                'price'      => 81,
+                'price_qty' => 21,
+                'price' => 81,
             ],
             [
                 'website_id' => 0,
                 'cust_group' => Group::CUST_GROUP_ALL,
-                'price_qty'  => 30,
+                'price_qty' => 30,
                 'percentage_value' => 50,
             ],
         ]

@@ -34,14 +34,14 @@ $store = $objectManager->create(\Magento\Store\Model\Store::class)
     ->save();
 
 $entityTypeCode = 'catalog_product';
-$entityType     = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode($entityTypeCode);
-$defaultSetId   = $entityType->getDefaultAttributeSetId();
+$entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode($entityTypeCode);
+$defaultSetId = $entityType->getDefaultAttributeSetId();
 
 $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
 $data = [
-    'attribute_set_name'    => 'vinos',
-    'entity_type_id'        => $entityType->getId(),
-    'sort_order'            => 200,
+    'attribute_set_name' => 'vinos',
+    'entity_type_id' => $entityType->getId(),
+    'sort_order' => 200,
 ];
 $attributeSet->setData($data);
 

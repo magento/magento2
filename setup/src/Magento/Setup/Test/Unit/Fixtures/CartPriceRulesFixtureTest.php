@@ -154,17 +154,17 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);
         if ($ruleId < ($ruleCount - 200)) {
             $firstCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
-                'operator'  => '==',
-                'value'     => null,
+                'operator' => '==',
+                'value' => null,
             ];
 
             $secondCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
-                'operator'  => '>=',
-                'value'     => 5,
+                'operator' => '>=',
+                'value' => 5,
             ];
             $expected = [
                 'conditions' => [
@@ -174,7 +174,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
                         'value' => '1',
                         'new_child' => '',
                     ],
-                    '1--1'=> [
+                    '1--1' => [
                         'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                         'aggregator' => 'all',
                         'value' => '1',
@@ -203,17 +203,17 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
                         'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
                         'Wisconsin', 'Wyoming'];
             $firstCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'region',
-                'operator'  => '==',
-                'value'     => $regions[($ruleId / 4) % 50],
+                'operator' => '==',
+                'value' => $regions[($ruleId / 4) % 50],
             ];
 
             $secondCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
-                'operator'  => '>=',
-                'value'     => 5,
+                'operator' => '>=',
+                'value' => 5,
             ];
             $expected = [
                 'conditions' => [

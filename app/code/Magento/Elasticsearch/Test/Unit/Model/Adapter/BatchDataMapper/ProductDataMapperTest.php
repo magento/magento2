@@ -294,7 +294,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                         ['value' => '2', 'label' => 'Disabled'],
                     ],
                 ],
-                [10  => '1', 11 => '2'],
+                [10 => '1', 11 => '2'],
                 ['status' => '1'],
             ],
             'select without options' => [

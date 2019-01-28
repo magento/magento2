@@ -29,10 +29,10 @@ class CollectionTest extends AbstractCollectionTest
     {
         parent::setUp();
 
-        $this->storeManagerMock  = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->metadataPoolMock  = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 

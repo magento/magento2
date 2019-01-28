@@ -18,7 +18,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_ID   = 'class_id';
+    const KEY_ID = 'class_id';
     const KEY_NAME = 'class_name';
     const KEY_TYPE = 'class_type';
     /**#@-*/

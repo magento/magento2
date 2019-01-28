@@ -64,7 +64,7 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
     public function constructorExceptionDataProvider()
     {
         return [
-            'numerical keys'   => [['css', 'less']],
+            'numerical keys' => [['css', 'less']],
             'non-array values' => [['css' => 'less']],
         ];
     }

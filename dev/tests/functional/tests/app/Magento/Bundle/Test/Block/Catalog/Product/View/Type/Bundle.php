@@ -246,7 +246,7 @@ class Bundle extends Block
      */
     protected function getCheckboxData(SimpleElement $option)
     {
-        $data =  $this->getRadiobuttonsData($option);
+        $data = $this->getRadiobuttonsData($option);
 
         foreach ($data['options'] as $key => $option) {
             $option['title'] = trim(preg_replace('/^[\d]+ x/', '', $option['title']));

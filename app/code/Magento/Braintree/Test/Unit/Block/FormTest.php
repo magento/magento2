@@ -82,7 +82,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'sessionQuote' => $this->sessionQuoteMock,
             'gatewayConfig' => $this->gatewayConfigMock,
             'ccType' => $this->ccTypeMock,
-            'paymentDataHelper' =>$this->paymentDataHelperMock,
+            'paymentDataHelper' => $this->paymentDataHelperMock,
         ]);
     }
 

@@ -327,7 +327,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
 
-        $quote =  $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);
+        $quote = $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);
         /** @var \Magento\Checkout\Controller\Cart\Add $controller */
         $controller = $this->_objectManager->create(\Magento\Checkout\Controller\Cart\Add::class, [$quote]);
         $controller->execute();

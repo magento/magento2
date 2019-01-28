@@ -69,7 +69,7 @@ class InputObjectType extends \Magento\Framework\GraphQl\Schema\Type\InputObject
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),
                 'type' => $type,
-                'description'=> $field->getDescription()
+                'description' => $field->getDescription()
             ];
         }
         parent::__construct($config);

@@ -85,7 +85,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
 
         $weeeHelper = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
-            ->setConstructorArgs(['serializer'  => $this->serializerMock])
+            ->setConstructorArgs(['serializer' => $this->serializerMock])
             ->disableOriginalConstructor()
             ->getMock();
 

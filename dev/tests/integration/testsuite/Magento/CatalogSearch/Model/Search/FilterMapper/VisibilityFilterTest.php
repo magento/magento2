@@ -196,7 +196,7 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
 
     private function mockAttribute()
     {
-        $attribute  = $this->getMockBuilder(AbstractAttribute::class)
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();

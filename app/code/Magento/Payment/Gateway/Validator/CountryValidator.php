@@ -52,7 +52,7 @@ class CountryValidator extends AbstractValidator
             );
 
             if (!in_array($validationSubject['country'], $availableCountries)) {
-                $isValid =  false;
+                $isValid = false;
             }
         }
 

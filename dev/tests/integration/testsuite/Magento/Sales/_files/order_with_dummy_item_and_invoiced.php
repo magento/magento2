@@ -9,25 +9,25 @@ require 'order.php';
 
 $orderItems = [
     [
-        \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_ID   => 2,
-        \Magento\Sales\Api\Data\OrderItemInterface::BASE_PRICE   => 100,
-        \Magento\Sales\Api\Data\OrderItemInterface::ORDER_ID     => $order->getId(),
-        \Magento\Sales\Api\Data\OrderItemInterface::QTY_ORDERED  => 2,
+        \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_ID => 2,
+        \Magento\Sales\Api\Data\OrderItemInterface::BASE_PRICE => 100,
+        \Magento\Sales\Api\Data\OrderItemInterface::ORDER_ID => $order->getId(),
+        \Magento\Sales\Api\Data\OrderItemInterface::QTY_ORDERED => 2,
         \Magento\Sales\Api\Data\OrderItemInterface::QTY_INVOICED => 2,
-        \Magento\Sales\Api\Data\OrderItemInterface::PRICE        => 100,
-        \Magento\Sales\Api\Data\OrderItemInterface::ROW_TOTAL    => 102,
+        \Magento\Sales\Api\Data\OrderItemInterface::PRICE => 100,
+        \Magento\Sales\Api\Data\OrderItemInterface::ROW_TOTAL => 102,
         \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_TYPE => 'bundle',
-        'children'                                               => [
+        'children' => [
             [
-                \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_ID   => 13,
-                \Magento\Sales\Api\Data\OrderItemInterface::ORDER_ID     => $order->getId(),
-                \Magento\Sales\Api\Data\OrderItemInterface::QTY_ORDERED  => 2,
+                \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_ID => 13,
+                \Magento\Sales\Api\Data\OrderItemInterface::ORDER_ID => $order->getId(),
+                \Magento\Sales\Api\Data\OrderItemInterface::QTY_ORDERED => 2,
                 \Magento\Sales\Api\Data\OrderItemInterface::QTY_INVOICED => 2,
-                \Magento\Sales\Api\Data\OrderItemInterface::BASE_PRICE   => 90,
-                \Magento\Sales\Api\Data\OrderItemInterface::PRICE        => 90,
-                \Magento\Sales\Api\Data\OrderItemInterface::ROW_TOTAL    => 92,
+                \Magento\Sales\Api\Data\OrderItemInterface::BASE_PRICE => 90,
+                \Magento\Sales\Api\Data\OrderItemInterface::PRICE => 90,
+                \Magento\Sales\Api\Data\OrderItemInterface::ROW_TOTAL => 92,
                 \Magento\Sales\Api\Data\OrderItemInterface::PRODUCT_TYPE => 'simple',
-                'product_options'                                        => [
+                'product_options' => [
                     'bundle_selection_attributes' => '{"qty":2}',
                 ],
             ]

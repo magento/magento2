@@ -187,10 +187,10 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
                     UiComponent::TYPE,
                     [
                         'attributes' => [
-                            'group'   => 'new_group',
+                            'group' => 'new_group',
                             'component' => 'component_name',
                         ],
-                        'arguments'  => [
+                        'arguments' => [
                             'attribute_1' => ['key_1' => 'value_1'],
                             'attribute_2' => ['key_2' => 'value_2'],
                         ]

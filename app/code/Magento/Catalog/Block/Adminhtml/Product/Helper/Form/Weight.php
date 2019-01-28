@@ -125,7 +125,7 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         }
 
         if ($this->getEntityAttribute()) {
-            $format= $this->localeFormat->getPriceFormat();
+            $format = $this->localeFormat->getPriceFormat();
             $value = number_format($value, $format['precision'], $format['decimalSymbol'], $format['groupSymbol']);
         } else {
             // default format:  1234.56

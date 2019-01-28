@@ -13,43 +13,43 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $creditMemos = [
     [
         'store_id' => 1,
-        'grand_total' =>  280.00,
+        'grand_total' => 280.00,
         'order_id' => $order->getId(),
         'email_sent' => 0,
         'send_email' => 0,
         'increment_id' => '123',
         'creditmemo_status' => 1,
-        'state'     => 1
+        'state' => 1
     ],
     [
         'store_id' => 1,
-        'grand_total' =>  450.00,
+        'grand_total' => 450.00,
         'order_id' => $order->getId(),
         'email_sent' => 1,
         'send_email' => 1,
         'increment_id' => '456',
         'creditmemo_status' => 1,
-        'state'     => 1
+        'state' => 1
     ],
     [
         'store_id' => 1,
-        'grand_total' =>  10.00,
+        'grand_total' => 10.00,
         'order_id' => $order->getId(),
         'email_sent' => 1,
         'send_email' => 1,
         'increment_id' => '789',
         'creditmemo_status' => 0,
-        'state'     => 1
+        'state' => 1
     ],
     [
         'store_id' => 1,
-        'grand_total' =>  1110.00,
+        'grand_total' => 1110.00,
         'order_id' => $order->getId(),
         'email_sent' => 1,
         'increment_id' => '012',
         'send_email' => 1,
         'creditmemo_status' => 1,
-        'state'     => 0
+        'state' => 0
     ],
 ];
 

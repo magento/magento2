@@ -112,9 +112,9 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         /** @var \Magento\Framework\View\Asset\LocalInterface $asset */
         foreach ($this->getFiles() as $fileId => $asset) {
             $links[$fileId] = [
-                'href'      => $this->getDownloadUrl($fileId, $this->_getCurrentTheme()->getId()),
-                'label'     => $fileId,
-                'title'     => $asset->getPath(),
+                'href' => $this->getDownloadUrl($fileId, $this->_getCurrentTheme()->getId()),
+                'label' => $fileId,
+                'title' => $asset->getPath(),
                 'delimiter' => '<br />',
             ];
         }
@@ -122,9 +122,9 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             'theme_css_view_assets',
             'links',
             [
-                'label'  => __('Theme CSS Assets'),
-                'title'  => __('Theme CSS Assets'),
-                'name'   => 'links',
+                'label' => __('Theme CSS Assets'),
+                'title' => __('Theme CSS Assets'),
+                'name' => 'links',
                 'values' => $links,
             ]
         );

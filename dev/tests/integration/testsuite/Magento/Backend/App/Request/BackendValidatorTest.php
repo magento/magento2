@@ -134,7 +134,7 @@ class BackendValidatorTest extends TestCase
                 parent::__construct(
                     Bootstrap::getObjectManager()->get(Context::class)
                 );
-                $this->locationValue= $locationValue;
+                $this->locationValue = $locationValue;
                 $this->param = $param;
             }
 

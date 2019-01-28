@@ -148,7 +148,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
         $valuesMap = [
             ['configurable_products', 0, 1],
             ['simple_products', 0, 1],
-            ['search_terms', null, ['search_term' =>[['term' => 'iphone 6', 'count' => '1']]]],
+            ['search_terms', null, ['search_term' => [['term' => 'iphone 6', 'count' => '1']]]],
             ['configurable_products_variation', 3, 1],
             [
                 'search_config',

@@ -19,9 +19,9 @@
     <?php if ($block->canEditQty()) : ?>
         <input type="text" class="input-text admin__control-text qty-input"
                name="invoice[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
-               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"/>
+               value="<?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>"/>
     <?php else : ?>
-        <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+        <?= /* @escapeNotVerified */ $_item->getQty() * 1 ?>
     <?php endif; ?>
     </td>
     <td class="col-subtotal">

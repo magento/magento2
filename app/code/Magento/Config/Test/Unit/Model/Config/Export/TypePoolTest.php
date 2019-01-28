@@ -102,7 +102,7 @@ class TypePoolTest extends \PHPUnit\Framework\TestCase
                 'environmentFieldList' => ['some/environment/field1' => '1'],
                 'field' => 'some/environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
-                'excludeListCallback' =>  function (MockObject $mockObject) {
+                'excludeListCallback' => function (MockObject $mockObject) {
                     $mockObject->expects($this->once())
                         ->method('isPresent')
                         ->willReturn(false);
@@ -114,7 +114,7 @@ class TypePoolTest extends \PHPUnit\Framework\TestCase
                 'environmentFieldList' => ['some/sensitive-environment/field1' => '1'],
                 'field' => 'some/sensitive-environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
-                'excludeListCallback' =>  function (MockObject $mockObject) {
+                'excludeListCallback' => function (MockObject $mockObject) {
                     $mockObject->expects($this->never())
                         ->method('isPresent');
                 },

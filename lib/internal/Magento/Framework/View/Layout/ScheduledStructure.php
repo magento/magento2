@@ -17,7 +17,7 @@ class ScheduledStructure
      */
     const ELEMENT_NAME = 'elementName';
     const ELEMENT_PARENT_NAME = 'parentName';
-    const ELEMENT_OFFSET_OR_SIBLING  = 'offsetOrSibling';
+    const ELEMENT_OFFSET_OR_SIBLING = 'offsetOrSibling';
     const ELEMENT_IS_AFTER = 'isAfter';
     /**#@-*/
 

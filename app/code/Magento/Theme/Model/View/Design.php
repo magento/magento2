@@ -274,7 +274,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         $params = [
             'area' => $this->getArea(),
             'themeModel' => $this->getDesignTheme(),
-            'locale'     => $this->getLocale(),
+            'locale' => $this->getLocale(),
         ];
 
         return $params;

@@ -835,7 +835,7 @@ class Config extends AbstractConfig
     public function getPayPalBasicStartUrl($token)
     {
         $params = [
-            'cmd'   => '_express-checkout',
+            'cmd' => '_express-checkout',
             'token' => $token,
         ];
 

@@ -28,7 +28,7 @@ store name = $_order->getStore()->getGroup()->getName()
 
     <tbody>
 <?php $i = 0; foreach ($_order->getAllItems() as $_item): $i++ ?>
-        <tr <?= $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
+        <tr <?= $i % 2 ? 'bgcolor="#eeeded"' : '' ?>>
             <td align="left" valign="top" style="padding:3px 9px"><strong><?= $block->escapeHtml($_item->getName()) ?></strong>
             <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
             <br /><strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>
@@ -37,7 +37,7 @@ store name = $_order->getStore()->getGroup()->getName()
             <br /><?= /* @escapeNotVerified */ __('Message:') ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             <?php endif; ?>
             </td>
-            <td align="center" valign="top" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
+            <td align="center" valign="top" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_item->getQtyOrdered() * 1 ?></td>
             <td align="right" valign="top" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice($_item->getRowTotal()) ?></td>
         </tr>
 <?php endforeach ?>

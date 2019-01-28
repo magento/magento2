@@ -89,7 +89,7 @@ class Authentication implements AuthenticationInterface
     {
         $now = new \DateTime();
         $lockThreshold = $this->getLockThreshold();
-        $maxFailures =  $this->getMaxFailures();
+        $maxFailures = $this->getMaxFailures();
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
 
         if (!($lockThreshold && $maxFailures)) {

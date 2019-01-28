@@ -29,7 +29,7 @@ class CommandRendererTest extends \PHPUnit\Framework\TestCase
      */
     public function commandsDataProvider()
     {
-        $testArgument  = 'argument';
+        $testArgument = 'argument';
         $testArgument2 = 'argument2';
 
         $expectedCommand = "php -r %s 2>&1 | grep %s 2>&1";

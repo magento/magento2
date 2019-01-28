@@ -60,7 +60,7 @@ class Base extends AbstractCurrency
             );
         }
 
-        $this->currencyFactory->create()->saveRates([$value =>[$value => 1]]);
+        $this->currencyFactory->create()->saveRates([$value => [$value => 1]]);
         return parent::afterSave();
     }
 }

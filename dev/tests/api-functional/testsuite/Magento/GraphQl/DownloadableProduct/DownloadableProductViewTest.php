@@ -255,7 +255,7 @@ QUERY;
             $actualResponse['downloadable_product_samples'][0],
             [
                 'title' => $downloadableProductSample->getTitle(),
-                'sort_order' =>$downloadableProductSample->getSortOrder(),
+                'sort_order' => $downloadableProductSample->getSortOrder(),
                 'sample_type' => strtoupper($downloadableProductSample->getSampleType()),
                 'sample_file' => $downloadableProductSample->getSampleFile()
             ]

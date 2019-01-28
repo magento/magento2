@@ -69,7 +69,7 @@ class TierPrice extends AbstractModifier
             'children'
         );
         if ($tierPricePath) {
-            $pricePath =  $this->arrayManager->findPath(
+            $pricePath = $this->arrayManager->findPath(
                 ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE,
                 $meta,
                 $tierPricePath

@@ -58,31 +58,31 @@
             <?php if ($_item->getQtyOrdered() > 0): ?>
                 <li class="item">
                     <span class="title"><?= /* @escapeNotVerified */ __('Ordered') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyOrdered() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
                 <li class="item">
                     <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyCanceled() > 0): ?>
                 <li class="item">
                     <span class="title"><?= /* @escapeNotVerified */ __('Canceled') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyCanceled() * 1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyRefunded() > 0): ?>
                 <li class="item">
                     <span class="title"><?= /* @escapeNotVerified */ __('Refunded') ?></span>
-                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyRefunded() * 1 ?></span>
                 </li>
             <?php endif; ?>
         <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately()): ?>
             <li class="item">
                 <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
-                <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped() * 1 ?></span>
             </li>
         <?php else: ?>
             &nbsp;

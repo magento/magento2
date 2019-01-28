@@ -121,7 +121,7 @@ class ModuleStatus
         $enabledModules = [];
         foreach ($this->allModules as $module) {
             if ($module['selected']) {
-                $enabledModules[] =  $module['name'];
+                $enabledModules[] = $module['name'];
             }
         }
         return $enabledModules;

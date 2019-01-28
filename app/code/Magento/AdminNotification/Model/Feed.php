@@ -93,12 +93,12 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_backendConfig    = $backendConfig;
-        $this->_inboxFactory     = $inboxFactory;
-        $this->curlFactory       = $curlFactory;
+        $this->_backendConfig = $backendConfig;
+        $this->_inboxFactory = $inboxFactory;
+        $this->curlFactory = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
-        $this->productMetadata   = $productMetadata;
-        $this->urlBuilder        = $urlBuilder;
+        $this->productMetadata = $productMetadata;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -205,11 +205,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $curl = $this->curlFactory->create();
         $curl->setConfig(
             [
-                'timeout'   => 2,
+                'timeout' => 2,
                 'useragent' => $this->productMetadata->getName()
                     . '/' . $this->productMetadata->getVersion()
                     . ' (' . $this->productMetadata->getEdition() . ')',
-                'referer'   => $this->urlBuilder->getUrl('*/*/*')
+                'referer' => $this->urlBuilder->getUrl('*/*/*')
             ]
         );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');

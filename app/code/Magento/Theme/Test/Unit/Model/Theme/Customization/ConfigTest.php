@@ -12,7 +12,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetFileTypes()
     {
         $expected = [
-            'key'  => 'value',
+            'key' => 'value',
             'key1' => 'value1',
         ];
         $config = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getMock();

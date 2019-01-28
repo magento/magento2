@@ -122,7 +122,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             [
                 'config' => [
                     'isActive' => true,
-                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
+                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                     'getSdkUrl' => self::SDK_URL,
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
@@ -145,7 +145,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
-                            'countrySpecificCardTypes' =>[
+                            'countrySpecificCardTypes' => [
                                 'GB' => ['VI', 'AE'],
                                 'US' => ['DI', 'JCB']
                             ],

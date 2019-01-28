@@ -87,7 +87,7 @@ class EditCurrencyCustomWebsiteTest extends Injectable
             [
                 'data' => [
                     'currency/options/allow' => [
-                        'value' =>  $currencies[0]['allowedCurrencies']
+                        'value' => $currencies[0]['allowedCurrencies']
                     ],
                     'currency/options/base' => [
                         'value' => $currencies[0]['baseCurrency']

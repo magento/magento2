@@ -187,7 +187,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helper);
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->_session);
         $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
-        $viewMock =  $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)->getMock();
+        $viewMock = $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)->getMock();
         $viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
         $contextMock->expects($this->any())->method('getView')->willReturn($viewMock);
         $contextMock->expects($this->any())

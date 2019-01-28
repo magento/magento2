@@ -193,24 +193,24 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             $tierPrices[] = $tierPrice['price']->getValue();
         }
         $config = [
-            'productId'   => $product->getId(),
+            'productId' => $product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'prices'      => [
-                'oldPrice'   => [
-                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
                     'adjustments' => []
                 ],
-                'basePrice'  => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
+                'basePrice' => [
+                    'amount' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+                    'amount' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
                     'adjustments' => []
                 ]
             ],
-            'idSuffix'    => '_clone',
-            'tierPrices'  => $tierPrices
+            'idSuffix' => '_clone',
+            'tierPrices' => $tierPrices
         ];
 
         $responseObject = new \Magento\Framework\DataObject();

@@ -75,8 +75,8 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->objectManager->getObject(
             Identifier::class,
             [
-                'request'    => $this->requestMock,
-                'context'    => $this->contextMock,
+                'request' => $this->requestMock,
+                'context' => $this->contextMock,
                 'serializer' => $this->serializerMock,
             ]
         );

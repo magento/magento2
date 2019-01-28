@@ -63,7 +63,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
     private function getValidator()
     {
         if (null === $this->validator) {
-            $this->validator =\Magento\Framework\App\ObjectManager::getInstance()->get(
+            $this->validator = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Theme\Model\Design\Config\Validator::class
             );
         }

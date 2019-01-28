@@ -75,7 +75,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->serverArray = $_SERVER;
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->pathInfo =  $this->objectManager->getObject(\Magento\Framework\App\Request\PathInfo::class);
+        $this->pathInfo = $this->objectManager->getObject(\Magento\Framework\App\Request\PathInfo::class);
     }
 
     public function tearDown()

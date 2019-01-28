@@ -93,7 +93,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($links);
         $samples = $this->_model->getSamples($product);
         $this->assertNotEmpty($samples->getData());
-        $i=0;
+        $i = 0;
         foreach ($links as $link) {
             $i++;
             $linkData = $link->getData();
@@ -102,7 +102,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             $linkData['title'] = 'Updated downloadable link #' . $i;
             $downloadableData['link'][] = $linkData;
         }
-        $i=0;
+        $i = 0;
         foreach ($samples as $sample) {
             $i++;
             $sampleData = $sample->getData();
@@ -232,7 +232,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     public function testCheckProductBuyState()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository =$this->objectManager->create(
+        $productRepository = $this->objectManager->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $product = $productRepository->get('downloadable-product');

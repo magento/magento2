@@ -41,7 +41,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
         $indexerRegistry = $this->objectManager->create(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
+        $this->indexer = $indexerRegistry->get('catalogsearch_fulltext');
 
         $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->connectionMock = $this->resource->getConnection();

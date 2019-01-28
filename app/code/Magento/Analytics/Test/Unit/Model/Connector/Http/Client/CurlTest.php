@@ -96,7 +96,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
             [
                 'data' => [
                     'version' => '1.1',
-                    'body'=> ['name' => 'value'],
+                    'body' => ['name' => 'value'],
                     'url' => 'http://www.mystore.com',
                     'method' => \Magento\Framework\HTTP\ZendClient::POST,
                 ]

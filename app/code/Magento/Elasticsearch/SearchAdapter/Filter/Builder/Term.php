@@ -33,7 +33,7 @@ class Term implements FilterInterface
         $filterQuery = [];
         if ($filter->getValue()) {
             $operator = is_array($filter->getValue()) ? 'terms' : 'term';
-            $filterQuery []= [
+            $filterQuery [] = [
                 $operator => [
                     $this->fieldMapper->getFieldName($filter->getField()) => $filter->getValue(),
                 ],

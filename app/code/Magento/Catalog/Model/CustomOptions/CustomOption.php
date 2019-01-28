@@ -70,7 +70,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
      */
     public function getOptionValue()
     {
-        $value =  $this->getData(self::OPTION_VALUE);
+        $value = $this->getData(self::OPTION_VALUE);
         if ($value == 'file') {
             /** @var \Magento\Framework\Api\Data\ImageContentInterface $fileInfo */
             $imageContent = $this->getExtensionAttributes()

@@ -85,7 +85,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         UserContextInterface $userContext = null
     ) {
         $this->entityManager = $entityManager;
-        $this->bulkSummaryFactory= $bulkSummaryFactory;
+        $this->bulkSummaryFactory = $bulkSummaryFactory;
         $this->operationCollectionFactory = $operationCollectionFactory;
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;

@@ -323,7 +323,7 @@ class SaveTest extends AttributeTest
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($this->redirectMock);
-        $response  = array_merge($response, [
+        $response = array_merge($response, [
             'messages' => ['message1'],
             'params' => $params,
         ]);

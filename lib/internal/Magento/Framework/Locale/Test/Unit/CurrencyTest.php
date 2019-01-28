@@ -58,9 +58,9 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->getObject(
                 \Magento\Framework\Locale\Currency::class,
                 [
-                    'eventManager'     => $this->mockEventManager,
-                    'localeResolver'   => $this->mockLocaleResolver,
-                    'currencyFactory'  => $this->mockCurrencyFactory,
+                    'eventManager' => $this->mockEventManager,
+                    'localeResolver' => $this->mockLocaleResolver,
+                    'currencyFactory' => $this->mockCurrencyFactory,
                 ]
             );
     }

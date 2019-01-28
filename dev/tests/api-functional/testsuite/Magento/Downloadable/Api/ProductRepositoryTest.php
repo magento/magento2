@@ -44,7 +44,7 @@ class ProductRepositoryTest extends WebapiAbstract
         return [
             'link1' => [
                 'title' => "link1",
-                'sort_order'=> 10,
+                'sort_order' => 10,
                 'is_shareable' => 1,
                 'price' => 2.0,
                 'number_of_downloads' => 0,
@@ -61,7 +61,7 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
             'link2' => [
                 'title' => 'link2',
-                'sort_order'=> 20,
+                'sort_order' => 20,
                 'is_shareable' => 0,
                 'price' => 3.0,
                 'number_of_downloads' => 100,
@@ -151,7 +151,7 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $response =  $this->createProduct($product);
+        $response = $this->createProduct($product);
         $this->assertEquals(self::PRODUCT_SKU, $response[ProductInterface::SKU]);
         $this->assertEquals(10, $response['price']);
         $this->assertEquals(
@@ -606,7 +606,7 @@ class ProductRepositoryTest extends WebapiAbstract
     protected function saveProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            for ($i = 0; $i < sizeof($product['custom_attributes']); $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {

@@ -28,7 +28,7 @@ $payment = $objectManager->create(Payment::class);
 $payment->setMethod('checkmo')
     ->setAdditionalInformation([
         'token_metadata' => [
-            'token'       => 'f34vjw',
+            'token' => 'f34vjw',
             'customer_id' => 1,
         ],
     ]);

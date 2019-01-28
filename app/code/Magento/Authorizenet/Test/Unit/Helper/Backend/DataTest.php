@@ -48,9 +48,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Authorizenet\Helper\Backend\Data::class,
             [
                 'context' => $contextMock,
-                'storeManager' =>$this->storeManagerMock,
-                'orderFactory' =>$this->orderFactoryMock,
-                'backendUrl' =>$this->urlBuilderMock
+                'storeManager' => $this->storeManagerMock,
+                'orderFactory' => $this->orderFactoryMock,
+                'backendUrl' => $this->urlBuilderMock
             ]
         );
     }

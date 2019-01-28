@@ -89,7 +89,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeDispatch()
     {
-        $customerGroupId =1;
+        $customerGroupId = 1;
 
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);

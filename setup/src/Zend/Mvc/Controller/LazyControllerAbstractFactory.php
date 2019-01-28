@@ -87,16 +87,16 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * @var string[]
      */
     protected $aliases = [
-        ConsoleAdapterInterface::class  => 'ConsoleAdapter',
-        FilterPluginManager::class      => 'FilterManager',
-        HydratorPluginManager::class    => 'HydratorManager',
+        ConsoleAdapterInterface::class => 'ConsoleAdapter',
+        FilterPluginManager::class => 'FilterManager',
+        HydratorPluginManager::class => 'HydratorManager',
         InputFilterPluginManager::class => 'InputFilterManager',
-        LogFilterManager::class         => 'LogFilterManager',
-        LogFormatterManager::class      => 'LogFormatterManager',
-        LogProcessorManager::class      => 'LogProcessorManager',
-        LogWriterManager::class         => 'LogWriterManager',
+        LogFilterManager::class => 'LogFilterManager',
+        LogFormatterManager::class => 'LogFormatterManager',
+        LogProcessorManager::class => 'LogProcessorManager',
+        LogWriterManager::class => 'LogWriterManager',
         SerializerAdapterManager::class => 'SerializerAdapterManager',
-        ValidatorPluginManager::class   => 'ValidatorManager',
+        ValidatorPluginManager::class => 'ValidatorManager',
     ];
 
     /**

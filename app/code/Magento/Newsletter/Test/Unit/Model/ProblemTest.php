@@ -127,7 +127,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
     public function testAddQueueData()
     {
         $queueId = 1;
-        $queueMock =  $this->getMockBuilder(Queue::class)
+        $queueMock = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()
             ->getMock();
         $queueMock->expects($this->once())

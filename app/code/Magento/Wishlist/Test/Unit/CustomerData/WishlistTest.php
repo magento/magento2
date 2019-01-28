@@ -286,7 +286,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $items = [$itemMock, $itemMock];
 
         $result = [
-            'counter' =>  __('%1 items', count($items)),
+            'counter' => __('%1 items', count($items)),
             'items' => [
                 [
                     'image' => [
@@ -466,7 +466,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $items = [];
 
         $result = [
-            'counter' =>  null,
+            'counter' => null,
             'items' => [],
         ];
 

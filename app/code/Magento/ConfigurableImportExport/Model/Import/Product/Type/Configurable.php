@@ -577,7 +577,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
                     // Ignoring field names' case.
-                    $fieldName  = strtolower(trim($nameAndValue[0]));
+                    $fieldName = strtolower(trim($nameAndValue[0]));
                     if ($fieldName) {
                         $fieldAndValuePairs[$fieldName] = $value;
                     }
@@ -637,7 +637,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
             if (!empty($nameAndValue)) {
                 $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                $attrCode  = trim($nameAndValue[0]);
+                $attrCode = trim($nameAndValue[0]);
                 if ($attrCode) {
                     $labels[$attrCode] = $value;
                 }

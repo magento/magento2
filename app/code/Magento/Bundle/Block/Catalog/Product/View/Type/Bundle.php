@@ -208,7 +208,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
         //pass the return array encapsulated in an object for the other modules to be able to alter it eg: weee
         $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['configObj' => $configObj]);
-        $config=$configObj->getConfig();
+        $config = $configObj->getConfig();
 
         if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;

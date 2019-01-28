@@ -73,7 +73,7 @@ class Stock
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->stockStatusFactory  = $stockStatusFactory;
+        $this->stockStatusFactory = $stockStatusFactory;
         $this->stockRegistryProvider = $stockRegistryProvider;
     }
 

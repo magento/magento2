@@ -86,7 +86,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setData(
             [
-                'id'   => 1000,
+                'id' => 1000,
                 'name' => 'Test Name'
             ]
         );

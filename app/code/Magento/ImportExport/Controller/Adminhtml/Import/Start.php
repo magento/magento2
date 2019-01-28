@@ -97,7 +97,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
                 $noticeHtml = $this->historyModel->getSummary();
 
                 if ($this->historyModel->getErrorFile()) {
-                    $noticeHtml .=  '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
+                    $noticeHtml .= '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
                                     . '<a href="'
                                     . $this->createDownloadUrlImportHistoryFile($this->historyModel->getErrorFile())
                                     . '">' . __('Download full report') . '</a></div>';

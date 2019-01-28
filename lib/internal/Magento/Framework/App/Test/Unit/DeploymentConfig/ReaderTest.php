@@ -93,7 +93,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->will($this->returnValueMap($files));
         $object = new Reader($this->dirList, $this->driverPool, $this->configFilePool);
-        $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
+        $this->assertSame(['fooKey' => 'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
     }
 
     /**

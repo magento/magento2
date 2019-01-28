@@ -18,7 +18,7 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
      * Constants defined for keys of array, makes typos less likely
      */
     const PERCENT = 'percent';
-    const TITLE   = 'title';
+    const TITLE = 'title';
     /**#@-*/
 
     /**

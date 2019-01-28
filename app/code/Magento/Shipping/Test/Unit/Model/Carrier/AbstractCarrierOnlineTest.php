@@ -66,7 +66,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
         $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(function ($key) {
             $configData = [
                 'max_package_weight' => 10,
-                'showmethod'         => 1,
+                'showmethod' => 1,
             ];
             return isset($configData[$key]) ? $configData[$key] : 0;
         }));

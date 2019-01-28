@@ -29,7 +29,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->scopeConfigMock =  $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

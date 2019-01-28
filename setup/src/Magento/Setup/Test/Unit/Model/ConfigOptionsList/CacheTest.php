@@ -96,7 +96,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $configData = $this->configOptionsList->createConfig(['cache-backend'=>'redis'], $this->deploymentConfigMock);
+        $configData = $this->configOptionsList->createConfig(['cache-backend' => 'redis'], $this->deploymentConfigMock);
 
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
@@ -193,7 +193,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
-            ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=>''])
+            ->with(['host' => 'localhost', 'db' => '', 'port' => '', 'password' => ''])
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);

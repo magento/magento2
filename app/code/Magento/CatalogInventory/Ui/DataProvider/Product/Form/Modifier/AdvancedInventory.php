@@ -152,7 +152,7 @@ class AdvancedInventory extends AbstractModifier
         $result[StockItemInterface::MIN_SALE_QTY] = (float)$stockItem->getMinSaleQty();
         $result[StockItemInterface::MAX_SALE_QTY] = (float)$stockItem->getMaxSaleQty();
         $result[StockItemInterface::IS_QTY_DECIMAL] = (int)$stockItem->getIsQtyDecimal();
-        $result[StockItemInterface::IS_DECIMAL_DIVIDED]= (int)$stockItem->getIsDecimalDivided();
+        $result[StockItemInterface::IS_DECIMAL_DIVIDED] = (int)$stockItem->getIsDecimalDivided();
         $result[StockItemInterface::BACKORDERS] = (int)$stockItem->getBackorders();
         $result[StockItemInterface::NOTIFY_STOCK_QTY] = (float)$stockItem->getNotifyStockQty();
         $result[StockItemInterface::ENABLE_QTY_INCREMENTS] = (int)$stockItem->getEnableQtyIncrements();

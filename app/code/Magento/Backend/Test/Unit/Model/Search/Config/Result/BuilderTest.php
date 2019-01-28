@@ -63,11 +63,11 @@ class BuilderTest extends TestCase
 
         $expectedSearchResult = [
             [
-                'id'          => $structureElementPath,
-                'type'        => null,
-                'name'        => 'Section Label',
+                'id' => $structureElementPath,
+                'type' => null,
+                'name' => 'Section Label',
                 'description' => 'Section Label',
-                'url'         => 'http://example.com',
+                'url' => 'http://example.com',
             ],
         ];
 

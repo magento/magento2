@@ -441,7 +441,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
+                'expectedObject' => $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
             ],
             'customAttributeIntegerCamelCaseCode' => [
                 'customAttributeType' => 'integer',
@@ -455,7 +455,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
+                'expectedObject' => $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
             ],
             'customAttributeObject' => [
                 'customAttributeType' => \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray::class,
@@ -466,7 +466,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('SimpleArray', ['ids' => [1, 2, 3, 4]]),
+                'expectedObject' => $this->getObjectWithCustomAttributes('SimpleArray', ['ids' => [1, 2, 3, 4]]),
             ],
             'customAttributeArrayOfObjects' => [
                 'customAttributeType' => 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]',
@@ -480,7 +480,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('Simple[]', [
+                'expectedObject' => $this->getObjectWithCustomAttributes('Simple[]', [
                     ['entityId' => 14, 'name' => 'First'],
                     ['entityId' => 15, 'name' => 'Second'],
                 ]),
