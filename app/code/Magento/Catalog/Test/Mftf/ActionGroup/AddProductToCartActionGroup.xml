@@ -27,6 +27,7 @@
         <waitForElementNotVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
 
