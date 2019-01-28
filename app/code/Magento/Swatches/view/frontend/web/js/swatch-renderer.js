@@ -667,10 +667,9 @@ define([
         /**
          * Load media gallery using ajax or json config.
          *
-         * @param {String|undefined} eventName
          * @private
          */
-        _loadMedia: function (eventName) {
+        _loadMedia: function () {
             var $main = this.inProductList ?
                     this.element.parents('.product-item-info') :
                     this.element.parents('.column.main'),
@@ -685,8 +684,19 @@ define([
                     images = this.options.mediaGalleryInitial;
                 }
 
-                this.updateBaseImage(images, $main, !this.inProductList, eventName);
+                this.updateBaseImage(this._sortImages(images), $main, !this.inProductList);
             }
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -1020,12 +1030,8 @@ define([
             _.each(allowedProducts, function (allowedProduct) {
                 optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
 
-                if (_.isEmpty(product)) {
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
                     optionMinPrice = optionFinalPrice;
-                    product = allowedProduct;
-                }
-
-                if (optionFinalPrice < optionMinPrice) {
                     product = allowedProduct;
                 }
             }, this);
@@ -1252,9 +1258,6 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
-                gallery.first();
-
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

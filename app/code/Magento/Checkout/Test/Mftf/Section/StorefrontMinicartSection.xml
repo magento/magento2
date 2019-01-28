@@ -22,5 +22,6 @@
         <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
         <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
         <element name="miniCartSubtotalField" type="text" selector=".block-minicart .amount span.price"/>
+        <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
     </section>
 </sections>
