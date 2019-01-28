@@ -7,8 +7,7 @@ define([
     'jquery',
     'uiComponent',
     'Magento_Paypal/js/in-context/express-checkout-wrapper',
-    'Magento_Customer/js/customer-data',
-    'mage/cookies'
+    'Magento_Customer/js/customer-data'
 ], function (_, $, Component, Wrapper, customerData) {
     'use strict';
 
@@ -69,7 +68,6 @@ define([
             this._super();
             this.clientConfig.quoteId = '';
             this.clientConfig.customerId = '';
-            this.clientConfig.formKey = $.mage.cookies.get('form_key');
             this.clientConfig.commit = false;
 
             return this.clientConfig;

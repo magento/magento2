@@ -74,7 +74,6 @@ define([
         prepareClientConfig: function () {
             this._super();
             this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
-            this.clientConfig.formKey = window.checkoutConfig.formKey;
             this.clientConfig.customerId = window.customerData.id;
             this.clientConfig.merchantId = this.merchantId;
             this.clientConfig.button = 0;

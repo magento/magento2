@@ -6,8 +6,7 @@ define([
     'uiComponent',
     'jquery',
     'Magento_Paypal/js/in-context/express-checkout-wrapper',
-    'Magento_Customer/js/customer-data',
-    'mage/cookies'
+    'Magento_Customer/js/customer-data'
 ], function (Component, $, Wrapper, customerData) {
     'use strict';
 
@@ -46,7 +45,6 @@ define([
         /** @inheritdoc */
         prepareClientConfig: function () {
             this._super();
-            this.clientConfig.formKey = $.mage.cookies.get('form_key');
             this.clientConfig.commit = false;
 
             return this.clientConfig;

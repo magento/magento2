@@ -6,7 +6,8 @@ define([
     'jquery',
     'mage/translate',
     'Magento_Customer/js/customer-data',
-    'Magento_Paypal/js/in-context/express-checkout-smart-buttons'
+    'Magento_Paypal/js/in-context/express-checkout-smart-buttons',
+    'mage/cookies'
 ], function ($, $t, customerData, checkoutSmartButtons) {
     'use strict';
 
@@ -178,6 +179,7 @@ define([
             this.clientConfig.client = {};
             this.clientConfig.client[this.clientConfig.environment] = this.clientConfig.merchantId;
             this.clientConfig.rendererComponent = this;
+            this.clientConfig.formKey = $.mage.cookies.get('form_key');
 
             return this.clientConfig;
         }
