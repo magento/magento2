@@ -25,7 +25,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                    class="product-item-photo">
             <?php else:?>
                 <span class="product-item-photo">
-            <?php endif;?>
+            <?php endif; ?>
             <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
             <?php if ($block->hasProductUrl()):?>
                 </a>
@@ -54,7 +54,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                             </dd>
                         <?php endforeach; ?>
                     </dl>
-                <?php endif;?>
+                <?php endif; ?>
                 <?php if ($messages = $block->getMessages()): ?>
                     <?php foreach ($messages as $message): ?>
                         <div class="cart item message <?= /* @escapeNotVerified */ $message['type'] ?>"><div><?= $block->escapeHtml($message['text']) ?></div></div>
@@ -63,7 +63,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
                 <?php if ($addInfoBlock): ?>
                     <?= $addInfoBlock->setItem($_item)->toHtml() ?>
-                <?php endif;?>
+                <?php endif; ?>
             </div>
         </td>
 

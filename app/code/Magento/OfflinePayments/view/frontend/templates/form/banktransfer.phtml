@@ -11,7 +11,7 @@
 $instructions = $block->getInstructions();
 ?>
 <?php if ($instructions): ?>
-    <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
+    <?php $methodCode = $block->escapeHtml($block->getMethodCode()); ?>
     <div class="items <?= /* @noEscape */ $methodCode ?> instructions agreement checkout-agreement-item-content" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none;">
         <?= /* @noEscape */ nl2br($block->escapeHtml($instructions)) ?>
     </div>

@@ -51,7 +51,7 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
     <div class="control">
         <?php if (!$_readonly): ?>
         <input type="hidden" id="original_inventory_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][original_inventory_qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty') * 1 ?>">
-        <?php endif;?>
+        <?php endif; ?>
         <input type="text" class="input-text validate-number" id="inventory_qty" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[stock_data][qty]" value="<?= /* @escapeNotVerified */ $block->getFieldValue('qty') * 1 ?>" <?= /* @escapeNotVerified */ $_readonly ?>>
     </div>
     <?php if (!$block->isSingleStoreMode()): ?>

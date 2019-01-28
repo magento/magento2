@@ -24,7 +24,7 @@ $_order = $block->getOrder() ?>
                 <?php endforeach; ?>
             </tr>
         </thead>
-        <?php $_items = $block->getItemsCollection();?>
+        <?php $_items = $block->getItemsCollection(); ?>
         <?php $i = 0; foreach ($_items as $_item):?>
             <?php if ($_item->getParentItem()) {
                 continue;

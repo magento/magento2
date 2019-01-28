@@ -13,6 +13,6 @@
     <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
         <?php foreach ($children as $childName):?>
             <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
-        <?php endforeach;?>
+        <?php endforeach; ?>
     </div>
 <?php endif; ?>

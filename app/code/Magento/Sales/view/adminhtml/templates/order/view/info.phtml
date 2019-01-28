@@ -57,7 +57,7 @@ $customerUrl = $block->getCustomerViewUrl();
                         <th><?= $block->escapeHtml(__('Order Date (%1)', $block->getTimezoneForStore($order->getStore()))) ?></th>
                         <td><?= $block->escapeHtml($orderStoreDate) ?></td>
                     </tr>
-                <?php endif;?>
+                <?php endif; ?>
                 <tr>
                     <th><?= $block->escapeHtml(__('Order Status')) ?></th>
                     <td><span id="order_status"><?= $block->escapeHtml($order->getStatusLabel()) ?></span></td>
@@ -152,7 +152,7 @@ $customerUrl = $block->getCustomerViewUrl();
                             <th><?= $block->escapeHtml($data['label']) ?></th>
                             <td><?= $block->escapeHtml($data['value'], ['br']) ?></td>
                         </tr>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                     <?= $block->getChildHtml('extra_customer_info') ?>
                 </table>
             </div>

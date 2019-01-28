@@ -27,7 +27,7 @@
                         <div class="field choice review-field-rating">
                             <label class="label" id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
                             <div class="control review-control-vote">
-                            <?php $options = $_rating->getOptions();?>
+                            <?php $options = $_rating->getOptions(); ?>
                             <?php $iterator = 1; foreach ($options as $_option): ?>
                                 <input
                                     type="radio"

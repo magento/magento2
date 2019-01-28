@@ -18,6 +18,6 @@
         <?= $block->escapeHtml(implode(' ', $block->getValueAsArray($value))) ?>
         {{pdf_row_separator}}
     <?php endforeach; ?>
-<?php endif;?>
+<?php endif; ?>
 
 <?= $block->escapeHtml(implode('{{pdf_row_separator}}', $block->getChildPdfAsArray())) ?>

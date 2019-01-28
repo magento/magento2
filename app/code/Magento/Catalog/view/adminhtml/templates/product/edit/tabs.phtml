@@ -12,7 +12,7 @@
     <?php $tabGroups = [
         \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::BASIC_TAB_GROUP_CODE,
         \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::ADVANCED_TAB_GROUP_CODE,
-    ];?>
+    ]; ?>
 
     <div id="<?= /* @escapeNotVerified */ $block->getId() ?>"
          data-mage-init='{"tabs":{
@@ -32,7 +32,7 @@
                 $activeCollapsible = $block->isAdvancedTabGroupActive() ? true : false;
             ?>
 
-            <div class="admin__page-nav <?php if (!$isBasic): ?> <?= '_collapsed' ?> <?php endif;?>"
+            <div class="admin__page-nav <?php if (!$isBasic): ?> <?= '_collapsed' ?> <?php endif; ?>"
                 data-role="container"
                 id="<?= /* @escapeNotVerified */ $tabGroupId ?>"
                 <?php if (!$isBasic): ?>
@@ -43,10 +43,10 @@
                     "animate": 200,
                     "collapsible": true
                     }}'
-                <?php endif;?>>
+                <?php endif; ?>>
 
                 <div class="admin__page-nav-title-wrap" <?= /* @escapeNotVerified */ $block->getUiId('title') ?> data-role="title">
-                    <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?= '_collapsible' ?><?php endif;?>"
+                    <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?= '_collapsible' ?><?php endif; ?>"
                         data-role="trigger">
                         <strong>
                             <?= /* @escapeNotVerified */ $isBasic ? __('Basic Settings') : __('Advanced Settings') ?>
@@ -60,7 +60,7 @@
                         <?php /** @var $_tab \Magento\Backend\Block\Widget\Tab\TabInterface */ ?>
                         <?php if (!$block->canShowTab($_tab) || $_tab->getParentTab()
                             || ($_tab->getGroupCode() && $_tab->getGroupCode() != $tabGroupCode)
-                            || (!$_tab->getGroupCode() && $isBasic)): continue; endif;?>
+                            || (!$_tab->getGroupCode() && $isBasic)): continue; endif; ?>
                         <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
                         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
                         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>

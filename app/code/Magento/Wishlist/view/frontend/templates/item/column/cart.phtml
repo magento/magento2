@@ -15,7 +15,7 @@ $allowedQty = $block->getMinMaxQty();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
     <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
-<?php endforeach;?>
+<?php endforeach; ?>
 <div class="box-tocart">
     <fieldset class="fieldset">
     <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>

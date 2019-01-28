@@ -30,7 +30,7 @@
                             <th scope="row" class="cell label remove"><span><?= /* @escapeNotVerified */ __('Remove Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product hidden-print">
-                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
                             <a href="#" data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataRemove($item) ?>'
                                class="action delete" title="<?= /* @escapeNotVerified */ __('Remove Product') ?>">
                                 <span><?= /* @escapeNotVerified */ __('Remove Product') ?></span>

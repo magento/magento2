@@ -151,14 +151,14 @@
                                 <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
                                     <option value="cart"><?= /* @escapeNotVerified */ __('Move to Shopping Cart') ?></option>
                                     <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
-                                        <?php $wishlists = $block->getCustomerWishlists();?>
+                                        <?php $wishlists = $block->getCustomerWishlists(); ?>
                                         <?php if (count($wishlists) <= 1):?>
                                             <option value="wishlist"><?= /* @escapeNotVerified */ __('Move to Wish List') ?></option>
                                         <?php else: ?>
                                             <optgroup label="<?= /* @escapeNotVerified */ __('Move to Wish List') ?>">
                                                 <?php foreach ($wishlists as $wishlist):?>
                                                     <option value="wishlist_<?= /* @escapeNotVerified */ $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
-                                                <?php endforeach;?>
+                                                <?php endforeach; ?>
                                             </optgroup>
                                         <?php endif; ?>
                                     <?php endif; ?>
@@ -189,7 +189,7 @@
                                 <?php endforeach; ?>
                             </td>
                         </tr>
-                    <?php endif;?>
+                    <?php endif; ?>
 
                     <?= $block->getItemExtraInfo($_item)->toHtml() ?>
                 </tbody>

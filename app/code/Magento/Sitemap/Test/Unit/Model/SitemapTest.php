@@ -418,7 +418,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
         $checkFileCallback = function ($file) use (&$currentFile) {
             $currentFile = $file;
-        };// Check that all expected file descriptors were created
+        }; // Check that all expected file descriptors were created
         $this->directoryMock->expects($this->exactly(count($expectedFile)))->method('openFile')
             ->willReturnCallback($checkFileCallback);
 

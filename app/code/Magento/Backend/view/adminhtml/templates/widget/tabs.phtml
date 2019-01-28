@@ -20,7 +20,7 @@
     <ul <?= /* @escapeNotVerified */ $block->getUiId('tab', $block->getId()) ?> class="<?= /* @escapeNotVerified */ $block->getIsHoriz() ? 'tabs-horiz' : 'tabs admin__page-nav-items' ?>">
         <?php foreach ($tabs as $_tab): ?>
 
-            <?php if (!$block->canShowTab($_tab)): continue;  endif; ?>
+            <?php if (!$block->canShowTab($_tab)): continue; endif; ?>
             <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
             <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>

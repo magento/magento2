@@ -24,7 +24,7 @@
              }'
              data-container-for="downloadable-links">
             <?php foreach ($_links as $_link): ?>
-                <?php $_linksLength++;?>
+                <?php $_linksLength++; ?>
                 <div class="field choice" data-role="link">
                     <?php if ($_linksPurchasedSeparately): ?>
                         <input type="checkbox"
@@ -59,6 +59,6 @@
         </div>
         <?php if ($_isRequired): ?>
             <span id="links-advice-container"></span>
-        <?php endif;?>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

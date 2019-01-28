@@ -105,7 +105,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                         </a>
                                                     <?php endif; ?>
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
-                                                        <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                                                        <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
                                                         <a href="#" class="action tocompare"
                                                            data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataParams($_item) ?>'
                                                            title="<?= /* @escapeNotVerified */ __('Add to Compare') ?>">
@@ -125,4 +125,4 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
             <?= $block->getPagerHtml() ?>
         </div>
     </div>
-<?php endif;?>
+<?php endif; ?>

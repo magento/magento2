@@ -121,7 +121,7 @@
                     <input type="checkbox"
                            class="admin__control-checkbox"
                            name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][back_to_stock]"
-                           value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
+                           value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif; ?> />
                     <label class="admin__field-label"></label>
                 <?php endif; ?>
             <?php else: ?>
@@ -196,8 +196,8 @@ require(['prototype'], function(){
 
 });
 </script>
-                        <?php endif;?>
-                    <?php endif;?>
+                        <?php endif; ?>
+                    <?php endif; ?>
                     </dd>
                 <?php endforeach; ?>
                 </dl>

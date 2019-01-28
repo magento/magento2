@@ -32,10 +32,10 @@ $_item = $block->getItem();
                     </dd>
                     <?php endforeach; ?>
                 </dl>
-                <?php endif;?>
+                <?php endif; ?>
                 <?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()):?>
                     <?= $addtInfoBlock->setItem($_item)->toHtml() ?>
-                <?php endif;?>
+                <?php endif; ?>
             </div>
         </td>
         <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">

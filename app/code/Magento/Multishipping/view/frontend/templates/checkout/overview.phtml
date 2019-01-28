@@ -14,7 +14,7 @@
         <a href="#<?= $block->escapeHtml($block->getCheckoutData()->getAddressAnchorName($addressId)); ?>">
             <?= $block->escapeHtml(__('details below')); ?></a>.
     </div>
-<?php endforeach;?>
+<?php endforeach; ?>
 <form action="<?= $block->escapeUrl($block->getPostActionUrl()); ?>"
       method="post"
       id="review-order-form"
@@ -72,7 +72,7 @@
                 </div>
                 <?php if ($error = $block->getCheckoutData()->getAddressError($address)) : ?>
                     <div class="error-description"><?= $block->escapeHtml($error); ?></div>
-                <?php endif;?>
+                <?php endif; ?>
                 <div class="box box-shipping-address">
                     <strong class="box-title">
                         <span><?= $block->escapeHtml(__('Shipping To')); ?></span>
@@ -161,7 +161,7 @@
         <div class="block-title"><strong><?= $block->escapeHtml(__('Other items in your order')); ?></strong></div>
         <?php if ($error = $block->getCheckoutData()->getAddressError($billingAddress)) :?>
                 <div class="error-description"><?= $block->escapeHtml($error); ?></div>
-        <?php endif;?>
+        <?php endif; ?>
         <div class="block-content">
             <strong class="subtitle">
                 <span><?= $block->escapeHtml(__('Items')); ?></span>

@@ -11,7 +11,7 @@
 $instructions = $block->getInstructions();
 ?>
 <?php if ($instructions): ?>
-    <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
+    <?php $methodCode = $block->escapeHtml($block->getMethodCode()); ?>
     <ul class="form-list checkout-agreements" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display:none;">
         <li>
             <div class="<?= /* @noEscape */ $methodCode ?>-instructions-content checkout-agreement-item-content">

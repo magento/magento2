@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\Shipping\Block\Adminhtml\View */ ?>
 <?php $order = $block->getOrder() ?>
-<?php if ($order->getIsVirtual()) : return '';endif; ?>
+<?php if ($order->getIsVirtual()) : return ''; endif; ?>
 
 <?php /* Shipping Method */ ?>
 <div class="admin__page-section-item order-shipping-method">

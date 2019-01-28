@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\AdminNotification\Block\System\Messages */ ?>
 
-<?php $lastCritical = $block->getLastCritical();?>
+<?php $lastCritical = $block->getLastCritical(); ?>
 <div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?>">
     <div class="message-system-inner">
         <?php if ($lastCritical): ?>
@@ -30,7 +30,7 @@
                         <?= /* @escapeNotVerified */ $block->getCriticalCount() ?>
                     </a>
                 </div>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php if ($block->getMajorCount()): ?>
                <div class="message message-warning warning">
@@ -38,7 +38,7 @@
                        <?= /* @escapeNotVerified */ $block->getMajorCount() ?>
                    </a>
                </div>
-            <?php endif;?>
+            <?php endif; ?>
         </div>
         <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>
     </div>

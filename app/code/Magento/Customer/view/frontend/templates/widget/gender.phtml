@@ -13,10 +13,10 @@
     <div class="control">
         <select id="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?= $block->escapeHtmlAttr(__('Gender')) ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
             <?php $options = $block->getGenderOptions(); ?>
-            <?php $value = $block->getGender();?>
+            <?php $value = $block->getGender(); ?>
             <?php foreach ($options as $option):?>
                 <option value="<?= $block->escapeHtmlAttr($option->getValue()) ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?= $block->escapeHtml(__($option->getLabel())) ?></option>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </select>
     </div>
 </div>

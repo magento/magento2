@@ -19,7 +19,7 @@
             <input type="text" id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text" class="input-text admin__control-text <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= /* @escapeNotVerified */ $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]" value="<?= $block->escapeHtml($block->getDefaultValue()) ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" />
         <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text" class="admin__control-textarea <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= /* @escapeNotVerified */ $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]" rows="5" cols="25" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
-        <?php endif;?>
+        <?php endif; ?>
 
         <?php if ($_option->getMaxCharacters()): ?>
             <p class="note"><?= /* @escapeNotVerified */ __('Maximum number of characters:') ?> <strong><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></strong></p>

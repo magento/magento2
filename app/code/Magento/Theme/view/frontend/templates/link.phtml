@@ -13,7 +13,7 @@
 <?php if (!$block->getIsDisabled()): ?>
 <li>
     <a href="<?= $block->escapeHtml($block->getHref()) ?>"
-        <?php if ($title = $block->getTitle()):?> title="<?= $block->escapeHtml(__($title)) ?>"<?php endif;?>>
+        <?php if ($title = $block->getTitle()):?> title="<?= $block->escapeHtml(__($title)) ?>"<?php endif; ?>>
         <?= $block->escapeHtml(__($block->getLabel())) ?>
     </a>
 </li>

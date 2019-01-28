@@ -30,12 +30,12 @@
         <?php else:?>
             <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1'):?>
                 <?= $block->getChildChildHtml('options_container') ?>
-            <?php endif;?>
+            <?php endif; ?>
         <?php endif; ?>
 
         <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2'):?>
             <?= $block->getChildChildHtml('options_container') ?>
-        <?php endif;?>
+        <?php endif; ?>
         <?= $block->getChildHtml('form_bottom') ?>
     </form>
 </div>

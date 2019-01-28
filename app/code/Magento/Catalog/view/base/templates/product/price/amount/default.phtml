@@ -15,7 +15,7 @@
     <?php if ($block->getDisplayLabel()): ?>
         <span class="price-label"><?= /* @escapeNotVerified */ $block->getDisplayLabel() ?></span>
     <?php endif; ?>
-    <span <?php if ($block->getPriceId()): ?> id="<?= /* @escapeNotVerified */ $block->getPriceId() ?>"<?php endif;?>
+    <span <?php if ($block->getPriceId()): ?> id="<?= /* @escapeNotVerified */ $block->getPriceId() ?>"<?php endif; ?>
         <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
         data-price-amount="<?= /* @escapeNotVerified */ $block->getDisplayValue() ?>"
         data-price-type="<?= /* @escapeNotVerified */ $block->getPriceType() ?>"

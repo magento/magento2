@@ -17,4 +17,4 @@
 <?php if ($priceAmount = $block->getProduct()->getFinalPrice()):?>
     <meta property="product:price:amount" content="<?= /* @escapeNotVerified */ $priceAmount ?>"/>
     <?= $block->getChildHtml('meta.currency') ?>
-<?php endif;?>
+<?php endif; ?>

@@ -20,7 +20,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             <tr>
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <th><?= /* @escapeNotVerified */ $column['label'] ?></th>
-                <?php endforeach;?>
+                <?php endforeach; ?>
                 <th class="col-actions" colspan="<?= /* @escapeNotVerified */ $_colspan ?>"><?= /* @escapeNotVerified */ __('Action') ?></th>
             </tr>
             </thead>
@@ -122,7 +122,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
         // Toggle the grid availability, if element is disabled (depending on scope)
         <?php if ($block->getElement()->getDisabled()):?>
         toggleValueElements({checked: true}, $('grid<?= /* @escapeNotVerified */ $_htmlId ?>').parentNode);
-            <?php endif;?>
+            <?php endif; ?>
         });
     </script>
 </div>

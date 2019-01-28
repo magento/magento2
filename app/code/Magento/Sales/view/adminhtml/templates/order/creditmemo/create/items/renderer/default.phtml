@@ -22,7 +22,7 @@
             <input type="checkbox"
                    class="admin__control-checkbox"
                    name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][back_to_stock]"
-                   value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif;?>/>
+                   value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif; ?>/>
             <label class="admin__field-label"></label>
         <?php endif; ?>
         </td>

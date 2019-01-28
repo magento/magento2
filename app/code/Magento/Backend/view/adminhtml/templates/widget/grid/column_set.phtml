@@ -54,7 +54,7 @@ $numColumns = sizeof($block->getColumns());
             <?php if ($block->hasMultipleRows($_item)) :?>
                 <?php $block->updateItemByFirstMultiRow($_item); ?>
                 <tr title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>" data-role="row"
-                    <?php if ($_class = $block->getRowClass($_item)):?> class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif;?>
+                    <?php if ($_class = $block->getRowClass($_item)):?> class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif; ?>
                 ><?php $i = 0; foreach ($block->getColumns() as $_column):
                       if ($block->shouldRenderCell($_item, $_column)):
                             $_rowspan = $block->getRowspan($_item, $_column);
@@ -86,7 +86,7 @@ $numColumns = sizeof($block->getColumns());
                         </td><?php
                         endforeach; ?>
                     </tr>
-                <?php endforeach;?>
+                <?php endforeach; ?>
 
                 <?php if ($block->shouldRenderSubTotal($_item)): ?>
                     <tr class="subtotals">
@@ -103,7 +103,7 @@ $numColumns = sizeof($block->getColumns());
                 <?php endif; ?>
             <?php else: ?>
                 <tr data-role="row" title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>"<?php if ($_class = $block->getRowClass($_item)):?>
-                    class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif;?>
+                    class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif; ?>
                 >
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
                         <?php if ($block->shouldRenderCell($_item, $_column)):?>
@@ -119,8 +119,8 @@ $numColumns = sizeof($block->getColumns());
                                 >
                                     <?= /* @escapeNotVerified */ $block->getEmptyCellLabel() ?>
                                 </td>
-                            <?php endif;?>
-                        <?php endif;?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </tr>
             <?php endif; ?>

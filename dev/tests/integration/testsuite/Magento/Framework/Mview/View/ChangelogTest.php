@@ -137,11 +137,11 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
             $this->connection->insert($changelogName, $data);
         }
         $this->assertEquals(5, $this->model->getVersion());
-        $this->assertEquals(3, count($this->model->getList(0, 5)));//distinct entity_ids
-        $this->assertEquals(3, count($this->model->getList(2, 5)));//distinct entity_ids
-        $this->assertEquals(2, count($this->model->getList(0, 3)));//distinct entity_ids
-        $this->assertEquals(1, count($this->model->getList(0, 2)));//distinct entity_ids
-        $this->assertEquals(1, count($this->model->getList(2, 3)));//distinct entity_ids
-        $this->assertEquals(0, count($this->model->getList(4, 3)));//because fromVersionId > toVersionId
+        $this->assertEquals(3, count($this->model->getList(0, 5))); //distinct entity_ids
+        $this->assertEquals(3, count($this->model->getList(2, 5))); //distinct entity_ids
+        $this->assertEquals(2, count($this->model->getList(0, 3))); //distinct entity_ids
+        $this->assertEquals(1, count($this->model->getList(0, 2))); //distinct entity_ids
+        $this->assertEquals(1, count($this->model->getList(2, 3))); //distinct entity_ids
+        $this->assertEquals(0, count($this->model->getList(4, 3))); //because fromVersionId > toVersionId
     }
 }

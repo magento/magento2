@@ -36,7 +36,7 @@
         <div id="<?= $block->getHtmlId() ?>-item-<?= /* @escapeNotVerified */ $_item->getId() ?>-block">
             <?php if ('' != $_item->getBlockName()):?>
                 <?= $block->getChildHtml($_item->getBlockName()) ?>
-            <?php endif;?>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
     </div>

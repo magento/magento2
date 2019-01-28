@@ -23,7 +23,7 @@
             <?php $_websites = $block->getWebsiteCollection() ?>
             <?php foreach ($_websites as $_website): ?>
             <div class="website-name">
-                <input name="product[website_ids][]" value="<?= /* @escapeNotVerified */ $_website->getId() ?>" <?php if ($block->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>" type="checkbox"<?php if ($block->hasWebsite($_website->getId()) || !$block->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
+                <input name="product[website_ids][]" value="<?= /* @escapeNotVerified */ $_website->getId() ?>" <?php if ($block->isReadonly()): ?>  disabled="disabled"<?php endif; ?> class="checkbox website-checkbox" id="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>" type="checkbox"<?php if ($block->hasWebsite($_website->getId()) || !$block->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
                 <label for="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
             </div>
             <dl class="webiste-groups" id="product_website_<?= /* @escapeNotVerified */ $_website->getId() ?>_data">

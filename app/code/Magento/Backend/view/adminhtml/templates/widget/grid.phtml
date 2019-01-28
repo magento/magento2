@@ -42,7 +42,7 @@ $numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
                 <?php endif; ?>
             </div>
             <?php endif; ?>
-            <div class="<?php if($massActionAvailable) { echo '_massaction ';} ?>admin__data-grid-header-row">
+            <div class="<?php if($massActionAvailable) { echo '_massaction '; } ?>admin__data-grid-header-row">
                 <?php if ($massActionAvailable): ?>
                     <?= $block->getChildHtml('grid.massaction') ?>
                 <?php else: ?>

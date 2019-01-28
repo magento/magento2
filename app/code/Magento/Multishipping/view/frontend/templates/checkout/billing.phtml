@@ -105,7 +105,7 @@
                             </dt>
                                 <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
                                     <dd class="item-content <?= $checked ? '' : 'no-display'; ?>"
-                                        data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
+                                        data-bind="scope: 'payment_method_<?= $block->escapeHtml($code); ?>'">
                                         <?= /* @noEscape */ $html; ?>
                                     </dd>
                                 <?php endif; ?>

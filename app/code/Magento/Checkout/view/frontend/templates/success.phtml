@@ -14,9 +14,9 @@
             <p><?= __('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeHtml($block->getViewOrderUrl()), $block->escapeHtml($block->getOrderId()))) ?></p>
         <?php  else :?>
             <p><?= __('Your order # is: <span>%1</span>.', $block->escapeHtml($block->getOrderId())) ?></p>
-        <?php endif;?>
+        <?php endif; ?>
             <p><?= /* @escapeNotVerified */ __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
-    <?php endif;?>
+    <?php endif; ?>
 
     <?= $block->getAdditionalInfoHtml() ?>
 

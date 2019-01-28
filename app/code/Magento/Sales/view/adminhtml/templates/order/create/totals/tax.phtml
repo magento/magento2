@@ -20,7 +20,7 @@ $taxAmount = $block->getTotal()->getValue();
             <div class="summary-collapse"><?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?></div>
         <?php else: ?>
             <?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?>
-        <?php endif;?>
+        <?php endif; ?>
     </td>
     <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="admin__total-amount"><?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValue()) ?></td>
 </tr>
@@ -54,6 +54,6 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php $isTop = 0; ?>
                 <?php endforeach; ?>
         <?php endforeach; ?>
-<?php endif;?>
-<?php endif;?>
+<?php endif; ?>
+<?php endif; ?>
 

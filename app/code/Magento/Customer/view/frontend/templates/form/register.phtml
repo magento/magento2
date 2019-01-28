@@ -114,13 +114,13 @@
                     <?= $block->getCountryHtmlSelect() ?>
                 </div>
             </div>
-            <?php $addressAttributes = $block->getChildBlock('customer_form_address_user_attributes');?>
+            <?php $addressAttributes = $block->getChildBlock('customer_form_address_user_attributes'); ?>
             <?php if ($addressAttributes): ?>
                 <?php $addressAttributes->setEntityType('customer_address'); ?>
-                <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat('address[%1$s]');?>
-                <?php $block->restoreSessionData($addressAttributes->getMetadataForm(), 'address');?>
+                <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat('address[%1$s]'); ?>
+                <?php $block->restoreSessionData($addressAttributes->getMetadataForm(), 'address'); ?>
                 <?= $addressAttributes->setShowContainer(false)->toHtml() ?>
-            <?php endif;?>
+            <?php endif; ?>
             <input type="hidden" name="default_billing" value="1">
             <input type="hidden" name="default_shipping" value="1">
         </fieldset>

@@ -148,6 +148,6 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             '<?= $block->escapeUrl($method->getCgiUrl()) ?>',
             '<?= $block->escapeUrl($block->getUrl('*/*/save', [
                 '_secure' => $block->getRequest()->isSecure()
-            ]));?>');
+            ])); ?>');
     });
 </script>

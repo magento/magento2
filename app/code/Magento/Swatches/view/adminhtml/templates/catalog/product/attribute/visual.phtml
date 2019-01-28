@@ -64,7 +64,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <input data-role="order" type="hidden" name="optionvisual[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()): ?> disabled="disabled"<?php endif; ?>/>
             </td>
             <td class="col-default">
-                <input class="input-radio" type="<%- data.intype %>" name="defaultvisual[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
+                <input class="input-radio" type="<%- data.intype %>" name="defaultvisual[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif; ?>/>
             </td>
             <td class="swatches-visual-col col-default <%- data.empty_class %>">
                 <?php //@todo add logic getting swatch value from db */ ?>
@@ -103,7 +103,7 @@ $stores = $block->getStoresSortedBySortOrder();
                             class="action- scalable delete delete-option">
                         <span><?= $block->escapeHtml(__('Delete')) ?></span>
                     </button>
-                <?php endif;?>
+                <?php endif; ?>
             </td>
         </tr>
     </script>

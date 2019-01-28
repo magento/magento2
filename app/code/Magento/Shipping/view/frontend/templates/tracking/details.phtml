@@ -72,7 +72,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                         <th class="col label" scope="row"><?= /* @noEscape */ $block->escapeHtml(__($title . ':')) ?></th>
                         <td class="col value"><?= $block->escapeHtml($track->$property()) ?></td>
                     </tr>
-                <?php endif;?>
+                <?php endif; ?>
             <?php endforeach; ?>
 
             <?php if ($track->getDeliverydate()): ?>

@@ -40,13 +40,13 @@
             <ul class="items pages-items" aria-labelledby="paging-label">
             <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
-                    <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
+                    <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : ''; ?>
                     <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> previous" href="<?= /* @escapeNotVerified */ $block->getPreviousPageUrl() ?>" title="<?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?>">
                         <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
                         <span><?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?></span>
                     </a>
                 </li>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php if ($block->canShowFirst()): ?>
                 <li class="item">
@@ -55,7 +55,7 @@
                         <span>1</span>
                     </a>
                 </li>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php if ($block->canShowPreviousJump()): ?>
                 <li class="item">
@@ -63,7 +63,7 @@
                         <span>...</span>
                     </a>
                 </li>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php foreach ($block->getFramePages() as $_page): ?>
                 <?php if ($block->isPageCurrent($_page)): ?>
@@ -80,8 +80,8 @@
                             <span><?= /* @escapeNotVerified */ $_page ?></span>
                         </a>
                     </li>
-                <?php endif;?>
-            <?php endforeach;?>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
             <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
@@ -89,7 +89,7 @@
                         <span>...</span>
                     </a>
                 </li>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php if ($block->canShowLast()): ?>
               <li class="item">
@@ -98,17 +98,17 @@
                       <span><?= /* @escapeNotVerified */ $block->getLastPageNum() ?></span>
                   </a>
               </li>
-            <?php endif;?>
+            <?php endif; ?>
 
             <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
-                    <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
+                    <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : ''; ?>
                     <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> next" href="<?= /* @escapeNotVerified */ $block->getNextPageUrl() ?>" title="<?= /* @escapeNotVerified */ $text ? $text : __('Next') ?>">
                         <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
                         <span><?= /* @escapeNotVerified */ $text ? $text : __('Next') ?></span>
                     </a>
                 </li>
-            <?php endif;?>
+            <?php endif; ?>
             </ul>
         </div>
         <?php endif; ?>
