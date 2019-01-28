@@ -269,6 +269,10 @@ define([
         onRequestComplete: function (params, data) {
             if (data) {
                 this.updateData(data.items);
+            } else {
+                data = {};
+            }
+                this.updateData(data.items);
 
                 if (this.cacheRequests) {
                     this.cacheRequest(data, params);
