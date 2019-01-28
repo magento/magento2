@@ -39,8 +39,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
             ->addFieldToFilter('main_table.type', ['in' => [
                 \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
                 \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL,
-            ]])
-        ;
+            ]]);
 
         $this->getSelect()->joinLeft(
             ['parent' => $this->getMainTable()],
