@@ -124,11 +124,6 @@ define([
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
 
-            // validate parent form
-            if (!this.$selector.valid()) {
-                return false;
-            }
-
             authData.clientKey = this.clientKey;
             authData.apiLoginID = this.apiLoginID;
 
@@ -143,16 +138,15 @@ define([
             secureData.authData = authData;
             secureData.cardData = cardData;
 
-            $('body').trigger('processStart');
             this.disableEventListeners();
 
             this.acceptjsClient.createTokens(secureData)
                 .always(function () {
-                    $('body').trigger('processEnd');
+                    $('body').trigger('processStop');
+                    self.enableEventListeners();
                 })
                 .done(function (tokens) {
                     self.setPaymentDetails(tokens);
-                    self.enableEventListeners();
                     self.placeOrder.call(self);
                 })
                 .fail(function (messages) {
