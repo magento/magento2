@@ -39,7 +39,7 @@ $taxAmount = $block->getTotal()->getValue();
                 <tr class="summary-details-<?= /* @escapeNotVerified */ $taxIter ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                     <td class="admin__total-mark" style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
                         <?= $block->escapeHtml($rate['title']) ?>
-                        <?php if (!is_null($rate['percent'])): ?>
+                        <?php if (null !== $rate['percent']): ?>
                             (<?= (float)$rate['percent'] ?>%)
                         <?php endif; ?>
                         <br />
