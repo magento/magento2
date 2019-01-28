@@ -1,1 +1,0 @@
-/Users/nathsmit/Sites/m2/app/code/Magento/AuthorizenetAcceptjs/view/base/web/js/view/payment/validator-handler.js
