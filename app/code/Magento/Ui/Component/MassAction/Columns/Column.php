@@ -66,7 +66,7 @@ class Column extends AbstractComponent implements ColumnInterface
      * @param array $items
      * @return array
      */
-    public function prepareItems(array & $items)
+    public function prepareItems(array &$items)
     {
         return $items;
     }

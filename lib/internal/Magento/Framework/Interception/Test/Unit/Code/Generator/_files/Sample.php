@@ -23,7 +23,7 @@ class Sample
         $this->attribute = $value;
     }
 
-    public function & getReference()
+    public function &getReference()
     {
     }
 
@@ -48,7 +48,7 @@ class Sample
     /**
      * @param mixed ...$variadicValue
      */
-    public function byRefVariadic(& ...$variadicValue)
+    public function byRefVariadic(&...$variadicValue)
     {
         $this->variadicAttribute = $variadicValue;
     }

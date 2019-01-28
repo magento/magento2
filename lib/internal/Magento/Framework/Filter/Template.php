@@ -386,7 +386,7 @@ class Template implements \Zend_Filter_Interface
         for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
-                $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
+                $stackVars[$i]['variable'] = &$this->templateVars[$stackVars[$i]['name']];
             } elseif (isset($stackVars[$i - 1]['variable'])
                     && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {

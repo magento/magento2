@@ -441,15 +441,15 @@ class Ftp
         $dir = $this->correctFilePath($dir);
         $rawfiles = (array)$this->rawlist($dir, $recursive);
         $structure = [];
-        $arraypointer = & $structure;
+        $arraypointer = &$structure;
         foreach ($rawfiles as $rawfile) {
             if ($rawfile[0] == '/') {
                 $paths = array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
-                $arraypointer = & $structure;
+                $arraypointer = &$structure;
                 foreach ($paths as $path) {
                     foreach ($arraypointer as $i => $file) {
                         if ($file['name'] == $path) {
-                            $arraypointer = & $arraypointer[$i]['children'];
+                            $arraypointer = &$arraypointer[$i]['children'];
                             break;
                         }
                     }

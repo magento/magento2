@@ -58,7 +58,7 @@ class Truncate implements \Zend_Filter_Interface
         $this->string = $string;
         $this->length = $length;
         $this->etc = $etc;
-        $this->remainder = & $remainder;
+        $this->remainder = &$remainder;
         $this->breakWords = $breakWords;
     }
 

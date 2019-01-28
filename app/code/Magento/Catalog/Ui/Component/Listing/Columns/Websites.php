@@ -57,7 +57,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         }
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $websites = [];
                 foreach ($item[$fieldName] as $websiteId) {
                     if (!isset($websiteNames[$websiteId])) {

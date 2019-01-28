@@ -581,7 +581,7 @@ class QuoteGenerator
      * @param array ...$replacements
      * @return void
      */
-    protected function query($table, ... $replacements)
+    protected function query($table, ...$replacements)
     {
         $query = $this->queryTemplates[$table];
         foreach ($replacements as $data) {

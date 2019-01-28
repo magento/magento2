@@ -131,7 +131,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-        if (! class_exists($requestedName)) {
+        if (!class_exists($requestedName)) {
             return false;
         }
 
@@ -167,14 +167,14 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
                 return [];
             }
 
-            if (! $parameter->getClass()) {
+            if (!$parameter->getClass()) {
                 return;
             }
 
             $type = $parameter->getClass()->getName();
             $type = isset($this->aliases[$type]) ? $this->aliases[$type] : $type;
 
-            if (! $container->has($type)) {
+            if (!$container->has($type)) {
                 throw new ServiceNotFoundException(sprintf(
                     'Unable to create controller "%s"; unable to resolve parameter "%s" using type hint "%s"',
                     $requestedName,

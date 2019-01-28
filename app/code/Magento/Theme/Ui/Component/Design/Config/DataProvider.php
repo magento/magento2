@@ -88,7 +88,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             );
         }
         $data = parent::getData();
-        foreach ($data['items'] as & $item) {
+        foreach ($data['items'] as &$item) {
             $item += ['default' => __('Global')];
         }
 

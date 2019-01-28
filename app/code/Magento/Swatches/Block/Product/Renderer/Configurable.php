@@ -297,7 +297,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             && $attributeDataArray['use_product_image_for_swatch']
         ) {
             $variationMedia = $this->getVariationMedia($attributeDataArray['attribute_code'], $optionId);
-            if (! empty($variationMedia)) {
+            if (!empty($variationMedia)) {
                 $swatch['type'] = Swatch::SWATCH_TYPE_VISUAL_IMAGE;
                 $swatch = array_merge($swatch, $variationMedia);
             }

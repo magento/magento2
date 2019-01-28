@@ -147,7 +147,7 @@ class ExtendsTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $section2 = & $result['config']['system']['sections']['section2'];
+        $section2 = &$result['config']['system']['sections']['section2'];
         $section2['children'] = ['child4' => 4, 'child5' => 5, 'child1' => 6, 'child2' => 2, 'child3' => 3];
 
         return [$source, $result];

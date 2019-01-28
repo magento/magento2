@@ -57,7 +57,7 @@ class FrontendStorageManager extends \Magento\Framework\View\Element\Template
     {
         $configuration = $this->getData('configuration') ?: [];
 
-        foreach ($configuration as $namespace => & $storageConfig) {
+        foreach ($configuration as $namespace => &$storageConfig) {
             $dynamicStorage = $this->storageConfigurationPool->get($namespace);
 
             if ($dynamicStorage) {

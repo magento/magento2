@@ -526,7 +526,7 @@ class OrdersFixture extends Fixture
      * @param array ...$replacements
      * @return void
      */
-    protected function query($table, ... $replacements)
+    protected function query($table, ...$replacements)
     {
         if (!$this->orderQuotesEnable && strpos($table, "quote") !== false) {
             return;

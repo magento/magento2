@@ -57,7 +57,7 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
             return $data;
         }
 
-        $this->_systemConfiguration = & $data['config']['system']['sections'];
+        $this->_systemConfiguration = &$data['config']['system']['sections'];
 
         foreach (array_keys($this->_systemConfiguration) as $nodeName) {
             $this->_traverseAndExtend($nodeName);
@@ -180,13 +180,13 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
     protected function _replaceData($path, $newData)
     {
         $pathParts = $this->_transformPathToKeysList($path);
-        $result = & $this->_systemConfiguration;
+        $result = &$this->_systemConfiguration;
 
         foreach ($pathParts as $part) {
             if (!isset($result[$part])) {
                 return;
             }
-            $result = & $result[$part];
+            $result = &$result[$part];
         }
 
         $result = $newData;

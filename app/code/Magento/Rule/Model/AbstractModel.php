@@ -341,12 +341,12 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
             if (($key === 'conditions' || $key === 'actions') && is_array($value)) {
                 foreach ($value as $id => $data) {
                     $path = explode('--', $id);
-                    $node = & $arr;
+                    $node = &$arr;
                     for ($i = 0, $l = sizeof($path); $i < $l; $i++) {
                         if (!isset($node[$key][$path[$i]])) {
                             $node[$key][$path[$i]] = [];
                         }
-                        $node = & $node[$key][$path[$i]];
+                        $node = &$node[$key][$path[$i]];
                     }
                     foreach ($data as $k => $v) {
                         $node[$k] = $v;

@@ -49,7 +49,7 @@ class PaymentMethod extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 try {
                     $item[$this->getData('name')] = $this->paymentHelper
                         ->getMethodInstance($item[$this->getData('name')])

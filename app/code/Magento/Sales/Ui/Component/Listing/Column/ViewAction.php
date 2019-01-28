@@ -49,7 +49,7 @@ class ViewAction extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['entity_id'])) {
                     $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';
                     $urlEntityParamName = $this->getData('config/urlEntityParamName') ?: 'entity_id';

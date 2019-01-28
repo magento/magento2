@@ -188,7 +188,7 @@ class ConsoleLogger extends AbstractLogger
 
         $bars = [];
         $maxBarSize = 0;
-        foreach ($this->processes as $name => & $process) {
+        foreach ($this->processes as $name => &$process) {
             $this->updateProcessInfo($name, $process);
             $bar = $this->renderProgressBar($output, $process);
             $maxBarSize = strlen($bar) > $maxBarSize ? strlen($bar) : $maxBarSize;
@@ -217,7 +217,7 @@ class ConsoleLogger extends AbstractLogger
      * @param array $process
      * @return void
      */
-    private function updateProcessInfo($deployedPackagePath, array & $process)
+    private function updateProcessInfo($deployedPackagePath, array &$process)
     {
         $packageDeploymentInfo = $this->getPackageDeploymentInfo($deployedPackagePath . '/info.json');
         if ($packageDeploymentInfo) {

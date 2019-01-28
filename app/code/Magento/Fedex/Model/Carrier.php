@@ -1136,7 +1136,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $tracking->setTracking($trackingValue);
             $tracking->addData($this->processTrackingDetails($item));
             $result->append($tracking);
-            $counter ++;
+            $counter++;
         }
 
         // no available tracking details

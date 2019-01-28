@@ -82,7 +82,7 @@ class Swagger extends \Magento\Framework\DataObject
      */
     public function setInfo($info)
     {
-        if (! is_array($info)) {
+        if (!is_array($info)) {
             return $this;
         }
         if (isset($info['title'])) {

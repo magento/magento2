@@ -59,7 +59,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
         if (isset($dataSource['data']['items'])) {
             $attributes = $this->getAttributes();
             $fieldName = $this->getData('name');
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $attrStrings = [];
                 foreach ($attributes as $attributeCode => $attribute) {
                     if (isset($item[$attributeCode]) && isset($attribute['options'][$item[$attributeCode]])) {

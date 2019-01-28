@@ -115,7 +115,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      */
-    protected function saveDefaultFlags(array $addressIdList, array & $extractedCustomerData)
+    protected function saveDefaultFlags(array $addressIdList, array &$extractedCustomerData)
     {
         $result = [];
         $extractedCustomerData[CustomerInterface::DEFAULT_BILLING] = null;
@@ -157,7 +157,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      */
-    protected function _extractCustomerAddressData(array & $extractedCustomerData)
+    protected function _extractCustomerAddressData(array &$extractedCustomerData)
     {
         $addresses = $this->getRequest()->getPost('address');
         $result = [];

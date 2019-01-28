@@ -183,7 +183,7 @@ class Queue
      * @param array $packageJob
      * @return void
      */
-    private function assertAndExecute($name, array & $packages, array $packageJob)
+    private function assertAndExecute($name, array &$packages, array $packageJob)
     {
         /** @var Package $package */
         $package = $packageJob['package'];

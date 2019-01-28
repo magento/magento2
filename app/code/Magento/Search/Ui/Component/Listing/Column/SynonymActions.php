@@ -52,7 +52,7 @@ class SynonymActions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $name = $this->getData('name');
                 $item[$name]['delete'] = [
                     'href' => $this->urlBuilder->getUrl(

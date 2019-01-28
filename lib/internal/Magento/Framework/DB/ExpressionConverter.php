@@ -128,7 +128,7 @@ class ExpressionConverter
         $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
         $superfluous = $diff / 2;
         $odd         = $diff % 2;
-        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
+        $hash        = substr($hash, $superfluous, -($superfluous + $odd));
         return $hash;
     }
 }

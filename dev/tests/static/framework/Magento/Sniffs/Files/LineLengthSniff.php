@@ -29,7 +29,7 @@ class LineLengthSniff extends FilesLineLengthSniff
         $currentLineMatch = preg_match($currentLineRegexp, $lineContent) !== 0;
         $previousLineMatch = preg_match($previousLineRegexp, $this->previousLineContent) !== 0;
         $this->previousLineContent = $lineContent;
-        if (! $currentLineMatch && !$previousLineMatch) {
+        if (!$currentLineMatch && !$previousLineMatch) {
             parent::checkLineLength($phpcsFile, $stackPtr, $lineContent);
         }
     }

@@ -196,7 +196,7 @@ abstract class AbstractFactory
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _processItem(& $items, & $rewrites, $filename, $location, $path)
+    protected function _processItem(&$items, &$rewrites, $filename, $location, $path)
     {
         $filename = str_replace('\\', '/', $filename);
 

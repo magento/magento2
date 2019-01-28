@@ -148,7 +148,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
-                $index ++;
+                $index++;
             }
         }
     }
@@ -290,7 +290,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
-                $index ++;
+                $index++;
             }
         }
     }

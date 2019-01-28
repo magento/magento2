@@ -40,7 +40,7 @@ class AccountLock extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (array_key_exists('lock_expires', $item)) {
                     $lockExpires = new \DateTime($item['lock_expires']);
                     if ($lockExpires > new \DateTime()) {

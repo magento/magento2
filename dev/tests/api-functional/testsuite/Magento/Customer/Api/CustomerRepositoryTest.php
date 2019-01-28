@@ -407,7 +407,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
-        foreach ($customerDataArray[Customer::KEY_ADDRESSES] as & $address) {
+        foreach ($customerDataArray[Customer::KEY_ADDRESSES] as &$address) {
             $address[Address::FIRSTNAME] = null;
         }
 

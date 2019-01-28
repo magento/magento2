@@ -52,7 +52,7 @@ class ViewAction extends Column
     public function prepareDataSource(array $dataSource) : array
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $indexField = $this->getData('config/indexField') ?: 'entity_id';
                 if (isset($item[$indexField])) {
                     $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';

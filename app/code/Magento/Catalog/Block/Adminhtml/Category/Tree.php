@@ -175,7 +175,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             }
             $categoryById[$category->getId()]['is_active'] = $category->getIsActive();
             $categoryById[$category->getId()]['label'] = $category->getName();
-            $categoryById[$category->getParentId()]['children'][] = & $categoryById[$category->getId()];
+            $categoryById[$category->getParentId()]['children'][] = &$categoryById[$category->getId()];
         }
 
         return $this->_jsonEncoder->encode($categoryById[\Magento\Catalog\Model\Category::TREE_ROOT_ID]['children']);

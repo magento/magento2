@@ -49,7 +49,7 @@ class State extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')] = isset($this->states[$item[$this->getData('name')]])
                     ? $this->states[$item[$this->getData('name')]]
                     : $item[$this->getData('name')];

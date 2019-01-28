@@ -79,7 +79,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             return $this->themes[$fullPath];
         }
 
-        if (! $this->getDeploymentConfig()->isDbAvailable()) {
+        if (!$this->getDeploymentConfig()->isDbAvailable()) {
             return $this->getThemeList()->getThemeByFullPath($fullPath);
         }
 

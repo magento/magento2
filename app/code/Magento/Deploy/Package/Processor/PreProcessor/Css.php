@@ -135,7 +135,7 @@ class Css implements ProcessorInterface
 
             $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
 
-            $callback = function ($matchContent) use ($packagePath, $filePath, & $imports) {
+            $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
                 $importRelPath = $this->normalize(pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']);
                 $imports[$importRelPath] = $this->normalize(
                     $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']

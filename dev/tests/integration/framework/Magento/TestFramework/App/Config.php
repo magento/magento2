@@ -99,7 +99,7 @@ class Config extends \Magento\Framework\App\Config
      * @param mixed $value
      * @return void
      */
-    private function updateResult(array $keys, & $result, $value)
+    private function updateResult(array $keys, &$result, $value)
     {
         $key = array_shift($keys);
 

@@ -51,7 +51,7 @@ class EditAction extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['entity_id'])) {
                     $editUrlPath = $this->getData('config/editUrlPath') ?: '#';
                     if (isset($item['store_id'])) {

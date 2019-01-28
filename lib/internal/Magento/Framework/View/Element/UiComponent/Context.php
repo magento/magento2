@@ -373,7 +373,7 @@ class Context implements ContextInterface
      * @param UiComponentInterface $component
      * @return void
      */
-    protected function prepareDataSource(array & $data, UiComponentInterface $component)
+    protected function prepareDataSource(array &$data, UiComponentInterface $component)
     {
         $childComponents = $component->getChildComponents();
         if (!empty($childComponents)) {

@@ -107,7 +107,7 @@ class EntityAttributeList
         foreach ($attributes as $attribute) {
             if (!array_key_exists($attribute->getAttributeCode(), $attributeCodes)) {
                 $attributeCodes[$attribute->getAttributeCode()]
-                    = ((! $attribute->getIsUserDefined()) && !is_array($attribute));
+                    = ((!$attribute->getIsUserDefined()) && !is_array($attribute));
             }
         }
         return $attributeCodes;

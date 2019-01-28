@@ -291,7 +291,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param array $data
      * @return void
      */
-    protected function initObservers(array & $data = [])
+    protected function initObservers(array &$data = [])
     {
         if (isset($data['observers']) && is_array($data['observers'])) {
             foreach ($data['observers'] as $observerType => $observer) {

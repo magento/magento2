@@ -211,7 +211,7 @@ class Input implements \Zend_Filter_Interface
     protected function _filter(array $data, &$filters = null, $isFilterListSimple = false)
     {
         if (null === $filters) {
-            $filters = & $this->_filters;
+            $filters = &$this->_filters;
         }
         foreach ($data as $key => $value) {
             if (!$isFilterListSimple && !empty($filters[$key])) {

@@ -67,7 +67,7 @@ class GroupActions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 if (isset($item['customer_group_id'])) {
                     $title = $this->escaper->escapeHtml($item['customer_group_code']);
                     $item[$this->getData('name')] = [

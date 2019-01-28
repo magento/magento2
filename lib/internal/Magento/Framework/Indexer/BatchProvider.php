@@ -34,7 +34,7 @@ class BatchProvider implements BatchProviderInterface
         /** @var int $fullBatchCount count of the batches that have expected batch size */
         $fullBatchCount = ($maxLinkFieldValue - $truncatedBatchSize) / $batchSize;
 
-        for ($batchIndex = 0; $batchIndex < $fullBatchCount; $batchIndex ++) {
+        for ($batchIndex = 0; $batchIndex < $fullBatchCount; $batchIndex++) {
             yield ['from' => $batchIndex * $batchSize + 1, 'to' => ($batchIndex + 1) * $batchSize];
         }
         // return the last batch if it has smaller size

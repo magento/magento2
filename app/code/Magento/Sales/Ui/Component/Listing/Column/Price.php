@@ -49,7 +49,7 @@ class Price extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
                 $item[$this->getData('name')] = $this->priceFormatter->format(
                     $item[$this->getData('name')],

@@ -51,7 +51,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     {
         if (isset($dataSource['data']['items'])) {
             $fieldName = $this->getData('name');
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as &$item) {
                 $product = new \Magento\Framework\DataObject($item);
                 $imageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail');
                 $item[$fieldName . '_src'] = $imageHelper->getUrl();
