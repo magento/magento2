@@ -9,30 +9,36 @@ declare(strict_types=1);
 namespace Magento\AuthorizenetAcceptjs\Test\Unit\Block;
 
 use Magento\AuthorizenetAcceptjs\Block\Info;
-use Magento\Framework\DataObject;
+use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class InfoTest extends TestCase
 {
     public function testLabelsAreTranslated()
     {
+        /** @var Context|MockObject|InvocationMocker $contextMock */
         $contextMock = $this->createMock(Context::class);
+        /** @var Config|MockObject|InvocationMocker $configMock */
         $configMock = $this->createMock(ConfigInterface::class);
         $block = new Info($contextMock, $configMock);
+        /** @var InfoInterface|MockObject|InvocationMocker $payment */
         $payment = $this->createMock(InfoInterface::class);
+        /** @var RendererInterface|MockObject|InvocationMocker $translationRenderer */
         $translationRenderer = $this->createMock(RendererInterface::class);
 
         // only foo should be used
         $configMock->method('getValue')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['paymentInfoKeys', null,  'foo'],
                 ['privateInfoKeys', null, '']
-            ]));
+            ]);
 
         // Give more info to ensure only foo is translated
         $payment->method('getAdditionalInformation')

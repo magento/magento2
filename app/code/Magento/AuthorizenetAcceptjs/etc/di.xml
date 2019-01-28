@@ -36,7 +36,7 @@
     </virtualType>
 
     <!-- Validators -->
-    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorChain">
+    <virtualType name="AuthorizenetAcceptjsTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
         <arguments>
             <argument name="chainBreakingValidators" xsi:type="array">
                 <item name="general" xsi:type="boolean">true</item>
