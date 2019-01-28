@@ -120,7 +120,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $actual = array_map(function (CommentInterface $comment) {
             return $comment->getComment();
         }, $comments);
-        self::assertEquals(2, count($actual));
+        self::assertCount(2, $actual);
         self::assertEquals([$message1, $message2], $actual);
     }
 

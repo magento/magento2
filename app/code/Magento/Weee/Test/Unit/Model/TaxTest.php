@@ -252,7 +252,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = $this->model->getProductWeeeAttributes($product, null, null, $websitePassed, true);
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey(0, $result);
         $obj = $result[0];
         $this->assertEquals(1, $obj->getAmount());

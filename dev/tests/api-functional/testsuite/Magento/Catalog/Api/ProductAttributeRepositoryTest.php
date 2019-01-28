@@ -30,7 +30,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeCode = 'test_attribute_code_333';
         $attribute = $this->getAttribute($attributeCode);
 
-        $this->assertTrue(is_array($attribute));
+        $this->assertInternalType('array', $attribute);
         $this->assertArrayHasKey('attribute_id', $attribute);
         $this->assertArrayHasKey('attribute_code', $attribute);
         $this->assertEquals($attributeCode, $attribute['attribute_code']);
@@ -307,7 +307,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
 
         $output = $this->updateAttribute($attributeCode, $attributeData);
-        $this->assertEquals(4, count($output['options']));
+        $this->assertCount(4, $output['options']);
     }
 
     /**

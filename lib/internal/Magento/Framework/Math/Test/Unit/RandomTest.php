@@ -51,8 +51,8 @@ class RandomTest extends \PHPUnit\Framework\TestCase
         $mathRandom = new \Magento\Framework\Math\Random();
         $hashOne = $mathRandom->getUniqueHash();
         $hashTwo = $mathRandom->getUniqueHash();
-        $this->assertTrue(is_string($hashOne));
-        $this->assertTrue(is_string($hashTwo));
+        $this->assertInternalType('string', $hashOne);
+        $this->assertInternalType('string', $hashTwo);
         $this->assertNotEquals($hashOne, $hashTwo);
     }
 

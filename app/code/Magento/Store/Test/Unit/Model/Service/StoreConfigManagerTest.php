@@ -180,7 +180,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getStoreConfigs([$code]);
 
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         $this->assertEquals($id, $result[0]->getId());
         $this->assertEquals($code, $result[0]->getCode());
         $this->assertEquals($weightUnit, $result[0]->getWeightUnit());

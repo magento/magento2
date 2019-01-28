@@ -70,7 +70,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertEquals($product->getSku(), $response['products']['items'][0]['sku']);
         self::assertEquals(

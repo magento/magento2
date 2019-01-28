@@ -210,7 +210,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertConfigurableProductOptions($response['products']['items'][0]);
@@ -327,13 +327,13 @@ QUERY;
                 $mediaGalleryEntries,
                 "Precondition failed since there are incorrect number of media gallery entries"
             );
-            $this->assertTrue(
-                is_array(
+            $this->assertInternalType(
+                'array',
                     $actualResponse['variants']
                     [$variantKey]
                     ['product']
                     ['media_gallery_entries']
-                )
+                
             );
             $this->assertCount(
                 1,

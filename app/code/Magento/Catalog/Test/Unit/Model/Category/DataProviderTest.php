@@ -237,7 +237,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayNotHasKey('image', $result[$categoryId]);
     }
@@ -322,7 +322,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayHasKey('image', $result[$categoryId]);
 

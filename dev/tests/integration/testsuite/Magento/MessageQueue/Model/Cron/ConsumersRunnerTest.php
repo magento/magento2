@@ -159,9 +159,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             $pidFileFullPath = $this->getPidFileFullPath($consumerName);
 
             if ($consumerName === $specificConsumer) {
-                $this->assertTrue(file_exists($pidFileFullPath));
+                $this->assertFileExists($pidFileFullPath);
             } else {
-                $this->assertFalse(file_exists($pidFileFullPath));
+                $this->assertFileNotExists($pidFileFullPath);
             }
         }
     }
@@ -184,7 +184,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $pidFileFullPath = $this->getPidFileFullPath($consumer->getName());
-            $this->assertFalse(file_exists($pidFileFullPath));
+            $this->assertFileNotExists($pidFileFullPath);
         }
     }
 

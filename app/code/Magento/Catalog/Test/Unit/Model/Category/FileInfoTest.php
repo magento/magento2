@@ -125,7 +125,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getStat($fileName);
 
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(1, $result['size']);
     }

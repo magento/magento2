@@ -250,7 +250,7 @@ QUERY;
         $childProduct->setId(
             $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        $this->assertEquals(1, count($options));
+        $this->assertCount(1, $options);
         $this->assertResponseFields(
             $actualResponse['items'][0],
             [

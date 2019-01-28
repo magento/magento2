@@ -94,7 +94,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     public function testGetFlatColumnsDdlDefinition()
     {
         foreach ($this->_model->getFlatColumnsDdlDefinition() as $column) {
-            $this->assertTrue(is_array($column), 'Columns must be an array value');
+            $this->assertInternalType('array', $column, 'Columns must be an array value');
             $this->assertArrayHasKey('type', $column, 'Column must have type definition at least');
         }
     }

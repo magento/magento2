@@ -238,7 +238,7 @@ class TierPriceStorageTest extends WebapiAbstract
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $tierPrice = $tierPrices[0];
         $this->assertEmpty($response);
-        $this->assertEquals(1, count($tierPrices));
+        $this->assertCount(1, $tierPrices);
         $this->assertEquals($pricesToStore, $tierPrice);
     }
 

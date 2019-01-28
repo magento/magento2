@@ -45,7 +45,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class)
             ->getWidgetConfigAsArray();
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $element = null;
         if (isset(
             $config['parameters']

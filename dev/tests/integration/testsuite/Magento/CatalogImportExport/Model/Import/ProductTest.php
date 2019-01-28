@@ -1201,7 +1201,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple1');
-        $this->assertTrue(is_numeric($productId));
+        $this->assertInternalType('numeric', $productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
@@ -2167,9 +2167,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertCount(
             3,
-            count($productRepository->getList($searchCriteria)->getItems())
+            $productRepository->getList($searchCriteria)->getItems()
         );
         foreach ($importedPrices as $sku => $expectedPrice) {
             $this->assertEquals($expectedPrice, $productRepository->get($sku)->getPrice());
@@ -2193,9 +2193,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertCount(
             3,
-            count($productRepository->getList($searchCriteria)->getItems()),
+            $productRepository->getList($searchCriteria)->getItems(),
             'Ensures that new products were not created'
         );
         foreach ($updatedPrices as $sku => $expectedPrice) {

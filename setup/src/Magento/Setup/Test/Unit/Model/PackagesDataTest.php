@@ -224,10 +224,10 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('date', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('time', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('packages', $latestData);
-        $this->assertSame(3, count($latestData['packages']));
+        $this->assertCount(3, $latestData['packages']);
         $this->assertSame(3, $latestData['countOfUpdate']);
         $this->assertArrayHasKey('installPackages', $latestData);
-        $this->assertSame(1, count($latestData['installPackages']));
+        $this->assertCount(1, $latestData['installPackages']);
         $this->assertSame(1, $latestData['countOfInstall']);
     }
 
@@ -260,7 +260,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('repo1');
         $this->createPackagesData();
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(2, count($packages));
+        $this->assertCount(2, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
         $firstPackage = array_values($packages)[0];
@@ -271,7 +271,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetPackagesForUpdate()
     {
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(3, count($packages));
+        $this->assertCount(3, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('magento/package-2', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
@@ -283,7 +283,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetInstalledPackages()
     {
         $installedPackages = $this->packagesData->getInstalledPackages();
-        $this->assertEquals(3, count($installedPackages));
+        $this->assertCount(3, $installedPackages);
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
         $this->assertArrayHasKey('partner/package-3', $installedPackages);

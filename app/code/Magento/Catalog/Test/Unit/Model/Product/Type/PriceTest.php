@@ -197,7 +197,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // test the data actually set on the product
         $tpArray = $this->product->getData($this::KEY_TIER_PRICE);
         $this->assertNotNull($tpArray);
-        $this->assertTrue(is_array($tpArray));
+        $this->assertInternalType('array', $tpArray);
         $this->assertEquals(sizeof($tps), sizeof($tpArray));
 
         for ($i = 0; $i < sizeof($tps); $i++) {
@@ -225,7 +225,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
-        $this->assertTrue(is_array($tpRests));
+        $this->assertInternalType('array', $tpRests);
         $this->assertEquals(sizeof($tps), sizeof($tpRests));
         foreach ($tpRests as $tpRest) {
             $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());

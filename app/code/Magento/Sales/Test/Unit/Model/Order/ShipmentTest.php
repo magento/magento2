@@ -88,7 +88,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->shipmentModel->getCommentsCollection();
 
-        self::assertTrue(is_object($actual));
+        self::assertInternalType('object', $actual);
         self::assertEquals($this->commentCollection, $actual);
     }
 
@@ -126,7 +126,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($collection);
 
         $actual = $this->shipmentModel->getComments();
-        self::assertTrue(is_array($actual));
+        self::assertInternalType('array', $actual);
         self::assertEquals($collection, $actual);
     }
 

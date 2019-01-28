@@ -139,7 +139,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(4, count($tierPriceCollection));
+            $this->assertCount(4, $tierPriceCollection);
             $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
@@ -237,7 +237,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
-            $this->assertEquals(0, count($newPricingData));
+            $this->assertCount(0, $newPricingData);
         }
     }
 
@@ -281,7 +281,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(4, count($tierPriceCollection));
+            $this->assertCount(4, $tierPriceCollection);
             $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {

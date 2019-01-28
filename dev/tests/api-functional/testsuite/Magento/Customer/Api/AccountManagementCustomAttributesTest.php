@@ -271,6 +271,6 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $previousImagePath =
             $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][0][AttributeValue::VALUE];
-        $this->assertFalse(file_exists($customerMediaPath . $previousImagePath));
+        $this->assertFileNotExists($customerMediaPath . $previousImagePath);
     }
 }

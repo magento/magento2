@@ -409,7 +409,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
 
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         /** @var Error $current */
         $current = $tracks[0];
@@ -466,7 +466,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($status);
 
         $tracks = $this->carrier->getTracking($tracking)->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         $current = $tracks[0];
         $fields = [
@@ -590,11 +590,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         $current = $tracks[0];
         $this->assertNotEmpty($current['progressdetail']);
-        $this->assertEquals(1, count($current['progressdetail']));
+        $this->assertCount(1, $current['progressdetail']);
 
         $event = $current['progressdetail'][0];
         $fields = ['activity', 'deliverylocation'];

@@ -207,32 +207,32 @@ QUERY;
             );
         }
         //Checks to make sure that the given description exists in the expectedOutput array
-        $this->assertTrue(
-            array_key_exists(
+        $this->assertArrayHasKey(
+            
                 array_search(
                     'Comment for empty PhysicalProductInterface',
                     array_column($expectedOutput, 'description')
                 ),
                 $expectedOutput
-            )
+            
         );
-        $this->assertTrue(
-            array_key_exists(
+        $this->assertArrayHasKey(
+            
                 array_search(
                     'Comment for empty Enum',
                     array_column($expectedOutput, 'description')
                 ),
                 $expectedOutput
-            )
+            
         );
-        $this->assertTrue(
-            array_key_exists(
+        $this->assertArrayHasKey(
+            
                 array_search(
                     'Comment for SearchResultPageInfo',
                     array_column($expectedOutput, 'description')
                 ),
                 $expectedOutput
-            )
+            
         );
     }
 }

@@ -119,7 +119,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($reports as $report) {
             $this->assertInstanceOf(\Magento\Framework\DataObject::class, $report);
             $reportData = $report->getData();
-            $this->assertTrue(empty($reportData['children']));
+            $this->assertEmpty($reportData['children']);
             $this->assertTrue($reportData['is_empty']);
         }
         $this->assertEquals($size, count($reports));

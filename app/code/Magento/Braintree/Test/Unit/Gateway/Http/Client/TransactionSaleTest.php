@@ -112,7 +112,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
 
         $actualResult = $this->model->placeRequest($this->getTransferObjectMock());
 
-        $this->assertTrue(is_object($actualResult['object']));
+        $this->assertInternalType('object', $actualResult['object']);
         $this->assertEquals(['object' => $response], $actualResult);
     }
 

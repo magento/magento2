@@ -544,7 +544,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
         $list = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertEquals(1, count($list));
+        $this->assertCount(1, $list);
 
         $link = reset($list);
         foreach ($expectations['fields'] as $index => $value) {

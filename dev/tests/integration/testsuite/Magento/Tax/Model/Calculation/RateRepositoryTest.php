@@ -178,14 +178,14 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
+        $this->assertCount(1, $titles);
         $this->assertEquals($store->getId(), $titles[0]->getStoreId());
         $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
 
         $taxRateServiceData = $this->rateRepository->get($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
+        $this->assertCount(1, $titles);
         $this->assertEquals($store->getId(), $titles[0]->getStoreId());
         $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
     }

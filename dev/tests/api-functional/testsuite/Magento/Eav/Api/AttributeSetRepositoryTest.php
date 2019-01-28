@@ -257,7 +257,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertCount(1, $searchResult['items']);
         $this->assertEquals(
             $searchResult['items'][0]['attribute_set_name'],
             'attribute_set_3_for_search'

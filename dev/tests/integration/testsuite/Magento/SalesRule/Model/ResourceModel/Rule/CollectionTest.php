@@ -167,7 +167,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $quote->getShippingAddress()
             )->getItems()
         );
-        $this->assertEquals(3, count($appliedRulesArray));
+        $this->assertCount(3, $appliedRulesArray);
     }
 
     /**

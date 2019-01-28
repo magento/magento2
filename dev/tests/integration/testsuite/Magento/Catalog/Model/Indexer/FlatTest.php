@@ -76,7 +76,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
     }
 
     /**
@@ -128,7 +128,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $this->createSubCategoriesInDefaultCategory();
 
         $result = $this->getLoadedDefaultCategory()->getCollection()->getItems();
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
 
         $this->assertEquals(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
         $this->assertEquals(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
@@ -236,7 +236,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertCount($countBeforeModification, $result);
     }
 

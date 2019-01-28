@@ -132,11 +132,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
+        $this->assertCount(1, $roles);
         $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
+        $this->assertCount(1, $roles);
         $this->assertEquals(self::$_newRole->getId(), $roles[0]);
     }
 
@@ -307,7 +307,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->hasAssigned2Role($this->_model);
-        $this->assertEquals(1, count($role));
+        $this->assertCount(1, $role);
         $this->assertArrayHasKey('role_id', $role[0]);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();

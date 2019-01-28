@@ -45,6 +45,6 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->setBackupExtension('tgz');
 
         $this->assertTrue($this->filesystem->rollback());
-        $this->assertTrue(file_exists($rootDir . '/' . $fileName));
+        $this->assertFileExists($rootDir . '/' . $fileName);
     }
 }

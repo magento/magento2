@@ -47,7 +47,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $response = $this->_webApiCall($serviceInfo, ['cartId' => $quoteId]);
-        $this->assertEquals(1, count($response));
+        $this->assertCount(1, $response);
         $response = $response[0];
         $bundleOption = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOption();
         $bundleOptionQty = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOptionQty();
@@ -192,7 +192,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $cartItems = $quoteUpdated->getAllVisibleItems();
         $buyRequest = $cartItems[0]->getBuyRequest()->toArray();
 
-        $this->assertEquals(1, count($cartItems));
+        $this->assertCount(1, $cartItems);
         $this->assertEquals(count($buyRequest['bundle_option']), count($bundleOptions));
         foreach ($bundleOptions as $option) {
             $optionId = $option['option_id'];

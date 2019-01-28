@@ -61,7 +61,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get($sku, false, null, true);
         $this->assertNull($product->getOptionById($optionId));
-        $this->assertEquals(9, count($product->getOptions()));
+        $this->assertCount(9, $product->getOptions());
     }
 
     /**

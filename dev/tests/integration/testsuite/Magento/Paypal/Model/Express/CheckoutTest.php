@@ -172,7 +172,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $customer = $customerService->getById($quote->getCustomerId());
 
         $this->assertEquals(1, $quote->getCustomerId());
-        $this->assertEquals(2, count($customer->getAddresses()));
+        $this->assertCount(2, $customer->getAddresses());
 
         $this->assertEquals(1, $quote->getBillingAddress()->getCustomerAddressId());
         $this->assertEquals(2, $quote->getShippingAddress()->getCustomerAddressId());

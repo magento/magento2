@@ -59,7 +59,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase
         $password = uniqid();
         $hash = $this->_model->getHash($password, true);
 
-        $this->assertTrue(is_string($hash));
+        $this->assertInternalType('string', $hash);
         $this->assertTrue($this->_model->validateHash($password, $hash));
     }
 }

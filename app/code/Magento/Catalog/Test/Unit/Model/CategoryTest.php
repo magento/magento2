@@ -468,7 +468,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
-        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertCount(1, $this->category->getCustomAttributes());
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $initialCustomAttributeValue,
@@ -477,7 +477,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
-        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertCount(1, $this->category->getCustomAttributes());
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $newCustomAttributeValue,

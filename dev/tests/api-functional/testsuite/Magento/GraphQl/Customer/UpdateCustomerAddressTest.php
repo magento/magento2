@@ -217,7 +217,7 @@ MUTATION;
             ['response_field' => 'default_billing', 'expected_value' => (bool)$address->isDefaultBilling()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
-        $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
+        $this->assertInternalType('array', [$actualResponse['region']], "region field must be of an array type.");
         $assertionRegionMap = [
             ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
             ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],

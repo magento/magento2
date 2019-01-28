@@ -121,7 +121,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         foreach ($expected as $expKey => $expVal) {
             $this->assertArrayHasKey($expKey, $actual, 'Schema does not contain \'' . $expKey . '\' section.');
             if (is_array($expVal)) {
-                $this->assertTrue(is_array($actual[$expKey]));
+                $this->assertInternalType('array', $actual[$expKey]);
                 $this->assertRecursiveArray($expVal, $actual[$expKey], $checkVal);
             } elseif ($checkVal) {
                 $this->assertEquals($expVal, $actual[$expKey], '\'' . $expKey . '\' section content is invalid.');

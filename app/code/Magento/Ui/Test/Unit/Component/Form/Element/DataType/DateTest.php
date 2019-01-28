@@ -65,7 +65,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
@@ -103,7 +103,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);

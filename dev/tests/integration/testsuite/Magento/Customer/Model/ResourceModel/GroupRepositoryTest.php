@@ -186,7 +186,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchResults = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
         /** @var GroupInterface[] $results */
         $results = $searchResults->getItems();
-        $this->assertEquals(4, count($results));
+        $this->assertCount(4, $results);
     }
 
     /**

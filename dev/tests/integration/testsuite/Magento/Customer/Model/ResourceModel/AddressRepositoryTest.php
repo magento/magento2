@@ -386,7 +386,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $items = array_values($searchResults->getItems());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $expectedResultIndex = count($expectedResult) - 1;
 

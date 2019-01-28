@@ -25,7 +25,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->setOrder('code', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(4, count($items));
+        $this->assertCount(4, $items);
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -49,7 +49,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code'], [['NOT LOGGED IN']]);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -61,7 +61,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code', 'code'], ['General', 'Retailer']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -77,7 +77,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', 'NOT LOGGED IN');
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -89,7 +89,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', ['like' => 'NOT%']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());

@@ -137,7 +137,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($this->model->getItemsByType(MessageInterface::TYPE_ERROR), $this->model->getErrors());
-        $this->assertEquals(4, count($this->model->getErrors()));
+        $this->assertCount(4, $this->model->getErrors());
     }
 
     /**

@@ -49,7 +49,7 @@ class VariationHandlerTest extends \PHPUnit\Framework\TestCase
         $this->_product->setNewVariationsAttributeSetId(4);
         // Default attribute set id
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
-        $this->assertEquals(3, count($generatedProducts));
+        $this->assertCount(3, $generatedProducts);
         foreach ($generatedProducts as $productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId);
             /** @var $product \Magento\Catalog\Model\Product */

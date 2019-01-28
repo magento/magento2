@@ -80,7 +80,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->productRepository->get('bundle-product', false, $secondStoreId, true);
         $options = $optionList->getItems($product);
-        $this->assertEquals(1, count($options));
+        $this->assertCount(1, $options);
         $this->assertEquals(
             $title . ' ' . $this->store->load('fixture_second_store')->getCode(),
             $options[0]->getTitle()

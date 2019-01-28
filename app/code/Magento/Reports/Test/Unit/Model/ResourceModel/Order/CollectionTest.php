@@ -281,7 +281,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
-        $this->assertEquals(3, count($result));
+        $this->assertCount(3, $result);
     }
 
     /**
@@ -289,8 +289,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDateRangeWithReturnObject()
     {
-        $this->assertEquals(2, count($this->collection->getDateRange('7d', '', '', true)));
-        $this->assertEquals(3, count($this->collection->getDateRange('7d', '', '', false)));
+        $this->assertCount(2, $this->collection->getDateRange('7d', '', '', true));
+        $this->assertCount(3, $this->collection->getDateRange('7d', '', '', false));
     }
 
     /**

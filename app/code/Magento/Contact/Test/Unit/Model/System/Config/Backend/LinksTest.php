@@ -23,6 +23,6 @@ class LinksTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdentities()
     {
-        $this->assertTrue(is_array($this->_model->getIdentities()));
+        $this->assertInternalType('array', $this->_model->getIdentities());
     }
 }

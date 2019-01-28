@@ -149,7 +149,7 @@ class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
         $this->tierPriceFactory->expects($this->atLeastOnce())->method('create')->willReturn($price);
         $prices = $this->tierPriceStorage->get($skus);
         $this->assertNotEmpty($prices);
-        $this->assertEquals(2, count($prices));
+        $this->assertCount(2, $prices);
     }
 
     /**

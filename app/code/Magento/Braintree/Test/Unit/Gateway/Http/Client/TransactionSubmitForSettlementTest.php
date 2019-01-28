@@ -91,7 +91,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
         /** @var TransferInterface|MockObject $transferObject */
         $transferObject = $this->getTransferObjectMock();
         $response = $this->client->placeRequest($transferObject);
-        static::assertTrue(is_object($response['object']));
+        static::assertInternalType('object', $response['object']);
         static::assertEquals(['object' => $data], $response);
     }
 

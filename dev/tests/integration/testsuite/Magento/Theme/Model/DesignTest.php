@@ -146,7 +146,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
         $cachedDesign = $serializer->unserialize($cachedDesign);
 
-        $this->assertTrue(is_array($cachedDesign));
+        $this->assertInternalType('array', $cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
     }
 

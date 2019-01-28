@@ -92,7 +92,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $product = $productRepository->get('simple-with-ftp');
 
         $amount = $this->_model->getProductWeeeAttributes($product, $shipping, null, null, true);
-        $this->assertTrue(is_array($amount));
+        $this->assertInternalType('array', $amount);
         $this->assertArrayHasKey(0, $amount);
         $this->assertEquals(12.70, $amount[0]->getAmount());
     }

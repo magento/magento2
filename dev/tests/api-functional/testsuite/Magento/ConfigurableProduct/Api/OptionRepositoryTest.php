@@ -24,14 +24,14 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $productSku = 'configurable';
 
         $options = $this->getList($productSku);
-        $this->assertTrue(is_array($options));
+        $this->assertInternalType('array', $options);
         $this->assertNotEmpty($options);
 
         foreach ($options as $option) {
             /** @var array $result */
             $result = $this->get($productSku, $option['id']);
 
-            $this->assertTrue(is_array($result));
+            $this->assertInternalType('array', $result);
             $this->assertNotEmpty($result);
 
             $this->assertArrayHasKey('id', $result);
@@ -44,7 +44,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->assertEquals($option['label'], $result['label']);
 
             $this->assertArrayHasKey('values', $result);
-            $this->assertTrue(is_array($result['values']));
+            $this->assertInternalType('array', $result['values']);
             $this->assertEquals($option['values'], $result['values']);
         }
     }
@@ -60,26 +60,26 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $result = $this->getList($productSku);
 
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey(0, $result);
 
         $option = $result[0];
 
         $this->assertNotEmpty($option);
-        $this->assertTrue(is_array($option));
+        $this->assertInternalType('array', $option);
 
         $this->assertArrayHasKey('id', $option);
         $this->assertArrayHasKey('label', $option);
         $this->assertEquals($option['label'], 'Test Configurable');
 
         $this->assertArrayHasKey('values', $option);
-        $this->assertTrue(is_array($option));
+        $this->assertInternalType('array', $option);
         $this->assertNotEmpty($option);
 
         $this->assertCount(2, $option['values']);
 
         foreach ($option['values'] as $value) {
-            $this->assertTrue(is_array($value));
+            $this->assertInternalType('array', $value);
             $this->assertNotEmpty($value);
 
             $this->assertArrayHasKey('value_index', $value);
