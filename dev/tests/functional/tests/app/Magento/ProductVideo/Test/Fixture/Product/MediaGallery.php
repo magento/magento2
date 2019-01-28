@@ -53,23 +53,23 @@ class MediaGallery extends DataSource
         $filename = $this->getFullPath($filename);
         if (!file_exists($filename)) {
             // Create an image with the specified dimensions
-            $image = imageCreate(300, 200);
+            $image = imagecreate(300, 200);
 
             // Create a color (this first call to imageColorAllocate
             //  also automatically sets the image background color)
-            $colorYellow = imageColorAllocate($image, 255, 255, 0);
+            $colorYellow = imagecolorallocate($image, 255, 255, 0);
 
             // Draw a rectangle
-            imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
+            imagefilledrectangle($image, 50, 50, 250, 150, $colorYellow);
 
             $directory = dirname($filename);
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
             }
-            imageJpeg($image, $filename);
+            imagejpeg($image, $filename);
 
             // Release memory
-            imageDestroy($image);
+            imagedestroy($image);
         }
     }
 
