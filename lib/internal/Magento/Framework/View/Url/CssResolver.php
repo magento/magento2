@@ -85,7 +85,7 @@ class CssResolver
             }
         }
 
-        $result = implode($css);
+        $result = implode('', $css);
         if ($imports) {
             $result = implode("\n", $imports)
                 . "\n/* The above import directives are aggregated from content. */\n"

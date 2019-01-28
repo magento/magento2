@@ -112,7 +112,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
         $arguments[] = new InputArgument(
             self::INPUT_KEY_INDEXER,
             InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            $optionDescription . ' (' . implode($this->indexers) . ')'
+            $optionDescription . ' (' . implode('', $this->indexers) . ')'
         );
 
         return $arguments;

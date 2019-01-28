@@ -90,7 +90,7 @@ class StaticCalls implements ParserInterface, DependenciesCollectorInterface
             $staticClassParts[] = $this->tokens->getTokenValueByKey($staticCall - $step);
             $step++;
         }
-        return implode(array_reverse($staticClassParts));
+        return implode('', array_reverse($staticClassParts));
     }
 
     /**

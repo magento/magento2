@@ -522,7 +522,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         foreach ($headers as $k => $v) {
             $str[] = "{$k}: {$v}\r\n";
         }
-        return implode($str);
+        return implode('', $str);
     }
 
     /**

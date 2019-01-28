@@ -113,7 +113,7 @@ class SendEmailToFriend implements ResolverInterface
 
         $validationResult = $sendFriend->validate();
         if ($validationResult !== true) {
-            throw new GraphQlInputException(__(implode($validationResult)));
+            throw new GraphQlInputException(__(implode('', $validationResult)));
         }
     }
 

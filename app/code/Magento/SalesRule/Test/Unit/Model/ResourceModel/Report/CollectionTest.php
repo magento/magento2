@@ -163,10 +163,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->selectMock->expects($this->at(3))
             ->method('where')
-            ->with($this->equalTo(implode([
+            ->with($this->equalTo(implode(' OR ', [
                 'test_1',
                 'test_2',
-            ], ' OR ')));
+            ])));
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())

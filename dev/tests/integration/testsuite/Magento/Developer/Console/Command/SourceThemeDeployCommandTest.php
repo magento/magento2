@@ -79,7 +79,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->clearStaticDirectory();
 
-        self::assertEmpty($error, implode($error));
+        self::assertEmpty($error, implode('', $error));
     }
 
     /**
