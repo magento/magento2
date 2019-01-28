@@ -183,7 +183,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-   public function getContentType()
+    public function getContentType()
     {
         $this->_getHandle();
         if ($this->_linkType === self::LINK_TYPE_FILE) {
@@ -253,10 +253,21 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 );
             }
         }
-
+        
         $this->_resourceFile = $resourceFile;
+        
+        /**
+        * check header for urls
+        */
+        if ($linkType === self::LINK_TYPE_URL) {
+            $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
+            if(isset($headers['location'])){
+                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location']): 
+                                        $headers['location'];
+            }
+        }
+        
         $this->_linkType = $linkType;
-
         return $this;
     }
 
