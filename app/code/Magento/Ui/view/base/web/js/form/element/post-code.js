@@ -32,7 +32,7 @@ define([
                 return;
             }
 
-            option = options[value];
+            option = options[value] ? options[value] : {};
 
             if (option['is_zipcode_optional']) {
                 this.error(false);
