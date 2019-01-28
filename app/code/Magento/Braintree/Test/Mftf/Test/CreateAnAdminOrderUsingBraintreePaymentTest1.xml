@@ -40,16 +40,18 @@
 
         <!--Create New Role-->
         <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
-        <actionGroup ref="AdminCreateRole" stepKey="AdminCreateNewRole"/>
+        <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
+        <actionGroup ref="AdminCreateNewRole" stepKey="AdminCreateNewRole"/>
 
-        <!--Create New User With Specific Role-->
+        <!--Create new admin user-->
         <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <waitForPageLoad stepKey="waitForUsers" time="15"/>
         <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
 
         <!--SignOut-->
         <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
 
-        <!--SignIn New User-->
+        <!--Log in as new user-->
         <actionGroup ref="LoginNewUser" stepKey="signInNewUser"/>
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
@@ -93,7 +95,7 @@
 
             <!--Delete User -->
             <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
-            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
 
             <!--Delete Role-->
             <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
