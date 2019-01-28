@@ -8,11 +8,11 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Product Test
@@ -565,14 +565,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->at(1))->method('registry')->will($this->returnValue($this->category));
         $this->assertFalse($this->model->getCategoryId());
         $this->assertEquals(10, $this->model->getCategoryId());
-    }
-
-    public function testGetCategoryIdWhenProductNotInCurrentCategory()
-    {
-        $this->model->setData('category_ids', [12]);
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(10));
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
-        $this->assertFalse($this->model->getCategoryId());
     }
 
     public function testGetIdBySku()
