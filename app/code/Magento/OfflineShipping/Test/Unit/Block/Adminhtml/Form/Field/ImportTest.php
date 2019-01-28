@@ -31,21 +31,21 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['getFieldNameSuffix', 'addSuffixToName'],
             [],
             '',
             false,
             false
         );
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import',
+            \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
             [
                 'escaper' => $this->escaperMock,
                 'data' => $testData,

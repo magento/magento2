@@ -29,7 +29,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
@@ -48,7 +48,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->file = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Form\Field\File',
+            \Magento\Config\Block\System\Config\Form\Field\File::class,
             [
                 'escaper' => $this->escaperMock,
                 'data' => $this->testData,

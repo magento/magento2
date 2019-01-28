@@ -36,13 +36,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\Url::class, [], [], '', false);
         $this->image = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Form\Field\Image',
+            \Magento\Config\Block\System\Config\Form\Field\Image::class,
             [
                 'escaper' => $this->escaperMock,
                 'urlBuilder' => $this->urlBuilderMock,
