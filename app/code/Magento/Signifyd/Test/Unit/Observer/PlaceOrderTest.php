@@ -103,7 +103,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->withActiveSignifydIntegration(false, $storeId);
         $this->withOrderEntity($orderId, $storeId);
 
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $this->placeOrder->execute($this->observer);
@@ -119,7 +119,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->withActiveSignifydIntegration(true);
         $this->withOrderEntity(null, null);
 
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $this->placeOrder->execute($this->observer);
@@ -138,7 +138,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->withOrderEntity($orderId, $storeId);
         $this->withAvailablePaymentMethod(false);
 
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $this->placeOrder->execute($this->observer);
@@ -160,11 +160,11 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->withAvailablePaymentMethod(true);
 
         $this->creationService->method('createForOrder')
-            ->with(self::equalTo($orderId))
+            ->with($this->equalTo($orderId))
             ->willThrowException(new AlreadyExistsException($exceptionMessage));
 
         $this->logger->method('error')
-            ->with(self::equalTo($exceptionMessage));
+            ->with($this->equalTo($exceptionMessage));
 
         $result = $this->placeOrder->execute($this->observer);
         $this->assertNull($result);
@@ -186,9 +186,9 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->creationService
             ->method('createForOrder')
-            ->with(self::equalTo($orderId));
+            ->with($this->equalTo($orderId));
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $this->placeOrder->execute($this->observer);
@@ -205,7 +205,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(Order::STATE_PENDING_PAYMENT);
         $this->withAvailablePaymentMethod(true);
 
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $this->placeOrder->execute($this->observer);

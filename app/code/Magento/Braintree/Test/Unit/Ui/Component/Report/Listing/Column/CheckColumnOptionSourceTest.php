@@ -19,7 +19,7 @@ class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
         $source = new PaymentType();
         $options = $source->toOptionArray();
 
-        static::assertEquals(6, count($options));
+        $this->assertEquals(6, count($options));
     }
 
     public function testStatusSource()
@@ -27,7 +27,7 @@ class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
         $source = new Status();
         $options = $source->toOptionArray();
 
-        static::assertEquals(14, count($options));
+        $this->assertEquals(14, count($options));
     }
 
     public function testTransactionTypeSource()
@@ -35,6 +35,6 @@ class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
         $source = new TransactionType();
         $options = $source->toOptionArray();
 
-        static::assertEquals(2, count($options));
+        $this->assertEquals(2, count($options));
     }
 }

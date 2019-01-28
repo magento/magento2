@@ -69,11 +69,11 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $buildSubject = [];
 
-        $this->configMock->expects(self::never())
+        $this->configMock->expects($this->never())
             ->method('hasFraudProtection')
             ->willReturn(true);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
@@ -92,28 +92,28 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $order = $this->createMock(OrderAdapterInterface::class);
-        $this->paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
+        $this->paymentDOMock->expects($this->once())->method('getOrder')->willReturn($order);
 
         $buildSubject = ['payment' => $this->paymentDOMock];
 
-        $this->paymentMock->expects(self::exactly(count($additionalData)))
+        $this->paymentMock->expects($this->exactly(count($additionalData)))
             ->method('getAdditionalInformation')
             ->willReturn($additionalData);
 
-        $this->configMock->expects(self::once())
+        $this->configMock->expects($this->once())
             ->method('hasFraudProtection')
             ->willReturn(true);
 
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expectedResult,
             $this->builder->build($buildSubject)
         );

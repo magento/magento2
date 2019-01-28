@@ -311,7 +311,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             $productMetadata
         );
 
-        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        $this->assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
     }
 
     /**
@@ -322,9 +322,9 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
         $notationCode = 'Magento_Cart_EditionFromConfig';
 
         $this->scopeConfigMock->method('getValue')
-            ->with(self::equalTo('paypal/notation_code'), self::equalTo('stores'))
+            ->with($this->equalTo('paypal/notation_code'), $this->equalTo('stores'))
             ->willReturn($notationCode);
 
-        self::assertEquals($notationCode, $this->config->getBuildNotationCode());
+        $this->assertEquals($notationCode, $this->config->getBuildNotationCode());
     }
 }

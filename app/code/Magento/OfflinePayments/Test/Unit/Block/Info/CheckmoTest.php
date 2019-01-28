@@ -51,13 +51,13 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPayableTo($details, $expected)
     {
-        $this->info->expects(static::at(0))
+        $this->info->expects($this->at(0))
             ->method('getAdditionalInformation')
             ->with('payable_to')
             ->willReturn($details);
         $this->block->setData('info', $this->info);
 
-        static::assertEquals($expected, $this->block->getPayableTo());
+        $this->assertEquals($expected, $this->block->getPayableTo());
     }
 
     /**
@@ -80,13 +80,13 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMailingAddress($details, $expected)
     {
-        $this->info->expects(static::at(1))
+        $this->info->expects($this->at(1))
             ->method('getAdditionalInformation')
             ->with('mailing_address')
             ->willReturn($details);
         $this->block->setData('info', $this->info);
 
-        static::assertEquals($expected, $this->block->getMailingAddress());
+        $this->assertEquals($expected, $this->block->getMailingAddress());
     }
 
     /**
@@ -107,7 +107,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
     public function testConvertAdditionalDataIsNeverCalled()
     {
         $mailingAddress = 'blah@blah.com';
-        $this->info->expects(static::at(1))
+        $this->info->expects($this->at(1))
             ->method('getAdditionalInformation')
             ->with('mailing_address')
             ->willReturn($mailingAddress);
@@ -117,6 +117,6 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
         $this->block->getMailingAddress();
 
         // And now we get already setted property $this->_mailingAddress
-        static::assertEquals($mailingAddress, $this->block->getMailingAddress());
+        $this->assertEquals($mailingAddress, $this->block->getMailingAddress());
     }
 }

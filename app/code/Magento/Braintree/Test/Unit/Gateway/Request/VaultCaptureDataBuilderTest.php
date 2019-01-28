@@ -103,7 +103,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($token);
 
         $result = $this->builder->build($buildSubject);
-        self::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**

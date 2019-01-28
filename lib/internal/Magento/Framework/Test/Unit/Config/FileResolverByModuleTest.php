@@ -81,7 +81,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $iterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $iterator->expects(self::once())
+        $iterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 'some_path' => '<xml>Some Content</xml>'
@@ -89,7 +89,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $primaryIterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $primaryIterator->expects(self::once())
+        $primaryIterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
@@ -97,28 +97,28 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
             ->willReturn(['app/etc/db_schema.xml']);
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/www/app/etc/db_schema.xml');
-        $this->readerMock->expects(self::once())
+        $this->readerMock->expects($this->once())
             ->method('getConfigurationFiles')
             ->willReturn($iterator);
-        $this->fileIteratorFactoryMock->expects(self::once())
+        $this->fileIteratorFactoryMock->expects($this->once())
             ->method('create')
             ->with(['/www/app/etc/db_schema.xml'])
             ->willReturn($primaryIterator);
-        $this->fileDriver->expects(self::once())
+        $this->fileDriver->expects($this->once())
             ->method('isFile')
             ->with('/www/app/etc/db_schema.xml')
             ->willReturn(true);
-        $this->filesystemMock->expects(self::once())
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->willReturn($directoryMock);
-        self::assertEquals(
+        $this->assertEquals(
             $this->model->get('db_schema.xml', 'all'),
             [
                 'some_path' => '<xml>Some Content</xml>',
@@ -135,7 +135,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $iterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $iterator->expects(self::once())
+        $iterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 'some_path' => '<xml>Some Content</xml>'
@@ -143,7 +143,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $primaryIterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $primaryIterator->expects(self::once())
+        $primaryIterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
@@ -151,25 +151,25 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
             ->willReturn(['app/etc/db_schema.xml']);
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/www/app/etc/db_schema.xml');
-        $this->readerMock->expects(self::once())
+        $this->readerMock->expects($this->once())
             ->method('getConfigurationFiles')
             ->willReturn($iterator);
-        $this->fileIteratorFactoryMock->expects(self::once())
+        $this->fileIteratorFactoryMock->expects($this->once())
             ->method('create')
             ->with(['/www/app/etc/db_schema.xml'])
             ->willReturn($primaryIterator);
-        $this->fileDriver->expects(self::once())
+        $this->fileDriver->expects($this->once())
             ->method('isFile')
             ->with('/www/app/etc/db_schema.xml')
             ->willReturn(true);
-        $this->filesystemMock->expects(self::once())
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->willReturn($directoryMock);
         $this->model->get('db_schema.xml', 'all');
@@ -180,7 +180,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $iterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $iterator->expects(self::once())
+        $iterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 'some_path/etc/db_schema.xml' => '<xml>Some Content</xml>'
@@ -188,7 +188,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $primaryIterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $primaryIterator->expects(self::once())
+        $primaryIterator->expects($this->once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
@@ -196,32 +196,32 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
             ->willReturn(['app/etc/db_schema.xml']);
-        $directoryMock->expects(self::once())
+        $directoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/www/app/etc/db_schema.xml');
-        $this->readerMock->expects(self::once())
+        $this->readerMock->expects($this->once())
             ->method('getConfigurationFiles')
             ->willReturn($iterator);
-        $this->fileIteratorFactoryMock->expects(self::once())
+        $this->fileIteratorFactoryMock->expects($this->once())
             ->method('create')
             ->with(['/www/app/etc/db_schema.xml'])
             ->willReturn($primaryIterator);
-        $this->fileDriver->expects(self::once())
+        $this->fileDriver->expects($this->once())
             ->method('isFile')
             ->with('/www/app/etc/db_schema.xml')
             ->willReturn(true);
-        $this->filesystemMock->expects(self::once())
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->willReturn($directoryMock);
-        $this->componentRegistrarMock->expects(self::once())
+        $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
             ->with('module', 'Magento_Some')
             ->willReturn('some_path');
-        self::assertEquals(
+        $this->assertEquals(
             [
                 'some_path/etc/db_schema.xml' => '<xml>Some Content</xml>',
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'

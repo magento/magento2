@@ -84,7 +84,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cookieManagerMock->expects(static::once())
+        $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
                 FormKey::COOKIE_NAME,
@@ -106,26 +106,26 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cookieMetadataFactory->expects(static::once())
+        $this->cookieMetadataFactory->expects($this->once())
             ->method('createCookieMetadata')
             ->willReturn($metadata);
 
-        $this->sessionManager->expects(static::once())
+        $this->sessionManager->expects($this->once())
             ->method('getCookiePath')
             ->willReturn($cookiePath);
-        $metadata->expects(static::once())
+        $metadata->expects($this->once())
             ->method('setPath')
             ->with($cookiePath)
             ->willReturnSelf();
-        $this->sessionManager->expects(static::once())
+        $this->sessionManager->expects($this->once())
             ->method('getCookieDomain')
             ->willReturn($cookieDomain);
-        $metadata->expects(static::once())
+        $metadata->expects($this->once())
             ->method('setDomain')
             ->with($cookieDomain)
             ->willReturnSelf();
 
-        $this->cookieManagerMock->expects(static::once())
+        $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
             ->with(
                 FormKey::COOKIE_NAME,

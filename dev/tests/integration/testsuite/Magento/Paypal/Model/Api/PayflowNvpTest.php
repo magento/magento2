@@ -103,7 +103,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
                 'https://payflowpro.paypal.com/transaction',
                 '1.1',
                 ['PAYPAL-NVP: Y'],
-                self::equalTo($request)
+                $this->equalTo($request)
             );
 
         $this->httpClient->method('read')

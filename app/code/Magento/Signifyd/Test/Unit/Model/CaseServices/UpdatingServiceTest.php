@@ -146,7 +146,7 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception('Something wrong.'));
 
@@ -169,12 +169,12 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
-        $this->caseRepository->expects(self::never())
+        $this->caseRepository->expects($this->never())
             ->method('save')
             ->with($caseEntity)
             ->willReturn($caseEntity);
 
-        $this->messageGenerator->expects(self::once())
+        $this->messageGenerator->expects($this->once())
             ->method('generate')
             ->with($data)
             ->willThrowException(new GeneratorException(__('Cannot generate message.')));
@@ -199,22 +199,22 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('save')
             ->with($caseEntity)
             ->willReturn($caseEntity);
 
-        $this->orderGridUpdater->expects(self::once())
+        $this->orderGridUpdater->expects($this->once())
             ->method('update')
             ->with($data['orderId']);
 
         $message = __('Message is generated.');
-        $this->messageGenerator->expects(self::once())
+        $this->messageGenerator->expects($this->once())
             ->method('generate')
             ->with($data)
             ->willReturn($message);
 
-        $this->commentsHistoryUpdater->expects(self::once())
+        $this->commentsHistoryUpdater->expects($this->once())
             ->method('addComment')
             ->with($caseEntity, $message)
             ->willThrowException(new \Exception('Something wrong'));
@@ -238,30 +238,30 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         $caseEntity = $this->withCaseEntity(21, $caseId, $data);
 
         $caseEntitySaved = clone $caseEntity;
-        $caseEntitySaved->expects(self::once())
+        $caseEntitySaved->expects($this->once())
             ->method('getGuaranteeDisposition')
             ->willReturn('APPROVED');
 
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('save')
             ->with($caseEntity)
             ->willReturn($caseEntitySaved);
 
         $message = __('Message is generated.');
-        $this->messageGenerator->expects(self::once())
+        $this->messageGenerator->expects($this->once())
             ->method('generate')
             ->with($data)
             ->willReturn($message);
 
-        $this->orderGridUpdater->expects(self::once())
+        $this->orderGridUpdater->expects($this->once())
             ->method('update')
             ->with($data['orderId']);
 
-        $this->commentsHistoryUpdater->expects(self::once())
+        $this->commentsHistoryUpdater->expects($this->once())
             ->method('addComment')
             ->with($caseEntitySaved, $message);
 
-        $this->orderStateService->expects(self::once())
+        $this->orderStateService->expects($this->once())
             ->method('updateByCase')
             ->with($caseEntitySaved);
 
@@ -287,26 +287,26 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMockForAbstractClass();
 
-        $caseEntity->expects(self::any())
+        $caseEntity->expects($this->any())
             ->method('getEntityId')
             ->willReturn($caseEntityId);
-        $caseEntity->expects(self::any())
+        $caseEntity->expects($this->any())
             ->method('getCaseId')
             ->willReturn($caseId);
 
         foreach ($data as $property => $value) {
             $method = 'set' . ucfirst($property);
             if ($property === 'orderId') {
-                $caseEntity->expects(self::never())
+                $caseEntity->expects($this->never())
                     ->method($method);
             }
-            $caseEntity->expects(self::any())
+            $caseEntity->expects($this->any())
                 ->method($method)
-                ->with(self::equalTo($value))
+                ->with($this->equalTo($value))
                 ->willReturnSelf();
 
             $method = 'get' . ucfirst($property);
-            $caseEntity->expects(self::any())
+            $caseEntity->expects($this->any())
                 ->method($method)
                 ->willReturn($value);
         }

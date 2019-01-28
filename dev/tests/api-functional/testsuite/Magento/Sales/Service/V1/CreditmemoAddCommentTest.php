@@ -79,8 +79,8 @@ class CreditmemoAddCommentTest extends WebapiAbstract
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
-        self::assertNotEmpty($result);
-        self::assertNotEmpty($result[Comment::ENTITY_ID]);
-        self::assertEquals($creditmemo->getId(), $result[Comment::PARENT_ID]);
+        $this->assertNotEmpty($result);
+        $this->assertNotEmpty($result[Comment::ENTITY_ID]);
+        $this->assertEquals($creditmemo->getId(), $result[Comment::PARENT_ID]);
     }
 }

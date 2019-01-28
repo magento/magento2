@@ -41,7 +41,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isReadonly', 'isDuplicable', 'isComposite'])
             ->getMockForAbstractClass();
 
-        $this->registryMock->expects(static::any())
+        $this->registryMock->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->willReturn($this->productMock);

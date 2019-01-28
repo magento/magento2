@@ -67,7 +67,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->customerAddressBlockRendererMock = $this->getMockBuilder(CustomerAddressBlockRenderer::class)
             ->getMockForAbstractClass();
 
-        $this->orderAddressMock->expects(static::any())
+        $this->orderAddressMock->expects($this->any())
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
@@ -89,17 +89,17 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $result = 'result string';
 
         $this->setStoreExpectations(1);
-        $this->customerAddressConfigMock->expects(static::atLeastOnce())
+        $this->customerAddressConfigMock->expects($this->atLeastOnce())
             ->method('getFormatByCode')
             ->with($type)
             ->willReturn($formatType);
-        $this->eventManagerMock->expects(static::once())
+        $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('customer_address_format', ['type' => $formatType, 'address' => $this->orderAddressMock]);
-        $this->orderAddressMock->expects(static::atLeastOnce())
+        $this->orderAddressMock->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn($addressData);
-        $this->customerAddressBlockRendererMock->expects(static::once())
+        $this->customerAddressBlockRendererMock->expects($this->once())
             ->method('renderArray')
             ->with($addressData, null)
             ->willReturn($result);
@@ -112,11 +112,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $type = 'html';
 
         $this->setStoreExpectations(1);
-        $this->customerAddressConfigMock->expects(static::atLeastOnce())
+        $this->customerAddressConfigMock->expects($this->atLeastOnce())
             ->method('getFormatByCode')
             ->with($type)
             ->willReturn(null);
-        $this->eventManagerMock->expects(static::never())
+        $this->eventManagerMock->expects($this->never())
             ->method('dispatch');
 
         $this->assertEquals(null, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
@@ -130,10 +130,10 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     private function setStoreExpectations($storeId)
     {
-        $this->orderMock->expects(static::atLeastOnce())
+        $this->orderMock->expects($this->atLeastOnce())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $this->customerAddressConfigMock->expects(static::atLeastOnce())
+        $this->customerAddressConfigMock->expects($this->atLeastOnce())
             ->method('setStore')
             ->with($storeId)
             ->willReturnSelf();

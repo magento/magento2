@@ -81,7 +81,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $itemFactoryMock->expects(self::any())
+        $itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(function ($data) {
                 $helper = new ObjectManager($this);
@@ -103,7 +103,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cmsPageFactoryMock->expects(self::any())
+        $cmsPageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($returnValue);
 
@@ -137,7 +137,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sitemapCmsPageMock->expects(self::any())
+        $sitemapCmsPageMock->expects($this->any())
             ->method('getCollection')
             ->willReturn($returnValue);
 

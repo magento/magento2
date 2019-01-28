@@ -84,12 +84,12 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $paymentMethodCode = 'exists_payment';
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('setMethodCode')
-            ->with(self::equalTo($paymentMethodCode))
+            ->with($this->equalTo($paymentMethodCode))
             ->willReturnSelf();
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with('cvv_ems_adapter')
             ->willReturn(PaymentVerificationInterface::class);
@@ -99,13 +99,13 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
-            ->with(self::equalTo(PaymentVerificationInterface::class))
+            ->with($this->equalTo(PaymentVerificationInterface::class))
             ->willReturn($cvvAdapter);
 
         $mapper = $this->factory->createPaymentCvv($paymentMethodCode);
-        self::assertInstanceOf(PaymentVerificationInterface::class, $mapper);
+        $this->assertInstanceOf(PaymentVerificationInterface::class, $mapper);
     }
 
     /**
@@ -117,21 +117,21 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $paymentMethodCode = 'non_exists_payment';
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('setMethodCode')
-            ->with(self::equalTo($paymentMethodCode))
+            ->with($this->equalTo($paymentMethodCode))
             ->willReturnSelf();
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with('cvv_ems_adapter')
             ->willReturn(null);
 
-        $this->fakeObjectManager->expects(self::never())
+        $this->fakeObjectManager->expects($this->never())
             ->method('create');
 
         $mapper = $this->factory->createPaymentCvv($paymentMethodCode);
-        self::assertSame($this->cvvDefaultAdapter, $mapper);
+        $this->assertSame($this->cvvDefaultAdapter, $mapper);
     }
 
     /**
@@ -145,20 +145,20 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $paymentMethodCode = 'exists_payment';
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('setMethodCode')
-            ->with(self::equalTo($paymentMethodCode))
+            ->with($this->equalTo($paymentMethodCode))
             ->willReturnSelf();
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with('cvv_ems_adapter')
             ->willReturn(\stdClass::class);
 
         $cvvAdapter = new \stdClass();
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
-            ->with(self::equalTo(\stdClass::class))
+            ->with($this->equalTo(\stdClass::class))
             ->willReturn($cvvAdapter);
 
         $this->factory->createPaymentCvv($paymentMethodCode);
@@ -173,12 +173,12 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $paymentMethodCode = 'exists_payment';
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('setMethodCode')
-            ->with(self::equalTo($paymentMethodCode))
+            ->with($this->equalTo($paymentMethodCode))
             ->willReturnSelf();
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with('avs_ems_adapter')
             ->willReturn(PaymentVerificationInterface::class);
@@ -187,13 +187,13 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
-            ->with(self::equalTo(PaymentVerificationInterface::class))
+            ->with($this->equalTo(PaymentVerificationInterface::class))
             ->willReturn($avsAdapter);
 
         $mapper = $this->factory->createPaymentAvs($paymentMethodCode);
-        self::assertInstanceOf(PaymentVerificationInterface::class, $mapper);
+        $this->assertInstanceOf(PaymentVerificationInterface::class, $mapper);
     }
 
     /**
@@ -203,20 +203,20 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $paymentMethodCode = 'non_exists_payment';
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('setMethodCode')
-            ->with(self::equalTo($paymentMethodCode))
+            ->with($this->equalTo($paymentMethodCode))
             ->willReturnSelf();
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with('avs_ems_adapter')
             ->willReturn(null);
 
-        $this->fakeObjectManager->expects(self::never())
+        $this->fakeObjectManager->expects($this->never())
             ->method('create');
 
         $mapper = $this->factory->createPaymentAvs($paymentMethodCode);
-        self::assertSame($this->avsDefaultAdapter, $mapper);
+        $this->assertSame($this->avsDefaultAdapter, $mapper);
     }
 }

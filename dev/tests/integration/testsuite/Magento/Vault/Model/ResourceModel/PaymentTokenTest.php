@@ -79,7 +79,7 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertTrue(
+        $this->assertTrue(
             $this->paymentToken->addLinkToOrderPayment(
                 $paymentToken->getEntityId(),
                 $this->order->getPayment()->getEntityId()
@@ -102,13 +102,13 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
             ->where('order_payment_id = ?', (int) $this->order->getPayment()->getEntityId())
             ->where('payment_token_id =?', (int) $paymentToken->getEntityId());
 
-        static::assertEmpty($this->connection->fetchRow($select));
-        static::assertTrue(
+        $this->assertEmpty($this->connection->fetchRow($select));
+        $this->assertTrue(
             $this->paymentToken->addLinkToOrderPayment(
                 $paymentToken->getEntityId(),
                 $this->order->getPayment()->getEntityId()
             )
         );
-        static::assertNotEmpty($this->connection->fetchRow($select));
+        $this->assertNotEmpty($this->connection->fetchRow($select));
     }
 }

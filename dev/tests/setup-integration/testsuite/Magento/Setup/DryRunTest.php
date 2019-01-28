@@ -45,9 +45,9 @@ class DryRunTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1'],
             ['dry-run' => true]
         );
-        self::assertFileExists($logFileName);
+        $this->assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
-        self::assertEquals($data, $this->getData()[0]);
+        $this->assertEquals($data, $this->getData()[0]);
     }
 
     /**
@@ -65,8 +65,8 @@ class DryRunTest extends SetupTestCase
             'etc'
         );
         $this->cliCommad->upgrade(['dry-run' => true]);
-        self::assertFileExists($logFileName);
+        $this->assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
-        self::assertEquals($data, $this->getData()[0]);
+        $this->assertEquals($data, $this->getData()[0]);
     }
 }

@@ -98,8 +98,8 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->createTable($this->getCreateTableDDL('old_table'));
         $this->model->renameTable('old_table', 'new_table');
         $tables = $this->model->getTables();
-        self::assertArrayHasKey('new_table', $tables['First_Module']);
-        self::assertArrayNotHasKey('old_table', $tables['First_Module']);
+        $this->assertArrayHasKey('new_table', $tables['First_Module']);
+        $this->assertArrayNotHasKey('old_table', $tables['First_Module']);
     }
 
     public function testDropIndex() : void
@@ -107,7 +107,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->setModuleName('First_Module');
         $this->model->createTable($this->getCreateTableDDL('index_table'));
         $this->model->dropIndex('index_table', 'INDEX_KEY', 'index');
-        self::assertTrue($this->model->getTables()['First_Module']['index_table']['indexes']['INDEX_KEY']['disabled']);
+        $this->assertTrue($this->model->getTables()['First_Module']['index_table']['indexes']['INDEX_KEY']['disabled']);
     }
 
     public function testCreateTable() : void
@@ -115,8 +115,8 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->setModuleName('First_Module');
         $this->model->createTable($this->getCreateTableDDL('new_table'));
         $tables = $this->model->getTables();
-        self::assertArrayHasKey('new_table', $tables['First_Module']);
-        self::assertEquals(
+        $this->assertArrayHasKey('new_table', $tables['First_Module']);
+        $this->assertEquals(
             [
                 'timestamp' =>
                     [
@@ -155,7 +155,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
             ],
             $tables['First_Module']['new_table']['columns']
         );
-        self::assertEquals(
+        $this->assertEquals(
             [
                 'primary' =>
                     [
@@ -186,7 +186,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
             $tables['First_Module']['new_table']['constraints']
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             [
                 'INDEX_KEY' =>
                     [
@@ -208,7 +208,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->createTable($this->getCreateTableDDL('old_table'));
         $this->model->setModuleName('New_Module');
         $this->model->dropTable('old_table');
-        self::assertTrue($this->model->getTables()['New_Module']['old_table']['disabled']);
+        $this->assertTrue($this->model->getTables()['New_Module']['old_table']['disabled']);
     }
 
     public function testDropTableInSameModule() : void
@@ -216,6 +216,6 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->setModuleName('Old_Module');
         $this->model->createTable($this->getCreateTableDDL('old_table'));
         $this->model->dropTable('old_table');
-        self::assertArrayNotHasKey('old_table', $this->model->getTables()['Old_Module']);
+        $this->assertArrayNotHasKey('old_table', $this->model->getTables()['Old_Module']);
     }
 }

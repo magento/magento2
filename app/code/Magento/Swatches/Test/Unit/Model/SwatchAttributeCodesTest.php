@@ -85,7 +85,7 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
             ->method('from')
             ->withConsecutive(
                 [
-                    self::identicalTo(
+                    $this->identicalTo(
                         ['a' => self::ATTRIBUTE_TABLE],
                         [
                             'attribute_id' => 'a.attribute_id',
@@ -94,7 +94,7 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
                     )
                 ],
                 [
-                    self::identicalTo(
+                    $this->identicalTo(
                         ['o' => self::ATTRIBUTE_OPTION_TABLE],
                         ['attribute_id' => 'o.attribute_id']
                     )
@@ -105,8 +105,8 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
         // used anything for second argument because of new \Zend_Db_Expt used in code.
         $selectMock->method('where')
             ->with(
-                self::identicalTo('a.attribute_id IN (?)'),
-                self::anything()
+                $this->identicalTo('a.attribute_id IN (?)'),
+                $this->anything()
             )
             ->willReturnSelf();
 
@@ -126,7 +126,7 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
                 [self::ATTRIBUTE_TABLE],
                 [self::ATTRIBUTE_OPTION_TABLE],
                 [self::SWATCH_OPTION_TABLE]
-            )->will(self::onConsecutiveCalls(
+            )->will($this->onConsecutiveCalls(
                 self::ATTRIBUTE_TABLE,
                 self::ATTRIBUTE_OPTION_TABLE,
                 self::SWATCH_OPTION_TABLE

@@ -105,8 +105,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
-        self::assertEquals(
+        $this->assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        $this->assertEquals(
             $secondFixtureAddressStreet,
             $address->getStreet(),
             "Street in default {$addressType} address is invalid."
@@ -120,7 +120,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals(
+        $this->assertEquals(
             $secondFixtureAddressId,
             $address->getId(),
             "Method results are not cached properly."
@@ -161,8 +161,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $addressId = $this->model->$methodName();
         $address = $this->addressRepository->getById($addressId);
 
-        self::assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
-        self::assertEquals(
+        $this->assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
+        $this->assertEquals(
             $firstFixtureAddressStreet,
             $address->getStreet(),
             "Street in default {$addressType} address is invalid."
@@ -199,7 +199,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $methodName = 'getCustomerDefault' . ucfirst($addressType) . 'Address';
         $address = $this->model->$methodName();
 
-        self::assertNull($address, "When customer has no addresses, null is expected.");
+        $this->assertNull($address, "When customer has no addresses, null is expected.");
     }
 
     /**
@@ -230,7 +230,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->model->createOrders();
 
         $orderList = $this->getOrderList((int)$quote->getId());
-        self::assertCount(3, $orderList);
+        $this->assertCount(3, $orderList);
 
         /**
          * @var Order $firstOrder
@@ -433,7 +433,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($expected as $key => $item) {
             $methodName = 'get' . ucfirst($key);
-            self::assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            $this->assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
         }
     }
 
@@ -474,6 +474,6 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private function performOrderTotalAssertions(float $total, float $expected)
     {
-        self::assertEquals($expected, $total, 'Order total amount does not match.');
+        $this->assertEquals($expected, $total, 'Order total amount does not match.');
     }
 }

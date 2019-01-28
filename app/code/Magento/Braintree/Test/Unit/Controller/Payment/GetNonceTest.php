@@ -87,7 +87,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId', 'getStoreId'])
             ->getMock();
-        $this->sessionMock->expects(static::once())
+        $this->sessionMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn(null);
 
@@ -96,10 +96,10 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::any())
+        $context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        $context->expects(static::any())
+        $context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
 
@@ -117,28 +117,28 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithException()
     {
-        $this->requestMock->expects(static::once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('public_hash')
             ->willReturn(null);
 
-        $this->sessionMock->expects(static::once())
+        $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn(null);
 
         $exception = new \Exception('The "publicHash" field does not exists');
-        $this->commandMock->expects(static::once())
+        $this->commandMock->expects($this->once())
             ->method('execute')
             ->willThrowException($exception);
 
-        $this->loggerMock->expects(static::once())
+        $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
 
-        $this->resultMock->expects(static::once())
+        $this->resultMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(Exception::HTTP_BAD_REQUEST);
-        $this->resultMock->expects(static::once())
+        $this->resultMock->expects($this->once())
             ->method('setData')
             ->with(['message' => 'Sorry, but something went wrong']);
 
@@ -154,32 +154,32 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
         $publicHash = '65b7bae0dcb690d93';
         $nonce = 'f1hc45';
 
-        $this->requestMock->expects(static::once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('public_hash')
             ->willReturn($publicHash);
 
-        $this->sessionMock->expects(static::once())
+        $this->sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->commandResultMock->expects(static::once())
+        $this->commandResultMock->expects($this->once())
             ->method('get')
             ->willReturn([
                 'paymentMethodNonce' => $nonce
             ]);
-        $this->commandMock->expects(static::once())
+        $this->commandMock->expects($this->once())
             ->method('execute')
             ->willReturn($this->commandResultMock);
 
-        $this->resultMock->expects(static::once())
+        $this->resultMock->expects($this->once())
             ->method('setData')
             ->with(['paymentMethodNonce' => $nonce]);
 
-        $this->loggerMock->expects(static::never())
+        $this->loggerMock->expects($this->never())
             ->method('critical');
 
-        $this->resultMock->expects(static::never())
+        $this->resultMock->expects($this->never())
             ->method('setHttpResponseCode');
 
         $this->action->execute();
@@ -199,7 +199,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultFactoryMock->expects(static::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultMock);
     }

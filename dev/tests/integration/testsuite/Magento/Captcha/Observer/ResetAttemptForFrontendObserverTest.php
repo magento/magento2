@@ -55,6 +55,6 @@ class ResetAttemptForFrontendObserverTest extends \PHPUnit\Framework\TestCase
          */
         $captchaLog = $captchaLogFactory->create();
 
-        self::assertEquals(0, $captchaLog->countAttemptsByUserLogin($customerEmail));
+        $this->assertEquals(0, $captchaLog->countAttemptsByUserLogin($customerEmail));
     }
 }

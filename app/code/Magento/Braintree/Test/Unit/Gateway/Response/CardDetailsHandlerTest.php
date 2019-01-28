@@ -58,24 +58,24 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $subject = ['payment' => $paymentDataMock];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentDataMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setCcLast4');
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setCcExpMonth');
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setCcExpYear');
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setCcType');
-        $this->paymentMock->expects(static::exactly(2))
+        $this->paymentMock->expects($this->exactly(2))
             ->method('setAdditionalInformation');
 
         $this->cardHandler->handle($subject, $response);
@@ -91,7 +91,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCctypesMapper'])
             ->getMock();
 
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('getCctypesMapper')
             ->willReturn([
                 'american-express' => 'AE',
@@ -125,7 +125,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 

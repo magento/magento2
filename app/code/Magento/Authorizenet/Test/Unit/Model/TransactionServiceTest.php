@@ -71,15 +71,15 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
             $responseStatus,
             $responseCode
         );
-        $this->httpClientMock->expects(static::once())
+        $this->httpClientMock->expects($this->once())
             ->method('getBody')
             ->willReturn($document);
 
         $result = $this->transactionService->getTransactionDetails($this->authorizenetMock, $transactionId);
 
-        static::assertEquals($responseCode, (string)$result->transaction->responseCode);
-        static::assertEquals($responseCode, (string)$result->transaction->responseReasonCode);
-        static::assertEquals($responseStatus, (string)$result->transaction->transactionStatus);
+        $this->assertEquals($responseCode, (string)$result->transaction->responseCode);
+        $this->assertEquals($responseCode, (string)$result->transaction->responseReasonCode);
+        $this->assertEquals($responseStatus, (string)$result->transaction->transactionStatus);
     }
 
     /**
@@ -109,7 +109,7 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['request', 'getBody', '__wakeup'])
             ->getMock();
 
-        $this->httpClientMock->expects(static::once())
+        $this->httpClientMock->expects($this->once())
             ->method('request')
             ->willReturnSelf();
 
@@ -118,7 +118,7 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $httpClientFactoryMock->expects(static::once())
+        $httpClientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->httpClientMock);
         return $httpClientFactoryMock;

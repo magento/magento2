@@ -35,7 +35,7 @@ class FloatComparatorTest extends TestCase
      */
     public function testEq(float $a, float $b, bool $expected)
     {
-        self::assertEquals($expected, $this->comparator->equal($a, $b));
+        $this->assertEquals($expected, $this->comparator->equal($a, $b));
     }
 
     /**
@@ -64,7 +64,7 @@ class FloatComparatorTest extends TestCase
      */
     public function testGt(float $a, float $b, bool $expected)
     {
-        self::assertEquals($expected, $this->comparator->greaterThan($a, $b));
+        $this->assertEquals($expected, $this->comparator->greaterThan($a, $b));
     }
 
     /**
@@ -93,7 +93,7 @@ class FloatComparatorTest extends TestCase
      */
     public function testGte(float $a, float $b, bool $expected)
     {
-        self::assertEquals($expected, $this->comparator->greaterThanOrEqual($a, $b));
+        $this->assertEquals($expected, $this->comparator->greaterThanOrEqual($a, $b));
     }
 
     /**

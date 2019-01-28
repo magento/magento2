@@ -131,7 +131,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeLocales);
 
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
-        $this->shell->expects(self::at(0))
+        $this->shell->expects($this->at(0))
             ->method('execute')
             ->with($setupDiCompileCmd);
 
@@ -140,20 +140,20 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
-        $this->shell->expects(self::at(1))
+        $this->shell->expects($this->at(1))
             ->method('execute')
             ->with($staticContentDeployCmd);
 
-        $this->output->expects(self::at(0))
+        $this->output->expects($this->at(0))
             ->method('writeln')
             ->with('Starting compilation');
-        $this->output->expects(self::at(2))
+        $this->output->expects($this->at(2))
             ->method('writeln')
             ->with('Compilation complete');
-        $this->output->expects(self::at(3))
+        $this->output->expects($this->at(3))
             ->method('writeln')
             ->with('Starting deployment of static content');
-        $this->output->expects(self::at(5))
+        $this->output->expects($this->at(5))
             ->method('writeln')
             ->with('Deployment of static content complete');
 

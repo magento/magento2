@@ -59,15 +59,15 @@ class AccountTokensTest extends \PHPUnit\Framework\TestCase
         $token = $this->objectManager->getObject(PaymentToken::class, [
             'data' => [PaymentTokenInterface::TYPE => AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT]
         ]);
-        $this->tokenManagement->expects(static::once())
+        $this->tokenManagement->expects($this->once())
             ->method('getCustomerSessionTokens')
             ->willReturn([$cardToken, $token]);
 
         $actual = $this->block->getPaymentTokens();
-        static::assertCount(1, $actual);
+        $this->assertCount(1, $actual);
 
         /** @var PaymentTokenInterface $actualToken */
         $actualToken = array_pop($actual);
-        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $actualToken->getType());
+        $this->assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $actualToken->getType());
     }
 }

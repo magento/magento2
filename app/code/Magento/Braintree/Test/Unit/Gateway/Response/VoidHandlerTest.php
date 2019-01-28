@@ -31,25 +31,25 @@ class VoidHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readPayment')
             ->with($handlingSubject)
             ->willReturn($paymentDO);
-        $paymentDO->expects(static::atLeastOnce())
+        $paymentDO->expects($this->atLeastOnce())
             ->method('getPayment')
             ->willReturn($paymentInfo);
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $paymentInfo->expects(static::never())
+        $paymentInfo->expects($this->never())
             ->method('setTransactionId');
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(true);
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('setShouldCloseParentTransaction')
             ->with(true);
 

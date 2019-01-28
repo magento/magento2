@@ -76,10 +76,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testBeforeAfterSave($isObjectNew, $invalidateCounter)
     {
         $this->prepareIndexer($invalidateCounter);
-        $this->storeMock->expects(static::once())
+        $this->storeMock->expects($this->once())
             ->method('isObjectNew')
             ->willReturn($isObjectNew);
-        $this->indexerMock->expects(static::exactly($invalidateCounter))
+        $this->indexerMock->expects($this->exactly($invalidateCounter))
             ->method('invalidate');
 
         $this->plugin->beforeSave($this->subjectMock, $this->storeMock);
@@ -100,7 +100,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testAfterDelete()
     {
         $this->prepareIndexer(1);
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('invalidate');
 
         $this->assertSame($this->subjectMock, $this->plugin->afterDelete($this->subjectMock, $this->subjectMock));
@@ -114,7 +114,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareIndexer($invalidateCounter)
     {
-        $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
+        $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
             ->with(FulltextIndexer::INDEXER_ID)
             ->willReturn($this->indexerMock);

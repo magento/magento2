@@ -41,9 +41,9 @@ class ProductImageTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['image']['url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['image']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['image']['label']);
+        $this->assertContains('magento_image.jpg', $response['products']['items'][0]['image']['url']);
+        $this->assertTrue($this->checkImageExists($response['products']['items'][0]['image']['url']));
+        $this->assertEquals('Image Alt Text', $response['products']['items'][0]['image']['label']);
     }
 
     /**
@@ -66,7 +66,7 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        self::assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
+        $this->assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
     }
 
     /**
@@ -89,9 +89,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
+        $this->assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        $this->assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
+        $this->assertEquals('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
     }
 
     /**
@@ -114,9 +114,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
-        self::assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
+        $this->assertContains('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
+        $this->assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
+        $this->assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
     }
 
     /**

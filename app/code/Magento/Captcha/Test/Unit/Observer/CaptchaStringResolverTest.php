@@ -46,7 +46,7 @@ class CaptchaStringResolverTest extends \PHPUnit\Framework\TestCase
             ->with(CaptchaDataHelper::INPUT_NAME_FIELD_VALUE)
             ->willReturn([$formId => $captchaValue]);
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->captchaStringResolver->resolve($this->requestMock, $formId),
             $captchaValue
         );
@@ -61,7 +61,7 @@ class CaptchaStringResolverTest extends \PHPUnit\Framework\TestCase
             ->with(CaptchaDataHelper::INPUT_NAME_FIELD_VALUE)
             ->willReturn([]);
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->captchaStringResolver->resolve($this->requestMock, $formId),
             ''
         );

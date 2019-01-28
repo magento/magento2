@@ -57,7 +57,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $requestFactory->expects(static::any())->method('create')->willReturn($this->request);
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->request);
         $this->carrierFactory = $this->getMockBuilder(\Magento\Shipping\Model\CarrierFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -72,7 +72,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getUser'])
             ->getMock();
-        $authSession->expects(static::any())->method('getUser')->willReturn($this->user);
+        $authSession->expects($this->any())->method('getUser')->willReturn($this->user);
         $regionFactory = $this->getRegionFactory();
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
@@ -100,7 +100,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
         $carrier = $this->getMockBuilder(\Magento\Shipping\Model\Carrier\AbstractCarrier::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->carrierFactory->expects(static::any())->method('create')->willReturn($carrier);
+        $this->carrierFactory->expects($this->any())->method('create')->willReturn($carrier);
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -112,21 +112,21 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCarrierCode'])
             ->getMock();
-        $shippingMethod->expects(static::once())
+        $shippingMethod->expects($this->once())
             ->method('getCarrierCode')
             ->willReturn('usps');
 
-        $order->expects(static::exactly(2))
+        $order->expects($this->exactly(2))
             ->method('getShippingMethod')
             ->with(true)
             ->willReturn($shippingMethod);
 
         $address = $this->getRecipientAddress();
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($address);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getWeight')
             ->willReturn(2);
 
@@ -134,11 +134,11 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
         $shipment = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shipment->expects(static::once())->method('getOrder')->willReturn($order);
-        $shipment->expects(static::once())->method('getStoreId')->willReturn($storeId);
-        $shipment->expects(static::once())->method('getPackages')->willReturn('');
+        $shipment->expects($this->once())->method('getOrder')->willReturn($order);
+        $shipment->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $shipment->expects($this->once())->method('getPackages')->willReturn('');
 
-        $this->scopeConfig->expects(static::any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
                 [Shipment::XML_PATH_STORE_REGION_ID, ScopeInterface::SCOPE_STORE, $storeId, $regionId],
@@ -175,7 +175,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->with(true)
             ->willReturn($shippingMethod);
         $this->carrierFactory
-            ->expects(static::any())
+            ->expects($this->any())
             ->method('create')
             ->willReturn($isShipmentCarrierNotNull ? $shippingMethod : null);
         $shipment->expects($this->once())->method('getOrder')->willReturn($order);
@@ -190,7 +190,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects(static::any())
+        $store->expects($this->any())
             ->method('getBaseCurrencyCode')
             ->willReturn('USD');
 
@@ -198,7 +198,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStore'])
             ->getMock();
-        $storeManager->expects(static::any())->method('getStore')->willReturn($store);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         return $storeManager;
     }
 
@@ -215,7 +215,7 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $regionFactory->expects(static::any())->method('create')->willReturn($this->region);
+        $regionFactory->expects($this->any())->method('create')->willReturn($this->region);
         return $regionFactory;
     }
 
@@ -227,34 +227,34 @@ class LabelsTest extends \PHPUnit\Framework\TestCase
         $address = $this->getMockBuilder(\Magento\Sales\Model\Order\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address->expects(static::exactly(2))
+        $address->expects($this->exactly(2))
             ->method('getRegionCode')
             ->willReturn('CO');
-        $address->expects(static::exactly(2))
+        $address->expects($this->exactly(2))
             ->method('getFirstname')
             ->willReturn('Chimi');
-        $address->expects(static::exactly(2))
+        $address->expects($this->exactly(2))
             ->method('getLastname')
             ->willReturn('Chung');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getCompany')
             ->willReturn('Software LLC');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getTelephone')
             ->willReturn('(231) 324-123-31');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getEmail')
             ->willReturn('chimi.chung@test.com');
-        $address->expects(static::exactly(4))
+        $address->expects($this->exactly(4))
             ->method('getStreetLine')
             ->willReturn('66 Pearl St');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getCity')
             ->willReturn('Denver');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getPostcode')
             ->willReturn('80203');
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getCountryId')
             ->willReturn(1);
         return $address;

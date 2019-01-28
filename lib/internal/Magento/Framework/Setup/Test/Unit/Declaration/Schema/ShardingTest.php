@@ -38,19 +38,19 @@ class ShardingTest extends \PHPUnit\Framework\TestCase
 
     public function testCanUseResource()
     {
-        $this->deploymentConfigMock->expects(self::once())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with('db/connection')
             ->willReturn(['default']);
-        self::assertFalse($this->model->canUseResource('checkout'));
+        $this->assertFalse($this->model->canUseResource('checkout'));
     }
 
     public function testGetResources()
     {
-        $this->deploymentConfigMock->expects(self::exactly(3))
+        $this->deploymentConfigMock->expects($this->exactly(3))
             ->method('get')
             ->with('db/connection')
             ->willReturn(['default' => 1, 'sales' => 2, 'index' => 3]);
-        self::assertEquals(['default', 'sales'], $this->model->getResources());
+        $this->assertEquals(['default', 'sales'], $this->model->getResources());
     }
 }

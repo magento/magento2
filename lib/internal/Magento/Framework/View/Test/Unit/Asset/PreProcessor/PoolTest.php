@@ -59,7 +59,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $chainMock->expects(self::once())
+        $chainMock->expects($this->once())
             ->method('getTargetContentType')
             ->willReturn($type);
 
@@ -76,7 +76,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
         $preprocessorMock = $this->getMockBuilder(self::PREPROCESSOR_CLASS)
             ->getMockForAbstractClass();
 
-        $preprocessorMock->expects(self::once())
+        $preprocessorMock->expects($this->once())
             ->method('process')
             ->with($chainMock);
 
@@ -103,14 +103,14 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             $preprocessors
         );
 
-        $this->sorterMock->expects(self::once())
+        $this->sorterMock->expects($this->once())
             ->method('sort')
             ->with($preprocessors[self::CONTENT_TYPE])
             ->willReturn($preprocessors[self::CONTENT_TYPE]);
 
         $chainMock = $this->getChainMock(self::CONTENT_TYPE);
 
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(self::PREPROCESSOR_CLASS)
             ->willReturn($this->getPreprocessorMock($chainMock));
@@ -134,12 +134,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             $preprocessors
         );
 
-        $this->sorterMock->expects(self::never())
+        $this->sorterMock->expects($this->never())
             ->method('sort');
 
         $chainMock = $this->getChainMock(self::CONTENT_TYPE);
 
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(self::DEFAULT_PREPROCESSOR)
             ->willReturn($this->getPreprocessorMock($chainMock));
@@ -170,14 +170,14 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             $preprocessors
         );
 
-        $this->sorterMock->expects(self::once())
+        $this->sorterMock->expects($this->once())
             ->method('sort')
             ->with($preprocessors[self::CONTENT_TYPE])
             ->willReturn($preprocessors[self::CONTENT_TYPE]);
 
         $chainMock = $this->getChainMock(self::CONTENT_TYPE);
 
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with('stdClass')
             ->willReturn(new \stdClass());

@@ -52,7 +52,7 @@ class SaveTest extends AbstractBackendController
 
         $this->dispatch('backend/sales/order_create/save');
         $this->assertSessionMessages(
-            self::equalTo(['Transaction has been declined.']),
+            $this->equalTo(['Transaction has been declined.']),
             MessageInterface::TYPE_ERROR
         );
 
@@ -60,8 +60,8 @@ class SaveTest extends AbstractBackendController
         $customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get($email);
 
-        self::assertNotEmpty($session->getCustomerId());
-        self::assertEquals($customer->getId(), $session->getCustomerId());
+        $this->assertNotEmpty($session->getCustomerId());
+        $this->assertEquals($customer->getId(), $session->getCustomerId());
 
         $this->_objectManager->removeSharedInstance(OrderService::class);
     }

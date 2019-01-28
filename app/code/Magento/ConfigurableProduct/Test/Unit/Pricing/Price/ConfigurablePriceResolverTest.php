@@ -79,7 +79,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls(...$variantPrices);
 
         $actualPrice = $this->resolver->resolvePrice($product);
-        self::assertSame($expectedPrice, $actualPrice);
+        $this->assertSame($expectedPrice, $actualPrice);
     }
 
     /**

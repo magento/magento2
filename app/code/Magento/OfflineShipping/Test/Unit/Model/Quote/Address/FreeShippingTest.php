@@ -85,8 +85,8 @@ class FreeShippingTest extends \PHPUnit\Framework\TestCase
             });
 
         $actual = $this->model->isFreeShipping($quote, $items);
-        self::assertEquals($expected, $actual);
-        self::assertEquals($expected, $address->getFreeShipping());
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $address->getFreeShipping());
     }
 
     /**

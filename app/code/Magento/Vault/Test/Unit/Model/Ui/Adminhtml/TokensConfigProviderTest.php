@@ -189,20 +189,20 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelper->expects($this->once())
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
         
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('isActive')
             ->with(self::STORE_ID)
             ->willReturn(true);
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
@@ -217,27 +217,27 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTimeFactory->expects(static::once())
+        $this->dateTimeFactory->expects($this->once())
             ->method('create')
             ->with("now", new \DateTimeZone('UTC'))
             ->willReturn($date);
-        $date->expects(static::once())
+        $date->expects($this->once())
             ->method('format')
             ->with('Y-m-d 00:00:00')
             ->willReturn('2015-01-01 00:00:00');
 
         $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
             ->getMockForAbstractClass();
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
 
-        $searchResult->expects(self::once())
+        $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        $this->assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -249,20 +249,20 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->initStoreMock();
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelper->expects($this->once())
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
 
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('isActive')
             ->with(self::STORE_ID)
             ->willReturn(true);
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
@@ -270,18 +270,18 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $token = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getReordered')
             ->willReturn(self::ORDER_ID);
-        $this->orderRepository->expects(static::once())
+        $this->orderRepository->expects($this->once())
             ->method('get')
             ->with(self::ORDER_ID)
             ->willReturn($this->getOrderMock());
-        $this->paymentTokenManagement->expects(static::once())
+        $this->paymentTokenManagement->expects($this->once())
             ->method('getByPaymentId')
             ->with(self::ORDER_PAYMENT_ENTITY_ID)
             ->willReturn($token);
-        $token->expects(static::once())
+        $token->expects($this->once())
             ->method('getEntityId')
             ->willReturn(self::ENTITY_ID);
 
@@ -292,27 +292,27 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $date = $this->getMockBuilder('DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTimeFactory->expects(static::once())
+        $this->dateTimeFactory->expects($this->once())
             ->method('create')
             ->with("now", new \DateTimeZone('UTC'))
             ->willReturn($date);
-        $date->expects(static::once())
+        $date->expects($this->once())
             ->method('format')
             ->with('Y-m-d 00:00:00')
             ->willReturn('2015-01-01 00:00:00');
 
         $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
             ->getMockForAbstractClass();
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
 
-        $searchResult->expects(self::once())
+        $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        $this->assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -324,41 +324,41 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = null;
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelper->expects($this->once())
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
 
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('isActive')
             ->with(self::STORE_ID)
             ->willReturn(true);
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getReordered')
             ->willReturn(self::ORDER_ID);
-        $this->orderRepository->expects(static::once())
+        $this->orderRepository->expects($this->once())
             ->method('get')
             ->with(self::ORDER_ID)
             ->willThrowException($exception);
 
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setField')
             ->with(PaymentTokenInterface::ENTITY_ID)
             ->willReturnSelf();
-        $this->filterBuilder->expects(static::never())
+        $this->filterBuilder->expects($this->never())
             ->method('setValue');
-        $this->searchCriteriaBuilder->expects(self::never())
+        $this->searchCriteriaBuilder->expects($this->never())
             ->method('addFilters');
 
-        static::assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        $this->assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -380,23 +380,23 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
         $this->initStoreMock();
 
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelper->expects($this->once())
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
 
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('isActive')
             ->with(self::STORE_ID)
             ->willReturn(false);
 
-        $this->paymentTokenRepository->expects(static::never())
+        $this->paymentTokenRepository->expects($this->never())
             ->method('getList');
 
         $configProvider = new TokensConfigProvider(
@@ -414,7 +414,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             $this->paymentDataHelper
         );
 
-        static::assertEmpty($configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        $this->assertEmpty($configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -422,47 +422,47 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTokensComponentsForGuestCustomerWithoutStoredTokens()
     {
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn(null);
 
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelper->expects($this->once())
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
 
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('isActive')
             ->with(self::STORE_ID)
             ->willReturn(true);
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getReordered')
             ->willReturn(self::ORDER_ID);
-        $this->orderRepository->expects(static::once())
+        $this->orderRepository->expects($this->once())
             ->method('get')
             ->with(self::ORDER_ID)
             ->willReturn($this->getOrderMock());
 
-        $this->paymentTokenManagement->expects(static::once())
+        $this->paymentTokenManagement->expects($this->once())
             ->method('getByPaymentId')
             ->with(self::ORDER_PAYMENT_ENTITY_ID)
             ->willReturn(null);
 
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setField')
             ->with(PaymentTokenInterface::ENTITY_ID)
             ->willReturnSelf();
-        $this->filterBuilder->expects(static::never())
+        $this->filterBuilder->expects($this->never())
             ->method('setValue');
 
-        $this->searchCriteriaBuilder->expects(static::never())
+        $this->searchCriteriaBuilder->expects($this->never())
             ->method('addFilters');
 
-        static::assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        $this->assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -471,12 +471,12 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     private function initStoreMock()
     {
         $this->store = $this->createMock(StoreInterface::class);
-        $this->store->expects(static::any())
+        $this->store->expects($this->any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->storeManager->expects(static::any())
+        $this->storeManager->expects($this->any())
             ->method('getStore')
             ->with(null)
             ->willReturn($this->store);
@@ -495,10 +495,10 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->getMockForAbstractClass();
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getPayment')
             ->willReturn($orderPayment);
-        $orderPayment->expects(static::once())
+        $orderPayment->expects($this->once())
             ->method('getEntityId')
             ->willReturn(self::ORDER_PAYMENT_ENTITY_ID);
 
@@ -513,7 +513,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     private function getTokenUiComponentProvider($token)
     {
         $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
-        $this->tokenComponentProvider->expects(static::once())
+        $this->tokenComponentProvider->expects($this->once())
             ->method('getComponentForToken')
             ->with($token)
             ->willReturn($tokenUiComponent);
@@ -577,12 +577,12 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             '2015-01-01 00:00:00',
             3
         );
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setConditionType')
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(4))
+        $this->searchCriteriaBuilder->expects($this->exactly(4))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -593,7 +593,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
 

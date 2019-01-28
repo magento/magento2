@@ -43,33 +43,33 @@ class SearchResultFactoryTest extends TestCase
 
         $searchResult = $this->searchResultFactory->create($entities, $totalCount, $searchCriteria, $idFieldName);
         $items = $searchResult->getItems();
-        self::assertCount(1, $items);
+        $this->assertCount(1, $items);
 
         $document = $items[0];
-        self::assertInstanceOf(DocumentInterface::class, $document);
-        self::assertEquals($idValue, $document->getId());
+        $this->assertInstanceOf(DocumentInterface::class, $document);
+        $this->assertEquals($idValue, $document->getId());
 
         $attributeId = $document->getCustomAttribute($idFieldName);
-        self::assertInstanceOf(AttributeInterface::class, $attributeId);
-        self::assertEquals($idFieldName, $attributeId->getAttributeCode());
-        self::assertEquals($idValue, $attributeId->getValue());
+        $this->assertInstanceOf(AttributeInterface::class, $attributeId);
+        $this->assertEquals($idFieldName, $attributeId->getAttributeCode());
+        $this->assertEquals($idValue, $attributeId->getValue());
 
         $attributeIdFieldName = $document->getCustomAttribute('id_field_name');
-        self::assertInstanceOf(AttributeInterface::class, $attributeIdFieldName);
-        self::assertEquals('id_field_name', $attributeIdFieldName->getAttributeCode());
-        self::assertEquals($idFieldName, $attributeIdFieldName->getValue());
+        $this->assertInstanceOf(AttributeInterface::class, $attributeIdFieldName);
+        $this->assertEquals('id_field_name', $attributeIdFieldName->getAttributeCode());
+        $this->assertEquals($idFieldName, $attributeIdFieldName->getValue());
 
         $attributeFoo = $document->getCustomAttribute('attribute_foo');
-        self::assertInstanceOf(AttributeInterface::class, $attributeFoo);
-        self::assertEquals('attribute_foo', $attributeFoo->getAttributeCode());
-        self::assertEquals('attribute_foo_value', $attributeFoo->getValue());
+        $this->assertInstanceOf(AttributeInterface::class, $attributeFoo);
+        $this->assertEquals('attribute_foo', $attributeFoo->getAttributeCode());
+        $this->assertEquals('attribute_foo_value', $attributeFoo->getValue());
 
         $attributeBar = $document->getCustomAttribute('attribute_bar');
-        self::assertInstanceOf(AttributeInterface::class, $attributeBar);
-        self::assertEquals('attribute_bar', $attributeBar->getAttributeCode());
-        self::assertEquals('attribute_bar_value', $attributeBar->getValue());
+        $this->assertInstanceOf(AttributeInterface::class, $attributeBar);
+        $this->assertEquals('attribute_bar', $attributeBar->getAttributeCode());
+        $this->assertEquals('attribute_bar_value', $attributeBar->getValue());
 
-        self::assertEquals($totalCount, $searchResult->getTotalCount());
-        self::assertEquals($searchCriteria, $searchResult->getSearchCriteria());
+        $this->assertEquals($totalCount, $searchResult->getTotalCount());
+        $this->assertEquals($searchCriteria, $searchResult->getSearchCriteria());
     }
 }

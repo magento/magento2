@@ -71,7 +71,7 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
             ->setMethods(['getId'])
             ->getMock();
 
-        $productMock->expects(self::exactly(3))
+        $productMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn($productId);
         $eventMock->expects($this->once())

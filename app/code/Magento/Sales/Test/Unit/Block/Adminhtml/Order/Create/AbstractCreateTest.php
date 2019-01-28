@@ -79,7 +79,7 @@ class AbstractCreateTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->model->getProduct($item);
 
-        self::assertInstanceOf(Product::class, $product);
+        $this->assertInstanceOf(Product::class, $product);
     }
 
     /**

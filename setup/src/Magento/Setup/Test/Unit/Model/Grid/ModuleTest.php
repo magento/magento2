@@ -98,14 +98,14 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->moduleListMock = $this->getMockBuilder(ModuleList::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->moduleListMock->expects(static::any())
+        $this->moduleListMock->expects($this->any())
             ->method('has')
             ->willReturn(true);
 
         $this->fullModuleListMock = $this->getMockBuilder(FullModuleList::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fullModuleListMock->expects(static::any())
+        $this->fullModuleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn($fullModuleList);
 
@@ -132,35 +132,35 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);
-        $objectManager->expects(static::once())
+        $objectManager->expects($this->once())
             ->method('get')
             ->willReturnMap([
                 [PackageInfoFactory::class, $this->packageInfoFactoryMock],
             ]);
-        $this->packageInfoFactoryMock->expects(static::once())
+        $this->packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->packageInfoMock);
 
-        $this->packageInfoMock->expects(static::never())
+        $this->packageInfoMock->expects($this->never())
             ->method('getModuleName');
 
-        $this->packageInfoMock->expects(static::once())
+        $this->packageInfoMock->expects($this->once())
             ->method('getRequiredBy')
             ->willReturn([]);
-        $this->packageInfoMock->expects(static::exactly(2))
+        $this->packageInfoMock->expects($this->exactly(2))
             ->method('getPackageName')
             ->willReturnMap([
                     ['Sample_ModuleOne', 'magento/sample-module-one'],
                     ['Sample_ModuleTwo', ''],
                 ]);
-        $this->packageInfoMock->expects(static::exactly(2))
+        $this->packageInfoMock->expects($this->exactly(2))
             ->method('getVersion')
             ->willReturnMap([
                 ['Sample_ModuleOne', '1.0.0'],
                 ['Sample_ModuleTwo', ''],
             ]);
 
-        $this->packagesDataMock->expects(static::exactly(2))
+        $this->packagesDataMock->expects($this->exactly(2))
             ->method('addPackageExtraInfo')
             ->will(
                 $this->returnCallback(function ($package) {
@@ -170,10 +170,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
                 })
             );
 
-        $this->moduleListMock->expects(static::exactly(2))
+        $this->moduleListMock->expects($this->exactly(2))
             ->method('has')
             ->willReturn(true);
-        $this->composerInformationMock->expects(static::once())
+        $this->composerInformationMock->expects($this->once())
             ->method('getInstalledMagentoPackages')
             ->willReturn($this->moduleData);
 
@@ -202,6 +202,6 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        static::assertEquals($expected, $this->model->getList());
+        $this->assertEquals($expected, $this->model->getList());
     }
 }

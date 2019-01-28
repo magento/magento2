@@ -56,20 +56,20 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($address);
 
-        $this->quote->expects(static::never())
+        $this->quote->expects($this->never())
             ->method('getShippingAddress');
 
-        $address->expects(static::exactly(2))
+        $address->expects($this->exactly(2))
             ->method('getCountry')
             ->willReturn('UK');
-        $this->directory->expects(static::never())
+        $this->directory->expects($this->never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('UK', $this->countryProvider->getCountry($this->quote));
+        $this->assertEquals('UK', $this->countryProvider->getCountry($this->quote));
     }
 
     /**
@@ -82,19 +82,19 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::never())
+        $this->quote->expects($this->never())
             ->method('getShippingAddress');
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($address);
 
-        $address->expects(static::once())
+        $address->expects($this->once())
             ->method('getCountry')
             ->willReturn(null);
-        $this->directory->expects(static::once())
+        $this->directory->expects($this->once())
             ->method('getDefaultCountry')
             ->willReturn('US');
-        static::assertEquals('US', $this->countryProvider->getCountry($this->quote));
+        $this->assertEquals('US', $this->countryProvider->getCountry($this->quote));
     }
 
     /**
@@ -107,21 +107,21 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn(null);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($address);
 
-        $address->expects(static::exactly(2))
+        $address->expects($this->exactly(2))
             ->method('getCountry')
             ->willReturn('CA');
 
-        $this->directory->expects(static::never())
+        $this->directory->expects($this->never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('CA', $this->countryProvider->getCountry($this->quote));
+        $this->assertEquals('CA', $this->countryProvider->getCountry($this->quote));
     }
 }

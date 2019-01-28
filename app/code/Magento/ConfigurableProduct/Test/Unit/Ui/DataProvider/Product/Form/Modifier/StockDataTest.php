@@ -39,7 +39,7 @@ class StockDataTest extends \PHPUnit\Framework\TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();
 
-        $this->productLocatorMock->expects(static::any())
+        $this->productLocatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
 

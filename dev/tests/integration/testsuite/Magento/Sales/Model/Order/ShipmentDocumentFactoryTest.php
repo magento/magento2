@@ -75,6 +75,6 @@ class ShipmentDocumentFactoryTest extends TestCase
             $this->shipmentCreationArgumentsInterface
         );
         $shipmentExtensionAttributes = $shipment->getExtensionAttributes();
-        self::assertEquals('test_value', $shipmentExtensionAttributes->getTestAttributeValue());
+        $this->assertEquals('test_value', $shipmentExtensionAttributes->getTestAttributeValue());
     }
 }

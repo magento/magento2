@@ -1120,11 +1120,11 @@ QUERY;
             ->clean(\Magento\Framework\App\Config::CACHE_TAG);
         $response = $this->graphQlQuery($query);
         $responseObject = new DataObject($response);
-        self::assertEquals(
+        $this->assertEquals(
             'simple_visible_in_stock',
             $responseObject->getData('products/items/0/sku')
         );
-        self::assertEquals(
+        $this->assertEquals(
             'Simple Product Visible and InStock',
             $responseObject->getData('products/items/0/name')
         );

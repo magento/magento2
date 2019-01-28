@@ -79,13 +79,13 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
-        $this->contextMock->expects(static::never())
+        $this->contextMock->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
-        $this->searchCriteriaBuilderMock->expects(static::any())
+        $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects(static::any())
+        $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')
             ->willReturn($this->searchCriteriaMock);
 
@@ -175,11 +175,11 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
 
         $this->attributesColumn->setData('name', $name);
 
-        $this->attributeRepositoryMock->expects(static::any())
+        $this->attributeRepositoryMock->expects($this->any())
             ->method('getList')
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultsMock);
-        $this->searchResultsMock->expects(static::any())
+        $this->searchResultsMock->expects($this->any())
             ->method('getItems')
             ->willReturn($attributes);
 
@@ -199,13 +199,13 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
             ->getMockForAbstractClass();
 
-        $attributeMock->expects(static::any())
+        $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
-        $attributeMock->expects(static::any())
+        $attributeMock->expects($this->any())
             ->method('getDefaultFrontendLabel')
             ->willReturn($defaultFrontendLabel);
-        $attributeMock->expects(static::any())
+        $attributeMock->expects($this->any())
             ->method('getOptions')
             ->willReturn($options);
 
@@ -224,10 +224,10 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $attributeOptionMock = $this->getMockBuilder(AttributeOptionInterface::class)
             ->getMockForAbstractClass();
 
-        $attributeOptionMock->expects(static::any())
+        $attributeOptionMock->expects($this->any())
             ->method('getValue')
             ->willReturn($value);
-        $attributeOptionMock->expects(static::any())
+        $attributeOptionMock->expects($this->any())
             ->method('getLabel')
             ->willReturn($label);
 

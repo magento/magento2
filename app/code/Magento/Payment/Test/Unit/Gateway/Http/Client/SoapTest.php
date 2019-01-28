@@ -66,32 +66,32 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         ];
         $soapResult = new \StdClass();
 
-        $this->logger->expects(static::at(0))
+        $this->logger->expects($this->at(0))
             ->method('debug')
             ->with(
                 ['request' => ['body']]
             );
-        $this->clientFactory->expects(static::once())
+        $this->clientFactory->expects($this->once())
             ->method('create')
             ->with('path_to_wsdl', ['trace' => true])
             ->willReturn($this->client);
         $transferObject = $this->getTransferObject();
-        $transferObject->expects(static::any())
+        $transferObject->expects($this->any())
             ->method('__setSoapHeaders')
             ->with(['headers']);
-        $this->client->expects(static::once())
+        $this->client->expects($this->once())
             ->method('__soapCall')
             ->with('soapMethod', [['body']])
             ->willReturn($soapResult);
-        $this->converter->expects(static::once())
+        $this->converter->expects($this->once())
             ->method('convert')
             ->with($soapResult)
             ->willReturn($expectedResult);
-        $this->logger->expects(static::at(1))
+        $this->logger->expects($this->at(1))
             ->method('debug')
             ->with(['response' => $expectedResult]);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expectedResult,
             $this->gatewayClient->placeRequest($transferObject)
         );
@@ -101,27 +101,27 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException('Exception');
 
-        $this->logger->expects(static::at(0))
+        $this->logger->expects($this->at(0))
             ->method('debug')
             ->with(
                 ['request' => ['body']]
             );
-        $this->clientFactory->expects(static::once())
+        $this->clientFactory->expects($this->once())
             ->method('create')
             ->with('path_to_wsdl', ['trace' => true])
             ->willReturn($this->client);
         $transferObject = $this->getTransferObject();
-        $transferObject->expects(static::any())
+        $transferObject->expects($this->any())
             ->method('__setSoapHeaders')
             ->with(['headers']);
-        $this->client->expects(static::once())
+        $this->client->expects($this->once())
             ->method('__soapCall')
             ->with('soapMethod', [['body']])
             ->willThrowException(new \Exception());
-        $this->client->expects(static::once())
+        $this->client->expects($this->once())
             ->method('__getLastRequest')
             ->willReturn('RequestTrace');
-        $this->logger->expects(static::at(1))
+        $this->logger->expects($this->at(1))
             ->method('debug')
             ->with(
                 ['trace' => 'RequestTrace']
@@ -141,13 +141,13 @@ class SoapTest extends \PHPUnit\Framework\TestCase
             \Magento\Payment\Gateway\Http\TransferInterface::class
         )->setMethods(['__setSoapHeaders', 'getBody', 'getClientConfig', 'getMethod'])->getMockForAbstractClass();
 
-        $transferObject->expects(static::any())
+        $transferObject->expects($this->any())
             ->method('getBody')
             ->willReturn(['body']);
-        $transferObject->expects(static::any())
+        $transferObject->expects($this->any())
             ->method('getClientConfig')
             ->willReturn(['wsdl' => 'path_to_wsdl']);
-        $transferObject->expects(static::any())
+        $transferObject->expects($this->any())
             ->method('getMethod')
             ->willReturn('soapMethod');
 

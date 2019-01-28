@@ -86,14 +86,14 @@ class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
     {
         $chainMock = $this->getChainMock();
 
-        $this->scopeConfigMock->expects(self::once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(WorkflowType::CONFIG_NAME_PATH)
             ->willReturn(WorkflowType::CLIENT_SIDE_COMPILATION);
-        $this->frontendCompilationMock->expects(self::once())
+        $this->frontendCompilationMock->expects($this->once())
             ->method('process')
             ->with($chainMock);
-        $this->alternativeSourceMock->expects(self::never())
+        $this->alternativeSourceMock->expects($this->never())
             ->method('process');
         $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
@@ -106,14 +106,14 @@ class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
     {
         $chainMock = $this->getChainMock();
 
-        $this->scopeConfigMock->expects(self::once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(WorkflowType::CONFIG_NAME_PATH)
             ->willReturn(WorkflowType::CLIENT_SIDE_COMPILATION);
-        $this->frontendCompilationMock->expects(self::once())
+        $this->frontendCompilationMock->expects($this->once())
             ->method('process')
             ->with($chainMock);
-        $this->alternativeSourceMock->expects(self::never())
+        $this->alternativeSourceMock->expects($this->never())
             ->method('process');
         $this->stateMock->expects($this->once())
             ->method('getMode')
@@ -135,10 +135,10 @@ class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(WorkflowType::CONFIG_NAME_PATH)
             ->willReturn('off');
-        $this->alternativeSourceMock->expects(self::once())
+        $this->alternativeSourceMock->expects($this->once())
             ->method('process')
             ->with($chainMock);
-        $this->frontendCompilationMock->expects(self::never())
+        $this->frontendCompilationMock->expects($this->never())
             ->method('process');
         $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')

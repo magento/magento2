@@ -182,22 +182,22 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->dbAdapter
-            ->expects(self::exactly(4))
+            ->expects($this->exactly(4))
             ->method('fetchRow')
             ->willReturnMap($returnValueMap);
         $this->dbAdapter->method('quoteInto')
             ->willReturn('');
         $this->dbAdapter->method('update')
-            ->with(self::equalTo('pre_admin_user'), self::anything())
+            ->with($this->equalTo('pre_admin_user'), $this->anything())
             ->willReturn(1);
 
-        $this->dbAdapter->expects(self::at(8))
+        $this->dbAdapter->expects($this->at(8))
             ->method('insert')
-            ->with(self::equalTo('pre_admin_passwords'), self::anything());
+            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
         // should only insert once (admin role)
-        $this->dbAdapter->expects(self::at(14))
+        $this->dbAdapter->expects($this->at(14))
             ->method('insert')
-            ->with(self::equalTo('pre_authorization_role'), self::anything());
+            ->with($this->equalTo('pre_authorization_role'), $this->anything());
 
         $this->adminAccount->save();
     }

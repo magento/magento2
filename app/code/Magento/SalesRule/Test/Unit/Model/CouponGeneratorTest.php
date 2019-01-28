@@ -69,6 +69,6 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->couponManagementServiceMock->expects($this->once())->method('generate')
             ->with($this->generationSpecMock)->willReturn($expected);
         $actual = $this->couponGenerator->generateCodes([]);
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 }

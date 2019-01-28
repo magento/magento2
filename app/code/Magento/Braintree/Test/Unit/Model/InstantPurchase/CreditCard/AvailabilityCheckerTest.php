@@ -52,7 +52,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())->method('isVerify3DSecure')->willReturn($isVerify3DSecure);
         $actual = $this->availabilityChecker->isAvailable();
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

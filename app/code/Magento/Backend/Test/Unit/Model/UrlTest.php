@@ -383,6 +383,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlWithUrlInRoutePath()
     {
         $routePath = 'https://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor';
-        static::assertEquals($routePath, $this->_model->getUrl($routePath));
+        $this->assertEquals($routePath, $this->_model->getUrl($routePath));
     }
 }

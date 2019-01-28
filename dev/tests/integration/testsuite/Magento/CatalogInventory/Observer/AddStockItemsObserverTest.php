@@ -31,8 +31,8 @@ class AddStockItemsObserverTest extends TestCase
         $collection->setQuote($quote);
         /** @var Quote\Item $quoteItem */
         foreach ($collection->getItems() as $quoteItem) {
-            self::assertNotEmpty($quoteItem->getProduct()->getExtensionAttributes()->getStockItem());
-            self::assertInstanceOf(
+            $this->assertNotEmpty($quoteItem->getProduct()->getExtensionAttributes()->getStockItem());
+            $this->assertInstanceOf(
                 StockItemInterface::class,
                 $quoteItem->getProduct()->getExtensionAttributes()->getStockItem()
             );

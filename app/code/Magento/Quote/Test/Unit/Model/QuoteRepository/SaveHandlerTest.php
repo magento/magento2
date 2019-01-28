@@ -103,10 +103,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
-        $this->quoteMock->expects(static::any())
+        $this->quoteMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($this->billingAddressMock);
-        $this->quoteMock->expects(static::any())
+        $this->quoteMock->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
 
@@ -127,34 +127,34 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $quoteItemMock = $this->createQuoteItemMock(false);
         
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([$quoteItemMock]);
-        $this->cartItemPersisterMock->expects(static::once())
+        $this->cartItemPersisterMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock, $quoteItemMock)
             ->willReturn($quoteItemMock);
-        $this->quoteMock->expects(static::once())
+        $this->quoteMock->expects($this->once())
             ->method('setLastAddedItem')
             ->with($quoteItemMock)
             ->willReturnSelf();
-        $this->billingAddressMock->expects(static::atLeastOnce())
+        $this->billingAddressMock->expects($this->atLeastOnce())
             ->method('getCustomerAddressId')
             ->willReturn(null);
-        $this->billingAddressMock->expects(static::never())
+        $this->billingAddressMock->expects($this->never())
             ->method('getCustomerAddress');
-        $this->billingAddressPersisterMock->expects(static::once())
+        $this->billingAddressPersisterMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock, $this->billingAddressMock);
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('isVirtual')
             ->willReturn(true);
-        $this->extensionAttributesMock->expects(static::never())
+        $this->extensionAttributesMock->expects($this->never())
             ->method('getShippingAssignments');
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('collectTotals')
             ->willReturnSelf();
-        $this->quoteResourceModelMock->expects(static::once())
+        $this->quoteResourceModelMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
             ->willReturnSelf();
@@ -166,33 +166,33 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $customerAddressId = 5;
 
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([]);
-        $this->quoteMock->expects(static::never())
+        $this->quoteMock->expects($this->never())
             ->method('setLastAddedItem');
-        $this->billingAddressMock->expects(static::atLeastOnce())
+        $this->billingAddressMock->expects($this->atLeastOnce())
             ->method('getCustomerAddressId')
             ->willReturn($customerAddressId);
-        $this->addressRepositoryMock->expects(static::once())
+        $this->addressRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerAddressId)
             ->willThrowException(new NoSuchEntityException());
-        $this->billingAddressMock->expects(static::once())
+        $this->billingAddressMock->expects($this->once())
             ->method('setCustomerAddressId')
             ->willReturn(null);
-        $this->billingAddressPersisterMock->expects(static::once())
+        $this->billingAddressPersisterMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock, $this->billingAddressMock);
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('isVirtual')
             ->willReturn(true);
-        $this->extensionAttributesMock->expects(static::never())
+        $this->extensionAttributesMock->expects($this->never())
             ->method('getShippingAssignments');
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('collectTotals')
             ->willReturnSelf();
-        $this->quoteResourceModelMock->expects(static::once())
+        $this->quoteResourceModelMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
             ->willReturnSelf();
@@ -212,7 +212,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quoteItemMock->expects(static::any())
+        $quoteItemMock->expects($this->any())
             ->method('isDeleted')
             ->willReturn($isDeleted);
 

@@ -141,36 +141,36 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filterBuilder->expects(self::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setField')
             ->with(PaymentTokenInterface::CUSTOMER_ID)
             ->willReturnSelf();
-        $this->filterBuilder->expects(self::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setValue')
             ->with(1)
             ->willReturnSelf();
-        $this->filterBuilder->expects(self::once())
+        $this->filterBuilder->expects($this->once())
             ->method('create')
             ->willReturn($filterMock);
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects($this->once())
             ->method('addFilters')
             ->with([$filterMock])
             ->willReturnSelf();
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
 
-        $searchResult->expects(self::once())
+        $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn([$tokenMock]);
 
-        self::assertEquals([$tokenMock], $this->paymentTokenManagement->getListByCustomerId(1));
+        $this->assertEquals([$tokenMock], $this->paymentTokenManagement->getListByCustomerId(1));
     }
 
     /**
@@ -182,17 +182,17 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
 
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByOrderPaymentId')
             ->with(1)
             ->willReturn(['token-data']);
 
-        $this->paymentTokenFactory->expects(self::once())
+        $this->paymentTokenFactory->expects($this->once())
             ->method('create')
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByPaymentId(1));
+        $this->assertEquals($tokenMock, $this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -200,15 +200,15 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByPaymentIdNull()
     {
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByOrderPaymentId')
             ->with(1)
             ->willReturn([]);
 
-        $this->paymentTokenFactory->expects(self::never())
+        $this->paymentTokenFactory->expects($this->never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPaymentId(1));
+        $this->assertEquals(null, $this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -220,17 +220,17 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
 
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByGatewayToken')
             ->with('token', 1, 1)
             ->willReturn(['token-data']);
 
-        $this->paymentTokenFactory->expects(self::once())
+        $this->paymentTokenFactory->expects($this->once())
             ->method('create')
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
+        $this->assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
     }
 
     /**
@@ -238,15 +238,15 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByGatewayTokenNull()
     {
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByGatewayToken')
             ->with('some-not-exists-token', 1, 1)
             ->willReturn([]);
 
-        $this->paymentTokenFactory->expects(self::never())
+        $this->paymentTokenFactory->expects($this->never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
+        $this->assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**
@@ -254,15 +254,15 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetByPublicHash()
     {
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByPublicHash')
             ->with('some-not-exists-token', 1)
             ->willReturn([]);
 
-        $this->paymentTokenFactory->expects(self::never())
+        $this->paymentTokenFactory->expects($this->never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
+        $this->assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
     }
 
     /**
@@ -280,33 +280,33 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $publicHash = 'some-not-existing-token';
         $paymentId = 1;
 
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getPublicHash')
             ->willReturn($publicHash);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, 1)
             ->willReturn([]);
 
-        $this->paymentTokenFactory->expects(self::never())
+        $this->paymentTokenFactory->expects($this->never())
             ->method('create');
 
-        $tokenMock->expects(self::once())
+        $tokenMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($entityId);
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('save')
             ->with($tokenMock);
 
-        $paymentMock->expects(self::once())
+        $paymentMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($paymentId);
 
-        $this->paymentTokenResourceModel->expects(static::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('addLinkToOrderPayment')
             ->with($entityId, $paymentId);
 
@@ -333,40 +333,40 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             'entity_id' => $entityId
         ];
 
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getPublicHash')
             ->willReturn($publicHash);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn($duplicateTokenData);
 
-        $this->paymentTokenFactory->expects(self::once())
+        $this->paymentTokenFactory->expects($this->once())
             ->method('create')
             ->with(['data' => $duplicateTokenData])
             ->willReturn($duplicateToken);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects($this->once())
             ->method('getIsVisible')
             ->willReturn(true);
-        $duplicateToken->expects(static::once())
+        $duplicateToken->expects($this->once())
             ->method('getEntityId')
             ->willReturn($entityId);
-        $tokenMock->expects(self::once())
+        $tokenMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($entityId);
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('save')
             ->with($tokenMock);
 
-        $paymentMock->expects(self::once())
+        $paymentMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($paymentId);
 
-        $this->paymentTokenResourceModel->expects(static::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('addLinkToOrderPayment')
             ->with($entityId, $paymentId);
 
@@ -396,51 +396,51 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         ];
         $newHash = 'new-token2';
 
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getPublicHash')
             ->willReturn($publicHash);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->paymentTokenResourceModel->expects(self::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn($duplicateTokenData);
 
-        $this->paymentTokenFactory->expects(self::once())
+        $this->paymentTokenFactory->expects($this->once())
             ->method('create')
             ->with(['data' => $duplicateTokenData])
             ->willReturn($duplicateToken);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getIsVisible')
             ->willReturn(false);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getGatewayToken')
             ->willReturn($gatewayToken);
 
-        $this->encryptor->expects(static::once())
+        $this->encryptor->expects($this->once())
             ->method('getHash')
             ->with($publicHash . $gatewayToken)
             ->willReturn($newHash);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects($this->once())
             ->method('setPublicHash')
             ->with($newHash);
 
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('save')
             ->with($tokenMock);
-        $tokenMock->expects(static::atLeastOnce())
+        $tokenMock->expects($this->atLeastOnce())
             ->method('getEntityId')
             ->willReturn($newEntityId);
 
-        $paymentMock->expects(self::atLeastOnce())
+        $paymentMock->expects($this->atLeastOnce())
             ->method('getEntityId')
             ->willReturn($paymentId);
-        $this->paymentTokenResourceModel->expects(static::once())
+        $this->paymentTokenResourceModel->expects($this->once())
             ->method('addLinkToOrderPayment')
             ->with($newEntityId, $paymentId);
 
@@ -467,7 +467,7 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
             '2015-01-01 00:00:00',
             3
         );
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects($this->once())
             ->method('setConditionType')
             ->with('gt')
             ->willReturnSelf();
@@ -475,34 +475,34 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateTimeFactory->expects(static::once())
+        $this->dateTimeFactory->expects($this->once())
             ->method('create')
             ->with("now", new \DateTimeZone('UTC'))
             ->willReturn($date);
-        $date->expects(static::once())
+        $date->expects($this->once())
             ->method('format')
             ->with('Y-m-d 00:00:00')
             ->willReturn('2015-01-01 00:00:00');
 
-        $this->searchCriteriaBuilder->expects(self::exactly(4))
+        $this->searchCriteriaBuilder->expects($this->exactly(4))
             ->method('addFilters')
             ->withConsecutive($customerFilter, $visibilityFilter, $isActiveFilter, $expiresAtFilter)
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $this->paymentTokenRepository->expects(self::once())
+        $this->paymentTokenRepository->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
 
-        $searchResult->expects(self::once())
+        $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn([$token]);
 
-        static::assertEquals(
+        $this->assertEquals(
             [$token],
             $this->paymentTokenManagement->getVisibleAvailableTokens($customerId)
         );

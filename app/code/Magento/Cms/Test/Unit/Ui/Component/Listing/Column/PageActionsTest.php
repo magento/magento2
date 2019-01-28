@@ -76,7 +76,7 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $escaper->expects(static::once())
+        $escaper->expects($this->once())
             ->method('escapeHtml')
             ->with($title)
             ->willReturn($title);

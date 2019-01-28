@@ -219,7 +219,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
             'Option 3',
             'Option 4 "!@#$%^&*'
         ];
-        self::assertEquals(
+        $this->assertEquals(
             $expected,
             $product->getAttributeText('multiselect_attribute')
         );

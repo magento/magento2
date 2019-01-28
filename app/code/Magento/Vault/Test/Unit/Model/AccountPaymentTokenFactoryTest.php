@@ -54,7 +54,7 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $this->objectManager->expects(static::once())
+        $this->objectManager->expects($this->once())
             ->method('create')
             ->willReturn($this->paymentToken);
 
@@ -62,7 +62,7 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit\Framework\TestCase
 
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->factory->create();
-        static::assertInstanceOf(PaymentTokenInterface::class, $paymentToken);
-        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $paymentToken->getType());
+        $this->assertInstanceOf(PaymentTokenInterface::class, $paymentToken);
+        $this->assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $paymentToken->getType());
     }
 }

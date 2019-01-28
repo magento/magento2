@@ -107,25 +107,25 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCancelForOrderWithUnavailableDisposition()
     {
-        $this->guaranteeAbility->expects(self::once())
+        $this->guaranteeAbility->expects($this->once())
             ->method('isAvailable')
-            ->with(self::equalTo(self::$orderId))
+            ->with($this->equalTo(self::$orderId))
             ->willReturn(false);
 
-        $this->caseManagement->expects(self::never())
+        $this->caseManagement->expects($this->never())
             ->method('getByOrderId');
 
-        $this->gateway->expects(self::never())
+        $this->gateway->expects($this->never())
             ->method('cancelGuarantee');
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
-        $this->updatingFactory->expects(self::never())
+        $this->updatingFactory->expects($this->never())
             ->method('create');
 
         $result = $this->service->cancelForOrder(self::$orderId);
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -137,20 +137,20 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->withCaseEntity();
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('cancelGuarantee')
-            ->with(self::equalTo(self::$caseId))
+            ->with($this->equalTo(self::$caseId))
             ->willThrowException(new GatewayException('Something wrong.'));
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
-            ->with(self::equalTo('Something wrong.'));
+            ->with($this->equalTo('Something wrong.'));
 
-        $this->updatingFactory->expects(self::never())
+        $this->updatingFactory->expects($this->never())
             ->method('create');
 
         $result = $this->service->cancelForOrder(self::$orderId);
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -162,27 +162,27 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
     {
         $case = $this->withCaseEntity();
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('cancelGuarantee')
-            ->with(self::equalTo(self::$caseId))
+            ->with($this->equalTo(self::$caseId))
             ->willReturn(CaseInterface::GUARANTEE_CANCELED);
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $service = $this->getMockBuilder(StubUpdatingService::class)
             ->setMethods(['update'])
             ->getMock();
-        $this->updatingFactory->expects(self::once())
+        $this->updatingFactory->expects($this->once())
             ->method('create')
             ->willReturn($service);
 
-        $service->expects(self::once())
+        $service->expects($this->once())
             ->method('update')
-            ->with(self::equalTo($case), self::equalTo(['guaranteeDisposition' => CaseInterface::GUARANTEE_CANCELED]));
+            ->with($this->equalTo($case), $this->equalTo(['guaranteeDisposition' => CaseInterface::GUARANTEE_CANCELED]));
 
         $result = $this->service->cancelForOrder(self::$orderId);
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -192,9 +192,9 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
      */
     private function withCaseEntity()
     {
-        $this->guaranteeAbility->expects(self::once())
+        $this->guaranteeAbility->expects($this->once())
             ->method('isAvailable')
-            ->with(self::equalTo(self::$orderId))
+            ->with($this->equalTo(self::$orderId))
             ->willReturn(true);
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
@@ -202,12 +202,12 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCaseId'])
             ->getMockForAbstractClass();
 
-        $this->caseManagement->expects(self::once())
+        $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
-            ->with(self::equalTo(self::$orderId))
+            ->with($this->equalTo(self::$orderId))
             ->willReturn($caseEntity);
 
-        $caseEntity->expects(self::once())
+        $caseEntity->expects($this->once())
             ->method('getCaseId')
             ->willReturn(self::$caseId);
         return $caseEntity;

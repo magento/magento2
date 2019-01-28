@@ -73,8 +73,8 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
      */
     public function testLockProcess($method)
     {
-        $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
-        $this->filesystemMock->expects(self::once())
+        $this->stateMock->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->$method());
@@ -84,7 +84,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
 
     public function testNotLockProcessInProductionMode()
     {
-        $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
+        $this->stateMock->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesystemMock->expects($this->never())->method('getDirectoryWrite');
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
@@ -95,8 +95,8 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnlockProcess()
     {
-        $this->stateMock->expects(self::exactly(2))->method('getMode')->willReturn(State::MODE_DEVELOPER);
-        $this->filesystemMock->expects(self::once())
+        $this->stateMock->expects($this->exactly(2))->method('getMode')->willReturn(State::MODE_DEVELOPER);
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->getTmpDirectoryMockFalse(1));
@@ -107,8 +107,8 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
 
     public function testNotUnlockProcessInProductionMode()
     {
-        $this->stateMock->expects(self::exactly(2))->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesystemMock->expects(self::never())->method('getDirectoryWrite');
+        $this->stateMock->expects($this->exactly(2))->method('getMode')->willReturn(State::MODE_PRODUCTION);
+        $this->filesystemMock->expects($this->never())->method('getDirectoryWrite');
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
         $this->lockerProcess->unlockProcess();
@@ -132,19 +132,19 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     {
         $tmpDirectoryMock = $this->getTmpDirectoryMock();
 
-        $tmpDirectoryMock->expects(self::atLeastOnce())
+        $tmpDirectoryMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with($this->fileName)
             ->willReturn(true);
 
-        $tmpDirectoryMock->expects(self::atLeastOnce())
+        $tmpDirectoryMock->expects($this->atLeastOnce())
             ->method('readFile')
             ->with($this->fileName)
             ->willReturn(time() - 25);
 
-        $tmpDirectoryMock->expects(self::once())
+        $tmpDirectoryMock->expects($this->once())
             ->method('writeFile')
-            ->with($this->fileName, self::matchesRegularExpression('#\d+#'));
+            ->with($this->fileName, $this->matchesRegularExpression('#\d+#'));
 
         return $tmpDirectoryMock;
     }
@@ -157,21 +157,21 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     {
         $tmpDirectoryMock = $this->getTmpDirectoryMock();
 
-        $tmpDirectoryMock->expects(self::atLeastOnce())
+        $tmpDirectoryMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with($this->fileName)
             ->willReturn(false);
 
-        $tmpDirectoryMock->expects(self::never())
+        $tmpDirectoryMock->expects($this->never())
             ->method('readFile');
 
-        $tmpDirectoryMock->expects(self::exactly($exactly))
+        $tmpDirectoryMock->expects($this->exactly($exactly))
             ->method('delete')
             ->with($this->fileName);
 
-        $tmpDirectoryMock->expects(self::once())
+        $tmpDirectoryMock->expects($this->once())
             ->method('writeFile')
-            ->with($this->fileName, self::matchesRegularExpression('#\d+#'));
+            ->with($this->fileName, $this->matchesRegularExpression('#\d+#'));
 
         return $tmpDirectoryMock;
     }

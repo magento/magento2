@@ -56,7 +56,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $actual = $this->container->getMethods();
         /** @var MethodInterface $paymentMethod */
         foreach ($actual as $paymentMethod) {
-            static::assertNotContains($paymentMethod->getCode(), [
+            $this->assertNotContains($paymentMethod->getCode(), [
                 PayPalConfigProvider::PAYPAL_VAULT_CODE, PayPalConfigProvider::PAYPAL_CODE
             ]);
         }

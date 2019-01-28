@@ -83,7 +83,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
 
-        $this->payment->expects(self::any())->method('getExtensionAttributes')->willReturn($this->paymentExtension);
+        $this->payment->expects($this->any())->method('getExtensionAttributes')->willReturn($this->paymentExtension);
 
         $config = $this->getConfigMock();
 
@@ -107,11 +107,11 @@ class VaultDetailsHandlerTest extends TestCase
         $paymentToken = $this->payment->getExtensionAttributes()
             ->getVaultPaymentToken();
 
-        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
-        self::assertEquals('2022-01-01 00:00:00', $paymentToken->getExpiresAt());
+        $this->assertEquals(self::$token, $paymentToken->getGatewayToken());
+        $this->assertEquals('2022-01-01 00:00:00', $paymentToken->getExpiresAt());
 
         $details = json_decode($paymentToken->getTokenDetails(), true);
-        self::assertEquals(
+        $this->assertEquals(
             [
                 'type' => 'AE',
                 'maskedCC' => 1231,

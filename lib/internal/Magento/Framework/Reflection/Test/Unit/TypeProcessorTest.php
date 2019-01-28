@@ -339,7 +339,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $classReflection = new ClassReflection(TSample::class);
         $methodReflection = $classReflection->getMethod('getPropertyName');
 
-        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+        $this->assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
     /**

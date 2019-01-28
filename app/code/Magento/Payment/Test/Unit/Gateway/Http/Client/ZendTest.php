@@ -155,7 +155,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
         $this->transferObjectMock->expects($this->once())->method('getHeaders')->willReturn($headers);
         $this->transferObjectMock->expects($this->atLeastOnce())->method('getBody')->willReturn($body);
         $this->transferObjectMock->expects($this->once())->method('shouldEncode')->willReturn($shouldEncode);
-        $this->transferObjectMock->expects(static::atLeastOnce())->method('getUri')->willReturn($uri);
+        $this->transferObjectMock->expects($this->atLeastOnce())->method('getUri')->willReturn($uri);
 
         $this->clientMock->expects($this->once())->method('setConfig')->with($config)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();

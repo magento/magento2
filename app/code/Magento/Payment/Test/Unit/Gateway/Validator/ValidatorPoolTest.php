@@ -22,7 +22,7 @@ class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -31,11 +31,11 @@ class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetExists')
             ->with('validator')
             ->willReturn(true);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetGet')
             ->with('validator')
             ->willReturn($commandI);
@@ -45,7 +45,7 @@ class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
             ['validator' => \Magento\Payment\Gateway\Validator\ValidatorInterface::class]
         );
 
-        static::assertSame($commandI, $pool->get('validator'));
+        $this->assertSame($commandI, $pool->get('validator'));
     }
 
     public function testGetException()
@@ -60,7 +60,7 @@ class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -69,7 +69,7 @@ class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetExists')
             ->with('validator')
             ->willReturn(false);

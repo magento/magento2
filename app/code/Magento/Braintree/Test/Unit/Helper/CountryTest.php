@@ -46,7 +46,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountries()
     {
-        $this->collection->expects(static::once())
+        $this->collection->expects($this->once())
             ->method('toOptionArray')
             ->willReturn([
                 ['value' => 'US', 'label' => 'United States'],
@@ -55,7 +55,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->getCountries();
 
-        $this->collection->expects(static::never())
+        $this->collection->expects($this->never())
             ->method('toOptionArray');
 
         $this->helper->getCountries();
@@ -71,11 +71,11 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['addFieldToFilter', 'loadData', 'toOptionArray', '__wakeup'])
             ->getMock();
 
-        $this->collection->expects(static::any())
+        $this->collection->expects($this->any())
             ->method('addFieldToFilter')
             ->willReturnSelf();
 
-        $this->collection->expects(static::any())
+        $this->collection->expects($this->any())
             ->method('loadData')
             ->willReturnSelf();
 
@@ -84,7 +84,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $collectionFactory->expects(static::once())
+        $collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);
 

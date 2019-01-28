@@ -42,7 +42,7 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::never())
+        $context->expects($this->never())
             ->method('getProcessor')
             ->willReturn($processor);
 
@@ -101,12 +101,12 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->escaper->expects(static::once())
+        $this->escaper->expects($this->once())
             ->method('escapeHtml')
             ->with($title)
             ->willReturn($title);
 
-        $this->urlBuilder->expects(static::exactly(2))
+        $this->urlBuilder->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturnMap(
                 [
@@ -130,6 +130,6 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
         $this->blockActions->setData('name', $name);
 
         $actual = $this->blockActions->prepareDataSource($items);
-        static::assertEquals($expectedItems, $actual['data']['items']);
+        $this->assertEquals($expectedItems, $actual['data']['items']);
     }
 }

@@ -80,7 +80,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->config->method('isRequiredBillingAddress')
             ->willReturn(1);
 
-        self::assertEquals($expected, $this->configProvider->getConfig());
+        $this->assertEquals($expected, $this->configProvider->getConfig());
     }
 
     /**

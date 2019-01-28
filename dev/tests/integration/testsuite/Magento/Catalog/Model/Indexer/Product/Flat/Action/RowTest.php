@@ -74,7 +74,7 @@ class RowTest extends IndexerTestCase
             ->setScheduled(false);
         $isScheduled = $this->processor->getIndexer()
             ->isScheduled();
-        self::assertFalse(
+        $this->assertFalse(
             $isScheduled,
             'Indexer is in scheduled mode when turned to update on save mode'
         );
@@ -92,12 +92,12 @@ class RowTest extends IndexerTestCase
         $layer->setCurrentCategory($category);
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $layer->getProductCollection();
-        self::assertTrue(
+        $this->assertTrue(
             $productCollection->isEnabledFlat(),
             'Product collection is not using flat resource when flat is on'
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             2,
             $productCollection->count(),
             'Product collection items count must be exactly 2'
@@ -106,7 +106,7 @@ class RowTest extends IndexerTestCase
         foreach ($productCollection as $product) {
             /** @var $product \Magento\Catalog\Model\Product */
             if ($product->getSku() === 'simple') {
-                self::assertEquals(
+                $this->assertEquals(
                     'Updated Product',
                     $product->getName(),
                     'Product name from flat does not match with updated name'

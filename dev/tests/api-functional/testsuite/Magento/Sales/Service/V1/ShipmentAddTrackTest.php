@@ -70,9 +70,9 @@ class ShipmentAddTrackTest extends WebapiAbstract
 
         $result = $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
 
-        self::assertNotEmpty($result);
-        self::assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
-        self::assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
+        $this->assertNotEmpty($result);
+        $this->assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
+        $this->assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
     }
     /**
      * Returns details about API endpoints and services.

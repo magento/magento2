@@ -73,10 +73,10 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         foreach ($categoryLinks as $key => $categoryLink) {
             $dtoCategoryLinks[$key] = $this->getMockBuilder(CategoryLinkInterface::class)
                 ->getMockForAbstractClass();
-            $this->dataObjectHelper->expects(static::at($key))
+            $this->dataObjectHelper->expects($this->at($key))
                 ->method('populateWithArray')
                 ->with($dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class);
-            $this->categoryLinkFactory->expects(static::at($key))
+            $this->categoryLinkFactory->expects($this->at($key))
                 ->method('create')
                 ->willReturn($dtoCategoryLinks[$key]);
         }
@@ -90,23 +90,23 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
-        $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with($dtoCategoryLinks);
+        $extensionAttributes->expects($this->once())->method('setCategoryLinks')->with($dtoCategoryLinks);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
-        $this->productCategoryLink->expects(static::any())
+        $this->productCategoryLink->expects($this->any())
             ->method('getCategoryLinks')
             ->with($product)
             ->willReturn($categoryLinks);
 
         $entity = $this->readHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     public function testExecuteNullExtensionAttributes()
@@ -120,22 +120,22 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
-        $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with(null);
+        $extensionAttributes->expects($this->once())->method('setCategoryLinks')->with(null);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
-        $this->productCategoryLink->expects(static::any())
+        $this->productCategoryLink->expects($this->any())
             ->method('getCategoryLinks')
             ->with($product)
             ->willReturn([]);
 
         $entity = $this->readHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 }

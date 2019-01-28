@@ -61,19 +61,19 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->initPaymentDOMock();
         $buildSubject = ['payment' => $this->paymentDOMock, 'amount' => 12.358];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->paymentModelMock->expects(self::once())
+        $this->paymentModelMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn($this->transactionId);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willReturn($buildSubject['amount']);
 
-        static::assertEquals(
+        $this->assertEquals(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => '12.36',
@@ -87,19 +87,19 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->initPaymentDOMock();
         $buildSubject = ['payment' => $this->paymentDOMock];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->paymentModelMock->expects(self::once())
+        $this->paymentModelMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn($this->transactionId);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
 
-        static::assertEquals(
+        $this->assertEquals(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => null,
@@ -114,19 +114,19 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
         $buildSubject = ['payment' => $this->paymentDOMock];
         $legacyTxnId = 'xsd7n-' . TransactionInterface::TYPE_CAPTURE;
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->paymentModelMock->expects(self::once())
+        $this->paymentModelMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn($legacyTxnId);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
 
-        static::assertEquals(
+        $this->assertEquals(
             [
                 'transaction_id' => $this->transactionId,
                 PaymentDataBuilder::AMOUNT => null,
@@ -143,7 +143,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
     private function initPaymentDOMock()
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentModelMock);
     }

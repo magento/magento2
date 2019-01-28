@@ -61,7 +61,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataPoolMock->expects(self::once())
+        $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->getMetaDataMock());
@@ -92,7 +92,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $metadata->expects(self::once())
+        $metadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn('entity_id');
 

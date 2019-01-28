@@ -228,7 +228,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturn(Config::METHOD_PAYFLOWLINK);
 
         $this->checkoutHelper->method('cancelCurrentOrder')
-            ->with(self::equalTo($errMessage));
+            ->with($this->equalTo($errMessage));
 
         $this->withBlockContent($expectedGotoSection, 'Your payment has been declined. Please try again.');
 
@@ -269,7 +269,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->withBlockContent(false, 'Requested payment method does not match with order.');
 
-        $this->payment->expects(self::once())
+        $this->payment->expects($this->once())
             ->method('getMethod')
             ->willReturn('something_else');
 
@@ -292,7 +292,7 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($errorMsg);
 
         $this->checkoutHelper->method('cancelCurrentOrder')
-            ->with(self::equalTo($errorMsgEscaped));
+            ->with($this->equalTo($errorMsgEscaped));
 
         $this->withBlockContent('paymentMethod', 'Your payment has been declined. Please try again.');
 
@@ -412,14 +412,14 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
      */
     private function withBlockContent($gotoSection, $errMsg)
     {
-        $this->block->expects(self::at(0))
+        $this->block->expects($this->at(0))
             ->method('setData')
-            ->with('goto_section', self::equalTo($gotoSection))
+            ->with('goto_section', $this->equalTo($gotoSection))
             ->willReturnSelf();
 
-        $this->block->expects(self::at(1))
+        $this->block->expects($this->at(1))
             ->method('setData')
-            ->with('error_msg', self::equalTo(__($errMsg)))
+            ->with('error_msg', $this->equalTo(__($errMsg)))
             ->willReturnSelf();
     }
 }

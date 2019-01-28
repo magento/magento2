@@ -92,10 +92,10 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
             Sample\Plugin3::class . '::after' . $capMethod
         ];
 
-        $this->pluginListMock->expects(static::any())
+        $this->pluginListMock->expects($this->any())
             ->method('getPlugin')
             ->willReturnMap($pluginMap);
-        $this->pluginListMock->expects(static::exactly(3))
+        $this->pluginListMock->expects($this->exactly(3))
             ->method('getNext')
             ->willReturnMap($pluginInfoMap);
 

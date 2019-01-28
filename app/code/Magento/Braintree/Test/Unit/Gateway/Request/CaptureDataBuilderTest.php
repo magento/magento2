@@ -62,15 +62,15 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => $amount,
         ];
 
-        $this->paymentMock->expects(self::once())
+        $this->paymentMock->expects($this->once())
             ->method('getCcTransId')
             ->willReturn('');
 
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
@@ -96,23 +96,23 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => $amount,
         ];
 
-        $this->paymentMock->expects(self::once())
+        $this->paymentMock->expects($this->once())
             ->method('getCcTransId')
             ->willReturn($transactionId);
 
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willReturn($amount);
 
-        static::assertEquals($expected, $this->builder->build($buildSubject));
+        $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 }

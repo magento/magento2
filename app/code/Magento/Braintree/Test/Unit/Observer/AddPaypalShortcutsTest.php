@@ -46,24 +46,24 @@ class AddPaypalShortcutsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observerMock->expects(self::once())
+        $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);
 
-        $eventMock->expects(self::once())
+        $eventMock->expects($this->once())
             ->method('getContainer')
             ->willReturn($shortcutButtonsMock);
 
-        $shortcutButtonsMock->expects(self::once())
+        $shortcutButtonsMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $layoutMock->expects(self::once())
+        $layoutMock->expects($this->once())
             ->method('createBlock')
             ->with(AddPaypalShortcuts::PAYPAL_SHORTCUT_BLOCK)
             ->willReturn($blockMock);
 
-        $shortcutButtonsMock->expects(self::once())
+        $shortcutButtonsMock->expects($this->once())
             ->method('addShortcut')
             ->with($blockMock);
 

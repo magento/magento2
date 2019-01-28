@@ -55,7 +55,7 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
         $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterFactoryMock->expects(self::once())
+        $adapterFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->adapterMock);
 

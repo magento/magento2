@@ -87,32 +87,32 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'load', 'getCustomerId', 'getId', 'getReferenceId'])
             ->getMock();
 
-        $this->agreementFactory->expects(static::once())
+        $this->agreementFactory->expects($this->once())
             ->method('create')
             ->willReturn($agreementModel);
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('getQuote')
             ->willReturn($quote);
 
-        $agreementModel->expects(static::once())
+        $agreementModel->expects($this->once())
             ->method('load')
             ->with($baId);
-        $agreementModel->expects(static::once())
+        $agreementModel->expects($this->once())
             ->method('getId')
             ->willReturn($baId);
-        $agreementModel->expects(static::atLeastOnce())
+        $agreementModel->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $agreementModel->expects(static::atLeastOnce())
+        $agreementModel->expects($this->atLeastOnce())
             ->method('getReferenceId')
             ->willReturn($referenceId);
 
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $paymentInfo->expects(static::exactly(2))
+        $paymentInfo->expects($this->exactly(2))
             ->method('setAdditionalInformation')
             ->willReturnMap(
                 [
@@ -136,7 +136,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
             AbstractDataAssignObserver::DATA_CODE => $data
         ];
 
-        $this->eventManagerMock->expects(static::exactly(2))
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->willReturnMap(
                 [

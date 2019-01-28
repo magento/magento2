@@ -53,9 +53,9 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSession->method('getCustomerId')->willReturn($customerId);
         $this->customerSession->method('isLoggedIn')->willReturn($isLoggedCustomer);
-        $this->paymentTokenManagement->expects(static::never())->method('getVisibleAvailableTokens');
+        $this->paymentTokenManagement->expects($this->never())->method('getVisibleAvailableTokens');
 
-        static::assertEquals([], $this->tokenManagement->getCustomerSessionTokens());
+        $this->assertEquals([], $this->tokenManagement->getCustomerSessionTokens());
     }
 
     /**
@@ -75,20 +75,20 @@ class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
         $token = $this->createMock(PaymentTokenInterface::class);
         $expectation = [$token];
 
-        $this->customerSession->expects(static::once())
+        $this->customerSession->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->customerSession->expects(static::once())
+        $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(true);
 
-        $this->paymentTokenManagement->expects(static::once())
+        $this->paymentTokenManagement->expects($this->once())
             ->method('getVisibleAvailableTokens')
             ->with($customerId)
             ->willReturn($expectation);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expectation,
             $this->tokenManagement->getCustomerSessionTokens()
         );

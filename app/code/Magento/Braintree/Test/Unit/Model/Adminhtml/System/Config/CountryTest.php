@@ -96,7 +96,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsCountryRestricted($countryId)
     {
-        static::assertTrue($this->model->isCountryRestricted($countryId));
+        $this->assertTrue($this->model->isCountryRestricted($countryId));
     }
 
     /**
@@ -134,13 +134,13 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     protected function initCountryCollectionMock(array $countries)
     {
-        $this->countryCollectionMock->expects(static::once())
+        $this->countryCollectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->willReturnSelf();
-        $this->countryCollectionMock->expects(static::once())
+        $this->countryCollectionMock->expects($this->once())
             ->method('loadData')
             ->willReturnSelf();
-        $this->countryCollectionMock->expects(static::once())
+        $this->countryCollectionMock->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($countries);
     }

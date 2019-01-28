@@ -413,8 +413,8 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     public function testGetCacheKeyInfoContainsIsProductListFlagByDefault()
     {
         $cacheInfo = $this->object->getCacheKeyInfo();
-        self::assertArrayHasKey('is_product_list', $cacheInfo);
-        self::assertFalse($cacheInfo['is_product_list']);
+        $this->assertArrayHasKey('is_product_list', $cacheInfo);
+        $this->assertFalse($cacheInfo['is_product_list']);
     }
 
     /**
@@ -427,8 +427,8 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     {
         $this->object->setData('is_product_list', $flag);
         $cacheInfo = $this->object->getCacheKeyInfo();
-        self::assertArrayHasKey('is_product_list', $cacheInfo);
-        self::assertEquals($flag, $cacheInfo['is_product_list']);
+        $this->assertArrayHasKey('is_product_list', $cacheInfo);
+        $this->assertEquals($flag, $cacheInfo['is_product_list']);
     }
 
     /**
@@ -436,7 +436,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsProductListByDefault()
     {
-        self::assertFalse($this->object->isProductList());
+        $this->assertFalse($this->object->isProductList());
     }
 
     /**
@@ -448,7 +448,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     public function testIsProductList($flag)
     {
         $this->object->setData('is_product_list', $flag);
-        self::assertEquals($flag, $this->object->isProductList());
+        $this->assertEquals($flag, $this->object->isProductList());
     }
 
     /**

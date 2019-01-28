@@ -73,11 +73,11 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->with($this->shipmentModel);
         $collection = [$shipmentItem];
 
-        $this->commentCollection->expects(self::once())
+        $this->commentCollection->expects($this->once())
             ->method('setShipmentFilter')
             ->with($shipmentId)
             ->willReturnSelf();
-        $this->commentCollection->expects(self::once())
+        $this->commentCollection->expects($this->once())
             ->method('setCreatedAtOrder')
             ->willReturnSelf();
 
@@ -88,8 +88,8 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->shipmentModel->getCommentsCollection();
 
-        self::assertTrue(is_object($actual));
-        self::assertEquals($this->commentCollection, $actual);
+        $this->assertTrue(is_object($actual));
+        $this->assertEquals($this->commentCollection, $actual);
     }
 
     /**
@@ -107,7 +107,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setShipment'])
             ->getMock();
-        $shipmentItem->expects(self::once())
+        $shipmentItem->expects($this->once())
             ->method('setShipment')
             ->with($this->shipmentModel);
         $collection = [$shipmentItem];
@@ -121,13 +121,13 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
 
-        $this->commentCollection->expects(self::once())
+        $this->commentCollection->expects($this->once())
             ->method('getItems')
             ->willReturn($collection);
 
         $actual = $this->shipmentModel->getComments();
-        self::assertTrue(is_array($actual));
-        self::assertEquals($collection, $actual);
+        $this->assertTrue(is_array($actual));
+        $this->assertEquals($collection, $actual);
     }
 
     /**

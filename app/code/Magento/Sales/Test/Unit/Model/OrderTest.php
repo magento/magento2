@@ -436,7 +436,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['isSalable'])
             ->getMockForAbstractClass();
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('isSalable')
             ->willReturn(true);
 
@@ -505,7 +505,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['isSalable'])
             ->getMockForAbstractClass();
-        $product->expects(static::never())
+        $product->expects($this->never())
             ->method('isSalable');
 
         $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
@@ -552,7 +552,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['isSalable'])
             ->getMockForAbstractClass();
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('isSalable')
             ->willReturn(false);
 

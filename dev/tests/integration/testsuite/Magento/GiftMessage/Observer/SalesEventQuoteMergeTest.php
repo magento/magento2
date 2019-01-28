@@ -35,6 +35,6 @@ class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        self::assertEquals($giftMessageId, $targetQuote->getGiftMessageId());
+        $this->assertEquals($giftMessageId, $targetQuote->getGiftMessageId());
     }
 }

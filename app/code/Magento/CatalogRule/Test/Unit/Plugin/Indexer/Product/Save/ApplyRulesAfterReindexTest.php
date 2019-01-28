@@ -52,10 +52,10 @@ class ApplyRulesAfterReindexTest extends \PHPUnit\Framework\TestCase
     {
         $id = 'test_id';
 
-        $this->subjectMock->expects(static::any())
+        $this->subjectMock->expects($this->any())
             ->method('getId')
             ->willReturn($id);
-        $this->productRuleProcessorMock->expects(static::once())
+        $this->productRuleProcessorMock->expects($this->once())
             ->method('reindexRow')
             ->with($id, false);
 

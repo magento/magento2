@@ -58,7 +58,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getConfigData'])
             ->getMock();
 
-        $payment->expects(static::exactly(2))
+        $payment->expects($this->exactly(2))
             ->method('getConfigData')
             ->willReturnMap([
                 ['email_customer', null, $customerEmail],
@@ -67,10 +67,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->request->setDataFromOrder($this->order, $payment);
 
-        static::assertEquals('US', $result->getXCountry());
-        static::assertEquals('UK', $result->getXShipToCountry());
-        static::assertEquals($customerEmail, $result->getXEmailCustomer());
-        static::assertEquals($merchantEmail, $result->getXMerchantEmail());
+        $this->assertEquals('US', $result->getXCountry());
+        $this->assertEquals('UK', $result->getXShipToCountry());
+        $this->assertEquals($customerEmail, $result->getXEmailCustomer());
+        $this->assertEquals($merchantEmail, $result->getXMerchantEmail());
     }
 
     /**

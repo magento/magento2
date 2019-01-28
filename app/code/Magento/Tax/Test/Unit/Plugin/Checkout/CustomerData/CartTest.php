@@ -101,12 +101,12 @@ class CartTest extends TestCase
 
         $result = $this->cart->afterGetSectionData($this->checkoutCart, $input);
 
-        self::assertArrayHasKey('subtotal_incl_tax', $result);
-        self::assertArrayHasKey('subtotal_excl_tax', $result);
-        self::assertArrayHasKey('items', $result);
-        self::assertTrue(is_array($result['items']));
-        self::assertEquals(2, count($result['items']));
-        self::assertEquals(1, $result['items'][0]['product_price']);
-        self::assertEquals(1, $result['items'][1]['product_price']);
+        $this->assertArrayHasKey('subtotal_incl_tax', $result);
+        $this->assertArrayHasKey('subtotal_excl_tax', $result);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertTrue(is_array($result['items']));
+        $this->assertEquals(2, count($result['items']));
+        $this->assertEquals(1, $result['items'][0]['product_price']);
+        $this->assertEquals(1, $result['items'][1]['product_price']);
     }
 }

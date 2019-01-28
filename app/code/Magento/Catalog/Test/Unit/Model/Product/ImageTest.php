@@ -234,7 +234,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'angle' => null,
             'quality' => 80,
         ];
-        $this->paramsBuilder->expects(self::once())
+        $this->paramsBuilder->expects($this->once())
             ->method('build')
             ->willReturn($miscParams);
         $this->mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));

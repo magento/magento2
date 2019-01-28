@@ -82,7 +82,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
         $this->orderRepository->save($order);
 
         $gridRow = $this->getGridRow($order->getEntityId());
-        self::assertNotEquals($order->getStatus(), $gridRow['status']);
+        $this->assertNotEquals($order->getStatus(), $gridRow['status']);
 
         $this->gridAsyncInsert->asyncInsert();
         $this->performUpdateAssertions($order);
@@ -133,7 +133,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
     {
         $gridRow = $this->getGridRow($order->getEntityId());
 
-        self::assertEquals($order->getStatus(), $gridRow['status']);
-        self::assertEquals($order->getUpdatedAt(), $gridRow['updated_at']);
+        $this->assertEquals($order->getStatus(), $gridRow['status']);
+        $this->assertEquals($order->getUpdatedAt(), $gridRow['updated_at']);
     }
 }

@@ -74,11 +74,11 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 123;
 
-        $this->gateway->expects(self::never())
+        $this->gateway->expects($this->never())
             ->method('submitCaseForGuarantee');
 
         $result = $this->service->createForOrder($orderId);
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -91,16 +91,16 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
     {
         $caseEntity = $this->getCaseEntity();
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('submitCaseForGuarantee')
             ->willThrowException(new GatewayException('Something wrong'));
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
             ->with('Something wrong');
 
         $result = $this->service->createForOrder($caseEntity->getOrderId());
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -114,31 +114,31 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
     {
         $caseEntity = $this->getCaseEntity();
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('submitCaseForGuarantee')
             ->with($caseEntity->getCaseId())
             ->willReturn(CaseInterface::GUARANTEE_IN_REVIEW);
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $result = $this->service->createForOrder($caseEntity->getOrderId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
 
         $updatedCase = $this->getCaseEntity();
-        self::assertEquals(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
-        self::assertEquals(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
+        $this->assertEquals(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
+        $this->assertEquals(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($updatedCase->getOrderId());
         $histories = $order->getStatusHistories();
-        self::assertNotEmpty($histories);
+        $this->assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        self::assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
+        $this->assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        $this->assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
     }
 
     /**

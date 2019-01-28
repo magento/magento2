@@ -54,6 +54,6 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
 
         $expected = ['allowWishlist' => $isAllow];
         $actual = $this->wishlistSettings->afterGetData($subjectMock, $result);
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 }

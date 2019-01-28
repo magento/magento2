@@ -94,7 +94,7 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
 
         $result = $this->_webApiCall($serviceInfo, ['id' => $trackEntity->getEntityId()]);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
         $this->assertNoAvailableTrackItems($shipment->getId());
     }
 
@@ -115,6 +115,6 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
             ->getList($searchCriteria)
             ->getItems();
 
-        self::assertEmpty($items);
+        $this->assertEmpty($items);
     }
 }

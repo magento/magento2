@@ -35,13 +35,13 @@ class TMapTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $tMap = $this->getSimpleInitialized(3);
-        static::assertEquals(3, $tMap->count());
+        $this->assertEquals(3, $tMap->count());
     }
 
     public function testRead()
     {
         $tMap = $this->getSimpleInitialized(3);
-        $this->om->expects(static::exactly(3))
+        $this->om->expects($this->exactly(3))
             ->method('create')
             ->willReturnMap(
                 [
@@ -52,7 +52,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
             );
 
         foreach ($tMap as $instance) {
-            static::assertInstanceOf('\TInterface', $instance);
+            $this->assertInstanceOf('\TInterface', $instance);
         }
     }
 
@@ -63,11 +63,11 @@ class TMapTest extends \PHPUnit\Framework\TestCase
     {
         $tMap = $this->getSimpleInitialized(3);
 
-        static::assertEquals(3, $tMap->count());
+        $this->assertEquals(3, $tMap->count());
         foreach ($tMap as $key => $instance) {
             unset($tMap[$key]);
         }
-        static::assertEquals(0, $tMap->count());
+        $this->assertEquals(0, $tMap->count());
     }
 
     /**
@@ -89,7 +89,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
         $tMap['item2'] = 'TClass';
         $tMap[] = 'TInterface';
 
-        $this->om->expects(static::exactly(4))
+        $this->om->expects($this->exactly(4))
             ->method('create')
             ->willReturnMap(
                 [
@@ -101,11 +101,11 @@ class TMapTest extends \PHPUnit\Framework\TestCase
 
         $i = 0;
         foreach ($tMap as $key => $item) {
-            static::assertEquals($expectedKeysOrder[$i], $key);
+            $this->assertEquals($expectedKeysOrder[$i], $key);
             $i++;
         }
 
-        static::assertEquals(4, $tMap->count());
+        $this->assertEquals(4, $tMap->count());
     }
 
     /**
@@ -129,7 +129,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
             3 => 'TInterface'
         ];
 
-        $this->omConfig->expects(static::exactly($exactlyCalls))
+        $this->omConfig->expects($this->exactly($exactlyCalls))
             ->method('getPreference')
             ->willReturnMap(
                 [
@@ -138,7 +138,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
                     ['TInterface', 'TClassVirtual']
                 ]
             );
-        $this->omConfig->expects(static::exactly($exactlyCalls))
+        $this->omConfig->expects($this->exactly($exactlyCalls))
             ->method('getInstanceType')
             ->willReturnMap(
                 [

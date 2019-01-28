@@ -941,7 +941,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setTypeInstance($typeInstanceMock);
 
-        self::assertTrue($this->model->getIsSalable());
+        $this->assertTrue($this->model->getIsSalable());
     }
 
     public function testGetIsSalableHasDataIsSaleable()
@@ -952,7 +952,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('is_saleable', true);
         $this->model->setData('is_salable', false);
 
-        self::assertTrue($this->model->getIsSalable());
+        $this->assertTrue($this->model->getIsSalable());
     }
 
     /**
@@ -1280,7 +1280,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 [3, 'not_null_skeep_foreache'],
             ]
         );
-        $imagesCollectionMock->expects(self::exactly(2))->method('addItem')->withConsecutive(
+        $imagesCollectionMock->expects($this->exactly(2))->method('addItem')->withConsecutive(
             $expectedImageDataObject,
             $expectedSmallImageDataObject
         );

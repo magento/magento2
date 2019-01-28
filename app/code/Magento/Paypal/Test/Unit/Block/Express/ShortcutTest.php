@@ -31,11 +31,11 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paypalConfigFactoryMock->expects(self::once())
+        $paypalConfigFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($configMock);
 
-        $configMock->expects(self::once())
+        $configMock->expects($this->once())
             ->method('setMethod')
             ->with('test-method');
 

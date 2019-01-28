@@ -46,7 +46,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $msg->expects($this->once())
             ->method('getType')
             ->willReturn($msgType);
-        $this->messageInterpretationStrategy->expects(static::once())
+        $this->messageInterpretationStrategy->expects($this->once())
             ->method('interpret')
             ->with($msg)
             ->willReturn($msgText);

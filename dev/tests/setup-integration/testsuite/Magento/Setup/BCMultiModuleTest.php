@@ -74,12 +74,12 @@ class BCMultiModuleTest extends SetupTestCase
         ]);
         //Check if declaration is applied
         $indexes = $this->dbSchemaReader->readIndexes('test_table', 'default');
-        self::assertCount(1, $indexes);
-        self::assertArrayHasKey('TEST_TABLE_TINYINT_BIGINT', $indexes);
+        $this->assertCount(1, $indexes);
+        $this->assertArrayHasKey('TEST_TABLE_TINYINT_BIGINT', $indexes);
         //Check UpgradeSchema old format, that modify declaration
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
-        self::assertEquals(29, $floatColumn['default']);
+        $this->assertEquals(29, $floatColumn['default']);
     }
 
     private function doUsToUsRevision()
@@ -132,10 +132,10 @@ class BCMultiModuleTest extends SetupTestCase
     private function assertUsToUsUpgrade()
     {
         $usToUsTables = $this->dbSchemaReader->readTables('default');
-        self::assertContains('custom_table', $usToUsTables);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertEquals(
+        $this->assertContains('custom_table', $usToUsTables);
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
+        $this->assertEquals(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'bigint_without_padding')
         );
@@ -150,14 +150,14 @@ class BCMultiModuleTest extends SetupTestCase
         $columns = $this->dbSchemaReader->readColumns('test_table', 'default');
         $floatColumn = $columns['float'];
         //Check whether declaration will be applied
-        self::assertEquals(35, $floatColumn['default']);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
-        self::assertEquals(
+        $this->assertEquals(35, $floatColumn['default']);
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule7'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule7'));
+        $this->assertEquals(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'bigint_without_padding')
         );
-        self::assertEquals(
+        $this->assertEquals(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );
@@ -195,7 +195,7 @@ class BCMultiModuleTest extends SetupTestCase
         //Check removal case, when we need to remove table with declaration and table was created in old scripts
         $this->cliCommand->upgrade();
         $tables = $this->dbSchemaReader->readTables('default');
-        self::assertNotContains('custom_table', $tables);
+        $this->assertNotContains('custom_table', $tables);
     }
 
     /**
@@ -226,18 +226,18 @@ class BCMultiModuleTest extends SetupTestCase
 
         $indexes = $this->dbSchemaReader
             ->readIndexes($tableName, 'default');
-        self::assertCount(1, $indexes);
-        self::assertArrayHasKey($indexName, $indexes);
+        $this->assertCount(1, $indexes);
+        $this->assertArrayHasKey($indexName, $indexes);
 
         $constraints = $this->dbSchemaReader
             ->readConstraints($tableName, 'default');
-        self::assertCount(1, $constraints);
-        self::assertArrayHasKey($constraintName, $constraints);
+        $this->assertCount(1, $constraints);
+        $this->assertArrayHasKey($constraintName, $constraints);
 
         $foreignKeys = $this->dbSchemaReader
             ->readReferences($tableName, 'default');
-        self::assertCount(1, $foreignKeys);
-        self::assertArrayHasKey($foreignKeyName, $foreignKeys);
+        $this->assertCount(1, $foreignKeys);
+        $this->assertArrayHasKey($foreignKeyName, $foreignKeys);
     }
 
     /**

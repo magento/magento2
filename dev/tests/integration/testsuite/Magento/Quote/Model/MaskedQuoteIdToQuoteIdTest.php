@@ -34,7 +34,7 @@ class MaskedQuoteIdToQuoteIdTest extends \PHPUnit\Framework\TestCase
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
         $quoteId = $this->maskedQuoteIdToQuoteId->execute($maskedQuoteId);
 
-        self::assertGreaterThan(0, $quoteId);
+        $this->assertGreaterThan(0, $quoteId);
     }
 
     public function testMaskedQuoteIdToQuoteIdForNonExistentQuote()

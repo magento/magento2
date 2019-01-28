@@ -73,7 +73,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetComponentName()
     {
-        $this->contextMock->expects(static::never())->method('getProcessor');
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $date = new Date(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -82,7 +82,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
             []
         );
 
-        static::assertTrue($date->getComponentName() === Date::NAME);
+        $this->assertTrue($date->getComponentName() === Date::NAME);
     }
 
     /**
@@ -99,7 +99,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects(static::atLeastOnce())->method('getProcessor')->willReturn($processor);
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate $uiComponent */
         $uiComponent = $this->getMockBuilder(FormDate::class)
             ->disableOriginalConstructor()
@@ -156,21 +156,21 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     private function getFilterMock($name, $expectedType, $expectedDate, &$i)
     {
-        $this->filterBuilderMock->expects(static::at($i++))
+        $this->filterBuilderMock->expects($this->at($i++))
             ->method('setConditionType')
             ->with($expectedType)
             ->willReturnSelf();
-        $this->filterBuilderMock->expects(static::at($i++))
+        $this->filterBuilderMock->expects($this->at($i++))
             ->method('setField')
             ->with($name)
             ->willReturnSelf();
-        $this->filterBuilderMock->expects(static::at($i++))
+        $this->filterBuilderMock->expects($this->at($i++))
             ->method('setValue')
             ->with($expectedDate)
             ->willReturnSelf();
 
         $filterMock = $this->createMock(Filter::class);
-        $this->filterBuilderMock->expects(static::at($i++))
+        $this->filterBuilderMock->expects($this->at($i++))
             ->method('create')
             ->willReturn($filterMock);
 
@@ -223,7 +223,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     private function processFilters($name, $filterData, $expectedCondition, $uiComponent)
     {
         if (is_string($filterData[$name])) {
-            $uiComponent->expects(static::once())
+            $uiComponent->expects($this->once())
                 ->method('convertDate')
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
@@ -248,7 +248,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
                     $expectedCondition['date'],
                     $i
                 );
-                $this->dataProviderMock->expects(static::once())
+                $this->dataProviderMock->expects($this->once())
                     ->method('addFilter')
                     ->with($filterMock);
                 break;
@@ -265,7 +265,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
                     $expectedCondition['date_to'],
                     $i
                 );
-                $this->dataProviderMock->expects(static::exactly(2))
+                $this->dataProviderMock->expects($this->exactly(2))
                     ->method('addFilter')
                     ->with($filterMock);
                 break;

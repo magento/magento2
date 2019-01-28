@@ -48,13 +48,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetActiveMethods()
     {
         $paymentMethods = $this->model->getActiveMethods();
-        static::assertNotEmpty($paymentMethods);
+        $this->assertNotEmpty($paymentMethods);
 
         /** @var \Magento\Payment\Model\MethodInterface $method */
         foreach ($paymentMethods as $method) {
-            static::assertNotEmpty($method->getCode());
-            static::assertTrue($method->isActive());
-            static::assertEquals(0, $method->getStore());
+            $this->assertNotEmpty($method->getCode());
+            $this->assertTrue($method->isActive());
+            $this->assertEquals(0, $method->getStore());
         }
     }
 

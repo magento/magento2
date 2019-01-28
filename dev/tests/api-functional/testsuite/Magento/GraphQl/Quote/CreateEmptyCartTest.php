@@ -49,14 +49,14 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('createEmptyCart', $response);
+        $this->assertArrayHasKey('createEmptyCart', $response);
 
         $maskedCartId = $response['createEmptyCart'];
         /** @var CartInterface $guestCart */
         $guestCart = $this->guestCartRepository->get($maskedCartId);
 
-        self::assertNotNull($guestCart->getId());
-        self::assertNull($guestCart->getCustomer()->getId());
+        $this->assertNotNull($guestCart->getId());
+        $this->assertNull($guestCart->getCustomer()->getId());
     }
 
     /**
@@ -79,13 +79,13 @@ QUERY;
 
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        self::assertArrayHasKey('createEmptyCart', $response);
+        $this->assertArrayHasKey('createEmptyCart', $response);
 
         $maskedCartId = $response['createEmptyCart'];
         /* guestCartRepository is used for registered customer to get the cart hash */
         $guestCart = $this->guestCartRepository->get($maskedCartId);
 
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
+        $this->assertNotNull($guestCart->getId());
+        $this->assertEquals(1, $guestCart->getCustomer()->getId());
     }
 }

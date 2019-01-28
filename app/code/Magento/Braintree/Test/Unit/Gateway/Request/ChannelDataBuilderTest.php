@@ -57,13 +57,13 @@ class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
         $buildSubject = [];
 
         $this->config->method('getValue')
-            ->with(self::equalTo('channel'))
+            ->with($this->equalTo('channel'))
             ->willReturn(null);
 
         $this->productMetadata->method('getEdition')
             ->willReturn($edition);
 
-        self::assertEquals($expected, $this->builder->build($buildSubject));
+        $this->assertEquals($expected, $this->builder->build($buildSubject));
     }
 
     /**
@@ -74,13 +74,13 @@ class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
         $channel = 'Magento2_Cart_ConfigEdition_BT';
 
         $this->config->method('getValue')
-            ->with(self::equalTo('channel'))
+            ->with($this->equalTo('channel'))
             ->willReturn($channel);
 
-        $this->productMetadata->expects(self::never())
+        $this->productMetadata->expects($this->never())
             ->method('getEdition');
 
-        self::assertEquals(
+        $this->assertEquals(
             [
                 'channel' => $channel
             ],

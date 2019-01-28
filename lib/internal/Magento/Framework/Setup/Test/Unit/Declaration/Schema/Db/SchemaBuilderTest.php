@@ -280,7 +280,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resourceConnectionMock->expects(self::any())
+        $resourceConnectionMock->expects($this->any())
             ->method('getTableName')
             ->willReturnArgument(0);
         /** @var Schema $schema */
@@ -331,10 +331,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     private function prepareSchemaMocks(array $columns, array $references, array $constraints, array $indexes)
     {
         $withContext = [['first_table', 'default'], ['second_table', 'default']];
-        $this->shardingMock->expects(self::once())
+        $this->shardingMock->expects($this->once())
             ->method('getResources')
             ->willReturn(['default']);
-        $this->dbSchemaReaderMock->expects(self::once())
+        $this->dbSchemaReaderMock->expects($this->once())
             ->method('readTables')
             ->with('default')
             ->willReturn(['first_table', 'second_table']);

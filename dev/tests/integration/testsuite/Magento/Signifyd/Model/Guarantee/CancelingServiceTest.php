@@ -80,14 +80,14 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
         $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_CANCELED);
         $caseRepository->save($caseEntity);
 
-        $this->gateway->expects(self::never())
+        $this->gateway->expects($this->never())
             ->method('cancelGuarantee');
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $result = $this->service->cancelForOrder($caseEntity->getOrderId());
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -104,17 +104,17 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('cancelGuarantee')
-            ->with(self::equalTo(self::$caseId))
+            ->with($this->equalTo(self::$caseId))
             ->willThrowException(new GatewayException($exceptionMessage));
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
-            ->with(self::equalTo($exceptionMessage));
+            ->with($this->equalTo($exceptionMessage));
 
         $result = $this->service->cancelForOrder($caseEntity->getOrderId());
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -130,29 +130,29 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
 
-        $this->gateway->expects(self::once())
+        $this->gateway->expects($this->once())
             ->method('cancelGuarantee')
-            ->with(self::equalTo(self::$caseId))
+            ->with($this->equalTo(self::$caseId))
             ->willReturn(CaseInterface::GUARANTEE_CANCELED);
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $result = $this->service->cancelForOrder($caseEntity->getOrderId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
 
         $updatedCase = $caseRepository->getByCaseId(self::$caseId);
-        self::assertEquals(CaseInterface::GUARANTEE_CANCELED, $updatedCase->getGuaranteeDisposition());
+        $this->assertEquals(CaseInterface::GUARANTEE_CANCELED, $updatedCase->getGuaranteeDisposition());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($updatedCase->getOrderId());
         $histories = $order->getStatusHistories();
-        self::assertNotEmpty($histories);
+        $this->assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        self::assertEquals('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
+        $this->assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        $this->assertEquals('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
     }
 }

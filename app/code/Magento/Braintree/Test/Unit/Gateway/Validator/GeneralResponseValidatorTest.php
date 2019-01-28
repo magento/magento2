@@ -70,7 +70,7 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->responseValidator->validate($validationSubject);
 
-        self::assertEquals($result, $actual);
+        $this->assertEquals($result, $actual);
     }
 
     /**

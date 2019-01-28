@@ -56,12 +56,12 @@ class CmsBlockTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('cmsBlocks', $response);
-        self::assertArrayHasKey('items', $response['cmsBlocks']);
+        $this->assertArrayHasKey('cmsBlocks', $response);
+        $this->assertArrayHasKey('items', $response['cmsBlocks']);
 
-        self::assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
-        self::assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
-        self::assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
+        $this->assertEquals($cmsBlockData['identifier'], $response['cmsBlocks']['items'][0]['identifier']);
+        $this->assertEquals($cmsBlockData['title'], $response['cmsBlocks']['items'][0]['title']);
+        $this->assertEquals($renderedContent, $response['cmsBlocks']['items'][0]['content']);
     }
 
     /**
@@ -155,14 +155,14 @@ QUERY;
 
         try {
             $this->graphQlQuery($query);
-            self::fail('Response should contains errors.');
+            $this->fail('Response should contains errors.');
         } catch (ResponseContainsErrorsException $e) {
             $responseData = $e->getResponseData();
         }
 
-        self::assertNotEmpty($responseData);
-        self::assertEquals('enabled_block', $responseData['data']['cmsBlocks']['items'][0]['identifier']);
-        self::assertEquals(
+        $this->assertNotEmpty($responseData);
+        $this->assertEquals('enabled_block', $responseData['data']['cmsBlocks']['items'][0]['identifier']);
+        $this->assertEquals(
             'The CMS block with the "disabled_block" ID doesn\'t exist.',
             $responseData['errors'][0]['message']
         );

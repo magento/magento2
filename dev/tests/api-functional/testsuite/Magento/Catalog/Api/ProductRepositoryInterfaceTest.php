@@ -714,14 +714,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $response = $this->updateProduct($productData);
 
-        self::assertArrayHasKey(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $response);
-        self::assertArrayHasKey($linksKey, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
-        self::assertCount(1, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey]);
+        $this->assertArrayHasKey(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        $this->assertArrayHasKey($linksKey, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+        $this->assertCount(1, $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey]);
 
         $linkData = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY][$linksKey][0];
 
-        self::assertArrayHasKey(Link::KEY_LINK_URL, $linkData);
-        self::assertEquals('http://example.com/downloadable.txt', $linkData[Link::KEY_LINK_URL]);
+        $this->assertArrayHasKey(Link::KEY_LINK_URL, $linkData);
+        $this->assertEquals('http://example.com/downloadable.txt', $linkData[Link::KEY_LINK_URL]);
     }
 
     /**

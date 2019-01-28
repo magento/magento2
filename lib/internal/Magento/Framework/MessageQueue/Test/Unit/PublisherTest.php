@@ -123,43 +123,43 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
         $exchange = $this->getMockBuilder(Exchange::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $exchange->expects(self::once())
+        $exchange->expects($this->once())
             ->method('enqueue')
-            ->with(self::identicalTo($topicName), self::identicalTo($envelope))
+            ->with($this->identicalTo($topicName), $this->identicalTo($envelope))
             ->willReturn(null);
         $connection = $this->getMockBuilder(PublisherConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connection->expects(self::once())
+        $connection->expects($this->once())
             ->method('getName')
             ->willReturn('amqp');
         $publisher = $this->getMockBuilder(PublisherConfigItem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $publisher->expects(self::once())
+        $publisher->expects($this->once())
             ->method('getConnection')
             ->willReturn($connection);
-        $this->messageValidator->expects(self::once())
+        $this->messageValidator->expects($this->once())
             ->method('validate');
-        $this->messageEncoder->expects(self::once())
+        $this->messageEncoder->expects($this->once())
             ->method('encode')
-            ->with(self::identicalTo($topicName), self::identicalTo($data))
+            ->with($this->identicalTo($topicName), $this->identicalTo($data))
             ->willReturn($encodedData);
-        $this->envelopeFactory->expects(self::once())
+        $this->envelopeFactory->expects($this->once())
             ->method('create')
             ->willReturn($envelope);
-        $this->publisherConfig->expects(self::once())
+        $this->publisherConfig->expects($this->once())
             ->method('getPublisher')
             ->with($topicName)
             ->willReturn($publisher);
-        $this->amqpConfig->expects(self::once())
+        $this->amqpConfig->expects($this->once())
             ->method('getValue')
             ->with(AmqpConfig::HOST)
             ->willReturn('');
-        $this->exchangeRepository->expects(self::once())
+        $this->exchangeRepository->expects($this->once())
             ->method('getByConnectionName')
             ->with('db')
             ->willReturn($exchange);
-        self::assertNull($this->publisher->publish($topicName, $data));
+        $this->assertNull($this->publisher->publish($topicName, $data));
     }
 }

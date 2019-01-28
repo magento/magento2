@@ -105,27 +105,27 @@ class ProTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getPaymentMock();
         $orderMock = $this->getOrderMock();
 
-        $this->apiMock->expects(static::any())
+        $this->apiMock->expects($this->any())
             ->method('setAuthorizationId')
             ->willReturnSelf();
-        $this->apiMock->expects(static::any())
+        $this->apiMock->expects($this->any())
             ->method('setIsCaptureComplete')
             ->willReturnSelf();
-        $this->apiMock->expects(static::any())
+        $this->apiMock->expects($this->any())
             ->method('setAmount')
             ->willReturnSelf();
 
-        $paymentMock->expects(static::once())
+        $paymentMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($orderMock);
 
         $paymentMock->method('isCaptureFinal')
             ->willReturn(true);
 
-        $this->apiMock->expects(static::once())
+        $this->apiMock->expects($this->once())
             ->method('getTransactionId')
             ->willReturn(45);
-        $this->apiMock->expects(static::any())
+        $this->apiMock->expects($this->any())
             ->method('getDataUsingMethod')
             ->willReturn(false);
 
@@ -147,7 +147,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isPaymentReviewRequired'])
             ->getMock();
-        $infoFactory->expects(static::any())->method('create')->willReturn($infoMock);
+        $infoFactory->expects($this->any())->method('create')->willReturn($infoMock);
         return $infoFactory;
     }
 
@@ -167,7 +167,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $configFactory->expects(static::any())
+        $configFactory->expects($this->any())
             ->method('create')
             ->with($configType, ['params' => [
                 PaypalConfig::METHOD_PAYMENT_PRO,
@@ -193,9 +193,9 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $httpClient->expects(static::any())
+        $httpClient->expects($this->any())
             ->method('read')
-            ->will(static::returnValue(
+            ->will($this->returnValue(
                 "\r\n" . 'ACK=Success&CORRELATIONID=32342431'
             ));
 
@@ -203,7 +203,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $curlFactory->expects(static::any())->method('create')->willReturn($httpClient);
+        $curlFactory->expects($this->any())->method('create')->willReturn($httpClient);
 
         $apiType = \Magento\Paypal\Model\Api\Nvp::class;
         $args = $objectHelper->getConstructArguments(
@@ -226,7 +226,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $apiFactory->expects(static::any())->method('create')->with($apiType)->willReturn($this->apiMock);
+        $apiFactory->expects($this->any())->method('create')->with($apiType)->willReturn($this->apiMock);
         return $apiFactory;
     }
 
@@ -243,7 +243,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
         $parentTransactionId = 43;
-        $paymentMock->expects(static::once())
+        $paymentMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn($parentTransactionId);
 
@@ -266,13 +266,13 @@ class ProTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
 
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn($orderData['id']);
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getBaseCurrencyCode')
             ->willReturn($orderData['currency']);
-        $orderMock->expects(static::atLeastOnce())
+        $orderMock->expects($this->atLeastOnce())
             ->method('getIncrementId')
             ->willReturn($orderData['increment_id']);
         return $orderMock;

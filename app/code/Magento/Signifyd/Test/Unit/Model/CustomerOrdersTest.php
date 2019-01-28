@@ -139,8 +139,8 @@ class CustomerOrdersTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->model->getAggregatedOrdersInfo(self::$customerId);
 
-        static::assertEquals(3, $actual['aggregateOrderCount']);
-        static::assertEquals(169.35, $actual['aggregateOrderDollars']);
+        $this->assertEquals(3, $actual['aggregateOrderCount']);
+        $this->assertEquals(169.35, $actual['aggregateOrderDollars']);
     }
 
     /**

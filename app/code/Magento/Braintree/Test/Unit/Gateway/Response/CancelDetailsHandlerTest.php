@@ -55,7 +55,7 @@ class CancelDetailsHandlerTest extends TestCase
 
         $this->handler->handle($response, []);
 
-        self::assertTrue($payment->getIsTransactionClosed(), 'The current transaction should be closed.');
-        self::assertTrue($payment->getShouldCloseParentTransaction(), 'The parent transaction should be closed.');
+        $this->assertTrue($payment->getIsTransactionClosed(), 'The current transaction should be closed.');
+        $this->assertTrue($payment->getShouldCloseParentTransaction(), 'The parent transaction should be closed.');
     }
 }

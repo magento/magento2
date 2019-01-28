@@ -260,16 +260,16 @@ QUERY;
         $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
-        self::assertEquals(
+        $this->assertEquals(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/1/name')
         );
-        self::assertEquals(
+        $this->assertEquals(
             'Filter category',
             $responseObject->getData('products/items/0/categories/2/name')
         );
         $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
+        $this->assertEquals(
             $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
             $responseObject->getData('products/items/0/canonical_url')
         );
@@ -644,8 +644,8 @@ QUERY;
         $secondProduct->setId(
             $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
         );
-        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
-        self::assertCount(2, $response['products']['items']);
+        $this->assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        $this->assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
         $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
     }

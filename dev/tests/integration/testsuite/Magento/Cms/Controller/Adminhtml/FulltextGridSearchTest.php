@@ -32,10 +32,10 @@ class FulltextGridSearchTest extends AbstractBackendController
         $this->dispatch($url);
         $response = $this->getResponse();
         $data = json_decode($response->getBody(), true);
-        self::assertEquals($expectedRows, $data['totalRecords']);
+        $this->assertEquals($expectedRows, $data['totalRecords']);
 
         $titleList = array_column($data['items'], 'title');
-        self::assertEquals($expectedTitles, $titleList);
+        $this->assertEquals($expectedTitles, $titleList);
     }
 
     /**

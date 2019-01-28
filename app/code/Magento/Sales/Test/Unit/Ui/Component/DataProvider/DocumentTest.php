@@ -50,11 +50,11 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     {
         $this->document->setData('state', Invoice::STATE_PAID);
 
-        $this->groupRepository->expects(static::never())
+        $this->groupRepository->expects($this->never())
             ->method('getById');
 
         $attribute = $this->document->getCustomAttribute('state');
-        static::assertEquals('Paid', $attribute->getValue());
+        $this->assertEquals('Paid', $attribute->getValue());
     }
 
     /**
@@ -66,16 +66,16 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $group = $this->getMockForAbstractClass(GroupInterface::class);
 
-        $this->groupRepository->expects(static::once())
+        $this->groupRepository->expects($this->once())
             ->method('getById')
             ->willReturn($group);
 
-        $group->expects(static::once())
+        $group->expects($this->once())
             ->method('getCode')
             ->willReturn('General');
 
         $attribute = $this->document->getCustomAttribute('customer_group_id');
-        static::assertEquals('General', $attribute->getValue());
+        $this->assertEquals('General', $attribute->getValue());
     }
 
     /**
@@ -91,7 +91,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $attributeValue = new AttributeValue();
 
-        $this->attributeValueFactory->expects(static::once())
+        $this->attributeValueFactory->expects($this->once())
             ->method('create')
             ->willReturn($attributeValue);
     }

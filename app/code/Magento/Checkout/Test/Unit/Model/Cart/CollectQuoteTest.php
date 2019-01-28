@@ -127,35 +127,35 @@ class CollectQuoteTest extends TestCase
         $regionId = 'CA';
         $regionMock = $this->createMock(RegionInterface::class);
 
-        $this->customerSessionMock->expects(self::once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(true);
-        $this->customerSessionMock->expects(self::once())
+        $this->customerSessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->customerRepositoryMock->expects(self::once())
+        $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->willReturn($this->customerMock);
-        $this->customerMock->expects(self::once())
+        $this->customerMock->expects($this->once())
             ->method('getDefaultShipping')
             ->willReturn($defaultAddressId);
-        $this->addressMock->expects(self::once())
+        $this->addressMock->expects($this->once())
             ->method('getCountryId')
             ->willReturn($countryId);
-        $regionMock->expects(self::once())
+        $regionMock->expects($this->once())
             ->method('getRegion')
             ->willReturn($regionId);
-        $this->addressMock->expects(self::once())
+        $this->addressMock->expects($this->once())
             ->method('getRegion')
             ->willReturn($regionMock);
-        $this->addressRepositoryMock->expects(self::once())
+        $this->addressRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($defaultAddressId)
             ->willReturn($this->addressMock);
-        $this->estimateAddressFactoryMock->expects(self::once())
+        $this->estimateAddressFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->estimateAddressMock);
-        $this->quoteRepositoryMock->expects(self::once())
+        $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock);
 
@@ -167,10 +167,10 @@ class CollectQuoteTest extends TestCase
      */
     public function testCollectWhenCustomerIsNotLoggedIn()
     {
-        $this->customerSessionMock->expects(self::once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
-        $this->customerRepositoryMock->expects(self::never())
+        $this->customerRepositoryMock->expects($this->never())
             ->method('getById');
 
         $this->model->collect($this->quoteMock);

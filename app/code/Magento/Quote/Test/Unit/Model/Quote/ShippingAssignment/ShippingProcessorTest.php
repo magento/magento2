@@ -68,27 +68,27 @@ class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->getMockForAbstractClass(AddressInterface::class);
         
-        $quote->expects(static::exactly(2))
+        $quote->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($quoteId);
         
-        $shipping->expects(static::once())
+        $shipping->expects($this->once())
             ->method('getAddress')
             ->willReturn($address);
 
-        $this->shippingAddressManagement->expects(static::once())
+        $this->shippingAddressManagement->expects($this->once())
             ->method('assign')
             ->with($quoteId, $address);
 
-        $shipping->expects(static::exactly(2))
+        $shipping->expects($this->exactly(2))
             ->method('getMethod')
             ->willReturn($method);
 
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $this->shippingMethodManagement->expects(static::once())
+        $this->shippingMethodManagement->expects($this->once())
             ->method('apply')
             ->with($quoteId, $carrierCode, $methodCode);
 

@@ -134,9 +134,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['description']['html']);
-        self::assertNotContains('{{block id', $response['products']['items'][0]['description']['html']);
-        self::assertContains($assertionCmsBlockText, $response['products']['items'][0]['short_description']['html']);
-        self::assertNotContains('{{block id', $response['products']['items'][0]['short_description']['html']);
+        $this->assertContains($assertionCmsBlockText, $response['products']['items'][0]['description']['html']);
+        $this->assertNotContains('{{block id', $response['products']['items'][0]['description']['html']);
+        $this->assertContains($assertionCmsBlockText, $response['products']['items'][0]['short_description']['html']);
+        $this->assertNotContains('{{block id', $response['products']['items'][0]['short_description']['html']);
     }
 }

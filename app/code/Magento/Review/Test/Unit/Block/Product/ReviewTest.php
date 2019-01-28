@@ -89,7 +89,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIdentities()
     {
-        static::assertEquals([Review::CACHE_TAG], $this->block->getIdentities());
+        $this->assertEquals([Review::CACHE_TAG], $this->block->getIdentities());
     }
 
     /**
@@ -102,16 +102,16 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['addStoreFilter', 'addStatusFilter', 'addEntityFilter', 'getSize', '__wakeup'])
             ->getMock();
 
-        $this->collection->expects(static::any())
+        $this->collection->expects($this->any())
             ->method('addStoreFilter')
             ->willReturnSelf();
 
-        $this->collection->expects(static::any())
+        $this->collection->expects($this->any())
             ->method('addStatusFilter')
             ->with(Review::STATUS_APPROVED)
             ->willReturnSelf();
 
-        $this->collection->expects(static::any())
+        $this->collection->expects($this->any())
             ->method('addEntityFilter')
             ->willReturnSelf();
 
@@ -120,7 +120,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create', '__wakeup'])
             ->getMock();
 
-        $this->collectionFactory->expects(static::once())
+        $this->collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);
     }
@@ -168,7 +168,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStore', '__wakeup'])
             ->getMock();
 
-        $this->storeManager->expects(static::any())
+        $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();

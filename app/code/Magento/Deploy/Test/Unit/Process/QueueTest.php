@@ -117,7 +117,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
 
         $this->queue->add($package, []);
 
-        $this->resourceConnection->expects(self::never())->method('closeConnection');
+        $this->resourceConnection->expects($this->never())->method('closeConnection');
 
         $this->assertEquals(0, $this->queue->process());
     }

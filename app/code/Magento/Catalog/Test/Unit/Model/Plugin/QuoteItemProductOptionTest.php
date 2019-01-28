@@ -72,7 +72,7 @@ class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeItemToOrderItemEmptyOptions()
     {
-        $this->quoteItemMock->expects(static::once())
+        $this->quoteItemMock->expects($this->once())
             ->method('getOptions')
             ->willReturn(null);
 
@@ -81,16 +81,16 @@ class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeItemToOrderItemWithOptions()
     {
-        $this->quoteItemMock->expects(static::exactly(2))
+        $this->quoteItemMock->expects($this->exactly(2))
             ->method('getOptions')
             ->willReturn([$this->quoteItemOptionMock, $this->quoteItemOptionMock]);
-        $this->quoteItemOptionMock->expects(static::exactly(2))
+        $this->quoteItemOptionMock->expects($this->exactly(2))
             ->method('getCode')
             ->willReturnOnConsecutiveCalls('someText_8', 'not_int_text');
-        $this->productMock->expects(static::once())
+        $this->productMock->expects($this->once())
             ->method('getOptionById')
             ->willReturn(new DataObject(['type' => ProductOption::OPTION_TYPE_FILE]));
-        $this->quoteItemMock->expects(static::once())
+        $this->quoteItemMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
 

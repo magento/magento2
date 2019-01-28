@@ -91,11 +91,11 @@ class GuestCouponManagementTest extends TestCase
         $this->httpClient->method('request')
             ->willReturn($request);
 
-        self::assertTrue($this->management->set($cartId, $couponCode));
+        $this->assertTrue($this->management->set($cartId, $couponCode));
 
         $methods = $this->estimateShipping($cartId);
         $methods = $this->filterFreeShippingMethods($methods);
-        self::assertEquals(['Fixed', 'Priority Mail 1-Day'], $methods);
+        $this->assertEquals(['Fixed', 'Priority Mail 1-Day'], $methods);
     }
 
     /**

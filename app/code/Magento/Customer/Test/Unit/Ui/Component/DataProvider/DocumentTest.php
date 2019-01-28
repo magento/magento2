@@ -85,30 +85,30 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $genderId = 1;
         $this->document->setData('gender', $genderId);
 
-        $this->groupRepository->expects(static::never())
+        $this->groupRepository->expects($this->never())
             ->method('getById');
 
-        $this->storeManager->expects(static::never())
+        $this->storeManager->expects($this->never())
             ->method('getWebsites');
 
         $metadata = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
 
-        $this->customerMetadata->expects(static::once())
+        $this->customerMetadata->expects($this->once())
             ->method('getAttributeMetadata')
             ->willReturn($metadata);
 
         $option = $this->getMockForAbstractClass(OptionInterface::class);
 
-        $metadata->expects(static::once())
+        $metadata->expects($this->once())
             ->method('getOptions')
             ->willReturn([$genderId => $option]);
 
-        $option->expects(static::once())
+        $option->expects($this->once())
             ->method('getLabel')
             ->willReturn('Male');
 
         $attribute = $this->document->getCustomAttribute('gender');
-        static::assertEquals('Male', $attribute->getValue());
+        $this->assertEquals('Male', $attribute->getValue());
     }
 
     /**
@@ -118,24 +118,24 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
     {
         $this->document->setData('group_id', 1);
 
-        $this->customerMetadata->expects(static::never())
+        $this->customerMetadata->expects($this->never())
             ->method('getAttributeMetadata');
 
-        $this->storeManager->expects(static::never())
+        $this->storeManager->expects($this->never())
             ->method('getWebsites');
 
         $group = $this->getMockForAbstractClass(GroupInterface::class);
 
-        $this->groupRepository->expects(static::once())
+        $this->groupRepository->expects($this->once())
             ->method('getById')
             ->willReturn($group);
 
-        $group->expects(static::once())
+        $group->expects($this->once())
             ->method('getCode')
             ->willReturn('General');
 
         $attribute = $this->document->getCustomAttribute('group_id');
-        static::assertEquals('General', $attribute->getValue());
+        $this->assertEquals('General', $attribute->getValue());
     }
 
     /**
@@ -146,24 +146,24 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $websiteId = 1;
         $this->document->setData('website_id', $websiteId);
 
-        $this->groupRepository->expects(static::never())
+        $this->groupRepository->expects($this->never())
             ->method('getById');
 
-        $this->customerMetadata->expects(static::never())
+        $this->customerMetadata->expects($this->never())
             ->method('getAttributeMetadata');
 
         $website = $this->getMockForAbstractClass(WebsiteInterface::class);
 
-        $this->storeManager->expects(static::once())
+        $this->storeManager->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$websiteId => $website]);
 
-        $website->expects(static::once())
+        $website->expects($this->once())
             ->method('getName')
             ->willReturn('Main Website');
 
         $attribute = $this->document->getCustomAttribute('website_id');
-        static::assertEquals('Main Website', $attribute->getValue());
+        $this->assertEquals('Main Website', $attribute->getValue());
     }
 
     /**
@@ -174,7 +174,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $websiteId = 1;
         $this->document->setData('original_website_id', $websiteId);
 
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with()
             ->willReturn(true);
@@ -183,8 +183,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->document->getCustomAttribute('confirmation');
 
         $value = $attribute->getValue();
-        static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Confirmed', (string)$value);
+        $this->assertInstanceOf(Phrase::class, $value);
+        $this->assertEquals('Confirmed', (string)$value);
     }
 
     /**
@@ -197,8 +197,8 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->document->getCustomAttribute('lock_expires');
 
         $value = $attribute->getValue();
-        static::assertInstanceOf(Phrase::class, $value);
-        static::assertEquals('Unlocked', (string)$value);
+        $this->assertInstanceOf(Phrase::class, $value);
+        $this->assertEquals('Unlocked', (string)$value);
     }
 
     /**
@@ -214,7 +214,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
 
         $attributeValue = new AttributeValue();
 
-        $this->attributeValueFactory->expects(static::once())
+        $this->attributeValueFactory->expects($this->once())
             ->method('create')
             ->willReturn($attributeValue);
     }

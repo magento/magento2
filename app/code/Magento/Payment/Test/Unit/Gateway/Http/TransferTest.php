@@ -29,11 +29,11 @@ class TransferTest extends \PHPUnit\Framework\TestCase
             $encode
         );
 
-        static::assertSame($clientConfig, $transfer->getClientConfig());
-        static::assertSame($headers, $transfer->getHeaders());
-        static::assertSame($body, $transfer->getBody());
-        static::assertSame($method, $transfer->getMethod());
-        static::assertSame($uri, $transfer->getUri());
-        static::assertSame($encode, $transfer->shouldEncode());
+        $this->assertSame($clientConfig, $transfer->getClientConfig());
+        $this->assertSame($headers, $transfer->getHeaders());
+        $this->assertSame($body, $transfer->getBody());
+        $this->assertSame($method, $transfer->getMethod());
+        $this->assertSame($uri, $transfer->getUri());
+        $this->assertSame($encode, $transfer->shouldEncode());
     }
 }

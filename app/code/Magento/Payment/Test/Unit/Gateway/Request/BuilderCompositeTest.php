@@ -20,7 +20,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -29,12 +29,12 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
         $builder = new BuilderComposite($tMapFactory, []);
-        static::assertEquals([], $builder->build([]));
+        $this->assertEquals([], $builder->build([]));
     }
 
     /**
@@ -58,7 +58,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
         $magentoBuilder = $this->getMockBuilder(\Magento\Payment\Gateway\Request\BuilderInterface::class)
             ->getMockForAbstractClass();
 
-        $customerBuilder->expects(static::once())
+        $customerBuilder->expects($this->once())
             ->method('build')
             ->willReturn(
                 [
@@ -66,7 +66,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
                     'address' => $expected['address']
                 ]
             );
-        $productBuilder->expects(static::once())
+        $productBuilder->expects($this->once())
             ->method('build')
             ->willReturn(
                 [
@@ -77,7 +77,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
                     'options' => ['product' => $expected['options']['product']]
                 ]
             );
-        $magentoBuilder->expects(static::once())
+        $magentoBuilder->expects($this->once())
             ->method('build')
             ->willReturn(
                 [
@@ -86,7 +86,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -99,7 +99,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$customerBuilder, $productBuilder, $magentoBuilder]));
 
@@ -112,7 +112,7 @@ class BuilderCompositeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals($expected, $builder->build([]));
+        $this->assertEquals($expected, $builder->build([]));
     }
 
     /**

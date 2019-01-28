@@ -82,10 +82,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
             'topic0' => []
         ];
 
-        $this->configMock->expects(static::atLeastOnce())
+        $this->configMock->expects($this->atLeastOnce())
             ->method('getBinds')
             ->willReturn($binds);
-        $this->configMock->expects(static::atLeastOnce())
+        $this->configMock->expects($this->atLeastOnce())
             ->method('getConnectionByTopic')
             ->willReturnMap(
                 [

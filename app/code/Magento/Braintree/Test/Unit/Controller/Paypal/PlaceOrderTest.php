@@ -148,10 +148,10 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->orderPlace->method('execute')
             ->with($quoteMock, [0]);
 
-        $this->messageManager->expects(self::never())
+        $this->messageManager->expects($this->never())
             ->method('addExceptionMessage');
 
-        self::assertEquals($this->placeOrder->execute(), $resultMock);
+        $this->assertEquals($this->placeOrder->execute(), $resultMock);
     }
 
     /**
@@ -186,16 +186,16 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->method('getQuote')
             ->willReturn($quote);
 
-        $this->orderPlace->expects(self::never())
+        $this->orderPlace->expects($this->never())
             ->method('execute');
 
         $this->messageManager->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\InvalidArgumentException'),
+                $this->isInstanceOf('\InvalidArgumentException'),
                 'The order #000000111 cannot be processed.'
             );
 
-        self::assertEquals($this->placeOrder->execute(), $resultMock);
+        $this->assertEquals($this->placeOrder->execute(), $resultMock);
     }
 
     /**

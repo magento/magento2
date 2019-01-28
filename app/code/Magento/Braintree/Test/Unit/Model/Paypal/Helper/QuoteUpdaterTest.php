@@ -225,7 +225,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private function updateQuoteAddressStep(MockObject $quoteMock, array $details): void
     {
-        $quoteMock->expects(self::exactly(2))
+        $quoteMock->expects($this->exactly(2))
             ->method('getIsVirtual')
             ->willReturn(false);
 
@@ -268,7 +268,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
 
         $quote->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
-        $quote->expects(self::exactly(2))
+        $quote->expects($this->exactly(2))
             ->method('getBillingAddress')
             ->willReturn($this->billingAddress);
 

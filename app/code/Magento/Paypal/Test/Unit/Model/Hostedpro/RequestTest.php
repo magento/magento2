@@ -65,20 +65,20 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
-        $order->expects(static::any())
+        $order->expects($this->any())
             ->method('getPayment')
             ->will($this->returnValue($payment));
-        $order->expects(static::any())
+        $order->expects($this->any())
             ->method('getBillingAddress')
             ->will($this->returnValue($billing));
-        $order->expects(static::any())
+        $order->expects($this->any())
             ->method('getShippingAddress')
             ->will($this->returnValue($shipping));
         $this->_model->setOrder($order);
-        static::assertEquals($billingState, $this->_model->getData('billing_state'));
-        static::assertEquals($state, $this->_model->getData('state'));
-        static::assertEquals($countryId, $this->_model->getData('billing_country'));
-        static::assertEquals($countryId, $this->_model->getData('country'));
+        $this->assertEquals($billingState, $this->_model->getData('billing_state'));
+        $this->assertEquals($state, $this->_model->getData('state'));
+        $this->assertEquals($countryId, $this->_model->getData('billing_country'));
+        $this->assertEquals($countryId, $this->_model->getData('country'));
     }
 
     /**
@@ -175,20 +175,20 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getIncrementId')
             ->willReturn($expectation['invoice']);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseCurrencyCode')
             ->willReturn($expectation['currency_code']);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getCustomerEmail')
             ->willReturn($expectation['buyer_email']);
 
         $this->_model->setOrder($order);
-        static::assertEquals($expectation, $this->_model->getData());
+        $this->assertEquals($expectation, $this->_model->getData());
     }
 
     /**
@@ -210,7 +210,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'discount' => abs($discount)
         ];
 
-        static::assertFalse($this->taxData->priceIncludesTax());
+        $this->assertFalse($this->taxData->priceIncludesTax());
 
         $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -220,32 +220,32 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $payment->expects(static::once())
+        $payment->expects($this->once())
             ->method('getBaseAmountAuthorized')
             ->willReturn($total);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getPayment')
             ->willReturn($payment);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseDiscountAmount')
             ->willReturn($discount);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseTaxAmount')
             ->willReturn($tax);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseShippingAmount')
             ->willReturn($shipping);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseSubtotal')
             ->willReturn($subtotal);
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        $this->assertEquals($expectation, $this->_model->getData());
     }
 
     /**
@@ -267,7 +267,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'discount' => abs($discount)
         ];
 
-        static::assertFalse($this->taxData->priceIncludesTax());
+        $this->assertFalse($this->taxData->priceIncludesTax());
 
         $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -277,32 +277,32 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $payment->expects(static::exactly(2))
+        $payment->expects($this->exactly(2))
             ->method('getBaseAmountAuthorized')
             ->willReturn($total);
 
-        $order->expects(static::exactly(2))
+        $order->expects($this->exactly(2))
             ->method('getPayment')
             ->willReturn($payment);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseDiscountAmount')
             ->willReturn($discount);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseTaxAmount')
             ->willReturn($tax);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseShippingAmount')
             ->willReturn($shipping);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getBaseSubtotal')
             ->willReturn($subtotal);
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        $this->assertEquals($expectation, $this->_model->getData());
     }
 
     /**
@@ -329,7 +329,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertTrue($this->taxData->getConfig()->priceIncludesTax());
+        $this->assertTrue($this->taxData->getConfig()->priceIncludesTax());
 
         $amount = 19.65;
 
@@ -346,17 +346,17 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $payment->expects(static::once())
+        $payment->expects($this->once())
             ->method('getBaseAmountAuthorized')
             ->willReturn($amount);
 
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getPayment')
             ->willReturn($payment);
 
         $this->_model->setAmount($order);
 
-        static::assertEquals($expectation, $this->_model->getData());
+        $this->assertEquals($expectation, $this->_model->getData());
     }
 
     /**

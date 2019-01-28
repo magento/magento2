@@ -78,25 +78,25 @@ class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
         );
 
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn($identifier);
-        $this->messageConfigurationsPool->expects(static::once())
+        $this->messageConfigurationsPool->expects($this->once())
             ->method('getMessageConfiguration')
             ->with($identifier)
             ->willReturn(
                 $messageConfiguration
             );
-        $this->renderersPool->expects(static::once())
+        $this->renderersPool->expects($this->once())
             ->method('get')
             ->with($messageConfiguration['renderer'])
             ->willReturn($renderer);
-        $renderer->expects(static::once())
+        $renderer->expects($this->once())
             ->method('render')
             ->with($this->messageMock, $messageConfiguration['data'])
             ->willReturn($renderedMessage);
 
-        static::assertSame(
+        $this->assertSame(
             $renderedMessage,
             $this->interpretationStrategy->interpret($this->messageMock)
         );
@@ -106,10 +106,10 @@ class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
     {
         $identifier = 'Prophesy';
 
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn($identifier);
-        $this->messageConfigurationsPool->expects(static::once())
+        $this->messageConfigurationsPool->expects($this->once())
             ->method('getMessageConfiguration')
             ->with($identifier)
             ->willReturn(
@@ -118,7 +118,7 @@ class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException('LogicException');
 
-        $this->renderersPool->expects(static::never())
+        $this->renderersPool->expects($this->never())
             ->method('get');
 
         $this->interpretationStrategy->interpret($this->messageMock);
@@ -134,16 +134,16 @@ class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn($identifier);
-        $this->messageConfigurationsPool->expects(static::once())
+        $this->messageConfigurationsPool->expects($this->once())
             ->method('getMessageConfiguration')
             ->with($identifier)
             ->willReturn(
                 $messageConfiguration
             );
-        $this->renderersPool->expects(static::once())
+        $this->renderersPool->expects($this->once())
             ->method('get')
             ->with($messageConfiguration['renderer'])
             ->willReturn(null);

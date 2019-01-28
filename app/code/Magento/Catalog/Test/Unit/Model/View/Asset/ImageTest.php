@@ -123,7 +123,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $hashPath = md5(implode('_', $miscParams));
         $this->context->method('getPath')->willReturn($absolutePath);
         $this->encryptor->method('hash')->willReturn($hashPath);
-        static::assertEquals(
+        $this->assertEquals(
             $absolutePath . '/cache/'. $hashPath . $filePath,
             $imageModel->getPath()
         );
@@ -150,9 +150,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $miscParams['background'] = isset($miscParams['background']) ? implode(',', $miscParams['background']) : '';
         $absolutePath = 'http://localhost/pub/media/catalog/product';
         $hashPath = md5(implode('_', $miscParams));
-        $this->context->expects(static::once())->method('getBaseUrl')->willReturn($absolutePath);
-        $this->encryptor->expects(static::once())->method('hash')->willReturn($hashPath);
-        static::assertEquals(
+        $this->context->expects($this->once())->method('getBaseUrl')->willReturn($absolutePath);
+        $this->encryptor->expects($this->once())->method('hash')->willReturn($hashPath);
+        $this->assertEquals(
             $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getUrl()
         );

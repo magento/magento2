@@ -87,8 +87,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeValidate()
     {
-        $this->requestMock->expects(static::once())->method('has')->with('attributes')->willReturn(true);
-        $this->productMock->expects(static::once())->method('setTypeId')->willReturnSelf();
+        $this->requestMock->expects($this->once())->method('has')->with('attributes')->willReturn(true);
+        $this->productMock->expects($this->once())->method('setTypeId')->willReturnSelf();
 
         $this->plugin->beforeValidate(
             $this->subjectMock,

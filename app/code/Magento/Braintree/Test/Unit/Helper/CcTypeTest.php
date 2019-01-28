@@ -47,7 +47,7 @@ class CcTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcTypes()
     {
-        $this->ccTypeSource->expects(static::once())
+        $this->ccTypeSource->expects($this->once())
             ->method('toOptionArray')
             ->willReturn([
                 'label' => 'VISA', 'value' => 'VI'
@@ -55,7 +55,7 @@ class CcTypeTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->getCcTypes();
 
-        $this->ccTypeSource->expects(static::never())
+        $this->ccTypeSource->expects($this->never())
             ->method('toOptionArray');
 
         $this->helper->getCcTypes();

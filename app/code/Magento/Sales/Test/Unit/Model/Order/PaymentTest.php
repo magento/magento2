@@ -597,7 +597,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($acceptPayment);
 
         $this->payment->accept();
-        self::assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
     /**
@@ -863,7 +863,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->with($transactionId);
         $this->invoice->method('getId')
             ->willReturn($transactionId);
-        $this->order->expects(self::exactly($countCall))
+        $this->order->expects($this->exactly($countCall))
             ->method('getInvoiceCollection')
             ->willReturn([$this->invoice]);
     }
@@ -917,13 +917,13 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->invoice->setBaseGrandTotal($baseGrandTotal);
         $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
 
-        $this->order->expects(self::never())
+        $this->order->expects($this->never())
             ->method('getStoreId');
-        $this->helper->expects(self::never())
+        $this->helper->expects($this->never())
             ->method('getMethodInstance');
-        $this->paymentMethod->expects(self::never())
+        $this->paymentMethod->expects($this->never())
             ->method('setStore');
-        $this->paymentMethod->expects(self::never())
+        $this->paymentMethod->expects($this->never())
             ->method('fetchTransactionInfo');
 
         $this->payment->update($isOnline);
@@ -1222,7 +1222,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $amountPaid = 10;
         $shippingCaptured = 5;
 
-        self::assertNull($this->payment->getAmountPaid());
+        $this->assertNull($this->payment->getAmountPaid());
 
         $this->mockInvoice(null);
         $this->invoice->setGrandTotal($amountPaid);
@@ -1230,11 +1230,11 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->invoice->setShippingAmount($shippingCaptured);
         $this->invoice->setBaseShippingAmount($shippingCaptured);
 
-        self::assertSame($this->payment, $this->payment->pay($this->invoice));
-        self::assertEquals($amountPaid, $this->payment->getAmountPaid());
-        self::assertEquals($amountPaid, $this->payment->getBaseAmountPaid());
-        self::assertEquals($shippingCaptured, $this->payment->getShippingCaptured());
-        self::assertEquals($shippingCaptured, $this->payment->getBaseShippingCaptured());
+        $this->assertSame($this->payment, $this->payment->pay($this->invoice));
+        $this->assertEquals($amountPaid, $this->payment->getAmountPaid());
+        $this->assertEquals($amountPaid, $this->payment->getBaseAmountPaid());
+        $this->assertEquals($shippingCaptured, $this->payment->getShippingCaptured());
+        $this->assertEquals($shippingCaptured, $this->payment->getBaseShippingCaptured());
     }
 
     /**
@@ -1257,8 +1257,8 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
 
         $this->payment->pay($this->invoice);
 
-        self::assertEquals(10, $this->payment->getAmountPaid());
-        self::assertEquals(5, $this->payment->getShippingCaptured());
+        $this->assertEquals(10, $this->payment->getAmountPaid());
+        $this->assertEquals(5, $this->payment->getShippingCaptured());
     }
 
     public function testGetOrder()
@@ -1468,25 +1468,25 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     public function testRefund()
     {
         $amount = 204.04;
-        $this->creditMemoMock->expects(static::once())
+        $this->creditMemoMock->expects($this->once())
             ->method('getBaseGrandTotal')
             ->willReturn($amount);
-        $this->creditMemoMock->expects(static::once())
+        $this->creditMemoMock->expects($this->once())
             ->method('getGrandTotal')
             ->willReturn($amount);
-        $this->creditMemoMock->expects(static::once())
+        $this->creditMemoMock->expects($this->once())
             ->method('getDoTransaction')
             ->willReturn(true);
 
-        $this->paymentMethod->expects(static::once())
+        $this->paymentMethod->expects($this->once())
             ->method('canRefund')
             ->willReturn(true);
 
         $this->mockInvoice(self::TRANSACTION_ID, 0);
-        $this->creditMemoMock->expects(static::once())
+        $this->creditMemoMock->expects($this->once())
             ->method('getInvoice')
             ->willReturn($this->invoice);
-        $this->creditMemoMock->expects(static::once())
+        $this->creditMemoMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->order);
 
@@ -1497,27 +1497,27 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $refundTranId = $captureTranId . '-' . Transaction::TYPE_REFUND;
-        $this->transactionManagerMock->expects(static::once())
+        $this->transactionManagerMock->expects($this->once())
             ->method('generateTransactionId')
             ->willReturn($refundTranId);
-        $captureTransaction->expects(static::once())
+        $captureTransaction->expects($this->once())
             ->method('getTxnId')
             ->willReturn($captureTranId);
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
             ->willReturn($captureTransaction);
 
-        $this->paymentMethod->expects(static::once())
+        $this->paymentMethod->expects($this->once())
             ->method('refund')
             ->with($this->payment, $amount);
 
         $isOnline = true;
         $this->getTransactionBuilderMock([], $isOnline, Transaction::TYPE_REFUND, $refundTranId);
 
-        $this->currencyMock->expects(static::once())
+        $this->currencyMock->expects($this->once())
             ->method('formatTxt')
             ->willReturn($amount);
-        $this->order->expects(static::once())
+        $this->order->expects($this->once())
             ->method('getBaseCurrency')
             ->willReturn($this->currencyMock);
 
@@ -1529,10 +1529,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
-        static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
-        static::assertEquals($amount, $this->payment->getData('amount_refunded'));
-        static::assertEquals($amount, $this->payment->getData('base_amount_refunded_online'));
-        static::assertEquals($amount, $this->payment->getData('base_amount_refunded'));
+        $this->assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
+        $this->assertEquals($amount, $this->payment->getData('amount_refunded'));
+        $this->assertEquals($amount, $this->payment->getData('base_amount_refunded_online'));
+        $this->assertEquals($amount, $this->payment->getData('base_amount_refunded'));
     }
 
     /**
@@ -1555,12 +1555,12 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $amount = 23.02;
         $partialAmount = 12.00;
 
-        $this->order->expects(static::exactly(2))
+        $this->order->expects($this->exactly(2))
             ->method('getBaseTotalDue')
             ->willReturn($amount);
 
-        static::assertFalse($this->payment->isCaptureFinal($partialAmount));
-        static::assertTrue($this->payment->isCaptureFinal($amount));
+        $this->assertFalse($this->payment->isCaptureFinal($partialAmount));
+        $this->assertTrue($this->payment->isCaptureFinal($amount));
     }
 
     /**
@@ -1570,10 +1570,10 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     public function testGetShouldCloseParentTransaction()
     {
         $this->payment->setShouldCloseParentTransaction(1);
-        static::assertTrue($this->payment->getShouldCloseParentTransaction());
+        $this->assertTrue($this->payment->getShouldCloseParentTransaction());
 
         $this->payment->setShouldCloseParentTransaction(0);
-        static::assertFalse($this->payment->getShouldCloseParentTransaction());
+        $this->assertFalse($this->payment->getShouldCloseParentTransaction());
     }
 
     /**

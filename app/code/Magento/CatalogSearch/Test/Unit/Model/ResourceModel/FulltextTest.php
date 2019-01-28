@@ -152,6 +152,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
                 $testTable2
             ));
 
-        self::assertSame($ids, $this->target->getRelationsByChild($ids));
+        $this->assertSame($ids, $this->target->getRelationsByChild($ids));
     }
 }

@@ -58,13 +58,13 @@ class RemoveProductsTest extends TestCase
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collection->expects(self::once())
+        $collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with(self::identicalTo('attribute_set_id'), self::identicalTo(['eq' => $attributeSetId]));
-        $collection->expects(self::once())
+            ->with($this->identicalTo('attribute_set_id'), $this->identicalTo(['eq' => $attributeSetId]));
+        $collection->expects($this->once())
             ->method('delete');
 
-        $this->collectionFactory->expects(self::once())
+        $this->collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($collection);
 
@@ -78,10 +78,10 @@ class RemoveProductsTest extends TestCase
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $attributeSet->expects(self::once())
+        $attributeSet->expects($this->once())
             ->method('getId')
             ->willReturn($attributeSetId);
 
-        self::assertTrue($this->testSubject->afterDelete($attributeSetRepository, true, $attributeSet));
+        $this->assertTrue($this->testSubject->afterDelete($attributeSetRepository, true, $attributeSet));
     }
 }

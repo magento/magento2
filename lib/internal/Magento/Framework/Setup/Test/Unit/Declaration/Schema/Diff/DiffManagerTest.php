@@ -62,8 +62,8 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         );
         $element = new Column('third', 'int', $table);
         $existingElement = new Column('second', 'int', $table);
-        self::assertTrue($this->model->shouldBeCreated($elements, $element));
-        self::assertFalse($this->model->shouldBeCreated($elements, $existingElement));
+        $this->assertTrue($this->model->shouldBeCreated($elements, $element));
+        $this->assertFalse($this->model->shouldBeCreated($elements, $existingElement));
     }
 
     public function testRegisterModification()
@@ -84,7 +84,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         );
         $element = new Column('third', 'int', $table);
         $generatedElement = new Column('third', 'int', $table, 'Previous column');
-        $diff->expects(self::once())
+        $diff->expects($this->once())
             ->method('register')
             ->with($element, 'modify_column', $generatedElement);
         $this->model->registerModification($diff, $element, $generatedElement);
@@ -109,7 +109,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         $column = new Column('third', 'int', $table, 'Previous column');
         $index = new Index('index_type', 'index', $table, [$column], 'btree', 'index_type');
         $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash', 'index_type');
-        $diff->expects(self::exactly(2))
+        $diff->expects($this->exactly(2))
             ->method('register')
             ->withConsecutive([$generatedIndex, 'drop_element', $generatedIndex], [$index, 'add_complex_element']);
         $this->model->registerModification($diff, $index, $generatedIndex);
@@ -143,7 +143,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         );
         $column = new Column('third', 'int', $table, 'Previous column');
         $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $refTable, $column, 'CASCADE');
-        $diff->expects(self::exactly(2))
+        $diff->expects($this->exactly(2))
             ->method('register')
             ->withConsecutive(
                 [$reference, 'drop_reference', $reference],
@@ -170,7 +170,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
         );
         $column = new Column('third', 'int', $table, 'Previous column');
         $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $table, $column, 'CASCADE');
-        $diff->expects(self::exactly(3))
+        $diff->expects($this->exactly(3))
             ->method('register')
             ->withConsecutive(
                 [$table, 'create_table'],
@@ -208,7 +208,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
             'utf_8_general_ci',
             ''
         );
-        $diff->expects(self::once())
+        $diff->expects($this->once())
             ->method('register')
             ->with($table, 'recreate_table', $generateTable);
         $this->model->registerRecreation($table, $generateTable, $diff);
@@ -240,7 +240,7 @@ class DiffManagerTest extends \PHPUnit\Framework\TestCase
             'utf_8_general_ci',
             ''
         );
-        $diff->expects(self::once())
+        $diff->expects($this->once())
             ->method('register')
             ->with($table, 'modify_table', $generateTable);
         $this->model->registerTableModification($table, $generateTable, $diff);

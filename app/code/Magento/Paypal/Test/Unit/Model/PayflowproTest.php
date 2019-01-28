@@ -251,23 +251,23 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $orderMock = $this->getOrderMock();
 
         // test case to build basic request
-        $paymentMock->expects(static::once())
+        $paymentMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with('pnref')
             ->willReturn(false);
-        $paymentMock->expects(static::once())
+        $paymentMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn(false);
 
-        $paymentMock->expects(static::exactly(2))
+        $paymentMock->expects($this->exactly(2))
             ->method('getOrder')
             ->willReturn($orderMock);
 
         $response = $this->execGatewayRequest();
         $amount = 23.03;
         $this->payflowpro->capture($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        static::assertFalse((bool)$paymentMock->getIsTransactionPending());
+        $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        $this->assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
     /**
@@ -369,15 +369,15 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getPaymentMock();
         $orderMock = $this->getOrderMock();
 
-        $paymentMock->expects(static::exactly(2))
+        $paymentMock->expects($this->exactly(2))
             ->method('getOrder')
             ->willReturn($orderMock);
 
         $response = $this->execGatewayRequest();
         $amount = 43.20;
         $this->payflowpro->authorize($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        static::assertFalse((bool)$paymentMock->getIsTransactionPending());
+        $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        $this->assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
     /**
@@ -421,8 +421,8 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
 
         $amount = 213.04;
         $this->payflowpro->refund($paymentMock, $amount);
-        static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
-        static::assertTrue($paymentMock->getIsTransactionClosed());
+        $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        $this->assertTrue($paymentMock->getIsTransactionClosed());
     }
 
     /**
@@ -436,10 +436,10 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $this->storeManagerMock->expects(static::once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
-        $storeMock->expects(static::once())
+        $storeMock->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
     }
@@ -471,7 +471,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     {
         $this->initStoreMock();
         $response = $this->getGatewayResponseObject();
-        $this->gatewayMock->expects(static::once())
+        $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->with(
                 $this->isInstanceOf(\Magento\Framework\DataObject::class),
@@ -501,16 +501,16 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             'year' => 18,
             'cvv' => 123
         ];
-        $paymentMock->expects(static::any())
+        $paymentMock->expects($this->any())
             ->method('getCcNumber')
             ->willReturn($cardData['number']);
-        $paymentMock->expects(static::any())
+        $paymentMock->expects($this->any())
             ->method('getCcExpMonth')
             ->willReturn($cardData['month']);
-        $paymentMock->expects(static::any())
+        $paymentMock->expects($this->any())
             ->method('getCcExpYear')
             ->willReturn($cardData['year']);
-        $paymentMock->expects(static::any())
+        $paymentMock->expects($this->any())
             ->method('getCcCid')
             ->willReturn($cardData['cvv']);
         return $paymentMock;
@@ -532,13 +532,13 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
 
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn($orderData['id']);
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getBaseCurrencyCode')
             ->willReturn($orderData['currency']);
-        $orderMock->expects(static::atLeastOnce())
+        $orderMock->expects($this->atLeastOnce())
             ->method('getIncrementId')
             ->willReturn($orderData['increment_id']);
         return $orderMock;
@@ -553,12 +553,12 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         /** @var ConfigInterface $config */
         $config = $this->createMock(ConfigInterface::class);
 
-        $this->gatewayMock->expects(static::once())
+        $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->with($request, $config)
             ->willReturn($expectedResult);
 
-        static::assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
+        $this->assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
     }
 
     /**
@@ -572,7 +572,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         /** @var ConfigInterface $config */
         $config = $this->createMock(ConfigInterface::class);
 
-        $this->gatewayMock->expects(static::once())
+        $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->with($request, $config)
             ->willThrowException(new \Zend_Http_Client_Exception());
@@ -596,7 +596,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $infoInstance = $this->getMockForAbstractClass(InfoInterface::class);
         $this->payflowpro->setData('info_instance', $infoInstance);
 
-        $this->eventManager->expects(static::exactly(2))
+        $this->eventManager->expects($this->exactly(2))
             ->method('dispatch');
 
         $this->payflowpro->assignData($dataObject);
@@ -611,7 +611,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     public function testMapGatewayResponse($postData, $expectedResponse)
     {
-        self::assertEquals(
+        $this->assertEquals(
             $this->payflowpro->mapGatewayResponse($postData, new DataObject()),
             $expectedResponse
         );

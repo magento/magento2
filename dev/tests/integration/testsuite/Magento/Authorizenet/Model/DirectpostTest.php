@@ -70,7 +70,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setUri', 'setConfig', 'setParameterPost', 'setMethod', 'request'])
             ->getMock();
 
-        $this->httpClientFactory->expects(static::once())
+        $this->httpClientFactory->expects($this->once())
             ->method('create')
             ->willReturn($httpClient);
 
@@ -78,7 +78,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
             ->getMock();
-        $response->expects(static::once())
+        $response->expects($this->once())
             ->method('getBody')
             ->willReturn(
                 "1(~)1(~)1(~)This transaction has been approved.(~)AWZFTG(~)P(~){$transactionId}(~)100000002(~)
@@ -89,16 +89,16 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
                 (~)(~)(~)(~)(~)(~)(~)(~)(~)(~)(~)(~)"
             );
 
-        $httpClient->expects(static::once())
+        $httpClient->expects($this->once())
             ->method('request')
             ->willReturn($response);
 
         $this->directPost->capture($payment, $amount);
 
-        static::assertEquals($transactionId, $payment->getTransactionId());
-        static::assertFalse($payment->getIsTransactionClosed());
-        static::assertEquals('US', $payment->getOrder()->getBillingAddress()->getCountryId());
-        static::assertEquals('UK', $payment->getOrder()->getShippingAddress()->getCountryId());
+        $this->assertEquals($transactionId, $payment->getTransactionId());
+        $this->assertFalse($payment->getIsTransactionClosed());
+        $this->assertEquals('US', $payment->getOrder()->getBillingAddress()->getCountryId());
+        $this->assertEquals('UK', $payment->getOrder()->getShippingAddress()->getCountryId());
     }
 
     /**
@@ -126,7 +126,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $payment = $this->getPayment($orderId);
         $this->objectManager->removeSharedInstance(TransactionService::class);
 
-        static::assertEquals($expectedOrderState, $payment->getOrder()->getState());
+        $this->assertEquals($expectedOrderState, $payment->getOrder()->getState());
     }
 
     /**

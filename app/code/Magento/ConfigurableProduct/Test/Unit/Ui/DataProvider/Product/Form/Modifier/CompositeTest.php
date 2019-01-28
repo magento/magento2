@@ -63,7 +63,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->allowedProductTypesMock = $this->createMock(AllowedProductTypes::class);
 
-        $this->productLocatorMock->expects(static::any())
+        $this->productLocatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
 
@@ -90,23 +90,23 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->productMock->expects(static::any())
+        $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
-        $this->allowedProductTypesMock->expects(static::once())
+        $this->allowedProductTypesMock->expects($this->once())
             ->method('isAllowedProductType')
             ->with($this->productMock)
             ->willReturn(true);
-        $this->productMock->expects(static::any())
+        $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn($productId);
-        $this->associatedProductsMock->expects(static::any())
+        $this->associatedProductsMock->expects($this->any())
             ->method('getProductMatrix')
             ->willReturn($productMatrix);
-        $this->associatedProductsMock->expects(static::any())
+        $this->associatedProductsMock->expects($this->any())
             ->method('getProductAttributesIds')
             ->willReturn($productAttributesIds);
-        $this->associatedProductsMock->expects(static::any())
+        $this->associatedProductsMock->expects($this->any())
             ->method('getProductAttributesCodes')
             ->willReturn($productAttributesCodes);
 
@@ -116,20 +116,20 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     public function testDisallowModifyData()
     {
         $data = ['some data'];
-        $this->productMock->expects(static::any())
+        $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
-        $this->allowedProductTypesMock->expects(static::once())
+        $this->allowedProductTypesMock->expects($this->once())
             ->method('isAllowedProductType')
             ->with($this->productMock)
             ->willReturn(false);
-        $this->productMock->expects(static::never())
+        $this->productMock->expects($this->never())
             ->method('getId');
-        $this->associatedProductsMock->expects(static::never())
+        $this->associatedProductsMock->expects($this->never())
             ->method('getProductMatrix');
-        $this->associatedProductsMock->expects(static::never())
+        $this->associatedProductsMock->expects($this->never())
             ->method('getProductAttributesIds');
-        $this->associatedProductsMock->expects(static::never())
+        $this->associatedProductsMock->expects($this->never())
             ->method('getProductAttributesCodes');
 
         $this->assertSame($data, $this->createCompositeModifier()->modifyData($data));
@@ -141,14 +141,14 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $resultMeta = ['result_meta'];
         $modifiers = ['modifier1', 'modifier2'];
 
-        $this->productMock->expects(static::any())
+        $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
-        $this->allowedProductTypesMock->expects(static::once())
+        $this->allowedProductTypesMock->expects($this->once())
             ->method('isAllowedProductType')
             ->with($this->productMock)
             ->willReturn(true);
-        $this->objectManagerMock->expects(static::any())
+        $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap(
                 [
@@ -164,14 +164,14 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     {
         $meta = ['some meta'];
         $modifiers = ['modifier1', 'modifier2'];
-        $this->productMock->expects(self::any())
+        $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
-        $this->allowedProductTypesMock->expects(self::once())
+        $this->allowedProductTypesMock->expects($this->once())
             ->method('isAllowedProductType')
             ->with($this->productMock)
             ->willReturn(false);
-        $this->objectManagerMock->expects(self::exactly(2))
+        $this->objectManagerMock->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap(
                 [
@@ -215,7 +215,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $modifierMock = $this->getMockBuilder(ModifierInterface::class)
             ->getMockForAbstractClass();
 
-        $modifierMock->expects(static::any())
+        $modifierMock->expects($this->any())
             ->method('modifyMeta')
             ->with($initialMeta)
             ->willReturn($resultMeta);

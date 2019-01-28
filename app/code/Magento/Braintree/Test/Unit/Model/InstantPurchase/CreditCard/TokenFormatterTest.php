@@ -68,7 +68,7 @@ class TokenFormatterTest extends TestCase
             $this->tokenDetails['expirationDate']
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             $formattedString,
             $this->creditCardTokenFormatter->formatPaymentToken($this->paymentTokenMock)
         );
@@ -95,7 +95,7 @@ class TokenFormatterTest extends TestCase
             $this->tokenDetails['expirationDate']
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             $formattedString,
             $this->creditCardTokenFormatter->formatPaymentToken($this->paymentTokenMock)
         );

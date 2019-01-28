@@ -94,9 +94,9 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $this->assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
+        $this->assertArrayHasKey('addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
     }
@@ -347,9 +347,9 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $this->assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
+        $this->assertArrayHasKey('addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
     }
@@ -405,9 +405,9 @@ mutation {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $this->assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
-        self::assertArrayHasKey('addresses', $cartResponse);
+        $this->assertArrayHasKey('addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['addresses']);
         $this->assertSavedShippingAddressFields($shippingAddressResponse);
     }

@@ -101,23 +101,23 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterRenderResult($usePlugin, $setCacheDebugHeaderCount, $getModeCount, $processCount)
     {
-        $this->responseMock->expects(static::exactly($setCacheDebugHeaderCount))
+        $this->responseMock->expects($this->exactly($setCacheDebugHeaderCount))
             ->method('setHeader')
             ->with('X-Magento-Debug', 1);
-        $this->registryMock->expects(static::once())
+        $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('use_page_cache_plugin')
             ->willReturn($usePlugin);
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('getType')
             ->willReturn(Config::VARNISH);
-        $this->appStateMock->expects(static::exactly($getModeCount))
+        $this->appStateMock->expects($this->exactly($getModeCount))
             ->method('getMode')
             ->willReturn(AppState::MODE_DEVELOPER);
-        $this->versionMock->expects(static::exactly($processCount))
+        $this->versionMock->expects($this->exactly($processCount))
             ->method('process');
 
         $this->assertSame(

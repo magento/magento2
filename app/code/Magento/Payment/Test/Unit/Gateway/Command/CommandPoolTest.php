@@ -22,7 +22,7 @@ class CommandPoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -31,18 +31,18 @@ class CommandPoolTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetExists')
             ->with('command')
             ->willReturn(true);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetGet')
             ->with('command')
             ->willReturn($commandI);
 
         $pool = new CommandPool($tMapFactory, [\Magento\Payment\Gateway\CommandInterface::class]);
 
-        static::assertSame($commandI, $pool->get('command'));
+        $this->assertSame($commandI, $pool->get('command'));
     }
 
     public function testGetException()
@@ -57,7 +57,7 @@ class CommandPoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -66,7 +66,7 @@ class CommandPoolTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('offsetExists')
             ->with('command')
             ->willReturn(false);

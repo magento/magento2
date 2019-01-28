@@ -50,7 +50,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->indexerRegistryMock->expects(static::once())
+        $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(FulltextIndexer::INDEXER_ID)
             ->willReturn($this->indexerMock);
@@ -66,10 +66,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $productIds = [1, 2, 3];
 
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(false);
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('reindexList')
             ->with($productIds);
 
@@ -83,10 +83,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $productIds = [1, 2, 3];
 
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(true);
-        $this->indexerMock->expects(static::never())
+        $this->indexerMock->expects($this->never())
             ->method('reindexList');
 
         $this->assertSame(
@@ -99,10 +99,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $productIds = [1, 2, 3];
 
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(false);
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('reindexList')
             ->with($productIds);
 
@@ -113,10 +113,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $productIds = [1, 2, 3];
 
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(true);
-        $this->indexerMock->expects(static::never())
+        $this->indexerMock->expects($this->never())
             ->method('reindexList');
 
         $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds, [], null);

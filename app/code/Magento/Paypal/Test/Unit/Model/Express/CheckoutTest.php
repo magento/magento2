@@ -116,10 +116,10 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $billingAddressMock = $this->getMockBuilder(Quote\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shippingAddressMock->expects(static::once())
+        $shippingAddressMock->expects($this->once())
             ->method('getShippingMethod')
             ->willReturn('old_method');
-        $shippingAddressMock->expects(static::once())
+        $shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')
             ->with(self::SHIPPING_METHOD)
             ->willReturnSelf();
@@ -127,34 +127,34 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $shippingMock = $this->getMockBuilder(Shipping::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shippingMock->expects(static::once())
+        $shippingMock->expects($this->once())
             ->method('setMethod')
             ->with(self::SHIPPING_METHOD);
 
         $shippingAssignmentMock = $this->getMockBuilder(ShippingAssignment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shippingAssignmentMock->expects(static::once())
+        $shippingAssignmentMock->expects($this->once())
             ->method('getShipping')
             ->willReturn($shippingMock);
 
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->setMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
-        $cartExtensionMock->expects(static::exactly(2))
+        $cartExtensionMock->expects($this->exactly(2))
             ->method('getShippingAssignments')
             ->willReturn([$shippingAssignmentMock]);
 
-        $this->quoteMock->expects(static::exactly(2))
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getShippingAddress')
             ->willReturn($shippingAddressMock);
-        $this->quoteMock->expects(static::exactly(2))
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getIsVirtual')
             ->willReturn(false);
-        $this->quoteMock->expects(static::any())
+        $this->quoteMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($billingAddressMock);
-        $this->quoteMock->expects(static::once())
+        $this->quoteMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($cartExtensionMock);
 

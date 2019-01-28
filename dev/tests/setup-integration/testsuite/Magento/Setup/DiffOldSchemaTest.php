@@ -85,12 +85,12 @@ class DiffOldSchemaTest extends SetupTestCase
         $generatedSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
         $allChanges = $diff->getAll();
-        self::assertCount(1, $allChanges);
-        self::assertEquals(
+        $this->assertCount(1, $allChanges);
+        $this->assertEquals(
             $this->getBigIntKeyXmlSensitiveData(),
             reset($allChanges)['modify_column'][0]->getNew()->getDiffSensitiveParams()
         );
-        self::assertEquals(
+        $this->assertEquals(
             $this->getBigIntKeyDbSensitiveData(),
             reset($allChanges)['modify_column'][0]->getOld()->getDiffSensitiveParams()
         );
@@ -130,7 +130,7 @@ class DiffOldSchemaTest extends SetupTestCase
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
         $generatedSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
-        self::assertEmpty($diff->getAll());
+        $this->assertEmpty($diff->getAll());
     }
 
     /**

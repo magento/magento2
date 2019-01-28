@@ -74,12 +74,12 @@ class DumpTest extends \PHPUnit\Framework\TestCase
         foreach ($this->themes as $themeId => $themeFullPath) {
             $themeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
                 ->getMockForAbstractClass();
-            $themeMock->expects(static::any())->method('getFullPath')->willReturn($themeFullPath);
+            $themeMock->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
 
             $themesMap[] = [$themeId, $themeMock];
         }
 
-        $this->themeList->expects(static::any())->method('getItemById')->willReturnMap($themesMap);
+        $this->themeList->expects($this->any())->method('getItemById')->willReturnMap($themesMap);
     }
 
     /**

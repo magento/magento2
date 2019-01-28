@@ -188,7 +188,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
-        $this->optionExtensionFactoryMock->expects(static::once())
+        $this->optionExtensionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->productOptionExtensionAttributes);
         $this->productOptionExtensionAttributes->expects($this->once())
@@ -232,7 +232,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
-        $productOptionMock->expects(static::exactly(2))
+        $productOptionMock->expects($this->exactly(2))
             ->method('getExtensionAttributes')
             ->willReturn($this->productOptionExtensionAttributes);
 

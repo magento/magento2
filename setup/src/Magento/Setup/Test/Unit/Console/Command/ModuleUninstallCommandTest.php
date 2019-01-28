@@ -449,14 +449,14 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteNonComposerModules()
     {
-        $this->deploymentConfig->expects(self::once())
+        $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
         $input = ['module' => ['Magento_A'], '-c' => true, '-r' => true, '--non-composer' => true];
-        $this->patchApplierMock->expects(self::once())
+        $this->patchApplierMock->expects($this->once())
             ->method('revertDataPatches')
             ->with('Magento_A');
-        self::assertEquals(0, $this->tester->execute($input));
+        $this->assertEquals(0, $this->tester->execute($input));
     }
 
     public function testExecuteAll()

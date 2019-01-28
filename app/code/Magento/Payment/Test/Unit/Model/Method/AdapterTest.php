@@ -150,19 +150,19 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     {
         $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
 
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPool->expects($this->once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
-        $activeValueHandler->expects(static::once())
+        $activeValueHandler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'active'])
             ->willReturn(false);
 
-        $this->eventManager->expects(static::never())
+        $this->eventManager->expects($this->never())
             ->method('dispatch');
 
-        static::assertFalse($this->adapter->isAvailable(null));
+        $this->assertFalse($this->adapter->isAvailable(null));
     }
 
     /**
@@ -176,35 +176,35 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $validationResult = $this->createMock(ResultInterface::class);
         $paymentInfo = $this->createMock(InfoInterface::class);
 
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPool->expects($this->once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
-        $activeValueHandler->expects(static::once())
+        $activeValueHandler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'active', 'payment' => $paymentDO])
             ->willReturn(true);
 
-        $this->validatorPool->expects(static::once())
+        $this->validatorPool->expects($this->once())
             ->method('get')
             ->with('availability')
             ->willReturn($availabilityValidator);
-        $this->paymentDataObjectFactory->expects(static::exactly(2))
+        $this->paymentDataObjectFactory->expects($this->exactly(2))
             ->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
-        $availabilityValidator->expects(static::once())
+        $availabilityValidator->expects($this->once())
             ->method('validate')
             ->willReturn($validationResult);
-        $validationResult->expects(static::once())
+        $validationResult->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
 
-        $this->eventManager->expects(static::once())
+        $this->eventManager->expects($this->once())
             ->method('dispatch');
 
         $this->adapter->setInfoInstance($paymentInfo);
-        static::assertTrue($this->adapter->isAvailable(null));
+        $this->assertTrue($this->adapter->isAvailable(null));
     }
 
     /**
@@ -213,23 +213,23 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     public function testIsAvailableWithEmptyInfoInstance()
     {
         $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPool->expects($this->once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
-        $activeValueHandler->expects(static::once())
+        $activeValueHandler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'active'])
             ->willReturn(true);
 
-        $this->validatorPool->expects(static::never())
+        $this->validatorPool->expects($this->never())
             ->method('get')
             ->with('availability');
 
-        $this->eventManager->expects(static::once())
+        $this->eventManager->expects($this->once())
             ->method('dispatch');
 
-        static::assertTrue($this->adapter->isAvailable(null));
+        $this->assertTrue($this->adapter->isAvailable(null));
     }
 
     public function testExecuteCommandWithCommandExecutor()
@@ -274,21 +274,21 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
         $valueHandler = $this->createMock(ValueHandlerInterface::class);
 
-        $valueHandlerPool->expects(static::once())
+        $valueHandlerPool->expects($this->once())
             ->method('get')
             ->with('can_authorize')
             ->willReturn($valueHandler);
-        $valueHandler->expects(static::once())
+        $valueHandler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'can_authorize'])
             ->willReturn(true);
 
-        $paymentDataObjectFactory->expects(static::once())
+        $paymentDataObjectFactory->expects($this->once())
             ->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
 
-        $commandManager->expects(static::once())
+        $commandManager->expects($this->once())
             ->method('executeByCode')
             ->with('authorize', $paymentInfo, ['amount' => 10, 'payment' => $paymentDO])
             ->willReturn(null);
@@ -331,25 +331,25 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $valueHandler = $this->createMock(ValueHandlerInterface::class);
         $command = $this->createMock(CommandInterface::class);
 
-        $valueHandlerPool->expects(static::once())
+        $valueHandlerPool->expects($this->once())
             ->method('get')
             ->with('can_authorize')
             ->willReturn($valueHandler);
-        $valueHandler->expects(static::once())
+        $valueHandler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'can_authorize'])
             ->willReturn(true);
 
-        $paymentDataObjectFactory->expects(static::once())
+        $paymentDataObjectFactory->expects($this->once())
             ->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
 
-        $commandPool->expects(static::once())
+        $commandPool->expects($this->once())
             ->method('get')
             ->with('authorize')
             ->willReturn($command);
-        $command->expects(static::once())
+        $command->expects($this->once())
             ->method('execute')
             ->with(['amount' => 10, 'payment' => $paymentDO])
             ->willReturn(null);

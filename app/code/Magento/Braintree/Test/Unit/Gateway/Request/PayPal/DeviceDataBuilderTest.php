@@ -62,21 +62,21 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => $this->paymentDataObjectMock,
         ];
 
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($this->paymentDataObjectMock);
 
-        $this->paymentDataObjectMock->expects(static::once())
+        $this->paymentDataObjectMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentInfoMock);
 
-        $this->paymentInfoMock->expects(static::once())
+        $this->paymentInfoMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->willReturn($paymentData);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

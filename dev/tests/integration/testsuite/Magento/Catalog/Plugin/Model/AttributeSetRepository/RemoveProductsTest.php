@@ -28,7 +28,7 @@ class RemoveProductsTest extends TestCase
     {
         $pluginInfo = Bootstrap::getObjectManager()->get(PluginList::class)
             ->get(AttributeSetRepositoryInterface::class, []);
-        self::assertSame(RemoveProducts::class, $pluginInfo['remove_products']['instance']);
+        $this->assertSame(RemoveProducts::class, $pluginInfo['remove_products']['instance']);
     }
 
     /**
@@ -50,8 +50,8 @@ class RemoveProductsTest extends TestCase
         $urlRewriteCollection->addFieldToFilter('entity_type', 'product');
         $urlRewriteCollection->addFieldToFilter('entity_id', $product->getId());
 
-        self::assertSame(1, $urlRewriteCollection->getSize());
-        self::assertSame(1, $productCollection->getSize());
+        $this->assertSame(1, $urlRewriteCollection->getSize());
+        $this->assertSame(1, $productCollection->getSize());
 
         $attributeSetRepository = Bootstrap::getObjectManager()->get(AttributeSetRepositoryInterface::class);
         $attributeSetRepository->deleteById($attributeSet->getAttributeSetId());
@@ -62,7 +62,7 @@ class RemoveProductsTest extends TestCase
         $urlRewriteCollection->addFieldToFilter('entity_type', 'product');
         $urlRewriteCollection->addFieldToFilter('entity_id', $product->getId());
 
-        self::assertSame(0, $urlRewriteCollection->getSize());
-        self::assertSame(0, $productCollection->getSize());
+        $this->assertSame(0, $urlRewriteCollection->getSize());
+        $this->assertSame(0, $productCollection->getSize());
     }
 }

@@ -58,13 +58,13 @@ class GeneratorFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
             ->with($className)
             ->willReturn($generator);
 
         $instance = $this->factory->create($type);
-        self::assertInstanceOf($className, $instance);
+        $this->assertInstanceOf($className, $instance);
     }
 
     /**

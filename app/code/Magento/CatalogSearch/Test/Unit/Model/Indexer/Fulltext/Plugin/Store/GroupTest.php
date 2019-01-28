@@ -77,14 +77,14 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     public function testBeforeAfterSave($isObjectNew, $websiteChanged, $invalidateCounter)
     {
         $this->prepareIndexer($invalidateCounter);
-        $this->storeGroupMock->expects(static::any())
+        $this->storeGroupMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('website_id')
             ->willReturn($websiteChanged);
-        $this->storeGroupMock->expects(static::once())
+        $this->storeGroupMock->expects($this->once())
             ->method('isObjectNew')
             ->willReturn($isObjectNew);
-        $this->indexerMock->expects(static::exactly($invalidateCounter))
+        $this->indexerMock->expects($this->exactly($invalidateCounter))
             ->method('invalidate');
 
         $this->plugin->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -107,7 +107,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     public function testAfterDelete()
     {
         $this->prepareIndexer(1);
-        $this->indexerMock->expects(static::once())
+        $this->indexerMock->expects($this->once())
             ->method('invalidate');
 
         $this->assertSame($this->subjectMock, $this->plugin->afterDelete($this->subjectMock, $this->subjectMock));
@@ -121,7 +121,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareIndexer($invalidateCounter)
     {
-        $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
+        $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
             ->with(FulltextIndexer::INDEXER_ID)
             ->willReturn($this->indexerMock);

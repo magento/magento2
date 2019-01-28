@@ -131,7 +131,7 @@ class AbstractMethodTest extends \PHPUnit\Framework\TestCase
             AbstractDataAssignObserver::DATA_CODE => $data
         ];
 
-        $this->eventManagerMock->expects(static::exactly(2))
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->willReturnMap(
                 [

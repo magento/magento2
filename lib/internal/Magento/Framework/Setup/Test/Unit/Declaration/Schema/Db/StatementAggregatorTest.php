@@ -44,17 +44,17 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statementsBank = [$statementOne, $statementTwo, $statementThree];
-        $statementOne->expects(self::exactly(2))
+        $statementOne->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturn('first_table');
-        $statementTwo->expects(self::exactly(2))
+        $statementTwo->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturn('first_table');
-        $statementThree->expects(self::exactly(2))
+        $statementThree->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturn('first_table');
         $this->model->addStatements($statementsBank);
-        self::assertEquals(
+        $this->assertEquals(
             [$statementsBank],
             $this->model->getStatementsBank()
         );
@@ -71,17 +71,17 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
         $statementThree = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statementOne->expects(self::exactly(2))
+        $statementOne->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturn('first_table');
-        $statementTwo->expects(self::exactly(1))
+        $statementTwo->expects($this->exactly(1))
             ->method('getTableName')
             ->willReturn('second_table');
-        $statementThree->expects(self::exactly(1))
+        $statementThree->expects($this->exactly(1))
             ->method('getTableName')
             ->willReturn('first_table');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        $this->assertEquals(
             [[$statementOne, $statementThree], [$statementTwo]],
             $this->model->getStatementsBank()
         );
@@ -98,11 +98,11 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
         $statementThree = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statementOne->expects(self::exactly(2))
+        $statementOne->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn('non_default');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        $this->assertEquals(
             [[$statementOne], [$statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -119,7 +119,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
         $statementThree = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statementThree->expects(self::exactly(0))
+        $statementThree->expects($this->exactly(0))
             ->method('getTriggers')
             ->willReturn(
                 [
@@ -128,7 +128,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        $this->assertEquals(
             [[$statementOne, $statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -145,7 +145,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
         $statementThree = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statementOne->expects(self::exactly(2))
+        $statementOne->expects($this->exactly(2))
             ->method('getTriggers')
             ->willReturn(
                 [
@@ -154,7 +154,7 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        $this->assertEquals(
             [[$statementOne], [$statementTwo, $statementThree]],
             $this->model->getStatementsBank()
         );
@@ -171,14 +171,14 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
         $statementThree = $this->getMockBuilder(ReferenceStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statementThree->expects(self::exactly(1))
+        $statementThree->expects($this->exactly(1))
             ->method('getName')
             ->willReturn('some_foreign_key');
-        $statementOne->expects(self::exactly(1))
+        $statementOne->expects($this->exactly(1))
             ->method('getName')
             ->willReturn('some_foreign_key');
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
-        self::assertEquals(
+        $this->assertEquals(
             [[$statementOne, $statementTwo], [$statementThree]],
             $this->model->getStatementsBank()
         );

@@ -40,9 +40,9 @@ class MediaGalleryTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('url', $response['products']['items'][0]['small_image']);
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
-        self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
+        $this->assertArrayHasKey('url', $response['products']['items'][0]['small_image']);
+        $this->assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        $this->assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
     }
 
     /**

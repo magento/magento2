@@ -110,11 +110,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->processRequest($commandSubject, false, $validationFailures);
 
-        $this->logger->expects(self::exactly(count($validationFailures)))
+        $this->logger->expects($this->exactly(count($validationFailures)))
             ->method('critical')
             ->withConsecutive(
-                [self::equalTo('Payment Error: ' . $validationFailures[0])],
-                [self::equalTo('Payment Error: ' . $validationFailures[1])]
+                [$this->equalTo('Payment Error: ' . $validationFailures[0])],
+                [$this->equalTo('Payment Error: ' . $validationFailures[1])]
             );
 
         $this->command->execute($commandSubject);
@@ -146,12 +146,12 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->logger->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
+        $this->logger->expects($this->exactly(count(array_merge($validationFailures, $errorCodes))))
             ->method('critical')
             ->withConsecutive(
-                [self::equalTo('Payment Error: Unauthorized')],
-                [self::equalTo('Payment Error: Failure Mapped')],
-                [self::equalTo('Payment Error: Failure #2')]
+                [$this->equalTo('Payment Error: Unauthorized')],
+                [$this->equalTo('Payment Error: Failure Mapped')],
+                [$this->equalTo('Payment Error: Failure #2')]
             );
 
         $this->command->execute($commandSubject);

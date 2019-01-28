@@ -94,13 +94,13 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
         $this->shippingMock = $this->getMockBuilder(ShippingInterface::class)
             ->getMockForAbstractClass();
 
-        $this->quoteMock->expects(static::any())
+        $this->quoteMock->expects($this->any())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $this->shippingAssignmentMock->expects(static::any())
+        $this->shippingAssignmentMock->expects($this->any())
             ->method('getShipping')
             ->willReturn($this->shippingMock);
-        $this->shippingMock->expects(static::any())
+        $this->shippingMock->expects($this->any())
             ->method('getAddress')
             ->willReturn($this->shippingAddressMock);
 
@@ -120,21 +120,21 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $quoteItemId = 1;
 
-        $this->shippingAssignmentMock->expects(static::once())
+        $this->shippingAssignmentMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->createQuoteItemMock($quoteItemId, true)]);
-        $this->quoteMock->expects(static::atLeastOnce())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getItemById')
             ->with($quoteItemId)
             ->willReturn(null);
-        $this->cartItemPersisterMock->expects(static::never())
+        $this->cartItemPersisterMock->expects($this->never())
             ->method('save');
-        $this->shippingAddressMock->expects(static::atLeastOnce())
+        $this->shippingAddressMock->expects($this->atLeastOnce())
             ->method('getCustomerAddressId')
             ->willReturn(null);
-        $this->addressRepositoryMock->expects(static::never())
+        $this->addressRepositoryMock->expects($this->never())
             ->method('getById');
-        $this->shippingProcessorMock->expects(static::once())
+        $this->shippingProcessorMock->expects($this->once())
             ->method('save')
             ->with($this->shippingMock, $this->quoteMock);
 
@@ -145,21 +145,21 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $customerAddressId = 11;
 
-        $this->shippingAssignmentMock->expects(static::atLeastOnce())
+        $this->shippingAssignmentMock->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([]);
-        $this->shippingAddressMock->expects(static::atLeastOnce())
+        $this->shippingAddressMock->expects($this->atLeastOnce())
             ->method('getCustomerAddressId')
             ->willReturn($customerAddressId);
-        $this->addressRepositoryMock->expects(static::once())
+        $this->addressRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerAddressId)
             ->willThrowException(new NoSuchEntityException());
-        $this->shippingAddressMock->expects(static::once())
+        $this->shippingAddressMock->expects($this->once())
             ->method('setCustomerAddressId')
             ->with(null)
             ->willReturn($this->shippingAddressMock);
-        $this->shippingProcessorMock->expects(static::once())
+        $this->shippingProcessorMock->expects($this->once())
             ->method('save')
             ->with($this->shippingMock, $this->quoteMock);
 
@@ -179,10 +179,10 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quoteItemMock->expects(static::any())
+        $quoteItemMock->expects($this->any())
             ->method('getItemId')
             ->willReturn($id);
-        $quoteItemMock->expects(static::any())
+        $quoteItemMock->expects($this->any())
             ->method('isDeleted')
             ->willReturn($isDeleted);
 

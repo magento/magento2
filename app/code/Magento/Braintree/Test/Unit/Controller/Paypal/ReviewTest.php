@@ -89,13 +89,13 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
@@ -117,50 +117,50 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->getQuoteMock();
         $childBlockMock = $this->getChildBlockMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $this->requestMock->expects(self::once())
+        $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->with('result', '{}')
             ->willReturn($result);
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->quoteUpdaterMock->expects(self::once())
+        $this->quoteUpdaterMock->expects($this->once())
             ->method('execute')
             ->with(['test-value'], ['test-value'], $quoteMock);
 
-        $this->resultFactoryMock->expects(self::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_PAGE)
             ->willReturn($resultPageMock);
 
-        $resultPageMock->expects(self::once())
+        $resultPageMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $layoutMock->expects(self::once())
+        $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('braintree.paypal.review')
             ->willReturn($blockMock);
 
-        $blockMock->expects(self::once())
+        $blockMock->expects($this->once())
             ->method('setQuote')
             ->with($quoteMock);
-        $blockMock->expects(self::once())
+        $blockMock->expects($this->once())
             ->method('getChildBlock')
             ->with('shipping_method')
             ->willReturn($childBlockMock);
 
-        $childBlockMock->expects(self::once())
+        $childBlockMock->expects($this->once())
             ->method('setData')
             ->with('quote', $quoteMock);
 
-        self::assertEquals($this->review->execute(), $resultPageMock);
+        $this->assertEquals($this->review->execute(), $resultPageMock);
     }
 
     public function testExecuteException()
@@ -169,40 +169,40 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->getQuoteMock();
         $resultRedirectMock = $this->getResultRedirectMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(0);
 
-        $this->requestMock->expects(self::once())
+        $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->with('result', '{}')
             ->willReturn($result);
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->quoteUpdaterMock->expects(self::never())
+        $this->quoteUpdaterMock->expects($this->never())
             ->method('execute');
 
-        $this->messageManagerMock->expects(self::once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\InvalidArgumentException'),
+                $this->isInstanceOf('\InvalidArgumentException'),
                 'Checkout failed to initialize. Verify and try again.'
             );
 
-        $this->resultFactoryMock->expects(self::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirectMock);
 
-        $resultRedirectMock->expects(self::once())
+        $resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('checkout/cart')
             ->willReturnSelf();
 
-        self::assertEquals($this->review->execute(), $resultRedirectMock);
+        $this->assertEquals($this->review->execute(), $resultRedirectMock);
     }
 
     public function testExecuteExceptionPaymentWithoutNonce()
@@ -211,7 +211,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->getQuoteMock();
         $resultRedirectMock = $this->getResultRedirectMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
@@ -219,37 +219,37 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($paymentMock);
 
-        $this->requestMock->expects(self::once())
+        $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->with('result', '{}')
             ->willReturn($result);
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->messageManagerMock->expects(self::once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
+                $this->isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
                 'Checkout failed to initialize. Verify and try again.'
             );
 
-        $this->resultFactoryMock->expects(self::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirectMock);
 
-        $resultRedirectMock->expects(self::once())
+        $resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('checkout/cart')
             ->willReturnSelf();
 
-        self::assertEquals($this->review->execute(), $resultRedirectMock);
+        $this->assertEquals($this->review->execute(), $resultRedirectMock);
     }
 
     /**

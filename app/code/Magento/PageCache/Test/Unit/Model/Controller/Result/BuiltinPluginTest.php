@@ -88,7 +88,7 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
         $this->httpHeaderMock = $this->getMockBuilder(HttpHeaderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('getHeader')
             ->willReturnMap(
                 [
@@ -96,10 +96,10 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
                     ['Cache-Control', $this->httpHeaderMock]
                 ]
             );
-        $this->configMock->expects(static::any())
+        $this->configMock->expects($this->any())
             ->method('isEnabled')
             ->willReturn(true);
-        $this->configMock->expects(static::any())
+        $this->configMock->expects($this->any())
             ->method('getType')
             ->willReturn(Config::BUILT_IN);
 
@@ -117,11 +117,11 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterResultWithoutPlugin()
     {
-        $this->registryMock->expects(static::once())
+        $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('use_page_cache_plugin')
             ->willReturn(false);
-        $this->kernelMock->expects(static::never())
+        $this->kernelMock->expects($this->never())
             ->method('process')
             ->with($this->responseMock);
 
@@ -133,23 +133,23 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterResultWithPlugin()
     {
-        $this->registryMock->expects(static::once())
+        $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('use_page_cache_plugin')
             ->willReturn(true);
-        $this->stateMock->expects(static::once())
+        $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(null);
-        $this->httpHeaderMock->expects(static::any())
+        $this->httpHeaderMock->expects($this->any())
             ->method('getFieldValue')
             ->willReturn('tag,tag');
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects($this->once())
             ->method('clearHeader')
             ->with('X-Magento-Tags');
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects($this->once())
             ->method('setHeader')
             ->with('X-Magento-Tags', 'tag,' . CacheType::CACHE_TAG);
-        $this->kernelMock->expects(static::once())
+        $this->kernelMock->expects($this->once())
             ->method('process')
             ->with($this->responseMock);
 
@@ -161,31 +161,31 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterResultWithPluginDeveloperMode()
     {
-        $this->registryMock->expects(static::once())
+        $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('use_page_cache_plugin')
             ->willReturn(true);
-        $this->stateMock->expects(static::once())
+        $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(AppState::MODE_DEVELOPER);
-        $this->httpHeaderMock->expects(static::any())
+        $this->httpHeaderMock->expects($this->any())
             ->method('getFieldValue')
             ->willReturnOnConsecutiveCalls('test', 'tag,tag2');
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setHeader')
             ->withConsecutive(
                 ['X-Magento-Cache-Control', 'test'],
                 ['X-Magento-Cache-Debug', 'MISS', true],
                 ['X-Magento-Tags', 'tag,tag2,' . CacheType::CACHE_TAG]
             );
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects($this->once())
             ->method('clearHeader')
             ->with('X-Magento-Tags');
-        $this->registryMock->expects(static::once())
+        $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('use_page_cache_plugin')
             ->willReturn(true);
-        $this->kernelMock->expects(static::once())
+        $this->kernelMock->expects($this->once())
             ->method('process')
             ->with($this->responseMock);
 

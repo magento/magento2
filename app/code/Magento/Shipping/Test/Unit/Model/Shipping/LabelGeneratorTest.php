@@ -89,7 +89,7 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getShippingMethod')
             ->with(true)
             ->willReturn($this->getShippingMethodMock());
@@ -100,9 +100,9 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
         $shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $shipmentMock->expects(static::once())->method('getOrder')->willReturn($order);
+        $shipmentMock->expects($this->once())->method('getOrder')->willReturn($order);
 
-        $this->carrierFactory->expects(static::once())
+        $this->carrierFactory->expects($this->once())
             ->method('create')
             ->with(self::CARRIER_CODE)
             ->willReturn($this->getCarrierMock());
@@ -110,20 +110,20 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
         $labelsMock = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\Labels::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $labelsMock->expects(static::once())
+        $labelsMock->expects($this->once())
             ->method('requestToShipment')
             ->with($shipmentMock)
             ->willReturn($this->getResponseMock($info));
 
-        $this->labelsFactory->expects(static::once())
+        $this->labelsFactory->expects($this->once())
             ->method('create')
             ->willReturn($labelsMock);
 
-        $this->filesystem->expects(static::once())
+        $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class));
 
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with(
                 'carriers/' . self::CARRIER_CODE . '/title',
@@ -131,7 +131,7 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
                 null
             )->willReturn(self::CARRIER_TITLE);
 
-        $this->labelsFactory->expects(static::once())
+        $this->labelsFactory->expects($this->once())
             ->method('create')
             ->willReturn($labelsMock);
 
@@ -143,21 +143,21 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
         $i = 0;
         $trackingNumbers = is_array($info['tracking_number']) ? $info['tracking_number'] : [$info['tracking_number']];
         foreach ($trackingNumbers as $trackingNumber) {
-            $trackMock->expects(static::at($i++))
+            $trackMock->expects($this->at($i++))
                 ->method('setNumber')
                 ->with($trackingNumber)
                 ->willReturnSelf();
-            $trackMock->expects(static::at($i++))
+            $trackMock->expects($this->at($i++))
                 ->method('setCarrierCode')
                 ->with(self::CARRIER_CODE)
                 ->willReturnSelf();
-            $trackMock->expects(static::at($i++))
+            $trackMock->expects($this->at($i++))
                 ->method('setTitle')
                 ->with(self::CARRIER_TITLE)
                 ->willReturnSelf();
         }
 
-        $this->trackFactory->expects(static::any())
+        $this->trackFactory->expects($this->any())
             ->method('create')
             ->willReturn($trackMock);
 
@@ -177,7 +177,7 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCarrierCode'])
             ->getMock();
-        $shippingMethod->expects(static::once())
+        $shippingMethod->expects($this->once())
             ->method('getCarrierCode')
             ->willReturn(self::CARRIER_CODE);
 
@@ -193,10 +193,10 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isShippingLabelsAvailable', 'getCarrierCode'])
             ->getMockForAbstractClass();
-        $carrierMock->expects(static::once())
+        $carrierMock->expects($this->once())
             ->method('isShippingLabelsAvailable')
             ->willReturn(true);
-        $carrierMock->expects(static::once())
+        $carrierMock->expects($this->once())
             ->method('getCarrierCode')
             ->willReturn(self::CARRIER_CODE);
 
@@ -213,13 +213,13 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['hasErrors', 'hasInfo', 'getInfo'])
             ->disableOriginalConstructor()
             ->getMock();
-        $responseMock->expects(static::once())
+        $responseMock->expects($this->once())
             ->method('hasErrors')
             ->willReturn(false);
-        $responseMock->expects(static::once())
+        $responseMock->expects($this->once())
             ->method('hasInfo')
             ->willReturn(true);
-        $responseMock->expects(static::once())
+        $responseMock->expects($this->once())
             ->method('getInfo')
             ->willReturn([$info]);
 

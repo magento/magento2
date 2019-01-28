@@ -82,17 +82,17 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfig($config, $expected)
     {
-        $this->braintreeAdapter->expects(static::once())
+        $this->braintreeAdapter->expects($this->once())
             ->method('generate')
             ->willReturn(self::CLIENT_TOKEN);
 
         foreach ($config as $method => $value) {
-            $this->config->expects(static::once())
+            $this->config->expects($this->once())
                 ->method($method)
                 ->willReturn($value);
         }
 
-        static::assertEquals($expected, $this->configProvider->getConfig());
+        $this->assertEquals($expected, $this->configProvider->getConfig());
     }
 
     /**
@@ -101,16 +101,16 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetClientToken($merchantAccountId, $params)
     {
-        $this->config->expects(static::once())
+        $this->config->expects($this->once())
             ->method('getMerchantAccountId')
             ->willReturn($merchantAccountId);
 
-        $this->braintreeAdapter->expects(static::once())
+        $this->braintreeAdapter->expects($this->once())
             ->method('generate')
             ->with($params)
             ->willReturn(self::CLIENT_TOKEN);
 
-        static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
+        $this->assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
     }
 
     /**

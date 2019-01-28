@@ -76,7 +76,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     {
         $this->reindexAll();
         $result = $this->searchByName('Configurable Product');
-        self::assertGreaterThanOrEqual(2, $result);
+        $this->assertGreaterThanOrEqual(2, $result);
     }
 
     /**
@@ -90,10 +90,10 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     {
         $this->reindexAll();
         $result = $this->searchByName('12345');
-        self::assertCount(1, $result);
+        $this->assertCount(1, $result);
 
         $specificProduct = $this->productRepository->get('configurable_12345');
-        self::assertEquals($specificProduct->getId(), $result[0]['_id']);
+        $this->assertEquals($specificProduct->getId(), $result[0]['_id']);
     }
 
     /**

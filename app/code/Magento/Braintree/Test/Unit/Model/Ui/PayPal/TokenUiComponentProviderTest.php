@@ -71,22 +71,22 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         ];
         $hash = '4g1mn4ew0vj23n2jf';
 
-        $this->paymentToken->expects(static::once())
+        $this->paymentToken->expects($this->once())
             ->method('getTokenDetails')
             ->willReturn(json_encode($tokenDetails));
 
-        $this->componentFactory->expects(static::once())
+        $this->componentFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->tokenComponent);
         
-        $this->paymentToken->expects(static::once())
+        $this->paymentToken->expects($this->once())
             ->method('getPublicHash')
             ->willReturn($hash);
         
-        $this->urlBuilder->expects(static::once())
+        $this->urlBuilder->expects($this->once())
             ->method('getUrl');
 
         $actual = $this->componentProvider->getComponentForToken($this->paymentToken);
-        static::assertEquals($this->tokenComponent, $actual);
+        $this->assertEquals($this->tokenComponent, $actual);
     }
 }

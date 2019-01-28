@@ -89,38 +89,38 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $tokenUiComponentProvider = $this->getMockForAbstractClass(TokenUiComponentProviderInterface::class);
         $tokenUiComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
 
-        $this->storeManager->expects(static::once())
+        $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->store->expects(static::once())
+        $this->store->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->vaultPaymentList->expects(static::once())
+        $this->vaultPaymentList->expects($this->once())
             ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
         
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getProviderCode')
             ->willReturn($vaultProviderCode);
 
-        $this->customerTokenManagement->expects(static::once())
+        $this->customerTokenManagement->expects($this->once())
             ->method('getCustomerSessionTokens')
             ->willReturn([$token]);
         
-        $token->expects(static::once())
+        $token->expects($this->once())
             ->method('getPaymentMethodCode')
             ->willReturn($vaultProviderCode);
 
-        $tokenUiComponentProvider->expects(static::once())
+        $tokenUiComponentProvider->expects($this->once())
             ->method('getComponentForToken')
             ->with($token)
             ->willReturn($tokenUiComponent);
-        $tokenUiComponent->expects(static::once())
+        $tokenUiComponent->expects($this->once())
             ->method('getConfig')
             ->willReturn(['token_code' => 'code']);
-        $tokenUiComponent->expects(static::once())
+        $tokenUiComponent->expects($this->once())
             ->method('getName')
             ->willReturn('Vendor_Module/js/vault_component');
 
@@ -137,6 +137,6 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             $this->vaultPaymentList
         );
 
-        static::assertEquals($expectedConfig, $configProvider->getConfig());
+        $this->assertEquals($expectedConfig, $configProvider->getConfig());
     }
 }

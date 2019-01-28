@@ -98,16 +98,16 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         $order = $this->getOrder();
         $exceptionMessage = 'Response is not valid JSON: Decoding failed: Syntax error';
 
-        $this->requestBuilder->expects(self::once())
+        $this->requestBuilder->expects($this->once())
             ->method('doRequest')
             ->willThrowException(new ApiCallException($exceptionMessage));
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
             ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -124,16 +124,16 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         ];
         $exceptionMessage = 'Bad Request - The request could not be parsed. Response: ' . json_encode($responseData);
 
-        $this->requestBuilder->expects(self::once())
+        $this->requestBuilder->expects($this->once())
             ->method('doRequest')
             ->willThrowException(new ApiCallException($exceptionMessage));
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
             ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -144,16 +144,16 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
     {
         $order = $this->getOrder();
 
-        $this->requestBuilder->expects(self::once())
+        $this->requestBuilder->expects($this->once())
             ->method('doRequest')
             ->willReturn([]);
 
-        $this->logger->expects(self::once())
+        $this->logger->expects($this->once())
             ->method('error')
             ->with('Expected field "investigationId" missed.');
 
         $result = $this->service->createForOrder($order->getEntityId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -164,24 +164,24 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
     {
         $order = $this->getOrder();
 
-        $this->requestBuilder->expects(self::once())
+        $this->requestBuilder->expects($this->once())
             ->method('doRequest')
             ->willReturn(['investigationId' => 123123]);
 
-        $this->logger->expects(self::never())
+        $this->logger->expects($this->never())
             ->method('error');
 
         $result = $this->service->createForOrder($order->getEntityId());
-        self::assertTrue($result);
+        $this->assertTrue($result);
 
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(123123);
         $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($caseEntity->getOrderId());
 
-        self::assertNotEmpty($caseEntity);
-        self::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
-        self::assertEquals(
+        $this->assertNotEmpty($caseEntity);
+        $this->assertEquals($order->getEntityId(), $caseEntity->getOrderId());
+        $this->assertEquals(
             $gridGuarantyStatus,
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
@@ -190,15 +190,15 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
-        self::assertEquals(Order::STATE_HOLDED, $order->getState());
+        $this->assertEquals(Order::STATE_HOLDED, $order->getState());
 
         $histories = $order->getStatusHistories();
-        self::assertNotEmpty($histories);
+        $this->assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $orderHoldComment */
         $orderHoldComment = array_pop($histories);
-        self::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
-        self::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
+        $this->assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
+        $this->assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
     }
 
     /**

@@ -368,17 +368,17 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         );
 
         $this->dispatch('backend/sales/order_create/loadBlock/block/shipping_address');
-        self::assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $updatedQuote = $quoteRepository->get($quote->getId());
 
         $billingAddress = $updatedQuote->getBillingAddress();
-        self::assertEquals($data['region_id'], $billingAddress->getRegionId());
-        self::assertEquals($data['country_id'], $billingAddress->getCountryId());
+        $this->assertEquals($data['region_id'], $billingAddress->getRegionId());
+        $this->assertEquals($data['country_id'], $billingAddress->getCountryId());
 
         $shippingAddress = $updatedQuote->getShippingAddress();
-        self::assertEquals($data['city'], $shippingAddress->getCity());
-        self::assertEquals($data['street'], $shippingAddress->getStreet());
+        $this->assertEquals($data['city'], $shippingAddress->getCity());
+        $this->assertEquals($data['street'], $shippingAddress->getStreet());
     }
 
     /**

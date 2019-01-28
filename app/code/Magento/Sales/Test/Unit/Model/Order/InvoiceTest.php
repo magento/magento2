@@ -331,7 +331,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->mockPay();
 
-        self::assertEquals($this->model, $this->model->capture());
+        $this->assertEquals($this->model, $this->model->capture());
     }
 
     public function mockPay()
@@ -370,16 +370,16 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $collection->method('getItems')
             ->willReturn($items);
 
-        self::assertFalse($this->model->wasPayCalled());
-        self::assertEquals($this->model, $this->model->pay());
-        self::assertTrue($this->model->wasPayCalled());
-        self::assertEquals($expectedState, $this->model->getState());
+        $this->assertFalse($this->model->wasPayCalled());
+        $this->assertEquals($this->model, $this->model->pay());
+        $this->assertTrue($this->model->wasPayCalled());
+        $this->assertEquals($expectedState, $this->model->getState());
 
         #second call of pay() method must do nothing
         $this->model->pay();
 
-        self::assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
-        self::assertEquals($expectedTotal, $this->order->getTotalPaid());
+        $this->assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
+        $this->assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
     /**
@@ -441,7 +441,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState(Invoice::STATE_OPEN);
         $this->model->cancel();
 
-        self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
+        $this->assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
     }
 
     /**
@@ -462,7 +462,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
 
-        self::assertEquals($finalInvoiceStatus, $this->model->getState());
+        $this->assertEquals($finalInvoiceStatus, $this->model->getState());
     }
 
     /**

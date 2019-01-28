@@ -66,7 +66,7 @@ class DataPatchInstallationTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule3']
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             '0.0.1',
             $this->moduleResource->getDataVersion('Magento_TestSetupDeclarationModule3')
         );
@@ -80,15 +80,15 @@ class DataPatchInstallationTest extends SetupTestCase
         $this->movePatches();
         ModuleResource::flush();
         $this->cliCommad->upgrade();
-        self::assertEquals(
+        $this->assertEquals(
             '0.0.3',
             $this->moduleResource->getDataVersion('Magento_TestSetupDeclarationModule3')
         );
-        self::assertTrue($this->patchList->isApplied(IncrementalSomeIntegerPatch::class));
-        self::assertTrue($this->patchList->isApplied(ReferenceIncrementalSomeIntegerPatch::class));
-        self::assertTrue($this->patchList->isApplied(ZFirstPatch::class));
+        $this->assertTrue($this->patchList->isApplied(IncrementalSomeIntegerPatch::class));
+        $this->assertTrue($this->patchList->isApplied(ReferenceIncrementalSomeIntegerPatch::class));
+        $this->assertTrue($this->patchList->isApplied(ZFirstPatch::class));
         $tableData = $this->tableData->describeTableData('test_table');
-        self::assertEquals($this->getTestTableData(), $tableData);
+        $this->assertEquals($this->getTestTableData(), $tableData);
     }
 
     /**
@@ -112,7 +112,7 @@ class DataPatchInstallationTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule3']
         );
         $tableData = $this->tableData->describeTableData('test_table');
-        self::assertEquals($this->getTestTableData(), $tableData);
+        $this->assertEquals($this->getTestTableData(), $tableData);
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule3',
             'cyclomatic_and_bic_revision',
@@ -167,10 +167,10 @@ class DataPatchInstallationTest extends SetupTestCase
         $this->cliCommad->uninstallModule('Magento_TestSetupDeclarationModule3');
         $testTableData = $this->tableData->describeTableData('test_table');
         $patchListTableData = $this->tableData->describeTableData('patch_list');
-        self::assertEmpty($patchListTableData);
-        self::assertEmpty($testTableData);
+        $this->assertEmpty($patchListTableData);
+        $this->assertEmpty($testTableData);
         $refTableData = $this->tableData->describeTableData('reference_table');
-        self::assertEquals($this->getRefTableData(), $refTableData);
+        $this->assertEquals($this->getRefTableData(), $refTableData);
     }
 
     /**

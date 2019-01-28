@@ -58,7 +58,7 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         /** @var PaymentDataObjectInterface|MockObject $paymentDO */
         $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
-        $paymentDO->expects(self::once())
+        $paymentDO->expects($this->once())
             ->method('getPayment')
             ->willReturn($payment);
 
@@ -76,27 +76,27 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
             'payment' => $paymentDO,
         ];
 
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($handlingSubject)
             ->willReturn($paymentDO);
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $payment->expects(static::at(0))
+        $payment->expects($this->at(0))
             ->method('setAdditionalInformation')
             ->with(RiskDataHandler::RISK_DATA_ID, 'test-id');
-        $payment->expects(static::at(1))
+        $payment->expects($this->at(1))
             ->method('setAdditionalInformation')
             ->with(RiskDataHandler::RISK_DATA_DECISION, $riskDecision);
 
         if (!$isFraud) {
-            $payment->expects(static::never())
+            $payment->expects($this->never())
                 ->method('setIsFraudDetected');
         } else {
-            $payment->expects(static::once())
+            $payment->expects($this->once())
                 ->method('setIsFraudDetected')
                 ->with(true);
         }

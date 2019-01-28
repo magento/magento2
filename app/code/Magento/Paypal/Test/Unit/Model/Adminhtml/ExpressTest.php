@@ -153,11 +153,11 @@ class ExpressTest extends TestCase
         $this->paymentInstance->method('getConfigPaymentAction')
             ->willReturn('order');
 
-        $this->nvp->expects(static::once())
+        $this->nvp->expects($this->once())
             ->method('callDoAuthorization')
             ->willReturnSelf();
 
-        $this->payment->expects(static::once())
+        $this->payment->expects($this->once())
             ->method('addTransaction')
             ->with(Transaction::TYPE_AUTH)
             ->willReturn($this->transaction);
@@ -196,7 +196,7 @@ class ExpressTest extends TestCase
         $this->payment->method('getAmountAuthorized')
             ->willReturn($authorizedAmount);
 
-        static::assertEquals($isAuthAllowed, $this->express->isOrderAuthorizationAllowed($this->payment));
+        $this->assertEquals($isAuthAllowed, $this->express->isOrderAuthorizationAllowed($this->payment));
     }
 
     /**

@@ -150,12 +150,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSuggestUrl(bool $isSecure)
     {
-        $this->requestMock->expects(self::once())
+        $this->requestMock->expects($this->once())
             ->method('isSecure')
             ->willReturn($isSecure);
-        $this->urlBuilderMock->expects(self::once())
+        $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->with(self::identicalTo('search/ajax/suggest'), self::identicalTo(['_secure' => $isSecure]));
+            ->with($this->identicalTo('search/ajax/suggest'), $this->identicalTo(['_secure' => $isSecure]));
         $this->model->getSuggestUrl();
     }
 

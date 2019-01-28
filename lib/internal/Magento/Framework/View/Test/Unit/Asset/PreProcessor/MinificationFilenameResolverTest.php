@@ -30,14 +30,14 @@ class MinificationFilenameResolverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $minificationMock->expects(self::once())
+        $minificationMock->expects($this->once())
             ->method('isEnabled')
             ->with('ext')
             ->willReturn($isMin);
 
         $resolver = new MinificationFilenameResolver($minificationMock);
 
-        self::assertEquals($expected, $resolver->resolve($input));
+        $this->assertEquals($expected, $resolver->resolve($input));
     }
 
     /**

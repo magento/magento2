@@ -52,7 +52,7 @@ class CaptureCommandTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
-        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+        $this->assertEquals(__($expectedMessage, $this->amount), $actualReturn);
     }
 
     /**

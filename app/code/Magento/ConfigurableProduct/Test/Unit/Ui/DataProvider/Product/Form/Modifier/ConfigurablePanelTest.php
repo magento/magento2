@@ -47,10 +47,10 @@ class ConfigurablePanelTest extends \PHPUnit\Framework\TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();
 
-        $this->productLocatorMock->expects(static::any())
+        $this->productLocatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->urlBuilderMock->expects(static::any())
+        $this->urlBuilderMock->expects($this->any())
             ->method('addSessionParam')
             ->willReturnSelf();
 

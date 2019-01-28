@@ -221,12 +221,12 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testIsCategoryProperForGenerating($parentIds, $expectedResult)
     {
         $storeId = 1;
-        $this->categoryMock->expects(self::any())->method('getParentIds')->willReturn($parentIds);
+        $this->categoryMock->expects($this->any())->method('getParentIds')->willReturn($parentIds);
         $result = $this->productScopeGenerator->isCategoryProperForGenerating(
             $this->categoryMock,
             $storeId
         );
-        self::assertEquals(
+        $this->assertEquals(
             $expectedResult,
             $result
         );

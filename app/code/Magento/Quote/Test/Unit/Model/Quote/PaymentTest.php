@@ -81,7 +81,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     public function testGetCcExpYearReturnsValidValue($databaseValue, $expectedValue)
     {
         $this->model->setData('cc_exp_year', $databaseValue);
-        static::assertEquals($expectedValue, $this->model->getCcExpYear());
+        $this->assertEquals($expectedValue, $this->model->getCcExpYear());
     }
 
     /**
@@ -121,13 +121,13 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getId')
             ->willReturn($quoteId);
 
         $this->model->setQuote($quote);
         $this->model->setMethodInstance($paymentMethod);
-        $this->eventManager->expects(static::once())
+        $this->eventManager->expects($this->once())
             ->method('dispatch')
             ->with(
                 'sales_quote_payment_import_data_before',
@@ -136,31 +136,31 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
                     'input' => new DataObject($convertedData)
                 ]
             );
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('collectTotals');
 
-        $this->specificationFactory->expects(static::once())
+        $this->specificationFactory->expects($this->once())
             ->method('create')
             ->with($checks)
             ->willReturn($methodSpecification);
 
-        $paymentMethod->expects(static::once())
+        $paymentMethod->expects($this->once())
             ->method('isAvailable')
             ->with($quote)
             ->willReturn(true);
-        $methodSpecification->expects(static::once())
+        $methodSpecification->expects($this->once())
             ->method('isApplicable')
             ->with($paymentMethod, $quote)
             ->willReturn(true);
 
-        $paymentMethod->expects(static::once())
+        $paymentMethod->expects($this->once())
             ->method('assignData')
             ->with(new DataObject($dataToAssign));
-        $paymentMethod->expects(static::once())
+        $paymentMethod->expects($this->once())
             ->method('validate');
 
         $this->model->importData($data);

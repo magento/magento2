@@ -87,22 +87,22 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $assetMock = $this->getAssetMock();
 
-        $this->appStateMock->expects(self::once())
+        $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
 
-        $this->assetSourceMock->expects(self::once())
+        $this->assetSourceMock->expects($this->once())
             ->method('getContent')
             ->with($assetMock)
             ->willThrowException(new \Exception(self::ERROR_MESSAGE));
 
-        $this->loggerMock->expects(self::never())
+        $this->loggerMock->expects($this->never())
             ->method('critical');
 
-        $this->temporaryFileMock->expects(self::never())
+        $this->temporaryFileMock->expects($this->never())
             ->method('createFile');
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getPath')
             ->willReturn(self::ASSET_PATH);
 
@@ -116,23 +116,23 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $assetMock = $this->getAssetMock();
 
-        $this->appStateMock->expects(self::once())
+        $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
 
-        $this->assetSourceMock->expects(self::once())
+        $this->assetSourceMock->expects($this->once())
             ->method('getContent')
             ->with($assetMock)
             ->willReturn('');
 
-        $this->temporaryFileMock->expects(self::never())
+        $this->temporaryFileMock->expects($this->never())
             ->method('createFile');
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getPath')
             ->willReturn(self::ASSET_PATH);
 
-        $this->loggerMock->expects(self::never())
+        $this->loggerMock->expects($this->never())
             ->method('critical');
 
         $this->processor->processContent($assetMock);
@@ -145,29 +145,29 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $assetMock = $this->getAssetMock();
 
-        $this->appStateMock->expects(self::once())
+        $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
 
-        $this->assetSourceMock->expects(self::once())
+        $this->assetSourceMock->expects($this->once())
             ->method('getContent')
             ->with($assetMock)
             ->willReturn(self::TEST_CONTENT);
 
-        $this->temporaryFileMock->expects(self::once())
+        $this->temporaryFileMock->expects($this->once())
             ->method('createFile')
             ->with(self::ASSET_PATH, self::TEST_CONTENT)
             ->willReturn(__DIR__ . '/' . self::TMP_PATH_LESS);
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getPath')
             ->willReturn(self::ASSET_PATH);
 
-        $this->loggerMock->expects(self::never())
+        $this->loggerMock->expects($this->never())
             ->method('critical');
 
         $clearSymbol = ["\n", "\r", "\t", ' '];
-        self::assertEquals(
+        $this->assertEquals(
             trim(str_replace($clearSymbol, '', file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS))),
             trim(str_replace($clearSymbol, '', $this->processor->processContent($assetMock)))
         );

@@ -94,14 +94,14 @@ class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddCommentWithException()
     {
-        $this->caseEntity->expects(self::once())
+        $this->caseEntity->expects($this->once())
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
         $this->historyEntity->method('setStatus')
             ->with('')
             ->willReturnSelf();
-        $this->historyRepository->expects(self::once())
+        $this->historyRepository->expects($this->once())
             ->method('save')
             ->with($this->historyEntity)
             ->willThrowException(new \Exception('Cannot save comment message.'));
@@ -116,14 +116,14 @@ class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddComment()
     {
-        $this->caseEntity->expects(self::once())
+        $this->caseEntity->expects($this->once())
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
         $this->historyEntity->method('setStatus')
             ->with(self::$status)
             ->willReturnSelf();
-        $this->historyRepository->expects(self::once())
+        $this->historyRepository->expects($this->once())
             ->method('save')
             ->with($this->historyEntity)
             ->willReturnSelf();
@@ -138,10 +138,10 @@ class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddCommentWithoutMessage()
     {
-        $this->caseEntity->expects(self::never())
+        $this->caseEntity->expects($this->never())
             ->method('getOrderId');
 
-        $this->historyFactory->expects(self::never())
+        $this->historyFactory->expects($this->never())
             ->method('save');
 
         $phrase = '';

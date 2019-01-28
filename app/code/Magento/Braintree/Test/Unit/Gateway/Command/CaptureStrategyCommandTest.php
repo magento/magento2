@@ -103,7 +103,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterFactoryMock->expects(self::any())
+        $adapterFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->braintreeAdapterMock);
 
@@ -128,26 +128,26 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->willReturn(false);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
         $this->buildSearchCriteria();
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getTotalCount')
             ->willReturn(0);
 
-        $this->commandPoolMock->expects(static::once())
+        $this->commandPoolMock->expects($this->once())
             ->method('get')
             ->with(CaptureStrategyCommand::SALE)
             ->willReturn($this->commandMock);
@@ -164,35 +164,35 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $subject['payment'] = $paymentData;
         $lastTransId = 'txnds';
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->willReturn(true);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getLastTransId')
             ->willReturn($lastTransId);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
         $this->buildSearchCriteria();
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getTotalCount')
             ->willReturn(0);
 
         // authorization transaction was not expired
         $collection = $this->getNotExpiredExpectedCollection($lastTransId);
-        $collection->expects(static::once())
+        $collection->expects($this->once())
             ->method('maximumCount')
             ->willReturn(0);
 
-        $this->commandPoolMock->expects(static::once())
+        $this->commandPoolMock->expects($this->once())
             ->method('get')
             ->with(CaptureStrategyCommand::CAPTURE)
             ->willReturn($this->commandMock);
@@ -215,10 +215,10 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->braintreeAdapterMock->expects(static::once())
+        $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
             ->with(
-                static::callback(
+                $this->callback(
                     function (array $filters) use ($isExpectations) {
                         foreach ($filters as $filter) {
                             /** @var IsNode $filter */
@@ -249,35 +249,35 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $subject['payment'] = $paymentData;
         $lastTransId = 'txnds';
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->willReturn(true);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getLastTransId')
             ->willReturn($lastTransId);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
         $this->buildSearchCriteria();
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getTotalCount')
             ->willReturn(0);
 
         // authorization transaction was expired
         $collection = $this->getNotExpiredExpectedCollection($lastTransId);
-        $collection->expects(static::once())
+        $collection->expects($this->once())
             ->method('maximumCount')
             ->willReturn(1);
 
-        $this->commandPoolMock->expects(static::once())
+        $this->commandPoolMock->expects($this->once())
             ->method('get')
             ->with(CaptureStrategyCommand::VAULT_CAPTURE)
             ->willReturn($this->commandMock);
@@ -293,26 +293,26 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->willReturn(true);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
         $this->buildSearchCriteria();
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getTotalCount')
             ->willReturn(1);
 
-        $this->commandPoolMock->expects(static::once())
+        $this->commandPoolMock->expects($this->once())
             ->method('get')
             ->with(CaptureStrategyCommand::VAULT_CAPTURE)
             ->willReturn($this->commandMock);
@@ -335,7 +335,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
@@ -359,7 +359,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['execute'])
             ->getMock();
 
-        $this->commandMock->expects(static::once())
+        $this->commandMock->expects($this->once())
             ->method('execute')
             ->willReturn([]);
     }
@@ -380,22 +380,22 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function buildSearchCriteria()
     {
-        $this->filterBuilderMock->expects(static::exactly(2))
+        $this->filterBuilderMock->expects($this->exactly(2))
             ->method('setField')
             ->willReturnSelf();
-        $this->filterBuilderMock->expects(static::exactly(2))
+        $this->filterBuilderMock->expects($this->exactly(2))
             ->method('setValue')
             ->willReturnSelf();
 
         $searchCriteria = new SearchCriteria();
-        $this->searchCriteriaBuilderMock->expects(static::exactly(2))
+        $this->searchCriteriaBuilderMock->expects($this->exactly(2))
             ->method('addFilters')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects(static::once())
+        $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($searchCriteria)
             ->willReturnSelf();

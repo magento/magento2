@@ -94,7 +94,7 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
         $this->createTableOperation = $this->getMockBuilder(CreateTable::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->createTableOperation->expects(self::exactly(2))
+        $this->createTableOperation->expects($this->exactly(2))
             ->method('getOperationName')
             ->willReturn('create_table');
         $this->dropElement = $this->getMockBuilder(DropElement::class)
@@ -151,20 +151,20 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
         /** @var DiffInterface|\PHPUnit_Framework_MockObject_MockObject $diff */
         $diff = $this->getMockBuilder(DiffInterface::class)
             ->getMock();
-        $this->shardingMock->expects(self::exactly(2))
+        $this->shardingMock->expects($this->exactly(2))
             ->method('getResources')
             ->willReturn(['default']);
         $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceConnectionMock->expects(self::exactly(3))
+        $this->resourceConnectionMock->expects($this->exactly(3))
             ->method('getConnection')
             ->with('default')
             ->willReturn($connectionMock);
         $statementAggregator = $this->getMockBuilder(StatementAggregator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statementAggregatorFactoryMock->expects(self::once())
+        $this->statementAggregatorFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($statementAggregator);
         $elementHistory = new ElementHistory($this->prepareTable());
@@ -173,20 +173,20 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
                 'create_table' => [$elementHistory]
             ]
         ];
-        $this->createTableOperation->expects(self::once())
+        $this->createTableOperation->expects($this->once())
             ->method('doOperation')
             ->with($elementHistory)
             ->willReturn(['TABLE table (`int` INT(11))']);
-        $statementAggregator->expects(self::once())
+        $statementAggregator->expects($this->once())
             ->method('addStatements')
             ->with(['TABLE table (`int` INT(11))']);
-        $this->dbSchemaWriterMock->expects(self::once())
+        $this->dbSchemaWriterMock->expects($this->once())
             ->method('compile')
             ->with($statementAggregator);
-        $diff->expects(self::once())
+        $diff->expects($this->once())
             ->method('getAll')
             ->willReturn($tablesHistories);
-        $this->dropElement->expects(self::at(0))
+        $this->dropElement->expects($this->at(0))
             ->method('doOperation');
         $this->model->execute($diff, []);
     }

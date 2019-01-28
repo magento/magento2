@@ -31,7 +31,7 @@ class DeleteActionTest extends AbstractController
         $tokenManagement = $this->_objectManager->get(CustomerTokenManagement::class);
         $tokens = $tokenManagement->getCustomerSessionTokens();
 
-        static::assertCount(1, $tokens);
+        $this->assertCount(1, $tokens);
 
         $vaultToken = array_pop($tokens);
 
@@ -45,9 +45,9 @@ class DeleteActionTest extends AbstractController
             ->setMethod(Request::METHOD_POST);
         $this->dispatch('vault/cards/deleteaction');
         
-        static::assertTrue($this->getResponse()->isRedirect());
-        static::assertRedirect(static::stringContains('vault/cards/listaction'));
-        static::assertSessionMessages(static::equalTo(['Stored Payment Method was successfully removed']));
-        static::assertEmpty($tokenManagement->getCustomerSessionTokens());
+        $this->assertTrue($this->getResponse()->isRedirect());
+        static::assertRedirect($this->stringContains('vault/cards/listaction'));
+        static::assertSessionMessages($this->equalTo(['Stored Payment Method was successfully removed']));
+        $this->assertEmpty($tokenManagement->getCustomerSessionTokens());
     }
 }

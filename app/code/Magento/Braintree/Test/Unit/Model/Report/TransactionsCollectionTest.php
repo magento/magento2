@@ -203,7 +203,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
     {
-        $this->filterMapperMock->expects(static::exactly($filterMapperCall))
+        $this->filterMapperMock->expects($this->exactly($filterMapperCall))
             ->method('getFilter')
             ->with($field, $expectedCondition)
             ->willReturn(new BraintreeSearchNodeStub());
@@ -214,7 +214,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             $this->filterMapperMock
         );
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             TransactionsCollection::class,
             $collection->addFieldToFilter($field, $condition)
         );

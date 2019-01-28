@@ -218,34 +218,34 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->withConsecutive(
                 [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_small')
+                    $this->identicalTo('test_file'),
+                    $this->identicalTo('product_page_image_small')
                 ],
                 [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_medium')
+                    $this->identicalTo('test_file'),
+                    $this->identicalTo('product_page_image_medium')
                 ],
                 [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_large')
+                    $this->identicalTo('test_file'),
+                    $this->identicalTo('product_page_image_large')
                 ]
             )
-            ->will(self::onConsecutiveCalls(
+            ->will($this->onConsecutiveCalls(
                 'testSmallImageUrl',
                 'testMediumImageUrl',
                 'testLargeImageUrl'
             ));
-        $this->_imageHelperMock->expects(self::never())
+        $this->_imageHelperMock->expects($this->never())
             ->method('setImageFile')
             ->with('test_file')
             ->willReturnSelf();
-        $this->_imageHelperMock->expects(self::never())
+        $this->_imageHelperMock->expects($this->never())
             ->method('getUrl')
             ->willReturn('product_page_image_small_url');
-        $this->_imageHelperMock->expects(self::never())
+        $this->_imageHelperMock->expects($this->never())
             ->method('getUrl')
             ->willReturn('product_page_image_medium_url');
-        $this->_imageHelperMock->expects(self::never())
+        $this->_imageHelperMock->expects($this->never())
             ->method('getUrl')
             ->willReturn('product_page_image_large_url');
 

@@ -163,9 +163,9 @@ class GetClientTokenTest extends AbstractBackendController
      */
     private function performAsserts($clientToken, $merchantId, $publicKey, $privateKey)
     {
-        self::assertEquals('client_token', $clientToken);
-        self::assertEquals(Configuration::merchantId(), $merchantId);
-        self::assertEquals(Configuration::publicKey(), $publicKey);
-        self::assertEquals(Configuration::privateKey(), $privateKey);
+        $this->assertEquals('client_token', $clientToken);
+        $this->assertEquals(Configuration::merchantId(), $merchantId);
+        $this->assertEquals(Configuration::publicKey(), $publicKey);
+        $this->assertEquals(Configuration::privateKey(), $privateKey);
     }
 }

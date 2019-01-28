@@ -74,10 +74,10 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
         $schemaMock = $this->getMockBuilder(Schema::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $schemaMock->expects(self::once())
+        $schemaMock->expects($this->once())
             ->method('getTables')
             ->willReturn([$table]);
-        self::assertEquals(
+        $this->assertEquals(
             [
                 [
                         'column' => 'ref_decimal',

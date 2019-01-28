@@ -218,7 +218,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
 
         $this->redirect->method('success')
             ->willReturn('some_url2');
-        $this->resultRaw->expects(self::never())
+        $this->resultRaw->expects($this->never())
             ->method('setHttpResponseCode');
 
         $result = [
@@ -230,7 +230,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->resultJson->method('setData')
             ->with($result)
             ->willReturn($loginSuccessResponse);
-        self::assertEquals($loginSuccessResponse, $this->controller->execute());
+        $this->assertEquals($loginSuccessResponse, $this->controller->execute());
     }
 
     /**
@@ -255,10 +255,10 @@ class LoginTest extends \PHPUnit\Framework\TestCase
             ->with('invalid@example.com', 'invalid')
             ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
 
-        $this->customerSession->expects(self::never())
+        $this->customerSession->expects($this->never())
             ->method('setCustomerDataAsLoggedIn')
             ->with($customer);
-        $this->customerSession->expects(self::never())
+        $this->customerSession->expects($this->never())
             ->method('regenerateId');
 
         $result = [
@@ -269,7 +269,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
             ->with($result)
             ->willReturn($loginFailureResponse);
 
-        self::assertEquals($loginFailureResponse, $this->controller->execute());
+        $this->assertEquals($loginFailureResponse, $this->controller->execute());
     }
 
     /**

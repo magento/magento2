@@ -152,7 +152,7 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
 
         $stateObject = new \Magento\Framework\DataObject();
         $this->model->initialize(\Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH, $stateObject);
-        self::assertEquals($storeId, $this->model->getStore(), '{Store} should be set');
+        $this->assertEquals($storeId, $this->model->getStore(), '{Store} should be set');
     }
 
     /**
@@ -190,6 +190,6 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoBlockType()
     {
-        static::assertEquals(Info::class, $this->model->getInfoBlockType());
+        $this->assertEquals(Info::class, $this->model->getInfoBlockType());
     }
 }

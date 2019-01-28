@@ -112,6 +112,6 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'name' . '_' . $store->getCode() => array_column($bundleValues, 'name' . '_' . $store->getCode())[0],
         ];
 
-        self::assertSame($expectedNames, $actualNames);
+        $this->assertSame($expectedNames, $actualNames);
     }
 }

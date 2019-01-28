@@ -77,11 +77,11 @@ class SilentPostTest extends AbstractController
 
         $this->dispatch('paypal/payflow/silentPost');
 
-        self::assertEquals(200, $this->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->getResponse()->getStatusCode());
 
         $order = $this->getOrder($orderIncrementId);
-        self::assertEquals($orderState, $order->getState());
-        self::assertEquals($orderStatus, $order->getStatus());
+        $this->assertEquals($orderState, $order->getState());
+        $this->assertEquals($orderStatus, $order->getStatus());
     }
 
     /**
@@ -117,13 +117,13 @@ class SilentPostTest extends AbstractController
         $this->_objectManager->addSharedInstance($logger, Monolog::class);
 
         $exception = new CommandException(__('Response message from PayPal gateway'));
-        $logger->expects(self::once())
+        $logger->expects($this->once())
             ->method('critical')
-            ->with(self::equalTo($exception));
+            ->with($this->equalTo($exception));
 
         $this->dispatch('paypal/payflow/silentPost');
 
-        self::assertEquals(200, $this->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->getResponse()->getStatusCode());
 
         $this->_objectManager->removeSharedInstance(Monolog::class);
     }

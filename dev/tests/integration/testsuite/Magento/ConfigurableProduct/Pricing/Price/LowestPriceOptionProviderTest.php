@@ -39,9 +39,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -58,9 +58,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->setCurrentStore($currentStoreId);
 
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -70,9 +70,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -90,9 +90,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->setCurrentStore($currentStoreId);
 
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -102,9 +102,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
 
         // load full aggregation root
         $lowestPriceChildProduct = $this->productRepository->get(
@@ -117,9 +117,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $stockItem->setIsInStock(0);
         $this->productRepository->save($lowestPriceChildProduct);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
@@ -130,9 +130,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $configurableProduct = $this->productRepository->getById(1, false, null, true);
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
 
         /** @var \Magento\Store\Api\WebsiteRepositoryInterface $webSiteRepository */
         $webSiteRepository = Bootstrap::getObjectManager()->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
@@ -145,9 +145,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->save($lowestPriceChildrenProduct);
 
         $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
-        self::assertCount(1, $lowestPriceChildrenProducts);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
-        self::assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**

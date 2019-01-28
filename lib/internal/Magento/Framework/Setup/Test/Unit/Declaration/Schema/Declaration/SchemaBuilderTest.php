@@ -327,7 +327,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         $firstTableConstraints = [$foreignKey, $primaryKey];
         $table->addColumns($firstTableColumns);
         $table->addConstraints($firstTableConstraints);
-        $this->elementFactoryMock->expects(self::exactly(9))
+        $this->elementFactoryMock->expects($this->exactly(9))
             ->method('create')
             ->willReturnOnConsecutiveCalls(
                 $table,
@@ -348,10 +348,10 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             Schema::class,
             ['resourceConnection' => $resourceConnectionMock]
         );
-        $this->resourceConnectionMock->expects(self::once())
+        $this->resourceConnectionMock->expects($this->once())
             ->method('getTableName')
             ->willReturn('second_table');
-        $resourceConnectionMock->expects(self::exactly(6))
+        $resourceConnectionMock->expects($this->exactly(6))
             ->method('getTableName')
             ->withConsecutive(
                 ['first_table'],

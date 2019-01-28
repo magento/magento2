@@ -22,7 +22,7 @@ class FileClassScannerTest extends \PHPUnit\Framework\TestCase
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -36,7 +36,7 @@ PHP
         /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
-        self::assertCount(0, $result);
+        $this->assertCount(0, $result);
     }
 
     public function testGetClassName()
@@ -44,7 +44,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -57,8 +57,8 @@ PHP
 
         $result = $scanner->getClassNames();
 
-        self::assertCount(1, $result);
-        self::assertContains('ThisIsATest', $result);
+        $this->assertCount(1, $result);
+        $this->assertContains('ThisIsATest', $result);
     }
 
     public function testGetClassNameAndSingleNamespace()
@@ -66,7 +66,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -81,8 +81,8 @@ PHP
 
         $result = $scanner->getClassNames();
 
-        self::assertCount(1, $result);
-        self::assertContains('NS\ThisIsMyTest', $result);
+        $this->assertCount(1, $result);
+        $this->assertContains('NS\ThisIsMyTest', $result);
     }
 
     public function testGetClassNameAndMultiNamespace()
@@ -90,7 +90,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -114,8 +114,8 @@ PHP
 
         $result = $scanner->getClassNames();
 
-        self::assertCount(1, $result);
-        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
+        $this->assertCount(1, $result);
+        $this->assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
     }
 
     public function testGetMultiClassNameAndMultiNamespace()
@@ -123,7 +123,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -153,9 +153,9 @@ PHP
 
         $result = $scanner->getClassNames();
 
-        self::assertCount(2, $result);
-        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
-        self::assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
+        $this->assertCount(2, $result);
+        $this->assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
+        $this->assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
     }
 
     public function testBracketedNamespacesAndClasses()
@@ -163,7 +163,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
 <?php
 
@@ -198,10 +198,10 @@ PHP
 
         $result = $scanner->getClassNames();
 
-        self::assertCount(3, $result);
-        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
-        self::assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
-        self::assertContains('This\Is\Not\My\Ns\ThisIsNotMyTest', $result);
+        $this->assertCount(3, $result);
+        $this->assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
+        $this->assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
+        $this->assertContains('This\Is\Not\My\Ns\ThisIsNotMyTest', $result);
     }
 
     public function testMultipleClassKeywordsInMiddleOfFileWithStringVariableParsing()
@@ -209,7 +209,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<'PHP'
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(<<<'PHP'
 <?php
 
 namespace This\Is\My\Ns;
@@ -238,7 +238,7 @@ PHP
         /* @var $scanner FileClassScanner */
         $result = $scanner->getClassNames();
 
-        self::assertCount(1, $result);
+        $this->assertCount(1, $result);
     }
 
     public function testInvalidPHPCodeThrowsExceptionWhenCannotDetermineBraceOrSemiColon()
@@ -247,7 +247,7 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+        $scanner->expects($this->once())->method('getFileContents')->willReturn(
             <<<PHP
             <?php
 

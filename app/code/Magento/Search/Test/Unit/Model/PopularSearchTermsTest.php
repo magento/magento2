@@ -77,7 +77,7 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($terms);
 
         $actual = $this->popularSearchTerms->isCacheable($term, $storeId);
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

@@ -128,7 +128,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
             return null;
         };
 
-        $this->backendHelperMock->expects(static::once())
+        $this->backendHelperMock->expects($this->once())
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
@@ -151,7 +151,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
             return $result;
         };
 
-        $this->backendHelperMock->expects(static::once())
+        $this->backendHelperMock->expects($this->once())
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 

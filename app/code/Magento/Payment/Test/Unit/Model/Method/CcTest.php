@@ -61,7 +61,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
             'cc_ss_start_year' => '30'
         ];
 
-        $payment->expects(static::once())
+        $payment->expects($this->once())
             ->method('addData')
             ->with(
                 $expectedData

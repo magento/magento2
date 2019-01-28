@@ -39,18 +39,18 @@ class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
         $contentTypeHeader = $response->getHeader('Content-type');
 
         /* Check the system returns the correct type */
-        self::assertEquals("Content-Type: $contentType", $contentTypeHeader->toString());
+        $this->assertEquals("Content-Type: $contentType", $contentTypeHeader->toString());
 
         $varDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
         $varDirectory->isFile($filename);
 
         /* Check the file is generated */
-        self::assertTrue($varDirectory->isFile($filename));
+        $this->assertTrue($varDirectory->isFile($filename));
 
         /* Check the file is removed after generation if the corresponding option is set */
         $fileContent = ['type' => 'string', 'value' => '', 'rm' => true];
         $fileFactory->create($filename, $fileContent, DirectoryList::VAR_DIR, $contentType);
 
-        self::assertFalse($varDirectory->isFile($filename));
+        $this->assertFalse($varDirectory->isFile($filename));
     }
 }

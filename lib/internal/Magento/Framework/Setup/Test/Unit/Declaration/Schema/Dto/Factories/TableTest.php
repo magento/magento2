@@ -46,7 +46,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $this->resourceConnectionMock->expects(self::once())
+        $this->resourceConnectionMock->expects($this->once())
             ->method('getTablePrefix')
             ->willReturn('pf_');
         $data = [
@@ -61,7 +61,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             'collation' => 'utf8_general_ci',
             'onCreate' => ''
         ];
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Table::class, $expectedData);
         $this->model->create($data);
@@ -69,7 +69,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithPrefix()
     {
-        $this->resourceConnectionMock->expects(self::once())
+        $this->resourceConnectionMock->expects($this->once())
             ->method('getTablePrefix')
             ->willReturn('pf_');
         $data = [
@@ -85,7 +85,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             'collation' => 'utf8_general_ci',
             'onCreate' => ''
         ];
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Table::class, $expectedData);
         $this->model->create($data);

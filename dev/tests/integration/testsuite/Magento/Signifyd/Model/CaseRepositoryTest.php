@@ -65,7 +65,7 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $case = array_pop($cases);
         $this->repository->delete($case);
 
-        self::assertEmpty($this->repository->getList($searchCriteria)->getItems());
+        $this->assertEmpty($this->repository->getList($searchCriteria)->getItems());
     }
 
     /**
@@ -87,9 +87,9 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $found = $this->repository->getById($case->getEntityId());
 
-        self::assertNotEmpty($found->getEntityId());
-        self::assertEquals($case->getEntityId(), $found->getEntityId());
-        self::assertEquals($case->getOrderId(), $found->getOrderId());
+        $this->assertNotEmpty($found->getEntityId());
+        $this->assertEquals($case->getEntityId(), $found->getEntityId());
+        $this->assertEquals($case->getOrderId(), $found->getOrderId());
     }
 
     /**
@@ -116,11 +116,11 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $items = $this->repository->getList($searchCriteria)
             ->getItems();
 
-        self::assertCount(3, $items);
+        $this->assertCount(3, $items);
 
         for ($i = 1; $i < 4; $i ++) {
             $current = array_shift($items);
-            self::assertEquals($i, $current->getCaseId());
+            $this->assertEquals($i, $current->getCaseId());
         }
     }
 
@@ -140,9 +140,9 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $items = $this->repository->getList($searchCriteria)
             ->getItems();
 
-        self::assertCount(1, $items);
+        $this->assertCount(1, $items);
 
         $case = array_pop($items);
-        self::assertEquals(123, $case->getCaseId());
+        $this->assertEquals(123, $case->getCaseId());
     }
 }

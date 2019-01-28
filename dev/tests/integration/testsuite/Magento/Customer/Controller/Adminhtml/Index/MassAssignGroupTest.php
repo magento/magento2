@@ -82,7 +82,7 @@ class MassAssignGroupTest extends AbstractBackendController
             ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
-            self::equalTo(['A total of 1 record(s) were updated.']),
+            $this->equalTo(['A total of 1 record(s) were updated.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
@@ -117,7 +117,7 @@ class MassAssignGroupTest extends AbstractBackendController
             ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
-            self::equalTo(['A total of 5 record(s) were updated.']),
+            $this->equalTo(['A total of 5 record(s) were updated.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));

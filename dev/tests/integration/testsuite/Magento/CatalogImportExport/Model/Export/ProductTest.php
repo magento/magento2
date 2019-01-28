@@ -319,7 +319,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_image.csv'));
         foreach ($data[0] as $columnNumber => $columnName) {
             if ($columnName === 'hide_from_product_page') {
-                self::assertSame($image['file'], $data[2][$columnNumber]);
+                $this->assertSame($image['file'], $data[2][$columnNumber]);
             }
         }
     }
@@ -378,7 +378,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        self::assertSame($expectedData, $customOptionData);
+        $this->assertSame($expectedData, $customOptionData);
     }
 
     /**

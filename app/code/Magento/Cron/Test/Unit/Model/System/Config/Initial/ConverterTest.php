@@ -56,7 +56,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->converterPlugin->afterConvert($this->converterMock, $expectedResult);
 
-        self::assertSame($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**
@@ -84,6 +84,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->converterPlugin->afterConvert($this->converterMock, $result);
 
-        self::assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 }

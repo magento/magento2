@@ -78,7 +78,7 @@ class CurrencyConfigTest extends TestCase
         $path = 'test/path';
         $expected = ['ARS', 'AUD', 'BZD'];
 
-        $this->appState->expects(self::once())
+        $this->appState->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areCode);
 
@@ -87,29 +87,29 @@ class CurrencyConfigTest extends TestCase
             ->setMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $store->expects(self::once())
+        $store->expects($this->once())
             ->method('getCode')
             ->willReturn('testCode');
 
         if ($areCode === Area::AREA_ADMINHTML) {
-            $this->storeManager->expects(self::once())
+            $this->storeManager->expects($this->once())
                 ->method('getStores')
                 ->willReturn([$store]);
         } else {
-            $this->storeManager->expects(self::once())
+            $this->storeManager->expects($this->once())
                 ->method('getStore')
                 ->willReturn($store);
         }
 
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('getValue')
             ->with(
-                self::identicalTo($path)
+                $this->identicalTo($path)
             )->willReturn('ARS,AUD,BZD');
 
         $result = $this->testSubject->getConfigCurrencies($path);
 
-        self::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**

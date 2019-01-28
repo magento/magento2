@@ -55,12 +55,12 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
             $paymentMethodInterface2
         ];
 
-        $this->paymentMethodList->expects(static::once())
+        $this->paymentMethodList->expects($this->once())
             ->method('getActiveList')
             ->with($storeId)
             ->willReturn($activePayments);
 
-        $this->instanceFactory->expects(static::exactly(2))
+        $this->instanceFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap([
                 [$paymentMethodInterface1, $this->createMock(MethodInterface::class)],
@@ -68,7 +68,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $vaultPayments = $this->vaultPaymentList->getActiveList($storeId);
-        static::assertCount(1, $vaultPayments);
-        static::assertInstanceOf(VaultPaymentInterface::class, $vaultPayment);
+        $this->assertCount(1, $vaultPayments);
+        $this->assertInstanceOf(VaultPaymentInterface::class, $vaultPayment);
     }
 }

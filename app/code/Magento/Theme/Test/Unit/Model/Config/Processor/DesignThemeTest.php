@@ -67,12 +67,12 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
         foreach ($this->themes as $themeId => $themeFullPath) {
             $themeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
                 ->getMockForAbstractClass();
-            $themeMock->expects(static::any())->method('getId')->willReturn($themeId);
+            $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
             $themesMap[] = [$themeFullPath, $themeMock];
         }
 
-        $this->themeList->expects(static::any())->method('getThemeByFullPath')->willReturnMap($themesMap);
+        $this->themeList->expects($this->any())->method('getThemeByFullPath')->willReturnMap($themesMap);
     }
 
     /**

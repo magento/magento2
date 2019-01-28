@@ -46,7 +46,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['request', 'setUri'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpClientFactoryMock->expects(static::once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->zendClientMock);
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
@@ -79,25 +79,25 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getBody'])
             ->disableOriginalConstructor()
             ->getMock();
-        $zendResponseMock->expects(static::once())
+        $zendResponseMock->expects($this->once())
             ->method('getBody')
             ->willReturn($expectedResponse);
-        $this->zendClientMock->expects(static::once())
+        $this->zendClientMock->expects($this->once())
             ->method('request')
             ->willReturn($zendResponseMock);
 
-        $configInterfaceMock->expects(static::any())
+        $configInterfaceMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap($configMap);
-        $this->loggerMock->expects(static::once())
+        $this->loggerMock->expects($this->once())
             ->method('debug');
 
         $object = new DataObject();
 
         $result = $this->object->postRequest($object, $configInterfaceMock);
 
-        static::assertInstanceOf(DataObject::class, $result);
-        static::assertArrayHasKey('result_code', $result->getData());
+        $this->assertInstanceOf(DataObject::class, $result);
+        $this->assertArrayHasKey('result_code', $result->getData());
     }
 
     /**
@@ -112,9 +112,9 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getBody'])
             ->disableOriginalConstructor()
             ->getMock();
-        $zendResponseMock->expects(static::never())
+        $zendResponseMock->expects($this->never())
             ->method('getBody');
-        $this->zendClientMock->expects(static::once())
+        $this->zendClientMock->expects($this->once())
             ->method('request')
             ->willThrowException(new \Zend_Http_Client_Exception());
 

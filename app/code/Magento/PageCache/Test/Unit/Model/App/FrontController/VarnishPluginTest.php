@@ -97,18 +97,18 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterDispatchReturnsCache($state, $countHeader)
     {
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('getType')
             ->willReturn(Config::VARNISH);
-        $this->versionMock->expects(static::once())
+        $this->versionMock->expects($this->once())
             ->method('process');
-        $this->stateMock->expects(static::once())
+        $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($state);
-        $this->responseMock->expects(static::exactly($countHeader))
+        $this->responseMock->expects($this->exactly($countHeader))
             ->method('setHeader')
             ->with('X-Magento-Debug');
 
@@ -120,17 +120,17 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDispatchNotResponse()
     {
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('getType')
             ->willReturn(Config::VARNISH);
-        $this->versionMock->expects(static::never())
+        $this->versionMock->expects($this->never())
             ->method('process');
-        $this->stateMock->expects(static::never())
+        $this->stateMock->expects($this->never())
             ->method('getMode');
-        $this->resultMock->expects(static::never())
+        $this->resultMock->expects($this->never())
             ->method('setHeader');
 
         $this->assertSame(
@@ -141,15 +141,15 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDispatchDisabled()
     {
-        $this->configMock->expects(static::any())
+        $this->configMock->expects($this->any())
             ->method('getType')
             ->willReturn(null);
-        $this->versionMock->expects(static::never())
+        $this->versionMock->expects($this->never())
             ->method('process');
-        $this->stateMock->expects(static::any())
+        $this->stateMock->expects($this->any())
             ->method('getMode')
             ->willReturn(AppState::MODE_DEVELOPER);
-        $this->responseMock->expects(static::never())
+        $this->responseMock->expects($this->never())
             ->method('setHeader');
 
         $this->assertSame(

@@ -61,8 +61,8 @@ class BCPatchTest extends SetupTestCase
     public function testSuccessfullInstall()
     {
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
     }
 
     /**
@@ -84,13 +84,13 @@ class BCPatchTest extends SetupTestCase
         );
         
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertEquals(
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertEquals(
             [6,12],
             $this->tableData->describeTableData('reference_table', 'some_integer')
         );
-        self::assertEquals(
+        $this->assertEquals(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );
@@ -114,9 +114,9 @@ class BCPatchTest extends SetupTestCase
             'Setup/Patch/Data'
         );
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertEquals(
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertEquals(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );
@@ -134,8 +134,8 @@ class BCPatchTest extends SetupTestCase
             'etc'
         );
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule5']);
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
         $this->moduleResource->setDataVersion('Magento_TestSetupDeclarationModule5', '1.0.2');
         $this->moduleResource->setDataVersion('Magento_TestSetupDeclarationModule5', '1.0.2');
         $this->moduleManager->updateRevision(
@@ -157,14 +157,14 @@ class BCPatchTest extends SetupTestCase
             'Setup/Patch/Data'
         );
         $this->cliCommand->upgrade();
-        self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
-        self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
         //Old scripts should be skipped because we do not have version
-        self::assertEquals(
+        $this->assertEquals(
             [],
             $this->tableData->describeTableData('reference_table', 'some_integer')
         );
-        self::assertEquals(
+        $this->assertEquals(
             ['_ref'],
             $this->tableData->describeTableData('test_table', 'varchar')
         );

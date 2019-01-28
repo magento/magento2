@@ -59,7 +59,7 @@ class SaveTest extends AbstractBackendController
             $error = $e->getMessage();
         }
 
-        self::assertEmpty($error, $error);
+        $this->assertEmpty($error, $error);
     }
 
     /**

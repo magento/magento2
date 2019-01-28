@@ -124,22 +124,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetActiveMethods($isActive)
     {
         $adapter = $this->createMock(MethodInterface::class);
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)
             ->willReturn($this->paymentMethodsList);
-        $this->paymentMethodFactory->expects(static::once())
+        $this->paymentMethodFactory->expects($this->once())
             ->method('create')
             ->with($this->paymentMethodsList['active_method']['model'])
             ->willReturn($adapter);
-        $adapter->expects(static::once())
+        $adapter->expects($this->once())
             ->method('setStore')
             ->with(null);
-        $adapter->expects(static::once())
+        $adapter->expects($this->once())
             ->method('getConfigData')
-            ->with('active', static::isNull())
+            ->with('active', $this->isNull())
             ->willReturn($isActive);
-        static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
+        $this->assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
     /**

@@ -70,13 +70,13 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeDispatchUpToDate()
     {
-        $this->cacheMock->expects(static::any())
+        $this->cacheMock->expects($this->any())
             ->method('load')
             ->with('db_is_up_to_date')
             ->willReturn('cache_data');
-        $this->dbVersionInfoMock->expects(static::never())
+        $this->dbVersionInfoMock->expects($this->never())
             ->method('getDbVersionErrors');
-        $this->cacheMock->expects(static::never())
+        $this->cacheMock->expects($this->never())
             ->method('save');
 
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
@@ -84,14 +84,14 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeDispatchOutOfDateNoErrors()
     {
-        $this->cacheMock->expects(static::any())
+        $this->cacheMock->expects($this->any())
             ->method('load')
             ->with('db_is_up_to_date')
             ->willReturn(false);
-        $this->dbVersionInfoMock->expects(static::once())
+        $this->dbVersionInfoMock->expects($this->once())
             ->method('getDbVersionErrors')
             ->willReturn([]);
-        $this->cacheMock->expects(static::once())
+        $this->cacheMock->expects($this->once())
             ->method('save')
             ->with('true', 'db_is_up_to_date', [], null)
             ->willReturn(true);
@@ -104,14 +104,14 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeDispatchOutOfDateWithErrors(array $errors, string $expectedMessage)
     {
-        $this->cacheMock->expects(static::any())
+        $this->cacheMock->expects($this->any())
             ->method('load')
             ->with('db_is_up_to_date')
             ->willReturn(false);
-        $this->dbVersionInfoMock->expects(static::once())
+        $this->dbVersionInfoMock->expects($this->once())
             ->method('getDbVersionErrors')
             ->willReturn($errors);
-        $this->cacheMock->expects(static::never())
+        $this->cacheMock->expects($this->never())
             ->method('save');
 
         $this->expectException(LocalizedException::class);

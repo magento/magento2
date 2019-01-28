@@ -24,7 +24,7 @@ class HandlerChainTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -36,16 +36,16 @@ class HandlerChainTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::once())
+        $tMap->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$handler1, $handler2]));
 
         $handlingSubject = [];
         $response = [];
-        $handler1->expects(static::once())
+        $handler1->expects($this->once())
             ->method('handle')
             ->with($handlingSubject, $response);
-        $handler2->expects(static::once())
+        $handler2->expects($this->once())
             ->method('handle')
             ->with($handlingSubject, $response);
 

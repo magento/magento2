@@ -503,7 +503,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         ];
         $address = $this->addressFactory->create(['data' => $addressData]);
         $saved = $this->repository->save($address);
-        self::assertNotEmpty($saved->getId());
+        $this->assertNotEmpty($saved->getId());
     }
 
     /**

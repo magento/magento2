@@ -61,7 +61,7 @@ class SpecialPriceIndexerTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product[] $items */
         $items = array_values($collection->getItems());
-        self::assertEquals(10, $items[0]->getData('min_price'));
+        $this->assertEquals(10, $items[0]->getData('min_price'));
 
         $this->indexerProcessor->reindexAll();
 
@@ -73,7 +73,7 @@ class SpecialPriceIndexerTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product $item */
         $item = $collection->getFirstItem();
-        self::assertEquals($specialPrice, $item->getData('min_price'));
+        $this->assertEquals($specialPrice, $item->getData('min_price'));
     }
 
     /**
@@ -98,6 +98,6 @@ class SpecialPriceIndexerTest extends \PHPUnit\Framework\TestCase
 
         /** @var Product $item */
         $item = $collection->getFirstItem();
-        self::assertEquals($specialPrice, $item->getData('min_price'));
+        $this->assertEquals($specialPrice, $item->getData('min_price'));
     }
 }

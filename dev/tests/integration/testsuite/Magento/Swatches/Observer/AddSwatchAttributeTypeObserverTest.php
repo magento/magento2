@@ -34,7 +34,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
 
         $responseTypes = $response->getTypes();
 
-        self::assertGreaterThan(0, count($responseTypes));
+        $this->assertGreaterThan(0, count($responseTypes));
 
         /* Iterate through values since other types (not swatches) might be added by observers */
         $responseTypeValues = [];
@@ -42,7 +42,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
             $responseTypeValues[] = $responseType['value'];
         }
 
-        self::assertTrue(in_array(Swatch::SWATCH_TYPE_VISUAL_ATTRIBUTE_FRONTEND_INPUT, $responseTypeValues));
-        self::assertTrue(in_array(Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT, $responseTypeValues));
+        $this->assertTrue(in_array(Swatch::SWATCH_TYPE_VISUAL_ATTRIBUTE_FRONTEND_INPUT, $responseTypeValues));
+        $this->assertTrue(in_array(Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT, $responseTypeValues));
     }
 }

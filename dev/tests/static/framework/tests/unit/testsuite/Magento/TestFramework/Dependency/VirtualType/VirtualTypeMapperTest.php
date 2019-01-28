@@ -35,7 +35,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
     public function testGetScopeFromFile()
     {
         $file = '/path/to/file/scope/filename.ext';
-        static::assertEquals('scope', $this->mapper->getScopeFromFile($file));
+        $this->assertEquals('scope', $this->mapper->getScopeFromFile($file));
     }
 
     /**
@@ -46,7 +46,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetType($scope, $type, $expected)
     {
-        static::assertEquals($expected, $this->mapper->getType($type, $scope));
+        $this->assertEquals($expected, $this->mapper->getType($type, $scope));
     }
 
     /**
@@ -112,7 +112,7 @@ class VirtualTypeMapperTest extends \PHPUnit\Framework\TestCase
 
         foreach ($expectedVirtualTypesDependencies as $scope => $deps) {
             foreach ($deps as $virtualType => $baseType) {
-                self::assertEquals($baseType, $mapper->getType($virtualType, $scope));
+                $this->assertEquals($baseType, $mapper->getType($virtualType, $scope));
             }
         }
     }

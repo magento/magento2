@@ -188,9 +188,9 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     public function testCanEditShippingMethod()
     {
         $this->model->setData('can_edit_shipping_method', true);
-        static::assertTrue($this->model->canEditShippingMethod());
+        $this->assertTrue($this->model->canEditShippingMethod());
 
         $this->model->setData('can_edit_shipping_method', false);
-        static::assertTrue($this->model->canEditShippingMethod());
+        $this->assertTrue($this->model->canEditShippingMethod());
     }
 }

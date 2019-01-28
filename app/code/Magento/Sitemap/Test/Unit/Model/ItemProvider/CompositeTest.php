@@ -29,7 +29,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
         foreach ($itemResolverData as $data) {
             $mockResolver = $this->getMockForAbstractClass(ItemProviderInterface::class);
-            $mockResolver->expects(self::once())
+            $mockResolver->expects($this->once())
                 ->method('getItems')
                 ->willReturn($data);
 

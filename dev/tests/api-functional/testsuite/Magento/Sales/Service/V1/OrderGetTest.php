@@ -82,34 +82,34 @@ class OrderGetTest extends WebapiAbstract
         $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
 
         foreach ($expectedOrderData as $field => $value) {
-            self::assertArrayHasKey($field, $result);
-            self::assertEquals($value, $result[$field]);
+            $this->assertArrayHasKey($field, $result);
+            $this->assertEquals($value, $result[$field]);
         }
 
-        self::assertArrayHasKey('payment', $result);
+        $this->assertArrayHasKey('payment', $result);
         foreach ($expectedPayments as $field => $value) {
-            self::assertEquals($value, $result['payment'][$field]);
+            $this->assertEquals($value, $result['payment'][$field]);
         }
 
-        self::assertArrayHasKey('billing_address', $result);
+        $this->assertArrayHasKey('billing_address', $result);
         foreach ($expectedBillingAddressNotEmpty as $field) {
-            self::assertArrayHasKey($field, $result['billing_address']);
+            $this->assertArrayHasKey($field, $result['billing_address']);
         }
 
-        self::assertArrayHasKey('extension_attributes', $result);
-        self::assertArrayHasKey('shipping_assignments', $result['extension_attributes']);
+        $this->assertArrayHasKey('extension_attributes', $result);
+        $this->assertArrayHasKey('shipping_assignments', $result['extension_attributes']);
 
         $shippingAssignments = $result['extension_attributes']['shipping_assignments'];
-        self::assertCount(1, $shippingAssignments);
+        $this->assertCount(1, $shippingAssignments);
         $shippingAddress = $shippingAssignments[0]['shipping']['address'];
         foreach ($expectedShippingAddress as $key => $value) {
-            self::assertArrayHasKey($key, $shippingAddress);
-            self::assertEquals($value, $shippingAddress[$key]);
+            $this->assertArrayHasKey($key, $shippingAddress);
+            $this->assertEquals($value, $shippingAddress[$key]);
         }
 
         //check that nullable fields were marked as optional and were not sent
         foreach ($result as $value) {
-            self::assertNotNull($value);
+            $this->assertNotNull($value);
         }
     }
 
@@ -128,13 +128,13 @@ class OrderGetTest extends WebapiAbstract
         $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
 
         $appliedTaxes = $result['extension_attributes']['applied_taxes'];
-        self::assertEquals($expectedTax['code'], $appliedTaxes[0]['code']);
+        $this->assertEquals($expectedTax['code'], $appliedTaxes[0]['code']);
         $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
-        self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
-        self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        self::assertEquals(true, $result['extension_attributes']['converting_from_quote']);
-        self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
-        self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
+        $this->assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
+        $this->assertNotEmpty($appliedTaxes[0]['applied_taxes']);
+        $this->assertEquals(true, $result['extension_attributes']['converting_from_quote']);
+        $this->assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
+        $this->assertNotEmpty($result['extension_attributes']['payment_additional_info']);
     }
 
     /**
@@ -158,9 +158,9 @@ class OrderGetTest extends WebapiAbstract
         $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
 
         $bundleProduct = $this->getBundleProduct($result['items']);
-        self::assertNotEmpty($bundleProduct, '"Bundle Product" should not be empty.');
-        self::assertNotEmpty($bundleProduct['product_option'], '"Product Option" should not be empty.');
-        self::assertEquals($expected, $bundleProduct['product_option']);
+        $this->assertNotEmpty($bundleProduct, '"Bundle Product" should not be empty.');
+        $this->assertNotEmpty($bundleProduct['product_option'], '"Product Option" should not be empty.');
+        $this->assertEquals($expected, $bundleProduct['product_option']);
     }
 
     /**

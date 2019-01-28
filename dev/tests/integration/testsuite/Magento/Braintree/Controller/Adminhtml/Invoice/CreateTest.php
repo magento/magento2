@@ -71,8 +71,8 @@ class CreateTest extends AbstractBackendController
         $order = $this->getOrder('100000002');
 
         $this->adapter->method('sale')
-            ->with(self::callback(function ($request) {
-                self::assertEquals('USA_Merchant', $request['merchantAccountId']);
+            ->with($this->callback(function ($request) {
+                $this->assertEquals('USA_Merchant', $request['merchantAccountId']);
                 return true;
             }))
             ->willReturn($this->getTransactionStub());
@@ -82,7 +82,7 @@ class CreateTest extends AbstractBackendController
         $this->dispatch($uri);
 
         self::assertSessionMessages(
-            self::equalTo(['The invoice has been created.']),
+            $this->equalTo(['The invoice has been created.']),
             MessageInterface::TYPE_SUCCESS
         );
     }

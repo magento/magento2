@@ -491,32 +491,32 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($address));
 
-        $this->quoteRepository->expects(static::once())
+        $this->quoteRepository->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('isVirtual')
             ->willReturn(false);
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
 
-        $this->dataProcessor->expects(static::any())
+        $this->dataProcessor->expects($this->any())
             ->method('buildOutputDataArray')
             ->willReturn($addressData);
 
-        $this->shippingAddress->expects(static::once())
+        $this->shippingAddress->expects($this->once())
             ->method('setCollectShippingRates')
             ->with(true)
             ->willReturnSelf();
 
-        $this->totalsCollector->expects(static::once())
+        $this->totalsCollector->expects($this->once())
             ->method('collectAddressTotals')
             ->with($this->quote, $this->shippingAddress)
             ->willReturnSelf();
@@ -528,21 +528,21 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
 
-        $this->shippingAddress->expects(static::once())
+        $this->shippingAddress->expects($this->once())
             ->method('getGroupedAllShippingRates')
             ->willReturn([[$rate]]);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getQuoteCurrencyCode')
             ->willReturn($currencyCode);
 
-        $this->converter->expects(static::once())
+        $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($rate, $currencyCode)
             ->willReturn($methodObject);
 
         $carriersRates = $this->model->estimateByExtendedAddress($cartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        $this->assertEquals($expectedRates, $carriersRates);
     }
 
     /**
@@ -575,32 +575,32 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($address));
 
-        $this->quoteRepository->expects(static::once())
+        $this->quoteRepository->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('isVirtual')
             ->willReturn(false);
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
 
-        $this->dataProcessor->expects(static::any())
+        $this->dataProcessor->expects($this->any())
             ->method('buildOutputDataArray')
             ->willReturn($addressData);
 
-        $this->shippingAddress->expects(static::once())
+        $this->shippingAddress->expects($this->once())
             ->method('setCollectShippingRates')
             ->with(true)
             ->willReturnSelf();
 
-        $this->totalsCollector->expects(static::once())
+        $this->totalsCollector->expects($this->once())
             ->method('collectAddressTotals')
             ->with($this->quote, $this->shippingAddress)
             ->willReturnSelf();
@@ -612,20 +612,20 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
 
-        $this->shippingAddress->expects(static::once())
+        $this->shippingAddress->expects($this->once())
             ->method('getGroupedAllShippingRates')
             ->willReturn([[$rate]]);
 
-        $this->quote->expects(static::once())
+        $this->quote->expects($this->once())
             ->method('getQuoteCurrencyCode')
             ->willReturn($currencyCode);
 
-        $this->converter->expects(static::once())
+        $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($rate, $currencyCode)
             ->willReturn($methodObject);
 
         $carriersRates = $this->model->estimateByAddressId($cartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        $this->assertEquals($expectedRates, $carriersRates);
     }
 }

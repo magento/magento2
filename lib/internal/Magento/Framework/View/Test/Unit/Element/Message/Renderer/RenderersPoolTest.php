@@ -33,7 +33,7 @@ class RenderersPoolTest extends \PHPUnit\Framework\TestCase
         $pool = new RenderersPool($renderers);
 
         foreach ($expectationMap as $code => $renderer) {
-            static::assertSame($renderer, $pool->get($code));
+            $this->assertSame($renderer, $pool->get($code));
         }
     }
 }

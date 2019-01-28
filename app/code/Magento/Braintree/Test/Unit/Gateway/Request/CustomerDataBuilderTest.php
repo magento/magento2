@@ -57,7 +57,7 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => null,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
@@ -75,10 +75,10 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $billingMock = $this->getBillingMock($billingData);
 
-        $this->paymentDOMock->expects(static::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($billingMock);
 
@@ -86,12 +86,12 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => $this->paymentDOMock,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        self::assertEquals($expectedResult, $this->builder->build($buildSubject));
+        $this->assertEquals($expectedResult, $this->builder->build($buildSubject));
     }
 
     /**
@@ -129,19 +129,19 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $addressMock = $this->createMock(AddressAdapterInterface::class);
 
-        $addressMock->expects(static::once())
+        $addressMock->expects($this->once())
             ->method('getFirstname')
             ->willReturn($billingData['first_name']);
-        $addressMock->expects(static::once())
+        $addressMock->expects($this->once())
             ->method('getLastname')
             ->willReturn($billingData['last_name']);
-        $addressMock->expects(static::once())
+        $addressMock->expects($this->once())
             ->method('getCompany')
             ->willReturn($billingData['company']);
-        $addressMock->expects(static::once())
+        $addressMock->expects($this->once())
             ->method('getTelephone')
             ->willReturn($billingData['phone']);
-        $addressMock->expects(static::once())
+        $addressMock->expects($this->once())
             ->method('getEmail')
             ->willReturn($billingData['email']);
 

@@ -53,11 +53,11 @@ class SwitcherPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeGetUrl($countryParam, $getUrlParams)
     {
-        $this->requestMock->expects(static::once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(ConfigStructurePlugin::REQUEST_PARAM_COUNTRY)
             ->willReturn($countryParam);
-        $this->subjectMock->expects(static::any())
+        $this->subjectMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
 

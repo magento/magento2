@@ -67,7 +67,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
-        $objectManager->expects(self::exactly(4))
+        $objectManager->expects($this->exactly(4))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
                 $this->validators['declarative_schema'],
@@ -80,16 +80,16 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $this->validators['old_validator']->expects(self::once())
+        $this->validators['old_validator']->expects($this->once())
             ->method('isUpToDate')
             ->willReturn(true);
-        $this->validators['up_to_date_schema']->expects(self::once())
+        $this->validators['up_to_date_schema']->expects($this->once())
             ->method('isUpToDate')
             ->willReturn(true);
-        $this->validators['up_to_date_data']->expects(self::once())
+        $this->validators['up_to_date_data']->expects($this->once())
             ->method('isUpToDate')
             ->willReturn(true);
-        $this->validators['declarative_schema']->expects(self::once())
+        $this->validators['declarative_schema']->expects($this->once())
             ->method('isUpToDate')
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())

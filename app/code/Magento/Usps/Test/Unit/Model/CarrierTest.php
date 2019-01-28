@@ -155,11 +155,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->scope->method('isSetFlag')
             ->willReturn(true);
 
-        $this->httpClient->expects(self::exactly(2))
+        $this->httpClient->expects($this->exactly(2))
             ->method('setParameterGet')
             ->withConsecutive(
                 ['API', 'RateV4'],
-                ['XML', self::equalTo($expectedXml->asXML())]
+                ['XML', $this->equalTo($expectedXml->asXML())]
             );
 
         $this->httpResponse->method('getBody')
@@ -168,7 +168,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[0]]);
 
-        self::assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
+        $this->assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
     }
 
     public function testCollectRatesWithUnavailableService()
@@ -197,7 +197,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ReturnShipment::class,
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
-        $this->httpClient->expects(self::exactly(2))
+        $this->httpClient->expects($this->exactly(2))
             ->method('setParameterGet')
             ->withConsecutive(
                 ['API', 'SignatureConfirmationCertifyV3'],

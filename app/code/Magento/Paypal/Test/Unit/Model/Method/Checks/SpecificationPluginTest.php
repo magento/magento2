@@ -137,14 +137,14 @@ class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
     {
         $this->setExpectations('paypal_billing_agreement', 1);
 
-        $this->billingAgreementFactoryMock->expects(static::once())
+        $this->billingAgreementFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->billingAgreementMock);
-        $this->billingAgreementMock->expects(static::once())
+        $this->billingAgreementMock->expects($this->once())
             ->method('getAvailableCustomerBillingAgreements')
             ->with(1)
             ->willReturn($this->billingAgreementCollectionMock);
-        $this->billingAgreementCollectionMock->expects(static::once())
+        $this->billingAgreementCollectionMock->expects($this->once())
             ->method('count')
             ->willReturn($count);
 
@@ -171,10 +171,10 @@ class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
      */
     private function setExpectations($paymentMethodCode, $customerId)
     {
-        $this->paymentMethodMock->expects(static::any())
+        $this->paymentMethodMock->expects($this->any())
             ->method('getCode')
             ->willReturn($paymentMethodCode);
-        $this->quoteMock->expects(static::any())
+        $this->quoteMock->expects($this->any())
             ->method('getCustomerId')
             ->willReturn($customerId);
     }

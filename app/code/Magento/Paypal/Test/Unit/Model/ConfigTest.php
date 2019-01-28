@@ -132,7 +132,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMerchantCountryPaypal()
     {
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with(
                 'paypal/general/merchant_country',
@@ -140,15 +140,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 null
             )->willReturn('US');
 
-        $this->directoryHelper->expects(static::never())
+        $this->directoryHelper->expects($this->never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('US', $this->model->getMerchantCountry());
+        $this->assertEquals('US', $this->model->getMerchantCountry());
     }
 
     public function testGetMerchantCountryGeneral()
     {
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with(
                 'paypal/general/merchant_country',
@@ -156,12 +156,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 null
             )->willReturn(null);
 
-        $this->directoryHelper->expects(static::once())
+        $this->directoryHelper->expects($this->once())
             ->method('getDefaultCountry')
             ->with(null)
             ->willReturn('US');
 
-        static::assertEquals('US', $this->model->getMerchantCountry());
+        $this->assertEquals('US', $this->model->getMerchantCountry());
     }
 
     /**

@@ -100,47 +100,47 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->lockerProcessMock->expects(self::once())
+        $this->lockerProcessMock->expects($this->once())
             ->method('lockProcess')
-            ->with(self::isType('string'));
-        $this->lockerProcessMock->expects(self::once())
+            ->with($this->isType('string'));
+        $this->lockerProcessMock->expects($this->once())
             ->method('unlockProcess');
 
-        $this->sorterMock->expects(self::once())
+        $this->sorterMock->expects($this->once())
             ->method('sort')
             ->with($alternatives)
             ->willReturn($alternatives);
 
-        $this->filenameResolverMock->expects(self::once())
+        $this->filenameResolverMock->expects($this->once())
             ->method('resolve')
             ->with(self::FILE_PATH)
             ->willReturn(self::FILE_PATH);
 
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setArea')
             ->with(self::AREA)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setTheme')
             ->with(self::THEME)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setLocale')
             ->with(self::LOCALE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setModule')
             ->with(self::MODULE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setPath')
             ->with(self::FILE_PATH)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('build')
             ->willReturn($this->getAssetNew());
 
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with('stdClass')
             ->willReturn(new \stdClass());
@@ -157,7 +157,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
         try {
             $alternativeSource->process($this->getChainMockExpects('', 0));
         } catch (\UnexpectedValueException $e) {
-            self::assertInstanceOf('\UnexpectedValueException', $e);
+            $this->assertInstanceOf('\UnexpectedValueException', $e);
         }
     }
 
@@ -172,49 +172,49 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->lockerProcessMock->expects(self::once())
+        $this->lockerProcessMock->expects($this->once())
             ->method('lockProcess')
-            ->with(self::isType('string'));
-        $this->lockerProcessMock->expects(self::once())
+            ->with($this->isType('string'));
+        $this->lockerProcessMock->expects($this->once())
             ->method('unlockProcess');
 
-        $this->sorterMock->expects(self::once())
+        $this->sorterMock->expects($this->once())
             ->method('sort')
             ->with($alternatives)
             ->willReturn($alternatives);
 
-        $this->filenameResolverMock->expects(self::once())
+        $this->filenameResolverMock->expects($this->once())
             ->method('resolve')
             ->with(self::FILE_PATH)
             ->willReturn(self::FILE_PATH);
 
         $assetMock = $this->getAssetNew();
 
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setArea')
             ->with(self::AREA)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setTheme')
             ->with(self::THEME)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setLocale')
             ->with(self::LOCALE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setModule')
             ->with(self::MODULE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setPath')
             ->with(self::FILE_PATH)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('build')
             ->willReturn($assetMock);
 
-        $this->objectManagerMock->expects(self::once())
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\View\Asset\ContentProcessorInterface::class)
             ->willReturn($this->getProcessorMock($assetMock));
@@ -240,20 +240,20 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
         $chainMock = $this->getChainMock();
         $assetMock = $this->getAssetMock();
 
-        $chainMock->expects(self::once())
+        $chainMock->expects($this->once())
             ->method('getContent')
             ->willReturn('test-content');
 
-        $chainMock->expects(self::once())
+        $chainMock->expects($this->once())
             ->method('getAsset')
             ->willReturn($assetMock);
 
-        $this->filenameResolverMock->expects(self::never())
+        $this->filenameResolverMock->expects($this->never())
             ->method('resolve');
 
-        $this->lockerProcessMock->expects(self::never())
+        $this->lockerProcessMock->expects($this->never())
             ->method('lockProcess');
-        $this->lockerProcessMock->expects(self::never())
+        $this->lockerProcessMock->expects($this->never())
             ->method('unlockProcess');
 
         $alternativeSource = new AlternativeSource(
@@ -278,7 +278,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
         $processorMock = $this->getMockBuilder(ContentProcessorInterface::class)
             ->getMockForAbstractClass();
 
-        $processorMock->expects(self::once())
+        $processorMock->expects($this->once())
             ->method('processContent')
             ->with($asset)
             ->willReturn(self::NEW_CONTENT);
@@ -307,13 +307,13 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     {
         $chainMock = $this->getChainMock();
 
-        $chainMock->expects(self::once())
+        $chainMock->expects($this->once())
             ->method('getContent')
             ->willReturn($content);
-        $chainMock->expects(self::exactly(3))
+        $chainMock->expects($this->exactly(3))
             ->method('getAsset')
             ->willReturn($this->getAssetMockExpects());
-        $chainMock->expects(self::exactly($contentExactly))
+        $chainMock->expects($this->exactly($contentExactly))
             ->method('setContent')
             ->willReturn(self::NEW_CONTENT);
 
@@ -351,13 +351,13 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     {
         $assetMock = $this->getAssetMock();
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getContext')
             ->willReturn($this->getContextMock());
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getFilePath')
             ->willReturn(self::FILE_PATH);
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getModule')
             ->willReturn(self::MODULE);
 
@@ -373,13 +373,13 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn(self::AREA);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getThemePath')
             ->willReturn(self::THEME);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getLocale')
             ->willReturn(self::LOCALE);
 

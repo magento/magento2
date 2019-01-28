@@ -64,7 +64,7 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getFileInfo'])
             ->getMockForAbstractClass();
 
-        $this->extensionAttributesFactoryMock->expects(self::any())
+        $this->extensionAttributesFactoryMock->expects($this->any())
             ->method('create')->willReturn($this->extensionMock);
 
         $this->model = new CustomOption(

@@ -70,28 +70,28 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $paymentToken = $this->createMock(PaymentTokenInterface::class);
-        $paymentToken->expects(static::once())
+        $paymentToken->expects($this->once())
             ->method('getTokenDetails')
             ->willReturn('{"type":"VI","maskedCC":"1111","expirationDate":"12\/2015"}');
-        $paymentToken->expects(static::once())
+        $paymentToken->expects($this->once())
             ->method('getPublicHash')
             ->willReturn('37du7ir5ed');
 
-        $this->urlBuilder->expects(static::once())
+        $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
         $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
-        $tokenComponent->expects(static::once())
+        $tokenComponent->expects($this->once())
             ->method('getConfig')
             ->willReturn($expected);
 
-        $this->componentFactory->expects(static::once())
+        $this->componentFactory->expects($this->once())
             ->method('create')
             ->willReturn($tokenComponent);
 
         $component = $this->tokenUiComponentProvider->getComponentForToken($paymentToken);
-        static::assertEquals($tokenComponent, $component);
-        static::assertEquals($expected, $component->getConfig());
+        $this->assertEquals($tokenComponent, $component);
+        $this->assertEquals($expected, $component->getConfig());
     }
 }

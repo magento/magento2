@@ -41,7 +41,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         /** @var $product Product */
         $product = $objectManager->get(Registry::class)->registry('current_product');
         $configurableProductLinks = array_values($product->getExtensionAttributes()->getConfigurableProductLinks());
-        self::assertEquals(
+        $this->assertEquals(
             $associatedProductIds,
             $configurableProductLinks,
             'Product links are not available in the registry'
@@ -50,7 +50,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         /** @var $product \Magento\Catalog\Api\Data\ProductInterface */
         $product = $objectManager->get(ProductRepositoryInterface::class)->getById(1, false, null, true);
         $configurableProductLinks = array_values($product->getExtensionAttributes()->getConfigurableProductLinks());
-        self::assertEquals(
+        $this->assertEquals(
             $associatedProductIds,
             $configurableProductLinks,
             'Product links are not available in the database'

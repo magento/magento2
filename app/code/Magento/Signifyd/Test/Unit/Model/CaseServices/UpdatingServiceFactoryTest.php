@@ -76,17 +76,17 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateWithInactiveConfig()
     {
         $type = 'cases/creation';
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('isActive')
             ->willReturn(false);
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
             ->with(StubUpdatingService::class)
             ->willReturn(new StubUpdatingService());
 
         $instance = $this->factory->create($type);
-        static::assertInstanceOf(StubUpdatingService::class, $instance);
+        $this->assertInstanceOf(StubUpdatingService::class, $instance);
     }
 
     /**
@@ -97,17 +97,17 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateWithTestType()
     {
         $type = 'cases/test';
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('isActive')
             ->willReturn(true);
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
             ->with(StubUpdatingService::class)
             ->willReturn(new StubUpdatingService());
 
         $instance = $this->factory->create($type);
-        static::assertInstanceOf(StubUpdatingService::class, $instance);
+        $this->assertInstanceOf(StubUpdatingService::class, $instance);
     }
 
     /**
@@ -120,11 +120,11 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateWithException()
     {
         $type = 'cases/unknown';
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('isActive')
             ->willReturn(true);
 
-        $this->generatorFactory->expects(self::once())
+        $this->generatorFactory->expects($this->once())
             ->method('create')
             ->with($type)
             ->willThrowException(new \InvalidArgumentException('Specified message type does not supported.'));
@@ -140,14 +140,14 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $type = 'case/creation';
-        $this->config->expects(self::once())
+        $this->config->expects($this->once())
             ->method('isActive')
             ->willReturn(true);
 
         $messageGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->generatorFactory->expects(self::once())
+        $this->generatorFactory->expects($this->once())
             ->method('create')
             ->with($type)
             ->willReturn($messageGenerator);
@@ -156,12 +156,12 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fakeObjectManager->expects(self::once())
+        $this->fakeObjectManager->expects($this->once())
             ->method('create')
             ->with(UpdatingService::class, ['messageGenerator' => $messageGenerator])
             ->willReturn($service);
 
         $result = $this->factory->create($type);
-        static::assertInstanceOf(UpdatingService::class, $result);
+        $this->assertInstanceOf(UpdatingService::class, $result);
     }
 }

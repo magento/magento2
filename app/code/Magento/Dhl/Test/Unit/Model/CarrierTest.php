@@ -272,11 +272,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ->method('debug')
             ->with($this->stringContains('<SiteID>****</SiteID><Password>****</Password>'));
 
-        self::assertNotEmpty($this->model->collectRates($request)->getAllRates());
-        self::assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
-        self::assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
+        $this->assertNotEmpty($this->model->collectRates($request)->getAllRates());
+        $this->assertContains('<Weight>18.223</Weight>', $rawPostData->getValue($this->httpClient));
+        $this->assertContains('<Height>0.630</Height>', $rawPostData->getValue($this->httpClient));
+        $this->assertContains('<Width>0.630</Width>', $rawPostData->getValue($this->httpClient));
+        $this->assertContains('<Depth>0.630</Depth>', $rawPostData->getValue($this->httpClient));
     }
 
     public function testCollectRatesErrorMessage()

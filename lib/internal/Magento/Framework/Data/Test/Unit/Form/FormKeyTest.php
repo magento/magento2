@@ -81,19 +81,19 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
 
     public function testIsPresent()
     {
-        $this->sessionMock->expects(static::once())
+        $this->sessionMock->expects($this->once())
             ->method('getData')
             ->with(FormKey::FORM_KEY)
             ->willReturn('Form key');
 
-        static::assertTrue($this->formKey->isPresent());
+        $this->assertTrue($this->formKey->isPresent());
     }
 
     public function testSet()
     {
         $formKeyValue = 'Form key';
 
-        $this->sessionMock->expects(static::once())
+        $this->sessionMock->expects($this->once())
             ->method('setData')
             ->with(FormKey::FORM_KEY, $formKeyValue);
 

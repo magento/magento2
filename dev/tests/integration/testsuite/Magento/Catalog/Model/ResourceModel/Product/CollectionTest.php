@@ -140,8 +140,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Collection $productCollection */
         $this->collection->addAttributeToSort('is_saleable', $order);
-        self::assertEquals(2, $this->collection->count());
-        self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
+        $this->assertEquals(2, $this->collection->count());
+        $this->assertSame($productSku, $this->collection->getFirstItem()->getSku());
     }
 
     /**
@@ -185,7 +185,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
 
-        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+        $this->assertContains($expected, str_replace(PHP_EOL, '', $sql));
     }
 
     /**

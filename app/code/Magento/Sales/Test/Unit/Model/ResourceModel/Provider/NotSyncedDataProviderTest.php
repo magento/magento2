@@ -27,7 +27,7 @@ class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $provider = new NotSyncedDataProvider($tMapFactory);
-        self::assertEquals([], $provider->getIds('main_table', 'grid_table'));
+        $this->assertEquals([], $provider->getIds('main_table', 'grid_table'));
     }
 
     public function testGetIds()
@@ -49,7 +49,7 @@ class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn([2, 3, 4]);
 
         $tMapFactory->method('create')
-            ->with(self::equalTo(
+            ->with($this->equalTo(
                 [
                     'array' => [$provider1, $provider2],
                     'type' => NotSyncedDataProviderInterface::class
@@ -59,7 +59,7 @@ class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
 
         $provider = new NotSyncedDataProvider($tMapFactory, [$provider1, $provider2]);
 
-        self::assertEquals(
+        $this->assertEquals(
             [1, 2, 3, 4],
             array_values($provider->getIds('main_table', 'grid_table'))
         );

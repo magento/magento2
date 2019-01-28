@@ -67,21 +67,21 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $params = [
             'order_success' => $url
         ];
-        $this->request->expects(static::once())
+        $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
 
-        $this->coreRegistry->expects(static::once())
+        $this->coreRegistry->expects($this->once())
             ->method('register')
             ->with(Iframe::REGISTRY_KEY, []);
 
-        $this->view->expects(static::once())
+        $this->view->expects($this->once())
             ->method('addPageLayoutHandles');
-        $this->view->expects(static::once())
+        $this->view->expects($this->once())
             ->method('loadLayout')
             ->with(false)
             ->willReturnSelf();
-        $this->view->expects(static::once())
+        $this->view->expects($this->once())
             ->method('renderLayout');
 
         $this->controller->execute();

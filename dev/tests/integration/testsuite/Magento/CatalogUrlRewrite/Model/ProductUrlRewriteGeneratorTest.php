@@ -50,8 +50,8 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             return $url->getRequestPath();
         }, $urls);
 
-        self::assertTrue(in_array('p002.html', $actualUrls));
-        self::assertTrue(in_array('cat-1/p002.html', $actualUrls));
-        self::assertTrue(in_array('cat-1-2/p002.html', $actualUrls));
+        $this->assertTrue(in_array('p002.html', $actualUrls));
+        $this->assertTrue(in_array('cat-1/p002.html', $actualUrls));
+        $this->assertTrue(in_array('cat-1-2/p002.html', $actualUrls));
     }
 }

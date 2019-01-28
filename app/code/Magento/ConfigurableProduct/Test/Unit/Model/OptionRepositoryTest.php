@@ -87,26 +87,26 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $optionId = 3;
         $productSku = "configurable";
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
 
         $optionMock = $this->createMock(OptionInterface::class);
-        $optionMock->expects(self::once())
+        $optionMock->expects($this->once())
             ->method('getId')
             ->willReturn($optionId);
 
-        $this->optionLoader->expects(self::once())
+        $this->optionLoader->expects($this->once())
             ->method('load')
             ->with($this->productMock)
             ->willReturn([$optionMock]);
 
-        self::assertEquals(
+        $this->assertEquals(
             $optionMock,
             $this->model->get($productSku, $optionId)
         );
@@ -121,20 +121,20 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $productSku = "configurable";
         $optionId = 3;
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE . '-not');
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
 
         $optionMock = $this->createMock(OptionInterface::class);
-        $optionMock->expects(self::never())
+        $optionMock->expects($this->never())
             ->method('getId');
 
-        $this->optionLoader->expects(self::never())
+        $this->optionLoader->expects($this->never())
             ->method('load');
 
         $this->model->get($productSku, $optionId);
@@ -150,17 +150,17 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var OptionInterface $optionMock */
         $optionMock = $this->createMock(OptionInterface::class);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('getEntityIdByAttribute')
             ->with($optionMock)
             ->willReturn($entityId);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($entityId)
             ->willReturn($this->productMock);
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE . '-not');
 
@@ -177,21 +177,21 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var OptionInterface $optionMock */
         $optionMock = $this->createMock(OptionInterface::class);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('getEntityIdByAttribute')
             ->with($optionMock)
             ->willReturn($entityId);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($entityId)
             ->willReturn($this->productMock);
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('saveProducts')
             ->with($this->productMock)
             ->willThrowException(new \Exception());
@@ -210,29 +210,29 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionMock->expects(self::once())
+        $optionMock->expects($this->once())
             ->method('getId')
             ->willReturn(33);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('getEntityIdByAttribute')
             ->with($optionMock)
             ->willReturn($entityId);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($entityId)
             ->willReturn($this->productMock);
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('saveProducts')
             ->with($this->productMock);
 
-        $this->optionResource->expects(self::once())
+        $this->optionResource->expects($this->once())
             ->method('delete')
             ->with($optionMock)
             ->willThrowException(new \Exception());
@@ -247,25 +247,25 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('getEntityIdByAttribute')
             ->with($optionMock)
             ->willReturn($entityId);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($entityId)
             ->willReturn($this->productMock);
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->configurableTypeResource->expects(self::once())
+        $this->configurableTypeResource->expects($this->once())
             ->method('saveProducts')
             ->with($this->productMock);
 
-        $this->optionResource->expects(self::once())
+        $this->optionResource->expects($this->once())
             ->method('delete')
             ->with($optionMock)
             ->willReturn(true);
@@ -284,20 +284,20 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $optionId = 3;
         $productSku = "configurable";
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
 
         $optionMock = $this->createMock(OptionInterface::class);
-        $optionMock->expects(self::never())
+        $optionMock->expects($this->never())
             ->method('getId');
 
-        $this->optionLoader->expects(self::once())
+        $this->optionLoader->expects($this->once())
             ->method('load')
             ->with($this->productMock)
             ->willReturn([]);
@@ -309,18 +309,18 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $productSku = "configurable";
 
-        $this->productMock->expects(self::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->productRepositoryMock->expects(self::once())
+        $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
 
         $optionMock = $this->createMock(OptionInterface::class);
 
-        $this->optionLoader->expects(self::once())
+        $this->optionLoader->expects($this->once())
             ->method('load')
             ->with($this->productMock)
             ->willReturn([$optionMock]);

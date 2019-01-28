@@ -47,7 +47,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
         );
         $paymentModel = $this->createMock(InfoInterface::class);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('setAdditionalInformation')
             ->with(
                 VaultConfigProvider::IS_ACTIVE_CODE,
@@ -90,7 +90,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
         );
         $paymentModel = $this->createMock(InfoInterface::class);
 
-        $paymentModel->expects(static::never())
+        $paymentModel->expects($this->never())
             ->method('setAdditionalInformation');
 
         $observer = $this->getPreparedObserverWithMap(
@@ -118,10 +118,10 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observer->expects(static::atLeastOnce())
+        $observer->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($event);
-        $event->expects(static::atLeastOnce())
+        $event->expects($this->atLeastOnce())
             ->method('getDataByKey')
             ->willReturnMap(
                 $returnMap

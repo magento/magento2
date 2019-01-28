@@ -74,28 +74,28 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        self::assertEquals($resourceConnection->getTablePrefix(), 'some_prefix');
+        $this->assertEquals($resourceConnection->getTablePrefix(), 'some_prefix');
     }
 
     public function testGetTablePrefix()
     {
-        $this->deploymentConfigMock->expects(self::once())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
             ->willReturn('pref_');
-        self::assertEquals('pref_', $this->unit->getTablePrefix());
+        $this->assertEquals('pref_', $this->unit->getTablePrefix());
     }
 
     public function testGetConnectionByName()
     {
-        $this->deploymentConfigMock->expects(self::once())->method('get')
+        $this->deploymentConfigMock->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/default')
             ->willReturn(['config']);
-        $this->connectionFactoryMock->expects(self::once())->method('create')
+        $this->connectionFactoryMock->expects($this->once())->method('create')
             ->with(['config'])
             ->willReturn('connection');
 
-        self::assertEquals('connection', $this->unit->getConnectionByName('default'));
+        $this->assertEquals('connection', $this->unit->getConnectionByName('default'));
     }
 
     public function testGetExistingConnectionByName()
@@ -107,14 +107,14 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
                 'connections' => ['default_process_' . getmypid() => 'existing_connection']
             ]
         );
-        $this->deploymentConfigMock->expects(self::never())->method('get');
+        $this->deploymentConfigMock->expects($this->never())->method('get');
 
-        self::assertEquals('existing_connection', $unit->getConnectionByName('default'));
+        $this->assertEquals('existing_connection', $unit->getConnectionByName('default'));
     }
 
     public function testCloseConnection()
     {
-        $this->configMock->expects(self::once())->method('getConnectionName')->with('default');
+        $this->configMock->expects($this->once())->method('getConnectionName')->with('default');
 
         $this->unit->closeConnection('default');
     }

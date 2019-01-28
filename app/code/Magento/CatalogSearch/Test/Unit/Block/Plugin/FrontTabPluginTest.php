@@ -92,14 +92,14 @@ class FrontTabPluginTest extends \PHPUnit\Framework\TestCase
     {
         $weightOptions = [1 => '1', 2 => '2'];
 
-        $this->formMock->expects(static::any())
+        $this->formMock->expects($this->any())
             ->method('getElement')
             ->with('front_fieldset')
             ->willReturn($this->fieldsetMock);
-        $this->weightSourceMock->expects(static::any())
+        $this->weightSourceMock->expects($this->any())
             ->method('getOptions')
             ->willReturn($weightOptions);
-        $this->fieldsetMock->expects(static::once())
+        $this->fieldsetMock->expects($this->once())
             ->method('addField')
             ->with(
                 'search_weight',
@@ -113,15 +113,15 @@ class FrontTabPluginTest extends \PHPUnit\Framework\TestCase
                 false
             )
             ->willReturn($this->childElementMock);
-        $this->subjectMock->expects(static::any())
+        $this->subjectMock->expects($this->any())
             ->method('getChildBlock')
             ->with('form_after')
             ->willReturn($this->childBlockMock);
-        $this->childBlockMock->expects(static::once())
+        $this->childBlockMock->expects($this->once())
             ->method('addFieldMap')
             ->with('search_weight', 'search_weight')
             ->willReturnSelf();
-        $this->childBlockMock->expects(static::once())
+        $this->childBlockMock->expects($this->once())
             ->method('addFieldDependence')
             ->with('search_weight', 'searchable', '1')
             ->willReturnSelf();

@@ -260,7 +260,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $this->calculator->expects($this->atLeastOnce())->method('getAmount')
             ->will($this->returnArgument(0));
 
-        $this->priceInfo->expects(static::atLeastOnce())
+        $this->priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->with(FinalPrice::PRICE_CODE)
             ->willReturn($price);

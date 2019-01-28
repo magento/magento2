@@ -239,23 +239,23 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             [
                 'secure' => false,
                 'referer' => 'https://test.domain.com/',
-                'expectedCall' => self::once()
+                'expectedCall' => $this->once()
             ],
             [
                 'secure' => true,
                 'referer' => false,
-                'expectedCall' => self::once()
+                'expectedCall' => $this->once()
             ],
             [
                 'secure' => true,
                 'referer' => 'http://test.domain.com/',
-                'expectedCall' => self::once()
+                'expectedCall' => $this->once()
             ],
             // This is the only case in which session regeneration can be skipped
             [
                 'secure' => true,
                 'referer' => 'https://test.domain.com/',
-                'expectedCall' => self::never()
+                'expectedCall' => $this->never()
             ],
         ];
     }

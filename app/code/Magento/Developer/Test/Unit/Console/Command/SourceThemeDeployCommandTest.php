@@ -87,7 +87,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->getMockForAbstractClass();
 
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
@@ -100,17 +100,17 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
             self::TYPE_TEST_VALUE
         );
 
-        $outputMock->expects(self::at(0))
+        $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with($message);
-        $outputMock->expects(self::at(1))
+        $outputMock->expects($this->at(1))
             ->method('writeln')
             ->with('<comment>-> file-test-value/test/file</comment>');
-        $outputMock->expects(self::at(2))
+        $outputMock->expects($this->at(2))
             ->method('writeln')
             ->with('<info>Successfully processed.</info>');
 
-        $this->assetRepositoryMock->expects(self::once())
+        $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')
             ->with(
                 'file-test-value/test' . DIRECTORY_SEPARATOR . 'file' . '.' . self::TYPE_TEST_VALUE,
@@ -121,11 +121,11 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturn($assetMock);
 
-        $this->assetPublisherMock->expects(self::once())
+        $this->assetPublisherMock->expects($this->once())
             ->method('publish')
             ->with($assetMock);
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getFilePath')
             ->willReturn(self::FILE_TEST_VALUE);
 
@@ -143,7 +143,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
@@ -175,12 +175,12 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->getMockForAbstractClass();
 
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
 
-        $this->assetRepositoryMock->expects(self::once())
+        $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')
             ->with(
                 'file-test-value/test' . DIRECTORY_SEPARATOR . 'file' . '.' . self::TYPE_TEST_VALUE,
@@ -191,7 +191,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturn($assetMock);
 
-        $this->assetPublisherMock->expects(self::once())
+        $this->assetPublisherMock->expects($this->once())
             ->method('publish')
             ->with($assetMock)
             ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException);
@@ -225,12 +225,12 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         ];
         $valueMap = empty($valueMap) ? $defaultValueMap : $valueMap;
 
-        $inputMock->expects(self::exactly(4))
+        $inputMock->expects($this->exactly(4))
             ->method('getOption')
             ->willReturnMap(
                 $valueMap
             );
-        $inputMock->expects(self::once())
+        $inputMock->expects($this->once())
             ->method('getArgument')
             ->with('file')
             ->willReturn([self::FILE_TEST_VALUE]);

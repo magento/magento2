@@ -89,8 +89,8 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
             ->with('test_url')
             ->willReturnArgument(1);
 
-        self::assertNull($this->model->prepare());
-        self::assertEquals(
+        $this->assertNull($this->model->prepare());
+        $this->assertEquals(
             $expected,
             $this->model->getData()
         );

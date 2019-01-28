@@ -25,15 +25,15 @@ class EscapeRendererTest extends \PHPUnit\Framework\TestCase
         /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
         $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
 
-        $message->expects(static::once())
+        $message->expects($this->once())
             ->method('getText')
             ->willReturn($messageText);
-        $escaper->expects(static::once())
+        $escaper->expects($this->once())
             ->method('escapeHtml')
             ->with($messageText)
             ->willReturn($escapedMessageText);
 
         $renderer = new EscapeRenderer($escaper);
-        static::assertSame($escapedMessageText, $renderer->render($message, []));
+        $this->assertSame($escapedMessageText, $renderer->render($message, []));
     }
 }

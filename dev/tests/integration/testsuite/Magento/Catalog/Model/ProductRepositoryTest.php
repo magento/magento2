@@ -73,8 +73,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);
 
-        self::assertNotEmpty($product);
-        self::assertEquals($expectedSku, $product->getSku());
+        $this->assertNotEmpty($product);
+        $this->assertEquals($expectedSku, $product->getSku());
     }
 
     /**

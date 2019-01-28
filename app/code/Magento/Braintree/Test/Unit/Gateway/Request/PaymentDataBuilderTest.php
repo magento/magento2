@@ -76,7 +76,7 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $buildSubject = [];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
@@ -95,11 +95,11 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => null,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
@@ -130,32 +130,32 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => 10.00,
         ];
 
-        $this->paymentMock->expects(self::exactly(count($additionalData)))
+        $this->paymentMock->expects($this->exactly(count($additionalData)))
             ->method('getAdditionalInformation')
             ->willReturnMap($additionalData);
 
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $this->paymentDOMock->expects(self::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willReturn(10.00);
 
-        $this->orderMock->expects(self::once())
+        $this->orderMock->expects($this->once())
             ->method('getOrderIncrementId')
             ->willReturn('000000101');
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedResult,
             $this->builder->build($buildSubject)
         );

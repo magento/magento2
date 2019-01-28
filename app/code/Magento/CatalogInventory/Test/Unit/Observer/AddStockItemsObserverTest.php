@@ -83,16 +83,16 @@ class AddStockItemsObserverTest extends TestCase
             ->setMethods(['setProductsFilter', 'setScopeFilter'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $criteria->expects(self::once())
+        $criteria->expects($this->once())
             ->method('setProductsFilter')
-            ->with(self::identicalTo([$productId]))
+            ->with($this->identicalTo([$productId]))
             ->willReturn(true);
-        $criteria->expects(self::once())
+        $criteria->expects($this->once())
             ->method('setScopeFilter')
-            ->with(self::identicalTo($defaultScopeId))
+            ->with($this->identicalTo($defaultScopeId))
             ->willReturn(true);
 
-        $this->criteriaInterfaceFactoryMock->expects(self::once())
+        $this->criteriaInterfaceFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($criteria);
         $stockItemCollection = $this->getMockBuilder(StockItemCollectionInterface::class)
@@ -103,20 +103,20 @@ class AddStockItemsObserverTest extends TestCase
             ->setMethods(['getProductId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $stockItem->expects(self::once())
+        $stockItem->expects($this->once())
             ->method('getProductId')
             ->willReturn($productId);
 
-        $stockItemCollection->expects(self::once())
+        $stockItemCollection->expects($this->once())
             ->method('getItems')
             ->willReturn([$stockItem]);
 
-        $this->stockItemRepositoryMock->expects(self::once())
+        $this->stockItemRepositoryMock->expects($this->once())
             ->method('getList')
-            ->with(self::identicalTo($criteria))
+            ->with($this->identicalTo($criteria))
             ->willReturn($stockItemCollection);
 
-        $this->stockConfigurationMock->expects(self::once())
+        $this->stockConfigurationMock->expects($this->once())
             ->method('getDefaultScopeId')
             ->willReturn($defaultScopeId);
 
@@ -124,38 +124,38 @@ class AddStockItemsObserverTest extends TestCase
             ->setMethods(['setStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $productExtension->expects(self::once())
+        $productExtension->expects($this->once())
             ->method('setStockItem')
-            ->with(self::identicalTo($stockItem));
+            ->with($this->identicalTo($stockItem));
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $product->expects(self::once())
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($productExtension);
-        $product->expects(self::once())
+        $product->expects($this->once())
             ->method('setExtensionAttributes')
-            ->with(self::identicalTo($productExtension))
+            ->with($this->identicalTo($productExtension))
             ->willReturnSelf();
 
         /** @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject $productCollection */
         $productCollection = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productCollection->expects(self::once())
+        $productCollection->expects($this->once())
             ->method('getItems')
             ->willReturn([$productId => $product]);
-        $productCollection->expects(self::once())
+        $productCollection->expects($this->once())
             ->method('getItemById')
-            ->with(self::identicalTo($productId))
+            ->with($this->identicalTo($productId))
             ->willReturn($product);
 
         /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $observer->expects(self::once())
+        $observer->expects($this->once())
             ->method('getData')
             ->with('collection')
             ->willReturn($productCollection);

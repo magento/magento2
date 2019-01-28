@@ -123,7 +123,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isDebugModeEnabled', 'getByCaseId'])
             ->getMock();
-        $config->expects(self::any())
+        $config->expects($this->any())
             ->method('getByCaseId')
             ->willReturn(false);
 
@@ -169,9 +169,9 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('getByCaseId')
-            ->with(self::equalTo($caseId))
+            ->with($this->equalTo($caseId))
             ->willReturn($caseEntity);
 
         $caseUpdatingService = $this->getMockBuilder(UpdatingService::class)
@@ -219,9 +219,9 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('getByCaseId')
-            ->with(self::equalTo($caseId))
+            ->with($this->equalTo($caseId))
             ->willReturn($caseEntity);
 
         $caseUpdatingService = $this->getMockBuilder(UpdatingService::class)
@@ -303,7 +303,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithMissedCaseId()
     {
-        $this->webhookRequestValidator->expects(self::once())
+        $this->webhookRequestValidator->expects($this->once())
             ->method('validate')
             ->willReturn(true);
 
@@ -313,18 +313,18 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $webhookMessage->expects($this->once())
             ->method('getEventTopic')
             ->willReturn('cases/creation');
-        $webhookMessage->expects(self::once())
+        $webhookMessage->expects($this->once())
             ->method('getData')
             ->willReturn([
                 'orderId' => '1000101'
             ]);
 
-        $this->webhookMessageReader->expects(self::once())
+        $this->webhookMessageReader->expects($this->once())
             ->method('read')
             ->with($this->webhookRequest)
             ->willReturn($webhookMessage);
 
-        $this->redirect->expects(self::once())
+        $this->redirect->expects($this->once())
             ->method('redirect')
             ->with($this->response, 'noroute', []);
 
@@ -340,7 +340,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
     {
         $caseId = 123;
 
-        $this->webhookRequestValidator->expects(self::once())
+        $this->webhookRequestValidator->expects($this->once())
             ->method('validate')
             ->willReturn(true);
 
@@ -348,24 +348,24 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
-        $webhookMessage->expects(self::once())
+        $webhookMessage->expects($this->once())
             ->method('getData')
             ->willReturn([
                 'orderId' => '1000101',
                 'caseId' => $caseId
             ]);
 
-        $this->webhookMessageReader->expects(self::once())
+        $this->webhookMessageReader->expects($this->once())
             ->method('read')
             ->with($this->webhookRequest)
             ->willReturn($webhookMessage);
 
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects($this->once())
             ->method('getByCaseId')
-            ->with(self::equalTo($caseId))
+            ->with($this->equalTo($caseId))
             ->willReturn(null);
 
-        $this->redirect->expects(self::once())
+        $this->redirect->expects($this->once())
             ->method('redirect')
             ->with($this->response, 'noroute', []);
 

@@ -54,7 +54,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->context->expects(static::once())
+        $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
         $this->directoryHelperMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)

@@ -183,7 +183,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     {
         $productMock = $this->createMock(Product::class);
         $productTypeMock = $this->createMock(AbstractType::class);
-        $productTypeMock->expects(static::once())
+        $productTypeMock->expects($this->once())
             ->method('getStoreFilter')
             ->with($productMock)
             ->willReturn($this->createMock(Store::class));
@@ -195,16 +195,16 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
 
         $productMock->method('getTypeInstance')->willReturn($productTypeMock);
         $productMock->method('getMediaGalleryImages')->willReturn($imagesCollection);
-        $this->registry->expects(static::once())
+        $this->registry->expects($this->once())
             ->method('registry')
             ->with('product')
             ->willReturn($productMock);
-        $this->galleryImagesConfigMock->expects(static::exactly(1))
+        $this->galleryImagesConfigMock->expects($this->exactly(1))
             ->method('getItems')
             ->willReturn($this->getGalleryImagesConfigItems());
 
         $images = $this->model->getGalleryImages();
-        static::assertInstanceOf(Collection::class, $images);
+        $this->assertInstanceOf(Collection::class, $images);
     }
 
     /**

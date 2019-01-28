@@ -69,7 +69,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequestWithException()
     {
         $exception = new \Exception('Transaction has been declined');
-        $this->adapterMock->expects(static::once())
+        $this->adapterMock->expects($this->once())
             ->method('submitForSettlement')
             ->willThrowException($exception);
 
@@ -84,15 +84,15 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequest()
     {
         $data = new Successful(['success'], [true]);
-        $this->adapterMock->expects(static::once())
+        $this->adapterMock->expects($this->once())
             ->method('submitForSettlement')
             ->willReturn($data);
 
         /** @var TransferInterface|MockObject $transferObject */
         $transferObject = $this->getTransferObjectMock();
         $response = $this->client->placeRequest($transferObject);
-        static::assertTrue(is_object($response['object']));
-        static::assertEquals(['object' => $data], $response);
+        $this->assertTrue(is_object($response['object']));
+        $this->assertEquals(['object' => $data], $response);
     }
 
     /**

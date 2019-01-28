@@ -24,19 +24,19 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readPayment')
             ->willReturn($paymentDO);
 
         $paymentMock = $this->createMock(InfoInterface::class);
 
-        $paymentDO->expects(static::once())
+        $paymentDO->expects($this->once())
             ->method('getPayment')
             ->willReturn($paymentMock);
 
         $voidHandler = new CanVoidHandler($subjectReader);
 
-        static::assertFalse($voidHandler->handle($subject));
+        $this->assertFalse($voidHandler->handle($subject));
     }
 
     public function testHandleSomeAmountWasPaid()
@@ -50,7 +50,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readPayment')
             ->willReturn($paymentDO);
 
@@ -58,16 +58,16 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentDO->expects(static::once())
+        $paymentDO->expects($this->once())
             ->method('getPayment')
             ->willReturn($paymentMock);
 
-        $paymentMock->expects(static::once())
+        $paymentMock->expects($this->once())
             ->method('getAmountPaid')
             ->willReturn(1.00);
 
         $voidHandler = new CanVoidHandler($subjectReader);
 
-        static::assertFalse($voidHandler->handle($subject));
+        $this->assertFalse($voidHandler->handle($subject));
     }
 }

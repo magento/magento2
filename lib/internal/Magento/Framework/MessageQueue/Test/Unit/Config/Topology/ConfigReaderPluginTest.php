@@ -135,10 +135,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->configMock->expects(static::atLeastOnce())
+        $this->configMock->expects($this->atLeastOnce())
             ->method('getBinds')
             ->willReturn($binding);
-        $this->configMock->expects(static::exactly(2))
+        $this->configMock->expects($this->exactly(2))
             ->method('getConnectionByTopic')
             ->willReturnMap([
                 ['catalog.product.removed', 'db'],

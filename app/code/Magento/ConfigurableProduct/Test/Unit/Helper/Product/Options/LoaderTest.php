@@ -72,7 +72,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             'value_index' => 23
         ];
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($this->configurable);
 
@@ -87,28 +87,28 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $iterator->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));
 
-        $this->configurable->expects(static::once())
+        $this->configurable->expects($this->once())
             ->method('getConfigurableAttributeCollection')
             ->with($this->product)
             ->willReturn($iterator);
 
-        $attribute->expects(static::once())
+        $attribute->expects($this->once())
             ->method('getOptions')
             ->willReturn([$option]);
 
         $optionValue = $this->getMockForAbstractClass(OptionValueInterface::class);
-        $this->optionValueFactory->expects(static::once())
+        $this->optionValueFactory->expects($this->once())
             ->method('create')
             ->willReturn($optionValue);
-        $optionValue->expects(static::once())
+        $optionValue->expects($this->once())
             ->method('setValueIndex')
             ->with($option['value_index']);
 
-        $attribute->expects(static::once())
+        $attribute->expects($this->once())
             ->method('setValues')
             ->with([$optionValue]);
 
         $options = $this->loader->load($this->product);
-        static::assertSame([$attribute], $options);
+        $this->assertSame([$attribute], $options);
     }
 }

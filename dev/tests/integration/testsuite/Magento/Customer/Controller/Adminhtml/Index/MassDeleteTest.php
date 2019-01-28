@@ -134,17 +134,17 @@ class MassDeleteTest extends AbstractBackendController
         return [
             [
                 'ids' => [],
-                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
+                'constraint' => $this->equalTo(['An item needs to be selected. Select and try again.']),
                 'messageType' => MessageInterface::TYPE_ERROR,
             ],
             [
                 'ids' => [111],
-                'constraint' => self::isEmpty(),
+                'constraint' => $this->isEmpty(),
                 'messageType' => null,
             ],
             [
                 'ids' => null,
-                'constraint' => self::equalTo(['An item needs to be selected. Select and try again.']),
+                'constraint' => $this->equalTo(['An item needs to be selected. Select and try again.']),
                 'messageType' => MessageInterface::TYPE_ERROR,
             ]
         ];
@@ -160,12 +160,12 @@ class MassDeleteTest extends AbstractBackendController
         return [
             [
                 'customerEmails' => ['customer1@example.com'],
-                'constraint' => self::equalTo(['A total of 1 record(s) were deleted.']),
+                'constraint' => $this->equalTo(['A total of 1 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],
             [
                 'customerEmails' => ['customer2@example.com', 'customer3@example.com'],
-                'constraint' => self::equalTo(['A total of 2 record(s) were deleted.']),
+                'constraint' => $this->equalTo(['A total of 2 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],
         ];

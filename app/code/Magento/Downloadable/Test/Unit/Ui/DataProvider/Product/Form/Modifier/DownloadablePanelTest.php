@@ -72,13 +72,13 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
     public function testModifyData($typeId, $isDownloadable)
     {
         $productId = 1;
-        $this->locatorMock->expects(static::once())
+        $this->locatorMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects(static::once())
+        $this->productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
-        $this->productMock->expects(static::once())
+        $this->productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn($typeId);
         $resultData = [
@@ -106,12 +106,12 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
      */
     public function testModifyMeta()
     {
-        $this->locatorMock->expects(static::once())
+        $this->locatorMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects(static::any())
+        $this->productMock->expects($this->any())
             ->method('getTypeId');
-        $this->arrayManagerMock->expects(static::exactly(3))
+        $this->arrayManagerMock->expects($this->exactly(3))
             ->method('set')
             ->willReturn([]);
 

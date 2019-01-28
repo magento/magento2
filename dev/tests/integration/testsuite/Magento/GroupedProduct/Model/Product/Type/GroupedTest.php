@@ -166,14 +166,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         /** @var Grouped $groupedProduct */
         $groupedProduct = $this->objectManager->get(Grouped::class);
         $actual = $groupedProduct->prepareForCartAdvanced($buyRequest, $product, Grouped::PROCESS_MODE_FULL);
-        self::assertEquals(
+        $this->assertEquals(
             count($expected),
             count($actual)
         );
         /** @var Product $product */
         foreach ($actual as $product) {
             $sku = $product->getSku();
-            self::assertEquals(
+            $this->assertEquals(
                 $expected[$sku],
                 $product->getCartQty(),
                 "Failed asserting that Product Cart Quantity matches expected"

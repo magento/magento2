@@ -79,12 +79,12 @@ class ImageFactoryTest extends \PHPUnit\Framework\TestCase
         $this->paramsBuilder->method('build')->willReturn($data['imageParamsBuilder']);
         $viewAssetImage->method('getUrl')->willReturn($data['url']);
 
-        $this->objectManager->expects(self::once())
+        $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Image::class, $expected)
             ->willReturn($imageBlock);
         $actual = $this->model->create($product, 'image_id', $data['custom_attributes']);
-        self::assertInstanceOf(Image::class, $actual);
+        $this->assertInstanceOf(Image::class, $actual);
     }
 
     /**

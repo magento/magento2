@@ -104,7 +104,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
         $agreement = ['test', 'test'];
         $quoteMock = $this->getQuoteMock();
 
-        $this->agreementsValidator->expects(self::once())
+        $this->agreementsValidator->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
 
@@ -112,14 +112,14 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
         $this->prepareGuestQuoteStep($quoteMock);
         $this->disabledQuoteAddressValidationStep($quoteMock);
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('collectTotals');
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getId')
             ->willReturn(10);
 
-        $this->cartManagement->expects(self::once())
+        $this->cartManagement->expects($this->once())
             ->method('placeOrder')
             ->with(10);
 
@@ -156,7 +156,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
         $billingAddressMock->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 
-        $billingAddressMock->expects(self::never())
+        $billingAddressMock->expects($this->never())
             ->method('setSameAsBilling');
     }
 
@@ -170,7 +170,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
         $this->customerSession->method('isLoggedIn')
             ->willReturn(false);
 
-        $quoteMock->expects(self::at(1))
+        $quoteMock->expects($this->at(1))
             ->method('getCheckoutMethod')
             ->willReturn(null);
 
@@ -181,7 +181,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
         $quoteMock->method('setCheckoutMethod')
             ->with(Onepage::METHOD_GUEST);
 
-        $quoteMock->expects(self::at(2))
+        $quoteMock->expects($this->at(2))
             ->method('getCheckoutMethod')
             ->willReturn(Onepage::METHOD_GUEST);
     }
@@ -195,12 +195,12 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('setCustomerId')
             ->with(null)
             ->willReturnSelf();
 
-        $billingAddressMock->expects(self::at(0))
+        $billingAddressMock->expects($this->at(0))
             ->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 

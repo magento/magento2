@@ -268,7 +268,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $products = $this->getUsedProducts();
         $productsCached = $this->getUsedProducts();
-        self::assertEquals(
+        $this->assertEquals(
             array_keys($products),
             array_keys($productsCached)
         );
@@ -525,8 +525,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $oldChildrenIds = reset($oldChildrenIds);
         $oneChildId = reset($oldChildrenIds);
 
-        self::assertNotEmpty($oldChildrenIds);
-        self::assertNotEmpty($oneChildId);
+        $this->assertNotEmpty($oldChildrenIds);
+        $this->assertNotEmpty($oneChildId);
 
         $product = $this->productRepository->getById($this->product->getId());
 
@@ -536,7 +536,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
-        self::assertEquals(
+        $this->assertEquals(
             [
                 [
                     $oneChildId => $oneChildId
@@ -555,7 +555,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $childrenIds = $this->product->getTypeInstance()
             ->getChildrenIds($this->product->getId());
 
-        self::assertNotEmpty(reset($childrenIds));
+        $this->assertNotEmpty(reset($childrenIds));
 
         $product = $this->productRepository->getById($this->product->getId(), true);
 
@@ -565,7 +565,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository->save($product);
 
-        self::assertEquals(
+        $this->assertEquals(
             [
                 []
             ],

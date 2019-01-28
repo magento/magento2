@@ -63,15 +63,15 @@ class PaymentReviewTest extends AbstractBackendController
         $orderId = $this->order->getEntityId();
         $this->dispatch('backend/sales/order/reviewPayment/action/accept/order_id/' . $orderId);
 
-        static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
+        static::assertRedirect($this->stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
-            static::equalTo(['The payment has been accepted.']),
+            $this->equalTo(['The payment has been accepted.']),
             MessageInterface::TYPE_SUCCESS
         );
 
         $order = $this->orderRepository->get($orderId);
-        static::assertEquals(Order::STATE_COMPLETE, $order->getState());
-        static::assertEquals(Order::STATE_COMPLETE, $order->getStatus());
+        $this->assertEquals(Order::STATE_COMPLETE, $order->getState());
+        $this->assertEquals(Order::STATE_COMPLETE, $order->getStatus());
     }
 
     /**
@@ -92,21 +92,21 @@ class PaymentReviewTest extends AbstractBackendController
         $payment->setMethodInstance($adapter);
         $this->orderRepository->save($this->order);
 
-        $adapter->expects(static::once())
+        $adapter->expects($this->once())
             ->method('denyPayment')
             ->with($payment)
             ->willReturn(true);
 
         $this->dispatch('backend/sales/order/reviewPayment/action/deny/order_id/' . $orderId);
 
-        static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
+        static::assertRedirect($this->stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
-            static::equalTo(['The payment has been denied.']),
+            $this->equalTo(['The payment has been denied.']),
             MessageInterface::TYPE_SUCCESS
         );
 
         $order = $this->orderRepository->get($orderId);
-        static::assertEquals(Order::STATE_CANCELED, $order->getState());
-        static::assertEquals(Order::STATE_CANCELED, $order->getStatus());
+        $this->assertEquals(Order::STATE_CANCELED, $order->getState());
+        $this->assertEquals(Order::STATE_CANCELED, $order->getStatus());
     }
 }

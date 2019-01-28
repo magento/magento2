@@ -57,11 +57,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $order = $orderRepository->get($orderId);
 
         $orderItems = $order->getItems();
-        self::assertCount(3, $orderItems);
+        $this->assertCount(3, $orderItems);
         foreach ($orderItems as $orderItem) {
             if ($orderItem->getProductType() == Type::TYPE_SIMPLE) {
-                self::assertNotEmpty($orderItem->getParentItem(), 'Parent is not set for child product');
-                self::assertNotEmpty($orderItem->getParentItemId(), 'Parent is not set for child product');
+                $this->assertNotEmpty($orderItem->getParentItem(), 'Parent is not set for child product');
+                $this->assertNotEmpty($orderItem->getParentItemId(), 'Parent is not set for child product');
             }
         }
     }

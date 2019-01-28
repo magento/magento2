@@ -1212,24 +1212,24 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function testSaveItemOptions()
     {
         $optionMockDeleted = $this->createOptionMock(100);
-        $optionMockDeleted->expects(self::once())->method('isDeleted')->willReturn(true);
-        $optionMockDeleted->expects(self::once())->method('delete');
+        $optionMockDeleted->expects($this->once())->method('isDeleted')->willReturn(true);
+        $optionMockDeleted->expects($this->once())->method('delete');
 
         $optionMock1 = $this->createOptionMock(200);
-        $optionMock1->expects(self::once())->method('isDeleted')->willReturn(false);
+        $optionMock1->expects($this->once())->method('isDeleted')->willReturn(false);
         $quoteItemMock1 = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getId']);
-        $quoteItemMock1->expects(self::once())->method('getId')->willReturn(null);
-        $optionMock1->expects(self::exactly(2))->method('getItem')->willReturn($quoteItemMock1);
-        $optionMock1->expects(self::exactly(2))->method('setItem')->with($this->model);
-        $optionMock1->expects(self::once())->method('save');
+        $quoteItemMock1->expects($this->once())->method('getId')->willReturn(null);
+        $optionMock1->expects($this->exactly(2))->method('getItem')->willReturn($quoteItemMock1);
+        $optionMock1->expects($this->exactly(2))->method('setItem')->with($this->model);
+        $optionMock1->expects($this->once())->method('save');
 
         $optionMock2 = $this->createOptionMock(300);
-        $optionMock2->expects(self::once())->method('isDeleted')->willReturn(false);
+        $optionMock2->expects($this->once())->method('isDeleted')->willReturn(false);
         $quoteItemMock2 = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getId']);
-        $quoteItemMock2->expects(self::once())->method('getId')->willReturn(11);
-        $optionMock2->expects(self::exactly(2))->method('getItem')->willReturn($quoteItemMock2);
-        $optionMock2->expects(self::once())->method('setItem')->with($this->model);
-        $optionMock2->expects(self::once())->method('save');
+        $quoteItemMock2->expects($this->once())->method('getId')->willReturn(11);
+        $optionMock2->expects($this->exactly(2))->method('getItem')->willReturn($quoteItemMock2);
+        $optionMock2->expects($this->once())->method('setItem')->with($this->model);
+        $optionMock2->expects($this->once())->method('save');
 
         $this->model->setOptions([$optionMockDeleted, $optionMock1, $optionMock2]);
         $this->model->saveItemOptions();

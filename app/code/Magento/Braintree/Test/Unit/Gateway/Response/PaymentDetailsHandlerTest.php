@@ -48,11 +48,11 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setCcTransId');
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setLastTransId');
-        $this->paymentMock->expects(static::any())
+        $this->paymentMock->expects($this->any())
             ->method('setAdditionalInformation');
 
         $this->paymentHandler = new PaymentDetailsHandler($this->subjectReaderMock);
@@ -69,11 +69,11 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $subject = ['payment' => $paymentDataMock];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentDataMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
@@ -92,7 +92,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 

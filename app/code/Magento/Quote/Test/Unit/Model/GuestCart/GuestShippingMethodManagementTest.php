@@ -126,12 +126,12 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
 
-        $this->shipmentEstimationManagement->expects(static::once())
+        $this->shipmentEstimationManagement->expects($this->once())
             ->method('estimateByExtendedAddress')
             ->with($this->cartId, $address)
             ->willReturn($expectedRates);
 
         $carriersRates = $this->model->estimateByExtendedAddress($this->maskedCartId, $address);
-        static::assertEquals($expectedRates, $carriersRates);
+        $this->assertEquals($expectedRates, $carriersRates);
     }
 }

@@ -60,7 +60,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\DataObject $response,
         $avsSecurityCodeFlag
     ) {
-        $this->payflowproFacade->expects(static::once())
+        $this->payflowproFacade->expects($this->once())
             ->method('getConfig')
             ->willReturn($this->configMock);
 

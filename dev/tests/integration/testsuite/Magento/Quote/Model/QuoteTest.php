@@ -556,8 +556,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customerQuote->merge($guestQuote);
         $mergedItemItem = $customerQuote->getItemByProduct($product);
 
-        self::assertEquals($expectedOrderGiftMessageId, $customerQuote->getGiftMessageId());
-        self::assertEquals($expectedItemGiftMessageId, $mergedItemItem->getGiftMessageId());
+        $this->assertEquals($expectedOrderGiftMessageId, $customerQuote->getGiftMessageId());
+        $this->assertEquals($expectedItemGiftMessageId, $mergedItemItem->getGiftMessageId());
     }
 
     /**

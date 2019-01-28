@@ -77,7 +77,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithOfflinePayment()
     {
         $order = $this->getOrder('100000005');
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $event = $this->objectManager->create(
@@ -105,9 +105,9 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     {
         $order = $this->getOrder('100000001');
 
-        $this->creationService->expects(self::once())
+        $this->creationService->expects($this->once())
             ->method('createForOrder')
-            ->with(self::equalTo($order->getEntityId()));
+            ->with($this->equalTo($order->getEntityId()));
 
         $event = $this->objectManager->create(
             Event::class,
@@ -145,7 +145,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $order = $this->getOrder('100000001');
         $order->setStoreId($store->getId());
 
-        $this->creationService->expects(self::never())
+        $this->creationService->expects($this->never())
             ->method('createForOrder');
 
         $event = $this->objectManager->create(
@@ -176,9 +176,9 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         $orderWithOfflinePayment = $this->getOrder('100000005');
 
         // this service mock should be called only once for the order with online payment method.
-        $this->creationService->expects(self::once())
+        $this->creationService->expects($this->once())
             ->method('createForOrder')
-            ->with(self::equalTo($orderWithOnlinePayment->getEntityId()));
+            ->with($this->equalTo($orderWithOnlinePayment->getEntityId()));
 
         $event = $this->objectManager->create(
             Event::class,

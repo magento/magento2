@@ -65,7 +65,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
 
-        $this->context->expects(self::once())
+        $this->context->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
 
@@ -99,15 +99,15 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGuaranteeDisposition($guaranteeDisposition, $expectedLabel)
     {
-        $this->caseManagement->expects(self::once())
+        $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
             ->willReturn($this->caseEntity);
 
-        $this->caseEntity->expects(self::atLeastOnce())
+        $this->caseEntity->expects($this->atLeastOnce())
             ->method('getGuaranteeDisposition')
             ->willReturn($guaranteeDisposition);
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedLabel,
             $this->caseInfo->getCaseGuaranteeDisposition()
         );
@@ -138,11 +138,11 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testCasePropertyWithEmptyCase()
     {
-        $this->caseManagement->expects(self::once())
+        $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
             ->willReturn(null);
 
-        self::assertEquals(
+        $this->assertEquals(
             '',
             $this->caseInfo->getCaseGuaranteeDisposition()
         );

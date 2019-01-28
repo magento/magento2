@@ -66,7 +66,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** check arguments won't be translated for ObjectManager, even if has attribute 'translate'=true. */
-        $renderer->expects(self::never())
+        $renderer->expects($this->never())
             ->method('render');
         Phrase::setRenderer($renderer);
 

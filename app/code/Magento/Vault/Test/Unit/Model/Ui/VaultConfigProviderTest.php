@@ -86,29 +86,29 @@ class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->storeManager->expects(static::once())
+        $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->store->expects(static::once())
+        $this->store->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->vaultPaymentList->expects(static::once())
+        $this->vaultPaymentList->expects($this->once())
             ->method('getActiveList')
             ->willReturn([$this->vaultPayment]);
 
-        $this->vaultPayment->expects(static::once())
+        $this->vaultPayment->expects($this->once())
             ->method('getCode')
             ->willReturn($vaultPaymentCode);
-        $this->vaultPayment->expects($customerId !== null ? static::once() : static::never())
+        $this->vaultPayment->expects($customerId !== null ? $this->once() : $this->never())
             ->method('isActive')
             ->with($storeId)
             ->willReturn($vaultEnabled);
 
-        static::assertEquals($expectedConfiguration, $this->vaultConfigProvider->getConfig());
+        $this->assertEquals($expectedConfiguration, $this->vaultConfigProvider->getConfig());
     }
 
     /**

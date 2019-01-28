@@ -44,17 +44,17 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
         $initializationData = ['template' => 'canvas.phtml'];
         $messagePresentation = 'The Last Supper, Michelangelo.';
 
-        $message->expects(static::once())
+        $message->expects($this->once())
             ->method('getData')
             ->willReturn($messageData);
         $this->blockTemplate->expects(new MethodInvokedAtIndex(0))
             ->method('setTemplate')
             ->with($initializationData['template']);
-        $this->blockTemplate->expects(static::once())
+        $this->blockTemplate->expects($this->once())
             ->method('setData')
             ->with($messageData);
 
-        $this->blockTemplate->expects(static::once())
+        $this->blockTemplate->expects($this->once())
             ->method('toHtml')
             ->willReturn($messagePresentation);
 
@@ -83,14 +83,14 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
             'is' => 'a Very Naughty Boy'
         ];
 
-        $message->expects(static::once())
+        $message->expects($this->once())
             ->method('getData')
             ->willReturn($messageData);
 
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Template should be provided for the renderer.');
 
-        $this->blockTemplate->expects(static::never())
+        $this->blockTemplate->expects($this->never())
             ->method('toHtml');
 
         $this->renderer->render($message, []);

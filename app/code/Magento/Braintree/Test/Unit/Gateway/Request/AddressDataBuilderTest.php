@@ -57,7 +57,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => null,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willThrowException(new \InvalidArgumentException());
@@ -67,14 +67,14 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildNoAddresses()
     {
-        $this->paymentDOMock->expects(static::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn(null);
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn(null);
 
@@ -82,12 +82,12 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => $this->paymentDOMock,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        static::assertEquals([], $this->builder->build($buildSubject));
+        $this->assertEquals([], $this->builder->build($buildSubject));
     }
 
     /**
@@ -100,14 +100,14 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $addressMock = $this->getAddressMock($addressData);
 
-        $this->paymentDOMock->expects(static::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($addressMock);
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($addressMock);
 
@@ -115,12 +115,12 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             'payment' => $this->paymentDOMock,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        self::assertEquals($expectedResult, $this->builder->build($buildSubject));
+        $this->assertEquals($expectedResult, $this->builder->build($buildSubject));
     }
 
     /**
@@ -178,31 +178,31 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $addressMock = $this->createMock(AddressAdapterInterface::class);
 
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getFirstname')
             ->willReturn($addressData['first_name']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getLastname')
             ->willReturn($addressData['last_name']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getCompany')
             ->willReturn($addressData['company']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getStreetLine1')
             ->willReturn($addressData['street_1']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getStreetLine2')
             ->willReturn($addressData['street_2']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getCity')
             ->willReturn($addressData['city']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getRegionCode')
             ->willReturn($addressData['region_code']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getPostcode')
             ->willReturn($addressData['post_code']);
-        $addressMock->expects(self::exactly(2))
+        $addressMock->expects($this->exactly(2))
             ->method('getCountryId')
             ->willReturn($addressData['country_id']);
 

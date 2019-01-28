@@ -48,7 +48,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects(static::never())
+        $this->contextMock->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
 
@@ -101,7 +101,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->urlBuilderMock->expects(static::any())
+        $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturnMap(
                 [

@@ -142,7 +142,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
         $this->typeMapper = $this->getMockBuilder(\Magento\Setup\Model\Grid\TypeMapper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeMapper->expects(static::any())
+        $this->typeMapper->expects($this->any())
             ->method('map')
             ->willReturnMap([
                 [ComposerInformation::MODULE_PACKAGE_TYPE, \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE],
@@ -291,7 +291,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMetaPackagesMap()
     {
-        static::assertEquals(
+        $this->assertEquals(
             ['magento/package-3' => 'magento/package-1'],
             $this->packagesData->getMetaPackagesMap()
         );
@@ -299,7 +299,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
 
     public function testAddPackageExtraInfo()
     {
-        static::assertEquals(
+        $this->assertEquals(
             [
                 'package_title' => 'Package 3 title',
                 'package_type' => 'Extension',

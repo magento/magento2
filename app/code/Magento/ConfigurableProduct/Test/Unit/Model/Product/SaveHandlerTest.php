@@ -71,15 +71,15 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn('simple');
 
-        $product->expects(static::never())
+        $product->expects($this->never())
             ->method('getExtensionAttributes');
 
         $entity = $this->saveHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     /**
@@ -94,10 +94,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
             ->getMock();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(1))
+        $product->expects($this->exactly(1))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -106,26 +106,26 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $product->expects(static::atLeastOnce())
+        $product->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $extensionAttributes->expects(static::atLeastOnce())
+        $extensionAttributes->expects($this->atLeastOnce())
             ->method('getConfigurableProductOptions')
             ->willReturn([]);
-        $extensionAttributes->expects(static::atLeastOnce())
+        $extensionAttributes->expects($this->atLeastOnce())
             ->method('getConfigurableProductLinks')
             ->willReturn($configurableProductLinks);
 
-        $this->optionRepository->expects(static::once())
+        $this->optionRepository->expects($this->once())
             ->method('getList')
             ->with($sku)
             ->willReturn([]);
-        $this->optionRepository->expects(static::never())
+        $this->optionRepository->expects($this->never())
             ->method('deleteById');
 
         $entity = $this->saveHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     /**
@@ -144,10 +144,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getSku', 'getData', 'getExtensionAttributes'])
             ->getMock();
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(4))
+        $product->expects($this->exactly(4))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -156,7 +156,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $product->expects(static::atLeastOnce())
+        $product->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
@@ -164,45 +164,45 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId'])
             ->getMock();
-        $attributeNew->expects(static::atLeastOnce())
+        $attributeNew->expects($this->atLeastOnce())
             ->method('getAttributeId')
             ->willReturn($attributeIdNew);
         $this->processSaveOptions($attributeNew, $sku, $idNew);
 
         $optionOld = $this->getMockForAbstractClass(OptionInterface::class);
-        $optionOld->expects(static::atLeastOnce())
+        $optionOld->expects($this->atLeastOnce())
             ->method('getAttributeId')
             ->willReturn($attributeIdOld);
-        $optionOld->expects(static::atLeastOnce())
+        $optionOld->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($idOld);
 
         $list = [$optionOld];
-        $this->optionRepository->expects(static::atLeastOnce())
+        $this->optionRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->with($sku)
             ->willReturn($list);
-        $this->optionRepository->expects(static::once())
+        $this->optionRepository->expects($this->once())
             ->method('deleteById')
             ->with($sku, $idOld);
 
         $configurableAttributes = [
             $attributeNew
         ];
-        $extensionAttributes->expects(static::atLeastOnce())
+        $extensionAttributes->expects($this->atLeastOnce())
             ->method('getConfigurableProductOptions')
             ->willReturn($configurableAttributes);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn($configurableProductLinks);
 
-        $this->configurable->expects(static::once())
+        $this->configurable->expects($this->once())
             ->method('saveProducts')
             ->with($product, $configurableProductLinks);
 
         $entity = $this->saveHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     /**
@@ -222,7 +222,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->configurableFactory->expects(static::any())
+        $this->configurableFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->configurable);
     }
@@ -237,12 +237,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private function processSaveOptions(\PHPUnit_Framework_MockObject_MockObject $attribute, $sku, $id)
     {
-        $attribute->expects(static::once())
+        $attribute->expects($this->once())
             ->method('setId')
             ->with(null)
             ->willReturnSelf();
 
-        $this->optionRepository->expects(static::once())
+        $this->optionRepository->expects($this->once())
             ->method('save')
             ->with($sku, $attribute)
             ->willReturn($id);

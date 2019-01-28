@@ -47,11 +47,11 @@ class TypeCasterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCastValues($origValue, $typeToCast, $expectedValue)
     {
-        $this->serializer->expects(self::never())
+        $this->serializer->expects($this->never())
             ->method('serialize');
 
         $value = $this->model->castValueToType($origValue, $typeToCast);
-        self::assertEquals($expectedValue, $value);
+        $this->assertEquals($expectedValue, $value);
     }
 
     /**
@@ -65,13 +65,13 @@ class TypeCasterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCastValueToType(array $origValue, $typeToCast, $expected)
     {
-        $this->serializer->expects(self::once())
+        $this->serializer->expects($this->once())
             ->method('serialize')
-            ->with(self::equalTo($origValue))
+            ->with($this->equalTo($origValue))
             ->willReturn(json_encode($origValue));
 
         $actual = $this->model->castValueToType($origValue, $typeToCast);
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

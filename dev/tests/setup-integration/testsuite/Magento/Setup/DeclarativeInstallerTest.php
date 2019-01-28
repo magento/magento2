@@ -78,7 +78,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
 
         //Second time installation should not find anything as we do not change anything
-        self::assertNull($diff->getAll());
+        $this->assertNull($diff->getAll());
         $this->compareStructures();
     }
 
@@ -96,7 +96,7 @@ class DeclarativeInstallerTest extends SetupTestCase
              */
             if (preg_match('#ON DELETE\s+NO ACTION#i', $shardData[$tableName] === 1)) {
                 preg_replace('#ON DELETE\s+NO ACTION#i', '', $sql);
-                self::assertEquals($sql, $shardData[$tableName]);
+                $this->assertEquals($sql, $shardData[$tableName]);
             }
         }
     }
@@ -127,7 +127,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->getAll());
+        $this->assertNull($diff->getAll());
         $this->compareStructures();
     }
 
@@ -172,7 +172,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->getAll());
+        $this->assertNull($diff->getAll());
         $this->compareStructures();
     }
 
@@ -208,9 +208,9 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->getAll());
+        $this->assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -237,9 +237,9 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->getAll());
+        $this->assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        $this->assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -259,7 +259,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
+        $this->assertEquals($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -270,7 +270,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommad->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $afterRollback);
+        $this->assertEquals($this->getData()['after'], $afterRollback);
     }
 
     /**
@@ -296,7 +296,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->resourceConnection->getTableName('some_table'),
             $dataToMigrate
         );
-        self::assertEquals($this->getData()['before'], $before['some_table']);
+        $this->assertEquals($this->getData()['before'], $before['some_table']);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -307,10 +307,10 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommad->upgrade();
         $after = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $after['some_table_renamed']);
+        $this->assertEquals($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
-        self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
+        $this->assertEquals([$dataToMigrate], $adapter->fetchAll($select));
     }
 
     /**

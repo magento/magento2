@@ -64,19 +64,19 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $subject = ['payment' => $paymentData];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $this->paymentMock->expects(static::at(1))
+        $this->paymentMock->expects($this->at(1))
             ->method('setAdditionalInformation')
             ->with('liabilityShifted', 'Yes');
-        $this->paymentMock->expects(static::at(2))
+        $this->paymentMock->expects($this->at(2))
             ->method('setAdditionalInformation')
             ->with('liabilityShiftPossible', 'Yes');
 
@@ -94,7 +94,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 

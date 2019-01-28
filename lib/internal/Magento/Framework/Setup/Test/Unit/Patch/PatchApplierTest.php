@@ -234,26 +234,26 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             $patches,
             ['registerPatch']
         );
-        $patchRegistryMock->expects(self::exactly(2))
+        $patchRegistryMock->expects($this->exactly(2))
             ->method('registerPatch');
 
-        $this->patchRegistryFactoryMock->expects(self::any())
+        $this->patchRegistryFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($patchRegistryMock);
 
         $patch1 = $this->createMock(\SomeDataPatch::class);
-        $patch1->expects(self::never())->method('apply');
+        $patch1->expects($this->never())->method('apply');
         $patch2 = $this->createMock(\OtherDataPatch::class);
-        $patch2->expects(self::once())->method('apply');
-        $this->objectManagerMock->expects(self::any())->method('create')->willReturnMap(
+        $patch2->expects($this->once())->method('apply');
+        $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
-        $this->connectionMock->expects(self::exactly(1))->method('beginTransaction');
-        $this->connectionMock->expects(self::exactly(1))->method('commit');
-        $this->patchHistoryMock->expects(self::exactly(2))->method('fixPatch');
+        $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
+        $this->connectionMock->expects($this->exactly(1))->method('commit');
+        $this->patchHistoryMock->expects($this->exactly(2))->method('fixPatch');
         $this->patchApllier->applyDataPatch($moduleName);
     }
 

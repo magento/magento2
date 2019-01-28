@@ -31,26 +31,26 @@ class TransactionIdHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readPayment')
             ->with($handlingSubject)
             ->willReturn($paymentDO);
-        $paymentDO->expects(static::atLeastOnce())
+        $paymentDO->expects($this->atLeastOnce())
             ->method('getPayment')
             ->willReturn($paymentInfo);
-        $subjectReader->expects(static::once())
+        $subjectReader->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('setTransactionId')
             ->with(1);
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(false);
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects($this->once())
             ->method('setShouldCloseParentTransaction')
             ->with(false);
 

@@ -82,31 +82,31 @@ QUERY;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $responseDataObject = new DataObject($response);
         //Some sort of smoke testing
-        self::assertEquals(
+        $this->assertEquals(
             'Ololo',
             $responseDataObject->getData('category/children/7/children/1/description')
         );
-        self::assertEquals(
+        $this->assertEquals(
             'default-category',
             $responseDataObject->getData('category/url_key')
         );
-        self::assertEquals(
+        $this->assertEquals(
             [],
             $responseDataObject->getData('category/children/0/available_sort_by')
         );
-        self::assertEquals(
+        $this->assertEquals(
             'name',
             $responseDataObject->getData('category/children/0/default_sort_by')
         );
-        self::assertCount(
+        $this->assertCount(
             8,
             $responseDataObject->getData('category/children')
         );
-        self::assertCount(
+        $this->assertCount(
             2,
             $responseDataObject->getData('category/children/7/children')
         );
-        self::assertEquals(
+        $this->assertEquals(
             5,
             $responseDataObject->getData('category/children/7/children/1/children/0/id')
         );

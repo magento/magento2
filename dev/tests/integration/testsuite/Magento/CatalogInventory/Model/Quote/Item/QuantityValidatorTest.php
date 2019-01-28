@@ -223,10 +223,10 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
             $result = $cart->addProduct($product, $request);
 
             if (empty($errorMessageRegexp)) {
-                self::assertEquals('Configurable Product', $result->getName());
+                $this->assertEquals('Configurable Product', $result->getName());
             }
         } catch (LocalizedException $e) {
-            self::assertEquals(1, preg_match($errorMessageRegexp, $e->getMessage()));
+            $this->assertEquals(1, preg_match($errorMessageRegexp, $e->getMessage()));
         }
     }
 

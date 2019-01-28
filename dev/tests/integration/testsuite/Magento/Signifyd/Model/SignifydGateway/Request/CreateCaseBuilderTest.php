@@ -163,7 +163,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        self::assertEquals(
+        $this->assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );
@@ -238,7 +238,7 @@ class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        self::assertEquals(
+        $this->assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );

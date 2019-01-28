@@ -294,7 +294,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $successMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
             ->getMockForAbstractClass();
 
-        $this->messageInterpretationStrategy->expects(static::any())
+        $this->messageInterpretationStrategy->expects($this->any())
             ->method('interpret')
             ->willReturnMap(
                 [

@@ -37,10 +37,10 @@ class DataAssignObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $observerContainer->expects(static::atLeastOnce())
+        $observerContainer->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($event);
-        $event->expects(static::exactly(2))
+        $event->expects($this->exactly(2))
             ->method('getDataByKey')
             ->willReturnMap(
                 [
@@ -48,10 +48,10 @@ class DataAssignObserverTest extends \PHPUnit\Framework\TestCase
                     [AbstractDataAssignObserver::DATA_CODE, $dataObject]
                 ]
             );
-        $paymentInfoModel->expects(static::at(0))
+        $paymentInfoModel->expects($this->at(0))
             ->method('setAdditionalInformation')
             ->with('payment_method_nonce', self::PAYMENT_METHOD_NONCE);
-        $paymentInfoModel->expects(static::at(1))
+        $paymentInfoModel->expects($this->at(1))
             ->method('setAdditionalInformation')
             ->with('device_data', self::DEVICE_DATA);
 

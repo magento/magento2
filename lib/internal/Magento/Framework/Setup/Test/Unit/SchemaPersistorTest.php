@@ -68,16 +68,16 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
         $schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $schemaListenerMock->expects(self::once())
+        $schemaListenerMock->expects($this->once())
             ->method('getTables')
             ->willReturn($tables);
-        $this->componentRegistrarMock->expects(self::once())
+        $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
             ->with('module', $moduleName)
             ->willReturn('some-non-existing-path');
         $simpleXmlElement = new \SimpleXMLElement($expectedXML);
         $this->xmlPersistor
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('persist')
             ->with($simpleXmlElement, 'some-non-existing-path/etc/db_schema.xml');
 

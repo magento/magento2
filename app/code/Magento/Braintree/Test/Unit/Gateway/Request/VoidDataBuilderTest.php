@@ -45,7 +45,7 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentDOMock->expects(static::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
@@ -73,12 +73,12 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => $amount,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        $this->paymentMock->expects(self::once())
+        $this->paymentMock->expects($this->once())
             ->method('getParentTransactionId')
             ->willReturn($parentTransactionId);
         $this->paymentMock->expects(self::$callLastTransId())
@@ -86,7 +86,7 @@ class VoidDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($lastTransId);
 
         $result = $this->builder->build($buildSubject);
-        self::assertEquals(
+        $this->assertEquals(
             ['transaction_id' => $expected],
             $result
         );

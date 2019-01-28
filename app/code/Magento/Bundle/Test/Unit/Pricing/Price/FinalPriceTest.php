@@ -197,7 +197,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
                 ->getMockForAbstractClass()
         ];
 
-        $this->productOptionRepositoryMock->expects(static::once())
+        $this->productOptionRepositoryMock->expects($this->once())
             ->method('getProductOptions')
             ->with($this->saleableInterfaceMock)
             ->willReturn($customOptions);

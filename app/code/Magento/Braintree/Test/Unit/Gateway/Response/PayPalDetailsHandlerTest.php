@@ -58,20 +58,20 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $subject = ['payment' => $paymentDataMock];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentDataMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
-        $this->subjectReaderMock->expects(static::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayPal')
             ->with($transaction)
             ->willReturn($transaction->paypal);
 
-        $this->paymentMock->expects(static::exactly(2))
+        $this->paymentMock->expects($this->exactly(2))
             ->method('setAdditionalInformation');
 
         $this->payPalHandler->handle($subject, $response);
@@ -88,7 +88,7 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 

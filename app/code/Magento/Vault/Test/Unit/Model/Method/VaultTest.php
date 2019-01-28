@@ -70,7 +70,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getAdditionalInformation')
             ->willReturn($additionalInfo);
 
@@ -106,7 +106,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
@@ -114,7 +114,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
                     PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
-        $tokenManagement->expects(static::once())
+        $tokenManagement->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn(null);
@@ -149,7 +149,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
         $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
         $token = $this->createMock(PaymentTokenInterface::class);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
@@ -157,25 +157,25 @@ class VaultTest extends \PHPUnit\Framework\TestCase
                     PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
-        $tokenManagement->expects(static::once())
+        $tokenManagement->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn($token);
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setVaultPaymentToken')
             ->with($token);
 
-        $this->vaultProvider->expects(static::atLeastOnce())
+        $this->vaultProvider->expects($this->atLeastOnce())
             ->method('getCode')
             ->willReturn($vaultProviderCode);
-        $commandManagerPool->expects(static::once())
+        $commandManagerPool->expects($this->once())
             ->method('get')
             ->with($vaultProviderCode)
             ->willReturn($commandManager);
-        $commandManager->expects(static::once())
+        $commandManager->expects($this->once())
             ->method('executeByCode')
             ->with(
                 VaultPaymentInterface::VAULT_AUTHORIZE_COMMAND,
@@ -185,7 +185,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('setMethod')
             ->with($vaultProviderCode);
 
@@ -225,7 +225,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $authorizationTransaction = $this->createMock(TransactionInterface::class);
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->willReturn($authorizationTransaction);
 
@@ -244,17 +244,17 @@ class VaultTest extends \PHPUnit\Framework\TestCase
         $quote = $this->getMockForAbstractClass(CartInterface::class);
         $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
-        $this->vaultProvider->expects(static::once())
+        $this->vaultProvider->expects($this->once())
             ->method('isAvailable')
             ->with($quote)
             ->willReturn($isAvailableProvider);
 
-        $config->expects(static::any())
+        $config->expects($this->any())
             ->method('getValue')
             ->with('active', $storeId)
             ->willReturn($isActive);
 
-        $quote->expects(static::any())
+        $quote->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
 
@@ -264,7 +264,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             'vaultProvider' => $this->vaultProvider
         ]);
         $actual = $model->isAvailable($quote);
-        static::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -289,12 +289,12 @@ class VaultTest extends \PHPUnit\Framework\TestCase
         $quote = null;
         $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
-        $this->vaultProvider->expects(static::once())
+        $this->vaultProvider->expects($this->once())
             ->method('isAvailable')
             ->with($quote)
             ->willReturn(true);
 
-        $config->expects(static::once())
+        $config->expects($this->once())
             ->method('getValue')
             ->with('active', $quote)
             ->willReturn(false);
@@ -304,7 +304,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             'config' => $config,
             'vaultProvider' => $this->vaultProvider
         ]);
-        static::assertFalse($model->isAvailable($quote));
+        $this->assertFalse($model->isAvailable($quote));
     }
 
     /**
@@ -319,17 +319,17 @@ class VaultTest extends \PHPUnit\Framework\TestCase
         $handlerPool = $this->createMock(ValueHandlerPoolInterface::class);
         $handler = $this->createMock(ValueHandlerInterface::class);
 
-        $handlerPool->expects(static::once())
+        $handlerPool->expects($this->once())
             ->method('get')
             ->with('can_use_internal')
             ->willReturn($handler);
 
-        $handler->expects(static::once())
+        $handler->expects($this->once())
             ->method('handle')
             ->with(['field' => 'can_use_internal'], null)
             ->willReturn($configValue);
 
-        $this->vaultProvider->expects(static::any())
+        $this->vaultProvider->expects($this->any())
             ->method('canUseInternal')
             ->willReturn($paymentValue);
 
@@ -338,7 +338,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             'vaultProvider' => $this->vaultProvider,
             'valueHandlerPool' => $handlerPool,
         ]);
-        static::assertEquals($expected, $model->canUseInternal());
+        $this->assertEquals($expected, $model->canUseInternal());
     }
 
     /**

@@ -15,7 +15,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $helper = new ObjectManager($this);
         $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->expects(static::once())
+        $storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
 
@@ -35,7 +35,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'GB'
         ];
 
-        $storeMock->expects(static::once())
+        $storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn('GB');
         $template->setTemplate('MontyPythonAndTheHolyGrail.phtml');
@@ -46,6 +46,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertSame($expectedData, $template->getCacheKeyInfo());
+        $this->assertSame($expectedData, $template->getCacheKeyInfo());
     }
 }

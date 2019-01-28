@@ -199,12 +199,12 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $attributes = [];
         $productMock = $this->createMock(Product::class);
         $imageMock = $this->createMock(Image::class);
-        $this->imageBuilder->expects(static::once())
+        $this->imageBuilder->expects($this->once())
             ->method('create')
             ->willReturn($imageMock);
 
         $image = $this->block->getImage($productMock, $imageId, $attributes);
 
-        static::assertInstanceOf(Image::class, $image);
+        $this->assertInstanceOf(Image::class, $image);
     }
 }

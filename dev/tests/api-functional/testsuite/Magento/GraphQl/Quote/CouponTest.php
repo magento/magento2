@@ -58,8 +58,8 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey("applyCouponToCart", $response);
-        self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
+        $this->assertArrayHasKey("applyCouponToCart", $response);
+        $this->assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
     }
 
     /**
@@ -79,8 +79,8 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareAddCouponRequestQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey("applyCouponToCart", $response);
-        self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
+        $this->assertArrayHasKey("applyCouponToCart", $response);
+        $this->assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
 
         self::expectExceptionMessage('A coupon is already applied to the cart. Please remove it to apply another');
         $this->graphQlQuery($query);
@@ -153,8 +153,8 @@ class CouponTest extends GraphQlAbstract
         $query = $this->prepareRemoveCouponRequestQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertSame('', $response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        $this->assertArrayHasKey('removeCouponFromCart', $response);
+        $this->assertSame('', $response['removeCouponFromCart']['cart']['applied_coupon']['code']);
     }
 
     /**

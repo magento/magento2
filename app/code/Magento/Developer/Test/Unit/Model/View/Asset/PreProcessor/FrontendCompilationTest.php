@@ -78,41 +78,41 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessException()
     {
-        $this->lockerProcessMock->expects(self::once())
+        $this->lockerProcessMock->expects($this->once())
             ->method('lockProcess')
-            ->with(self::isType('string'));
-        $this->lockerProcessMock->expects(self::once())
+            ->with($this->isType('string'));
+        $this->lockerProcessMock->expects($this->once())
             ->method('unlockProcess');
 
-        $this->alternativeSourceMock->expects(self::once())
+        $this->alternativeSourceMock->expects($this->once())
             ->method('getAlternativesExtensionsNames')
             ->willReturn(['less']);
 
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setArea')
             ->with(self::AREA)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setTheme')
             ->with(self::THEME)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setLocale')
             ->with(self::LOCALE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setModule')
             ->with(self::MODULE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setPath')
             ->with(self::FILE_PATH)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('build')
             ->willThrowException(new \Exception());
 
-        $this->assetSourceMock->expects(self::never())
+        $this->assetSourceMock->expects($this->never())
             ->method('getContent');
 
         $frontendCompilation = new FrontendCompilation(
@@ -126,7 +126,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
         try {
             $frontendCompilation->process($this->getChainMockExpects('', 0, 1));
         } catch (\Exception $e) {
-            self::assertInstanceOf('\Exception', $e);
+            $this->assertInstanceOf('\Exception', $e);
         }
     }
 
@@ -137,43 +137,43 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     {
         $newContentType = 'less';
 
-        $this->lockerProcessMock->expects(self::once())
+        $this->lockerProcessMock->expects($this->once())
             ->method('lockProcess')
-            ->with(self::isType('string'));
-        $this->lockerProcessMock->expects(self::once())
+            ->with($this->isType('string'));
+        $this->lockerProcessMock->expects($this->once())
             ->method('unlockProcess');
 
         $assetMock = $this->getAssetNew();
 
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setArea')
             ->with(self::AREA)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setTheme')
             ->with(self::THEME)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setLocale')
             ->with(self::LOCALE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setModule')
             ->with(self::MODULE)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('setPath')
             ->with(self::FILE_PATH)
             ->willReturnSelf();
-        $this->assetBuilderMock->expects(self::once())
+        $this->assetBuilderMock->expects($this->once())
             ->method('build')
             ->willReturn($assetMock);
 
-        $this->alternativeSourceMock->expects(self::once())
+        $this->alternativeSourceMock->expects($this->once())
             ->method('getAlternativesExtensionsNames')
             ->willReturn([$newContentType]);
 
-        $this->assetSourceMock->expects(self::once())
+        $this->assetSourceMock->expects($this->once())
             ->method('getContent')
             ->with($assetMock)
             ->willReturn(self::NEW_CONTENT);
@@ -212,16 +212,16 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     {
         $chainMock = $this->getChainMock();
 
-        $chainMock->expects(self::once())
+        $chainMock->expects($this->once())
             ->method('getContent')
             ->willReturn($content);
-        $chainMock->expects(self::exactly(3))
+        $chainMock->expects($this->exactly(3))
             ->method('getAsset')
             ->willReturn($this->getAssetMockExpects($pathExactly));
-        $chainMock->expects(self::exactly($contentExactly))
+        $chainMock->expects($this->exactly($contentExactly))
             ->method('setContent')
             ->with(self::NEW_CONTENT);
-        $chainMock->expects(self::exactly($contentExactly))
+        $chainMock->expects($this->exactly($contentExactly))
             ->method('setContentType')
             ->with($newContentType);
 
@@ -260,13 +260,13 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     {
         $assetMock = $this->getAssetMock();
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getContext')
             ->willReturn($this->getContextMock());
-        $assetMock->expects(self::exactly($pathExactly))
+        $assetMock->expects($this->exactly($pathExactly))
             ->method('getFilePath')
             ->willReturn(self::FILE_PATH);
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getModule')
             ->willReturn(self::MODULE);
 
@@ -282,13 +282,13 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn(self::AREA);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getThemePath')
             ->willReturn(self::THEME);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getLocale')
             ->willReturn(self::LOCALE);
 

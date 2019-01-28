@@ -95,22 +95,22 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcAvailableTypes($countryId, array $availableTypes, array $expected)
     {
-        $this->sessionQuoteMock->expects(static::once())
+        $this->sessionQuoteMock->expects($this->once())
             ->method('getCountryId')
             ->willReturn($countryId);
 
-        $this->gatewayConfigMock->expects(static::once())
+        $this->gatewayConfigMock->expects($this->once())
             ->method('getAvailableCardTypes')
             ->with($this->storeId)
             ->willReturn(self::$configCardTypes);
 
-        $this->gatewayConfigMock->expects(static::once())
+        $this->gatewayConfigMock->expects($this->once())
             ->method('getCountryAvailableCardTypes')
             ->with($countryId, $this->storeId)
             ->willReturn($availableTypes);
 
         $result = $this->block->getCcAvailableTypes();
-        static::assertEquals($expected, array_values($result));
+        $this->assertEquals($expected, array_values($result));
     }
 
     /**
@@ -133,17 +133,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testIsVaultEnabled()
     {
         $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->paymentDataHelperMock->expects(static::once())
+        $this->paymentDataHelperMock->expects($this->once())
             ->method('getMethodInstance')
             ->with(ConfigProvider::CC_VAULT_CODE)
             ->willReturn($vaultPayment);
 
-        $vaultPayment->expects(static::once())
+        $vaultPayment->expects($this->once())
             ->method('isActive')
             ->with($this->storeId)
             ->willReturn(true);
 
-        static::assertTrue($this->block->isVaultEnabled());
+        $this->assertTrue($this->block->isVaultEnabled());
     }
 
     /**
@@ -156,7 +156,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
-        $this->ccTypeMock->expects(static::any())
+        $this->ccTypeMock->expects($this->any())
             ->method('getCcTypeLabelMap')
             ->willReturn(self::$baseCardTypes);
     }
@@ -171,13 +171,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup', 'getStoreId'])
             ->getMock();
 
-        $this->sessionQuoteMock->expects(static::any())
+        $this->sessionQuoteMock->expects($this->any())
             ->method('getQuote')
             ->willReturnSelf();
-        $this->sessionQuoteMock->expects(static::any())
+        $this->sessionQuoteMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturnSelf();
-        $this->sessionQuoteMock->expects(static::any())
+        $this->sessionQuoteMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn($this->storeId);
     }

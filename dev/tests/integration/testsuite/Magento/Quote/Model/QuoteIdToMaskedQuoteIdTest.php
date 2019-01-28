@@ -45,7 +45,7 @@ class QuoteIdToMaskedQuoteIdTest extends \PHPUnit\Framework\TestCase
         $this->quoteResource->load($quote, 'test01', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteId->execute((int) $quote->getId());
 
-        self::assertNotEmpty($maskedQuoteId);
+        $this->assertNotEmpty($maskedQuoteId);
     }
 
     public function testMaskedQuoteIdWithNonExistentQuoteId()

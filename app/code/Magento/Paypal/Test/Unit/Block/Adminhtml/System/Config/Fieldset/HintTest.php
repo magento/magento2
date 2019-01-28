@@ -46,15 +46,15 @@ class HintTest extends \PHPUnit\Framework\TestCase
         $expected .= '<a href="http://test.com" target="_blank">Configuration Details</a>';
         $expected .= '</span></p></td></tr>';
 
-        $this->element->expects(static::exactly(2))
+        $this->element->expects($this->exactly(2))
             ->method('getComment')
             ->willReturn('http://test.com');
 
-        $this->element->expects(static::once())
+        $this->element->expects($this->once())
             ->method('getHtmlId')
             ->willReturn('payment');
 
-        static::assertSame($expected, $this->block->render($this->element));
+        $this->assertSame($expected, $this->block->render($this->element));
     }
 
     /**
@@ -62,13 +62,13 @@ class HintTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderEmptyComment()
     {
-        $this->element->expects(static::once())
+        $this->element->expects($this->once())
             ->method('getComment')
             ->willReturn('');
 
-        $this->element->expects(static::never())
+        $this->element->expects($this->never())
             ->method('getHtmlId');
 
-        static::assertSame('', $this->block->render($this->element));
+        $this->assertSame('', $this->block->render($this->element));
     }
 }

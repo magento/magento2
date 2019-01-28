@@ -117,10 +117,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $linkName = $destinationDirectory . '/link';
 
-        self::assertTrue($this->driver->isWritable($destinationDirectory));
-        self::assertTrue($this->driver->symlink($sourceDirectory, $linkName));
-        self::assertTrue($this->driver->isExists($linkName));
-        self::assertTrue($this->driver->deleteDirectory($linkName));
+        $this->assertTrue($this->driver->isWritable($destinationDirectory));
+        $this->assertTrue($this->driver->symlink($sourceDirectory, $linkName));
+        $this->assertTrue($this->driver->isExists($linkName));
+        $this->assertTrue($this->driver->deleteDirectory($linkName));
     }
 
     /**

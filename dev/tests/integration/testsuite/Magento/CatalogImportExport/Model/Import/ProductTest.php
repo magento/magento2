@@ -819,7 +819,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveMediaImageError()
     {
-        $this->logger->expects(self::once())->method('critical');
+        $this->logger->expects($this->once())->method('critical');
         $this->importDataForMediaTest('import_media.csv', 1);
     }
 
@@ -1127,7 +1127,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product->setStoreId($storeId);
         $product->load($id);
         $product->getProductUrl();
-        self::assertEquals($expected, $product->getRequestPath());
+        $this->assertEquals($expected, $product->getRequestPath());
         $registry->unregister('current_category');
     }
 
@@ -2220,8 +2220,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $mediaGallery = $product->getData('media_gallery');
         foreach ($mediaGallery['images'] as $image) {
             $image['file'] === '/m/a/magento_image.jpg'
-                ? self::assertSame('1', $image['disabled'])
-                : self::assertSame('0', $image['disabled']);
+                ? $this->assertSame('1', $image['disabled'])
+                : $this->assertSame('0', $image['disabled']);
         }
     }
 

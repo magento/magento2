@@ -45,14 +45,14 @@ class InterpretationMediatorTest extends \PHPUnit\Framework\TestCase
     public function testInterpretNotIdentifiedMessage()
     {
         $messageText = 'Very awful message. Shame.';
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn(null);
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getText')
             ->willReturn($messageText);
 
-        static::assertSame(
+        $this->assertSame(
             $messageText,
             $this->interpretationMediator->interpret($this->messageMock)
         );
@@ -62,15 +62,15 @@ class InterpretationMediatorTest extends \PHPUnit\Framework\TestCase
     {
         $messageInterpreted = 'Awesome message. An identified message is the one we appreciate.';
 
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn('Great identifier');
-        $this->interpretationStrategy->expects(static::once())
+        $this->interpretationStrategy->expects($this->once())
             ->method('interpret')
             ->with($this->messageMock)
             ->willReturn($messageInterpreted);
 
-        static::assertSame(
+        $this->assertSame(
             $messageInterpreted,
             $this->interpretationMediator->interpret($this->messageMock)
         );
@@ -80,18 +80,18 @@ class InterpretationMediatorTest extends \PHPUnit\Framework\TestCase
     {
         $messageStillNotInterpreted = 'One step left to call it an awesome message.';
 
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getIdentifier')
             ->willReturn('Great identifier');
-        $this->messageMock->expects(static::once())
+        $this->messageMock->expects($this->once())
             ->method('getText')
             ->willReturn($messageStillNotInterpreted);
-        $this->interpretationStrategy->expects(static::once())
+        $this->interpretationStrategy->expects($this->once())
             ->method('interpret')
             ->with($this->messageMock)
             ->willThrowException(new \LogicException());
 
-        static::assertSame(
+        $this->assertSame(
             $messageStillNotInterpreted,
             $this->interpretationMediator->interpret($this->messageMock)
         );

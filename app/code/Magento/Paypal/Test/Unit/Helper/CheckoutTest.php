@@ -44,23 +44,23 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getLastRealOrder')
             ->willReturn($order);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getId')
             ->willReturn($id);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getState')
             ->willReturn($state);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('registerCancellation')
             ->with($comment)
             ->willReturnSelf();
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('save');
 
-        static::assertTrue($this->checkout->cancelCurrentOrder($comment));
+        $this->assertTrue($this->checkout->cancelCurrentOrder($comment));
     }
 
     public function testCancelCurrentOrderWhichIsCancelled()
@@ -73,31 +73,31 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('getLastRealOrder')
             ->willReturn($order);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getId')
             ->willReturn($id);
-        $order->expects(static::once())
+        $order->expects($this->once())
             ->method('getState')
             ->willReturn($state);
-        $order->expects(static::never())
+        $order->expects($this->never())
             ->method('registerCancellation')
             ->with($comment)
             ->willReturnSelf();
-        $order->expects(static::never())
+        $order->expects($this->never())
             ->method('save');
 
-        static::assertFalse($this->checkout->cancelCurrentOrder($comment));
+        $this->assertFalse($this->checkout->cancelCurrentOrder($comment));
     }
 
     public function testRestoreQuote()
     {
-        $this->session->expects(static::once())
+        $this->session->expects($this->once())
             ->method('restoreQuote')
             ->willReturn(true);
 
-        static::assertTrue($this->checkout->restoreQuote());
+        $this->assertTrue($this->checkout->restoreQuote());
     }
 }

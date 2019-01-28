@@ -111,22 +111,22 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getRedirect')
             ->willReturn($this->redirectMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($this->urlMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
-        $contextMock->expects(self::once())
+        $contextMock->expects($this->once())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
@@ -146,11 +146,11 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
         $layoutMock = $this->getLayoutMock();
         $blockMock = $this->getBlockMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $this->requestMock->expects(self::exactly(2))
+        $this->requestMock->expects($this->exactly(2))
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -159,42 +159,42 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->shippingMethodUpdaterMock->expects(self::once())
+        $this->shippingMethodUpdaterMock->expects($this->once())
             ->method('execute')
             ->with('test-shipping-method', $quoteMock);
 
-        $this->resultFactoryMock->expects(self::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_PAGE)
             ->willReturn($responsePageMock);
 
-        $responsePageMock->expects(self::once())
+        $responsePageMock->expects($this->once())
             ->method('addHandle')
             ->with('paypal_express_review_details')
             ->willReturnSelf();
 
-        $responsePageMock->expects(self::once())
+        $responsePageMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $layoutMock->expects(self::once())
+        $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('page.block')
             ->willReturn($blockMock);
 
-        $blockMock->expects(self::once())
+        $blockMock->expects($this->once())
             ->method('toHtml')
             ->willReturn($resultHtml);
 
-        $this->responseMock->expects(self::once())
+        $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with($resultHtml);
 
-        $this->urlMock->expects(self::never())
+        $this->urlMock->expects($this->never())
             ->method('getUrl');
 
         $this->saveShippingMethod->execute();
@@ -205,11 +205,11 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
         $redirectPath = 'path/to/redirect';
         $quoteMock = $this->getQuoteMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(0);
 
-        $this->requestMock->expects(self::exactly(1))
+        $this->requestMock->expects($this->exactly(1))
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -217,26 +217,26 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->shippingMethodUpdaterMock->expects(self::never())
+        $this->shippingMethodUpdaterMock->expects($this->never())
             ->method('execute');
 
-        $this->messageManagerMock->expects(self::once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\InvalidArgumentException'),
+                $this->isInstanceOf('\InvalidArgumentException'),
                 'Checkout failed to initialize. Verify and try again.'
             );
 
-        $this->urlMock->expects(self::once())
+        $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/review', ['_secure' => true])
             ->willReturn($redirectPath);
 
-        $this->redirectMock->expects(self::once())
+        $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, $redirectPath, []);
 
@@ -248,11 +248,11 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
         $redirectPath = 'path/to/redirect';
         $quoteMock = $this->getQuoteMock();
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('getItemsCount')
             ->willReturn(0);
 
-        $this->requestMock->expects(self::exactly(1))
+        $this->requestMock->expects($this->exactly(1))
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -260,26 +260,26 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->checkoutSessionMock->expects(self::once())
+        $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->shippingMethodUpdaterMock->expects(self::never())
+        $this->shippingMethodUpdaterMock->expects($this->never())
             ->method('execute');
 
-        $this->messageManagerMock->expects(self::once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\InvalidArgumentException'),
+                $this->isInstanceOf('\InvalidArgumentException'),
                 'Checkout failed to initialize. Verify and try again.'
             );
 
-        $this->urlMock->expects(self::once())
+        $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/review', ['_secure' => true])
             ->willReturn($redirectPath);
 
-        $this->responseMock->expects(self::once())
+        $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with(sprintf('<script>window.location.href = "%s";</script>', $redirectPath));
 

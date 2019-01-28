@@ -99,15 +99,15 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $jsLayout = $this->getLayoutData();
 
-        $this->attributeDataProvider->expects(static::once())
+        $this->attributeDataProvider->expects($this->once())
             ->method('loadAttributesCollection')
             ->willReturn([]);
 
-        $this->dataHelper->expects(static::once())
+        $this->dataHelper->expects($this->once())
             ->method('isDisplayBillingOnPaymentMethodAvailable')
             ->willReturn(true);
 
-        $this->attributeMerger->expects(static::exactly(2))
+        $this->attributeMerger->expects($this->exactly(2))
             ->method('merge')
             ->willReturnMap([
                 ['payment1_1' => $this->getBillingComponent('payment1_1')],
@@ -116,27 +116,27 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->layoutProcessor->process($jsLayout);
 
-        static::assertArrayHasKey(
+        $this->assertArrayHasKey(
             'payment1_1-form',
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children']
         );
-        static::assertArrayHasKey(
+        $this->assertArrayHasKey(
             'payment2_1-form',
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children']
         );
-        static::assertArrayNotHasKey(
+        $this->assertArrayNotHasKey(
             'payment2_2-form',
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children']
         );
-        static::assertArrayHasKey(
+        $this->assertArrayHasKey(
             'afterMethods',
             $actual['components']['checkout']['children']['steps']['children']['billing-step']
             ['children']['payment']['children']
         );
-        static::assertEmpty(
+        $this->assertEmpty(
             $actual['components']['checkout']['children']['steps']['children']['billing-step']
             ['children']['payment']['children']['afterMethods']['children']
         );
@@ -149,30 +149,30 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $jsLayout = $this->getLayoutData();
 
-        $this->attributeDataProvider->expects(static::once())
+        $this->attributeDataProvider->expects($this->once())
             ->method('loadAttributesCollection')
             ->willReturn([]);
 
-        $this->dataHelper->expects(static::once())
+        $this->dataHelper->expects($this->once())
             ->method('isDisplayBillingOnPaymentMethodAvailable')
             ->willReturn(false);
 
-        $this->attributeMerger->expects(static::once())
+        $this->attributeMerger->expects($this->once())
             ->method('merge')
             ->willReturn($this->getBillingComponent('shared'));
 
         $actual = $this->layoutProcessor->process($jsLayout);
 
-        static::assertEmpty(
+        $this->assertEmpty(
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children']
         );
 
-        static::assertNotEmpty(
+        $this->assertNotEmpty(
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['afterMethods']['children']
         );
-        static::assertArrayHasKey(
+        $this->assertArrayHasKey(
             'billing-address-form',
             $actual['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']
             ['children']['afterMethods']['children']

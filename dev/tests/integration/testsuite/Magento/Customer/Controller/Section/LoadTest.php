@@ -16,6 +16,6 @@ class LoadTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch(
             '/customer/section/load/?sections=section<invalid&force_new_section_timestamp=false&_=147066166394'
         );
-        self::assertEquals(json_encode($expected), $this->getResponse()->getBody());
+        $this->assertEquals(json_encode($expected), $this->getResponse()->getBody());
     }
 }

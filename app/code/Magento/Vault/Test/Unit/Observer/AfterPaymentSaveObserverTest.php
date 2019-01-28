@@ -151,13 +151,13 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
                 ->with($this->paymentTokenMock);
         }
 
-        static::assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
+        $this->assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
 
         $paymentToken = $this->salesOrderPaymentMock->getExtensionAttributes()->getVaultPaymentToken();
-        static::assertSame($paymentToken, $this->paymentTokenMock);
-        static::assertEquals($token, $paymentToken->getGatewayToken());
-        static::assertEquals($isActive, $paymentToken->getIsActive());
-        static::assertEquals($createdAt, $paymentToken->getCreatedAt());
+        $this->assertSame($paymentToken, $this->paymentTokenMock);
+        $this->assertEquals($token, $paymentToken->getGatewayToken());
+        $this->assertEquals($isActive, $paymentToken->getIsActive());
+        $this->assertEquals($createdAt, $paymentToken->getCreatedAt());
     }
 
     /**

@@ -452,7 +452,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
         $paymentId = 36;
         $orderId = 36;
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getId')
             ->willReturn($paymentId);
 
@@ -460,18 +460,18 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($orderMock);
 
         $transactionMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment\Transaction::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
             ->with($transactionId, $paymentId, $orderId)
             ->willReturn($transactionMock);
@@ -483,19 +483,19 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             $responseStatus,
             $responseCode
         );
-        $this->transactionServiceMock->expects(static::once())
+        $this->transactionServiceMock->expects($this->once())
             ->method('getTransactionDetails')
             ->with($this->directpost, $transactionId)
             ->willReturn($document);
 
         // transaction should be closed
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setIsTransactionDenied')
             ->with(true);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(true);
-        $transactionMock->expects(static::once())
+        $transactionMock->expects($this->once())
             ->method('close');
 
         $this->directpost->fetchTransactionInfo($this->paymentMock, $transactionId);
@@ -509,26 +509,26 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
     {
         $card = 1111;
 
-        $this->paymentMock->expects(static::exactly(2))
+        $this->paymentMock->expects($this->exactly(2))
             ->method('getCcLast4')
             ->willReturn($card);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('decrypt')
             ->willReturn($card);
-        $this->paymentMock->expects(static::exactly(3))
+        $this->paymentMock->expects($this->exactly(3))
             ->method('getParentTransactionId')
             ->willReturn(self::TRANSACTION_ID . '-capture');
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getPoNumber')
             ->willReturn(self::INVOICE_NUM);
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(true)
             ->willReturnSelf();
 
         $orderMock = $this->getOrderMock();
 
-        $this->paymentMock->expects(static::exactly(2))
+        $this->paymentMock->expects($this->exactly(2))
             ->method('getOrder')
             ->willReturn($orderMock);
 
@@ -536,12 +536,12 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAdditionalInformation'])
             ->getMock();
-        $transactionMock->expects(static::once())
+        $transactionMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with(Directpost::REAL_TRANSACTION_ID_KEY)
             ->willReturn(self::TRANSACTION_ID);
 
-        $this->transactionRepositoryMock->expects(static::once())
+        $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
             ->willReturn($transactionMock);
 
@@ -550,18 +550,18 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             Directpost::RESPONSE_REASON_CODE_APPROVED,
             'Successful'
         );
-        $this->httpClientMock->expects(static::once())
+        $this->httpClientMock->expects($this->once())
             ->method('getBody')
             ->willReturn($response);
 
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects($this->once())
             ->method('getXResponseCode')
             ->willReturn(Directpost::RESPONSE_CODE_APPROVED);
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects($this->once())
             ->method('getXResponseReasonCode')
             ->willReturn(Directpost::RESPONSE_REASON_CODE_APPROVED);
 
-        $this->dataHelperMock->expects(static::never())
+        $this->dataHelperMock->expects($this->never())
             ->method('wrapGatewayError');
 
         $this->directpost->refund($this->paymentMock, self::TOTAL_AMOUNT);
@@ -606,34 +606,34 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXResponseCode')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXResponseReasonCode')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXResponseReasonText')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXAvsCode')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXTransId')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXInvoiceNum')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXAmount')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXMethod')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setXType')
             ->willReturnSelf();
-        $this->responseMock->expects(static::any())
+        $this->responseMock->expects($this->any())
             ->method('setData')
             ->willReturnSelf();
 
@@ -706,7 +706,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
-        $requestFactory->expects(static::any())
+        $requestFactory->expects($this->any())
             ->method('create')
             ->willReturn($request);
         return $requestFactory;
@@ -726,19 +726,19 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
-        $orderMock->expects(static::exactly(2))
+        $orderMock->expects($this->exactly(2))
             ->method('getIncrementId')
             ->willReturn(self::INVOICE_NUM);
 
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn(1);
 
-        $orderMock->expects(static::once())
+        $orderMock->expects($this->once())
             ->method('getBaseCurrencyCode')
             ->willReturn('USD');
         return $orderMock;
@@ -755,7 +755,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['request', 'getBody', '__wakeup'])
             ->getMock();
 
-        $this->httpClientMock->expects(static::any())
+        $this->httpClientMock->expects($this->any())
             ->method('request')
             ->willReturnSelf();
 
@@ -764,7 +764,7 @@ class DirectpostTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $httpClientFactoryMock->expects(static::any())
+        $httpClientFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->httpClientMock);
         return $httpClientFactoryMock;

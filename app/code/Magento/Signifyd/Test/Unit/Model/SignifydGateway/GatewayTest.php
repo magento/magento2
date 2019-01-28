@@ -346,7 +346,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $dummyStoreId = 1;
 
         $this->withCaseEntity($caseId, $dummyStoreId);
-        $this->apiClient->expects(self::once())
+        $this->apiClient->expects($this->once())
             ->method('makeApiCall')
             ->with(
                 '/cases/' . $caseId . '/guarantee',
@@ -359,7 +359,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             );
 
         $result = $this->gateway->cancelGuarantee($caseId);
-        self::assertEquals(Gateway::GUARANTEE_CANCELED, $result);
+        $this->assertEquals(Gateway::GUARANTEE_CANCELED, $result);
     }
 
     /**
@@ -375,7 +375,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $dummyStoreId = 1;
 
         $this->withCaseEntity($caseId, $dummyStoreId);
-        $this->apiClient->expects(self::once())
+        $this->apiClient->expects($this->once())
             ->method('makeApiCall')
             ->with(
                 '/cases/' . $caseId . '/guarantee',

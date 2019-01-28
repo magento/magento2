@@ -91,7 +91,7 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
             'consumer0' => []
         ];
 
-        $this->configMock->expects(static::atLeastOnce())
+        $this->configMock->expects($this->atLeastOnce())
             ->method('getConsumers')
             ->willReturn($consumers);
 

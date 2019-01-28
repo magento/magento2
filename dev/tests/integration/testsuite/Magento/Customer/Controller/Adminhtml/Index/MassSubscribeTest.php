@@ -82,7 +82,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
         // Assertions
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
-            self::equalTo(['A total of 2 record(s) were updated.']),
+            $this->equalTo(['A total of 2 record(s) were updated.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertEquals(
@@ -114,7 +114,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
-            self::equalTo(['An item needs to be selected. Select and try again.']),
+            $this->equalTo(['An item needs to be selected. Select and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }

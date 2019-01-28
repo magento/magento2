@@ -45,10 +45,10 @@ class SearchTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, $searchCriteria);
 
-        self::assertArrayHasKey('search_criteria', $response);
-        self::assertArrayHasKey('items', $response);
-        self::assertGreaterThan(0, count($response['items']));
-        self::assertGreaterThan(0, $response['items'][0]['id']);
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('items', $response);
+        $this->assertGreaterThan(0, count($response['items']));
+        $this->assertGreaterThan(0, $response['items'][0]['id']);
     }
 
     /**
@@ -61,9 +61,9 @@ class SearchTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, $searchCriteria);
 
-        self::assertArrayHasKey('search_criteria', $response);
-        self::assertArrayHasKey('items', $response);
-        self::assertEquals(0, count($response['items']));
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('items', $response);
+        $this->assertEquals(0, count($response['items']));
     }
 
     /**

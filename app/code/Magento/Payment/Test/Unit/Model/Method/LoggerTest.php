@@ -52,7 +52,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
                 'request' => ['data1' => '123', 'data2' => '123']
             ];
 
-        $this->loggerMock->expects(static::once())
+        $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(var_export($debugData, true));
 

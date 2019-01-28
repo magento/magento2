@@ -55,7 +55,7 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertOrderStateAndStatus($order, $expectedState, $expectedStatus);
-        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+        $this->assertEquals(__($expectedMessage, $this->amount), $actualReturn);
     }
 
     /**
@@ -178,7 +178,7 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function assertOrderStateAndStatus($order, $expectedState, $expectedStatus)
     {
-        self::assertEquals($expectedState, $order->getState(), 'The order {state} should match.');
-        self::assertEquals($expectedStatus, $order->getStatus(), 'The order {status} should match.');
+        $this->assertEquals($expectedState, $order->getState(), 'The order {state} should match.');
+        $this->assertEquals($expectedStatus, $order->getStatus(), 'The order {status} should match.');
     }
 }

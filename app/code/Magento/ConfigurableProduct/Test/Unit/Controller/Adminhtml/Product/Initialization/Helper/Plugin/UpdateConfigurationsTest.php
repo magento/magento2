@@ -148,7 +148,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
             'product3' => $this->getProductMock($configurations['product3'], false, true),
         ];
 
-        $this->requestMock->expects(static::any())
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -156,11 +156,11 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                     ['configurable-matrix-serialized', "[]", json_encode($configurableMatrix)]
                 ]
             );
-        $this->variationHandlerMock->expects(static::once())
+        $this->variationHandlerMock->expects($this->once())
             ->method('duplicateImagesForVariations')
             ->with($configurations)
             ->willReturn($configurations);
-        $this->productRepositoryMock->expects(static::any())
+        $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturnMap(
                 [
@@ -168,7 +168,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                     ['product3', false, 0, false, $productMocks['product3']]
                 ]
             );
-        $this->variationHandlerMock->expects(static::any())
+        $this->variationHandlerMock->expects($this->any())
             ->method('processMediaGallery')
             ->willReturnMap(
                 [
@@ -195,16 +195,16 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
 
         if ($wasChanged !== false) {
             if ($expectedData !== null) {
-                $productMock->expects(static::once())
+                $productMock->expects($this->once())
                     ->method('addData')
                     ->with($expectedData)
                     ->willReturnSelf();
             }
 
-            $productMock->expects(static::any())
+            $productMock->expects($this->any())
                 ->method('hasDataChanges')
                 ->willReturn($hasDataChanges);
-            $productMock->expects($hasDataChanges ? static::once() : static::never())
+            $productMock->expects($hasDataChanges ? $this->once() : $this->never())
                 ->method('save')
                 ->willReturnSelf();
         }
@@ -218,7 +218,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     {
         $productMock = $this->getProductMock();
 
-        $this->requestMock->expects(static::any())
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -227,7 +227,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->variationHandlerMock->expects(static::once())
+        $this->variationHandlerMock->expects($this->once())
             ->method('duplicateImagesForVariations')
             ->with([])
             ->willReturn([]);

@@ -70,10 +70,10 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecute($categoryIds, $categoryLinks, $existCategoryLinks, $expectedCategoryLinks, $affectedIds)
     {
         if ($categoryLinks) {
-            $this->hydrator->expects(static::any())
+            $this->hydrator->expects($this->any())
                 ->method('extract')
                 ->willReturnArgument(0);
-            $this->hydratorPool->expects(static::once())
+            $this->hydratorPool->expects($this->once())
                 ->method('getHydrator')
                 ->with(CategoryLinkInterface::class)
                 ->willReturn($this->hydrator);
@@ -83,7 +83,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks', 'getCategoryLinks'])
             ->getMockForAbstractClass();
-        $extensionAttributes->expects(static::any())
+        $extensionAttributes->expects($this->any())
             ->method('getCategoryLinks')
             ->willReturn($categoryLinks);
 
@@ -98,33 +98,33 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $product->expects(static::at(0))->method('setIsChangedCategories')->with(false);
-        $product->expects(static::once())
+        $product->expects($this->at(0))->method('setIsChangedCategories')->with(false);
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
-        $product->expects(static::any())
+        $product->expects($this->any())
             ->method('getCategoryIds')
             ->willReturn($categoryIds);
 
-        $this->productCategoryLink->expects(static::any())
+        $this->productCategoryLink->expects($this->any())
             ->method('saveCategoryLinks')
             ->with($product, $expectedCategoryLinks)
             ->willReturn($affectedIds);
 
         if (!empty($affectedIds)) {
-            $product->expects(static::once())
+            $product->expects($this->once())
                 ->method('setAffectedCategoryIds')
                 ->with($affectedIds);
-            $product->expects(static::exactly(2))->method('setIsChangedCategories');
+            $product->expects($this->exactly(2))->method('setIsChangedCategories');
         }
 
-        $this->productCategoryLink->expects(static::any())
+        $this->productCategoryLink->expects($this->any())
             ->method('getCategoryLinks')
             ->with($product, $categoryIds)
             ->willReturn($existCategoryLinks);
 
         $entity = $this->saveHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     /**
@@ -221,14 +221,14 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getExtensionAttributes', 'hasCategoryIds'])
             ->getMock();
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn(null);
-        $product->expects(static::any())
+        $product->expects($this->any())
             ->method('hasCategoryIds')
             ->willReturn(false);
 
         $entity = $this->saveHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 }

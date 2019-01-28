@@ -49,7 +49,7 @@ class BundleSkuTest extends AbstractModifierTest
             ]
         ];
 
-        $this->arrayManagerMock->expects(static::any())
+        $this->arrayManagerMock->expects($this->any())
             ->method('findPath')
             ->willReturnMap(
                 [

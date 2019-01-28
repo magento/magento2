@@ -41,18 +41,18 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $orderPayment->expects(self::once())
+        $orderPayment->expects($this->once())
             ->method('getMethod')
             ->willReturn(ConfigProvider::CODE);
 
-        $orderPayment->expects(self::once())
+        $orderPayment->expects($this->once())
             ->method('getAdditionalInformation')
             ->willReturn([
                 'avsPostalCodeResponseCode' => $avsZip,
                 'avsStreetAddressResponseCode' => $avsStreet
             ]);
 
-        self::assertEquals($expected, $this->mapper->getCode($orderPayment));
+        $this->assertEquals($expected, $this->mapper->getCode($orderPayment));
     }
 
     /**
@@ -69,7 +69,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $orderPayment->expects(self::exactly(2))
+        $orderPayment->expects($this->exactly(2))
             ->method('getMethod')
             ->willReturn('some_payment');
 

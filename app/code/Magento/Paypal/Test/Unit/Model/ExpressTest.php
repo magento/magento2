@@ -161,7 +161,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             ->with($transactionData)
             ->willReturnSelf();
 
-        static::assertEquals($this->model, $this->model->order($paymentModel, 12.3));
+        $this->assertEquals($this->model, $this->model->order($paymentModel, 12.3));
     }
 
     public function testAssignData()
@@ -202,7 +202,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
 
         $this->parentAssignDataExpectation($data);
 
-        $paymentInfo->expects(static::exactly(3))
+        $paymentInfo->expects($this->exactly(3))
             ->method('setAdditionalInformation')
             ->withConsecutive(
                 [Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue],
@@ -224,7 +224,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             AbstractDataAssignObserver::DATA_CODE => $data
         ];
 
-        $this->eventManager->expects(static::exactly(2))
+        $this->eventManager->expects($this->exactly(2))
             ->method('dispatch')
             ->willReturnMap(
                 [

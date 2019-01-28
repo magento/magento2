@@ -53,7 +53,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($result);
 
         $actual = $this->validator->validate($subject);
-        self::assertEquals($result, $actual);
+        $this->assertEquals($result, $actual);
     }
 
     public function testValidateSuccess()
@@ -74,6 +74,6 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($result);
 
         $actual = $this->validator->validate($subject);
-        self::assertEquals($result, $actual);
+        $this->assertEquals($result, $actual);
     }
 }

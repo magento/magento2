@@ -67,7 +67,7 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->gridModuleMock->expects(static::once())
+        $this->gridModuleMock->expects($this->once())
             ->method('getList')
             ->willReturn($moduleList);
 

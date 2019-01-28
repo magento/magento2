@@ -56,7 +56,7 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getResultFactory'])
             ->getMock();
-        $context->expects(static::any())
+        $context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -88,17 +88,17 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
         $responseMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
             ->getMock();
-        $responseMock->expects(static::once())
+        $responseMock->expects($this->once())
             ->method('setData')
             ->with(['clientToken' => $clientToken])
             ->willReturn($responseMock);
-        $this->resultFactoryMock->expects(static::once())
+        $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($responseMock);
-        $this->quoteSessionMock->expects(static::once())
+        $this->quoteSessionMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('getMerchantAccountId')
             ->with($storeId)
             ->willReturn(null);
@@ -106,10 +106,10 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['generate'])
             ->getMock();
-        $adapterMock->expects(static::once())
+        $adapterMock->expects($this->once())
             ->method('generate')
             ->willReturn($clientToken);
-        $this->adapterFactoryMock->expects(static::once())
+        $this->adapterFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($adapterMock);
 

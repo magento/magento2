@@ -104,19 +104,19 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setValues', 'getData'])
             ->getMock();
 
-        $this->attributeFactory->expects(static::once())
+        $this->attributeFactory->expects($this->once())
             ->method('create')
             ->willReturn($attribute);
 
         $eavAttribute = $this->getMockBuilder(EavAttribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productAttributeRepository->expects(static::once())
+        $this->productAttributeRepository->expects($this->once())
             ->method('get')
             ->with($attributeId)
             ->willReturn($eavAttribute);
 
-        $this->configurable->expects(static::once())
+        $this->configurable->expects($this->once())
             ->method('canUseAttribute')
             ->with($eavAttribute)
             ->willReturn(false);
@@ -139,41 +139,41 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setValues', 'setData', '__wakeup'])
             ->getMock();
 
-        $this->attributeFactory->expects(static::once())
+        $this->attributeFactory->expects($this->once())
             ->method('create')
             ->willReturn($attribute);
 
         $eavAttribute = $this->getMockBuilder(EavAttribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productAttributeRepository->expects(static::once())
+        $this->productAttributeRepository->expects($this->once())
             ->method('get')
             ->with($attributeId)
             ->willReturn($eavAttribute);
 
-        $this->configurable->expects(static::once())
+        $this->configurable->expects($this->once())
             ->method('canUseAttribute')
             ->with($eavAttribute)
             ->willReturn(true);
 
         $option = $this->createMock(OptionValueInterface::class);
-        $option->expects(static::once())
+        $option->expects($this->once())
             ->method('setValueIndex')
             ->with($valueIndex)
             ->willReturnSelf();
-        $this->optionValueFactory->expects(static::once())
+        $this->optionValueFactory->expects($this->once())
             ->method('create')
             ->willReturn($option);
 
-        $attribute->expects(static::once())
+        $attribute->expects($this->once())
             ->method('setData')
             ->with($item);
 
-        $attribute->expects(static::once())
+        $attribute->expects($this->once())
             ->method('setValues')
             ->with([$option]);
 
         $result = $this->factory->create($data);
-        static::assertSame([$attribute], $result);
+        $this->assertSame([$attribute], $result);
     }
 }

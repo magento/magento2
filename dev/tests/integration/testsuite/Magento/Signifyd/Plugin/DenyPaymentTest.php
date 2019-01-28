@@ -86,10 +86,10 @@ class DenyPaymentTest extends \PHPUnit\Framework\TestCase
         $order = $this->getOrder();
         $this->registry->register('current_order', $order);
 
-        $this->apiClient->expects(self::once())
+        $this->apiClient->expects($this->once())
             ->method('makeApiCall')
             ->with(
-                self::equalTo('/cases/' . self::$caseId . '/guarantee'),
+                $this->equalTo('/cases/' . self::$caseId . '/guarantee'),
                 'PUT',
                 [
                     'guaranteeDisposition' => CaseInterface::GUARANTEE_CANCELED
@@ -108,7 +108,7 @@ class DenyPaymentTest extends \PHPUnit\Framework\TestCase
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $case = $caseRepository->getByCaseId(self::$caseId);
 
-        self::assertEquals(CaseInterface::GUARANTEE_CANCELED, $case->getGuaranteeDisposition());
+        $this->assertEquals(CaseInterface::GUARANTEE_CANCELED, $case->getGuaranteeDisposition());
     }
 
     /**

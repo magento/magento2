@@ -50,7 +50,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->paymentTokenManagement->expects(static::never())
+        $this->paymentTokenManagement->expects($this->never())
             ->method('getByPublicHash');
         $this->observer->execute($observer);
     }
@@ -73,7 +73,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->paymentTokenManagement->expects(static::never())
+        $this->paymentTokenManagement->expects($this->never())
             ->method('getByPublicHash');
         $this->observer->execute($observer);
     }
@@ -96,17 +96,17 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
         $quote = $this->createMock(CartInterface::class);
         $customer = $this->createMock(CustomerInterface::class);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getQuote')
             ->willReturn($quote);
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customer);
-        $customer->expects(static::once())
+        $customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
 
-        $this->paymentTokenManagement->expects(static::once())
+        $this->paymentTokenManagement->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn(null);
@@ -118,7 +118,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $paymentModel->expects(static::never())
+        $paymentModel->expects($this->never())
             ->method('setAdditionalInformation');
 
         $this->observer->execute($observer);
@@ -143,22 +143,22 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
         $customer = $this->createMock(CustomerInterface::class);
         $paymentToken = $this->createMock(PaymentTokenInterface::class);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('getQuote')
             ->willReturn($quote);
-        $quote->expects(static::once())
+        $quote->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customer);
-        $customer->expects(static::once())
+        $customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
 
-        $this->paymentTokenManagement->expects(static::once())
+        $this->paymentTokenManagement->expects($this->once())
             ->method('getByPublicHash')
             ->with($publicHash, $customerId)
             ->willReturn($paymentToken);
 
-        $paymentModel->expects(static::once())
+        $paymentModel->expects($this->once())
             ->method('setAdditionalInformation')
             ->with(
                 [
@@ -190,10 +190,10 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observer->expects(static::atLeastOnce())
+        $observer->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($event);
-        $event->expects(static::atLeastOnce())
+        $event->expects($this->atLeastOnce())
             ->method('getDataByKey')
             ->willReturnMap(
                 $returnMap

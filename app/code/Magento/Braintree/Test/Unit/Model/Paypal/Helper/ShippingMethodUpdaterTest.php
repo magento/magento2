@@ -82,31 +82,31 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     {
         $quoteMock = $this->getQuoteMock();
 
-        $quoteMock->expects(self::exactly(2))
+        $quoteMock->expects($this->exactly(2))
             ->method('getIsVirtual')
             ->willReturn(false);
 
-        $quoteMock->expects(self::exactly(2))
+        $quoteMock->expects($this->exactly(2))
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
 
-        $this->shippingAddressMock->expects(self::once())
+        $this->shippingAddressMock->expects($this->once())
             ->method('getShippingMethod')
             ->willReturn(self::TEST_SHIPPING_METHOD . '-bad');
 
         $this->disabledQuoteAddressValidationStep($quoteMock);
 
-        $this->shippingAddressMock->expects(self::once())
+        $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')
             ->willReturn(self::TEST_SHIPPING_METHOD);
-        $this->shippingAddressMock->expects(self::once())
+        $this->shippingAddressMock->expects($this->once())
             ->method('setCollectShippingRates')
             ->willReturn(true);
 
-        $quoteMock->expects(self::once())
+        $quoteMock->expects($this->once())
             ->method('collectTotals');
 
-        $this->quoteRepositoryMock->expects(self::once())
+        $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($quoteMock);
 
@@ -120,21 +120,21 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
-        $billingAddressMock->expects(self::once())
+        $billingAddressMock->expects($this->once())
             ->method('setShouldIgnoreValidation')
             ->with(true)
             ->willReturnSelf();
 
-        $this->shippingAddressMock->expects(self::once())
+        $this->shippingAddressMock->expects($this->once())
             ->method('setShouldIgnoreValidation')
             ->with(true)
             ->willReturnSelf();
 
-        $billingAddressMock->expects(self::at(1))
+        $billingAddressMock->expects($this->at(1))
             ->method('getEmail')
             ->willReturn(self::TEST_EMAIL);
 
-        $billingAddressMock->expects(self::never())
+        $billingAddressMock->expects($this->never())
             ->method('setSameAsBilling');
     }
 
@@ -151,7 +151,7 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
                 ->getMock();
         }
 
-        $quoteMock->expects(self::any())
+        $quoteMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($this->billingAddressMock);
 

@@ -26,7 +26,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $resolver = new ProductItemResolver($configReaderMock, $productFactoryMock, $itemFactoryMock);
 
-        self::assertSame([], $resolver->getItems(1));
+        $this->assertSame([], $resolver->getItems(1));
     }
 
     /**
@@ -43,13 +43,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $resolver = new ProductItemResolver($configReaderMock, $productFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
 
-        self::assertTrue(count($items) == count($products));
+        $this->assertTrue(count($items) == count($products));
         foreach ($products as $index => $product) {
-            self::assertSame($product->getUpdatedAt(), $items[$index]->getUpdatedAt());
-            self::assertSame('daily', $items[$index]->getChangeFrequency());
-            self::assertSame('1.0', $items[$index]->getPriority());
-            self::assertSame($product->getImages(), $items[$index]->getImages());
-            self::assertSame($product->getUrl(), $items[$index]->getUrl());
+            $this->assertSame($product->getUpdatedAt(), $items[$index]->getUpdatedAt());
+            $this->assertSame('daily', $items[$index]->getChangeFrequency());
+            $this->assertSame('1.0', $items[$index]->getPriority());
+            $this->assertSame($product->getImages(), $items[$index]->getImages());
+            $this->assertSame($product->getUrl(), $items[$index]->getUrl());
         }
     }
 

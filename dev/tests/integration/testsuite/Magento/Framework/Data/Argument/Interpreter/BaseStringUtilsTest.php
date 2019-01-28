@@ -42,7 +42,7 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
         $translateRenderer = $this->getMockBuilder(RendererInterface::class)
           ->setMethods(['render'])
           ->getMockForAbstractClass();
-        $translateRenderer->expects(self::never())->method('render');
+        $translateRenderer->expects($this->never())->method('render');
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
 

@@ -57,7 +57,7 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
             )->disableOriginalConstructor()
             ->getMock();
 
-        $eventMock->expects(self::once())
+        $eventMock->expects($this->once())
             ->method('getContainer')
             ->willReturn($shortcutButtonsMock);
 
@@ -93,7 +93,7 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
         foreach ($blocks as $instanceName => $blockData) {
             $params = [];
 
-            $paypalConfigMock->expects(self::at($callIndexAvailable))
+            $paypalConfigMock->expects($this->at($callIndexAvailable))
                 ->method('isMethodAvailable')
                 ->with($blockData[self::PAYMENT_CODE])
                 ->willReturn($blockData[self::PAYMENT_AVAILABLE]);
@@ -107,7 +107,7 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
             ++$callIndexSession;
             $params['shortcutValidator'] = 'test-shortcut-validator';
 
-            $shortcutFactoryMock->expects(self::at($callIndexShortcutFactory))
+            $shortcutFactoryMock->expects($this->at($callIndexShortcutFactory))
                 ->method('create')
                 ->with('test-checkout-session')
                 ->willReturn('test-shortcut-validator');
@@ -124,27 +124,27 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
 
-            $blockMock->expects(self::once())
+            $blockMock->expects($this->once())
                 ->method('setIsInCatalogProduct')
                 ->willReturnSelf();
-            $blockMock->expects(self::once())
+            $blockMock->expects($this->once())
                 ->method('setShowOrPosition')
                 ->willReturnSelf();
 
-            $layoutMock->expects(self::at($callIndexBlock))
+            $layoutMock->expects($this->at($callIndexBlock))
                 ->method('createBlock')
                 ->with($instanceName, '', $params)
                 ->willReturn($blockMock);
 
             ++$callIndexBlock;
         }
-        $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
+        $shortcutButtonsMock->expects($this->exactly($callIndexBlock))
             ->method('addShortcut')
-            ->with(self::isInstanceOf(ShortcutInterface::class));
-        $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
+            ->with($this->isInstanceOf(ShortcutInterface::class));
+        $shortcutButtonsMock->expects($this->exactly($callIndexBlock))
             ->method('getLayout')
             ->willReturn($layoutMock);
-        $eventMock->expects(self::exactly($callIndexSession))
+        $eventMock->expects($this->exactly($callIndexSession))
             ->method('getCheckoutSession')
             ->willReturn('test-checkout-session');
 

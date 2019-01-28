@@ -45,25 +45,25 @@ class HandlerTest extends AbstractController
         $caseEntity = $caseRepository->getByCaseId($caseId);
         $orderEntityId = $caseEntity->getOrderId();
 
-        self::assertNotEmpty($caseEntity);
-        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
-        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
-        self::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
-        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
-        self::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
-        self::assertEquals($orderEntityId, $caseEntity->getOrderId());
+        $this->assertNotEmpty($caseEntity);
+        $this->assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
+        $this->assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
+        $this->assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
+        $this->assertEquals(true, $caseEntity->isGuaranteeEligible());
+        $this->assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
+        $this->assertEquals($orderEntityId, $caseEntity->getOrderId());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
         $histories = $order->getStatusHistories();
-        self::assertNotEmpty($histories);
+        $this->assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseComment = array_pop($histories);
-        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
+        $this->assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
 
-        self::assertEquals(
+        $this->assertEquals(
             "Case Update: New score for the order is 384. Previous score was 553.",
             $caseComment->getComment()
         );

@@ -79,7 +79,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->clearStaticDirectory();
 
-        self::assertEmpty($error, implode($error));
+        $this->assertEmpty($error, implode($error));
     }
 
     /**
@@ -121,7 +121,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
 
-        $inputMock->expects(self::exactly(4))
+        $inputMock->expects($this->exactly(4))
             ->method('getOption')
             ->willReturnMap(
                 [
@@ -131,7 +131,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
                     ['type', self::TYPE_TEST_VALUE]
                 ]
             );
-        $inputMock->expects(self::once())
+        $inputMock->expects($this->once())
             ->method('getArgument')
             ->with('file')
             ->willReturn($this->compiledFiles);

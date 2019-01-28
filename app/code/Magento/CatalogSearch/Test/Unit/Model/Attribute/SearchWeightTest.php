@@ -69,33 +69,33 @@ class SearchWeightTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveNewAttribute()
     {
-        $this->attribute->expects(self::once())->method('isObjectNew')->willReturn(true);
-        $this->attribute->expects(self::once())->method('dataHasChangedFor')->with('search_weight')->willReturn(false);
-        $this->config->expects(self::once())->method('reset');
+        $this->attribute->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->attribute->expects($this->once())->method('dataHasChangedFor')->with('search_weight')->willReturn(false);
+        $this->config->expects($this->once())->method('reset');
         $this->searchWeightPlugin->aroundSave($this->attributeResourceModel, $this->closure, $this->attribute);
     }
 
     public function testSaveNewAttributeWithChangedProperty()
     {
-        $this->attribute->expects(self::once())->method('isObjectNew')->willReturn(true);
-        $this->attribute->expects(self::once())->method('dataHasChangedFor')->with('search_weight')->willReturn(true);
-        $this->config->expects(self::once())->method('reset');
+        $this->attribute->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->attribute->expects($this->once())->method('dataHasChangedFor')->with('search_weight')->willReturn(true);
+        $this->config->expects($this->once())->method('reset');
         $this->searchWeightPlugin->aroundSave($this->attributeResourceModel, $this->closure, $this->attribute);
     }
 
     public function testSaveNotNewAttributeWithChangedProperty()
     {
-        $this->attribute->expects(self::once())->method('isObjectNew')->willReturn(false);
-        $this->attribute->expects(self::once())->method('dataHasChangedFor')->with('search_weight')->willReturn(true);
-        $this->config->expects(self::once())->method('reset');
+        $this->attribute->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->attribute->expects($this->once())->method('dataHasChangedFor')->with('search_weight')->willReturn(true);
+        $this->config->expects($this->once())->method('reset');
         $this->searchWeightPlugin->aroundSave($this->attributeResourceModel, $this->closure, $this->attribute);
     }
 
     public function testSaveNotNewAttributeWithNotChangedProperty()
     {
-        $this->attribute->expects(self::once())->method('isObjectNew')->willReturn(false);
-        $this->attribute->expects(self::once())->method('dataHasChangedFor')->with('search_weight')->willReturn(false);
-        $this->config->expects(self::never())->method('reset');
+        $this->attribute->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->attribute->expects($this->once())->method('dataHasChangedFor')->with('search_weight')->willReturn(false);
+        $this->config->expects($this->never())->method('reset');
         $this->searchWeightPlugin->aroundSave($this->attributeResourceModel, $this->closure, $this->attribute);
     }
 }

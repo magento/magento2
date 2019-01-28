@@ -64,7 +64,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', 'getPayment'])
             ->getMock();
-        $this->paymentDOMock->expects(static::once())
+        $this->paymentDOMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
@@ -95,36 +95,36 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => 25,
         ];
 
-        $this->configMock->expects(static::once())
+        $this->configMock->expects($this->once())
             ->method('isVerify3DSecure')
-            ->with(self::equalTo($this->storeId))
+            ->with($this->equalTo($this->storeId))
             ->willReturn($verify);
 
-        $this->configMock->expects(static::any())
+        $this->configMock->expects($this->any())
             ->method('getThresholdAmount')
-            ->with(self::equalTo($this->storeId))
+            ->with($this->equalTo($this->storeId))
             ->willReturn($thresholdAmount);
 
-        $this->configMock->expects(static::any())
+        $this->configMock->expects($this->any())
             ->method('get3DSecureSpecificCountries')
-            ->with(self::equalTo($this->storeId))
+            ->with($this->equalTo($this->storeId))
             ->willReturn($countries);
 
-        $this->billingAddressMock->expects(static::any())
+        $this->billingAddressMock->expects($this->any())
             ->method('getCountryId')
             ->willReturn($countryId);
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readAmount')
             ->with($buildSubject)
             ->willReturn(25);
 
         $result = $this->builder->build($buildSubject);
-        self::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -173,7 +173,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getBillingAddress', 'getStoreId'])
             ->getMock();
 
-        $this->orderMock->expects(static::any())
+        $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($this->billingAddressMock);
         $this->orderMock->method('getStoreId')

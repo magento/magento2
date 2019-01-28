@@ -41,7 +41,7 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        static::assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
     }
 
     /**
@@ -51,17 +51,17 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
      */
     public function testExtensionsAction($extensions)
     {
-        $this->packagesData->expects(static::once())
+        $this->packagesData->expects($this->once())
             ->method('getPackagesForInstall')
             ->willReturn($extensions);
 
         $jsonModel = $this->controller->extensionsAction();
-        static::assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
-        static::assertArrayHasKey('success', $variables);
-        static::assertArrayHasKey('extensions', $variables);
-        static::assertArrayHasKey('total', $variables);
-        static::assertTrue($variables['success']);
+        $this->assertArrayHasKey('success', $variables);
+        $this->assertArrayHasKey('extensions', $variables);
+        $this->assertArrayHasKey('total', $variables);
+        $this->assertTrue($variables['success']);
     }
 
     /**

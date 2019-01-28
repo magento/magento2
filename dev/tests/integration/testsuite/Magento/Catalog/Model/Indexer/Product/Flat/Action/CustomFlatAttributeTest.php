@@ -76,13 +76,13 @@ class CustomFlatAttributeTest extends IndexerTestCase
         $resourceModel = $product->getResourceCollection()
             ->getEntity();
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             Flat::class,
             $resourceModel,
             'Product should be received from flat resource'
         );
 
-        self::assertEquals(
+        $this->assertEquals(
             'changed flat attribute',
             $product->getFlatAttribute(),
             'Product flat attribute should be able to change.'

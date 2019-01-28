@@ -65,7 +65,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setInfoInstance($payment);
 
-        $this->api->expects(static::once())
+        $this->api->expects($this->once())
             ->method('call')
             ->willReturn([
                 'EMAILLINK' => 'https://securepayments.sandbox.paypal.com/webapps/HostedSoleSolutionApp/webflow/'
@@ -74,9 +74,9 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
         $state = $this->objectManager->create(DataObject::class);
         $this->model->initialize(Config::PAYMENT_ACTION_AUTH, $state);
 
-        static::assertEquals(Order::STATE_PENDING_PAYMENT, $state->getState());
-        static::assertEquals(Order::STATE_PENDING_PAYMENT, $state->getStatus());
-        static::assertFalse($state->getIsNotified());
+        $this->assertEquals(Order::STATE_PENDING_PAYMENT, $state->getState());
+        $this->assertEquals(Order::STATE_PENDING_PAYMENT, $state->getStatus());
+        $this->assertFalse($state->getIsNotified());
     }
 
     /**
@@ -89,7 +89,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
-        $config->expects(static::any())
+        $config->expects($this->any())
             ->method('getValue')
             ->with('payment_action')
             ->willReturn(Config::PAYMENT_ACTION_AUTH);
@@ -108,10 +108,10 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $config = $this->getConfig();
-        $pro->expects(static::any())
+        $pro->expects($this->any())
             ->method('getConfig')
             ->willReturn($config);
-        $pro->expects(static::any())
+        $pro->expects($this->any())
             ->method('getApi')
             ->willReturn($this->api);
 
@@ -119,7 +119,7 @@ class HostedproTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $proFactory->expects(static::once())
+        $proFactory->expects($this->once())
             ->method('create')
             ->willReturn($pro);
         return $proFactory;

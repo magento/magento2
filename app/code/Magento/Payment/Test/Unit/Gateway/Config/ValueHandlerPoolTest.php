@@ -18,7 +18,7 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $tMapFactory->expects(static::never())
+        $tMapFactory->expects($this->never())
             ->method('create');
         new ValueHandlerPool($tMapFactory, []);
     }
@@ -39,7 +39,7 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $tMapFactory->expects(static::once())
+        $tMapFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
@@ -52,7 +52,7 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($tMap);
-        $tMap->expects(static::exactly(3))
+        $tMap->expects($this->exactly(3))
             ->method('offsetExists')
             ->willReturnMap(
                 [
@@ -60,7 +60,7 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
                     ['some_value', true]
                 ]
             );
-        $tMap->expects(static::exactly(3))
+        $tMap->expects($this->exactly(3))
             ->method('offsetGet')
             ->willReturnMap(
                 [
@@ -76,8 +76,8 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
                 'some_value' => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
             ]
         );
-        static::assertSame($someValueHandler, $pool->get('some_value'));
-        static::assertSame($defaultHandler, $pool->get(ValueHandlerPool::DEFAULT_HANDLER));
-        static::assertSame($defaultHandler, $pool->get('no_custom_logic_required'));
+        $this->assertSame($someValueHandler, $pool->get('some_value'));
+        $this->assertSame($defaultHandler, $pool->get(ValueHandlerPool::DEFAULT_HANDLER));
+        $this->assertSame($defaultHandler, $pool->get('no_custom_logic_required'));
     }
 }

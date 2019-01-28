@@ -58,7 +58,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         ]);
         /** @var Shipping $result */
         $result = $this->model->collectRatesByAddress($address, 'flatrate');
-        static::assertInstanceOf(Shipping::class, $result);
+        $this->assertInstanceOf(Shipping::class, $result);
 
         return $result->getResult();
     }
@@ -74,13 +74,13 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     public function testCollectRates(Result $result)
     {
         $rates = $result->getAllRates();
-        static::assertNotEmpty($rates);
+        $this->assertNotEmpty($rates);
 
         /** @var Method $rate */
         $rate = array_pop($rates);
 
-        static::assertInstanceOf(Method::class, $rate);
-        static::assertEquals('flatrate', $rate->getData('carrier'));
-        static::assertEquals(5, $rate->getData('price'));
+        $this->assertInstanceOf(Method::class, $rate);
+        $this->assertEquals('flatrate', $rate->getData('carrier'));
+        $this->assertEquals(5, $rate->getData('price'));
     }
 }

@@ -83,14 +83,14 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         $orderEntityId = $caseEntity->getOrderId();
         $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($orderEntityId);
 
-        self::assertNotEmpty($caseEntity);
-        self::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
-        self::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
-        self::assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
-        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
-        self::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
-        self::assertEquals($orderEntityId, $caseEntity->getOrderId());
-        self::assertEquals(
+        $this->assertNotEmpty($caseEntity);
+        $this->assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
+        $this->assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
+        $this->assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
+        $this->assertEquals(true, $caseEntity->isGuaranteeEligible());
+        $this->assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
+        $this->assertEquals($orderEntityId, $caseEntity->getOrderId());
+        $this->assertEquals(
             $gridGuarantyStatus,
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
@@ -99,14 +99,14 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
-        self::assertEquals(Order::STATE_PROCESSING, $order->getState());
+        $this->assertEquals(Order::STATE_PROCESSING, $order->getState());
         $histories = $order->getStatusHistories();
-        self::assertNotEmpty($histories);
+        $this->assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        self::assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
+        $this->assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        $this->assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
     }
 
     /**
@@ -134,7 +134,7 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
 
-        self::assertEquals(Order::STATE_HOLDED, $order->getState());
+        $this->assertEquals(Order::STATE_HOLDED, $order->getState());
     }
 
     /**
@@ -163,7 +163,7 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
 
-        self::assertEquals(Order::STATE_PROCESSING, $order->getState());
+        $this->assertEquals(Order::STATE_PROCESSING, $order->getState());
     }
 
     /**

@@ -25,7 +25,7 @@ class MessageConfigurationsPoolTest extends \PHPUnit\Framework\TestCase
         $pool = new MessageConfigurationsPool($messageConfigurations);
 
         foreach ($expectedMessageConfigurations as $messageIdentifier => $expectedConfiguration) {
-            static::assertSame(
+            $this->assertSame(
                 $expectedConfiguration,
                 $pool->getMessageConfiguration($messageIdentifier)
             );

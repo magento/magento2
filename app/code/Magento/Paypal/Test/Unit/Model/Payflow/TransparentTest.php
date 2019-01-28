@@ -170,10 +170,10 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->orderMock->expects(static::once())
+        $this->orderMock->expects($this->once())
             ->method('getIncrementId')
             ->willReturn('0000001');
         $this->orderMock->expects($this->once())
@@ -399,7 +399,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects($this->once())
             ->method('getCcExpMonth')
             ->willReturn('12');
-        $this->paymentMock->expects(static::any())
+        $this->paymentMock->expects($this->any())
             ->method('getAdditionalInformation')
             ->willReturnMap(
                 [
@@ -408,23 +408,23 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->paymentTokenFactory->expects(static::once())
+        $this->paymentTokenFactory->expects($this->once())
             ->method('create')
             ->willReturn($paymentTokenMock);
-        $paymentTokenMock->expects(static::once())
+        $paymentTokenMock->expects($this->once())
             ->method('setGatewayToken')
             ->with('test-pnref');
-        $paymentTokenMock->expects(static::once())
+        $paymentTokenMock->expects($this->once())
             ->method('setTokenDetails')
             ->with(json_encode($ccDetails));
-        $paymentTokenMock->expects(static::once())
+        $paymentTokenMock->expects($this->once())
             ->method('setExpiresAt')
             ->with('2018-01-01 00:00:00');
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
 
@@ -443,6 +443,6 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoBlockType()
     {
-        static::assertEquals(Info::class, $this->object->getInfoBlockType());
+        $this->assertEquals(Info::class, $this->object->getInfoBlockType());
     }
 }

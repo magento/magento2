@@ -157,54 +157,54 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
         $column = $this->prepareColumn();
         $elementHistory = new ElementHistory($column);
         $definition = '`int` INT(11) NOT NULL DEFAULT 0 Comment "Azaza"';
-        $this->definitionAggregatorMock->expects(self::once())
+        $this->definitionAggregatorMock->expects($this->once())
             ->method('toDefinition')
             ->with($column)
             ->willReturn($definition);
-        $this->migrateDataTrigger->expects(self::once())
+        $this->migrateDataTrigger->expects($this->once())
             ->method('isApplicable')
             ->with('migrateDataFrom(v)')
             ->willReturn(true);
-        $this->migrateDataTrigger->expects(self::once())
+        $this->migrateDataTrigger->expects($this->once())
             ->method('getCallback')
             ->with($elementHistory)
             ->willReturn($callback);
         $statement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statement->expects(self::once())
+        $statement->expects($this->once())
             ->method('addTrigger')
             ->with($callback);
-        $this->dbSchemaWriterMock->expects(self::once())
+        $this->dbSchemaWriterMock->expects($this->once())
             ->method('addElement')
             ->with('int', 'default', 'table', $definition, 'column')
             ->willReturn($statement);
         $index = new Index('index', 'index', $column->getTable(), [$column], 'btree', 'index');
-        $this->elementFactoryMock->expects(self::once())
+        $this->elementFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($index);
         $indexHistory = new ElementHistory($index);
-        $statement->expects(self::once())
+        $statement->expects($this->once())
             ->method('getTriggers')
             ->willReturn([$callback]);
-        $this->elementHistoryFactoryMock->expects(self::once())
+        $this->elementHistoryFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($indexHistory);
-        $this->addComplexElementMock->expects(self::once())
+        $this->addComplexElementMock->expects($this->once())
             ->method('doOperation')
             ->with($indexHistory)
             ->willReturn([$addComplexStatement]);
-        $this->dropElementMock->expects(self::once())
+        $this->dropElementMock->expects($this->once())
             ->method('doOperation')
             ->with($indexHistory)
             ->willReturn([$dropComplexElement]);
         $resetAIStatement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock->expects(self::once())
+        $this->dbSchemaWriterMock->expects($this->once())
             ->method('resetAutoIncrement')
             ->willReturn($resetAIStatement);
-        self::assertEquals(
+        $this->assertEquals(
             [$addComplexStatement, $statement, $dropComplexElement, $resetAIStatement],
             $this->model->doOperation($elementHistory)
         );

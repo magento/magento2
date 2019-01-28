@@ -206,16 +206,16 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $productMock->expects(static::any())
+        $productMock->expects($this->any())
             ->method('getId')
             ->willReturn($this->productId);
-        $productMock->expects(static::any())
+        $productMock->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($this->configurableProductTypeMock);
-        $this->configurableProductTypeMock->expects(static::any())
+        $this->configurableProductTypeMock->expects($this->any())
             ->method('getConfigurableOptions')
             ->willReturn($productAttributesOptions);
-        $this->productCollectionMock->expects(static::atLeastOnce())
+        $this->productCollectionMock->expects($this->atLeastOnce())
             ->method('addAttributeToFilter')
             ->willReturnMap(
                 [
@@ -223,7 +223,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
                     ['type_id', ['eq' => ConfigurableProductType::TYPE_CODE], 'inner', $this->productCollectionMock]
                 ]
             );
-        $this->productCollectionMock->expects(static::atLeastOnce())
+        $this->productCollectionMock->expects($this->atLeastOnce())
             ->method('fetchItem')
             ->willReturnOnConsecutiveCalls($productMock, false);
 

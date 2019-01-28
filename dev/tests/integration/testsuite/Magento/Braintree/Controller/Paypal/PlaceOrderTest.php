@@ -98,14 +98,14 @@ class PlaceOrderTest extends AbstractController
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('braintree/paypal/placeOrder');
 
-        self::assertRedirect(self::stringContains('checkout/cart'));
+        self::assertRedirect($this->stringContains('checkout/cart'));
         self::assertSessionMessages(
-            self::equalTo(['The order #' . $reservedOrderId . ' cannot be processed.']),
+            $this->equalTo(['The order #' . $reservedOrderId . ' cannot be processed.']),
             MessageInterface::TYPE_ERROR
         );
 
         $order = $this->getOrder($reservedOrderId);
-        self::assertEquals('canceled', $order->getState());
+        $this->assertEquals('canceled', $order->getState());
     }
 
     /**

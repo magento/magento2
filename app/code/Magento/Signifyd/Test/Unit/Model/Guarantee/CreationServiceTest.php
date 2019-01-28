@@ -96,19 +96,19 @@ class CreationServiceTest extends TestCase
     {
         $orderId = 1;
 
-        $this->createGuaranteeAbility->expects(self::once())
+        $this->createGuaranteeAbility->expects($this->once())
             ->method('isAvailable')
             ->with($orderId)
             ->willReturn(false);
 
-        $this->caseManagement->expects(self::never())
+        $this->caseManagement->expects($this->never())
             ->method('getByOrderId');
 
-        $this->gateway->expects(self::never())
+        $this->gateway->expects($this->never())
             ->method('submitCaseForGuarantee');
 
         $result = $this->service->createForOrder($orderId);
-        self::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     public function testCreateForOrderWitCase()
@@ -210,9 +210,9 @@ class CreationServiceTest extends TestCase
      */
     private function withCaseEntityExistsForOrderId($orderId, array $caseData = [])
     {
-        $this->createGuaranteeAbility->expects(self::once())
+        $this->createGuaranteeAbility->expects($this->once())
             ->method('isAvailable')
-            ->with(self::equalTo($orderId))
+            ->with($this->equalTo($orderId))
             ->willReturn(true);
 
         $dummyCaseEntity = $this->getMockBuilder(CaseInterface::class)

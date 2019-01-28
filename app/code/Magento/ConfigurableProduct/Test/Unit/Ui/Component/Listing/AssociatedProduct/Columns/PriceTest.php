@@ -87,7 +87,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects(static::never())
+        $this->contextMock->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
 

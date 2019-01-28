@@ -68,7 +68,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $childrenIds = $this->product->getTypeInstance()->getChildrenIds($this->product->getId());
         $savedChildrenIds = [reset($childrenIds[0])];
 
-        self::assertEquals($newChildrenIds, $savedChildrenIds);
+        $this->assertEquals($newChildrenIds, $savedChildrenIds);
     }
 
     /**
@@ -85,7 +85,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->handler->execute($product);
         $newProductLinks = $this->getCurrentProductLinks();
 
-        self::assertEquals($oldProductLinks, $newProductLinks);
+        $this->assertEquals($oldProductLinks, $newProductLinks);
     }
 
     /**

@@ -30,16 +30,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->methodsMap = $this->createMock(MethodsMap::class);
 
-        $this->methodsMap->expects(static::any())
+        $this->methodsMap->expects($this->any())
             ->method('getMethodsMap')
             ->will($this->throwException(new \InvalidArgumentException('message', 333)));
 
         $this->typeProcessor = $this->createMock(TypeProcessor::class);
-        $this->typeProcessor->expects(static::any())
+        $this->typeProcessor->expects($this->any())
             ->method('isTypeSimple')
             ->willReturn(false);
 
-        $this->typeProcessor->expects(static::any())
+        $this->typeProcessor->expects($this->any())
             ->method('isTypeSimple')
             ->willReturn(false);
     }

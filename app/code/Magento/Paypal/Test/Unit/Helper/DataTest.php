@@ -89,12 +89,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBillingAgreementMethods($store, $quote, $paymentMethodsMap, $expectedResult)
     {
-        $this->paymentMethodList->expects(static::once())
+        $this->paymentMethodList->expects($this->once())
             ->method('getActiveList')
             ->with($store)
             ->willReturn(array_column($paymentMethodsMap, 0));
 
-        $this->paymentMethodInstanceFactory->expects(static::any())
+        $this->paymentMethodInstanceFactory->expects($this->any())
             ->method('create')
             ->willReturnMap($paymentMethodsMap);
 

@@ -56,20 +56,20 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
         $buildSubject = [
             'payment' => $paymentDOMock,
         ];
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReaderMock->expects($this->once())
             ->method('readPayment')
             ->with($buildSubject)
             ->willReturn($paymentDOMock);
 
         $order = $this->createMock(OrderAdapterInterface::class);
-        $order->expects(self::once())->method('getStoreId')->willReturn('1');
+        $order->expects($this->once())->method('getStoreId')->willReturn('1');
 
-        $paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
+        $paymentDOMock->expects($this->once())->method('getOrder')->willReturn($order);
 
         $this->configMock->method('getDynamicDescriptors')->willReturn($descriptors);
 
         $actual = $this->builder->build(['payment' => $paymentDOMock]);
-        static::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

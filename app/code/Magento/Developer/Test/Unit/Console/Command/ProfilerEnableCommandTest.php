@@ -50,7 +50,7 @@ class ProfilerEnableCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(['type' => $inputType]);
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
             trim(str_replace(PHP_EOL, ' ', $commandTester->getDisplay()))
         );

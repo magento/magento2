@@ -154,15 +154,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ['attributes', null, $attributes],
         ];
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ConfigurableProduct::TYPE_CODE);
 
-        $this->request->expects(static::any())
+        $this->request->expects($this->any())
             ->method('getPost')
             ->willReturnMap($valueMap);
 
-        $this->request->expects(static::any())
+        $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
@@ -170,33 +170,33 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $this->optionFactory->expects(static::once())
+        $this->optionFactory->expects($this->once())
             ->method('create')
             ->with($attributes)
             ->willReturn($attributes);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setConfigurableProductOptions')
             ->with($attributes);
 
-        $this->variationHandler->expects(static::once())
+        $this->variationHandler->expects($this->once())
             ->method('prepareAttributeSet')
             ->with($this->product);
 
-        $this->variationHandler->expects(static::once())
+        $this->variationHandler->expects($this->once())
             ->method('generateSimpleProducts')
             ->with($this->product, $variationMatrix)
             ->willReturn($simpleProductsIds);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setConfigurableProductLinks')
             ->with($simpleProductsIds);
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
@@ -220,15 +220,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ['attributes', null, $attributes],
         ];
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ConfigurableProduct::TYPE_CODE);
 
-        $this->request->expects(static::any())
+        $this->request->expects($this->any())
             ->method('getPost')
             ->willReturnMap($valueMap);
 
-        $this->request->expects(static::any())
+        $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
@@ -236,29 +236,29 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $this->optionFactory->expects(static::once())
+        $this->optionFactory->expects($this->once())
             ->method('create')
             ->with($attributes)
             ->willReturn($attributes);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setConfigurableProductOptions')
             ->with($attributes);
 
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('prepareAttributeSet');
 
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('generateSimpleProducts');
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects($this->once())
             ->method('setConfigurableProductLinks');
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
@@ -267,36 +267,36 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterInitializeIfAttributesEmpty()
     {
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ConfigurableProduct::TYPE_CODE);
-        $this->request->expects(static::once())
+        $this->request->expects($this->once())
             ->method('getParam')
             ->with('attributes')
             ->willReturn([]);
-        $this->product->expects(static::never())
+        $this->product->expects($this->never())
             ->method('getExtensionAttributes');
-        $this->request->expects(static::once())
+        $this->request->expects($this->once())
             ->method('getPost');
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('prepareAttributeSet');
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('generateSimpleProducts');
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
     public function testAfterInitializeForNotConfigurableProduct()
     {
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn('non-configurable');
-        $this->product->expects(static::never())
+        $this->product->expects($this->never())
             ->method('getExtensionAttributes');
-        $this->request->expects(static::once())
+        $this->request->expects($this->once())
             ->method('getPost');
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('prepareAttributeSet');
-        $this->variationHandler->expects(static::never())
+        $this->variationHandler->expects($this->never())
             ->method('generateSimpleProducts');
         $this->plugin->afterInitialize($this->subject, $this->product);
     }

@@ -63,16 +63,16 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->setData('region_id', $regionId);
         $this->address->setData('country_id', 2);
 
-        $this->regionMock->expects(static::once())
+        $this->regionMock->expects($this->once())
             ->method('load')
             ->with($regionId)
             ->willReturnSelf();
 
-        $this->regionMock->expects(static::once())
+        $this->regionMock->expects($this->once())
             ->method('getCountryId')
             ->willReturn(1);
 
-        $this->regionFactoryMock->expects(static::once())
+        $this->regionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->regionMock);
         $this->assertEquals('region', $this->address->getRegionCode());

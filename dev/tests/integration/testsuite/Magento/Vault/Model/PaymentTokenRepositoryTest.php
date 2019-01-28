@@ -104,8 +104,8 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $deletedToken = $tokenRepository->getById($token->getEntityId());
 
-        static::assertEquals('public_hash', $deletedToken->getPublicHash());
-        static::assertFalse($deletedToken->getIsActive());
-        static::assertFalse($deletedToken->getIsVisible());
+        $this->assertEquals('public_hash', $deletedToken->getPublicHash());
+        $this->assertFalse($deletedToken->getIsActive());
+        $this->assertFalse($deletedToken->getIsVisible());
     }
 }

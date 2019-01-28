@@ -49,15 +49,15 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn('simple');
 
-        $product->expects(static::never())
+        $product->expects($this->never())
             ->method('getExtensionAttributes');
 
         $entity = $this->readHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 
     /**
@@ -79,7 +79,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
@@ -88,11 +88,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $this->optionLoader->expects(static::once())
+        $this->optionLoader->expects($this->once())
             ->method('load')
             ->with($product)
             ->willReturn($options);
@@ -102,23 +102,23 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getChildrenIds'])
             ->getMock();
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($typeInstance);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getId')
             ->willReturn($entityId);
 
-        $typeInstance->expects(static::once())
+        $typeInstance->expects($this->once())
             ->method('getChildrenIds')
             ->willReturn($ids);
 
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
         $entity = $this->readHandler->execute($product);
-        static::assertSame($product, $entity);
+        $this->assertSame($product, $entity);
     }
 }

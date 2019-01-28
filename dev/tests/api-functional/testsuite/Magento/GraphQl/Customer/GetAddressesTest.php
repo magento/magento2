@@ -60,7 +60,7 @@ QUERY;
             is_array([$response['customer']['addresses']]),
             " Addresses field must be of an array type."
         );
-        self::assertEquals($customer->getId(), $response['customer']['id']);
+        $this->assertEquals($customer->getId(), $response['customer']['id']);
         $this->assertCustomerAddressesFields($customer, $response);
     }
 

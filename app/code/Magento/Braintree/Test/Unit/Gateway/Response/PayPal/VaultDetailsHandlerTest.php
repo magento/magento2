@@ -107,7 +107,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->paymentInfoMock->expects(self::any())
+        $this->paymentInfoMock->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($this->paymentExtensionMock);
 
@@ -159,14 +159,14 @@ class VaultDetailsHandlerTest extends TestCase
 
         $extensionAttributes = $this->paymentInfoMock->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
-        self::assertNotNull($paymentToken);
+        $this->assertNotNull($paymentToken);
 
         $tokenDetails = json_decode($paymentToken->getTokenDetails(), true);
 
-        self::assertSame($this->paymentTokenMock, $paymentToken);
-        self::assertEquals(self::$token, $paymentToken->getGatewayToken());
-        self::assertEquals(self::$payerEmail, $tokenDetails['payerEmail']);
-        self::assertEquals($expirationDate, $paymentToken->getExpiresAt());
+        $this->assertSame($this->paymentTokenMock, $paymentToken);
+        $this->assertEquals(self::$token, $paymentToken->getGatewayToken());
+        $this->assertEquals(self::$payerEmail, $tokenDetails['payerEmail']);
+        $this->assertEquals($expirationDate, $paymentToken->getExpiresAt());
     }
 
     public function testHandleWithoutToken()
@@ -181,14 +181,14 @@ class VaultDetailsHandlerTest extends TestCase
         $this->paymentDataObjectMock->method('getPayment')
             ->willReturn($this->paymentInfoMock);
 
-        $this->paymentTokenFactoryMock->expects(self::never())
+        $this->paymentTokenFactoryMock->expects($this->never())
             ->method('create');
 
-        $this->dateTimeFactoryMock->expects(self::never())
+        $this->dateTimeFactoryMock->expects($this->never())
             ->method('create');
 
         $this->handler->handle($this->subject, $response);
-        self::assertNotNull($this->paymentInfoMock->getExtensionAttributes());
+        $this->assertNotNull($this->paymentInfoMock->getExtensionAttributes());
     }
 
     /**

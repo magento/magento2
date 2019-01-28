@@ -58,7 +58,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountrySpecificCardTypeConfig($encodedValue, $value, array $expected)
     {
-        $this->scopeConfigMock->expects(static::once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($encodedValue);
@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($encodedValue)
             ->willReturn($value);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expected,
             $this->model->getCountrySpecificCardTypeConfig()
         );
@@ -100,12 +100,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAvailableCardTypes($value, $expected)
     {
-        $this->scopeConfigMock->expects(static::once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_CC_TYPES), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expected,
             $this->model->getAvailableCardTypes()
         );
@@ -135,12 +135,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcTypesMapper($value, $expected)
     {
-        $this->scopeConfigMock->expects(static::once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_CC_TYPES_BRAINTREE_MAPPER), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
-        static::assertEquals(
+        $this->assertEquals(
             $expected,
             $this->model->getCcTypesMapper()
         );
@@ -176,7 +176,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testCountryAvailableCardTypes($encodedData, $data, array $countryData)
     {
-        $this->scopeConfigMock->expects(static::any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($encodedData);
@@ -188,11 +188,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);
-            static::assertEquals($types, $result);
+            $this->assertEquals($types, $result);
         }
 
         if (empty($countryData)) {
-            static::assertEquals($data, "");
+            $this->assertEquals($data, "");
         }
     }
 
@@ -201,12 +201,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testUseCvv()
     {
-        $this->scopeConfigMock->expects(static::any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->isCvvEnabled());
+        $this->assertEquals(true, $this->model->isCvvEnabled());
     }
 
     /**
@@ -217,11 +217,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsVerify3DSecure($data, $expected)
     {
-        $this->scopeConfigMock->expects(static::any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_VERIFY_3DSECURE), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($data);
-        static::assertEquals($expected, $this->model->isVerify3DSecure());
+        $this->assertEquals($expected, $this->model->isVerify3DSecure());
     }
 
     /**
@@ -248,11 +248,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetThresholdAmount($data, $expected)
     {
-        $this->scopeConfigMock->expects(static::any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_THRESHOLD_AMOUNT), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($data);
-        static::assertEquals($expected, $this->model->getThresholdAmount());
+        $this->assertEquals($expected, $this->model->getThresholdAmount());
     }
 
     /**
@@ -281,18 +281,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet3DSecureSpecificCountries($value, array $expected)
     {
-        $this->scopeConfigMock->expects(static::at(0))
+        $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with($this->getPath(Config::KEY_VERIFY_ALLOW_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
         if ($value !== Config::VALUE_3DSECURE_ALL) {
-            $this->scopeConfigMock->expects(static::at(1))
+            $this->scopeConfigMock->expects($this->at(1))
                 ->method('getValue')
                 ->with($this->getPath(Config::KEY_VERIFY_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
                 ->willReturn('GB,US');
         }
-        static::assertEquals($expected, $this->model->get3DSecureSpecificCountries());
+        $this->assertEquals($expected, $this->model->get3DSecureSpecificCountries());
     }
 
     /**
@@ -317,21 +317,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDynamicDescriptors($name, $phone, $url, array $expected)
     {
-        $this->scopeConfigMock->expects(static::at(0))
+        $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with($this->getPath('descriptor_name'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($name);
-        $this->scopeConfigMock->expects(static::at(1))
+        $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
             ->with($this->getPath('descriptor_phone'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($phone);
-        $this->scopeConfigMock->expects(static::at(2))
+        $this->scopeConfigMock->expects($this->at(2))
             ->method('getValue')
             ->with($this->getPath('descriptor_url'), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($url);
 
         $actual = $this->model->getDynamicDescriptors();
-        static::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

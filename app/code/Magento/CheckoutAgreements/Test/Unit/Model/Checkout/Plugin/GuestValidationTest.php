@@ -106,7 +106,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects(static::atLeastOnce())
+        $this->paymentMock->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation(
@@ -141,7 +141,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
-        $this->paymentMock->expects(static::atLeastOnce())
+        $this->paymentMock->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation(
@@ -177,7 +177,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects(static::atLeastOnce())
+        $this->paymentMock->expects($this->atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation(

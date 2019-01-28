@@ -69,7 +69,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $shipment->setPackages($packages);
         $saved = $this->shipmentRepository->save($shipment);
-        self::assertEquals($packages, $saved->getPackages());
+        $this->assertEquals($packages, $saved->getPackages());
     }
 
     /**
@@ -95,7 +95,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $shipment->addTrack($track);
         $this->shipmentRepository->save($shipment);
         $saved = $this->shipmentRepository->get((int)$shipment->getEntityId());
-        self::assertNotEmpty($saved->getTracks());
+        $this->assertNotEmpty($saved->getTracks());
     }
 
     /**
@@ -120,8 +120,8 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $actual = array_map(function (CommentInterface $comment) {
             return $comment->getComment();
         }, $comments);
-        self::assertEquals(2, count($actual));
-        self::assertEquals([$message1, $message2], $actual);
+        $this->assertEquals(2, count($actual));
+        $this->assertEquals([$message1, $message2], $actual);
     }
 
     /**

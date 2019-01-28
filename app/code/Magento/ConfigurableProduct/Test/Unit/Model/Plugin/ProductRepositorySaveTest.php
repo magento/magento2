@@ -109,10 +109,10 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterSaveWhenProductIsSimple()
     {
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn('simple');
-        $this->product->expects(static::never())
+        $this->product->expects($this->never())
             ->method('getExtensionAttributes');
 
         $this->assertEquals(
@@ -123,22 +123,22 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterSaveWithoutOptions()
     {
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->result->expects(static::once())
+        $this->result->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
 
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductOptions')
             ->willReturn([]);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn([]);
 
-        $this->productAttributeRepository->expects(static::never())
+        $this->productAttributeRepository->expects($this->never())
             ->method('get');
 
         $this->assertEquals(
@@ -154,21 +154,21 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     public function testAfterSaveWithLinks()
     {
         $links = [4, 5];
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->result->expects(static::once())
+        $this->result->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductOptions')
             ->willReturn(null);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn($links);
 
-        $this->productAttributeRepository->expects(static::never())
+        $this->productAttributeRepository->expects($this->never())
             ->method('get');
 
         $product = $this->getMockBuilder(Product::class)
@@ -176,14 +176,14 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['load', 'getData', '__wakeup'])
             ->getMock();
 
-        $this->productFactory->expects(static::exactly(2))
+        $this->productFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($product);
 
-        $product->expects(static::exactly(2))
+        $product->expects($this->exactly(2))
             ->method('load')
             ->willReturnSelf();
-        $product->expects(static::never())
+        $product->expects($this->never())
             ->method('getData');
 
         $this->plugin->afterSave($this->productRepository, $this->result, $this->product);
@@ -200,29 +200,29 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'color';
         $attributeId = 23;
 
-        $this->option->expects(static::once())
+        $this->option->expects($this->once())
             ->method('getAttributeId')
             ->willReturn($attributeId);
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->result->expects(static::once())
+        $this->result->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductOptions')
             ->willReturn([$this->option]);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn($links);
 
-        $this->productAttributeRepository->expects(static::once())
+        $this->productAttributeRepository->expects($this->once())
             ->method('get')
             ->willReturn($this->eavAttribute);
 
-        $this->eavAttribute->expects(static::once())
+        $this->eavAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
@@ -231,14 +231,14 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['load', 'getData', '__wakeup'])
             ->getMock();
 
-        $this->productFactory->expects(static::once())
+        $this->productFactory->expects($this->once())
             ->method('create')
             ->willReturn($product);
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('load')
             ->with($simpleProductId)
             ->willReturnSelf();
-        $product->expects(static::once())
+        $product->expects($this->once())
             ->method('getData')
             ->with($attributeCode)
             ->willReturn(false);
@@ -256,29 +256,29 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'color';
         $attributeId = 23;
 
-        $this->option->expects(static::once())
+        $this->option->expects($this->once())
             ->method('getAttributeId')
             ->willReturn($attributeId);
 
-        $this->product->expects(static::once())
+        $this->product->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $this->result->expects(static::once())
+        $this->result->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductOptions')
             ->willReturn([$this->option]);
-        $this->extensionAttributes->expects(static::once())
+        $this->extensionAttributes->expects($this->once())
             ->method('getConfigurableProductLinks')
             ->willReturn($links);
 
-        $this->productAttributeRepository->expects(static::once())
+        $this->productAttributeRepository->expects($this->once())
             ->method('get')
             ->willReturn($this->eavAttribute);
 
-        $this->eavAttribute->expects(static::once())
+        $this->eavAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
@@ -287,13 +287,13 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['load', 'getData', '__wakeup'])
             ->getMock();
 
-        $this->productFactory->expects(static::exactly(2))
+        $this->productFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($product);
-        $product->expects(static::exactly(2))
+        $product->expects($this->exactly(2))
             ->method('load')
             ->willReturnSelf();
-        $product->expects(static::exactly(4))
+        $product->expects($this->exactly(4))
             ->method('getData')
             ->with($attributeCode)
             ->willReturn($attributeId);

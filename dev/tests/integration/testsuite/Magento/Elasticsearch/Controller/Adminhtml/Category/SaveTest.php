@@ -67,9 +67,9 @@ class SaveTest extends AbstractBackendController
     public function testExecute()
     {
         $fulltextIndexer = $this->getIndexer(FulltextIndexer::INDEXER_ID);
-        self::assertTrue($fulltextIndexer->isValid(), 'Fulltext indexer should be valid.');
+        $this->assertTrue($fulltextIndexer->isValid(), 'Fulltext indexer should be valid.');
         $categoryIndexer = $this->getIndexer(CategoryIndexer::INDEXER_ID);
-        self::assertTrue($categoryIndexer->isValid(), 'Category indexer should be valid.');
+        $this->assertTrue($categoryIndexer->isValid(), 'Category indexer should be valid.');
 
         $category = $this->getCategory('Category 1');
         $productIdList = $this->getProductIdList(['simple1', 'simple2', 'simple3']);
@@ -83,14 +83,14 @@ class SaveTest extends AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            self::equalTo(['You saved the category.']),
+            $this->equalTo(['You saved the category.']),
             MessageInterface::TYPE_SUCCESS
         );
 
         $fulltextIndexer = $this->getIndexer(FulltextIndexer::INDEXER_ID);
-        self::assertTrue($fulltextIndexer->isInvalid(), 'Fulltext indexer should be invalidated.');
+        $this->assertTrue($fulltextIndexer->isInvalid(), 'Fulltext indexer should be invalidated.');
         $categoryIndexer = $this->getIndexer(CategoryIndexer::INDEXER_ID);
-        self::assertTrue($categoryIndexer->isInvalid(), 'Category indexer should be invalidated.');
+        $this->assertTrue($categoryIndexer->isInvalid(), 'Category indexer should be invalidated.');
     }
 
     /**
