@@ -91,7 +91,7 @@ class AdminUsersFixture extends Fixture
 
         $role = $this->createAdministratorRole();
 
-        for ($i = $adminUsersStartIndex; $i <= $adminUsersNumber; $i++) {
+        for ($i = $adminUsersStartIndex; $i <= $adminUsersNumber; ++$i) {
             $adminUser = $this->userFactory->create();
             $adminUser->setRoleId($role->getId())
                 ->setEmail('admin' . $i . '@example.com')

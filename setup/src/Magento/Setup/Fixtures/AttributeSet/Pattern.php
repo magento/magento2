@@ -45,7 +45,7 @@ class Pattern
             'name' => $name,
             'attributes' => []
         ];
-        for ($index = 1; $index <= $attributesPerSet; $index++) {
+        for ($index = 1; $index <= $attributesPerSet; ++$index) {
             $attributeData =  $this->generateAttribute(
                 $index,
                 is_array($optionsPerAttribute) ? $optionsPerAttribute[$index-1] : $optionsPerAttribute
@@ -85,7 +85,7 @@ class Pattern
     private function generateOptions($optionsPerAttribute)
     {
         $options = [];
-        for ($index = 1; $index <= $optionsPerAttribute; $index++) {
+        for ($index = 1; $index <= $optionsPerAttribute; ++$index) {
             $options[] = [
                 'label' => 'option ' . $index,
                 'value' => 'option_' . $index

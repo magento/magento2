@@ -337,7 +337,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_nextCustomerId++;
+                    ++$this->_nextCustomerId;
                 }
 
                 return $this->_validateAddressRow($rowData, $rowNumber);

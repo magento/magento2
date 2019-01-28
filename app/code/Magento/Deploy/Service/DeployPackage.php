@@ -133,11 +133,11 @@ class DeployPackage
                 $errorMessage = __('Compilation from source: ')
                     . $file->getSourcePath()
                     . PHP_EOL . $exception->getMessage();
-                $this->errorsCount++;
+                ++$this->errorsCount;
                 $this->logger->critical($errorMessage);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception->getTraceAsString());
-                $this->errorsCount++;
+                ++$this->errorsCount;
             }
         }
 

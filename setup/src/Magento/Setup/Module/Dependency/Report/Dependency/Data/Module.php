@@ -76,7 +76,7 @@ class Module
         $dependenciesCount = 0;
         foreach ($this->getDependencies() as $dependency) {
             if ($dependency->isHard()) {
-                $dependenciesCount++;
+                ++$dependenciesCount;
             }
         }
         return $dependenciesCount;
@@ -92,7 +92,7 @@ class Module
         $dependenciesCount = 0;
         foreach ($this->getDependencies() as $dependency) {
             if ($dependency->isSoft()) {
-                $dependenciesCount++;
+                ++$dependenciesCount;
             }
         }
         return $dependenciesCount;

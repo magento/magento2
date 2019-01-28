@@ -88,7 +88,7 @@ class TypeSelectorsSniff implements Sniff
             //$phpcsFile->addWarning('Type selector is used', $stackPtr, 'TypeSelector');
         }
 
-        for ($i = $stackPtr; $i < $bracketPtr; $i++) {
+        for ($i = $stackPtr; $i < $bracketPtr; ++$i) {
             if (preg_match('/[A-Z]/', $tokens[$i]['content'])) {
                 $phpcsFile->addError('Selector contains uppercase symbols', $stackPtr, 'UpperCaseSelector');
             }

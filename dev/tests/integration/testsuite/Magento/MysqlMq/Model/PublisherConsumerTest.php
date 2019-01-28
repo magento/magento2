@@ -84,15 +84,15 @@ class PublisherConsumerTest extends \PHPUnit\Framework\TestCase
         $objectFactory = $this->objectManager->create(\Magento\MysqlMq\Model\DataObjectFactory::class);
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         $object = $objectFactory->create();
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.created', $object);
         }
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.updated', $object);
         }
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.custom.created', $object);
         }
@@ -127,23 +127,23 @@ class PublisherConsumerTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
         $object = $objectFactory->create();
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.created', $object);
         }
         $outputPattern = '/(Processed \d+\s)/';
-        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; $i++) {
+        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; ++$i) {
             $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX, 0, $outputPattern);
         }
         $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX, 0, $outputPattern);
 
         /** Try consume messages for MAX_NUMBER_OF_TRIALS+1 and then consumer them without exception */
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.created', $object);
         }
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
-        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS + 1; $i++) {
+        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS + 1; ++$i) {
             $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX, 0, $outputPattern);
         }
         /** Make sure that messages are not accessible anymore after number of trials is exceeded */

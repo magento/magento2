@@ -158,7 +158,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
                 $retrieverId = 100 * (int)$sortOrder;
                 // Check if there is a retriever with such id and find next available position if needed
                 while (isset($this->_retrievers[$retrieverId])) {
-                    $retrieverId++;
+                    ++$retrieverId;
                 }
                 $this->_retrievers[$retrieverId] = $this->_models[$code];
             }

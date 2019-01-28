@@ -212,7 +212,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      */
     protected function incArrayDepth()
     {
-        $this->arrayDepth++;
+        ++$this->arrayDepth;
     }
 
     /**
@@ -227,7 +227,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
         if ($this->arrayDepth == 0) {
             return;
         }
-        $this->arrayDepth--;
+        --$this->arrayDepth;
     }
 
     /**

@@ -311,7 +311,7 @@ class Eav extends AbstractModifier
                     $sortOrder * self::SORT_ORDER_MULTIPLIER;
             }
 
-            $sortOrder++;
+            ++$sortOrder;
         }
 
         return $meta;

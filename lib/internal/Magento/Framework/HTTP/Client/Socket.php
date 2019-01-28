@@ -351,11 +351,11 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
             }
             $out[trim($key)] = ['value' => trim($val)];
             array_shift($values);
-            $c--;
+            --$c;
             if (!$c) {
                 continue;
             }
-            for ($i = 0; $i < $c; $i++) {
+            for ($i = 0; $i < $c; ++$i) {
                 list($subkey, $val) = explode("=", $values[$i]);
                 $out[trim($key)][trim($subkey)] = trim($val);
             }

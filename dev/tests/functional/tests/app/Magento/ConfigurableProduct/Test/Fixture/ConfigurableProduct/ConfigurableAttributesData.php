@@ -386,7 +386,7 @@ class ConfigurableAttributesData extends DataSource
                     }
                     $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                     $result[$newRowKey] = $row;
-                    $index++;
+                    ++$index;
                 }
             }
         }

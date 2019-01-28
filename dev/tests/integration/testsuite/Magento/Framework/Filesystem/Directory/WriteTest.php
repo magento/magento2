@@ -71,17 +71,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->create('../../outsideDir');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->create('//./..///../outsideDir');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->create('\..\..\outsideDir');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -118,17 +118,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->delete('../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->delete('//./..///../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->delete('\..\..\Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -171,7 +171,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->renameFile('../../Directory/ReadTest.php', 'RenamedTest');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->renameFile(
@@ -179,12 +179,12 @@ class WriteTest extends \PHPUnit\Framework\TestCase
                 'RenamedTest'
             );
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->renameFile('\..\..\Directory\ReadTest.php', 'RenamedTest');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -263,7 +263,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->copyFile('../../Directory/ReadTest.php', 'CopiedTest');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->copyFile(
@@ -271,12 +271,12 @@ class WriteTest extends \PHPUnit\Framework\TestCase
                 'CopiedTest'
             );
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->copyFile('\..\..\Directory\ReadTest.php', 'CopiedTest');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->copyFile(
@@ -284,7 +284,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
                 '../../Directory/copied_outside.txt'
             );
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(4, $exceptions);
     }
@@ -342,17 +342,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->changePermissions('../../Directory', 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->changePermissions('//./..///../Directory', 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->changePermissions('\..\..\Directory', 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -377,17 +377,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->changePermissionsRecursively('../foo', 0777, 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->changePermissionsRecursively('//./..///foo', 0777, 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->changePermissionsRecursively('\..\foo', 0777, 0777);
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -429,17 +429,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->touch('../../foo.tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->touch('//./..///../foo.tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->touch('\..\..\foo.tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -462,17 +462,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->isWritable('../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isWritable('//./..///../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isWritable('\..\..\Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -514,17 +514,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->openFile('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->openFile('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->openFile('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -580,17 +580,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->writeFile('../../Directory/ReadTest.php', 'tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->writeFile('//./..///../Directory/ReadTest.php', 'tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->writeFile('\..\..\Directory\ReadTest.php', 'tst');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }

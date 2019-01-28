@@ -147,7 +147,7 @@ class BatchRangeIterator implements BatchIteratorInterface
         $this->isValid = $this->currentOffset < $this->totalItemCount;
         $select = $this->initSelectObject();
         if ($this->isValid) {
-            $this->iteration++;
+            ++$this->iteration;
             $this->currentSelect = $select;
         } else {
             $this->currentSelect = null;

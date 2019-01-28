@@ -269,7 +269,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
             if ($lPage == $page) {
                 $break = true;
             }
-            $page++;
+            ++$page;
 
             $collection = $this->_getRowCollection($originalCollection);
             foreach ($collection as $item) {

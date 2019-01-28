@@ -257,8 +257,8 @@ class Topmenu extends Template implements IdentityInterface
                 $childrenWrapClass,
                 $limit
             ) . '</li>';
-            $itemPosition++;
-            $counter++;
+            ++$itemPosition;
+            ++$counter;
         }
 
         if (is_array($colBrakes) && count($colBrakes) && $limit) {

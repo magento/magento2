@@ -349,7 +349,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                     ->method('getPrice')
                     ->with($priceType)
                     ->willReturn($priceValue);
-                $counter++;
+                ++$counter;
             }
         } else {
             $priceInfoMock->expects($this->any())

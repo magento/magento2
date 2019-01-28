@@ -97,7 +97,7 @@ class FieldsFilter
         $parent = [];
         $currentElement = null;
 
-        for ($position = 0; $position < $length; $position++) {
+        for ($position = 0; $position < $length; ++$position) {
             //Extracting field when encountering field separators
             if (in_array($filterString[$position], ['[', ']', ','])) {
                 if ($start !== null) {

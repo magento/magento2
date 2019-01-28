@@ -94,7 +94,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
         $message = array_shift($messages);
         $messageRelationId = $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
 
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 2; ++$i) {
             $this->assertEquals($i, $message[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
             $this->queueManagement->pushToQueueForRetry($message[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
             $messages = $this->queueManagement->readMessages('queue2', 1);

@@ -93,7 +93,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 ->method('getPath')
                 ->willReturn('/theme/path');
             $themes[] = $theme;
-            $i++;
+            ++$i;
         }
         $this->themePackages->expects($this->exactly(count($templates)))
             ->method('getThemes')

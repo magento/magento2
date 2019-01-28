@@ -144,13 +144,13 @@ class ProcessManager
      */
     private function executeParentProcess(int &$threadNumber)
     {
-        $threadNumber++;
+        ++$threadNumber;
         if ($threadNumber >= $this->threadsCount) {
             pcntl_wait($status);
             if (pcntl_wexitstatus($status) !== 0) {
                 $this->failInChildProcess = true;
             }
-            $threadNumber--;
+            --$threadNumber;
         }
     }
 }

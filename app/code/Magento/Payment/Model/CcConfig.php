@@ -77,7 +77,7 @@ class CcConfig
         $years = [];
         $first = date("Y");
 
-        for ($index = 5; $index >= 0; $index--) {
+        for ($index = 5; $index >= 0; --$index) {
             $year = $first - $index;
             $years[$year] = $year;
         }

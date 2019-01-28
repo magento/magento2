@@ -143,12 +143,12 @@ class ProductGenerator
         $this->initializeFixtureDefaultValues($fixtureMap);
         $attributeSets = [];
         // prepare attribute sets distribution for save products per attribute set
-        for ($productNumber = 1; $productNumber <= $products; $productNumber++) {
+        for ($productNumber = 1; $productNumber <= $products; ++$productNumber) {
             $attributeSetId = $this->getFixtureValue('attribute_set_id', $productNumber, $productNumber, $fixtureMap);
             if (!isset($attributeSets[$attributeSetId])) {
                 $attributeSets[$attributeSetId] = 0;
             }
-            $attributeSets[$attributeSetId]++;
+            ++$attributeSets[$attributeSetId];
         }
 
         $customTableMap = [

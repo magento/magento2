@@ -58,7 +58,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->assertInstanceOf(\Magento\Framework\Data\Tree\Node::class, $category);
             $this->assertEquals($expectedPaths[$index][0], $category->getId());
             $this->assertEquals($expectedPaths[$index][1], $category->getData('path'));
-            $index++;
+            ++$index;
         }
     }
 

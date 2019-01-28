@@ -135,7 +135,7 @@ class CsvImportHandler
         $fileFieldsNum = count($fileFields);
 
         // process title-related fields that are located right after required fields with store code as field name)
-        for ($index = $requiredFieldsNum; $index < $fileFieldsNum; $index++) {
+        for ($index = $requiredFieldsNum; $index < $fileFieldsNum; ++$index) {
             $titleFieldName = $fileFields[$index];
             if ($this->_isStoreCodeValid($titleFieldName)) {
                 // if store is still valid, append this field to valid file fields
@@ -193,7 +193,7 @@ class CsvImportHandler
         $requiredFieldsNum = count($this->getRequiredCsvFields());
         $validFieldsNum = count($validFields);
         // title related fields located right after required fields
-        for ($index = $requiredFieldsNum; $index < $validFieldsNum; $index++) {
+        for ($index = $requiredFieldsNum; $index < $validFieldsNum; ++$index) {
             foreach ($this->_publicStores as $store) {
                 $storeCode = $validFields[$index];
                 if ($storeCode === $store->getCode()) {

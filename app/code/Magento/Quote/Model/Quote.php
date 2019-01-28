@@ -2322,7 +2322,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if ($_item->isDeleted() || $_item->getParentItemId()) {
                 continue;
             }
-            $countItems++;
+            ++$countItems;
             if (!$_item->getProduct()->getIsVirtual()) {
                 $isVirtual = false;
                 break;
@@ -2510,7 +2510,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     continue;
                 }
                 if ($item->getQty() > 1) {
-                    for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
+                    for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; ++$itemIndex) {
                         if ($itemIndex == 0) {
                             $addressItem = $item;
                         } else {

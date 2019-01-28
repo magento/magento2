@@ -95,7 +95,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($samples->getData());
         $i=0;
         foreach ($links as $link) {
-            $i++;
+            ++$i;
             $linkData = $link->getData();
             $linkData['is_delete'] = 0;
             $linkData['type'] = \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE;
@@ -104,7 +104,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
         $i=0;
         foreach ($samples as $sample) {
-            $i++;
+            ++$i;
             $sampleData = $sample->getData();
             $sampleData['is_delete'] = 0;
             $sampleData['type'] = \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE;

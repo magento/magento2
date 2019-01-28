@@ -763,16 +763,16 @@ class AccountManagement implements AccountManagementInterface
         $return = 0;
 
         if (preg_match('/[0-9]+/', $password)) {
-            $counter++;
+            ++$counter;
         }
         if (preg_match('/[A-Z]+/', $password)) {
-            $counter++;
+            ++$counter;
         }
         if (preg_match('/[a-z]+/', $password)) {
-            $counter++;
+            ++$counter;
         }
         if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter++;
+            ++$counter;
         }
 
         if ($counter < $requiredNumber) {

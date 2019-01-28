@@ -72,7 +72,7 @@ class Multiline extends AbstractElement
         $html = '';
         $lineCount = $this->getLineCount();
 
-        for ($i = 0; $i < $lineCount; $i++) {
+        for ($i = 0; $i < $lineCount; ++$i) {
             if ($i == 0 && $this->getRequired()) {
                 $this->setClass('input-text admin__control-text required-entry _required');
             } else {
@@ -111,7 +111,7 @@ class Multiline extends AbstractElement
         $html = '';
         $lineCount = $this->getLineCount();
 
-        for ($i = 0; $i < $lineCount; $i++) {
+        for ($i = 0; $i < $lineCount; ++$i) {
             $html .= $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
             if ($i == 0) {
                 $html .= '<label for="' .

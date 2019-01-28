@@ -68,6 +68,6 @@ class Page extends AbstractFactory
         $this->factoryContent .= "        return \$this->objectManager->create({$realClass}::class);";
         $this->factoryContent .= "\n    }\n";
 
-        $this->cnt++;
+        ++$this->cnt;
     }
 }

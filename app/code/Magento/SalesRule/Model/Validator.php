@@ -405,7 +405,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                     $qty = $this->validatorUtility->getItemQty($item, $rule);
                     $ruleTotalItemsPrice += $this->getItemPrice($item) * $qty;
                     $ruleTotalBaseItemsPrice += $this->getItemBasePrice($item) * $qty;
-                    $validItemsCount++;
+                    ++$validItemsCount;
                 }
 
                 $this->_rulesItemTotals[$rule->getId()] = [
@@ -538,7 +538,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      */
     public function decrementRuleItemTotalsCount($key)
     {
-        $this->_rulesItemTotals[$key]['items_count']--;
+        --$this->_rulesItemTotals[$key]['items_count'];
 
         return $this;
     }

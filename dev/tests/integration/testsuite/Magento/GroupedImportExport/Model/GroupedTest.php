@@ -43,7 +43,7 @@ class GroupedTest extends AbstractProductExportImportTestCase
         foreach ($expectedAssociatedProducts as $associatedProduct) {
             $expectedAssociatedProductSkus[] = $associatedProduct->getSku();
             $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
-            $i++;
+            ++$i;
         }
 
         $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);

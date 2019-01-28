@@ -43,7 +43,7 @@ class CustomAttributeTypeWsdlGenerationTest extends \Magento\TestFramework\TestC
             if (strpos($type, 'TestModuleMSCDataCustomAttributeDataObjectInterface') !== false ||
                 strpos($type, 'TestModuleMSCDataCustomAttributeNestedDataObjectInterface') !== false
             ) {
-                $testCustomTypeCount++;
+                ++$testCustomTypeCount;
             }
         }
 

@@ -209,7 +209,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
 
         /* Try to get token using invalid credentials for 5 times (account is locked after 6 attempts) */
         $noExceptionOccurred = false;
-        for ($i = 0; $i < ($this->attemptsCountToLockAccount - 1); $i++) {
+        for ($i = 0; $i < ($this->attemptsCountToLockAccount - 1); ++$i) {
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;
@@ -252,7 +252,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
 
         /* Try to get token using invalid credentials for 5 times (account would be locked after 6 attempts) */
         $noExceptionOccurred = false;
-        for ($i = 0; $i < $this->attemptsCountToLockAccount; $i++) {
+        for ($i = 0; $i < $this->attemptsCountToLockAccount; ++$i) {
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;

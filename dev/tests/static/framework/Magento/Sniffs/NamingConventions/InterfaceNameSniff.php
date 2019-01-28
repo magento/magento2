@@ -43,7 +43,7 @@ class InterfaceNameSniff implements Sniff
                 }
                 break;
             }
-            $stackPtr++;
+            ++$stackPtr;
         }
     }
 }

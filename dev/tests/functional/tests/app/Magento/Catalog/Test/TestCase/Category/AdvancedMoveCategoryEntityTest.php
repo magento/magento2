@@ -94,7 +94,7 @@ class AdvancedMoveCategoryEntityTest extends Injectable
         $resultCategory = $childCategory;
 
         if (!empty($moveLevel)) {
-            for ($nestingIterator = 1; $nestingIterator < $moveLevel; $nestingIterator++) {
+            for ($nestingIterator = 1; $nestingIterator < $moveLevel; ++$nestingIterator) {
                 $childCategory = $childCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
             }
             $resultCategory = $this->getMovedCategoryTree($resultCategory, $parentCategory, $childCategory);
@@ -142,7 +142,7 @@ class AdvancedMoveCategoryEntityTest extends Injectable
         $bottomChildCategory[] = $movedCategory->getData();
 
         $newCategory = $parentCategory;
-        for ($i = count($bottomChildCategory) - 1; $i >= 0; $i--) {
+        for ($i = count($bottomChildCategory) - 1; $i >= 0; --$i) {
             unset($bottomChildCategory[$i]['parent_id']);
             $bottomChildCategory[$i]['parent_id']['source'] = $newCategory;
             $newCategory = $this->fixtureFactory->createByCode(

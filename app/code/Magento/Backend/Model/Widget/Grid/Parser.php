@@ -32,7 +32,7 @@ class Parser
             $splittedExpr = preg_split('/\\' . $operation . '/', $expression, -1, PREG_SPLIT_DELIM_CAPTURE);
             $count = count($splittedExpr);
             if ($count > 1) {
-                for ($i = 0; $i < $count; $i++) {
+                for ($i = 0; $i < $count; ++$i) {
                     $stack = array_merge($stack, $this->parseExpression($splittedExpr[$i]));
                     if ($i > 0) {
                         $stack[] = $operation;

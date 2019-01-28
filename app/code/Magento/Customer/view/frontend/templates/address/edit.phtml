@@ -53,7 +53,7 @@
                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>"/>
                 <div class="nested">
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-                    <?php for ($_i = 1, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i < $_n; $_i++): ?>
+                    <?php for ($_i = 1, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i < $_n; ++$_i): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>

@@ -318,7 +318,7 @@ abstract class Index extends \Magento\Backend\App\Action
         foreach ($customerIds as $customerId) {
             try {
                 $singleAction($customerId);
-                $customersUpdated++;
+                ++$customersUpdated;
             } catch (\Exception $exception) {
                 $this->messageManager->addError($exception->getMessage());
             }

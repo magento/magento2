@@ -273,7 +273,7 @@ class XssOutputValidator
             }
         }
         foreach ($bracketInterval as $interval) {
-            for ($i = $interval[0] + 1; $i < $interval[1]; $i++) {
+            for ($i = $interval[0] + 1; $i < $interval[1]; ++$i) {
                 unset($command[$i]);
             }
         }

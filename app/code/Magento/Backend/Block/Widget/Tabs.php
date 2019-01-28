@@ -317,7 +317,7 @@ class Tabs extends \Magento\Backend\Block\Widget
             $orderByPosition[$newPosition] = $tab;
             $tab->setPosition($newPosition);
 
-            $positionFactor++;
+            ++$positionFactor;
         }
 
         return $this->finalTabsSortOrder($orderByPosition);

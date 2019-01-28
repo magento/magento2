@@ -71,7 +71,7 @@ class CatalogPriceRulesFixture extends Fixture
         $linkField = $metadata->getLinkField();
         $idField = $metadata->getIdentifierField();
 
-        for ($i = 0; $i < $catalogPriceRulesCount; $i++) {
+        for ($i = 0; $i < $catalogPriceRulesCount; ++$i) {
             $ruleName = sprintf('Catalog Price Rule %1$d', $i);
             $data = [
                 $idField                => null,

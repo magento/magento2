@@ -111,7 +111,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->_numerableClasses as $number => $className) {
             $properties = [];
-            for ($i = 1; $i <= $number; $i++) {
+            for ($i = 1; $i <= $number; ++$i) {
                 $propertyName = $this->_numerableProperties[$i];
                 $properties[$propertyName] = self::TEST_CLASS;
             }

@@ -95,7 +95,7 @@ class NamespaceResolver
                 $importsCount = 0;
                 foreach ($import as $item) {
                     if ($item === ',') {
-                        $importsCount++;
+                        ++$importsCount;
                         continue;
                     }
                     $imports[$importsCount][] = $item;

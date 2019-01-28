@@ -48,7 +48,7 @@ class MassDelete extends AbstractMassAction implements HttpPostActionInterface
         $customersDeleted = 0;
         foreach ($collection->getAllIds() as $customerId) {
             $this->customerRepository->deleteById($customerId);
-            $customersDeleted++;
+            ++$customersDeleted;
         }
 
         if ($customersDeleted) {

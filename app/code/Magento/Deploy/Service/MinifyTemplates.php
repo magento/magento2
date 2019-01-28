@@ -45,7 +45,7 @@ class MinifyTemplates
         $count = 0;
         foreach ($this->filesUtils->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
-            $count++;
+            ++$count;
         }
         return $count;
     }

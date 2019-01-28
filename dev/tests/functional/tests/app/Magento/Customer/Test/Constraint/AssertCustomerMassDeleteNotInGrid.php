@@ -31,7 +31,7 @@ class AssertCustomerMassDeleteNotInGrid extends AbstractConstraint
         $customersQtyToDelete,
         $customers
     ) {
-        for ($i = 0; $i < $customersQtyToDelete; $i++) {
+        for ($i = 0; $i < $customersQtyToDelete; ++$i) {
             $assertCustomerNotInGrid->processAssert($customers[$i], $customerIndexPage);
         }
     }

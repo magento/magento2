@@ -175,7 +175,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
             $packageText = __('Package') . ' ' . $packageNum;
             $page->drawText($packageText, 525, $this->y, 'UTF-8');
-            $packageNum++;
+            ++$packageNum;
 
             $package = new \Magento\Framework\DataObject($package);
             $params = new \Magento\Framework\DataObject($package->getParams());
@@ -273,7 +273,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $itemCollsXEnd = 565;
             $itemCollsXStep = round(($itemCollsXEnd - $itemCollsX[1]) / ($itemCollsNumber - 1));
             // calculate coordinates for all other cells (Weight, Customs Value, Qty Ordered, Qty)
-            for ($i = 2; $i <= $itemCollsNumber; $i++) {
+            for ($i = 2; $i <= $itemCollsNumber; ++$i) {
                 $itemCollsX[$i] = $itemCollsX[$i - 1] + $itemCollsXStep;
             }
 

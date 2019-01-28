@@ -166,7 +166,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
                 $index = count($attribute['options']);
                 foreach ($data[$key]['options'] as $newOption) {
                     $attributes[$key]['options']['option_key_' . $index] = $newOption;
-                    $index++;
+                    ++$index;
                 }
             }
         }
@@ -184,7 +184,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
         $index = count($attributes);
         foreach ($data as $attribute) {
             $attributes['attribute_key_' . $index] = $attribute;
-            $index++;
+            ++$index;
         }
     }
 

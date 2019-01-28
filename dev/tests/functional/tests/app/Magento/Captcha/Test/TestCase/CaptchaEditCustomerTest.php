@@ -135,7 +135,7 @@ class CaptchaEditCustomerTest extends Injectable
     private function customerEdit(Customer $customer, $attempts)
     {
         $accountInfoForm = $this->customerAccountEdit->getAccountInfoForm();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $accountInfoForm->setChangeEmail(true);
             $accountInfoForm->fill($customer);
             $accountInfoForm->submit();

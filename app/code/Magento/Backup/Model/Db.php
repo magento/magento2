@@ -191,7 +191,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
                     $multiRowsLength = 1;
                 }
 
-                for ($i = 0; $i < $multiRowsLength; $i++) {
+                for ($i = 0; $i < $multiRowsLength; ++$i) {
                     $backup->write($this->getResource()->getTableDataSql($table, $limit, $i * $limit));
                 }
 

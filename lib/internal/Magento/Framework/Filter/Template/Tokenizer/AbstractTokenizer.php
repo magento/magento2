@@ -37,7 +37,7 @@ abstract class AbstractTokenizer
             return false;
         }
 
-        $this->_currentIndex++;
+        ++$this->_currentIndex;
         return true;
     }
 
@@ -54,7 +54,7 @@ abstract class AbstractTokenizer
             return false;
         }
 
-        $this->_currentIndex--;
+        --$this->_currentIndex;
         return true;
     }
 

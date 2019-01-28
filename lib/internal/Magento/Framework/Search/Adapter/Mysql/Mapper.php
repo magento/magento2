@@ -413,7 +413,7 @@ class Mapper
         if ($queriesCount) {
             $table = $this->temporaryStorage->storeDocumentsFromSelect($select);
             foreach ($matchQueries as $matchContainer) {
-                $queriesCount--;
+                --$queriesCount;
                 $matchScoreBuilder = $this->scoreBuilderFactory->create();
                 $matchSelect = $this->matchBuilder->build(
                     $matchScoreBuilder,

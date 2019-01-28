@@ -424,7 +424,7 @@ class Table
                 $primaryPosition = 0;
                 foreach ($this->_columns as $v) {
                     if ($v['PRIMARY']) {
-                        $primaryPosition++;
+                        ++$primaryPosition;
                     }
                 }
             }
@@ -548,7 +548,7 @@ class Table
                 'POSITION' => $columnPos,
             ];
 
-            $position++;
+            ++$position;
         }
 
         if (empty($columns)) {
@@ -695,7 +695,7 @@ class Table
         $position = 0;
         foreach (array_keys($columns) as $columnId) {
             $columns[$columnId]['POSITION'] = $position;
-            $position++;
+            ++$position;
         }
         return $columns;
     }
@@ -712,7 +712,7 @@ class Table
         $position = 0;
         foreach (array_keys($columns) as $columnId) {
             $columns[$columnId]['COLUMN_POSITION'] = $position;
-            $position++;
+            ++$position;
         }
         return $columns;
     }

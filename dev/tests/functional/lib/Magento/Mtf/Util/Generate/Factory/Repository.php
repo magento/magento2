@@ -60,6 +60,6 @@ class Repository extends AbstractFactory
             . "array('defaultConfig' => \$defaultConfig, 'defaultData' => \$defaultData));\n";
         $this->factoryContent .= "    }\n";
 
-        $this->cnt++;
+        ++$this->cnt;
     }
 }

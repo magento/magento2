@@ -82,9 +82,9 @@ class FileClassScanner
         foreach ($this->tokens as $index => $token) {
             // Is either a literal brace or an interpolated brace with a variable
             if ($token == '{' || (is_array($token) && in_array($token[0], $allowedOpenBraces))) {
-                $braceLevel++;
+                ++$braceLevel;
             } else if ($token == '}') {
-                $braceLevel--;
+                --$braceLevel;
             }
             // The namespace keyword was found in the last loop
             if ($triggerNamespace) {

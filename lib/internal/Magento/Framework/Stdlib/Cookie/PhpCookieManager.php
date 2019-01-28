@@ -199,7 +199,7 @@ class PhpCookieManager implements CookieManagerInterface
         $numCookies = count($_COOKIE);
 
         if (!isset($_COOKIE[$name])) {
-            $numCookies++;
+            ++$numCookies;
         }
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);

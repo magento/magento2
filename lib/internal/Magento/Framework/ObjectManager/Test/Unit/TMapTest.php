@@ -102,7 +102,7 @@ class TMapTest extends \PHPUnit\Framework\TestCase
         $i = 0;
         foreach ($tMap as $key => $item) {
             static::assertEquals($expectedKeysOrder[$i], $key);
-            $i++;
+            ++$i;
         }
 
         static::assertEquals(4, $tMap->count());

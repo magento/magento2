@@ -118,7 +118,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
         $filter = ['name' => $initIntegration->getName()];
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getIntegrationGrid()->searchAndOpen($filter);
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->integrationNewPage->getIntegrationForm()->fill($integration);
             $this->integrationNewPage->getFormPageActions()->save();
         }

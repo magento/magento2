@@ -190,7 +190,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
         }
         $this->_validatedRows[$rowNumber] = true;
-        $this->_processedEntitiesCount++;
+        ++$this->_processedEntitiesCount;
         if ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
             $this->_validateRowForUpdate($rowData, $rowNumber);
         } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {

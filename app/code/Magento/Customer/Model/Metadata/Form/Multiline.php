@@ -43,7 +43,7 @@ class Multiline extends Text
         if (!is_array($value)) {
             $value = [$value];
         }
-        for ($i = 0; $i < $attribute->getMultilineCount(); $i++) {
+        for ($i = 0; $i < $attribute->getMultilineCount(); ++$i) {
             if (!isset($value[$i])) {
                 $value[$i] = null;
             }

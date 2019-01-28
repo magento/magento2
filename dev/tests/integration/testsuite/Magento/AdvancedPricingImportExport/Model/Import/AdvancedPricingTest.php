@@ -148,7 +148,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
-                $index ++;
+                ++$index ;
             }
         }
     }
@@ -192,7 +192,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
-            $index++;
+            ++$index;
         }
 
         $csvfile = uniqid('importexport_') . '.csv';
@@ -233,7 +233,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $this->model->importData();
 
         while ($index > 0) {
-            $index--;
+            --$index;
             $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
@@ -290,7 +290,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
-                $index ++;
+                ++$index ;
             }
         }
     }

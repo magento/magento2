@@ -592,7 +592,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             if ($existingPrice['all_groups'] == $price['all_groups']
                 && $existingPrice['customer_group_id'] == $price['customer_group_id']
             ) {
-                $this->countItemsUpdated++;
+                ++$this->countItemsUpdated;
             }
         }
     }

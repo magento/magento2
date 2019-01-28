@@ -86,7 +86,7 @@ class CategoryProcessor
                 $this->categoriesCache[$category->getId()] = $category;
                 if ($pathSize > 1) {
                     $path = [];
-                    for ($i = 1; $i < $pathSize; $i++) {
+                    for ($i = 1; $i < $pathSize; ++$i) {
                         $name = $collection->getItemById((int)$structure[$i])->getName();
                         $path[] = $this->quoteDelimiter($name);
                     }

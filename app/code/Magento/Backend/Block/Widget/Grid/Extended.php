@@ -969,7 +969,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             if ($lPage == $page) {
                 $break = true;
             }
-            $page++;
+            ++$page;
 
             foreach ($collection as $item) {
                 call_user_func_array([$this, $callback], array_merge([$item], $args));

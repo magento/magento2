@@ -97,7 +97,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             if ($matchingResultCode === 1) {
                 return $position;
             }
-            $position++;
+            ++$position;
         }
 
         return null;
@@ -135,7 +135,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     private function getSearchPattern(array $words): string
     {
         $patterns = [];
-        for ($lastItem = count($words); $lastItem > 0; $lastItem--) {
+        for ($lastItem = count($words); $lastItem > 0; --$lastItem) {
             $phrase = implode("\s+", \array_slice($words, 0, $lastItem));
             $patterns[] = '^' . $phrase . ',';
             $patterns[] = ',' . $phrase . ',';

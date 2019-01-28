@@ -21,7 +21,7 @@ class MtdStart extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(AbstractElement $element)
     {
         $_days = [];
-        for ($i = 1; $i <= 31; $i++) {
+        for ($i = 1; $i <= 31; ++$i) {
             $_days[$i] = $i < 10 ? '0' . $i : $i;
         }
 

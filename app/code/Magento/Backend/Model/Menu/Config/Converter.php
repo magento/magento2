@@ -37,7 +37,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         ];
         $xpath = new \DOMXPath($dom);
         $nodeList = $xpath->query('/config/menu/*');
-        for ($i = 0; $i < $nodeList->length; $i++) {
+        for ($i = 0; $i < $nodeList->length; ++$i) {
             $item = [];
             $node = $nodeList->item($i);
             $item['type'] = $node->nodeName;

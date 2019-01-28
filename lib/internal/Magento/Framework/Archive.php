@@ -96,7 +96,7 @@ class Archive
     {
         $archivers = $this->_getArchivers($destination);
         $interimSource = '';
-        for ($i = 0, $count = count($archivers); $i < $count; $i++) {
+        for ($i = 0, $count = count($archivers); $i < $count; ++$i) {
             if ($i == $count - 1) {
                 $packed = $destination;
             } else {
@@ -126,7 +126,7 @@ class Archive
     {
         $archivers = $this->_getArchivers($source);
         $interimSource = '';
-        for ($i = count($archivers) - 1; $i >= 0; $i--) {
+        for ($i = count($archivers) - 1; $i >= 0; --$i) {
             if ($tillTar && $archivers[$i] == self::TAPE_ARCHIVER) {
                 break;
             }

@@ -118,7 +118,7 @@ QUERY;
         $this->assertArrayHasKey('url_rewrites', $response['products']['items'][0]);
         $this->assertCount($rewritesCount, $response['products']['items'][0]['url_rewrites']);
 
-        for ($i = 0; $i < $rewritesCount; $i++) {
+        for ($i = 0; $i < $rewritesCount; ++$i) {
             $urlRewrite = $rewritesCollection[$i];
             $this->assertResponseFields(
                 $response['products']['items'][0]['url_rewrites'][$i],

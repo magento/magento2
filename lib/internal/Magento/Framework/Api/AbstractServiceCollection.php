@@ -193,7 +193,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
                 } else {
                     $this->fieldFilters[] = ['field' => array_slice($field, $cnt, 1, true), 'condition' => $cond];
                 }
-                $cnt++;
+                ++$cnt;
             }
         }
         return $this;

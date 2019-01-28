@@ -123,7 +123,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
         $freeShipping = false;
         $items = $request->getAllItems();
         $c = count($items);
-        for ($i = 0; $i < $c; $i++) {
+        for ($i = 0; $i < $c; ++$i) {
             if ($items[$i]->getProduct() instanceof \Magento\Catalog\Model\Product) {
                 if ($items[$i]->getFreeShipping()) {
                     $freeShipping = true;

@@ -478,7 +478,7 @@ class Element extends \SimpleXMLElement
         $uniqueId = uniqid();
         $this['_unique_id'] = $uniqueId;
         $children = $this->getParent()->xpath('*');
-        for ($i = count($children); $i > 0; $i--) {
+        for ($i = count($children); $i > 0; --$i) {
             if ($children[$i - 1][0]['_unique_id'] == $uniqueId) {
                 unset($children[$i - 1][0]);
                 return;

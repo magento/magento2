@@ -107,7 +107,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         // As Paypal Sandbox is not stable there are three attempts given to place order
         while ($this->checkoutOnepage->getHostedProBlock()->isErrorMessageVisible() && $attempts <= 3) {
             $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
-            $attempts++;
+            ++$attempts;
         }
 
         $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();

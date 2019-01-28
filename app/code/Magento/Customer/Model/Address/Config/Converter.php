@@ -24,7 +24,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($formats as $formatConfig) {
             $formatCode = $formatConfig->attributes->getNamedItem('code')->nodeValue;
             $output[$formatCode] = [];
-            for ($attributeIndex = 0; $attributeIndex < $formatConfig->attributes->length; $attributeIndex++) {
+            for ($attributeIndex = 0; $attributeIndex < $formatConfig->attributes->length; ++$attributeIndex) {
                 $output[$formatCode][$formatConfig->attributes->item(
                     $attributeIndex
                 )->nodeName] = $formatConfig->attributes->item(

@@ -36,7 +36,7 @@ class Iterator extends \Magento\Framework\DataObject
                     $args = array_merge($args, (array)$result);
                 }
             }
-            $args['idx']++;
+            ++$args['idx'];
         }
 
         return $this;

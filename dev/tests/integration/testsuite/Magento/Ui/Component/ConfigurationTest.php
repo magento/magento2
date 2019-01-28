@@ -120,7 +120,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             $counter = 0;
             while (!empty($map)) {
                 $this->hasXpaths($map, $xpaths, $counter);
-                $counter++;
+                ++$counter;
             }
             $this->map[$name]['xpaths'] = $xpaths;
         }

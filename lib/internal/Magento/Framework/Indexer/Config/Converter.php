@@ -293,8 +293,8 @@ class Converter implements ConverterInterface
          * correct sequence of indexers with multiple dependencies.
          */
         $maxIndex = count($expanded) - 1;
-        for ($i = 0; $i < $maxIndex; $i++) {
-            for ($j = $i + 1; $j <= $maxIndex; $j++) {
+        for ($i = 0; $i < $maxIndex; ++$i) {
+            for ($j = $i + 1; $j <= $maxIndex; ++$j) {
                 if (in_array($expanded[$j]['indexerId'], $expanded[$i]['dependencies'], true)) {
                     $temp = $expanded[$i];
                     $expanded[$i] = $expanded[$j];

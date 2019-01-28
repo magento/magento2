@@ -235,7 +235,7 @@ class PhpScanner implements ScannerInterface
         $tokens = token_get_all(file_get_contents($file));
         $count = count($tokens);
 
-        for ($tokenIterator = 0; $tokenIterator < $count; $tokenIterator++) {
+        for ($tokenIterator = 0; $tokenIterator < $count; ++$tokenIterator) {
             if ($tokens[$tokenIterator][0] == T_NAMESPACE) {
                 $namespace .= $this->_fetchNamespace($tokenIterator, $count, $tokens);
             }

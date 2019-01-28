@@ -365,7 +365,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         }
 
         $checksum = 0;
-        for ($i = 0; $i < 512; $i++) {
+        for ($i = 0; $i < 512; ++$i) {
             $checksum += ord(substr($packedHeader, $i, 1));
         }
         $packedHeader = substr_replace($packedHeader, sprintf("%07o", $checksum) . "\0", 148, 8);
@@ -461,7 +461,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $checksum = 0;
         $headerBlock = substr_replace($headerBlock, '        ', 148, 8);
 
-        for ($i = 0; $i < 512; $i++) {
+        for ($i = 0; $i < 512; ++$i) {
             $checksum += ord(substr($headerBlock, $i, 1));
         }
 

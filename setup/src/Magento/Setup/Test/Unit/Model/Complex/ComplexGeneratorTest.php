@@ -85,7 +85,7 @@ class ComplexGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGetIndex()
     {
         $model = new Generator($this->getPattern(), 4);
-        for ($i = 0; $i < 32; $i++) {
+        for ($i = 0; $i < 32; ++$i) {
             $this->assertEquals($model->getIndex($i), floor($i / $this->getPattern()->getRowsCount()) + 1);
         }
     }

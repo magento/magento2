@@ -715,7 +715,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $this->_nextAttrId = $this->_resourceHelper->getNextAutoincrement($mainTable);
         }
-        $this->_nextAttrId++;
+        ++$this->_nextAttrId;
         return $this->_nextAttrId;
     }
 

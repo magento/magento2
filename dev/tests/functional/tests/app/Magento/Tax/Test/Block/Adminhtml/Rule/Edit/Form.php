@@ -244,7 +244,7 @@ class Form extends FormInterface
                 return;
             } catch (\Exception $e) {
                 // In parallel run on windows change the focus is lost on element
-                $count++;
+                ++$count;
             }
         } while ($count < self::MAX_TRY_COUNT);
 

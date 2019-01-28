@@ -91,7 +91,7 @@ class CustomerDataGenerator
 
         while ($addressesCount) {
             $addresses[] = $this->addressDataGenerator->generateAddress();
-            $addressesCount--;
+            --$addressesCount;
         }
 
         return $addresses;

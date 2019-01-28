@@ -175,7 +175,7 @@ class Bundle extends Section
             }
             $newFields['bundle_selections'][$key] =
                 $this->getBundleOptionBlock($index, $context)->getOptionData($bundleOption);
-            $index++;
+            ++$index;
         }
 
         return $newFields;

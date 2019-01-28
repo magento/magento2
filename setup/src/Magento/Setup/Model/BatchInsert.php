@@ -67,7 +67,7 @@ class BatchInsert
     public function insert(array $dataToInsert)
     {
         $this->dataStorage[$this->currentStorageIndex] = $dataToInsert;
-        $this->currentStorageIndex++;
+        ++$this->currentStorageIndex;
 
         if ($this->currentStorageIndex >= $this->batchSize) {
             $this->flush();

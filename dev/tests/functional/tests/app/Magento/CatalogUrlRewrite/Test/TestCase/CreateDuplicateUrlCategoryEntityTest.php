@@ -73,7 +73,7 @@ class CreateDuplicateUrlCategoryEntityTest extends Injectable
      */
     public function test(Category $category, $addCategory)
     {
-        for ($index = 0; $index < 2; $index++) {
+        for ($index = 0; $index < 2; ++$index) {
             // Duplicate category
             $this->catalogCategoryIndex->open();
             $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category, false);

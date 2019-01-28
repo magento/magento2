@@ -130,7 +130,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
             $this->orderTaxFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($orderTaxMock);
-            $index++;
+            ++$index;
         }
     }
 
@@ -159,7 +159,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
             $this->taxItemFactoryMock->expects($this->at($index))
                 ->method('create')
                 ->willReturn($itemTaxMock);
-            $index++;
+            ++$index;
         }
     }
 

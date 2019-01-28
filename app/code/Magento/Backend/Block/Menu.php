@@ -416,7 +416,7 @@ class Menu extends \Magento\Backend\Block\Template
                 . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass($menuItem, $level)
                 . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
                 . '" role="menu-item">' . $anchor . $subMenu . '</li>';
-            $itemPosition++;
+            ++$itemPosition;
         }
 
         if (is_array($colBrakes) && count($colBrakes) && $limit) {

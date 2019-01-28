@@ -815,7 +815,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         unset($items[$key]);
                         $sumWeight += $weight;
                     } elseif ($sumWeight + $weight > $maxWeight) {
-                        $numberOfPieces++;
+                        ++$numberOfPieces;
                         $nodePiece = $nodePieces->addChild('Piece', '', '');
                         $nodePiece->addChild('PieceID', $numberOfPieces);
                         $this->_addDimension($nodePiece);
@@ -823,7 +823,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         break;
                     } else {
                         unset($items[$key]);
-                        $numberOfPieces++;
+                        ++$numberOfPieces;
                         $sumWeight += $weight;
                         $nodePiece = $nodePieces->addChild('Piece', '', '');
                         $nodePiece->addChild('PieceID', $numberOfPieces);
@@ -835,7 +835,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 }
             }
             if ($sumWeight > 0) {
-                $numberOfPieces++;
+                ++$numberOfPieces;
                 $nodePiece = $nodePieces->addChild('Piece', '', '');
                 $nodePiece->addChild('PieceID', $numberOfPieces);
                 $this->_addDimension($nodePiece);
@@ -922,7 +922,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $responseBody = '';
         try {
-            for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; $offset++) {
+            for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; ++$offset) {
                 $debugPoint = [];
 
                 $requestXml = $this->_buildQuotesRequestXml();

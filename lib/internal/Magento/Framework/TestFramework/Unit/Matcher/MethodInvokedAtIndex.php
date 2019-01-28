@@ -66,9 +66,9 @@ class MethodInvokedAtIndex implements \PHPUnit\Framework\MockObject\Matcher\Invo
             $this->indexes[$invocation->getMethodName()] = 0;
         } else {
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->indexes[$invocation->getMethodName()]++;
+            ++$this->indexes[$invocation->getMethodName()];
         }
-        $this->currentIndex++;
+        ++$this->currentIndex;
 
         /** @noinspection PhpUndefinedFieldInspection */
         return $this->indexes[$invocation->getMethodName()] == $this->sequenceIndex;

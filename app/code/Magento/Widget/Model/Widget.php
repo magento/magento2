@@ -179,7 +179,7 @@ class Widget
                     $data = $this->prepareHelperBlock($data);
 
                     $newParams[$key] = new \Magento\Framework\DataObject($data);
-                    $sortOrder++;
+                    ++$sortOrder;
                 }
             }
         }

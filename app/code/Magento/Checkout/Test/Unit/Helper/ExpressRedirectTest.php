@@ -93,7 +93,7 @@ class ExpressRedirectTest extends \PHPUnit\Framework\TestCase
         $actionFlagList = array_merge(['no-dispatch' => true], $actionFlagList);
         foreach ($actionFlagList as $actionKey => $actionFlag) {
             $this->_actionFlag->expects($this->at($atIndex))->method('set')->with('', $actionKey, $actionFlag);
-            $atIndex++;
+            ++$atIndex;
         }
 
         $expectedLoginUrl = 'loginURL';

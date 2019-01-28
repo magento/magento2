@@ -16,7 +16,7 @@
     ?>
     <?php foreach ($_methods as $_method) :
         $_code = $_method->getCode();
-        $_counter++;
+        ++$_counter;
         ?>
         <dt class="admin__field-option">
         <?php if ($_methodsCount > 1) : ?>

@@ -92,7 +92,7 @@ class CreateDuplicateUrlProductEntity extends Injectable
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
-        for ($index = 0; $index < 2; $index++) {
+        for ($index = 0; $index < 2; ++$index) {
             // Duplicate product
             $productGrid->open();
             $productGrid->getGridPageActionBlock()->addProduct('simple');

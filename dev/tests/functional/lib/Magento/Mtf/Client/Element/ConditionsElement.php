@@ -292,7 +292,7 @@ class ConditionsElement extends SimpleElement
                 $this->exception = $e;
                 $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);
             }
-            $count++;
+            ++$count;
         } while (!$isSetType && $count < self::TRY_COUNT);
 
         if (!$isSetType) {
@@ -343,7 +343,7 @@ class ConditionsElement extends SimpleElement
                     $this->exception = $e;
                     $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);
                 }
-                $count++;
+                ++$count;
             } while (!$isSet && $count < self::TRY_COUNT);
 
             if (!$isSet) {

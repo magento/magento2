@@ -140,7 +140,7 @@ class Import
         $items = [];
         while (false !== ($csvLine = $file->readCsv())) {
             try {
-                $rowNumber++;
+                ++$rowNumber;
                 if (empty($csvLine)) {
                     continue;
                 }

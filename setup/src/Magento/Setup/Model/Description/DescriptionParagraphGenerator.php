@@ -48,7 +48,7 @@ class DescriptionParagraphGenerator
         while ($sentencesCount) {
             $sentences .= $this->sentenceGenerator->generate();
             $sentences .= ' ';
-            $sentencesCount--;
+            --$sentencesCount;
         }
 
         $sentences = rtrim($sentences);

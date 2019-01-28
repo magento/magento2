@@ -159,7 +159,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $default = [];
             $optionIndex = 0;
             foreach ($attribute->getOptions() as $option) {
-                $optionIndex++;
+                ++$optionIndex;
                 $optionId = $option->getValue() ?: 'option_' . $optionIndex;
                 $options['value'][$optionId][0] = $option->getLabel();
                 $options['order'][$optionId] = $option->getSortOrder() ?: $sortOrder++;

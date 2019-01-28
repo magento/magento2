@@ -564,7 +564,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     && in_array($pdoException->errorInfo[1], $connectionErrors)
                 ) {
                     $retry = true;
-                    $triesCount++;
+                    ++$triesCount;
                     $this->closeConnection();
 
                     /**

@@ -40,7 +40,7 @@ class ShoppingCartPagerTest extends Scenario
     public function __prepare(FixtureFactory $fixtureFactory)
     {
         $products = [];
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             $products[$i] = $fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
             $products[$i]->persist();
         }

@@ -63,7 +63,7 @@ class Throws implements ParserInterface, DependenciesCollectorInterface
                     $throw + $step
                 ) == T_NS_SEPARATOR) {
                     $class .= trim($this->tokens->getTokenValueByKey($throw + $step));
-                    $step++;
+                    ++$step;
                 }
                 if ($uses->hasUses()) {
                     $class = $uses->getClassNameWithNamespace($class);

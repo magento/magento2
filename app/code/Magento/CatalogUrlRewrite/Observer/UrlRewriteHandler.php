@@ -299,7 +299,7 @@ class UrlRewriteHandler
                     );
                 }
                 $collection->clear();
-                $currentPage++;
+                ++$currentPage;
             }
         }
     }

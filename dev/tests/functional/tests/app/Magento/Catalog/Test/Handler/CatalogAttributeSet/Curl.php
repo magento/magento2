@@ -164,7 +164,7 @@ class Curl extends AbstractCurl implements CatalogAttributeSetInterface
                     $dataAttribute['attributes'][$index][] = $parentAttributes['id'];
                     $dataAttribute['attributes'][$index][] = $index;
                     $dataAttribute['attributes'][$index][] = $attribute['entity_id'];
-                    $index++;
+                    ++$index;
                 }
             }
         }

@@ -66,7 +66,7 @@ class MassUnhold extends AbstractMassAction implements HttpPostActionInterface
                 continue;
             }
             $this->orderManagement->unHold($order->getEntityId());
-            $countUnHoldOrder++;
+            ++$countUnHoldOrder;
         }
 
         $countNonUnHoldOrder = $collection->count() - $countUnHoldOrder;

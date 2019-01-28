@@ -125,7 +125,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
         // Preconditions
         $stores = [];
         if ($storeDataset) {
-            for ($i = 0; $i < $storesCount; $i++) {
+            for ($i = 0; $i < $storesCount; ++$i) {
                 $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
                 $stores[$i]->persist();
             }

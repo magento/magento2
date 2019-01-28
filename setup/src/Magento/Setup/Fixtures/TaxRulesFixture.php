@@ -149,7 +149,7 @@ class TaxRulesFixture extends Fixture
 
             $this->taxRuleRepository->save($taxRuleDataObject);
 
-            $taxRules--;
+            --$taxRules;
         }
     }
 

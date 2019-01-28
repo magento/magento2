@@ -115,12 +115,12 @@ class StringUtils
                     $result[$index] .= $space . $part;
                 } elseif ($partLength <= $length) {
                     // add part to new element
-                    $index++;
+                    ++$index;
                     $result[$index] = $part;
                 } else {
                     // break too long part recursively
                     foreach ($this->split($part, $length, false, $trim, $wordSeparatorRegex) as $subPart) {
-                        $index++;
+                        ++$index;
                         $result[$index] = $subPart;
                     }
                 }
@@ -192,7 +192,7 @@ class StringUtils
         if (!$strLen) {
             return $result;
         }
-        for ($i = $strLen - 1; $i >= 0; $i--) {
+        for ($i = $strLen - 1; $i >= 0; --$i) {
             $result .= $this->substr($str, $i, 1);
         }
         return $result;

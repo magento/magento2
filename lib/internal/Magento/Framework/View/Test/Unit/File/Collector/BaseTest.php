@@ -52,7 +52,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     {
         $files = [];
         foreach (['shared', 'theme'] as $fileType) {
-            for ($i = 0; $i < 2; $i++) {
+            for ($i = 0; $i < 2; ++$i) {
                 $file = $this->createMock(\Magento\Framework\Component\ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')

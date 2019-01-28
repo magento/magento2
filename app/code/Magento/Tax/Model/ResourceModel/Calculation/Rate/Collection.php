@@ -208,7 +208,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $rates = array_merge($rates, $this->toOptionArray());
             $this->clear();
-            $page++;
+            ++$page;
         } while ($this->getSize() > $offset);
 
         return $rates;

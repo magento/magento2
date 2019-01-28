@@ -250,7 +250,7 @@ class ImagesFixture extends Fixture
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $productImagesDirectoryPath = $mediaDirectory->getRelativePath($this->mediaConfig->getBaseMediaPath());
 
-        for ($i = 1; $i <= $this->getImagesToGenerate(); $i++) {
+        for ($i = 1; $i <= $this->getImagesToGenerate(); ++$i) {
             $imageName = md5($i) . '.jpg';
             $imageFullName = DIRECTORY_SEPARATOR . substr($imageName, 0, 1)
                 . DIRECTORY_SEPARATOR . substr($imageName, 1, 1)
@@ -300,7 +300,7 @@ class ImagesFixture extends Fixture
         $imageGenerator = $this->getImagesGenerator();
 
         foreach ($this->getProductGenerator() as $productEntity) {
-            for ($imageNum = 1; $imageNum <= $this->getImagesPerProduct(); $imageNum++) {
+            for ($imageNum = 1; $imageNum <= $this->getImagesPerProduct(); ++$imageNum) {
                 $image = $imageGenerator->current();
                 $imageGenerator->next();
 

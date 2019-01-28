@@ -58,7 +58,7 @@ class SqlCollector
             // process multi queries
             if ($sqlBindGroupAmount > 1) {
                 $valuesCount = count($bind)/$sqlBindGroupAmount;
-                for ($i = 0; $i < $sqlBindGroupAmount; $i++) {
+                for ($i = 0; $i < $sqlBindGroupAmount; ++$i) {
                     $binds[] = array_combine(
                         $fields,
                         $this->handleBindValues($sqlBind, $bind, $i * $valuesCount)
@@ -84,7 +84,7 @@ class SqlCollector
         foreach ($sqlBind as $i => $fieldValue) {
             if ($fieldValue === '?') {
                 $sqlBind[$i] = $bind[$bindPosition];
-                $bindPosition++;
+                ++$bindPosition;
             }
         }
 

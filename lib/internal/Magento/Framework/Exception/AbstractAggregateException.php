@@ -55,7 +55,7 @@ abstract class AbstractAggregateException extends LocalizedException implements 
      */
     public function addError(Phrase $phrase)
     {
-        $this->addErrorCalls++;
+        ++$this->addErrorCalls;
         if (empty($this->errors)) {
             if (1 === $this->addErrorCalls) {
                 // First call: simply overwrite the phrase and message
@@ -84,7 +84,7 @@ abstract class AbstractAggregateException extends LocalizedException implements 
      */
     public function addException(LocalizedException $exception)
     {
-        $this->addErrorCalls++;
+        ++$this->addErrorCalls;
         $this->errors[] = $exception;
         return $this;
     }

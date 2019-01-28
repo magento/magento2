@@ -19,7 +19,7 @@ $_order = $block->getOrder() ?>
                 $columns = $block->getColumns();
                 $lastItemNumber = count($columns) ?>
                 <?php foreach ($columns as $columnName => $columnTitle):?>
-                    <?php $i++; ?>
+                    <?php ++$i; ?>
                     <th class="col-<?= /* @noEscape */ $columnName ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= /* @noEscape */ $columnTitle ?></span></th>
                 <?php endforeach; ?>
             </tr>
@@ -29,7 +29,7 @@ $_order = $block->getOrder() ?>
             <?php if ($_item->getParentItem()) {
                 continue;
             } else {
-                $i++;
+                ++$i;
             }?>
             <tbody class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
                 <?= $block->getItemHtml($_item) ?>

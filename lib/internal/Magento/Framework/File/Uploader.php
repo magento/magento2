@@ -609,7 +609,7 @@ class Uploader
             $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
             while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
                 $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
+                ++$index;
             }
             $destFileName = $baseName;
         } else {
@@ -649,7 +649,7 @@ class Uploader
                     $dispertionPath
                 ) . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             }
-            $char++;
+            ++$char;
         }
         return $dispertionPath;
     }

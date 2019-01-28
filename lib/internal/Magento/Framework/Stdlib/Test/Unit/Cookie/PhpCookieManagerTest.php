@@ -502,7 +502,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             $cookieValue = '';
 
             $cookieManager = $this->cookieManager;
-            for ($i = 0; $i < $cookieManager::MAX_COOKIE_SIZE + 1; $i++) {
+            for ($i = 0; $i < $cookieManager::MAX_COOKIE_SIZE + 1; ++$i) {
                 $cookieValue = $cookieValue . 'a';
             }
 
@@ -532,7 +532,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
 
             $cookieManager = $this->cookieManager;
             // Set $cookieManager::MAX_NUM_COOKIES number of cookies in superglobal $_COOKIE.
-            for ($i = count($_COOKIE); $i < $cookieManager::MAX_NUM_COOKIES; $i++) {
+            for ($i = count($_COOKIE); $i < $cookieManager::MAX_NUM_COOKIES; ++$i) {
                 $_COOKIE['test_cookie_' . $i] = self::COOKIE_VALUE . '_' . $i;
             }
 

@@ -54,7 +54,7 @@ class NodeSet implements \Iterator, \Countable
     public function addNode(Node $node)
     {
         $this->_nodes[$this->_currentNode] = $node;
-        $this->count++;
+        ++$this->count;
         return ++$this->_currentNode;
     }
 

@@ -83,7 +83,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             if ($message) {
                 $item->setText($message->getText());
                 if (array_key_exists($message->getSeverity(), $this->_countBySeverity)) {
-                    $this->_countBySeverity[$message->getSeverity()]++;
+                    ++$this->_countBySeverity[$message->getSeverity()];
                 } else {
                     $this->_countBySeverity[$message->getSeverity()] = 1;
                 }

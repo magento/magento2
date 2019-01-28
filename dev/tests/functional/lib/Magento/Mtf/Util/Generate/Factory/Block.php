@@ -59,6 +59,6 @@ class Block extends AbstractFactory
             . "array('element' => \$element, 'driver' => \$driver, 'config' => \$config));";
         $this->factoryContent .= "\n    }\n";
 
-        $this->cnt++;
+        ++$this->cnt;
     }
 }

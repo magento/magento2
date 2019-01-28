@@ -154,7 +154,7 @@ class CaptchaLockoutCustomerTest extends Injectable
      */
     private function customerLogin(FixtureInterface $customer, Login $loginForm, $attempts)
     {
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $loginForm->fill($customer);
             $loginForm->submit();
         }

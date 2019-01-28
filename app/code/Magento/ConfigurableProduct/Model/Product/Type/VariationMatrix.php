@@ -37,14 +37,14 @@ class VariationMatrix
             }
 
             $filledVariation = [];
-            for ($attributeIndex = $attributesCount; $attributeIndex--;) {
+            for ($attributeIndex = $attributesCount; --$attributeIndex;) {
                 $currentAttribute = $variationalAttributes[$attributeIndex];
                 $currentVariationValue = $currentVariation[$attributeIndex];
                 $filledVariation[$currentAttribute['id']] = $currentAttribute['values'][$currentVariationValue];
             }
 
             $variations[] = $filledVariation;
-            $currentVariation[0]++;
+            ++$currentVariation[0];
         } while (true);
 
         return $variations;

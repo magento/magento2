@@ -222,7 +222,7 @@ class Migration
                 $this->_getRowsCount($tableName, $fieldName, $fieldRule['additional_where']) / $this->_rowsPerPage
             );
 
-            for ($page = 1; $page <= $pagesCount; $page++) {
+            for ($page = 1; $page <= $pagesCount; ++$page) {
                 $this->_applyFieldRule($tableName, $fieldName, $fieldRule, $page);
             }
         }

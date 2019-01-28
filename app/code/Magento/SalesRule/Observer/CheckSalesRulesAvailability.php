@@ -50,7 +50,7 @@ class CheckSalesRulesAvailability
             $this->_removeAttributeFromConditions($rule->getActions(), $attributeCode);
             $rule->save();
 
-            $disabledRulesCount++;
+            ++$disabledRulesCount;
         }
 
         if ($disabledRulesCount) {

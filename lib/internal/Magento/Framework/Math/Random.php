@@ -43,7 +43,7 @@ class Random
         }
 
         $charsMaxKey = mb_strlen($chars) - 1;
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $str .= $chars[self::getRandomNumber(0, $charsMaxKey)];
         }
 

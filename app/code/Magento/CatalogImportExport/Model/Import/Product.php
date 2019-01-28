@@ -1355,7 +1355,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                         'value' => $linkPositions[$linkedKey],
                                     ];
                                 }
-                                $nextLinkId++;
+                                ++$nextLinkId;
                             }
                         }
                     }
@@ -1714,7 +1714,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             'created_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                         ];
-                        $productsQty++;
+                        ++$productsQty;
                     } else {
                         $rowSku = null;
                         // sign for child rows to be skipped
@@ -2480,7 +2480,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         // SKU is specified, row is SCOPE_DEFAULT, new product block begins
-        $this->_processedEntitiesCount++;
+        ++$this->_processedEntitiesCount;
 
         if ($this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior()) {
             // can we get all necessary data from existent DB product?
@@ -2823,7 +2823,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $rowData = $source->current();
             } catch (\InvalidArgumentException $e) {
                 $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                $this->_processedRowsCount++;
+                ++$this->_processedRowsCount;
                 $source->next();
                 continue;
             }

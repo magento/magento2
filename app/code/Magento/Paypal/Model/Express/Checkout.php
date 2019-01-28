@@ -1011,7 +1011,7 @@ class Checkout
                     $min = $amountInclTax;
                     $iMin = $i;
                 }
-                $i++;
+                ++$i;
             }
         }
 

@@ -251,7 +251,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $columnEntry = ['main_table', $field, $alias];
                 array_splice($columns, $insertIndex, 0, [$columnEntry]);
                 // Insert column
-                $insertIndex++;
+                ++$insertIndex;
             }
         } else {
             array_unshift($columns, ['main_table', '*', null]);

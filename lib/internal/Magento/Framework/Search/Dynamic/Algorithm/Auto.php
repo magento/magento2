@@ -65,7 +65,7 @@ class Auto implements AlgorithmInterface
         do {
             $range = pow(10, strlen(floor($maxPrice)) - $index);
             $items = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityStorage);
-            $index++;
+            ++$index;
         } while ($range > $this->getMinRangePower() && count($items) < 2);
 
         return $range;

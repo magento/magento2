@@ -709,7 +709,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ksort($outerTitles);
                             ksort($innerTitles);
                             if ($outerTitles === $innerTitles) {
-                                $optionsCount++;
+                                ++$optionsCount;
                             }
                         }
                     }
@@ -856,7 +856,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_rowProductSku = $rowData[self::COLUMN_SKU];
         }
         if (!empty($rowData[self::COLUMN_TYPE])) {
-            $this->_newCustomOptionId++;
+            ++$this->_newCustomOptionId;
         }
         // get store ID
         if (!empty($rowData[self::COLUMN_STORE])) {
@@ -1102,7 +1102,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $i = 0;
         foreach ($rowData['custom_options'] as $name => $customOption) {
-            $i++;
+            ++$i;
             foreach ($customOption as $rowOrder => $optionRow) {
                 $row = array_merge(
                     [
@@ -1338,7 +1338,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $titlesCount = count($titles);
         if ($titlesCount > 0 && count($options) !== $titlesCount) {
             $combinedData[Product::COL_STORE_VIEW_CODE] = '';
-            $optionId--;
+            --$optionId;
             $option = $this->_collectOptionMainData(
                 $combinedData,
                 $prevOptionId,
@@ -1497,7 +1497,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
-                $nextValueId++;
+                ++$nextValueId;
             }
             $specificTypeData = $this->_getSpecificTypeData($rowData, 0, false);
             //For others stores
@@ -2042,7 +2042,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
             $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
-            $k++;
+            ++$k;
         }
         $rowData['custom_options'] = $options;
         return $rowData;

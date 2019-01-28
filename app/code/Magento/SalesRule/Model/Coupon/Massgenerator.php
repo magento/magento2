@@ -156,7 +156,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         $coupon = $this->couponFactory->create();
         $nowTimestamp = $this->dateTime->formatDate($this->date->gmtTimestamp());
 
-        for ($i = 0; $i < $size; $i++) {
+        for ($i = 0; $i < $size; ++$i) {
             $attempt = 0;
             do {
                 if ($attempt >= $maxAttempts) {
@@ -206,7 +206,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
 
         if ($probability > $maxProbability) {
             do {
-                $length++;
+                ++$length;
                 $maxCodes = pow($chars, $length);
                 $probability = $size / $maxCodes;
             } while ($probability > $maxProbability);

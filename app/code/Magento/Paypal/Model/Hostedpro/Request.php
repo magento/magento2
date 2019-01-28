@@ -107,7 +107,7 @@ class Request extends DataObject
                 } else {
                     $varKey = sprintf($this->buttonVarFormat, $i);
                     $requestData[$varKey] = $key . '=' . $value;
-                    $i++;
+                    ++$i;
                 }
             }
         }

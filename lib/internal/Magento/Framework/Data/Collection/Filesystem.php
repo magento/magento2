@@ -318,7 +318,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
 
         $cnt = 0;
         foreach ($this->_collectedFiles as $row) {
-            $cnt++;
+            ++$cnt;
             if ($isPaginated && ($cnt < $from || $cnt > $to)) {
                 continue;
             }
@@ -428,7 +428,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
             'callback' => $callback,
             'is_inverted' => $isInverted,
         ];
-        $this->_filterIncrement++;
+        ++$this->_filterIncrement;
         return $this;
     }
 
@@ -446,7 +446,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
         // render filters once
         if (!$this->_isFiltersRendered) {
             $eval = '';
-            for ($i = 0; $i < $this->_filterIncrement; $i++) {
+            for ($i = 0; $i < $this->_filterIncrement; ++$i) {
                 if (isset($this->_filterBrackets[$i])) {
                     $eval .= $this->_renderConditionBeforeFilterElement(
                         $i,
@@ -638,7 +638,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
             'value' => $bracket === ')' ? ')' : '(',
             'is_and' => $isAnd,
         ];
-        $this->_filterIncrement++;
+        ++$this->_filterIncrement;
         return $this;
     }
 

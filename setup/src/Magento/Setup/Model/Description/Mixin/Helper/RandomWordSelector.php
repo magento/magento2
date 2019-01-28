@@ -28,7 +28,7 @@ class RandomWordSelector
         $wordsSize = count($words);
         while ($count) {
             $randWords[] = $words[random_int(0, $wordsSize - 1)];
-            $count--;
+            --$count;
         }
 
         return $randWords;

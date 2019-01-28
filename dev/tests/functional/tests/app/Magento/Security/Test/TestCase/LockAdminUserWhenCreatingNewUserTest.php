@@ -108,7 +108,7 @@ class LockAdminUserWhenCreatingNewUserTest extends Injectable
         $this->adminAuthLogin->getLoginBlock()->submit();
         $this->userIndexPage->open();
         $this->userIndexPage->getPageActions()->addNew();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->userEditPage->getUserForm()->fill($user);
             $this->userEditPage->getPageActions()->save();
         }

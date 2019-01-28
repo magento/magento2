@@ -194,7 +194,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->method('getData')
                 ->with($key)
                 ->willReturn($value);
-            $i++;
+            ++$i;
         }
 
         $this->attributeMock->expects($this->once())->method('setData');
@@ -458,7 +458,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->configurableMock);
 
         $simpleProducts = [];
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 2; ++$i) {
             $simpleProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['hasData', 'getMediaGalleryEntries'])

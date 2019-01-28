@@ -97,7 +97,7 @@ class SearchTermsReportEntityTest extends Injectable
     protected function createProducts($product, $countProduct)
     {
         $name = 'simpleProductName' . mt_rand();
-        for ($i = 0; $i < $countProduct; $i++) {
+        for ($i = 0; $i < $countProduct; ++$i) {
             $productFixture = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',
                 ['dataset' => $product, 'data' => ['name' => $name]]
@@ -116,7 +116,7 @@ class SearchTermsReportEntityTest extends Injectable
      */
     protected function searchProducts($productName, $countSearch)
     {
-        for ($i = 0; $i < $countSearch; $i++) {
+        for ($i = 0; $i < $countSearch; ++$i) {
             $this->cmsIndex->getSearchBlock()->search($productName);
         }
     }

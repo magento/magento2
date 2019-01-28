@@ -537,7 +537,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             $stmt = $connection->query($select);
             while ($row = $stmt->fetch()) {
                 $ids[] = $row['cache_id'];
-                $counter++;
+                ++$counter;
                 if ($counter > 100) {
                     $result = $result && $connection->delete($this->_getDataTable(), ['id IN (?)' => $ids]);
                     $ids = [];

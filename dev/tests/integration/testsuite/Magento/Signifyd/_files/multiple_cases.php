@@ -7,7 +7,7 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 require __DIR__ . '/case.php';
 
-for ($i = 1; $i < 4; $i ++) {
+for ($i = 1; $i < 4; ++$i ) {
     $newOrder = clone $order;
     $newOrder->setEntityId(null)
         ->setIncrementId($order->getIncrementId() + $i);

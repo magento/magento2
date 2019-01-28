@@ -86,7 +86,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $children = $root->childNodes;
 
         $processedSubLists = [];
-        for ($i = 0; $i < $children->length; $i++) {
+        for ($i = 0; $i < $children->length; ++$i) {
             $child = $children->item($i);
             $childName = $child->nodeName;
             $convertedChild = [];

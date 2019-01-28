@@ -92,8 +92,8 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
     public function ratioDataProvider()
     {
         $data = [];
-        for ($i = 10; $i <= 20; $i++) {
-            for ($j = 0; $j <= $i; $j++) {
+        for ($i = 10; $i <= 20; ++$i) {
+            for ($j = 0; $j <= $i; ++$j) {
                 $data[] = [$i, $j];
             }
         }

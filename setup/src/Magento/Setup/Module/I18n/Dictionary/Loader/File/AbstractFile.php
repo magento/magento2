@@ -54,7 +54,7 @@ abstract class AbstractFile implements FileInterface
 
         $this->_position = 0;
         while ($data = $this->_readFile()) {
-            $this->_position++;
+            ++$this->_position;
             $data = array_pad($data, 4, null);
             $dictionary->addPhrase(
                 $this->_createPhrase(

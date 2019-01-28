@@ -54,7 +54,7 @@ class AggregateInvoker
         foreach ($dataSource as $dataSetName => $dataSet) {
             try {
                 call_user_func_array($callback, $dataSet);
-                $passed++;
+                ++$passed;
             } catch (\PHPUnit\Framework\IncompleteTestError $exception) {
                 $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit\Framework\SkippedTestError $exception) {

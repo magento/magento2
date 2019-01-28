@@ -104,7 +104,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_ERROR;
-            $this->failed++;
+            ++$this->failed;
         }
     }
 
@@ -120,7 +120,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE;
-            $this->failed++;
+            ++$this->failed;
         }
     }
 
@@ -136,7 +136,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_INCOMPLETE;
-            $this->incomplete++;
+            ++$this->incomplete;
         }
     }
 
@@ -153,7 +153,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED;
-            $this->skipped++;
+            ++$this->skipped;
         }
     }
 
@@ -170,7 +170,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_RISKY;
-            $this->risky++;
+            ++$this->risky;
         }
     }
 
@@ -238,13 +238,13 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
             }
 
             if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {
-                $this->tests[$this->currentTestMethodPrettified]['success']++;
+                ++$this->tests[$this->currentTestMethodPrettified]['success'];
             }
             if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_ERROR) {
-                $this->tests[$this->currentTestMethodPrettified]['failure']++;
+                ++$this->tests[$this->currentTestMethodPrettified]['failure'];
             }
             if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
-                $this->tests[$this->currentTestMethodPrettified]['failure']++;
+                ++$this->tests[$this->currentTestMethodPrettified]['failure'];
             }
             $this->tests[$this->currentTestMethodPrettified]['time'] += $time;
             $this->currentTestClassPrettified = null;

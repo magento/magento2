@@ -124,7 +124,7 @@ class DownloadProductsReportEntityTest extends Injectable
         $downloadableProductsUrl = $this->browser->getUrl();
         foreach ($order->getEntityId()['products'] as $product) {
             foreach ($product->getDownloadableLinks()['downloadable']['link'] as $link) {
-                for ($i = 0; $i < $downloads; $i++) {
+                for ($i = 0; $i < $downloads; ++$i) {
                     $this->browser->open($this->customerProducts->getMainBlock()->getLinkUrl($link['title']));
                     $this->browser->open($downloadableProductsUrl);
                 }

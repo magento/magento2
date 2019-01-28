@@ -457,7 +457,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $optionsData = array_values($products);
         if ($doubleOptions) {
             foreach ($products as $product) {
-                $elementIndex++;
+                ++$elementIndex;
                 $product['id'] = $elementIndex;
                 $optionsData[] = $product;
             }
@@ -763,7 +763,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $this->_bypassModelMethodGetMultiRowFormat($rowData);
 
-        for ($i = 0; $i < $numberOfValidations; $i++) {
+        for ($i = 0; $i < $numberOfValidations; ++$i) {
             $this->modelMock->validateRow($rowData, $i);
         }
 

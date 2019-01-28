@@ -89,7 +89,7 @@ class LockCustomerOnLoginPageTest extends Injectable
         );
 
         // Steps
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->customerAccountLogin->open();
             $this->customerAccountLogin->getLoginBlock()->fill($incorrectCustomer);
             $this->customerAccountLogin->getLoginBlock()->submit();

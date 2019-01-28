@@ -174,14 +174,14 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $modelForValidateRow = clone $this->_model;
         $modelForValidateRow->expects($this->any())->method('validateRow')->will($this->returnValue(false));
 
-        for ($i = 1; $i <= $rows; $i++) {
+        for ($i = 1; $i <= $rows; ++$i) {
             $this->assertFalse($modelForValidateRow->isRowAllowedToImport([], $i));
         }
 
         $modelForIsAllowed = clone $this->_model;
         $modelForIsAllowed->expects($this->any())->method('validateRow')->will($this->returnValue(true));
 
-        for ($i = 1; $i <= $rows; $i++) {
+        for ($i = 1; $i <= $rows; ++$i) {
             $expected = true;
             if (isset($skippedRows[$i])) {
                 $expected = !$skippedRows[$i];

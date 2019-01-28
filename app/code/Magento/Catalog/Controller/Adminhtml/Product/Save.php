@@ -216,7 +216,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
             $removedImagesAmount = 0;
             foreach ($postData['product']['media_gallery']['images'] as $image) {
                 if (!empty($image['removed'])) {
-                    $removedImagesAmount++;
+                    ++$removedImagesAmount;
                 }
             }
             if ($removedImagesAmount) {

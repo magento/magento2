@@ -120,7 +120,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $attributesCount = 3;
         $attributes = [];
-        for ($i = 1; $i < $attributesCount; $i++) {
+        for ($i = 1; $i < $attributesCount; ++$i) {
             $attribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProductAttribute']);
             $productAttribute = $this->createPartialMock(
                 \Magento\Framework\DataObject::class,
@@ -145,7 +145,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
         $allowedProducts = [];
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 2; ++$i) {
             $productMock = $this->createPartialMock(
                 \Magento\Catalog\Model\Product::class,
                 ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages']
@@ -199,7 +199,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function getDataCallback($key)
     {
         $map = [];
-        for ($k = 1; $k < 3; $k++) {
+        for ($k = 1; $k < 3; ++$k) {
             $map['attribute_code_' . $k] = 'attribute_code_value_' . $k;
         }
         return $map[$key];

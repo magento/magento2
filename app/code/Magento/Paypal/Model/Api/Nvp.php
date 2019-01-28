@@ -1351,7 +1351,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         $errors = [];
 
-        for ($i = 0; isset($response["L_ERRORCODE{$i}"]); $i++) {
+        for ($i = 0; isset($response["L_ERRORCODE{$i}"]); ++$i) {
             $errorCode = $response["L_ERRORCODE{$i}"];
             $errorMessage = $this->_formatErrorMessage(
                 $errorCode,
@@ -1384,7 +1384,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         if ($ack == 'SUCCESS' || $ack == 'SUCCESSWITHWARNING') {
             // collect warnings
             if ($ack == 'SUCCESSWITHWARNING') {
-                for ($i = 0; isset($response["L_ERRORCODE{$i}"]); $i++) {
+                for ($i = 0; isset($response["L_ERRORCODE{$i}"]); ++$i) {
                     $this->_callWarnings[] = $response["L_ERRORCODE{$i}"];
                 }
             }

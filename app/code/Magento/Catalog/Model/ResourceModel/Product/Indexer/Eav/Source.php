@@ -404,7 +404,7 @@ class Source extends AbstractEav
             foreach ($values as $valueId) {
                 if (isset($options[$row['attribute_id']][$valueId])) {
                     $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId, $row['source_id']];
-                    $i++;
+                    ++$i;
                     if ($i % 10000 == 0) {
                         $this->_saveIndexData($data);
                         $data = [];

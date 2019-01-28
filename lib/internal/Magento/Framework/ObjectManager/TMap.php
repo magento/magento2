@@ -183,7 +183,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
             $this->array[$offset] = $value;
         }
 
-        $this->counter++;
+        ++$this->counter;
     }
 
     /**
@@ -192,7 +192,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     public function offsetUnset($offset)
     {
         if ($this->counter && isset($this->array[$offset])) {
-            $this->counter--;
+            --$this->counter;
             unset($this->array[$offset]);
 
             if (isset($this->objectsArray[$offset])) {

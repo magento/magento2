@@ -23,9 +23,9 @@ class RootComposerMappingTest extends \PHPUnit\Framework\TestCase
         $patterns = $reader->getPatterns();
         $counter = 0;
         $count = count($patterns);
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             if (file_exists(BP . '/' . $patterns[$i])) {
-                $counter++;
+                ++$counter;
             }
         }
 
@@ -35,9 +35,9 @@ class RootComposerMappingTest extends \PHPUnit\Framework\TestCase
         $customizablePaths = $reader->getCustomizablePaths();
         $counter = 0;
         $count = count($customizablePaths);
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             if (file_exists(BP . '/' . str_replace('*', '', $customizablePaths[$i]))) {
-                $counter++;
+                ++$counter;
             }
         }
 

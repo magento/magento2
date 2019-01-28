@@ -448,7 +448,7 @@ abstract class AbstractEntity
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                 }
                 if (!$valid) {
-                    $this->_processedRowsCount++;
+                    ++$this->_processedRowsCount;
                     $source->next();
                     continue;
                 }
@@ -478,7 +478,7 @@ abstract class AbstractEntity
                     unset($entityGroup);
                 }
 
-                $this->_processedRowsCount++;
+                ++$this->_processedRowsCount;
                 $source->next();
             }
         }
@@ -827,7 +827,7 @@ abstract class AbstractEntity
             $invalidColumns = [];
             $invalidAttributes = [];
             foreach ($this->getSource()->getColNames() as $columnName) {
-                $columnNumber++;
+                ++$columnNumber;
                 if (!$this->isAttributeParticular($columnName)) {
                     if (trim($columnName) == '') {
                         $emptyHeaderColumns[] = $columnNumber;

@@ -58,13 +58,13 @@ class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testSearchTermApplied()
     {
-        for ($productIndex=1; $productIndex<=$this->totalProductsCount; $productIndex++) {
+        for ($productIndex=1; $productIndex<=$this->totalProductsCount; ++$productIndex) {
             $description = 'Fleet: ';
             $this->searchTermManager->applySearchTermsToDescription($description, $productIndex);
 
             foreach (array_keys($this->searchTermsUsage) as $searchTerm) {
                 if (preg_match("/\\b$searchTerm\\b/", $description)) {
-                    $this->searchTermsUsage[$searchTerm]['used']++;
+                    ++$this->searchTermsUsage[$searchTerm]['used'];
                 }
             }
         }

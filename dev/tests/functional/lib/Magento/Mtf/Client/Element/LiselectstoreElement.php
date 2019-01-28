@@ -149,7 +149,7 @@ class LiselectstoreElement extends SimpleElement
         $elementText = false;
         while ($elementText == false) {
             $elementText = $elements[$key][$criteria] == true ? $elements[$key]['element']->getText() : false;
-            $key--;
+            --$key;
         }
         return $elementText;
     }

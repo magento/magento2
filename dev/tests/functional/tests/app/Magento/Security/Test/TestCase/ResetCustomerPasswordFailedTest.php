@@ -77,7 +77,7 @@ class ResetCustomerPasswordFailedTest extends Injectable
 
         // Steps
         $customer->persist();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->forgotPassword->open();
             $this->forgotPassword->getForgotPasswordForm()->resetForgotPassword($customer);
         }

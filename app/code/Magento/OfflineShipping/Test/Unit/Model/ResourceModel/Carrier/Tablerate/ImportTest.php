@@ -232,7 +232,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             $file->expects($this->at($i))
                 ->method('readCsv')
                 ->willReturn($line);
-            $i++;
+            ++$i;
         }
         $file->expects($this->at($i))
             ->method('readCsv')

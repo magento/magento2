@@ -112,7 +112,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
         // Steps
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getGridPageActions()->addNew();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->integrationNewPage->getIntegrationForm()->fill($integration);
             $this->integrationNewPage->getFormPageActions()->saveNew();
         }

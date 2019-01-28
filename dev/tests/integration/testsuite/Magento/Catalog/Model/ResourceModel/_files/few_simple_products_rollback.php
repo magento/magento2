@@ -19,7 +19,7 @@ $productRepository = Bootstrap::getObjectManager()
 $productsAmount = 10;
 
 try {
-    for ($i = 1; $i <= $productsAmount; $i++) {
+    for ($i = 1; $i <= $productsAmount; ++$i) {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get("Product{$i}", false, null, true);
         $productRepository->delete($product);

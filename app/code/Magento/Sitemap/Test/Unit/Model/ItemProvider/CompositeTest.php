@@ -49,14 +49,14 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     {
         $testCases = [];
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             $itemProviders = [];
             $expectedItems = [];
             $maxProviders = random_int(1, 5);
-            for ($i = 1; $i < $maxProviders; $i++) {
+            for ($i = 1; $i < $maxProviders; ++$i) {
                 $items = [];
                 $maxItems = random_int(2, 5);
-                for ($i = 1; $i < $maxItems; $i++) {
+                for ($i = 1; $i < $maxItems; ++$i) {
                     $sitemapItem = $this->getMockForAbstractClass(SitemapItemInterface::class);
                     $items[] = $sitemapItem;
                     $expectedItems[]  = $sitemapItem;

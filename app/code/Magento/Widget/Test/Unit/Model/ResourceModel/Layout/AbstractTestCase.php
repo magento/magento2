@@ -120,7 +120,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     {
         $counter = $this->_expectedConditions['counter'];
         $data = $this->_expectedConditions['data'][$counter];
-        $this->_expectedConditions['counter']++;
+        ++$this->_expectedConditions['counter'];
 
         $this->assertEquals($data[0], $fieldName);
 

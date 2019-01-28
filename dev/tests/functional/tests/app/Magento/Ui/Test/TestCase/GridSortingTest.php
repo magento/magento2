@@ -113,7 +113,7 @@ class GridSortingTest extends Injectable
     protected function createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps)
     {
         $items = [];
-        for ($i = 0; $i < $itemsCount; $i++) {
+        for ($i = 0; $i < $itemsCount; ++$i) {
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
             $items[$i] = $item;

@@ -117,7 +117,7 @@ class SignifydObserveCaseStep implements TestStepInterface
     {
         $this->signifydCases->open();
         // Search case few times because it can appear with delay.
-        for ($attempts = $this->searchAttempts; $attempts > 0; $attempts--) {
+        for ($attempts = $this->searchAttempts; $attempts > 0; --$attempts) {
             $this->signifydCases->getCaseSearchBlock()
                 ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
             if ($this->signifydCases->getCaseSearchBlock()->isAnyCaseVisible()) {

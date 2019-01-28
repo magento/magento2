@@ -36,7 +36,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     public function testTryLockJobNoLockedJobsSucceeds()
     {
-        for ($i = 1; $i < 6; $i++) {
+        for ($i = 1; $i < 6; ++$i) {
             $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60 * $i);
         }
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);

@@ -217,7 +217,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
 
                     $transport->sendMessage();
 
-                    $sent++;
+                    ++$sent;
                 }
             } catch (\Exception $e) {
                 $wishlist->setShared($wishlist->getShared() + $sent);

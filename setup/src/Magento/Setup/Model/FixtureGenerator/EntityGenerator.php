@@ -163,8 +163,8 @@ class EntityGenerator
         $processed = 0;
         $entitiesAmount = (int)$entitiesAmount;
         gc_disable();
-        for ($entityNumber = 0; $entityNumber < $entitiesAmount; $entityNumber++) {
-            $processed++;
+        for ($entityNumber = 0; $entityNumber < $entitiesAmount; ++$entityNumber) {
+            ++$processed;
             $map = array_merge_recursive($map, $this->getSqlQueries($entity, $entityNumber, $fixture));
 
             if ($processed % $this->bunchSize === 0 || $entityNumber === ($entitiesAmount - 1)) {

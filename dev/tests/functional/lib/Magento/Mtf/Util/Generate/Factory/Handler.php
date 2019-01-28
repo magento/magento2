@@ -85,6 +85,6 @@ class Handler extends AbstractFactory
         $this->factoryContent .= "        return \$handler->persist(\$fixture);";
         $this->factoryContent .= "\n    }\n";
 
-        $this->cnt++;
+        ++$this->cnt;
     }
 }

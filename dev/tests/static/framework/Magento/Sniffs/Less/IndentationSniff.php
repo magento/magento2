@@ -64,16 +64,16 @@ class IndentationSniff implements Sniff
 
         $numTokens = (count($tokens) - 2);
         $indentLevel = 0;
-        for ($i = 1; $i < $numTokens; $i++) {
+        for ($i = 1; $i < $numTokens; ++$i) {
             if ($tokens[$i]['code'] === T_COMMENT) {
                 // Don't check the indent of comments.
                 continue;
             }
 
             if ($tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
-                $indentLevel++;
+                ++$indentLevel;
             } elseif ($tokens[($i + 1)]['code'] === T_CLOSE_CURLY_BRACKET) {
-                $indentLevel--;
+                --$indentLevel;
             }
 
             if ($tokens[$i]['column'] !== 1) {

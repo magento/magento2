@@ -27,7 +27,7 @@ class FirstPlugin
      */
     public function aroundD(Intercepted $subject, \Closure $next, $param1)
     {
-        $this->_counter++;
+        ++$this->_counter;
         return '<F:D>' . $this->_counter . ': ' . $next($param1) . '</F:D>';
     }
 

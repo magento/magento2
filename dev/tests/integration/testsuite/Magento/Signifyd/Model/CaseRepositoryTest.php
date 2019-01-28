@@ -118,7 +118,7 @@ class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
 
         self::assertCount(3, $items);
 
-        for ($i = 1; $i < 4; $i ++) {
+        for ($i = 1; $i < 4; ++$i ) {
             $current = array_shift($items);
             self::assertEquals($i, $current->getCaseId());
         }

@@ -447,7 +447,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
                 $value = $item->getDataUsingMethod($publicKey);
                 $request[sprintf($privateFormat, $i)] = $this->formatValue($value, $publicKey);
             }
-            $i++;
+            ++$i;
         }
         return $result;
     }
@@ -478,7 +478,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
                 }
                 $request[sprintf($privateFormat, $i)] = $value;
             }
-            $i++;
+            ++$i;
         }
         return true;
     }
@@ -561,7 +561,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
         $i = 0;
         foreach ($keys as $key) {
             $to[$key] = isset($street[$i]) ? $street[$i] : '';
-            $i++;
+            ++$i;
         }
     }
 

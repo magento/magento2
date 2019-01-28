@@ -34,7 +34,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
             $this->_validateTypes($types);
             foreach ($types as $type) {
                 $this->_cacheTypeList->cleanType($type);
-                $updatedTypes++;
+                ++$updatedTypes;
             }
             if ($updatedTypes > 0) {
                 $this->messageManager->addSuccessMessage(__("%1 cache type(s) refreshed.", $updatedTypes));

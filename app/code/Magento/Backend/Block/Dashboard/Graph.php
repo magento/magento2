@@ -272,7 +272,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 $i = 0;
             } else {
                 $dates[$k] = '';
-                $i++;
+                ++$i;
             }
         }
 
@@ -331,7 +331,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $thisdataarray = $serie;
             if ($this->_encoding == "s") {
                 // SIMPLE ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0; $j < sizeof($thisdataarray); ++$j) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         $ylocation = round(
@@ -344,7 +344,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 }
             } else {
                 // EXTENDED ENCODING
-                for ($j = 0; $j < sizeof($thisdataarray); $j++) {
+                for ($j = 0; $j < sizeof($thisdataarray); ++$j) {
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         if ($yrange) {
@@ -424,7 +424,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 } elseif ($idx == 'y') {
                     $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
                 }
-                $indexid++;
+                ++$indexid;
             }
             $params['chxl'] = implode('|', $valueBuffer);
         }
@@ -514,7 +514,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $pow = 0;
         while ($number >= 10) {
             $number = $number / 10;
-            $pow++;
+            ++$pow;
         }
         return $pow;
     }

@@ -59,7 +59,7 @@ class Menu extends Block
                     ->find($textSelector)
                     ->getText()
             );
-            $counter++;
+            ++$counter;
         }
         return $menuItems;
     }

@@ -114,7 +114,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             }
             $count = 1;
             foreach ($_option->getValues() as $_value) {
-                $count++;
+                ++$count;
 
                 $priceStr = $this->_formatPrice(
                     [

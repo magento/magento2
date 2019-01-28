@@ -46,7 +46,7 @@ class Progress
     public function setNext()
     {
         $this->validate($this->total, $this->current + 1);
-        $this->current++;
+        ++$this->current;
     }
 
     /**

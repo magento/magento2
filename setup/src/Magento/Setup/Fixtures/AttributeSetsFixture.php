@@ -70,7 +70,7 @@ class AttributeSetsFixture extends Fixture
 
         $attributeSetsCount = $this->fixtureModel->getValue('product_attribute_sets', null);
         if ($attributeSetsCount !== null) {
-            for ($index = 1; $index <= $attributeSetsCount; $index++) {
+            for ($index = 1; $index <= $attributeSetsCount; ++$index) {
                 $this->attributeSetsFixture->createAttributeSet(
                     $this->pattern->generateAttributeSet(
                         self::PRODUCT_SET_NAME . $index,

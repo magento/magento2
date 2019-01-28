@@ -37,7 +37,7 @@ class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
             /** @var CatalogProductSimple $product */
             $product = $products[$key];
             if ($reviewBlock->getItemElement($product->getName())->isVisible()) {
-                $presentItems++;
+                ++$presentItems;
             }
         }
 

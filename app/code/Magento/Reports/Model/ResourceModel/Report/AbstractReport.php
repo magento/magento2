@@ -457,7 +457,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
             $dtz = new \DateTimeZone($timezone);
             $transitions = $dtz->getTransitions();
 
-            for ($i = count($transitions) - 1; $i >= 0; $i--) {
+            for ($i = count($transitions) - 1; $i >= 0; --$i) {
                 $tr = $transitions[$i];
                 try {
                     $this->timezoneValidator->validate($tr['ts'], $to);

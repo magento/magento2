@@ -36,7 +36,7 @@ class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
             /** @var CatalogProductSimple $product */
             $product = $products[$key];
             if ($sidebar->getCartItem($product)->isVisible()) {
-                $presentItems++;
+                ++$presentItems;
             }
         }
 

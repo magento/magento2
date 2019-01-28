@@ -73,7 +73,7 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
                 ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]);
             $this->socketAdapterMock->expects($this->at($i++))
                 ->method('read');
-            $i++;
+            ++$i;
         }
         $this->socketAdapterMock->expects($this->exactly(count($uris)))
             ->method('close');

@@ -480,7 +480,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         call_user_func_array([$productFactoryInvMock, 'willReturnOnConsecutiveCalls'], $productMocks);
         $this->serializerMock->expects($this->atLeastOnce())->method('serialize');
 
-        for ($i = 1; $i <= $productsCount; $i++) {
+        for ($i = 1; $i <= $productsCount; ++$i) {
             $product = $this->model->getById($i, false, 0);
             $result[] = $product->getId();
             $expectedResult[] = $i;
@@ -499,7 +499,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $productMocks = [];
 
-        for ($i = 1; $i <= $productsCount; $i++) {
+        for ($i = 1; $i <= $productsCount; ++$i) {
             $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
                 ->disableOriginalConstructor()
                 ->setMethods([

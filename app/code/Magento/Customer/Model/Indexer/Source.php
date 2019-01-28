@@ -103,7 +103,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
             foreach ($this->customerCollection->getItems() as $key => $value) {
                 yield $key => $value;
             }
-            $pageNumber++;
+            ++$pageNumber;
         } while ($pageNumber <= $lastPage);
     }
 

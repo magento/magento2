@@ -179,7 +179,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
             $bundleOptionCollection = $productRepository->get(self::TEST_PRODUCT_NAME, false, $storeId)
                 ->getExtensionAttributes()->getBundleProductOptions();
             $this->assertCount(2, $bundleOptionCollection);
-            $i++;
+            ++$i;
             foreach ($bundleOptionCollection as $optionKey => $option) {
                 $this->assertEquals('checkbox', $option->getData('type'));
                 $this->assertEquals('Option ' . $i . ' ' . ($optionKey + 1), $option->getData('title'));

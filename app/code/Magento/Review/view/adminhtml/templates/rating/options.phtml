@@ -12,7 +12,7 @@
 </div>
 <fieldset id="options_form">
 <?php if (!$options): ?>
-    <?php for ($_i = 1; $_i <= 5; $_i++): ?>
+    <?php for ($_i = 1; $_i <= 5; ++$_i): ?>
         <span class="field-row">
             <label for="option_<?= /* @noEscape */ $_i ?>"><?= $block->escapeHtml(__('Option Title:')) ?></label>
             <input id="option_<?= /* @noEscape */ $_i ?>" name="option[<?= /* @noEscape */ $_i ?>][code]" value="<?= /* @noEscape */ $_i ?>" class="input-text" type="text" />

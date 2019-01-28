@@ -52,14 +52,14 @@ class CouponManagementTest extends WebapiAbstract
                 if ($cnt < $count / 2) {
                     $couponIds[] = $coupon['coupon_id'];
                 }
-                $cnt++;
+                ++$cnt;
             }
             $cnt=0;
             foreach ($couponList as $coupon) {
                 if ($cnt >= $count / 2) {
                     $couponCodes[] = $coupon['code'];
                 }
-                $cnt++;
+                ++$cnt;
             }
         }
 

@@ -41,7 +41,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $counter = 0;
         foreach ($this->_model as $item) {
             $this->assertEquals($this->_flyweightMock, $item);
-            $counter++;
+            ++$counter;
         }
         $this->assertEquals(3, $counter);
     }

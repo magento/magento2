@@ -82,7 +82,7 @@ class ArrayUtils
                 $this->_decorateArrayObject($element, $keyIsOdd, !$isEven, $forceSetAll || !$isEven);
                 $this->_decorateArrayObject($element, $keyIsEven, $isEven, $forceSetAll || $isEven);
                 $isEven = !$isEven;
-                $index++;
+                ++$index;
                 $this->_decorateArrayObject(
                     $element,
                     $keyIsLast,
@@ -100,7 +100,7 @@ class ArrayUtils
                     $array[$key][$keyIsEven] = $isEven;
                 }
                 $isEven = !$isEven;
-                $index++;
+                ++$index;
                 if ($forceSetAll || $index === $count) {
                     $array[$key][$keyIsLast] = $index === $count;
                 }

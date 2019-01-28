@@ -65,7 +65,7 @@ class LockAdminUserEntityTest extends Injectable
         );
 
         // Steps and assertions
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $assertUserFailedLoginMessage->processAssert($adminAuth, $incorrectUser);
         }
     }

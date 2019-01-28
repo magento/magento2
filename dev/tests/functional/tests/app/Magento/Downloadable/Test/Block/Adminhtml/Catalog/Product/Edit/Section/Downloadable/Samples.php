@@ -117,8 +117,8 @@ class Samples extends Form
                 $target = $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->getSortHandle();
                 $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
 
-                $currentSortRowData['current_position_in_grid']--;
-                $sortRowData['current_position_in_grid']++;
+                --$currentSortRowData['current_position_in_grid'];
+                ++$sortRowData['current_position_in_grid'];
             }
         }
         unset($sortRowData);

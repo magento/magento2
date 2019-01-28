@@ -71,7 +71,7 @@ class Log
      */
     public function startCreating($class)
     {
-        $this->stats['total']++;
+        ++$this->stats['total'];
         $parent = empty($this->currentItem) ? null : $this->currentItem;
         $item = new Item($class, $parent);
 
@@ -102,7 +102,7 @@ class Log
      */
     public function add($object)
     {
-        $this->stats['total']++;
+        ++$this->stats['total'];
         if ($this->currentItem) {
             $item = new Item(get_class($object), $this->currentItem);
             $this->currentItem->addChild($item);

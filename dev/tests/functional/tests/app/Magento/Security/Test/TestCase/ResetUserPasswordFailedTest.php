@@ -96,7 +96,7 @@ class ResetUserPasswordFailedTest extends Injectable
             ->getGroup('admin', 'captcha')->setValue('admin', 'captcha', 'enable', 'No');
         $this->systemConfigEditPage->getPageActions()->save();
 
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->userAccountForgotPassword->open();
             $this->userAccountForgotPassword->getForgotPasswordForm()->fill($customAdmin);
             $this->userAccountForgotPassword->getForgotPasswordForm()->submit();

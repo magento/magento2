@@ -194,7 +194,7 @@ class BatchConsumer implements ConsumerInterface
     private function getMessages(QueueInterface $queue, $count)
     {
         $messages = [];
-        for ($i = $count; $i > 0; $i--) {
+        for ($i = $count; $i > 0; --$i) {
             $message = $queue->dequeue();
             if ($message === null) {
                 break;

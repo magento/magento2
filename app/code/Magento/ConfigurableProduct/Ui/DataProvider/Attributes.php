@@ -53,7 +53,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
             if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
                 $items[] = $attribute->toArray();
             } else {
-                $skippedItems++;
+                ++$skippedItems;
             }
         }
         return [

@@ -129,7 +129,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 }
                 $childItems = $item->getChildrenItems();
                 if (empty($childItems)) {
-                    $itemsCount++;
+                    ++$itemsCount;
                 }
             }
         }

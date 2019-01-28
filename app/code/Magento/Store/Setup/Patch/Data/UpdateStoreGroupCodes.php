@@ -64,7 +64,7 @@ class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
             }
 
             if (array_key_exists($code, $codes)) {
-                $codes[$code]++;
+                ++$codes[$code];
                 $code = $code . $codes[$code];
             }
             $codes[$code] = 1;

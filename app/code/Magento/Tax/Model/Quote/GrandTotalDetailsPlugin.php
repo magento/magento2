@@ -123,7 +123,7 @@ class GrandTotalDetailsPlugin
             $taxDetails->setRates($taxRates);
             $taxDetails->setGroupId($detailsId);
             $finalData[] = $taxDetails;
-            $detailsId++;
+            ++$detailsId;
         }
         $attributes = $totalSegments[$this->code]->getExtensionAttributes();
         if ($attributes === null) {

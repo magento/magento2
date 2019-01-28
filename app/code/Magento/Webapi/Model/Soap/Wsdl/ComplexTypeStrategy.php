@@ -230,7 +230,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
 
         if (preg_match_all('/{([a-z]+):(.+)}/Ui', $documentation, $matches)) {
             $count = count($matches[0]);
-            for ($i = 0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; ++$i) {
                 $appinfoTag = $matches[0][$i];
                 $tagName = $matches[1][$i];
                 $tagValue = $matches[2][$i];

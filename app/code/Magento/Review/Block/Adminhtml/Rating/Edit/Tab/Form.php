@@ -180,10 +180,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     ]
                 );
 
-                $i++;
+                ++$i;
             }
         } else {
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 5; ++$i) {
                 $this->getFieldset('rating_form')->addField(
                     'option_code_' . $i,
                     'hidden',

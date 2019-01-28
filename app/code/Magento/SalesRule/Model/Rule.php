@@ -512,7 +512,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $ok = true;
         } else {
             if ($this->getId()) {
-                for ($attemptNum = 0; $attemptNum < $saveAttemptCount; $attemptNum++) {
+                for ($attemptNum = 0; $attemptNum < $saveAttemptCount; ++$attemptNum) {
                     try {
                         $coupon->save();
                     } catch (\Exception $e) {

@@ -94,7 +94,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
 
             $collection->setPageSize($this->batchSize);
             $pages = $collection->getLastPageNumber();
-            for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+            for ($currentPage = 1; $currentPage <= $pages; ++$currentPage) {
                 $collection->setCurPage($currentPage);
                 foreach ($collection->getItems() as $item) {
                     $sku = strtolower(trim($item->getSku()));

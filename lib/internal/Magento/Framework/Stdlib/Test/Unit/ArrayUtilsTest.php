@@ -40,7 +40,7 @@ class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
 
         $iterator = 0;
         foreach ($input as $value) {
-            $iterator++;
+            ++$iterator;
             $this->assertEquals($iterator, $value);
         }
     }

@@ -391,7 +391,7 @@ class CustomOptions extends Form
             $listOptions[$index]['sort_order'] = $index;
             ++$count;
             $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
-            $index++;
+            ++$index;
         }
 
         return [

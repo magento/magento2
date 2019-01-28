@@ -203,13 +203,13 @@ class Websites extends AbstractModifier
                 ],
             ];
 
-            $sortOrder++;
+            ++$sortOrder;
             $tooltip = null;
             $label = ' ';
 
             if (!$isNewProduct && !in_array($website['id'], $websiteIds) && $website['storesCount']) {
                 $children['copy_to_stores.' . $website['id']] = $this->getDynamicRow($website['id'], $sortOrder);
-                $sortOrder++;
+                ++$sortOrder;
             }
         }
 
@@ -429,7 +429,7 @@ class Websites extends AbstractModifier
                     if (!$storeId || $store->getStoreGroupId() != $groupId) {
                         continue;
                     }
-                    $websiteRow['storesCount']++;
+                    ++$websiteRow['storesCount'];
                     $groupRow['stores'][] = [
                         'id' => $storeId,
                         'name' => $store->getName(),

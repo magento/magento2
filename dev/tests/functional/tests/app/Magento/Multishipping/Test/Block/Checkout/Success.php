@@ -54,7 +54,7 @@ class Success extends Block
             }
         );
         $orderIds = [];
-        for ($i = 1; $i <= $ordersNumber; $i++) {
+        for ($i = 1; $i <= $ordersNumber; ++$i) {
             $orderIds[] = $this->_rootElement->find(
                 '//a[' . $i . '][contains(@href, "view/order_id")]',
                 Locator::SELECTOR_XPATH

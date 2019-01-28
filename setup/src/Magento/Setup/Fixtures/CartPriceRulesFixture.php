@@ -166,7 +166,7 @@ class CartPriceRulesFixture extends Fixture
      */
     public function generateRules($ruleFactory, $categoriesArray)
     {
-        for ($i = 0; $i < $this->cartPriceRulesCount; $i++) {
+        for ($i = 0; $i < $this->cartPriceRulesCount; ++$i) {
             $ruleName = sprintf('Cart Price Rule %1$d', $i);
             $data = [
                 'rule_id'               => null,
@@ -352,13 +352,13 @@ class CartPriceRulesFixture extends Fixture
     public function generateAdvancedRules($ruleFactory, $categoriesArray)
     {
         $j = 0;
-        for ($i = 0; $i < $this->cartPriceRulesCount; $i++) {
+        for ($i = 0; $i < $this->cartPriceRulesCount; ++$i) {
             if ($i < ($this->cartPriceRulesCount - 200)) {
                 $ruleName = sprintf('Cart Price Advanced Catalog Rule %1$d', $j);
             } else {
                 $ruleName = sprintf('Cart Price Advanced Region Rule %1$d', $j);
             }
-            $j++;
+            ++$j;
             $data = [
                 'rule_id'               => null,
                 'product_ids'           => '',

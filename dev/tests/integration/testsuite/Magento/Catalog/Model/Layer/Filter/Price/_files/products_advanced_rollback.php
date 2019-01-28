@@ -32,7 +32,7 @@ foreach ($prices as $price) {
         //Product already removed
     }
 
-    $lastProductId++;
+    ++$lastProductId;
 }
 
 /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */

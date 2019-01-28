@@ -1147,7 +1147,7 @@ XMLAuth;
                             }
                             $packageProgress[] = $tempArr;
                         }
-                        $index++;
+                        ++$index;
                     }
                     $resultArr['progressdetail'] = $packageProgress;
                 }

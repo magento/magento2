@@ -67,7 +67,7 @@ class AssertExportAdvancedPricing extends AbstractConstraint
     ) {
         $regexpsForCheck = [];
         $tierPrices = count($product->getData()['tier_price']);
-        for ($i = 0; $i < $tierPrices; $i++) {
+        for ($i = 0; $i < $tierPrices; ++$i) {
             $regexp = '/';
             foreach ($fields as $field) {
                 if (strpos($field, 'tier_price') !== false) {

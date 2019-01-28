@@ -67,13 +67,13 @@ class ConstantUsageSniffTest extends \PHPUnit\Framework\TestCase
         $lineNumber = 1;
         $tokens = token_get_all($fileContent);
         $snifferTokens = [];
-        for ($i = 0, $count = count($tokens); $i < $count; $i++) {
+        for ($i = 0, $count = count($tokens); $i < $count; ++$i) {
             $content = is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
             $snifferTokens[$i]['line'] = $lineNumber;
             $snifferTokens[$i]['content'] = $content;
             $trimmedContent = trim($content, ' ');
             if ($trimmedContent == PHP_EOL || $trimmedContent == PHP_EOL . PHP_EOL) {
-                $lineNumber++;
+                ++$lineNumber;
             }
         }
         return $snifferTokens;

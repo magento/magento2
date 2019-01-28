@@ -116,7 +116,7 @@ class BatchIterator implements BatchIteratorInterface
         $itemsCountInSelect = $this->calculateBatchSize($select);
         $this->isValid = $itemsCountInSelect > 0;
         if ($this->isValid) {
-            $this->iteration++;
+            ++$this->iteration;
             $this->currentSelect = $select;
         } else {
             $this->currentSelect = null;

@@ -731,7 +731,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); ++$i) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
@@ -1152,7 +1152,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); ++$i) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {

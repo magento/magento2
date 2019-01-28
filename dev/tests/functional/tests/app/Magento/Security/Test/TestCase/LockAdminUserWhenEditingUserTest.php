@@ -108,7 +108,7 @@ class LockAdminUserWhenEditingUserTest extends Injectable
         $this->userIndexPage->open();
         $this->userIndexPage->getUserGrid()->searchAndOpen($filter);
         // Edit user with wrong password
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->userEditPage->getUserForm()->fill($user);
             $this->userEditPage->getPageActions()->save();
         }

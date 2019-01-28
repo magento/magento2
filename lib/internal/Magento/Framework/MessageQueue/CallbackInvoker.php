@@ -21,7 +21,7 @@ class CallbackInvoker
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {
-        for ($i = $maxNumberOfMessages; $i > 0; $i--) {
+        for ($i = $maxNumberOfMessages; $i > 0; --$i) {
             do {
                 $message = $queue->dequeue();
             } while ($message === null && (sleep(1) === 0));

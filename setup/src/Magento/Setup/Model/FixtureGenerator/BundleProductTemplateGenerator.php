@@ -115,7 +115,7 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
 
         $bundleProductOptions = [];
         $variationN = 0;
-        for ($i = 1; $i <= $bundleOptions; $i++) {
+        for ($i = 1; $i <= $bundleOptions; ++$i) {
             $option = $this->optionFactory->create(['data' => [
                 'title' => 'Bundle Product Items ' . $i,
                 'default_title' => 'Bundle Product Items ' . $i,
@@ -128,8 +128,8 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
             $option->setSku($bundleProduct->getSku());
 
             $links = [];
-            for ($linkN = 1; $linkN <= $bundleProductsPerOption; $linkN++) {
-                $variationN++;
+            for ($linkN = 1; $linkN <= $bundleProductsPerOption; ++$linkN) {
+                ++$variationN;
                 $link = $this->linkFactory->create(['data' => [
                     'sku' => sprintf($bundleVariationSkuPattern, $variationN),
                     'qty' => 1,

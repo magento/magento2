@@ -49,7 +49,7 @@ $quote->setCustomerIsGuest(true)
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-for ($i = 1; $i <= 3; $i++) {
+for ($i = 1; $i <= 3; ++$i) {
     /** @var ProductInterface $product */
     $product = $objectManager->create(ProductInterface::class);
     $product->setTypeId('simple')

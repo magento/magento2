@@ -212,7 +212,7 @@ class Price
                     do {
                         $range = pow(10, strlen(floor($maxPrice)) - $index);
                         $items = $this->getRangeItemCounts($range);
-                        $index++;
+                        ++$index;
                     } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
                 } else {
                     $range = (double)$this->getRangeStepValue();

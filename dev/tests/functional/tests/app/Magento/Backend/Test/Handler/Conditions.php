@@ -150,7 +150,7 @@ abstract class Conditions extends Curl
             } else {
                 $result += $this->convertMultipleCondition($condition, $nesting, $count);
             }
-            $count++;
+            ++$count;
         }
         return $result;
     }

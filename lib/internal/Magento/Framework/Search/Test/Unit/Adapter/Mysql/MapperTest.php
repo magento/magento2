@@ -189,7 +189,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
         $previousSelect = $select;
         $selects = [];
-        for ($i = $queriesCount; $i >= 0; $i--) {
+        for ($i = $queriesCount; $i >= 0; --$i) {
             $isLast = $i === 0;
             $select = $this->createSelectMock($previousSelect, $isLast, true);
             $previousSelect = $select;

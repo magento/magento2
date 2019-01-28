@@ -585,7 +585,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\View\LayoutInterface::class
             );
         }
-        for ($i = 0; $i < $qty; $i++) {
+        for ($i = 0; $i < $qty; ++$i) {
             $name = uniqid('block.');
             if ($layout) {
                 $block = $layout->createBlock($className, $name);

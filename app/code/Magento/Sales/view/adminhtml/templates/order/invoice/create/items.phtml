@@ -42,7 +42,7 @@
                 <?php if ($_item->getOrderItem()->getParentItem()) {
                     continue;
                 } else {
-                    $_i++;
+                    ++$_i;
                 } ?>
                     <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'even' : 'odd' ?>">
                         <?= $block->getItemHtml($_item) ?>

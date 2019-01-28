@@ -266,7 +266,7 @@ class ProductDataMapper implements DataMapperInterface
                 $result['tier_price_qty_' . $i] = $tierPrice['price_qty'];
                 $result['tier_website_price_' . $i] = $tierPrice['website_price'];
                 $result['tier_price_' . $i] = $tierPrice['price'];
-                $i++;
+                ++$i;
             }
         }
 
@@ -312,7 +312,7 @@ class ProductDataMapper implements DataMapperInterface
                     $result['video_metadata_' . $i] = $data['video_metadata'];
                     $result['video_provider_' . $i] = $data['video_provider'];
                 }
-                $i++;
+                ++$i;
             }
         }
         return $result;

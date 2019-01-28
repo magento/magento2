@@ -60,7 +60,7 @@ class Console
                                 $this->getStartTag($type) . "\t\t" . $message . $this->getEndTag($type)
                             );
                             if ($type != Log::GENERATION_SUCCESS) {
-                                $errorsCount++;
+                                ++$errorsCount;
                             }
                         }
                     }

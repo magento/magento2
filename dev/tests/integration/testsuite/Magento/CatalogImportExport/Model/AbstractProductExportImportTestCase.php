@@ -119,14 +119,14 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
             $origProducts[$index] = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID);
-            $index++;
+            ++$index;
         }
 
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
 
         while ($index > 0) {
-            $index--;
+            --$index;
             $stockRegistryStorage->removeStockItem($ids[$index]);
             $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // @todo uncomment or remove after MAGETWO-49806 resolved
@@ -302,7 +302,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
             $origProducts[$index] = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID);
-            $index++;
+            ++$index;
         }
 
         $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
@@ -320,7 +320,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE);
 
         while ($index > 0) {
-            $index--;
+            --$index;
             $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // check original product is deleted
             $origProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($ids[$index]);

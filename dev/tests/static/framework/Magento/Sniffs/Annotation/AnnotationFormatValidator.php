@@ -25,7 +25,7 @@ class AnnotationFormatValidator
     {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $shortPtr;
-        for ($i = ($shortPtr + 1); $i < $commentEndPtr; $i++) {
+        for ($i = ($shortPtr + 1); $i < $commentEndPtr; ++$i) {
             if ($tokens[$i]['code'] === T_DOC_COMMENT_STRING) {
                 if ($tokens[$i]['line'] === $tokens[$shortPtrEnd]['line'] + 1) {
                     $shortPtrEnd = $i;
@@ -231,7 +231,7 @@ class AnnotationFormatValidator
                 }
 
                 if ($tokens[$prevPtr]['line'] !== $tokens[$tag]['line'] - 1) {
-                    $groupId++;
+                    ++$groupId;
                 }
             }
 

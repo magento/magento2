@@ -111,7 +111,7 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
 
         $this->userRoleIndex->open();
         $this->userRoleIndex->getRoleActions()->addNew();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->userRoleEditRole->getRoleFormTabs()->fill($role);
             $this->userRoleEditRole->getPageActions()->save();
         }

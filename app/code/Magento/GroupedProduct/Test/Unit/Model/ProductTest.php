@@ -391,7 +391,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($links as $link) {
             foreach ($expectedOutput as $expected) {
                 if ($expected->getData() == $link->getData()) {
-                    $matches++;
+                    ++$matches;
                 }
             }
         }

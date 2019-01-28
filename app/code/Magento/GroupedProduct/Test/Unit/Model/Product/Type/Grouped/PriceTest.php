@@ -185,7 +185,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /* price for option taking into account quantity discounts */
         $childProductMock->expects($this->any())->method('getFinalPrice')->with(5)->will($this->returnValue(5));
 
-        for ($i = 0; $i <= 2; $i++) {
+        for ($i = 0; $i <= 2; ++$i) {
             $childProduct = clone $childProductMock;
             $childProduct->expects($this->once())->method('getId')->will($this->returnValue($i));
             $associatedProducts[] = $childProduct;

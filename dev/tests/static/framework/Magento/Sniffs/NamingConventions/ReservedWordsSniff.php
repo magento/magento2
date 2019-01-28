@@ -58,7 +58,7 @@ class ReservedWordsSniff implements Sniff
         $tokens = $sourceFile->getTokens();
         while ($stackPtr < $sourceFile->numTokens && $tokens[$stackPtr]['code'] !== T_SEMICOLON) {
             if ($tokens[$stackPtr]['code'] === T_WHITESPACE || $tokens[$stackPtr]['code'] === T_NS_SEPARATOR) {
-                $stackPtr++; //skip "namespace" and whitespace
+                ++$stackPtr; //skip "namespace" and whitespace
                 continue;
             }
             $namespacePart = $tokens[$stackPtr]['content'];
@@ -70,7 +70,7 @@ class ReservedWordsSniff implements Sniff
                     [$namespacePart, $this->reservedWords[strtolower($namespacePart)]]
                 );
             }
-            $stackPtr++;
+            ++$stackPtr;
         }
     }
 

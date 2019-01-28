@@ -48,7 +48,7 @@ class DescriptionSentenceGenerator
         while ($sentenceWordsCount) {
             $sentence .= $this->dictionary->getRandWord();
             $sentence .= ' ';
-            $sentenceWordsCount--;
+            --$sentenceWordsCount;
         }
 
         return ucfirst(rtrim($sentence)) . '.';

@@ -385,7 +385,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
         $word = '';
         $symbols = $this->getSymbols();
         $wordLen = $this->getWordLen();
-        for ($i = 0; $i < $wordLen; $i++) {
+        for ($i = 0; $i < $wordLen; ++$i) {
             $word .= $symbols[array_rand($symbols)];
         }
         return $word;

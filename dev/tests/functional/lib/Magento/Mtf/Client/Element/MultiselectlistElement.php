@@ -90,7 +90,7 @@ class MultiselectlistElement extends MultiselectElement
         $newOption = $this->find(sprintf($this->optionElement, $counter), Locator::SELECTOR_XPATH);
         while ($newOption->isVisible()) {
             $options[] = $newOption;
-            $counter++;
+            ++$counter;
             $newOption = $this->find(sprintf($this->optionElement, $counter), Locator::SELECTOR_XPATH);
         }
 

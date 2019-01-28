@@ -95,7 +95,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $i = 0;
         foreach ($this->_getAvailableWidgets(true) as $data) {
             $html .= sprintf('<div id="widget-description-%s" class="no-display">%s</div>', $i, $data['description']);
-            $i++;
+            ++$i;
         }
         return $html;
     }

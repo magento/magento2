@@ -489,7 +489,7 @@ class Tree extends Dbp
                 $path = implode('/', $pathIds);
                 $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
                 array_pop($pathIds);
-                $level--;
+                --$level;
             }
         }
         $where = array_keys($where);

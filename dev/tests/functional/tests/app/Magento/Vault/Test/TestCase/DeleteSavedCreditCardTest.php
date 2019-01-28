@@ -104,7 +104,7 @@ class DeleteSavedCreditCardTest extends Injectable
         }
         // Delete credit cards from Stored Payment Methods and verify they are not available on checkout
         $paymentsCount = count($payments);
-        for ($i = 2; $i < $paymentsCount; $i++) {
+        for ($i = 2; $i < $paymentsCount; ++$i) {
             $deletedCard = $this->deleteCreditCardFromMyAccount(
                 $customer,
                 $payments[$i]['creditCard']

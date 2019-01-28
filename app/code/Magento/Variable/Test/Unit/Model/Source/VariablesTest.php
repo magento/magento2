@@ -74,7 +74,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
         foreach ($optionArray as $variable) {
             $this->assertEquals($expectedResults[$index]['value'], $variable['value']);
             $this->assertEquals($expectedResults[$index]['label_text'], $variable['label']->getText());
-            $index++;
+            ++$index;
         }
     }
 
@@ -89,7 +89,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
         foreach ($optionArray[0]['value'] as $variable) {
             $this->assertEquals($expectedResults[$index]['value'], $variable['value']);
             $this->assertEquals($expectedResults[$index]['label_text'], $variable['label']->getText());
-            $index++;
+            ++$index;
         }
     }
 

@@ -81,13 +81,13 @@ class TransactionsCollection extends Collection implements SearchResultInterface
         // To optimize the processing of large searches, data is retrieved from the server lazily.
         foreach ($this->collection as $item) {
             if ($skipCounter > 0) {
-                $skipCounter --;
+                --$skipCounter ;
             } else {
                 $entity = $this->_entityFactory->create($this->_itemObjectClass, ['transaction' => $item]);
                 if ($entity) {
                     $result[] = $entity;
 
-                    $counter ++;
+                    ++$counter ;
                     if ($pageSize && $counter >= $pageSize) {
                         break;
                     }

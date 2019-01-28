@@ -56,7 +56,7 @@ class IntegerDefinition implements DefinitionConverterInterface
         $unsigned = $definition['unsigned'] ?? false;
 
         if ((bool) $unsigned && in_array($definition['type'], ['int', 'smallint'])) {
-            $length--;
+            --$length;
         }
 
         return [

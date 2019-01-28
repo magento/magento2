@@ -403,7 +403,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testResetItemsDataChanged()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             /** @var \Magento\Framework\Model\AbstractModel $item */
             $item = $this->getMockForAbstractClass(\Magento\Framework\Model\AbstractModel::class, [], '', false);
             $this->uut->addItem($item->setDataChanges(true));
@@ -418,7 +418,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $item */
             $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['save']);
             $item->expects($this->once())->method('save');

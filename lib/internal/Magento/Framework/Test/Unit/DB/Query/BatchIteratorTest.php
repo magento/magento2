@@ -156,7 +156,7 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
         foreach ($this->model as $key => $select) {
             $result[] = $select;
             $this->assertEquals($iteration, $key);
-            $iteration++;
+            ++$iteration;
         }
         $this->assertCount(3, $result);
     }

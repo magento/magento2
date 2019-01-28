@@ -95,7 +95,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $pathAlias = 'path_' . $pathsCounter;
             $orWhere[] = 'path = :' . $pathAlias;
             $bind[$pathAlias] = $path;
-            $pathsCounter++;
+            ++$pathsCounter;
         }
         $bind['template_id'] = $templateId;
         $select = $this->getConnection()->select()->from(

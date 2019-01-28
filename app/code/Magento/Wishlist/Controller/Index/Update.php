@@ -116,7 +116,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                     $this->messageManager->addSuccessMessage(
                         __('%1 has been updated in your Wish List.', $item->getProduct()->getName())
                     );
-                    $updatedItems++;
+                    ++$updatedItems;
                 } catch (\Exception $e) {
                     $this->messageManager->addError(
                         __(

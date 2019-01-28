@@ -266,7 +266,7 @@ class AttributeMerger
     {
         $lines = [];
         unset($attributeConfig['validation']['required-entry']);
-        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
+        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; ++$lineIndex) {
             $isFirstLine = $lineIndex === 0;
             $line = [
                 'component' => 'Magento_Ui/js/form/element/abstract',

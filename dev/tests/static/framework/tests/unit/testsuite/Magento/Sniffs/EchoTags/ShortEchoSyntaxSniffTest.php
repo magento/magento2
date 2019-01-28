@@ -59,7 +59,7 @@ class ShortEchoSyntaxSniffTest extends \PHPUnit\Framework\TestCase
     {
         $tokens = token_get_all($fileContent);
         $snifferTokens = [];
-        for ($i = 0; $i < count($tokens); $i++) {
+        for ($i = 0; $i < count($tokens); ++$i) {
             $code = is_array($tokens[$i]) ? $tokens[$i][0] : $tokens[$i];
             $content = is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
             $snifferTokens[$i]['code'] = $code;

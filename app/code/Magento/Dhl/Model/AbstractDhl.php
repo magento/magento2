@@ -51,7 +51,7 @@ abstract class AbstractDhl extends AbstractCarrierOnline
 
         $i = -1;
         do {
-            $i++;
+            ++$i;
             $weekday = date('D', strtotime("{$date} +{$i} day"));
         } while (!in_array($weekday, $shippingDays) && $i < 10);
 

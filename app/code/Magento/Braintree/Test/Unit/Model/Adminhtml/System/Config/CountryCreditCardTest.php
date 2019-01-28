@@ -170,7 +170,7 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
             $this->mathRandomMock->expects($this->at($index))
                 ->method('getUniqueHash')
                 ->willReturn($hash);
-            $index++;
+            ++$index;
         }
 
         $this->serializerMock->expects($this->exactly($unserializeCalledNum))

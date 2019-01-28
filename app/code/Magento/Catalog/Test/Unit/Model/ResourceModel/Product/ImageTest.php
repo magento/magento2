@@ -183,7 +183,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 $result = [];
                 $count = $batchSize;
                 while ($count) {
-                    $count--;
+                    --$count;
                     $result[$count] = $count;
                 }
 
@@ -209,7 +209,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             $result = [];
             $count = $batchCount;
             while ($count) {
-                $count--;
+                --$count;
                 $result[$count] = $selectMock;
             }
 

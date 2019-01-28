@@ -94,7 +94,7 @@ class FilterMapper
         $conditionsAppliedCounter = 0;
         foreach ($conditionMap as $conditionKey => $value) {
             if ($applier->apply($fieldFilter, $conditionKey, $value)) {
-                $conditionsAppliedCounter ++;
+                ++$conditionsAppliedCounter ;
             }
         }
 

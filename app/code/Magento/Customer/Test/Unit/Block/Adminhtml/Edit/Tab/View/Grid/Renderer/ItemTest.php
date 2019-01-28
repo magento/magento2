@@ -21,7 +21,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function configure($amountOption, $withoutOptions = false)
     {
         $options = [];
-        for ($i = 1; $i <= $amountOption; $i++) {
+        for ($i = 1; $i <= $amountOption; ++$i) {
             $options[] = [
                 'label' => "testLabel{$i}",
                 'value' => ['1 x Configurable Product 49-option 3 <span class="price">$10.00</span>']

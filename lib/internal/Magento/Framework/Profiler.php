@@ -272,7 +272,7 @@ class Profiler
         }
         /* Continue collecting timers statistics under the latest started one */
         self::$_currentPath[] = $timerName;
-        self::$_pathCount++;
+        ++self::$_pathCount;
         self::$_pathIndex[$timerName][] = self::$_pathCount;
     }
 
@@ -308,7 +308,7 @@ class Profiler
             }
         }
 
-        for ($i = 0; $i < $timersToStop; $i++) {
+        for ($i = 0; $i < $timersToStop; ++$i) {
             $timerId = self::_getTimerId();
             /** @var DriverInterface $driver */
             foreach (self::$_drivers as $driver) {
@@ -316,7 +316,7 @@ class Profiler
             }
             /* Move one level up in timers nesting tree */
             array_pop(self::$_currentPath);
-            self::$_pathCount--;
+            --self::$_pathCount;
         }
     }
 

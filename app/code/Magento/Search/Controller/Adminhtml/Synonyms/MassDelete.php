@@ -70,7 +70,7 @@ class MassDelete extends \Magento\Backend\App\Action
         foreach ($collection as $synonymGroup) {
             try {
                 $this->synGroupRepository->delete($synonymGroup);
-                $deletedItems++;
+                ++$deletedItems;
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }

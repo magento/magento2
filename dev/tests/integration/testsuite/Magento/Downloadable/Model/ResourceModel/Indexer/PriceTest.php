@@ -71,7 +71,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_array($resultTiers), 'Tiers not found');
         $this->assertEquals(count($tierData), count($resultTiers), 'Incorrect number of result tiers');
 
-        for ($i = 0; $i < count($tierData); $i++) {
+        for ($i = 0; $i < count($tierData); ++$i) {
             $this->assertEquals($tierData[$i]['price_qty'], $resultTiers[$i]->getQty(), 'Wrong tier price quantity');
             $this->assertEquals($tierData[$i]['price'], $resultTiers[$i]->getValue(), 'Wrong tier price value');
         }

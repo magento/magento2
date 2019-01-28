@@ -30,7 +30,7 @@ class AssertProductsQtyAndStockStatusInAdminPanel extends AbstractConstraint
         array $expectedStockStatus
     ) {
         $actualQtyAndStockStatus = [];
-        for ($i = 0; $i < count($products); $i++) {
+        for ($i = 0; $i < count($products); ++$i) {
             $catalogProductEdit->open(['id' => $products[$i]->getId()]);
             $productData = $catalogProductEdit->getProductForm()->getData($products[$i]);
 

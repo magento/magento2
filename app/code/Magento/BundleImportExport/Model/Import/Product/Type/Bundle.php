@@ -577,7 +577,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 if ($tmpArray = $this->populateOptionTemplate($option, $entityId, $index)) {
                     $insert[] = $tmpArray;
                     $this->_cachedOptions[$entityId][$key]['index'] = $index;
-                    $index++;
+                    ++$index;
                 }
             }
         }
@@ -653,7 +653,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                         $index
                     )) {
                         $selections[] = $tmpArray;
-                        $index++;
+                        ++$index;
                     }
                 }
             }

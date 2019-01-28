@@ -103,7 +103,7 @@ abstract class AbstractSource implements \SeekableIterator
      */
     public function next()
     {
-        $this->_key++;
+        ++$this->_key;
         $row = $this->_getNextRow();
         if (false === $row || [] === $row) {
             $this->_row = [];

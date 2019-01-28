@@ -197,7 +197,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private function _getPreparedYearsList()
     {
         $expectedYearsList = [];
-        for ($index = 0; $index <= Config::YEARS_RANGE; $index++) {
+        for ($index = 0; $index <= Config::YEARS_RANGE; ++$index) {
             $year = (int)self::CURRENT_YEAR + $index;
             $expectedYearsList[$year] = $year;
         }

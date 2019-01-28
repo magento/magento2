@@ -68,7 +68,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         // Exceptions to escaping ranges
         $immune = [',', '.', '_'];
-        for ($chr = 0; $chr < 0xFF; $chr++) {
+        for ($chr = 0; $chr < 0xFF; ++$chr) {
             if (($chr >= 0x30 && $chr <= 0x39)
                 || ($chr >= 0x41 && $chr <= 0x5A)
                 || ($chr >= 0x61 && $chr <= 0x7A)

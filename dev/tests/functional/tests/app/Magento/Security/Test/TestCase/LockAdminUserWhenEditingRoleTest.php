@@ -115,7 +115,7 @@ class LockAdminUserWhenEditingRoleTest extends Injectable
         $filter = ['rolename' => $initrole->getRolename()];
         $this->userRoleIndex->open();
         $this->userRoleIndex->getRoleGrid()->searchAndOpen($filter);
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->userRoleEditRole->getRoleFormTabs()->fill($role);
             $this->userRoleEditRole->getPageActions()->save();
         }

@@ -87,7 +87,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
                     $this->moduleDataSetup->getTable('rating')
                 );
                 $optionData = [];
-                for ($i = 1; $i <= 5; $i++) {
+                for ($i = 1; $i <= 5; ++$i) {
                     $optionData[] = ['rating_id' => $ratingId, 'code' => (string)$i, 'value' => $i, 'position' => $i];
                 }
                 $this->moduleDataSetup->getConnection()->insertMultiple(

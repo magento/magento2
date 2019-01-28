@@ -411,12 +411,12 @@ abstract class AbstractEntity
                     $skuSet[$rowData['sku']] = true;
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                    $this->_processedRowsCount++;
+                    ++$this->_processedRowsCount;
                     $source->next();
                     continue;
                 }
 
-                $this->_processedRowsCount++;
+                ++$this->_processedRowsCount;
 
                 if ($this->validateRow($rowData, $source->key())) {
                     // add row to bunch for save
@@ -805,7 +805,7 @@ abstract class AbstractEntity
                 $invalidColumns = [];
                 $invalidAttributes = [];
                 foreach ($this->getSource()->getColNames() as $columnName) {
-                    $columnNumber++;
+                    ++$columnNumber;
                     if (!$this->isAttributeParticular($columnName)) {
                         if (trim($columnName) == '') {
                             $emptyHeaderColumns[] = $columnNumber;

@@ -212,7 +212,7 @@ try {
         $newLabel = 'magento';
         if (in_array($newLabel, $repoLabels)) {
             $count = count($repoLabels);
-            for ($i = 1; $i <= $count; $i++) {
+            for ($i = 1; $i <= $count; ++$i) {
                 if (!in_array("$newLabel-$i", $repoLabels)) {
                     $newLabel = "$newLabel-$i";
                     break;

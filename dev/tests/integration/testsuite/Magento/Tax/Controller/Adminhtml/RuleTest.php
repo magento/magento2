@@ -113,7 +113,7 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     private function _generateTaxRates()
     {
         $ratesCount = $this->taxRatesProvider->getPageSize() + 1;
-        for ($i = 0; $i <= $ratesCount; $i++) {
+        for ($i = 0; $i <= $ratesCount; ++$i) {
             $taxData = [
                 'tax_country_id' => 'US',
                 'tax_region_id' => '8',

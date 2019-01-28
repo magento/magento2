@@ -59,7 +59,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             '<option value=""></option>';
         $i = 0;
         foreach ($actions as $action) {
-            $i++;
+            ++$i;
             if (is_array($action)) {
                 $out .= $this->_toOptionHtml($action, $row);
             }

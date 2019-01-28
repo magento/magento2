@@ -53,7 +53,7 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
 
                 $i = 0;
                 foreach ($entityIds as $entityId) {
-                    $i++;
+                    ++$i;
                     $object->setId($entityId);
                     $object->setEntityId($entityId);
                     // collect data for save

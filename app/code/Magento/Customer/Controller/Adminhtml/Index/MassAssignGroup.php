@@ -53,7 +53,7 @@ class MassAssignGroup extends AbstractMassAction implements HttpPostActionInterf
             $customer = $this->customerRepository->getById($customerId);
             $customer->setGroupId($this->getRequest()->getParam('group'));
             $this->customerRepository->save($customer);
-            $customersUpdated++;
+            ++$customersUpdated;
         }
 
         if ($customersUpdated) {

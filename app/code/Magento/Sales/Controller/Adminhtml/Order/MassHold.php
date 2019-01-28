@@ -58,7 +58,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
                 continue;
             }
             $this->orderManagement->hold($order->getEntityId());
-            $countHoldOrder++;
+            ++$countHoldOrder;
         }
         $countNonHoldOrder = $collection->count() - $countHoldOrder;
 

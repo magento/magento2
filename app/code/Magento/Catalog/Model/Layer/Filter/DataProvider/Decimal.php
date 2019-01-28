@@ -57,7 +57,7 @@ class Decimal
             do {
                 $range = pow(10, strlen(floor($maxValue)) - $index);
                 $items = $this->getRangeItemCounts($range, $filter) ?: [];
-                $index++;
+                ++$index;
             } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
             $this->range = $range;
         }

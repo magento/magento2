@@ -28,7 +28,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new ObjectManager($this);
 
-        for ($count = 0; $count < 5; $count++) {
+        for ($count = 0; $count < 5; ++$count) {
             $document = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -55,7 +55,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
         $count = 0;
         foreach ($this->queryResponse as $document) {
             $this->assertEquals($document->getId(), $count);
-            $count++;
+            ++$count;
         }
     }
 

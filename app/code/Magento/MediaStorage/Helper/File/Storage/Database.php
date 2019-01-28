@@ -209,7 +209,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
                 $extension = strrchr($filename, '.');
                 $filenameWoExtension = substr($filename, 0, -1 * strlen($extension));
                 while ($this->fileExists($directory . $filenameWoExtension . '_' . $index . $extension)) {
-                    $index++;
+                    ++$index;
                 }
                 $filename = $filenameWoExtension . '_' . $index . $extension;
             }

@@ -71,7 +71,7 @@ class MethodArgumentsSniff implements Sniff
     private function validateCommentBlockExists(File $phpcsFile, int $previousCommentClosePtr, int $stackPtr) : bool
     {
         $tokens = $phpcsFile->getTokens();
-        for ($tempPtr = $previousCommentClosePtr + 1; $tempPtr < $stackPtr; $tempPtr++) {
+        for ($tempPtr = $previousCommentClosePtr + 1; $tempPtr < $stackPtr; ++$tempPtr) {
             if (!$this->isTokenBeforeClosingCommentTagValid($tokens[$tempPtr]['type'])) {
                 return false;
             }
@@ -102,7 +102,7 @@ class MethodArgumentsSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
         $methodArguments = [];
-        for ($i = $openParenthesisPtr; $i < $closedParenthesisPtr; $i++) {
+        for ($i = $openParenthesisPtr; $i < $closedParenthesisPtr; ++$i) {
             $argumentsPtr = $phpcsFile->findNext(T_VARIABLE, $i + 1, $closedParenthesisPtr);
             if ($argumentsPtr === false) {
                 break;
@@ -124,7 +124,7 @@ class MethodArgumentsSniff implements Sniff
     private function getMethodParameters(array $paramDefinitions) : array
     {
         $paramName = [];
-        for ($i = 0; $i < count($paramDefinitions); $i++) {
+        for ($i = 0; $i < count($paramDefinitions); ++$i) {
             if (isset($paramDefinitions[$i]['paramName'])) {
                 $paramName[] = $paramDefinitions[$i]['paramName'];
             }
@@ -188,7 +188,7 @@ class MethodArgumentsSniff implements Sniff
         string $inheritdocAnnotation
     ) : bool {
         $tokens = $phpcsFile->getTokens();
-        for ($ptr = $previousCommentOpenPtr; $ptr < $previousCommentClosePtr; $ptr++) {
+        for ($ptr = $previousCommentOpenPtr; $ptr < $previousCommentClosePtr; ++$ptr) {
             if (strtolower($tokens[$ptr]['content']) === $inheritdocAnnotation) {
                 return true;
             }
@@ -336,7 +336,7 @@ class MethodArgumentsSniff implements Sniff
     ) : void {
         $parameterNames = $this->getMethodParameters($paramDefinitions);
         $paramDefinitionsCount = count($paramDefinitions);
-        for ($ptr = 0; $ptr < $paramDefinitionsCount; $ptr++) {
+        for ($ptr = 0; $ptr < $paramDefinitionsCount; ++$ptr) {
             if (isset($methodArguments[$ptr]) && isset($parameterNames[$ptr])
                 && in_array($methodArguments[$ptr], $parameterNames)
             ) {
@@ -371,10 +371,10 @@ class MethodArgumentsSniff implements Sniff
         $parametersCount = count($paramPointers);
         if ($argumentsCount <= $parametersCount && $argumentsCount > 0) {
             $duplicateParameters = [];
-            for ($i = 0; $i < sizeof($paramDefinitions); $i++) {
+            for ($i = 0; $i < sizeof($paramDefinitions); ++$i) {
                 if (isset($paramDefinitions[$i]['paramName'])) {
                     $parameterContent = $paramDefinitions[$i]['paramName'];
-                    for ($j = $i + 1; $j < count($paramDefinitions); $j++) {
+                    for ($j = $i + 1; $j < count($paramDefinitions); ++$j) {
                         if (isset($paramDefinitions[$j]['paramName'])
                             && $parameterContent === $paramDefinitions[$j]['paramName']
                         ) {
@@ -510,7 +510,7 @@ class MethodArgumentsSniff implements Sniff
             $phpcsFile,
             $paramPointers
         );
-        for ($ptr = 0; $ptr < count($methodArguments); $ptr++) {
+        for ($ptr = 0; $ptr < count($methodArguments); ++$ptr) {
             $tokens = $phpcsFile->getTokens();
             if (isset($paramPointers[$ptr])) {
                 $this->validateArgumentNameInParameterAnnotationExists(
@@ -550,7 +550,7 @@ class MethodArgumentsSniff implements Sniff
         $closedParenthesisPtr = $phpcsFile->findNext(T_CLOSE_PARENTHESIS, $stackPtr+1, $numTokens);
         $methodArguments = $this->getMethodArguments($phpcsFile, $openParenthesisPtr, $closedParenthesisPtr);
         $paramPointers = $paramDefinitions = [];
-        for ($tempPtr = $previousCommentOpenPtr; $tempPtr < $previousCommentClosePtr; $tempPtr++) {
+        for ($tempPtr = $previousCommentOpenPtr; $tempPtr < $previousCommentClosePtr; ++$tempPtr) {
             if (strtolower($tokens[$tempPtr]['content']) === '@param') {
                 $paramPointers[] = $tempPtr;
                 $paramAnnotationParts = explode(' ', $tokens[$tempPtr+2]['content']);

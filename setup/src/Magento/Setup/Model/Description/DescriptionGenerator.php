@@ -72,7 +72,7 @@ class DescriptionGenerator
         while ($paragraphsCount) {
             $descriptionParagraphs .= $this->paragraphGenerator->generate();
             $descriptionParagraphs .= PHP_EOL;
-            $paragraphsCount--;
+            --$paragraphsCount;
         }
 
         $descriptionParagraphs = rtrim($descriptionParagraphs);

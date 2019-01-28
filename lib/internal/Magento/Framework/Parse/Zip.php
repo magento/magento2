@@ -71,7 +71,7 @@ class Zip
 
         $startZip = '';
         $diffPosition = null;
-        for ($pos = 0; $pos < $zipLength; $pos++) {
+        for ($pos = 0; $pos < $zipLength; ++$pos) {
             if ($from[$pos] == $to[$pos]) {
                 $startZip .= $from[$pos];
             } else {
@@ -91,11 +91,11 @@ class Zip
             $start = $from[$diffPosition];
             $finish = $to[$diffPosition];
             if ($diffPosition < $zipLength - 1) {
-                $start++;
-                $finish--;
+                ++$start;
+                --$finish;
             }
             $end = $diffPosition < $zipLength - 1 ? '*' : '';
-            for ($digit = $start; $digit <= $finish; $digit++) {
+            for ($digit = $start; $digit <= $finish; ++$digit) {
                 $zipPattern[] = $startZip . $digit . $end;
             }
         }
@@ -106,18 +106,18 @@ class Zip
 
         $nextAsteriskFrom = true;
         $nextAsteriskTo = true;
-        for ($pos = $zipLength - 1; $pos > $diffPosition; $pos--) {
+        for ($pos = $zipLength - 1; $pos > $diffPosition; --$pos) {
             // calculate zip-patterns based on $from value
             if ($from[$pos] == 0 && $nextAsteriskFrom) {
                 $nextAsteriskFrom = true;
             } else {
                 $subZip = '';
-                for ($k = $diffPosition; $k < $pos; $k++) {
+                for ($k = $diffPosition; $k < $pos; ++$k) {
                     $subZip .= $from[$k];
                 }
                 $delta = $nextAsteriskFrom ? 0 : 1;
                 $end = $pos < $zipLength - 1 ? '*' : '';
-                for ($i = $from[$pos] + $delta; $i <= 9; $i++) {
+                for ($i = $from[$pos] + $delta; $i <= 9; ++$i) {
                     $zipPattern[] = $startZip . $subZip . $i . $end;
                 }
                 $nextAsteriskFrom = false;
@@ -128,12 +128,12 @@ class Zip
                 $nextAsteriskTo = true;
             } else {
                 $subZip = '';
-                for ($k = $diffPosition; $k < $pos; $k++) {
+                for ($k = $diffPosition; $k < $pos; ++$k) {
                     $subZip .= $to[$k];
                 }
                 $delta = $nextAsteriskTo ? 0 : 1;
                 $end = $pos < $zipLength - 1 ? '*' : '';
-                for ($i = 0; $i <= $to[$pos] - $delta; $i++) {
+                for ($i = 0; $i <= $to[$pos] - $delta; ++$i) {
                     $zipPattern[] = $startZip . $subZip . $i . $end;
                 }
                 $nextAsteriskTo = false;

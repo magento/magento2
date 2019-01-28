@@ -57,7 +57,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
             if ($isCanceled === false) {
                 continue;
             }
-            $countCancelOrder++;
+            ++$countCancelOrder;
         }
         $countNonCancelOrder = $collection->count() - $countCancelOrder;
 

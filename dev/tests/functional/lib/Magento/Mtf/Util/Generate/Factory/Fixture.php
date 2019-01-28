@@ -58,6 +58,6 @@ class Fixture extends AbstractFactory
             . "array('placeholders' => \$placeholders));\n";
         $this->factoryContent .= "    }\n";
 
-        $this->cnt++;
+        ++$this->cnt;
     }
 }

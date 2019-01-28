@@ -68,7 +68,7 @@ class Gallery extends AbstractElement
         $i = 0;
         if ($this->getValue() !== null) {
             foreach ($this->getValue() as $image) {
-                $i++;
+                ++$i;
                 $html .= '<tr class="gallery">';
                 foreach ($this->getValue()->getAttributeBackend()->getImageTypes() as $type) {
                     $url = $image->setType($type)->getSourceUrl();

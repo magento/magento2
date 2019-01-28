@@ -442,7 +442,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $pathSize = count($structure);
             if ($pathSize > 1) {
                 $path = [];
-                for ($i = 1; $i < $pathSize; $i++) {
+                for ($i = 1; $i < $pathSize; ++$i) {
                     $name = $collection->getItemById($structure[$i])->getName();
                     $path[] = $this->quoteCategoryDelimiter($name);
                 }

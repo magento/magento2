@@ -61,7 +61,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
             foreach ($types as $code) {
                 if (!$this->_cacheState->isEnabled($code)) {
                     $this->_cacheState->setEnabled($code, true);
-                    $updatedTypes++;
+                    ++$updatedTypes;
                 }
             }
             if ($updatedTypes > 0) {

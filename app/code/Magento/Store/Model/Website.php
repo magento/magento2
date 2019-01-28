@@ -273,7 +273,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
             if ($this->getDefaultGroupId() == $group->getId()) {
                 $this->_defaultGroup = $group;
             }
-            $this->_groupsCount++;
+            ++$this->_groupsCount;
         }
     }
 
@@ -293,7 +293,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
             if ($this->getDefaultGroupId() == $group->getId()) {
                 $this->_defaultGroup = $group;
             }
-            $this->_groupsCount++;
+            ++$this->_groupsCount;
         }
         return $this;
     }
@@ -380,7 +380,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
             if ($this->getDefaultGroup() && $this->getDefaultGroup()->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount++;
+            ++$this->_storesCount;
         }
     }
 
@@ -401,7 +401,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
             if ($this->getDefaultGroup() && $this->getDefaultGroup()->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount++;
+            ++$this->_storesCount;
         }
     }
 

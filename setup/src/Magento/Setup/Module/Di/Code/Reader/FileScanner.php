@@ -66,7 +66,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             }
             if (is_string($tokens[$tokenIndex]) && $tokens[$tokenIndex] === '"') {
                 do {
-                    $tokenIndex++;
+                    ++$tokenIndex;
                 } while (!(is_string($tokens[$tokenIndex]) && $tokens[$tokenIndex] === '"'));
             }
             $token = $tokens[$tokenIndex];
@@ -101,7 +101,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
         $macroInfoAdvance = function () use (&$infoIndex, &$infos, &$tokenIndex, &$tokenLine) {
             $infos[$infoIndex]['tokenEnd'] = $tokenIndex;
             $infos[$infoIndex]['lineEnd'] = $tokenLine;
-            $infoIndex++;
+            ++$infoIndex;
 
             return $infoIndex;
         };
@@ -198,7 +198,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
                         goto SCANNER_USE_END;
                     } elseif ($tokenContent === ',') {
                         $useAsContext = false;
-                        $useStatementIndex++;
+                        ++$useStatementIndex;
                         $infos[$infoIndex]['statements'][$useStatementIndex] = ['use' => null, 'as' => null];
                     }
                 }
@@ -321,10 +321,10 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
                 if ($this->tokenType === null) {
                     if ($tokenContent == '{') {
-                        $classBraceCount++;
+                        ++$classBraceCount;
                     }
                     if ($tokenContent == '}') {
-                        $classBraceCount--;
+                        --$classBraceCount;
                         if ($classBraceCount === 0) {
                             goto SCANNER_CLASS_END;
                         }

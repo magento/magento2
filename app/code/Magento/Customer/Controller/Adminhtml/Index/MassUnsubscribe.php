@@ -60,7 +60,7 @@ class MassUnsubscribe extends AbstractMassAction
             // Verify customer exists
             $this->customerRepository->getById($customerId);
             $this->subscriberFactory->create()->unsubscribeCustomerById($customerId);
-            $customersUpdated++;
+            ++$customersUpdated;
         }
 
         if ($customersUpdated) {

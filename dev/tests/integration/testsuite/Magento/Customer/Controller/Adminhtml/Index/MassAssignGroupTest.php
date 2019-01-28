@@ -100,7 +100,7 @@ class MassAssignGroupTest extends AbstractBackendController
     public function testLargeGroupMassAssignGroupAction()
     {
         $ids = [];
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             /** @var CustomerInterface $customer */
             $customer = $this->customerRepository->get('customer' . $i . '@example.com');
             $this->assertEquals(1, $customer->getGroupId());
@@ -121,7 +121,7 @@ class MassAssignGroupTest extends AbstractBackendController
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             /** @var CustomerInterface $customer */
             $customer = $this->customerRepository->get('customer' . $i . '@example.com');
             $this->assertEquals(0, $customer->getGroupId());

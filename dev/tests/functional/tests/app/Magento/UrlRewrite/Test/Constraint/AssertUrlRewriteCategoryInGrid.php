@@ -133,7 +133,7 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
             return strtolower($category->getUrlKey() . '.html');
         }
         $filterByRequestPathCondition = [];
-        for ($nestingIterator = 0; $nestingIterator < $nestingLevel; $nestingIterator++) {
+        for ($nestingIterator = 0; $nestingIterator < $nestingLevel; ++$nestingIterator) {
             $filterByRequestPathCondition[] = $category->getUrlKey();
             $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
         }

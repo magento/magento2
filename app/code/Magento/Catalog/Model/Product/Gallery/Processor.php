@@ -212,7 +212,7 @@ class Processor
             }
         }
 
-        $position++;
+        ++$position;
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,

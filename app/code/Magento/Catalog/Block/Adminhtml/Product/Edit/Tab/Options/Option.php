@@ -358,7 +358,7 @@ class Option extends Widget
                                     : null;
                             }
                         }
-                        $i++;
+                        ++$i;
                     }
                 } else {
                     $value['price'] = $showPrice ? $this->getPriceValue(

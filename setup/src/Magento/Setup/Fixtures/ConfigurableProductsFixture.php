@@ -324,12 +324,12 @@ class ConfigurableProductsFixture extends Fixture
                 : 'Default';
         };
         $productsPerSet = [];
-        for ($i = 1; $i <= $configurableProductsCount; $i++) {
+        for ($i = 1; $i <= $configurableProductsCount; ++$i) {
             $attributeSet = $attributeSetClosure($i);
             if (!isset($productsPerSet[$attributeSet])) {
                 $productsPerSet[$attributeSet] = 0;
             }
-            $productsPerSet[$attributeSet]++;
+            ++$productsPerSet[$attributeSet];
         }
         $configurableConfig = [];
         foreach ($defaultAttributeSets as $attributeSetName => $attributeSet) {
@@ -778,7 +778,7 @@ class ConfigurableProductsFixture extends Fixture
     private function generateVariationsMatrix($attributesPerSet, $optionsPerAttribute)
     {
         $variationsMatrix = null;
-        for ($i = 0; $i < $attributesPerSet; $i++) {
+        for ($i = 0; $i < $attributesPerSet; ++$i) {
             $variationsMatrix[] = range(0, $optionsPerAttribute[$i] - 1);
         }
         return $this->generateVariations($variationsMatrix);

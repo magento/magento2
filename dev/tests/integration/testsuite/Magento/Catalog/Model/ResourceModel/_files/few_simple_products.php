@@ -21,7 +21,7 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 // Create 10 products (with change this variable, don't forget to change the same in rollback)
 $productsAmount = 10;
 
-for ($i = 1; $i <= $productsAmount; $i++) {
+for ($i = 1; $i <= $productsAmount; ++$i) {
     $productArray = [
         'data' => [
             'name' => "Product{$i}",

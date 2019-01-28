@@ -104,7 +104,7 @@ class RateQuery
                 $bindValueKey = sprintf(':condition_value_%d', $i);
                 $bind[$bindNameKey] = $conditionName;
                 $bind[$bindValueKey] = $this->request->getData($conditionName);
-                $i++;
+                ++$i;
             }
         } else {
             $bind[':condition_name'] = $this->request->getConditionName();

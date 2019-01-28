@@ -54,7 +54,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
-        for ($i = 0; $i < $optionsCount; $i++) {
+        for ($i = 0; $i < $optionsCount; ++$i) {
             $expectedOptionLabelOnStoreView = 'value_' . $i .'_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' .$i;
@@ -96,7 +96,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $optionsData = [];
         $expectedOptionsLabels = [];
-        for ($i = 0; $i < $optionsCount; $i++) {
+        for ($i = 0; $i < $optionsCount; ++$i) {
             $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
             $optionId = 'option_' . $i;

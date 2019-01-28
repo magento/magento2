@@ -100,7 +100,7 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
                 $lines[$i][] = ['text' => $priceData['label'], 'feed' => $feedPrice, 'align' => 'right'];
                 // draw Subtotal label
                 $lines[$i][] = ['text' => $priceData['label'], 'feed' => $feedSubtotal, 'align' => 'right'];
-                $i++;
+                ++$i;
             }
             // draw Price
             $lines[$i][] = [
@@ -116,7 +116,7 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
                 'font' => 'bold',
                 'align' => 'right',
             ];
-            $i++;
+            ++$i;
         }
 
         // draw Tax

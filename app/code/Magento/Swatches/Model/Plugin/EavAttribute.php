@@ -230,7 +230,7 @@ class EavAttribute
             $optionCounter = 1;
             foreach (array_keys($optionsArray['value']) as $baseOptionId) {
                 $dependencyArray[$baseOptionId] = $attributeSavedOptions[$optionCounter]['value'];
-                $optionCounter++;
+                ++$optionCounter;
             }
         }
 

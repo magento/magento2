@@ -183,7 +183,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         );
 
         $characters = [];
-        for ($i = 0; $i < strlen($drawingString); $i++) {
+        for ($i = 0; $i < strlen($drawingString); ++$i) {
             $characters[] = ord($drawingString[$i++]) << 8 | ord($drawingString[$i]);
         }
         $glyphs = $font->glyphNumbersForCharacters($characters);
@@ -383,9 +383,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private function reverseArabicText($string)
     {
         $splitText = explode(' ', $string);
-        for ($i = 0; $i < count($splitText); $i++) {
+        for ($i = 0; $i < count($splitText); ++$i) {
             if ($this->isArabic($splitText[$i])) {
-                for ($j = $i + 1; $j < count($splitText); $j++) {
+                for ($j = $i + 1; $j < count($splitText); ++$j) {
                     $tmp = $this->string->strrev($splitText[$j]);
                     $splitText[$j] = $this->string->strrev($splitText[$i]);
                     $splitText[$i] = $tmp;

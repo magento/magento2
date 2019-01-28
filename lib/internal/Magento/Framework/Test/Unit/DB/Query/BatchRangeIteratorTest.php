@@ -113,7 +113,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
 
         foreach ($this->model as $key) {
             $this->assertEquals($this->selectMock, $key);
-            $iterations++;
+            ++$iterations;
         }
 
         $this->assertEquals(11, $iterations);

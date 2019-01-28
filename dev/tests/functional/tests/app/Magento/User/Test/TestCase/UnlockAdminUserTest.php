@@ -120,7 +120,7 @@ class UnlockAdminUserTest extends Injectable
             'user',
             ['data' => ['username' => $customAdmin->getUsername(), 'password' => $incorrectPassword]]
         );
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i < $attempts; ++$i) {
             $this->adminAuth->open();
             $this->adminAuth->getLoginBlock()->fill($incorrectUser);
             $this->adminAuth->getLoginBlock()->submit();

@@ -320,9 +320,9 @@ class OrdersFixture extends Fixture
         ];
 
         $batchNumber = 0;
-        $entityId++;
+        ++$entityId;
         while ($entityId <= $requestedOrders) {
-            $batchNumber++;
+            ++$batchNumber;
             $productCount = [
                 Type::TYPE_SIMPLE => mt_rand($orderSimpleCountFrom, $orderSimpleCountTo),
                 Configurable::TYPE_CODE => mt_rand($orderConfigurableCountFrom, $orderConfigurableCountTo),
@@ -356,7 +356,7 @@ class OrdersFixture extends Fixture
                 $this->query('sales_order_payment', $order);
                 $this->query('sales_order_status_history', $order);
 
-                for ($i = 0; $i < $productCount[Type::TYPE_SIMPLE]; $i++) {
+                for ($i = 0; $i < $productCount[Type::TYPE_SIMPLE]; ++$i) {
                     $itemData = [
                         '%productId%' => $productId($entityId, $i, Type::TYPE_SIMPLE),
                         '%sku%' => $productSku($entityId, $i, Type::TYPE_SIMPLE),
@@ -380,7 +380,7 @@ class OrdersFixture extends Fixture
                 }
 
                 foreach ([Configurable::TYPE_CODE, self::BIG_CONFIGURABLE_TYPE] as $type) {
-                    for ($i = 0; $i < $productCount[$type]; $i++) {
+                    for ($i = 0; $i < $productCount[$type]; ++$i) {
                         // Generate parent item
                         $parentItemId = $itemIdSequence->current();
                         $itemData = [
@@ -450,7 +450,7 @@ class OrdersFixture extends Fixture
                 $this->commitBatch();
                 $batchNumber = 0;
             }
-            $entityId++;
+            ++$entityId;
         }
 
         foreach ($this->resourceConnections as $connection) {
@@ -761,7 +761,7 @@ class OrdersFixture extends Fixture
     private function getItemIdSequence($maxItemId, $requestedOrders, $maxItemsPerOrder)
     {
         $requestedItems = $requestedOrders * $maxItemsPerOrder;
-        for ($i = $maxItemId + 1; $i <= $requestedItems; $i++) {
+        for ($i = $maxItemId + 1; $i <= $requestedItems; ++$i) {
             yield $i;
         }
     }

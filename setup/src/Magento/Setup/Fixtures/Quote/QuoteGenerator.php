@@ -141,9 +141,9 @@ class QuoteGenerator
         $quoteQty = $this->config->getExistsQuoteQuantity();
         $batchNumber = 0;
         while ($quoteQty < $this->config->getRequiredQuoteQuantity()) {
-            $entityId++;
-            $batchNumber++;
-            $quoteQty++;
+            ++$entityId;
+            ++$batchNumber;
+            ++$quoteQty;
 
             try {
                 $this->saveQuoteWithQuoteItems($entityId, $itemIdSequence);
@@ -209,13 +209,13 @@ class QuoteGenerator
         $this->query('quote_address', $quote, $address, $shippingAddress);
         $this->query('quote_address', $quote, $address, $billingAddress);
 
-        for ($i = 0; $i < $productCount[Type::TYPE_SIMPLE]; $i++) {
+        for ($i = 0; $i < $productCount[Type::TYPE_SIMPLE]; ++$i) {
             $this->saveItemSimpleData($entityId, $i, $itemIdSequence->current(), $quote);
             $itemIdSequence->next();
         }
 
         foreach ([Configurable::TYPE_CODE, QuoteConfiguration::BIG_CONFIGURABLE_TYPE] as $type) {
-            for ($i = 0; $i < $productCount[$type]; $i++) {
+            for ($i = 0; $i < $productCount[$type]; ++$i) {
                 // Generate parent item
                 $parentItemId = $itemIdSequence->current();
                 $this->saveParentItemConfigurableData($entityId, $i, $parentItemId, $type, $quote);
@@ -767,7 +767,7 @@ class QuoteGenerator
     private function getItemIdSequence($maxItemId, $requestedOrders, $maxItemsPerOrder)
     {
         $requestedItems = $maxItemId + ($requestedOrders + 1) * $maxItemsPerOrder;
-        for ($i = $maxItemId + 1; $i <= $requestedItems; $i++) {
+        for ($i = $maxItemId + 1; $i <= $requestedItems; ++$i) {
             yield $i;
         }
     }

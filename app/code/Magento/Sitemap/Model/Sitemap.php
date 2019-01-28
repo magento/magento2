@@ -446,7 +446,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
             $this->_writeSitemapRow($xml);
             // Increase counters
-            $this->_lineCount++;
+            ++$this->_lineCount;
             $this->_fileSize += strlen($xml);
         }
 
@@ -482,7 +482,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _createSitemapIndex()
     {
         $this->_createSitemap($this->getSitemapFilename(), self::TYPE_INDEX);
-        for ($i = 1; $i <= $this->_sitemapIncrement; $i++) {
+        for ($i = 1; $i <= $this->_sitemapIncrement; ++$i) {
             $xml = $this->_getSitemapIndexRow($this->_getCurrentSitemapFilename($i), $this->_getCurrentDateTime());
             $this->_writeSitemapRow($xml);
         }
@@ -597,7 +597,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _createSitemap($fileName = null, $type = self::TYPE_URL)
     {
         if (!$fileName) {
-            $this->_sitemapIncrement++;
+            ++$this->_sitemapIncrement;
             $fileName = $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
         }
 

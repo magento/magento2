@@ -537,7 +537,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
 
         // collect fraud filters
         $fraudFilters = [];
-        for ($i = 1; $value = $this->getRequestData("fraud_management_pending_filters_{$i}"); $i++) {
+        for ($i = 1; $value = $this->getRequestData("fraud_management_pending_filters_{$i}"); ++$i) {
             $fraudFilters[] = $value;
         }
         if ($fraudFilters) {

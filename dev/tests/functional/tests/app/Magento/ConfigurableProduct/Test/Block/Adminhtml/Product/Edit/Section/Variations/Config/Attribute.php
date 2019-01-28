@@ -315,7 +315,7 @@ class Attribute extends Form
         }
         foreach ($attribute['options'] as $option) {
             $attributeBlock->find($this->addOption)->click();
-            $count++;
+            ++$count;
             $optionContainer = $attributeBlock->find(
                 sprintf($this->optionContainerByNumber, $count),
                 Locator::SELECTOR_XPATH
@@ -338,7 +338,7 @@ class Attribute extends Form
         $count = 0;
 
         foreach ($attribute['options'] as $option) {
-            $count++;
+            ++$count;
             $label = isset($option['admin']) ? $option['admin'] : $option['label'];
             $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 

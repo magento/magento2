@@ -106,9 +106,9 @@ class StoreView
     private function removeDuplicates($arr)
     {
         $len = count($arr);
-        for ($out = 0; $out < $len; $out++) {
+        for ($out = 0; $out < $len; ++$out) {
             $outVal = $arr[$out];
-            for ($in = $out + 1; $in < $len; $in++) {
+            for ($in = $out + 1; $in < $len; ++$in) {
                 $inVal = $arr[$in];
                 if ($outVal === $inVal) {
                     unset($arr[$out]);

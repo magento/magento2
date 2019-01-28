@@ -371,7 +371,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
                     $count = count($line);
-                    for ($i = 1; $i < $count; $i++) {
+                    for ($i = 1; $i < $count; ++$i) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
@@ -410,7 +410,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
         $bodyItem = [];
-        for ($i = 1, $count = count($line); $i < $count; $i++) {
+        for ($i = 1, $count = count($line); $i < $count; ++$i) {
             if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);

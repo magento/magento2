@@ -101,7 +101,7 @@ class CreateDuplicateUrlCmsPageEntityTest extends Injectable
 
         $cmsPage = $this->fixtureFactory->createByCode($fixtureType, ['data' => $data]);
 
-        for ($index = 0; $index < 2; $index++) {
+        for ($index = 0; $index < 2; ++$index) {
             // Duplicate page
             $this->cmsIndex->open();
             $this->cmsIndex->getPageActionsBlock()->addNew();

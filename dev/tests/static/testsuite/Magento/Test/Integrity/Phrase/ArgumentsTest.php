@@ -106,7 +106,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
                     // Check if char after placeholder is not a digit or letter
                     $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];
                     if (!preg_match('/[A-Za-z0-9]/', $charAfterPh)) {
-                        $placeholderCount--;
+                        --$placeholderCount;
                     }
                 }
             }

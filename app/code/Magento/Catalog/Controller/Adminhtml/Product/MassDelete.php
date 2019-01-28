@@ -63,7 +63,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($collection->getItems() as $product) {
             $this->productRepository->delete($product);
-            $productDeleted++;
+            ++$productDeleted;
         }
 
         if ($productDeleted) {

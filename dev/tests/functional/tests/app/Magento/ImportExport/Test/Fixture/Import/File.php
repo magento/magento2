@@ -221,7 +221,7 @@ class File extends DataSource
                     }
                 }
             }
-            $key++;
+            ++$key;
         }
         $this->placeholders = $placeholders;
     }
@@ -309,7 +309,7 @@ class File extends DataSource
         foreach (str_getcsv($csvContent, "\n") as $value) {
             $explodedArray = explode(",", $value);
             $count = count($explodedArray);
-            for ($i = 0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; ++$i) {
                 if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {
                     $compiledData = $this->compileToOneString($i, $explodedArray);
                     $i = $compiledData['index'];

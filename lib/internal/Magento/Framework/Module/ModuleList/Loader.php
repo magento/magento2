@@ -141,8 +141,8 @@ class Loader
 
         // Use "bubble sorting" because usort does not check each pair of elements and in this case it is important
         $total = count($expanded);
-        for ($i = 0; $i < $total - 1; $i++) {
-            for ($j = $i; $j < $total; $j++) {
+        for ($i = 0; $i < $total - 1; ++$i) {
+            for ($j = $i; $j < $total; ++$j) {
                 if (in_array($expanded[$j]['name'], $expanded[$i]['sequence'])) {
                     $temp = $expanded[$i];
                     $expanded[$i] = $expanded[$j];

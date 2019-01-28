@@ -77,7 +77,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
         $additionalData = null;
         $mockItems = [];
 
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 2; ++$i) {
             $mockItems[] = [
                 'origin' => $origin . $i,
                 'code' => $code,

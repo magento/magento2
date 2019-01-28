@@ -89,7 +89,7 @@ class MassDeleteCustomerBackendEntityTest extends Injectable
         // Preconditions:
         $customers = $this->createCustomers($customersQty);
         $deleteCustomers = [];
-        for ($i = 0; $i < $customersQtyToDelete; $i++) {
+        for ($i = 0; $i < $customersQtyToDelete; ++$i) {
             $deleteCustomers[] = ['email' => $customers[$i]->getEmail()];
         }
         // Steps:
@@ -108,7 +108,7 @@ class MassDeleteCustomerBackendEntityTest extends Injectable
     protected function createCustomers($customersQty)
     {
         $customers = [];
-        for ($i = 0; $i < $customersQty; $i++) {
+        for ($i = 0; $i < $customersQty; ++$i) {
             $customer = $this->fixtureFactory->createByCode('customer', ['dataset' => 'default']);
             $customer->persist();
             $customers[] = $customer;

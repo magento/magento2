@@ -117,7 +117,7 @@ class EavVariationsFixture extends Fixture
         $storeIds = array_keys($this->storeManager->getStores(true));
         $options = [];
 
-        for ($option = 1; $option <= $optionCount; $option++) {
+        for ($option = 1; $option <= $optionCount; ++$option) {
             $options['order']['option_' . $option] = $option;
             $options['value']['option_' . $option] = array_fill_keys($storeIds, 'option ' . $option);
             $options['delete']['option_' . $option] = '';

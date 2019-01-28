@@ -224,7 +224,7 @@ HTML;
             ->setConstructorArgs(['container' => $container])
             ->getMock();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $id = "category-node-$i";
             $categoryNode = $this->createPartialMock(
                 \Magento\Framework\Data\Tree\Node::class,

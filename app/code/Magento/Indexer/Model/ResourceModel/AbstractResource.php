@@ -148,7 +148,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
             $counter = 0;
             while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
                 $data[] = $row;
-                $counter++;
+                ++$counter;
                 if ($counter > 2000) {
                     $to->insertArray($destTable, $columns, $data);
                     $data = [];

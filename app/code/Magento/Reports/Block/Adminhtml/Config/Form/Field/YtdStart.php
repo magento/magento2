@@ -22,11 +22,11 @@ class YtdStart extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(AbstractElement $element)
     {
         $_months = [];
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; ++$i) {
             $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i, 1))->format('m');
         }
         $_days = [];
-        for ($i = 1; $i <= 31; $i++) {
+        for ($i = 1; $i <= 31; ++$i) {
             $_days[$i] = $i < 10 ? '0' . $i : $i;
         }
 

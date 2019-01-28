@@ -139,7 +139,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $currentRate = 0;
         $totalPercent = 0;
         $countedRates = count($rates);
-        for ($i = 0; $i < $countedRates; $i++) {
+        for ($i = 0; $i < $countedRates; ++$i) {
             $rate = $rates[$i];
             $value = (isset($rate['value']) ? $rate['value'] : $rate['percent']) * 1;
 
@@ -179,7 +179,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             if (isset($rates[$i + 1]['tax_calculation_rule_id'])) {
                 while (isset($rates[$i + 1]) && $rates[$i + 1]['tax_calculation_rule_id'] == $ruleId) {
-                    $i++;
+                    ++$i;
                 }
             }
 
@@ -246,7 +246,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // finish building out the search template array
         $strlen = strlen($postcode);
-        for ($i = 1; $i < $strlen; $i++) {
+        for ($i = 1; $i < $strlen; ++$i) {
             $strArr[] = sprintf('%s*', substr($postcode, 0, -$i));
         }
 
@@ -422,14 +422,14 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $result = 0;
         $currentRate = 0;
         $countedRates = count($rates);
-        for ($i = 0; $i < $countedRates; $i++) {
+        for ($i = 0; $i < $countedRates; ++$i) {
             $rate = $rates[$i];
             $rule = $rate['tax_calculation_rule_id'];
             $value = $rate['value'];
             $priority = $rate['priority'];
 
             while (isset($rates[$i + 1]) && $rates[$i + 1]['tax_calculation_rule_id'] == $rule) {
-                $i++;
+                ++$i;
             }
 
             $currentRate += $value;
@@ -458,12 +458,12 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $result = [];
         $rates = $this->_getRates($request);
         $countedRates = count($rates);
-        for ($i = 0; $i < $countedRates; $i++) {
+        for ($i = 0; $i < $countedRates; ++$i) {
             $rate = $rates[$i];
             $rule = $rate['tax_calculation_rule_id'];
             $result[] = $rate['tax_calculation_rate_id'];
             while (isset($rates[$i + 1]) && $rates[$i + 1]['tax_calculation_rule_id'] == $rule) {
-                $i++;
+                ++$i;
             }
         }
 

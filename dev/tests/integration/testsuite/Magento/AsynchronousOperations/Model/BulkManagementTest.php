@@ -62,7 +62,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $operationCount = 100;
         $operations = [];
         $operationFactory = $this->objectManager->get(OperationInterfaceFactory::class);
-        for ($index = 0; $index < $operationCount; $index++) {
+        for ($index = 0; $index < $operationCount; ++$index) {
             /** @var OperationInterface $operation */
             $operation = $operationFactory->create();
             $operation->setBulkUuid($bulkUuid);

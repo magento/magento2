@@ -164,7 +164,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
                     $operationIds = [];
                     $currentBatchSize = 0;
                 }
-                $currentBatchSize++;
+                ++$currentBatchSize;
                 $operationIds[] = $operation->getId();
                 // Rescheduled operations must be put in queue in 'open' state (i.e. without ID)
                 $operation->setId(null);

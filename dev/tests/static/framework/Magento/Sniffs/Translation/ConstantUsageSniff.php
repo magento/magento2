@@ -51,13 +51,13 @@ class ConstantUsageSniff implements Sniff
         $currentLineContent = '';
         $currentLine = 1;
 
-        for (; $tokenCount < $phpcsFile->numTokens; $tokenCount++) {
+        for (; $tokenCount < $phpcsFile->numTokens; ++$tokenCount) {
             if ($tokens[$tokenCount]['line'] === $currentLine) {
                 $currentLineContent .= $tokens[$tokenCount]['content'];
             } else {
                 $this->checkIfFirstArgumentConstant($phpcsFile, ($tokenCount - 1), $currentLineContent);
                 $currentLineContent = $tokens[$tokenCount]['content'];
-                $currentLine++;
+                ++$currentLine;
             }
         }
 

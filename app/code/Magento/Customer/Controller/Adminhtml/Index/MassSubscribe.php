@@ -60,7 +60,7 @@ class MassSubscribe extends AbstractMassAction
             // Verify customer exists
             $this->customerRepository->getById($customerId);
             $this->subscriberFactory->create()->subscribeCustomerById($customerId);
-            $customersUpdated++;
+            ++$customersUpdated;
         }
 
         if ($customersUpdated) {

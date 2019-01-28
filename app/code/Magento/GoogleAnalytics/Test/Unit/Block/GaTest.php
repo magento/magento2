@@ -198,7 +198,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     protected function createOrderMock($orderItemCount = 1)
     {
         $orderItems = [];
-        for ($i = 0; $i < $orderItemCount; $i++) {
+        for ($i = 0; $i < $orderItemCount; ++$i) {
             $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();

@@ -169,7 +169,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             if ($this->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount++;
+            ++$this->_storesCount;
         }
     }
 
@@ -190,7 +190,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             if ($this->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount++;
+            ++$this->_storesCount;
         }
     }
 

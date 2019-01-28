@@ -149,7 +149,7 @@ class ViewedProductsReportEntityTest extends Injectable
     {
         $total = explode(', ', $total);
         foreach ($products as $key => $product) {
-            for ($i = 0; $i < $total[$key]; $i++) {
+            for ($i = 0; $i < $total[$key]; ++$i) {
                 $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
                 $this->assertEquals(
                     $product->getName(),

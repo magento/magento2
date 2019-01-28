@@ -196,7 +196,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
                 $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
-            $position++;
+            ++$position;
         }
         $config = $this->getConfigData($currentProduct, $options);
 

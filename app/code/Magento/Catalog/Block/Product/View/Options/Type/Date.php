@@ -166,7 +166,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     protected function _getSelectFromToHtml($name, $from, $to, $value = null)
     {
         $options = [['value' => '', 'label' => '-']];
-        for ($i = $from; $i <= $to; $i++) {
+        for ($i = $from; $i <= $to; ++$i) {
             $options[] = ['value' => $i, 'label' => $this->_getValueWithLeadingZeros($i)];
         }
         return $this->_getHtmlSelect($name, $value)->setOptions($options)->getHtml();

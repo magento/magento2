@@ -9,7 +9,7 @@
 $taxAmount = $block->getTotal()->getValue();
 ?>
 <?php if (($taxAmount == 0 && $this->helper('Magento\Tax\Helper\Data')->displayZeroTax()) || ($taxAmount > 0)): ?>
-<?php global $taxIter; $taxIter++; ?>
+<?php global $taxIter; ++$taxIter; ?>
 <?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
 <tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
     onclick="expandDetails(this, '.summary-details-<?= /* @escapeNotVerified */ $taxIter ?>')"

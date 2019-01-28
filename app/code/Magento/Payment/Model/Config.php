@@ -169,7 +169,7 @@ class Config
     {
         $years = [];
         $first = (int)$this->_date->date('Y');
-        for ($index = 0; $index <= self::YEARS_RANGE; $index++) {
+        for ($index = 0; $index <= self::YEARS_RANGE; ++$index) {
             $year = $first + $index;
             $years[$year] = $year;
         }

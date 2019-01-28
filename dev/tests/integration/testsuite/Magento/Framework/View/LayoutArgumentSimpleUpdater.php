@@ -18,7 +18,7 @@ class LayoutArgumentSimpleUpdater implements \Magento\Framework\View\Layout\Argu
      */
     public function update($argument)
     {
-        $argument++;
+        ++$argument;
         return $argument;
     }
 }

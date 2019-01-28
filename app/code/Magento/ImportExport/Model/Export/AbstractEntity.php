@@ -247,7 +247,7 @@ abstract class AbstractEntity
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
-        $this->_errorsCount++;
+        ++$this->_errorsCount;
 
         return $this;
     }

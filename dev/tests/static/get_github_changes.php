@@ -344,7 +344,7 @@ class GitRepo
         $changedFilesMasks = $this->buildChangedFilesMask($changesType);
         $filteredChanges = [];
         foreach ($changes as $fileName) {
-            $countScannedFiles++;
+            ++$countScannedFiles;
             if (($countScannedFiles % 5000) == 0) {
                 echo $countScannedFiles . " files scanned so far\n";
             }

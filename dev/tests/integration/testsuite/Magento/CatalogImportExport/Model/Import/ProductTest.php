@@ -599,7 +599,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                     $lastOptionKey = $option['type'] . '|' . $option['name'];
                     if (!isset($expectedOptions[$expectedOptionId])
                         || $expectedOptions[$expectedOptionId] != $lastOptionKey) {
-                        $expectedOptionId++;
+                        ++$expectedOptionId;
                         $expectedOptions[$expectedOptionId] = $lastOptionKey;
                         $expectedData[$expectedOptionId] = [];
                         foreach ($this->_assertOptions as $assertKey => $assertFieldName) {
@@ -651,7 +651,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $optionKey = $option->getType() . '|' . $option->getTitle();
             $optionValues = $this->getOptionValues($option);
             if (!in_array($optionKey, $expectedOptions)) {
-                $expectedOptionId++;
+                ++$expectedOptionId;
                 $expectedOptions[$expectedOptionId] = $optionKey;
                 $expectedData[$expectedOptionId] = $this->getOptionData($option);
                 if ($optionValues) {
@@ -700,7 +700,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var $option \Magento\Catalog\Model\Product\Option */
         foreach ($options as $option) {
             $lastOptionKey = $option->getType() . '|' . $option->getTitle();
-            $actualOptionId++;
+            ++$actualOptionId;
             if (!in_array($lastOptionKey, $actualOptions)) {
                 $actualOptions[$actualOptionId] = $lastOptionKey;
                 $actualData[$actualOptionId] = $this->getOptionData($option);

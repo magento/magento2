@@ -153,7 +153,7 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
                 ->where('sku = ?', $this->fixture['_variation_sku_pattern'])
         )['entity_id'];
 
-        for ($i = 0; $i < $this->fixture['_variation_count']; $i++) {
+        for ($i = 0; $i < $this->fixture['_variation_count']; ++$i) {
             $associatedProductIds[] = $firstSimpleProductId + $i;
         }
 

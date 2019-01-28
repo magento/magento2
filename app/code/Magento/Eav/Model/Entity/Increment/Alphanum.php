@@ -50,7 +50,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
         $lchars = strlen($chars);
         $lid = strlen($lastId) - 1;
 
-        for ($i = $lid; $i >= 0; $i--) {
+        for ($i = $lid; $i >= 0; --$i) {
             $p = strpos($chars, $lastId[$i]);
             if (false === $p) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -58,7 +58,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
                 );
             }
             if ($bumpNextChar) {
-                $p++;
+                ++$p;
                 $bumpNextChar = false;
             }
             if ($p === $lchars) {

@@ -91,7 +91,7 @@ class MassOrdersUpdateTest extends Injectable
     {
         $orders = [];
         $steps = explode('|', $steps);
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             /** @var OrderInjectable $order */
             $order = $this->fixtureFactory->createByCode('orderInjectable', ['dataset' => 'default']);
             $order->persist();

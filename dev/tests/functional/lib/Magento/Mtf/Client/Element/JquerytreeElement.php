@@ -131,7 +131,7 @@ class JquerytreeElement extends Tree
     {
         $selector = $this->rootElement;
         if ($level !== null) {
-            for ($i = 1; $i < $level; $i++) {
+            for ($i = 1; $i < $level; ++$i) {
                 $selector .= $this->level;
             }
             $selector .= $this->selectedLabelsByLevel;

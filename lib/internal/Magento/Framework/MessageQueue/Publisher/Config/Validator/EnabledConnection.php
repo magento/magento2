@@ -25,7 +25,7 @@ class EnabledConnection implements ValidatorInterface
             $enabledConnections = 0;
             foreach ($publisherData['connections'] as $connectionConfig) {
                 if ($connectionConfig['disabled'] == false) {
-                    $enabledConnections++;
+                    ++$enabledConnections;
                 }
             }
 

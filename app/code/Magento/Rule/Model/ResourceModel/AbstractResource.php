@@ -118,7 +118,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
                     $entityInfo['entity_id_field'] => $entityId,
                     $entityInfo['rule_id_field'] => $ruleId,
                 ];
-                $count++;
+                ++$count;
                 if ($count % 1000 == 0) {
                     $this->getConnection()->insertOnDuplicate(
                         $this->getTable($entityInfo['associations_table']),

@@ -88,7 +88,7 @@ class StaticCalls implements ParserInterface, DependenciesCollectorInterface
             $staticCall - $step
         ) == T_NS_SEPARATOR) {
             $staticClassParts[] = $this->tokens->getTokenValueByKey($staticCall - $step);
-            $step++;
+            ++$step;
         }
         return implode(array_reverse($staticClassParts));
     }

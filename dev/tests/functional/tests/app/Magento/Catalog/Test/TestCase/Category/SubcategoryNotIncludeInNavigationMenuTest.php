@@ -140,7 +140,7 @@ class SubcategoryNotIncludeInNavigationMenuTest extends Injectable
      */
     private function getParentCategoryByNestingLevel(Category $category, $nestingLevel)
     {
-        for ($nestingIterator = 1; $nestingIterator < $nestingLevel; $nestingIterator++) {
+        for ($nestingIterator = 1; $nestingIterator < $nestingLevel; ++$nestingIterator) {
             $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
         }
 

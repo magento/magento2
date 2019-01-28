@@ -115,7 +115,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
         $accountReference = 'customer@example.com';
 
         try {
-            for ($i = 0; $i < $attempts; $i++) {
+            for ($i = 0; $i < $attempts; ++$i) {
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
             }
         } catch (\Magento\Framework\Exception\SecurityViolationException $e) {
@@ -149,7 +149,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
         $accountReference = 'customer@example.com';
 
         try {
-            for ($i = 0; $i < $attempts; $i++) {
+            for ($i = 0; $i < $attempts; ++$i) {
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
             }
         } catch (\Magento\Framework\Exception\SecurityViolationException $e) {

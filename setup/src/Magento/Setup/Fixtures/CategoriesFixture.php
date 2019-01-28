@@ -124,7 +124,7 @@ class CategoriesFixture extends Fixture
         &$categoryIndex
     ) {
         $maxCategoriesNumberOnLevel = $nestingLevel === 1 ? $this->categoriesNumber : $categoriesNumberOnLevel;
-        for ($i = 0; $i < $maxCategoriesNumberOnLevel && $categoryIndex <= $this->categoriesNumber; $i++) {
+        for ($i = 0; $i < $maxCategoriesNumberOnLevel && $categoryIndex <= $this->categoriesNumber; ++$i) {
             try {
                 $category = clone $parentCategory;
                 $category->setId(null)
@@ -138,7 +138,7 @@ class CategoriesFixture extends Fixture
                     ->setDefaultSortBy('name')
                     ->setIsActive(true);
                 $category->save();
-                $categoryIndex++;
+                ++$categoryIndex;
                 if ($nestingLevel < $this->maxNestingLevel) {
                     $this->generateCategories(
                         $category,
@@ -148,10 +148,10 @@ class CategoriesFixture extends Fixture
                     );
                 }
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                $categoryIndex++;
+                ++$categoryIndex;
                 continue;
             } catch (\Magento\Framework\DB\Adapter\DuplicateException $e) {
-                $categoryIndex++;
+                ++$categoryIndex;
                 continue;
             }
         }

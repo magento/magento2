@@ -113,7 +113,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
      */
     private function nextIncrementStep($lastInsertId, $sequenceNumber)
     {
-        $lastInsertId++;
+        ++$lastInsertId;
         $this->connectionMock->expects($this->at(1))->method('lastInsertId')->with(
             $this->sequenceParameters()->testTable
         )->willReturn(

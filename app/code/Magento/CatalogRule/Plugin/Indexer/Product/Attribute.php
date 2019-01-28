@@ -98,7 +98,7 @@ class Attribute
             $this->removeAttributeFromConditions($rule->getConditions(), $attributeCode);
             $rule->save();
 
-            $disabledRulesCount++;
+            ++$disabledRulesCount;
         }
 
         if ($disabledRulesCount) {

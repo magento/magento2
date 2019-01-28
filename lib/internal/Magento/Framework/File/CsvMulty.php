@@ -27,7 +27,7 @@ class CsvMulty extends \Magento\Framework\File\Csv
         $csvData = $this->getData($file);
         $lineNumber = 0;
         foreach ($csvData as $rowData) {
-            $lineNumber++;
+            ++$lineNumber;
             if (isset($rowData[$keyIndex])) {
                 if (isset($data[$rowData[$keyIndex]])) {
                     if (isset($data[$rowData[$keyIndex]]['duplicate'])) {

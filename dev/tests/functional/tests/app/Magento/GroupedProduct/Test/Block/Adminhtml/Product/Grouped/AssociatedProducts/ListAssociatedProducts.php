@@ -77,7 +77,7 @@ class ListAssociatedProducts extends Form
     {
         $productsSku = [];
         $productsQty = count($this->_rootElement->getElements($this->itemProducts));
-        for ($i = 1; $i <= $productsQty; $i++) {
+        for ($i = 1; $i <= $productsQty; ++$i) {
             $productsSku[] = $this->getProductBlock($i)->getProductSku();
         }
         return $productsSku;

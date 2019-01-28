@@ -65,7 +65,7 @@ class Crypt
             /* Generate a random vector from human-readable characters */
             $allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             $initVector = '';
-            for ($i = 0; $i < $initVectorSize; $i++) {
+            for ($i = 0; $i < $initVectorSize; ++$i) {
                 $initVector .= $allowedCharacters[rand(0, strlen($allowedCharacters) - 1)];
             }
             // @codingStandardsIgnoreStart

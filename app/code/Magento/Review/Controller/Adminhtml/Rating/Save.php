@@ -54,7 +54,7 @@ class Save extends RatingController implements HttpPostActionInterface
                             ->setRatingId($ratingModel->getId())
                             ->setPosition($i)
                             ->save();
-                        $i++;
+                        ++$i;
                     }
                 }
 

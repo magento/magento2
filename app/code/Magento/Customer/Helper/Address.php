@@ -311,7 +311,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             $modulo = count($origStreets) % $toCount;
             $offset = 0;
             $neededLinesCount = 0;
-            for ($i = 0; $i < $toCount; $i++) {
+            for ($i = 0; $i < $toCount; ++$i) {
                 $offset += $neededLinesCount;
                 $neededLinesCount = $countArgs;
                 if ($modulo > 0) {

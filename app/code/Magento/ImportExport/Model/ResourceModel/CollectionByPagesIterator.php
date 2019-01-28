@@ -40,7 +40,7 @@ class CollectionByPagesIterator
                 }
             }
 
-            $pageNumber++;
+            ++$pageNumber;
         } while ($pageNumber <= $paginatedCollection->getLastPageNumber());
 
         $paginatedCollection->clear();

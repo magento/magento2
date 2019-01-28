@@ -109,12 +109,12 @@ class Tokenizer
                     continue;
                 }
                 if ($token->isCloseBrace()) {
-                    $this->_closeBrackets++;
+                    ++$this->_closeBrackets;
                 }
                 $arguments[$argumentNumber][] = $token;
                 if ($token->isComma() && $this->_isInnerArgumentClosed()) {
                     array_pop($arguments[$argumentNumber]);
-                    $argumentNumber++;
+                    ++$argumentNumber;
                 }
                 if ($this->_openBrackets == $this->_closeBrackets) {
                     break;
@@ -143,16 +143,16 @@ class Tokenizer
      */
     private function _skipInnerArgumentInvoke()
     {
-        $this->_openBrackets++;
+        ++$this->_openBrackets;
         while (!$this->getNextToken()->isCloseBrace()) {
             if ($this->getCurrentToken()->isCloseBrace()) {
-                $this->_closeBrackets++;
+                ++$this->_closeBrackets;
             }
             if ($this->getCurrentToken()->isOpenBrace()) {
-                $this->_openBrackets++;
+                ++$this->_openBrackets;
             }
         }
-        $this->_closeBrackets++;
+        ++$this->_closeBrackets;
     }
 
     /**

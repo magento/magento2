@@ -71,8 +71,8 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($pageCount)
         );
 
-        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
-            for ($rowNumber = 1; $rowNumber <= $pageSize; $rowNumber++) {
+        for ($pageNumber = 1; $pageNumber <= $pageCount; ++$pageNumber) {
+            for ($rowNumber = 1; $rowNumber <= $pageSize; ++$rowNumber) {
                 $itemId = ($pageNumber - 1) * $pageSize + $rowNumber;
                 $item = new \Magento\Framework\DataObject(['id' => $itemId]);
                 $collectionMock->addItem($item);

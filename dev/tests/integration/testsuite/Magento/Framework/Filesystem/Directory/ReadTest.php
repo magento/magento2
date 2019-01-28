@@ -42,17 +42,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->getAbsolutePath('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->getAbsolutePath('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->getAbsolutePath('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -75,22 +75,22 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->getRelativePath(__DIR__ .'/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->getRelativePath(__DIR__ .'//./..////Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->getRelativePath(__DIR__ .'\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->getRelativePath('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(4, $exceptions);
     }
@@ -133,17 +133,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->read('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->read('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->read('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -186,17 +186,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->search('/*/*.txt', '../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->search('/*/*.txt', '//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->search('/*/*.txt', '\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -232,17 +232,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->isExist('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isExist('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isExist('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -295,17 +295,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->stat('bar/../../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->stat('bar//./..///../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->stat('bar\..\..\..\Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -331,17 +331,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->isReadable('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isReadable('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isReadable('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -365,17 +365,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->isFile('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isFile('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isFile('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -399,17 +399,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->isDirectory('../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isDirectory('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->isDirectory('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -461,17 +461,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->openFile('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->openFile('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->openFile('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -512,17 +512,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->readFile('../../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->readFile('//./..///../Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->readFile('\..\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }
@@ -564,17 +564,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         try {
             $dir->readRecursively('../../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->readRecursively('//./..///../Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         try {
             $dir->readRecursively('\..\..\Directory');
         } catch (ValidatorException $exception) {
-            $exceptions++;
+            ++$exceptions;
         }
         $this->assertEquals(3, $exceptions);
     }

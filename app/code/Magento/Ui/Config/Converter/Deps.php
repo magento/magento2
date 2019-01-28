@@ -61,7 +61,7 @@ class Deps implements ConverterInterface
                         Dom::TYPE_ATTRIBUTE => 'string',
                         'value' => trim($childNode->nodeValue)
                     ];
-                    $i++;
+                    ++$i;
                 }
             }
         } else {

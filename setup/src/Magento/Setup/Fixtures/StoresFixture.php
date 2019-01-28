@@ -235,7 +235,7 @@ class StoresFixture extends Fixture
             );
             $website->save();
             $this->websiteIds[] = $website->getId();
-            $existedWebsitesCount++;
+            ++$existedWebsitesCount;
         }
     }
 
