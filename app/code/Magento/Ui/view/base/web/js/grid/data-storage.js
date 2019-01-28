@@ -264,7 +264,7 @@ define([
          * Handles successful data request.
          *
          * @param {Object} params - Request parameters.
-         * @param {Object} data - Response data.
+         * @param {Object | null} data - Response data.
          */
         onRequestComplete: function (params, data) {
             if (data) {
