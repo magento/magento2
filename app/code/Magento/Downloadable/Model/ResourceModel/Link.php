@@ -132,7 +132,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $dataToInsert[] = [
                     'link_id' => $linkObject->getId(),
                     'website_id' => (int)$linkObject->getWebsiteId(),
-                    'price' => (double)$linkObject->getPrice(),
+                    'price' => (float)$linkObject->getPrice(),
                 ];
                 if ($linkObject->getOrigData('link_id') != $linkObject->getLinkId()) {
                     $_isNew = true;

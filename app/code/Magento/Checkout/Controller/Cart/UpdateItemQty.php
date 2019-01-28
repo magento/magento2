@@ -91,7 +91,7 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
 
             foreach ($cartData as $itemId => $itemInfo) {
                 $item = $quote->getItemById($itemId);
-                $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : 0;
+                $qty = isset($itemInfo['qty']) ? (float)$itemInfo['qty'] : 0;
                 if ($item) {
                     $this->updateItemQuantity($item, $qty);
                 }

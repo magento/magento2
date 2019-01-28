@@ -145,7 +145,7 @@ class InvoiceService implements InvoiceManagementInterface
             if ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
             } elseif (isset($qtys[$orderItem->getId()])) {
-                $qty = (double) $qtys[$orderItem->getId()];
+                $qty = (float) $qtys[$orderItem->getId()];
             } elseif (empty($qtys)) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
@@ -243,7 +243,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     protected function setInvoiceItemQuantity(\Magento\Sales\Api\Data\InvoiceItemInterface $item, $qty)
     {
-        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
+        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (float) $qty : (int) $qty;
         $qty = $qty > 0 ? $qty : 0;
 
         /**

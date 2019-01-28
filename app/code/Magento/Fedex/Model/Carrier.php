@@ -458,7 +458,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'RequestedPackageLineItems' => [
                     '0' => [
                         'Weight' => [
-                            'Value' => (double)$r->getWeight(),
+                            'Value' => (float)$r->getWeight(),
                             'Units' => $this->getConfigData('unit_of_measure'),
                         ],
                         'GroupPackageCount' => 1,
@@ -480,7 +480,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($purpose == self::RATE_REQUEST_SMARTPOST) {
                 $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
                 $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
-                    'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                    'Indicia' => (float)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                     'HubId' => $this->getConfigData('smartpost_hubid'),
                 ];
             }
@@ -1377,7 +1377,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST) {
             $requestClient['RequestedShipment']['SmartPostDetail'] = [
-                'Indicia' => (double)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'Indicia' => (float)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                 'HubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }

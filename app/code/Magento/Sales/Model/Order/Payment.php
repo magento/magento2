@@ -1146,7 +1146,7 @@ class Payment extends Info implements OrderPaymentInterface
             0 == $this->getBaseAmountCanceled()
         ) {
             if ($authTransaction->canVoidAuthorizationCompletely()) {
-                $amount = (double)$order->getBaseGrandTotal();
+                $amount = (float)$order->getBaseGrandTotal();
             }
         }
 

@@ -255,7 +255,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueConstant()
     {
-        return (double)$this->scopeConfig->getValue(
+        return (float)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -269,7 +269,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getConversionValue()
     {
         if ($this->isDynamicConversionValue()) {
-            $conversionValue = (double)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
+            $conversionValue = (float)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
         } else {
             $conversionValue = $this->getConversionValueConstant();
         }

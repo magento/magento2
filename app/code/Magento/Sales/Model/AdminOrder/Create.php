@@ -1081,7 +1081,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (double)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1111,13 +1111,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
                     $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
-                    $info['qty'] = (double)$item->getQty();
+                    $info['qty'] = (float)$item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
                     if (!$item) {
                         continue;
                     }
-                    $info['qty'] = (double)$info['qty'];
+                    $info['qty'] = (float)$info['qty'];
                 }
                 $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {

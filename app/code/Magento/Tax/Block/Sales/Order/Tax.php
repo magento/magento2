@@ -82,7 +82,7 @@ class Tax extends \Magento\Framework\View\Element\Template
 
         $store = $this->getStore();
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
-        $grandTotal = (double)$this->_source->getGrandTotal();
+        $grandTotal = (float)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
             $this->_addTax();
         }
@@ -130,10 +130,10 @@ class Tax extends \Magento\Framework\View\Element\Template
             return $this;
         }
         if ($this->_config->displaySalesSubtotalBoth($store)) {
-            $subtotal = (double)$this->_source->getSubtotal();
-            $baseSubtotal = (double)$this->_source->getBaseSubtotal();
-            $subtotalIncl = (double)$this->_source->getSubtotalInclTax();
-            $baseSubtotalIncl = (double)$this->_source->getBaseSubtotalInclTax();
+            $subtotal = (float)$this->_source->getSubtotal();
+            $baseSubtotal = (float)$this->_source->getBaseSubtotal();
+            $subtotalIncl = (float)$this->_source->getSubtotalInclTax();
+            $baseSubtotalIncl = (float)$this->_source->getBaseSubtotalInclTax();
 
             if (!$subtotalIncl || !$baseSubtotalIncl) {
                 // Calculate the subtotal if it is not set
@@ -175,8 +175,8 @@ class Tax extends \Magento\Framework\View\Element\Template
             $parent->addTotal($totalIncl, 'subtotal_excl');
             $parent->removeTotal('subtotal');
         } elseif ($this->_config->displaySalesSubtotalInclTax($store)) {
-            $subtotalIncl = (double)$this->_source->getSubtotalInclTax();
-            $baseSubtotalIncl = (double)$this->_source->getBaseSubtotalInclTax();
+            $subtotalIncl = (float)$this->_source->getSubtotalInclTax();
+            $baseSubtotalIncl = (float)$this->_source->getBaseSubtotalInclTax();
 
             if (!$subtotalIncl) {
                 $subtotalIncl = $this->_source->getSubtotal() +
@@ -211,15 +211,15 @@ class Tax extends \Magento\Framework\View\Element\Template
         }
 
         if ($this->_config->displaySalesShippingBoth($store)) {
-            $shipping = (double)$this->_source->getShippingAmount();
-            $baseShipping = (double)$this->_source->getBaseShippingAmount();
-            $shippingIncl = (double)$this->_source->getShippingInclTax();
+            $shipping = (float)$this->_source->getShippingAmount();
+            $baseShipping = (float)$this->_source->getBaseShippingAmount();
+            $shippingIncl = (float)$this->_source->getShippingInclTax();
             if (!$shippingIncl) {
-                $shippingIncl = $shipping + (double)$this->_source->getShippingTaxAmount();
+                $shippingIncl = $shipping + (float)$this->_source->getShippingTaxAmount();
             }
-            $baseShippingIncl = (double)$this->_source->getBaseShippingInclTax();
+            $baseShippingIncl = (float)$this->_source->getBaseShippingInclTax();
             if (!$baseShippingIncl) {
-                $baseShippingIncl = $baseShipping + (double)$this->_source->getBaseShippingTaxAmount();
+                $baseShippingIncl = $baseShipping + (float)$this->_source->getBaseShippingTaxAmount();
             }
 
             $totalExcl = new \Magento\Framework\DataObject(
@@ -274,7 +274,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $store = $this->getStore();
         $parent = $this->getParentBlock();
         $grandototal = $parent->getTotal('grand_total');
-        if (!$grandototal || !(double)$this->_source->getGrandTotal()) {
+        if (!$grandototal || !(float)$this->_source->getGrandTotal()) {
             return $this;
         }
 

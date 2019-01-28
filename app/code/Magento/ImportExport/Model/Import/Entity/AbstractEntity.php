@@ -656,7 +656,7 @@ abstract class AbstractEntity
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
-                $valid = (double)$val == $val;
+                $valid = (float)$val == $val;
                 break;
             case 'select':
             case 'multiselect':

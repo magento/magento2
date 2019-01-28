@@ -244,7 +244,7 @@ class RowParser
     {
         $result = false;
         if (is_numeric($value)) {
-            $value = (double)sprintf('%.4F', $value);
+            $value = (float)sprintf('%.4F', $value);
             if ($value >= 0.0000) {
                 $result = $value;
             }

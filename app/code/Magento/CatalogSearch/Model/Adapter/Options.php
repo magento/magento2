@@ -44,7 +44,7 @@ class Options implements OptionsInterface
                 self::XML_PATH_INTERVAL_DIVISION_LIMIT,
                 ScopeInterface::SCOPE_STORE
             ),
-            'range_step' => (double)$this->scopeConfig->getValue(
+            'range_step' => (float)$this->scopeConfig->getValue(
                 self::XML_PATH_RANGE_STEP,
                 ScopeInterface::SCOPE_STORE
             ),

@@ -378,7 +378,7 @@ class Cart
      */
     protected function _setAmount($amountType, $amount)
     {
-        $this->_amounts[$amountType] = (double)$amount;
+        $this->_amounts[$amountType] = (float)$amount;
     }
 
     /**
@@ -388,7 +388,7 @@ class Cart
      */
     protected function _addAmount($amountType, $amount)
     {
-        $this->_amounts[$amountType] += (double)$amount;
+        $this->_amounts[$amountType] += (float)$amount;
     }
 
     /**
@@ -413,7 +413,7 @@ class Cart
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
-        $item = new \Magento\Framework\DataObject(['name' => $name, 'qty' => $qty, 'amount' => (double)$amount]);
+        $item = new \Magento\Framework\DataObject(['name' => $name, 'qty' => $qty, 'amount' => (float)$amount]);
 
         if ($identifier) {
             $item->setData('id', $identifier);

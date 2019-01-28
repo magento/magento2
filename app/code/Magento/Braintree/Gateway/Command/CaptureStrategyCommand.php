@@ -192,6 +192,6 @@ class CaptureStrategyCommand implements CommandInterface
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
         $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
-        return (boolean) $count;
+        return (bool) $count;
     }
 }

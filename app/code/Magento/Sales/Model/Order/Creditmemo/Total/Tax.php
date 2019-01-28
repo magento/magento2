@@ -37,9 +37,9 @@ class Tax extends AbstractTotal
             if ($orderItem->isDummy() || $item->getQty() <= 0) {
                 continue;
             }
-            $orderItemTax = (double)$orderItem->getTaxInvoiced();
-            $baseOrderItemTax = (double)$orderItem->getBaseTaxInvoiced();
-            $orderItemQty = (double)$orderItem->getQtyInvoiced();
+            $orderItemTax = (float)$orderItem->getTaxInvoiced();
+            $baseOrderItemTax = (float)$orderItem->getBaseTaxInvoiced();
+            $orderItemQty = (float)$orderItem->getQtyInvoiced();
 
             if ($orderItemTax && $orderItemQty) {
                 /**

@@ -305,7 +305,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 'product_id' => (int)$row['entity_id'],
                 'website_id' => (int)$row['website_id'],
                 'stock_id' => Stock::DEFAULT_STOCK_ID,
-                'qty' => (double)$row['qty'],
+                'qty' => (float)$row['qty'],
                 'stock_status' => (int)$row['status'],
             ];
             if ($i % 1000 == 0) {

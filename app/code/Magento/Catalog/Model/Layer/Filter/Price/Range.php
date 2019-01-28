@@ -62,6 +62,6 @@ class Range
      */
     public function getConfigRangeStep()
     {
-        return (double)$this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
+        return (float)$this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
     }
 }

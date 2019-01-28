@@ -202,7 +202,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($type == 'int') {
             $value = (int)$value;
         } elseif ($type == 'decimal') {
-            $value = (double)sprintf('%F', $value);
+            $value = (float)sprintf('%F', $value);
         }
         return $value;
     }

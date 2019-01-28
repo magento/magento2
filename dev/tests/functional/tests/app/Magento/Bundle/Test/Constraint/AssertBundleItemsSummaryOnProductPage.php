@@ -47,14 +47,14 @@ class AssertBundleItemsSummaryOnProductPage extends AbstractAssertForm
                         ]
                     ]
                 ]);
-                $assignedProductPrice = (double)$assignedProduct['data']['selection_price_value'];
-                $assignedProductQty = (double)$assignedProduct['data']['selection_qty'];
+                $assignedProductPrice = (float)$assignedProduct['data']['selection_price_value'];
+                $assignedProductQty = (float)$assignedProduct['data']['selection_qty'];
 
                 foreach ($bundleViewBlock->getBundleSummaryBlock()->getSummaryItems() as $bundleSummaryItem) {
                     $bundleSummaryItemText = $bundleSummaryItem->getText();
                     if (strpos($bundleSummaryItemText, $assignedProduct['search_data']['name']) !== false) {
                         $optionData = $this->getBundleOptionData($bundleSummaryItemText);
-                        $optionData['price'] = (double)$configuredPriceBlock->getPrice();
+                        $optionData['price'] = (float)$configuredPriceBlock->getPrice();
                         $actualResult[] = $optionData;
                     }
                 }
@@ -62,7 +62,7 @@ class AssertBundleItemsSummaryOnProductPage extends AbstractAssertForm
                 $expectedResult[] = [
                     'qty' => $assignedProduct['data']['selection_qty'],
                     'name' => $assignedProduct['search_data']['name'],
-                    'price' => $assignedProductQty * $assignedProductPrice + (double)$product->getPrice()
+                    'price' => $assignedProductQty * $assignedProductPrice + (float)$product->getPrice()
                 ];
             }
         }

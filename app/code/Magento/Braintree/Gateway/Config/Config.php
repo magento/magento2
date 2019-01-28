@@ -153,7 +153,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getThresholdAmount($storeId = null)
     {
-        return (double) $this->getValue(self::KEY_THRESHOLD_AMOUNT, $storeId);
+        return (float) $this->getValue(self::KEY_THRESHOLD_AMOUNT, $storeId);
     }
 
     /**

@@ -29,7 +29,7 @@ class Shipping extends AbstractTotal
              * Check shipping amount in previous invoices
              */
             foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-                if ((double)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
+                if ((float)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
                     return $this;
                 }
             }

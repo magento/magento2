@@ -1767,7 +1767,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ('%' == substr($data, -1)) {
                 $priceData['price_type'] = 'percent';
             }
-            $priceData['price'] = (double)rtrim($data, '%');
+            $priceData['price'] = (float)rtrim($data, '%');
 
             return $priceData;
         }
@@ -1797,7 +1797,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
             if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
                 $priceData = [
-                    'price' => (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
+                    'price' => (float)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
                     'price_type' => 'fixed',
                 ];
                 if ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) {

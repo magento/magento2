@@ -293,7 +293,7 @@ class ShipmentFactory
     private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
     {
         if ($item->getIsQtyDecimal()) {
-            $qty = (double)$qty;
+            $qty = (float)$qty;
         } else {
             $qty = (int)$qty;
         }
