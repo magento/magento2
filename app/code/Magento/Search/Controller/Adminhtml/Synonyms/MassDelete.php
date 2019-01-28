@@ -62,6 +62,7 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @throws \Magento\Framework\Exception\NotFoundException|\Exception
      */
     public function execute()
     {

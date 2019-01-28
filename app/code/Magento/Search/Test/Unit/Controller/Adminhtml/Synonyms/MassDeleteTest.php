@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Synonyms;
 
 /**
- * Unit tests for MassDelete controller.
+ * Unit tests for Magento\Search\Controller\Adminhtml\Synonyms\MassDelete controller.
  */
 class MassDeleteTest extends \PHPUnit\Framework\TestCase
 {
