@@ -87,7 +87,7 @@ class Install extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }
@@ -100,7 +100,7 @@ class Install extends AbstractActionController
     public function startAction()
     {
         $this->log->clear();
-        $json = new JsonModel;
+        $json = new JsonModel();
         try {
             $this->checkForPriorInstall();
             $content = $this->getRequest()->getContent();

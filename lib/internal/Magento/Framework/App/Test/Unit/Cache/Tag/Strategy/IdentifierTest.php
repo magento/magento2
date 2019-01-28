@@ -17,7 +17,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->model = new Identifier;
+        $this->model = new Identifier();
     }
 
     public function testGetWithScalar()
@@ -29,7 +29,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTagsWithObject()
     {
-        $this->assertEquals([], $this->model->getTags(new \stdClass));
+        $this->assertEquals([], $this->model->getTags(new \stdClass()));
     }
 
     public function testGetTagsWithIdentityInterface()

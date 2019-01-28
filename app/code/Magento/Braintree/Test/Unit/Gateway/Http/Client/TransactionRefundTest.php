@@ -102,7 +102,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceRequestSuccess()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->success = true;
         $this->adapterMock->expects($this->once())
             ->method('refund')

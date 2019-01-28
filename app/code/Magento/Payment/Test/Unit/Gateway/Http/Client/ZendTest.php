@@ -102,7 +102,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
 
         $this->clientMock->expects($this->once())
             ->method('request')
-            ->willThrowException(new \Zend_Http_Client_Exception);
+            ->willThrowException(new \Zend_Http_Client_Exception());
 
         $this->converterMock->expects($this->never())->method('convert');
 

@@ -36,7 +36,7 @@ class SelectVersion extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/select-version.phtml');
         return $view;

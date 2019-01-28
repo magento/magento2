@@ -37,7 +37,7 @@ class LandingInstaller extends AbstractActionController
             . "Click 'Agree and Set Up Magento' or read ";
         $docRef = "https://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
         $agreeButtonText = "Agree and Setup Magento";
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/landing.phtml');
         $view->setVariable('version', $this->productMetadata->getVersion());

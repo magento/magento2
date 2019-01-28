@@ -187,8 +187,8 @@ class Application
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
-        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool();
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);

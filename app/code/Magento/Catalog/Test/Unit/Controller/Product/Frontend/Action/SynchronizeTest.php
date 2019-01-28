@@ -128,7 +128,7 @@ class SynchronizeTest extends \PHPUnit\Framework\TestCase
 
         $this->synchronizerMock->expects($this->once())
             ->method('syncActions')
-            ->willThrowException(new \Exception);
+            ->willThrowException(new \Exception());
 
         $jsonObject->expects($this->once())
             ->method('setStatusHeader')

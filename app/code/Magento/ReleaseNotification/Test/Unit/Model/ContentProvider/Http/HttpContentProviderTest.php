@@ -98,7 +98,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->httpClientMock->expects($this->once())
             ->method('get')
             ->with($url)
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->httpClientMock->expects($this->never())->method('getBody');
         $this->loggerMock->expects($this->once())
             ->method('warning');

@@ -133,7 +133,7 @@ class AddAttributeToTemplate extends Product implements HttpPostActionInterface
                     ->getItems();
 
                 if (!$attributeGroupItems) {
-                    throw new NoSuchEntityException;
+                    throw new NoSuchEntityException();
                 }
 
                 /** @var AttributeGroupInterface $attributeGroup */

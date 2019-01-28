@@ -194,7 +194,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
         $this->assetPublisherMock->expects(self::once())
             ->method('publish')
             ->with($assetMock)
-            ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException);
+            ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException());
 
         $valueMap = [
             ['area', self::AREA_TEST_VALUE],

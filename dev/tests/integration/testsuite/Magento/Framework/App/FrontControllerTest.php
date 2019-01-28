@@ -44,7 +44,7 @@ class FrontControllerTest extends TestCase
     private function createRequestValidator(): ValidatorInterface
     {
         if (!$this->fakeRequestValidator) {
-            $this->fakeRequestValidator = new class implements ValidatorInterface {
+            $this->fakeRequestValidator = new class() implements ValidatorInterface {
                 /**
                  * @var bool
                  */

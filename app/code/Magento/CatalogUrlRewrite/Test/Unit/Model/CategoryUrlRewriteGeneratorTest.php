@@ -80,7 +80,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
             ['create']
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(

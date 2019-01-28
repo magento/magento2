@@ -40,7 +40,7 @@ class Navigation extends AbstractActionController
     {
         $this->navigation = $navigation;
         $this->status = $status;
-        $this->view = new ViewModel;
+        $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
@@ -50,7 +50,7 @@ class Navigation extends AbstractActionController
      */
     public function indexAction()
     {
-        $json = new JsonModel;
+        $json = new JsonModel();
         $json->setVariable('nav', $this->navigation->getData());
         $json->setVariable('menu', $this->navigation->getMenuItems());
         $json->setVariable('main', $this->navigation->getMainItems());

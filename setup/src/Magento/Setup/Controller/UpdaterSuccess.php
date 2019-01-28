@@ -32,7 +32,7 @@ class UpdaterSuccess extends AbstractActionController
     public function indexAction()
     {
         $this->maintenanceMode->set(false);
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }

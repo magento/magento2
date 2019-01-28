@@ -122,7 +122,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         foreach (['semantic', 'mixed', 'arbitrary'] as $filePath) {
             $realPaths[] = $this->fixturePath . '/' . $filePath . '/' . $componentName . '.xml';
         }
-        return new FileIterator(new ReadFactory(new DriverPool), $realPaths);
+        return new FileIterator(new ReadFactory(new DriverPool()), $realPaths);
     }
 
     /**

@@ -77,7 +77,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
             $path . '/module_one/ui_component/' . $filename,
             $path . '/module_two/ui_component/' . $filename
         ];
-        return new FileIterator(new ReadFactory(new DriverPool), $paths);
+        return new FileIterator(new ReadFactory(new DriverPool()), $paths);
     }
 
     /**

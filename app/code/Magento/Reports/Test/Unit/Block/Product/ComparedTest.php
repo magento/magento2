@@ -47,7 +47,7 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetModelException()
     {
-        $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException);
+        $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException());
 
         $this->sut->getModel();
     }

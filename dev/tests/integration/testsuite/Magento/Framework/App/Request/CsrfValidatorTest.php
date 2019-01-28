@@ -69,7 +69,7 @@ class CsrfValidatorTest extends TestCase
      */
     private function createUnawareAction(): ActionInterface
     {
-        return new class implements ActionInterface {
+        return new class() implements ActionInterface {
             /**
              * @inheritDoc
              */

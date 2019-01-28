@@ -113,7 +113,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new NoSuchEntityException);
+            ->willThrowException(new NoSuchEntityException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);
@@ -135,7 +135,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new StoreIsInactiveException);
+            ->willThrowException(new StoreIsInactiveException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);
@@ -157,7 +157,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new InvalidArgumentException);
+            ->willThrowException(new InvalidArgumentException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);

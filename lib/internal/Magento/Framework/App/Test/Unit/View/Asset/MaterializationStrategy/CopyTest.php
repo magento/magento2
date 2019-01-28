@@ -17,7 +17,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->copyPublisher = new Copy;
+        $this->copyPublisher = new Copy();
     }
 
     public function testPublishFile()
