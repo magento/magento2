@@ -187,16 +187,16 @@
     <!-- Check order summary in checkout -->
     <actionGroup name="CheckOrderSummaryInCheckoutActionGroup">
         <arguments>
-            <argument name="subtotal"/>
-            <argument name="shippingTotal"/>
-            <argument name="shippingMethod"/>
-            <argument name="total"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="shippingTotal" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <see userInput="${{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
-        <see userInput="${{shippingTotal}}" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="{{shippingTotal}}" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
         <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
-        <see userInput="${{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
+        <see userInput="{{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
    </actionGroup>
 
     <actionGroup name="CheckTotalsSortOrderInSummarySection">
