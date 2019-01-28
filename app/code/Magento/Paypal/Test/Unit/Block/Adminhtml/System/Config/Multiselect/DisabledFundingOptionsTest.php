@@ -17,7 +17,6 @@ use \PHPUnit\Framework\TestCase;
 
 /**
  * Class DisabledFundingOptionsTest
- * @package Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Multiselect
  */
 class DisabledFundingOptionsTest extends TestCase
 {
@@ -69,13 +68,16 @@ class DisabledFundingOptionsTest extends TestCase
     }
 
     /**
-     * @param string $requestCountry
-     * @param string $merchantCountry
+     * @param null|string $requestCountry
+     * @param null|string $merchantCountry
      * @param bool $shouldContainPaypalCredit
      * @dataProvider isPaypalCreditAvailableDataProvider
      */
-    public function testIsPaypalCreditAvailable($requestCountry, $merchantCountry, $shouldContainPaypalCredit)
-    {
+    public function testIsPaypalCreditAvailable(
+        ?string $requestCountry,
+        ?string $merchantCountry,
+        bool $shouldContainPaypalCredit
+    ) {
         $this->request->expects($this->any())
             ->method('getParam')
             ->will($this->returnCallback(function ($param) use ($requestCountry) {
