@@ -78,7 +78,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
@@ -122,7 +122,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function get($cartId)
     {
