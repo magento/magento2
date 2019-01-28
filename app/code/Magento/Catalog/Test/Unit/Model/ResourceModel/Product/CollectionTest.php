@@ -320,7 +320,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->exactly(2))->method('where')
             ->withConsecutive(
                 ['entity_id IN(?)', [1]],
-                [ '(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
+                ['(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
             )
             ->willReturnSelf();
         $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();

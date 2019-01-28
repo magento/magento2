@@ -559,7 +559,7 @@ QUERY;
         $product = $productRepository->get('simple333');
         $categoryIds  = $product->getCategoryIds();
         foreach ($categoryIds as $index => $value) {
-            $categoryIds[$index] = [ 'id' => (int)$value];
+            $categoryIds[$index] = ['id' => (int)$value];
         }
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
         $this->assertNotNull($response['products']['items'][0]['categories'], "categories must not be null");

@@ -119,7 +119,7 @@ class CartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         ];
         $itemArray = [
             'name' => 'item',
-            'options' => [ 4 => ['label' => 'justLabel']],
+            'options' => [4 => ['label' => 'justLabel']],
         ];
         $currencyCode = 'US';
 

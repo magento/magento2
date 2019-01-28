@@ -856,7 +856,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testValidateRowCheckSpecifiedSku($sku, $expectedError)
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
-            [ 'addRowError', 'getOptionEntity', 'getRowScope'],
+            ['addRowError', 'getOptionEntity', 'getRowScope'],
             ['isRowInvalid' => true]
         );
 
@@ -899,7 +899,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testValidateRowValidateExistingProductTypeAddNewSku()
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
-            [ 'addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity'],
             ['isRowInvalid' => true]
         );
 

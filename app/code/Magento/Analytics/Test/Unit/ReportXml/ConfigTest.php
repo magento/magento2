@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $queryName = 'query string';
-        $queryResult = [ 'query' => 1 ];
+        $queryResult = ['query' => 1];
 
         $this->dataMock
             ->expects($this->once())

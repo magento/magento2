@@ -274,7 +274,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'attribute_code';
         $dir = \Magento\Framework\DB\Select::SQL_ASC;
         $collection = $this->getMockBuilder(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class)
-            ->setMethods([ 'getSelect', 'getStoreId'])
+            ->setMethods(['getSelect', 'getStoreId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

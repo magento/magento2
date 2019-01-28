@@ -123,7 +123,7 @@ class CouponManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'generate',
             ],
         ];
-        $requestData = [  "couponSpec"=>
+        $requestData = ["couponSpec"=>
             [
                 "rule_id" => $ruleId,
                 "quantity"  => $count,

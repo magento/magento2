@@ -46,7 +46,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->buttonMock);
         $this->buttonList = $this->objectManager->getObject(
             \Magento\Backend\Block\Widget\Button\ButtonList::class,
-            [ 'itemFactory' => $this->itemFactoryMock]
+            ['itemFactory' => $this->itemFactoryMock]
         );
         $this->urlBuilderMock = $this->getMockForAbstractClass(
             \Magento\Framework\UrlInterface::class,

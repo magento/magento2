@@ -530,7 +530,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->with($templateSubject)
             ->will($this->returnValue($expectedResult));
 
-        $variables = [ 'key' => 'value' ];
+        $variables = ['key' => 'value'];
         $filterTemplate->expects($this->once())
             ->method('setVariables')
             ->with(array_merge($variables, ['this' => $model]));
@@ -647,7 +647,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('cancelDesignConfig')
             ->will($this->returnValue(true));
 
-        $vars = [ 'key' => 'value' ];
+        $vars = ['key' => 'value'];
         $model->setVars($vars);
         $model->expects($this->once())
             ->method('getProcessedTemplate')

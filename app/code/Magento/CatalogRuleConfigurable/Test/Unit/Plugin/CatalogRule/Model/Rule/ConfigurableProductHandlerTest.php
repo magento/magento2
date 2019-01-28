@@ -77,8 +77,8 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
         $this->configurableProductsProviderMock->expects($this->once())->method('getIds')
             ->willReturn(['conf1', 'conf2']);
         $this->configurableMock->expects($this->any())->method('getChildrenIds')->willReturnMap([
-            ['conf1', true, [ 0 => ['simple1']]],
-            ['conf2', true, [ 0 => ['simple1', 'simple2']]],
+            ['conf1', true, [0 => ['simple1']]],
+            ['conf2', true, [0 => ['simple1', 'simple2']]],
         ]);
 
         $this->assertEquals(

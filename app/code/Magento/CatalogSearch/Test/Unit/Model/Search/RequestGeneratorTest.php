@@ -65,7 +65,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
                     'advanced_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
                     'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
-                ['sku', 'static', 0, 0, 1 ]
+                ['sku', 'static', 0, 0, 1]
             ],
             [
                 [

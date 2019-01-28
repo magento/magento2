@@ -171,7 +171,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                                             'finalPrice' =>['amount' => 321.50],
                                         ],
                                 ],
-                                'otherkey' => [ 1, 2 , 3],
+                                'otherkey' => [1, 2 , 3],
                             ]
                         ],
                     ],
@@ -193,7 +193,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                                             'weeePrice' => ['amount' => 321.50],
                                         ],
                                 ],
-                                'otherkey' => [ 1, 2 , 3],
+                                'otherkey' => [1, 2 , 3],
                             ]
                         ],
                     ],

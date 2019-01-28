@@ -34,7 +34,7 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
         $document1 = $this->createMock(DocumentInterface::class);
         $document2 = $this->createMock(DocumentInterface::class);
 
-        $this->items = [ $document1,  $document2];
+        $this->items = [$document1,  $document2];
         $document1->expects($this->any())
             ->method('getId')
             ->willReturn(1);

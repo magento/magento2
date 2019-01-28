@@ -229,7 +229,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $this->assertEquals($rateClassData['zip_to'], $class->getZipTo());
         }
 
-        $postData = [ 'id' => $rateClassId ];
+        $postData = ['id' => $rateClassId];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/tax/rate/ajaxLoad');
         $jsonBody = $this->getResponse()->getBody();
@@ -265,7 +265,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxNonLoadAction()
     {
-        $postData = [ 'id' => 99999999 ];
+        $postData = ['id' => 99999999];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/tax/rate/ajaxLoad');
         $jsonBody = $this->getResponse()->getBody();

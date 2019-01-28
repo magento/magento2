@@ -164,10 +164,10 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function executeDataProvider()
     {
         return [
-            [ false, ['error' => false]],
-            [ true, ['error' => false]],
-            [ __('Variable Code must be unique.'), ['error' => true, 'html_message' => null]],
-            [ __('Validation has failed.'), ['error' => true, 'html_message' => null]],
+            [false, ['error' => false]],
+            [true, ['error' => false]],
+            [__('Variable Code must be unique.'), ['error' => true, 'html_message' => null]],
+            [__('Validation has failed.'), ['error' => true, 'html_message' => null]],
         ];
     }
 }

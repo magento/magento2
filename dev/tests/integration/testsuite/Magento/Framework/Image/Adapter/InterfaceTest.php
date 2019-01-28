@@ -397,32 +397,32 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     $this->_getFixture('watermark_alpha_base_image.jpg'),
                     $this->_getFixture('watermark_alpha.png'),
                     25,
-                    [ 23, 3 ],
-                    [ 23, 30 ]
+                    [23, 3],
+                    [23, 30]
                 ],
                 // Watermark with alpha channel, 50%
                 [
                     $this->_getFixture('watermark_alpha_base_image.jpg'),
                     $this->_getFixture('watermark_alpha.png'),
                     50,
-                    [ 23, 3 ],
-                    [ 23, 30 ]
+                    [23, 3],
+                    [23, 30]
                 ],
                 // Watermark with no alpha channel, 50%
                 [
                     $this->_getFixture('watermark_alpha_base_image.jpg'),
                     $this->_getFixture('watermark.png'),
                     50,
-                    [ 3, 3 ],
-                    [ 23,3 ]
+                    [3, 3],
+                    [23,3]
                 ],
                 // Watermark with no alpha channel, 100%
                 [
                     $this->_getFixture('watermark_alpha_base_image.jpg'),
                     $this->_getFixture('watermark.png'),
                     100,
-                    [ 3, 3 ],
-                    [ 3, 60 ]
+                    [3, 3],
+                    [3, 60]
                 ],
             ]
         );

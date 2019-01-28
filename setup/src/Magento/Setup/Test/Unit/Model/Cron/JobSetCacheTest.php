@@ -31,9 +31,9 @@ class JobSetCacheTest extends \PHPUnit\Framework\TestCase
         $cleanupFiles = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
         $cache = $this->createMock(\Magento\Framework\App\Cache::class);
         $valueMap = [
-            [ \Magento\Framework\Module\PackageInfoFactory::class],
-            [ \Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
-            [ \Magento\Framework\App\Cache::class, $cache],
+            [\Magento\Framework\Module\PackageInfoFactory::class],
+            [\Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
+            [\Magento\Framework\App\Cache::class, $cache],
         ];
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);

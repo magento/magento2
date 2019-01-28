@@ -328,14 +328,14 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
     public function collectRatesDataProvider()
     {
         return [
-            [0, 0, '/_files/ups_rates_response_option1.xml', '11', 6.45 ],
-            [0, 0, '/_files/ups_rates_response_option2.xml', '65', 29.59 ],
-            [0, 1, '/_files/ups_rates_response_option3.xml', '11', 7.74 ],
-            [0, 1, '/_files/ups_rates_response_option4.xml', '65', 29.59 ],
-            [1, 0, '/_files/ups_rates_response_option5.xml', '11', 9.35 ],
-            [1, 0, '/_files/ups_rates_response_option6.xml', '65', 41.61 ],
-            [1, 1, '/_files/ups_rates_response_option7.xml', '11', 11.22 ],
-            [1, 1, '/_files/ups_rates_response_option8.xml', '65', 41.61 ],
+            [0, 0, '/_files/ups_rates_response_option1.xml', '11', 6.45],
+            [0, 0, '/_files/ups_rates_response_option2.xml', '65', 29.59],
+            [0, 1, '/_files/ups_rates_response_option3.xml', '11', 7.74],
+            [0, 1, '/_files/ups_rates_response_option4.xml', '65', 29.59],
+            [1, 0, '/_files/ups_rates_response_option5.xml', '11', 9.35],
+            [1, 0, '/_files/ups_rates_response_option6.xml', '65', 41.61],
+            [1, 1, '/_files/ups_rates_response_option7.xml', '11', 11.22],
+            [1, 1, '/_files/ups_rates_response_option8.xml', '65', 41.61],
         ];
     }
 }

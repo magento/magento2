@@ -111,7 +111,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                             'phrase' => 'php phrase111',
                             'quote' => "'"
                         ],
-                        [   'phrase' => 'php phrase112',
+                        ['phrase' => 'php phrase112',
                             'quote' => '"'
                         ]
                     ],
@@ -120,7 +120,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                             'phrase' => 'php phrase121',
                             'quote' => "'"
                         ],
-                        [   'phrase' => 'php phrase122',
+                        ['phrase' => 'php phrase122',
                             'quote' => '"'
                         ]
                     ],
@@ -132,7 +132,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                             'phrase' => 'js phrase111',
                             'quote' => "'"
                         ],
-                        [   'phrase' => 'js phrase112',
+                        ['phrase' => 'js phrase112',
                             'quote' => '"'
                         ]
                     ],
@@ -141,7 +141,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
                             'phrase' => 'js phrase121',
                             'quote' => "'"
                         ],
-                        [   'phrase' => 'js phrase122',
+                        ['phrase' => 'js phrase122',
                             'quote' => '"'
                         ]
                     ],

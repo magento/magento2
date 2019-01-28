@@ -359,7 +359,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $data['option_id'] = $fixtureOption->getId();
             $valueObject = $this->_webApiCall(
                 $serviceInfo,
-                [ 'option_id' => $fixtureOption->getId(), 'option' => $data]
+                ['option_id' => $fixtureOption->getId(), 'option' => $data]
             );
         } else {
             $valueObject = $this->_webApiCall($serviceInfo, ['option' => $data]);

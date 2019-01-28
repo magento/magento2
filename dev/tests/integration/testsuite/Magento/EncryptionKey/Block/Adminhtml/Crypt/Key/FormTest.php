@@ -45,7 +45,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $generateRandomField = $form->getElement('generate_random');
         $this->assertEquals('select', $generateRandomField->getType());
-        $this->assertEquals([ 0 => 'No', 1 => 'Yes'], $generateRandomField->getOptions());
+        $this->assertEquals([0 => 'No', 1 => 'Yes'], $generateRandomField->getOptions());
 
         $cryptKeyField = $form->getElement('crypt_key');
         $this->assertEquals('text', $cryptKeyField->getType());

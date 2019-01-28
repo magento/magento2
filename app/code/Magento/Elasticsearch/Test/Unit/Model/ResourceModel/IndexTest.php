@@ -309,7 +309,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                     1 => 1,
                 ],
             ],
-            $this->model->getPriceIndexData([1 ], 1)
+            $this->model->getPriceIndexData([1], 1)
         );
     }
 
@@ -344,7 +344,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [],
-            $this->model->getPriceIndexData([1 ], 1)
+            $this->model->getPriceIndexData([1], 1)
         );
     }
 

@@ -50,7 +50,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->templateModel);
         $this->model = $objectManager->create(
             \Magento\Theme\Model\Design\Config\Validator::class,
-            [ 'templateFactory' => $this->templateFactoryMock ]
+            ['templateFactory' => $this->templateFactoryMock]
         );
     }
 

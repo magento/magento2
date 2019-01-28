@@ -83,7 +83,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function regionProvider()
     {
-        return [ [1, null], [null, 1]];
+        return [[1, null], [null, 1]];
     }
 
     /**

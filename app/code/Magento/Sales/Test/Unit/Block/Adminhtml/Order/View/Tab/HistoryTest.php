@@ -91,7 +91,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     public function testGetItemCreatedAtDate()
     {
         $date = new \DateTime;
-        $item = ['created_at' => $date ];
+        $item = ['created_at' => $date];
 
         $this->localeDateMock->expects($this->once())
             ->method('formatDateTime')
@@ -104,7 +104,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     public function testGetItemCreatedAtTime()
     {
         $date = new \DateTime;
-        $item = ['created_at' => $date ];
+        $item = ['created_at' => $date];
 
         $this->localeDateMock->expects($this->once())
             ->method('formatDateTime')
@@ -116,7 +116,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetItemCreatedAtEmpty()
     {
-        $item = ['title' => "Test" ];
+        $item = ['title' => "Test"];
 
         $this->localeDateMock->expects($this->never())->method('formatDateTime');
         $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item));

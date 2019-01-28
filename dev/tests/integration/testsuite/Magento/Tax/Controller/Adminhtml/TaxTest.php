@@ -71,7 +71,7 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals($taxClassData['class_name'], $class->getClassName());
         $this->assertEquals($taxClassData['class_type'], $class->getClassType());
 
-        $postData = [ 'class_id' => $taxClassId ];
+        $postData = ['class_id' => $taxClassId];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/tax/tax/ajaxDelete');
 

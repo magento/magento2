@@ -39,7 +39,7 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
             \Magento\Webapi\Controller\Rest\ParamsOverrider::class,
-            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
+            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId]]
         );
 
         $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));

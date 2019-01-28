@@ -34,7 +34,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildWithSimpleField()
     {
-        $document = [ 'fieldName' => 'fieldValue'];
+        $document = ['fieldName' => 'fieldValue'];
         $field = 'fieldName';
         $value = 'fieldValue';
 

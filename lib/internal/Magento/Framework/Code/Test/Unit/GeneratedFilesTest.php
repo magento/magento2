@@ -85,13 +85,13 @@ class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
         ];
 
         return [
-            'runAll' => [ $getPathMap, [[BP . '/' . $pathToGeneration, true],
-                [BP . '/' . $pathToDi, true]], $deleteMap ],
-            'noDIfolder' => [ $getPathMap, [[BP . '/' . $pathToGeneration, true],
+            'runAll' => [$getPathMap, [[BP . '/' . $pathToGeneration, true],
+                [BP . '/' . $pathToDi, true]], $deleteMap],
+            'noDIfolder' => [$getPathMap, [[BP . '/' . $pathToGeneration, true],
                 [BP . '/' . $pathToDi, false]], $deleteMap],
             'noGenerationfolder' => [$getPathMap, [[BP . '/' . $pathToGeneration, false],
                 [BP . '/' . $pathToDi, true]], $deleteMap],
-            'nofolders' => [ $getPathMap, [[BP . '/' . $pathToGeneration, false],
+            'nofolders' => [$getPathMap, [[BP . '/' . $pathToGeneration, false],
                 [BP . '/' . $pathToDi, false]], $deleteMap],
         ];
     }

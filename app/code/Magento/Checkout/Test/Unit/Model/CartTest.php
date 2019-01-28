@@ -432,7 +432,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         return [
             'prod_int_info_int' => [4, 4],
-            'prod_int_info_array' => [ 4, $data],
+            'prod_int_info_array' => [4, $data],
             'prod_int_info_object' => [
                 4,
                 $obj->getObject(
@@ -441,7 +441,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
                 )
             ],
             'prod_obj_info_int' => [null, 4],
-            'prod_obj_info_array' => [ null, $data],
+            'prod_obj_info_array' => [null, $data],
             'prod_obj_info_object' => [
                 null,
                 $obj->getObject(

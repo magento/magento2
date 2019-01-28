@@ -123,7 +123,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceWebsiteInvalid']],
+                ['result' => false, 'messages' => [0 => 'tierPriceWebsiteInvalid']],
             ],
             'invalidIncomplete1' => [
                 [
@@ -131,7 +131,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceDataIsIncomplete']],
+                ['result' => false, 'messages' => [0 => 'tierPriceDataIsIncomplete']],
             ],
             'invalidIncomplete2' => [
                 [
@@ -139,7 +139,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceDataIsIncomplete']],
+                ['result' => false, 'messages' => [0 => 'tierPriceDataIsIncomplete']],
             ],
             'invalidIncomplete3' => [
                 [
@@ -147,7 +147,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceDataIsIncomplete']],
+                ['result' => false, 'messages' => [0 => 'tierPriceDataIsIncomplete']],
             ],
             'invalidSite' => [
                 [
@@ -158,7 +158,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceWebsiteInvalid']],
+                ['result' => false, 'messages' => [0 => 'tierPriceWebsiteInvalid']],
             ],
             'invalidGroup' => [
                 [
@@ -169,7 +169,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 2,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'tierPriceGroupInvalid']],
+                ['result' => false, 'messages' => [0 => 'tierPriceGroupInvalid']],
             ],
             'invalidQty' => [
                 [
@@ -180,7 +180,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                 ],
                 1,
                 null,
-                ['result' => false, 'messages' => [ 0 => 'invalidTierPriceOrQty']],
+                ['result' => false, 'messages' => [0 => 'invalidTierPriceOrQty']],
             ],
         ];
     }

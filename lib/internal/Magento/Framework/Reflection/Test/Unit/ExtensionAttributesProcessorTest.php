@@ -124,7 +124,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue([
                 $dataObjectType => [
-                    $attributeName => [ Converter::RESOURCE_PERMISSIONS => [ $permissionName ] ]
+                    $attributeName => [Converter::RESOURCE_PERMISSIONS => [$permissionName]]
                 ]
               ]));
         $this->authorizationMock->expects($this->once())

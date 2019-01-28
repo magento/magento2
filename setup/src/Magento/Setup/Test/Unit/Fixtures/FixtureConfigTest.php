@@ -40,7 +40,7 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
     public function testLoadConfig()
     {
         $this->fileParserMock->expects($this->exactly(2))->method('xmlToArray')->willReturn(
-            ['config' => [ 'profile' => ['some_key' => 'some_value']]]
+            ['config' => ['profile' => ['some_key' => 'some_value']]]
         );
 
         $domMock = $this->createPartialMock(\DOMDocument::class, ['load', 'xinclude']);

@@ -41,7 +41,7 @@ class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
         $requestInfoFilterMock2->expects($this->atLeastOnce())
             ->method('filter');
 
-        $filterList = [ $requestInfoFilterMock1, $requestInfoFilterMock2];
+        $filterList = [$requestInfoFilterMock1, $requestInfoFilterMock2];
 
         $this->model = $this->objectManager->getObject(
             \Magento\Checkout\Model\Cart\RequestInfoFilterComposite::class,

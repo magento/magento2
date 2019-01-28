@@ -204,7 +204,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function renewPersistentCookieDataProvider()
     {
         return [
-            'no duration' => [0, 0, null ],
+            'no duration' => [0, 0, null],
             'no cookie' => [1, 0, 1000, null],
             'all' => [1, 1],
         ];

@@ -98,7 +98,7 @@ class GuestTest extends \PHPUnit\Framework\TestCase
                 ->getMock();
         $this->orderRepository->method('getList')->willReturn($orderSearchResult);
         $orderSearchResult->method('getTotalCount')->willReturn(1);
-        $orderSearchResult->method('getItems')->willReturn([ 2 => $this->salesOrderMock]);
+        $orderSearchResult->method('getItems')->willReturn([2 => $this->salesOrderMock]);
         $searchCriteria = $this
             ->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
