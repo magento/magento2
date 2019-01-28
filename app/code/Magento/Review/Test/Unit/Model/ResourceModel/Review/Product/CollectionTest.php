@@ -73,7 +73,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $universalFactory->expects($this->any())->method('create')->will($this->returnValue($entity));
         $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $fetchStrategy = $this->getMock(
             \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
@@ -83,7 +83,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             false
         );
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $productLimitationMock = $this->getMock(
+        $productLimitationMock = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
