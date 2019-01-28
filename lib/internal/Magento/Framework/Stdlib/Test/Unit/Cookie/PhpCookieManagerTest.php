@@ -18,6 +18,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
     use Magento\Framework\Phrase;
     use Magento\Framework\HTTP\Header as HttpHeader;
     use Psr\Log\LoggerInterface;
+
     // @codingStandardsIgnoreEnd
 
     /**

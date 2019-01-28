@@ -6,7 +6,7 @@
 namespace Magento\Tax\Test\Unit\Model;
 
 use \Magento\Tax\Model\TaxRateCollection;
- 
+
 class TaxRateCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
