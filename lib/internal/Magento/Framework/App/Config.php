@@ -90,7 +90,7 @@ class Config implements ScopeConfigInterface
      */
     public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
-        return !!$this->getValue($path, $scope, $scopeCode);
+        return (bool)$this->getValue($path, $scope, $scopeCode);
     }
 
     /**

@@ -96,7 +96,7 @@ class RouterList implements RouterListInterface
      */
     public function valid()
     {
-        return !!current($this->routerList);
+        return (bool)current($this->routerList);
     }
 
     /**

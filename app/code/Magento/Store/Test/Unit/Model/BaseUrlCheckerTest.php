@@ -80,7 +80,7 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with('web/url/redirect_to_base', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(!!1);
+            ->willReturn((bool)1);
         $this->assertTrue($this->baseUrlChecker->isEnabled());
     }
 
@@ -97,7 +97,7 @@ class BaseUrlCheckerTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with('web/secure/use_in_frontend', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(!!1);
+            ->willReturn((bool)1);
 
         $this->assertTrue($this->baseUrlChecker->isFrontendSecure());
     }
