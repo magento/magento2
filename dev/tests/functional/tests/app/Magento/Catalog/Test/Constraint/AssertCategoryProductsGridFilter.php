@@ -88,7 +88,7 @@ class AssertCategoryProductsGridFilter extends AbstractConstraint
      *
      * @return string
      */
-    public function toString() : string
+    public function toString(): string
     {
         return 'Category products grid filter works correctly';
     }

@@ -72,7 +72,7 @@ class TablesWhitelistGenerateCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleName = $input->getOption(self::MODULE_NAME_KEY);
 

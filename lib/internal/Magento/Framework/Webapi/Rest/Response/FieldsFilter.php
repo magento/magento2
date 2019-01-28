@@ -203,7 +203,7 @@ class FieldsFilter
      * @param array $filter
      * @return array
      */
-    private function filterCustomAttributes(array $item, array $filter) : array
+    private function filterCustomAttributes(array $item, array $filter): array
     {
         $fieldResult = [];
         foreach ($item as $key => $field) {

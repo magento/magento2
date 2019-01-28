@@ -75,7 +75,7 @@ class InterfaceFactory implements ConfigElementFactoryInterface
     public function create(
         array $interfaceData,
         array $fields
-    ) : InterfaceType {
+    ): InterfaceType {
         return $this->objectManager->create(
             InterfaceType::class,
             [

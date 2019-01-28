@@ -16,7 +16,7 @@ class GetSelectedTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testExecute() : void
+    public function testExecute(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -32,7 +32,7 @@ class GetSelectedTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         );
     }
 
-    public function testExecuteNonExistingSearchKey() : void
+    public function testExecuteNonExistingSearchKey(): void
     {
         $this->getRequest()
             ->setPostValue('productId', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');

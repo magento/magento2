@@ -42,7 +42,7 @@ class SearchFilter
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchCriteriaInterface
      */
-    public function add(string $searchTerm, SearchCriteriaInterface $searchCriteria) : SearchCriteriaInterface
+    public function add(string $searchTerm, SearchCriteriaInterface $searchCriteria): SearchCriteriaInterface
     {
         $searchTermFilter = $this->filterBuilder->setField('search_term')->setValue($searchTerm)->create();
         $this->filterGroupBuilder->addFilter($searchTermFilter);

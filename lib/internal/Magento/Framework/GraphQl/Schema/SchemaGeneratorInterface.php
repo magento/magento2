@@ -19,5 +19,5 @@ interface SchemaGeneratorInterface
      *
      * @return Schema
      */
-    public function generate() : Schema;
+    public function generate(): Schema;
 }

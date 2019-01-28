@@ -40,7 +40,7 @@ class PageSizeProvider
      *
      * @return integer
      */
-    public function getMaxPageSize() : int
+    public function getMaxPageSize(): int
     {
         $searchEngine = $this->engineResolver->getCurrentSearchEngine();
 

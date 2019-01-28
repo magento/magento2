@@ -50,7 +50,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
      */
-    private function modifyHeightAndContentCss(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    private function modifyHeightAndContentCss(\Magento\Framework\DataObject $config): \Magento\Framework\DataObject
     {
         return $config->addData(
             [
@@ -68,7 +68,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      */
     private function removeSpecialCharacterFromToolbar(
         \Magento\Framework\DataObject $config
-    ) : \Magento\Framework\DataObject {
+    ): \Magento\Framework\DataObject {
         $tinymce4 = $config->getData('tinymce4');
         if (isset($tinymce4['toolbar']) && isset($tinymce4['plugins'])) {
             $toolbar = $tinymce4['toolbar'];

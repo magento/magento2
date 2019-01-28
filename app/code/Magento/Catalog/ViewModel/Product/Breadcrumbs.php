@@ -99,7 +99,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      *
      * @return string
      */
-    public function getJsonConfigurationHtmlEscaped() : string
+    public function getJsonConfigurationHtmlEscaped(): string
     {
         return json_encode(
             [

@@ -31,7 +31,7 @@ class Feed implements FeedInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormattedContent() : string
+    public function getFormattedContent(): string
     {
         return FeedFactory::factory($this->feeds)->export(FeedFactoryInterface::FORMAT_RSS);
     }

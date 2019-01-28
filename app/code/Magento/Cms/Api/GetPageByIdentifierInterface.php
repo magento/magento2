@@ -19,5 +19,5 @@ interface GetPageByIdentifierInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Cms\Api\Data\PageInterface
      */
-    public function execute(string $identifier, int $storeId) : \Magento\Cms\Api\Data\PageInterface;
+    public function execute(string $identifier, int $storeId): \Magento\Cms\Api\Data\PageInterface;
 }

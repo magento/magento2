@@ -36,7 +36,7 @@ class Filters
      * @param string $layerType
      * @return array
      */
-    public function getData(string $layerType) : array
+    public function getData(string $layerType): array
     {
         $filtersData = [];
         /** @var AbstractFilter $filter */

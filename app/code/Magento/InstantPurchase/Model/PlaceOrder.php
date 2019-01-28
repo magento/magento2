@@ -97,7 +97,7 @@ class PlaceOrder
         InstantPurchaseOption $instantPurchaseOption,
         Product $product,
         array $productRequest
-    ) : int {
+    ): int {
         $quote = $this->quoteCreation->createQuote(
             $store,
             $customer,

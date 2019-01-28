@@ -44,7 +44,7 @@ class ArgumentApplierPool
      * @return ArgumentApplierInterface
      * @throws \LogicException
      */
-    public function getApplier(string $argumentName) : ArgumentApplierInterface
+    public function getApplier(string $argumentName): ArgumentApplierInterface
     {
         if (isset($this->appliers[$argumentName])) {
             return $this->objectManager->get($this->appliers[$argumentName]);
@@ -59,7 +59,7 @@ class ArgumentApplierPool
      * @param string $argumentName
      * @return bool
      */
-    public function hasApplier(string $argumentName) : bool
+    public function hasApplier(string $argumentName): bool
     {
         if (isset($this->appliers[$argumentName])) {
             return true;

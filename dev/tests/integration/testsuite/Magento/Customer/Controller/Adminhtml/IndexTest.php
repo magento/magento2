@@ -514,7 +514,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ): \PHPUnit_Framework_MockObject_MockObject {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();

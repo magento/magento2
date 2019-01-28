@@ -40,7 +40,7 @@ class Collection
      *
      * @return AttributeCollection
      */
-    public function getAttributes() : AttributeCollection
+    public function getAttributes(): AttributeCollection
     {
         if (!$this->collection) {
             $this->collection = $this->collectionFactory->create();
@@ -75,7 +75,7 @@ class Collection
      * @param string[] $fieldNames
      * @return string[]
      */
-    public function getRequestAttributes(array $fieldNames) : array
+    public function getRequestAttributes(array $fieldNames): array
     {
         $attributes = $this->getAttributes();
         $attributeNames = [];

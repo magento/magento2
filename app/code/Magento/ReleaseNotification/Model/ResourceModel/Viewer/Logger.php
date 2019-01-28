@@ -53,7 +53,7 @@ class Logger
      * @param string $lastViewVersion
      * @return bool
      */
-    public function log(int $viewerId, string $lastViewVersion) : bool
+    public function log(int $viewerId, string $lastViewVersion): bool
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
@@ -76,7 +76,7 @@ class Logger
      * @param int $viewerId
      * @return Log
      */
-    public function get(int $viewerId) : Log
+    public function get(int $viewerId): Log
     {
         return $this->logFactory->create(['data' => $this->loadLogData($viewerId)]);
     }
@@ -87,7 +87,7 @@ class Logger
      * @param int $viewerId
      * @return array
      */
-    private function loadLogData(int $viewerId) : array
+    private function loadLogData(int $viewerId): array
     {
         $connection = $this->resource->getConnection();
         $select = $connection->select()

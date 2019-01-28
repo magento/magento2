@@ -59,7 +59,7 @@ class Product
      * @param string $sku
      * @return void
      */
-    public function addProductSku(string $sku) : void
+    public function addProductSku(string $sku): void
     {
         if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
             $this->productList = [];
@@ -75,7 +75,7 @@ class Product
      * @param array $skus
      * @return void
      */
-    public function addProductSkus(array $skus) : void
+    public function addProductSkus(array $skus): void
     {
         foreach ($skus as $sku) {
             if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
@@ -93,7 +93,7 @@ class Product
      * @param array $attributeCodes
      * @return void
      */
-    public function addEavAttributes(array $attributeCodes) : void
+    public function addEavAttributes(array $attributeCodes): void
     {
         $this->attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
     }
@@ -104,7 +104,7 @@ class Product
      * @param string $sku
      * @return array
      */
-    public function getProductBySku(string $sku) : array
+    public function getProductBySku(string $sku): array
     {
         $products = $this->fetch();
 
@@ -120,7 +120,7 @@ class Product
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->productSkus) || !empty($this->productList)) {
             return $this->productList;

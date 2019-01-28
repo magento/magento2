@@ -97,7 +97,7 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
     protected function expectedComposerArguments(
         array $sampleDataPackages,
         string $pathToComposerJson
-    ) : array {
+    ): array {
         return [
             'command' => 'remove',
             '--working-dir' => $pathToComposerJson,

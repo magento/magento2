@@ -36,7 +36,7 @@ class Result
      * @param string $value
      * @return void
      */
-    public function setValue(string $value) : void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -46,7 +46,7 @@ class Result
      *
      * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -57,7 +57,7 @@ class Result
      * @param string $remainder
      * @return void
      */
-    public function setRemainder(string $remainder) : void
+    public function setRemainder(string $remainder): void
     {
         $this->remainder = $remainder;
     }
@@ -67,7 +67,7 @@ class Result
      *
      * @return string
      */
-    public function getRemainder() : string
+    public function getRemainder(): string
     {
         return $this->remainder;
     }

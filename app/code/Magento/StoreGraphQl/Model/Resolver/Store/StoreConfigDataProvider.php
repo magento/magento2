@@ -74,7 +74,7 @@ class StoreConfigDataProvider
      *
      * @return array
      */
-    private function getBaseConfigData() : array
+    private function getBaseConfigData(): array
     {
         $store = $this->storeManager->getStore();
         $storeConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));

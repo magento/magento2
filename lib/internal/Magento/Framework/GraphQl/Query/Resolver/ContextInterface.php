@@ -25,7 +25,7 @@ interface ContextInterface extends ExtensibleDataInterface
      *
      * @return int
      */
-    public function getUserType() : int;
+    public function getUserType(): int;
 
     /**
      * Set type of a user
@@ -35,14 +35,14 @@ interface ContextInterface extends ExtensibleDataInterface
      * @param int $typeId
      * @return ContextInterface
      */
-    public function setUserType(int $typeId) : ContextInterface;
+    public function setUserType(int $typeId): ContextInterface;
 
     /**
      * Get id of the user
      *
      * @return int
      */
-    public function getUserId() : int;
+    public function getUserId(): int;
 
     /**
      * Set id of a user
@@ -50,7 +50,7 @@ interface ContextInterface extends ExtensibleDataInterface
      * @param int $userId
      * @return ContextInterface
      */
-    public function setUserId(int $userId) : ContextInterface;
+    public function setUserId(int $userId): ContextInterface;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
@@ -67,5 +67,5 @@ interface ContextInterface extends ExtensibleDataInterface
      */
     public function setExtensionAttributes(
         \Magento\Framework\GraphQl\Query\Resolver\ContextExtensionInterface $extensionAttributes
-    ) : ContextInterface;
+    ): ContextInterface;
 }

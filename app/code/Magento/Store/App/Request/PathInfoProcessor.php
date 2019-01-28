@@ -43,7 +43,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      * @param string $pathInfo
      * @return string
      */
-    public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo) : string
+    public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo): string
     {
         //can store code be used in url
         if ((bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)) {
@@ -67,7 +67,7 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
      * @param string $storeCode
      * @return string
      */
-    private function trimStoreCodeFromPathInfo(string $pathInfo, string $storeCode) : ?string
+    private function trimStoreCodeFromPathInfo(string $pathInfo, string $storeCode): ?string
     {
         if (substr($pathInfo, 0, strlen('/' . $storeCode)) == '/'. $storeCode) {
             $pathInfo = substr($pathInfo, strlen($storeCode)+1);

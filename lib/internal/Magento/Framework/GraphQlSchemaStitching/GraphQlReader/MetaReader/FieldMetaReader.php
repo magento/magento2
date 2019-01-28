@@ -40,7 +40,7 @@ class FieldMetaReader
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
      * @return array
      */
-    public function read(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : array
+    public function read(\GraphQL\Type\Definition\FieldDefinition $fieldMeta): array
     {
         $fieldName = $fieldMeta->name;
         $fieldTypeMeta = $fieldMeta->getType();
@@ -92,7 +92,7 @@ class FieldMetaReader
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
      * @return string
      */
-    private function getFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : string
+    private function getFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta): string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $fieldMeta->astNode->directives;

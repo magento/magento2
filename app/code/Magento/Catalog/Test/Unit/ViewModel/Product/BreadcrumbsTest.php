@@ -41,7 +41,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->catalogHelper = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])
@@ -68,7 +68,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testGetCategoryUrlSuffix() : void
+    public function testGetCategoryUrlSuffix(): void
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -81,7 +81,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testIsCategoryUsedInProductUrl() : void
+    public function testIsCategoryUsedInProductUrl(): void
     {
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -98,7 +98,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedName
      * @return void
      */
-    public function testGetProductName($product, string $expectedName) : void
+    public function testGetProductName($product, string $expectedName): void
     {
         $this->catalogHelper->expects($this->atLeastOnce())
             ->method('getProduct')
@@ -110,7 +110,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function productDataProvider() : array
+    public function productDataProvider(): array
     {
         return [
             [$this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test']]), 'Test'],
@@ -125,7 +125,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedJson
      * @return void
      */
-    public function testGetJsonConfiguration($product, string $expectedJson) : void
+    public function testGetJsonConfiguration($product, string $expectedJson): void
     {
         $this->catalogHelper->expects($this->atLeastOnce())
             ->method('getProduct')
@@ -147,7 +147,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function productJsonEncodeDataProvider() : array
+    public function productJsonEncodeDataProvider(): array
     {
         return [
             [
@@ -174,7 +174,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ObjectManager
      */
-    private function getObjectManager() : ObjectManager
+    private function getObjectManager(): ObjectManager
     {
         if (null === $this->objectManager) {
             $this->objectManager = new ObjectManager($this);

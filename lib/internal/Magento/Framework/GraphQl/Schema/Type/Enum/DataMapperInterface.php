@@ -18,5 +18,5 @@ interface DataMapperInterface
      * @param string $enumName
      * @return string[]
      */
-    public function getMappedEnums(string $enumName) : array;
+    public function getMappedEnums(string $enumName): array;
 }

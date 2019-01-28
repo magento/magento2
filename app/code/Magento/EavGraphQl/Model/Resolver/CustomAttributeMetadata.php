@@ -91,7 +91,7 @@ class CustomAttributeMetadata implements ResolverInterface
      * @param array $attribute
      * @return GraphQlInputException
      */
-    private function createInputException(array $attribute) : GraphQlInputException
+    private function createInputException(array $attribute): GraphQlInputException
     {
         $isCodeSet = isset($attribute['attribute_code']);
         $isEntitySet = isset($attribute['entity_type']);

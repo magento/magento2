@@ -92,7 +92,7 @@ class GeneratePatchCommand extends Command
      *
      * @return string
      */
-    private function getPatchTemplate() : string
+    private function getPatchTemplate(): string
     {
         return file_get_contents(__DIR__ . '/patch_template.php.dist');
     }
@@ -101,7 +101,7 @@ class GeneratePatchCommand extends Command
      * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleName = $input->getArgument(self::MODULE_NAME);
         $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME);

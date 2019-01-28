@@ -56,7 +56,7 @@ class CheckoutAgreementsListTest extends WebapiAbstract
      * @param array $requestData
      * @return array
      */
-    private function getServiceInfo(array $requestData) : array
+    private function getServiceInfo(array $requestData): array
     {
         return [
             'soap' => [

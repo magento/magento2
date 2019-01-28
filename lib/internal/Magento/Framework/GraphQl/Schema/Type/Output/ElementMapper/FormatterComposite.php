@@ -31,7 +31,7 @@ class FormatterComposite implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $configElement, OutputTypeInterface $outputType) : array
+    public function format(TypeInterface $configElement, OutputTypeInterface $outputType): array
     {
         $config = [
             'name' => $configElement->getName(),

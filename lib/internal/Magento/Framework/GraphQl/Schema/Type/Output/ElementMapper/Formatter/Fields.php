@@ -162,7 +162,7 @@ class Fields implements FormatterInterface
      * @param array $config
      * @return array
      */
-    private function formatArguments(Field $field, array $config) : array
+    private function formatArguments(Field $field, array $config): array
     {
         foreach ($field->getArguments() as $argument) {
             $inputType = $this->inputMapper->getRepresentation($argument);

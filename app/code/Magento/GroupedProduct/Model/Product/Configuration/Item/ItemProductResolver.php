@@ -40,7 +40,7 @@ class ItemProductResolver implements ItemResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getFinalProduct(ItemInterface $item) : ProductInterface
+    public function getFinalProduct(ItemInterface $item): ProductInterface
     {
         /**
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
@@ -71,7 +71,7 @@ class ItemProductResolver implements ItemResolverInterface
      * @param ItemInterface $item
      * @return Product
      */
-    private function getParentProduct(ItemInterface $item) : Product
+    private function getParentProduct(ItemInterface $item): Product
     {
         $option = $item->getOptionByCode('product_type');
         $product = $item->getProduct();

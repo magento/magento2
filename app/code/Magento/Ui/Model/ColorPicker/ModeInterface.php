@@ -18,5 +18,5 @@ interface ModeInterface
      *
      * @return array
      */
-    public function getConfig() : array ;
+    public function getConfig(): array ;
 }

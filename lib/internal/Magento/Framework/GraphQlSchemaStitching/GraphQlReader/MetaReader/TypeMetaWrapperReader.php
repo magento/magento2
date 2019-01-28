@@ -25,7 +25,7 @@ class TypeMetaWrapperReader
      * @param string $parameterType Argument|OutputField|InputField
      * @return array
      */
-    public function read(\GraphQL\Type\Definition\Type $meta, string $parameterType) : array
+    public function read(\GraphQL\Type\Definition\Type $meta, string $parameterType): array
     {
         $result = [];
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {

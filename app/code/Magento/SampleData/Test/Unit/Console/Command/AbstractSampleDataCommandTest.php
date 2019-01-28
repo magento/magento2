@@ -129,5 +129,5 @@ abstract class AbstractSampleDataCommandTest extends TestCase
     abstract protected function expectedComposerArguments(
         array $sampleDataPackages,
         string $pathToComposerJson
-    ) : array;
+    ): array;
 }

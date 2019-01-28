@@ -22,7 +22,7 @@ class AddSearchKeyConditionToCollection implements AddFilterToCollectionInterfac
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFilter(Collection $collection, $field, $condition = null) : void
+    public function addFilter(Collection $collection, $field, $condition = null): void
     {
         if (isset($condition['fulltext']) && !empty($condition['fulltext'])) {
             $collection->addFieldToFilter(

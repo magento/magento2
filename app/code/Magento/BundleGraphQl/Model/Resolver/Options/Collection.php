@@ -63,7 +63,7 @@ class Collection
      * @param int $parentId
      * @param string $sku
      */
-    public function addParentFilterData(int $parentId, int $parentEntityId, string $sku) : void
+    public function addParentFilterData(int $parentId, int $parentEntityId, string $sku): void
     {
         $this->skuMap[$parentId] = ['sku' => $sku, 'entity_id' => $parentEntityId];
     }
@@ -74,7 +74,7 @@ class Collection
      * @param int $parentId
      * @return array
      */
-    public function getOptionsByParentId(int $parentId) : array
+    public function getOptionsByParentId(int $parentId): array
     {
         $options = $this->fetch();
         if (!isset($options[$parentId])) {
@@ -89,7 +89,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->skuMap) || !empty($this->optionMap)) {
             return $this->optionMap;

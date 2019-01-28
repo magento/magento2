@@ -23,7 +23,7 @@ class Presentation
      * @param Attribute $attribute
      * @return string|null
      */
-    public function getPresentationInputType(Attribute $attribute) :?string
+    public function getPresentationInputType(Attribute $attribute): ?string
     {
         $inputType = $attribute->getFrontendInput();
         if ($inputType == 'textarea' && $attribute->getIsWysiwygEnabled()) {
@@ -39,7 +39,7 @@ class Presentation
      *
      * @return array
      */
-    public function convertPresentationDataToInputType(array $data) : array
+    public function convertPresentationDataToInputType(array $data): array
     {
         if (isset($data['frontend_input']) && $data['frontend_input'] === 'texteditor') {
             $data['is_wysiwyg_enabled'] = 1;

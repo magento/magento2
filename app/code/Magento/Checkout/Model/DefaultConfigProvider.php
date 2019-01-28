@@ -734,7 +734,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
-    private function setLabelsToAttributes(array $customAttributes) : array
+    private function setLabelsToAttributes(array $customAttributes): array
     {
         if (!empty($customAttributes)) {
             foreach ($customAttributes as $customAttributeCode => $customAttribute) {
@@ -757,7 +757,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
-    private function getAttributeLabels(array $customAttribute, string $customAttributeCode) : array
+    private function getAttributeLabels(array $customAttribute, string $customAttributeCode): array
     {
         $attributeOptionLabels = [];
 

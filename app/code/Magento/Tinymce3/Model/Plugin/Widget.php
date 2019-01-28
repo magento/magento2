@@ -55,7 +55,7 @@ class Widget
         \Magento\Widget\Model\Widget $subject,
         \Closure $proceed,
         string $type
-    ) : string {
+    ): string {
         if ($this->activeEditor->getWysiwygAdapterPath() !== Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
             return $proceed($type);
         }

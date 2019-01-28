@@ -40,7 +40,7 @@ class Sort implements ArgumentApplierInterface
         string $fieldName,
         string $argumentName,
         array $argument
-    ) : SearchCriteriaInterface {
+    ): SearchCriteriaInterface {
         $sortOrders = [];
         foreach ($argument as $fieldName => $fieldValue) {
             /** @var SortOrder $sortOrder */

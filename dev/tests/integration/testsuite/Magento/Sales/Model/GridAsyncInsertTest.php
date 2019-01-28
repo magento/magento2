@@ -94,7 +94,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
      * @param string $incrementId
      * @return OrderInterface
      */
-    private function getOrder(string $incrementId) : OrderInterface
+    private function getOrder(string $incrementId): OrderInterface
     {
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $this->objectManager->get(SearchCriteriaBuilder::class)
@@ -113,7 +113,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
      * @param int $entityId
      * @return array
      */
-    private function getGridRow(int $entityId) : array
+    private function getGridRow(int $entityId): array
     {
         $tableName = $this->grid->getGridTable();
         $select = $this->connection->select()

@@ -55,7 +55,7 @@ class Collection
      * @param int $productId
      * @return void
      */
-    public function addIdFilters(int $productId) : void
+    public function addIdFilters(int $productId): void
     {
         if (!in_array($productId, $this->productIds)) {
             $this->productIds[] = $productId;
@@ -68,7 +68,7 @@ class Collection
      * @param int $productId
      * @return array
      */
-    public function getWebsiteForProductId(int $productId) : array
+    public function getWebsiteForProductId(int $productId): array
     {
         $websiteList = $this->fetch();
 
@@ -84,7 +84,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->productIds) || !empty($this->websites)) {
             return $this->websites;

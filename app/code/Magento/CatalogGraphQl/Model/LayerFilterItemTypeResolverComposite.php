@@ -33,7 +33,7 @@ class LayerFilterItemTypeResolverComposite implements TypeResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         /** @var TypeResolverInterface $typeResolver */
         foreach ($this->typeResolvers as $typeResolver) {

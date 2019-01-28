@@ -116,7 +116,7 @@ class CategoryTree
      * @param FieldNode $fieldNode
      * @return void
      */
-    private function joinAttributesRecursively(Collection $collection, FieldNode $fieldNode) : void
+    private function joinAttributesRecursively(Collection $collection, FieldNode $fieldNode): void
     {
         if (!isset($fieldNode->selectionSet->selections)) {
             return;

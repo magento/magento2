@@ -42,7 +42,7 @@ class MigrateDataFrom implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function isApplicable(string $statement) : bool
+    public function isApplicable(string $statement): bool
     {
         return (bool) preg_match(self::MATCH_PATTERN, $statement);
     }
@@ -50,7 +50,7 @@ class MigrateDataFrom implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $columnHistory) : callable
+    public function getCallback(ElementHistory $columnHistory): callable
     {
         /** @var Column $column */
         $column = $columnHistory->getNew();

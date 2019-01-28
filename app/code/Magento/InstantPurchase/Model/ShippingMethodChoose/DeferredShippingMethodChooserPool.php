@@ -35,7 +35,7 @@ class DeferredShippingMethodChooserPool
      * @param string $type
      * @return DeferredShippingMethodChooserInterface
      */
-    public function get($type) : DeferredShippingMethodChooserInterface
+    public function get($type): DeferredShippingMethodChooserInterface
     {
         if (!isset($this->choosers[$type])) {
             throw new \InvalidArgumentException(sprintf(

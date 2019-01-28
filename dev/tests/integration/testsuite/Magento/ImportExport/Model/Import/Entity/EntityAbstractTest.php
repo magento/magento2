@@ -23,7 +23,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testSaveValidatedBunches() : void
+    public function testSaveValidatedBunches(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);

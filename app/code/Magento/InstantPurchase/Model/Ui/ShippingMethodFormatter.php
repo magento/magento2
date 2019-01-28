@@ -18,7 +18,7 @@ class ShippingMethodFormatter
      * @param ShippingMethodInterface $shippingMethod
      * @return string
      */
-    public function format(ShippingMethodInterface $shippingMethod) : string
+    public function format(ShippingMethodInterface $shippingMethod): string
     {
         $data = [
             $shippingMethod->getCarrierTitle(),

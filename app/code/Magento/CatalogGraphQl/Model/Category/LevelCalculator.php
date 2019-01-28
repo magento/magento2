@@ -33,7 +33,7 @@ class LevelCalculator
      * @param int $rootCategoryId
      * @return int
      */
-    public function calculate(int $rootCategoryId) : int
+    public function calculate(int $rootCategoryId): int
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()

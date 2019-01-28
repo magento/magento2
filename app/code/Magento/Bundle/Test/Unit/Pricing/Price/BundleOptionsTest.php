@@ -176,7 +176,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider() : array
+    public function getOptionsDataProvider(): array
     {
         return [
             [

@@ -42,7 +42,7 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
     /**
      * {@inheritdoc}
      */
-    public function getEntityAttributes() : array
+    public function getEntityAttributes(): array
     {
         $productTypeSchema = $this->config->getConfigElement('SimpleProduct');
         if (!$productTypeSchema instanceof Type) {

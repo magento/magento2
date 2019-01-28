@@ -49,7 +49,7 @@ class GetSelected extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute() : \Magento\Framework\Controller\ResultInterface
+    public function execute(): \Magento\Framework\Controller\ResultInterface
     {
         $productId = $this->getRequest()->getParam('productId');
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */

@@ -36,7 +36,7 @@ class ElementMapper
      * @param OutputTypeInterface $outputType
      * @return array
      */
-    public function buildSchemaArray(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
+    public function buildSchemaArray(ConfigElementInterface $configElement, OutputTypeInterface $outputType): array
     {
         return $this->formatter->format($configElement, $outputType);
     }

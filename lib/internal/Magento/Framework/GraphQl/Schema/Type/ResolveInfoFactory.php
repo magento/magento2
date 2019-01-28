@@ -18,7 +18,7 @@ class ResolveInfoFactory
      * @param \GraphQL\Type\Definition\ResolveInfo $info
      * @return ResolveInfo
      */
-    public function create(\GraphQL\Type\Definition\ResolveInfo $info) : ResolveInfo
+    public function create(\GraphQL\Type\Definition\ResolveInfo $info): ResolveInfo
     {
         $values = [];
         foreach (get_object_vars($info) as $key => $value) {

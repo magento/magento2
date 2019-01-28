@@ -56,7 +56,7 @@ class EnumValue implements ConfigElementInterface
      *
      * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -66,7 +66,7 @@ class EnumValue implements ConfigElementInterface
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }

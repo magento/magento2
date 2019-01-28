@@ -26,5 +26,5 @@ interface FeedFactoryInterface
      * @param string $format
      * @return FeedInterface
      */
-    public function create(array $data, string $format = self::FORMAT_RSS) : FeedInterface;
+    public function create(array $data, string $format = self::FORMAT_RSS): FeedInterface;
 }

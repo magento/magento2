@@ -55,7 +55,7 @@ class AttributeOptions implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) : Value {
+    ): Value {
 
         return $this->valueFactory->create(function () use ($value) {
             $entityType = $this->getEntityType($value);

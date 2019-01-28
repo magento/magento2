@@ -230,7 +230,7 @@ class Diff implements DiffInterface
      * @param string $operation
      * @return int
      */
-    private function findTableIndex(ElementInterface $element, string $operation) : int
+    private function findTableIndex(ElementInterface $element, string $operation): int
     {
         $elementName = $element instanceof TableElementInterface ?
             $element->getTable()->getName() : $element->getName();

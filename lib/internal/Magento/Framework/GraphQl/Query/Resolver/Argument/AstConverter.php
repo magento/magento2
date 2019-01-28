@@ -55,7 +55,7 @@ class AstConverter
      * @param array $arguments
      * @return array
      */
-    public function getClausesFromAst(string $fieldName, array $arguments) : array
+    public function getClausesFromAst(string $fieldName, array $arguments): array
     {
         $attributes = $this->fieldEntityAttributesPool->getEntityAttributesForEntityFromField($fieldName);
         $conditions = [];

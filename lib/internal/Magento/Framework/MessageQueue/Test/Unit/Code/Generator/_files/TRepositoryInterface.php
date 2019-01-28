@@ -16,8 +16,7 @@ interface TRepositoryInterface
      * @param TInterface $t
      * @return \Magento\Framework\MessageQueue\Code\Generator\TInterface
      */
-    public function save(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t)
-        : \Magento\Framework\MessageQueue\Code\Generator\TInterface;
+    public function save(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t): \Magento\Framework\MessageQueue\Code\Generator\TInterface;
 
     /**
      * Retrieves TInterfaces entity.
@@ -26,8 +25,7 @@ interface TRepositoryInterface
      * @param int|null $typeId
      * @return TInterface
      */
-    public function get(string $attribute, int $typeId = null)
-        : \Magento\Framework\MessageQueue\Code\Generator\TInterface;
+    public function get(string $attribute, int $typeId = null): \Magento\Framework\MessageQueue\Code\Generator\TInterface;
 
     /**
      * Retrieves TInterface entity by id.
@@ -35,7 +33,7 @@ interface TRepositoryInterface
      * @param int $tId
      * @return TInterface
      */
-    public function getById(int $tId) : \Magento\Framework\MessageQueue\Code\Generator\TInterface;
+    public function getById(int $tId): \Magento\Framework\MessageQueue\Code\Generator\TInterface;
 
     /**
      * Gets list of TInterface entities.
@@ -51,7 +49,7 @@ interface TRepositoryInterface
      * @param TInterface $t
      * @return bool
      */
-    public function delete(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t) : bool;
+    public function delete(\Magento\Framework\MessageQueue\Code\Generator\TInterface $t): bool;
 
     /**
      * Deletes TInterface entity by id.
@@ -59,5 +57,5 @@ interface TRepositoryInterface
      * @param int $tId
      * @return bool
      */
-    public function deleteById(int $tId) : bool;
+    public function deleteById(int $tId): bool;
 }

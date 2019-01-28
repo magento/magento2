@@ -53,7 +53,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    private function setObjectProperty($object, string $propertyName, $value) : void
+    private function setObjectProperty($object, string $propertyName, $value): void
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -64,7 +64,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecute() : void
+    public function testExecute(): void
     {
         $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2];
         $result = '{"id":3,"path":"1/2/3","parentId":"2"}';
@@ -116,7 +116,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecuteWithoutCategoryId() : void
+    public function testExecuteWithoutCategoryId(): void
     {
         $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 

@@ -59,7 +59,7 @@ class Collection
      * @param int $parentId
      * @return void
      */
-    public function addIdFilters(int $optionId, int $parentId) : void
+    public function addIdFilters(int $optionId, int $parentId): void
     {
         if (!in_array($optionId, $this->optionIds)) {
             $this->optionIds[] = $optionId;
@@ -75,7 +75,7 @@ class Collection
      * @param int $optionId
      * @return array
      */
-    public function getLinksForOptionId(int $optionId) : array
+    public function getLinksForOptionId(int $optionId): array
     {
         $linksList = $this->fetch();
 
@@ -91,7 +91,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->optionIds) || empty($this->parentIds) || !empty($this->links)) {
             return $this->links;

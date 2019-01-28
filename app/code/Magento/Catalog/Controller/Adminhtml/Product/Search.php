@@ -50,7 +50,7 @@ class Search extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute() : \Magento\Framework\Controller\ResultInterface
+    public function execute(): \Magento\Framework\Controller\ResultInterface
     {
         $searchKey = $this->getRequest()->getParam('searchKey');
         $pageNum = (int)$this->getRequest()->getParam('page');

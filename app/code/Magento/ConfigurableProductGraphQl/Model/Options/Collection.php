@@ -66,7 +66,7 @@ class Collection
      *
      * @param int $productId
      */
-    public function addProductId(int $productId) : void
+    public function addProductId(int $productId): void
     {
         if (!in_array($productId, $this->productIds)) {
             $this->productIds[] = $productId;
@@ -79,7 +79,7 @@ class Collection
      * @param int $productId
      * @return array
      */
-    public function getAttributesByProductId(int $productId) : array
+    public function getAttributesByProductId(int $productId): array
     {
         $attributes = $this->fetch();
 
@@ -95,7 +95,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->productIds) || !empty($this->attributeMap)) {
             return $this->attributeMap;

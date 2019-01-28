@@ -1602,7 +1602,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $attributeCode
      * @return bool
      */
-    public function isAttributeAdded($attributeCode) : bool
+    public function isAttributeAdded($attributeCode): bool
     {
         return isset($this->_selectAttributes[$attributeCode]);
     }

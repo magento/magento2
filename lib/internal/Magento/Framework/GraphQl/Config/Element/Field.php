@@ -82,7 +82,7 @@ class Field implements OutputFieldInterface
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -92,7 +92,7 @@ class Field implements OutputFieldInterface
      *
      * @return string
      */
-    public function getTypeName() : string
+    public function getTypeName(): string
     {
         return $this->type;
     }
@@ -102,7 +102,7 @@ class Field implements OutputFieldInterface
      *
      * @return bool
      */
-    public function isList() : bool
+    public function isList(): bool
     {
         return $this->isList;
     }
@@ -112,7 +112,7 @@ class Field implements OutputFieldInterface
      *
      * @return bool
      */
-    public function isRequired() : bool
+    public function isRequired(): bool
     {
         return $this->required;
     }
@@ -122,7 +122,7 @@ class Field implements OutputFieldInterface
      *
      * @return string
      */
-    public function getResolver() : string
+    public function getResolver(): string
     {
         return $this->resolver;
     }
@@ -132,7 +132,7 @@ class Field implements OutputFieldInterface
      *
      * @return Argument[]
      */
-    public function getArguments() : array
+    public function getArguments(): array
     {
         return $this->arguments;
     }
@@ -142,7 +142,7 @@ class Field implements OutputFieldInterface
      *
      * @return string|null
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }

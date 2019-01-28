@@ -12,7 +12,7 @@ class WysiwygDefaultConfig implements \Magento\Framework\Data\Wysiwyg\ConfigProv
     /**
      * {@inheritdoc}
      */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    public function getConfig(\Magento\Framework\DataObject $config): \Magento\Framework\DataObject
     {
         return $config;
     }

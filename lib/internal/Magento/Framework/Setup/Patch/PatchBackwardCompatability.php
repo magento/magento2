@@ -37,7 +37,7 @@ class PatchBackwardCompatability
      * @param string $moduleName
      * @return bool
      */
-    public function isSkipableByDataSetupVersion(string $patchClassName, string $moduleName) : bool
+    public function isSkipableByDataSetupVersion(string $patchClassName, string $moduleName): bool
     {
         $dbVersion = (string) $this->moduleResource->getDataVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
@@ -51,7 +51,7 @@ class PatchBackwardCompatability
      * @param string $moduleName
      * @return bool
      */
-    public function isSkipableBySchemaSetupVersion(string $patchClassName, string $moduleName) : bool
+    public function isSkipableBySchemaSetupVersion(string $patchClassName, string $moduleName): bool
     {
         $dbVersion = (string) $this->moduleResource->getDbVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&

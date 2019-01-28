@@ -28,5 +28,5 @@ interface ArgumentApplierInterface
         string $fieldName,
         string $argumentName,
         array $argument
-    ) : SearchCriteriaInterface;
+    ): SearchCriteriaInterface;
 }

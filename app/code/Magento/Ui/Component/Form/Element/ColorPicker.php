@@ -65,7 +65,7 @@ class ColorPicker extends AbstractElement
      *
      * @return void
      */
-    public function prepare() : void
+    public function prepare(): void
     {
         $modes = $this->modesProvider->getModes();
         $colorPickerModeSetting = $this->getData('config/colorPickerMode');

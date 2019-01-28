@@ -488,7 +488,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dhlProductsDataProvider() : array
+    public function dhlProductsDataProvider(): array
     {
         return [
             'doc' => [

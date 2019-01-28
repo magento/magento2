@@ -27,7 +27,7 @@ class AttributesJoiner
      * @param AbstractCollection $collection
      * @return void
      */
-    public function join(FieldNode $fieldNode, AbstractCollection $collection) : void
+    public function join(FieldNode $fieldNode, AbstractCollection $collection): void
     {
         foreach ($this->getQueryFields($fieldNode) as $field) {
             if (!$collection->isAttributeAdded($field)) {

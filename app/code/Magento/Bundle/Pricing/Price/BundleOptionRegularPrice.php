@@ -68,7 +68,7 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
      *
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
-    public function getOptions() : \Magento\Bundle\Model\ResourceModel\Option\Collection
+    public function getOptions(): \Magento\Bundle\Model\ResourceModel\Option\Collection
     {
         return $this->bundleOptions->getOptions($this->product);
     }
@@ -79,7 +79,7 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
      * @param \Magento\Bundle\Model\Selection $selection
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getOptionSelectionAmount($selection) : \Magento\Framework\Pricing\Amount\AmountInterface
+    public function getOptionSelectionAmount($selection): \Magento\Framework\Pricing\Amount\AmountInterface
     {
         return $this->bundleOptions->getOptionSelectionAmount(
             $this->product,
@@ -93,7 +93,7 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getAmount() : \Magento\Framework\Pricing\Amount\AmountInterface
+    public function getAmount(): \Magento\Framework\Pricing\Amount\AmountInterface
     {
         return $this->calculator->getOptionsAmount($this->product);
     }

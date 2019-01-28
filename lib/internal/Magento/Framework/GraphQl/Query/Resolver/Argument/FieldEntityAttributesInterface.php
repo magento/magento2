@@ -17,5 +17,5 @@ interface FieldEntityAttributesInterface
      *
      * @return array
      */
-    public function getEntityAttributes() : array;
+    public function getEntityAttributes(): array;
 }

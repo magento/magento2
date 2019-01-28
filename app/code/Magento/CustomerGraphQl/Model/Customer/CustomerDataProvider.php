@@ -76,7 +76,7 @@ class CustomerDataProvider
      * @param array $arrayAddress
      * @return array
      */
-    private function curateAddressData(array $arrayAddress) : array
+    private function curateAddressData(array $arrayAddress): array
     {
         foreach ($arrayAddress as $key => $address) {
             if (!isset($address['default_shipping'])) {

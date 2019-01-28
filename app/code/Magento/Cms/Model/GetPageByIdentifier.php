@@ -40,7 +40,7 @@ class GetPageByIdentifier implements GetPageByIdentifierInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $identifier, int $storeId) : PageInterface
+    public function execute(string $identifier, int $storeId): PageInterface
     {
         $page = $this->pageFactory->create();
         $page->setStoreId($storeId);

@@ -186,7 +186,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @return void
      * @see \Magento\Shipping\Model\Shipping::collectRates
      */
-    private function limitShippingCarrier(Quote $quote) : void
+    private function limitShippingCarrier(Quote $quote): void
     {
         $shippingAddress = $quote->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingMethod()) {

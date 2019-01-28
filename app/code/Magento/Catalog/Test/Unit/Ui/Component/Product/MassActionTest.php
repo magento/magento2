@@ -95,7 +95,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPrepareDataProvider() : array
+    public function getPrepareDataProvider(): array
     {
         return [
             [

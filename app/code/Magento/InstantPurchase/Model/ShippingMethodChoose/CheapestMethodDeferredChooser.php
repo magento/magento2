@@ -38,7 +38,7 @@ class CheapestMethodDeferredChooser implements DeferredShippingMethodChooserInte
      * @param Rate[] $shippingRates
      * @return Rate
      */
-    private function selectCheapestRate(array $shippingRates) : Rate
+    private function selectCheapestRate(array $shippingRates): Rate
     {
         $rate = array_shift($shippingRates);
         foreach ($shippingRates as $tmpRate) {

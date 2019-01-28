@@ -277,7 +277,7 @@ class Processor
      *
      * @return string
      */
-    private function resolveHostName() : string
+    private function resolveHostName(): string
     {
         if (!empty($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];

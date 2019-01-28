@@ -31,7 +31,7 @@ class FieldTranslator
      * @param string $fieldName
      * @return string
      */
-    public function translate(string $fieldName) : string
+    public function translate(string $fieldName): string
     {
         if (isset($this->translationMap[$fieldName])) {
             return $this->translationMap[$fieldName];

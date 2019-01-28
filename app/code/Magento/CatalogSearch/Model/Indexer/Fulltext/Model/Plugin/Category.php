@@ -36,7 +36,7 @@ class Category
      * @return Resource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(Resource $subjectCategory, Resource $resultCategory) : Resource
+    public function afterDelete(Resource $subjectCategory, Resource $resultCategory): Resource
     {
         $this->fulltextIndexerProcessor->markIndexerAsInvalid();
 

@@ -19,5 +19,5 @@ interface TypeInterface extends ConfigElementInterface
      *
      * @return Field[]
      */
-    public function getFields() : array;
+    public function getFields(): array;
 }

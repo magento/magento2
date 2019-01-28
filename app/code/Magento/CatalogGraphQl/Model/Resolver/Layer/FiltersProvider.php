@@ -51,7 +51,7 @@ class FiltersProvider
      * @param string $layerType
      * @return array
      */
-    public function getFilters(string $layerType) : array
+    public function getFilters(string $layerType): array
     {
         $filterableAttributesList = $this->filterableAttributesListFactory->create(
             $layerType

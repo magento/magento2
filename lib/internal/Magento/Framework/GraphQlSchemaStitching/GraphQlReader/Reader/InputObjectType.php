@@ -39,7 +39,7 @@ class InputObjectType implements TypeMetaReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\InputObjectType) {
             $typeName = $typeMeta->name;
@@ -66,7 +66,7 @@ class InputObjectType implements TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\InputObjectField $fieldMeta
      * @return array
      */
-    private function readInputObjectFieldMeta(\GraphQL\Type\Definition\InputObjectField $fieldMeta) : array
+    private function readInputObjectFieldMeta(\GraphQL\Type\Definition\InputObjectField $fieldMeta): array
     {
         $fieldName = $fieldMeta->name;
         $typeMeta = $fieldMeta->getType();

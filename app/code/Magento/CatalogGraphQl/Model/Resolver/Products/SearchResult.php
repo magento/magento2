@@ -39,7 +39,7 @@ class SearchResult
      *
      * @return int
      */
-    public function getTotalCount() : int
+    public function getTotalCount(): int
     {
         return $this->totalCount;
     }
@@ -49,7 +49,7 @@ class SearchResult
      *
      * @return array
      */
-    public function getProductsSearchResult() : array
+    public function getProductsSearchResult(): array
     {
         return $this->productsSearchResult;
     }

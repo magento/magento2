@@ -22,5 +22,5 @@ interface CheckoutAgreementsListInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array;
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria): array;
 }

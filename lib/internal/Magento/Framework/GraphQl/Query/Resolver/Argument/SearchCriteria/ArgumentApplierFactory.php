@@ -35,7 +35,7 @@ class ArgumentApplierFactory
      * @return ArgumentApplierInterface
      * @throws \LogicException
      */
-    public function create(string $argumentName) : ArgumentApplierInterface
+    public function create(string $argumentName): ArgumentApplierInterface
     {
         $appliers = [
             ArgumentApplier\Filter::ARGUMENT_NAME => ArgumentApplier\Filter::class,

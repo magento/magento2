@@ -97,7 +97,7 @@ class Price implements ResolverInterface
      * @param AmountInterface $amount
      * @return array
      */
-    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount) : array
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount): array
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();

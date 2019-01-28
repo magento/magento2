@@ -83,7 +83,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveCategoryId() : int
+    private function resolveCategoryId(): int
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
@@ -98,7 +98,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveStoreId() : int
+    private function resolveStoreId(): int
     {
         $storeId = (int)$this->getRequest()->getParam('store', false);
 

@@ -56,7 +56,7 @@ class Type
      * @return string
      * @throws GraphQlInputException
      */
-    public function getType(string $attributeCode, string $entityType) : string
+    public function getType(string $attributeCode, string $entityType): string
     {
         $type = $this->typeLocator->getType($attributeCode, $entityType);
 

@@ -41,7 +41,7 @@ class Builder
      * @param array $arguments
      * @return SearchCriteriaInterface
      */
-    public function build(string $fieldName, array $arguments) : SearchCriteriaInterface
+    public function build(string $fieldName, array $arguments): SearchCriteriaInterface
     {
         $searchCriteria = $this->searchCriteriaFactory->create();
         foreach ($arguments as $argumentName => $argument) {

@@ -52,7 +52,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return string
      */
-    public function isReviewEnabled() : string
+    public function isReviewEnabled(): string
     {
         return $this->_scopeConfig->getValue(
             PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,

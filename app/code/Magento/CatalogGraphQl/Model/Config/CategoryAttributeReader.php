@@ -71,7 +71,7 @@ class CategoryAttributeReader implements ReaderInterface
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function read($scope = null) : array
+    public function read($scope = null): array
     {
         $config =[];
         $data = [];

@@ -18,5 +18,5 @@ interface TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\Type $typeMeta
      * @return array|null
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta)  : array;
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array;
 }

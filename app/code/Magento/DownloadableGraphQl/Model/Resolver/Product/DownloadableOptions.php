@@ -119,7 +119,7 @@ class DownloadableOptions implements ResolverInterface
      * @param LinkCollection $links
      * @return array
      */
-    private function formatLinks(LinkCollection $links) : array
+    private function formatLinks(LinkCollection $links): array
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
@@ -155,7 +155,7 @@ class DownloadableOptions implements ResolverInterface
      * @param Collection $samples
      * @return array
      */
-    private function formatSamples(Collection $samples) : array
+    private function formatSamples(Collection $samples): array
     {
         $resultData = [];
         foreach ($samples as $sampleKey => $sample) {

@@ -37,7 +37,7 @@ class ConnectiveFactory
     public function create(
         array $conditions,
         string $operator = null
-    ) : Connective {
+    ): Connective {
         return $this->objectManager->create(
             Connective::class,
             [

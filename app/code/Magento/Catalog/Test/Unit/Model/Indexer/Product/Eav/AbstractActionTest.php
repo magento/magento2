@@ -154,7 +154,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
         array $ids,
         array $parentIds,
         array $childIds
-    ) : void {
+    ): void {
         $reindexIds = array_unique(array_merge($ids, $parentIds, $childIds));
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
@@ -226,7 +226,7 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function reindexEntitiesDataProvider() : array
+    public function reindexEntitiesDataProvider(): array
     {
         return [
             [[4], [], [1, 2, 3]],

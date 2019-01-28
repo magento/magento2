@@ -274,7 +274,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     private function getMockForAssignBillingAddress(
         int $cartId,
         \PHPUnit_Framework_MockObject_MockObject  $billingAddressMock
-    ) : void {
+    ): void {
         $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
         $this->quoteIdMaskFactoryMock->method('create')
             ->willReturn($quoteIdMask);

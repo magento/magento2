@@ -58,7 +58,7 @@ class Filter implements ArgumentApplierInterface
         string $fieldName,
         string $argumentName,
         array $argument
-    ) : SearchCriteriaInterface {
+    ): SearchCriteriaInterface {
         $filters = $this->astConverter->getClausesFromAst($fieldName, $argument);
         $filtersForGroup = $this->connectiveFactory->create($filters);
         $filterGroups = $searchCriteria->getFilterGroups();

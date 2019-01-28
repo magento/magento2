@@ -55,7 +55,7 @@ class InputMapper
      * @return array
      * @throws GraphQlInputException
      */
-    public function getRepresentation(Argument $argument) : array
+    public function getRepresentation(Argument $argument): array
     {
         $typeName = $argument->getTypeName();
         if ($this->scalarTypes->isScalarType($typeName)) {

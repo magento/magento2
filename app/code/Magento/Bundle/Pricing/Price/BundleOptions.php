@@ -81,7 +81,7 @@ class BundleOptions
     public function calculateOptions(
         SaleableInterface $bundleProduct,
         bool $searchMin = true
-    ) : float {
+    ): float {
         $priceList = [];
         /* @var \Magento\Bundle\Model\Option $option */
         foreach ($this->getOptions($bundleProduct) as $option) {
@@ -111,7 +111,7 @@ class BundleOptions
         Product $bundleProduct,
         $selection,
         bool $useRegularPrice = false
-    ) : AmountInterface {
+    ): AmountInterface {
         $cacheKey = implode(
             '_',
             [

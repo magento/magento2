@@ -55,7 +55,7 @@ class PredispatchNewsletterObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class PredispatchNewsletterObserverTest extends TestCase
     /**
      * Test with enabled newsletter active config.
      */
-    public function testNewsletterEnabled() : void
+    public function testNewsletterEnabled(): void
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -107,7 +107,7 @@ class PredispatchNewsletterObserverTest extends TestCase
     /**
      * Test with disabled newsletter active config.
      */
-    public function testNewsletterDisabled() : void
+    public function testNewsletterDisabled(): void
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()

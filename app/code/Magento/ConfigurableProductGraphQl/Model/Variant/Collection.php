@@ -88,7 +88,7 @@ class Collection
      * @param int $id
      * @return void
      */
-    public function addParentId(int $id) : void
+    public function addParentId(int $id): void
     {
         if (!in_array($id, $this->parentIds) && !empty($this->childrenMap)) {
             $this->childrenMap = [];
@@ -104,7 +104,7 @@ class Collection
      * @param array $attributeCodes
      * @return void
      */
-    public function addEavAttributes(array $attributeCodes) : void
+    public function addEavAttributes(array $attributeCodes): void
     {
         $this->attributeCodes = array_replace($this->attributeCodes, $attributeCodes);
     }
@@ -115,7 +115,7 @@ class Collection
      * @param int $id
      * @return array
      */
-    public function getChildProductsByParentId(int $id) : array
+    public function getChildProductsByParentId(int $id): array
     {
         $childrenMap = $this->fetch();
 
@@ -131,7 +131,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch() : array
+    private function fetch(): array
     {
         if (empty($this->parentIds) || !empty($this->childrenMap)) {
             return $this->childrenMap;

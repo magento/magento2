@@ -1334,7 +1334,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         int &$optionId,
         array $products,
         array $prices
-    ) : void {
+    ): void {
         $titlesCount = count($titles);
         if ($titlesCount > 0 && count($options) !== $titlesCount) {
             $combinedData[Product::COL_STORE_VIEW_CODE] = '';
@@ -1359,7 +1359,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $titles
      */
-    private function setLastOptionTitle(array &$titles) : void
+    private function setLastOptionTitle(array &$titles): void
     {
         if (count($titles) > 0) {
             end($titles);

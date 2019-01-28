@@ -42,7 +42,7 @@ class MethodArgumentsSniff implements Sniff
     /**
      * @inheritdoc
      */
-    public function register() : array
+    public function register(): array
     {
         return [
             T_FUNCTION
@@ -55,7 +55,7 @@ class MethodArgumentsSniff implements Sniff
      * @param string $type
      * @return bool
      */
-    private function isTokenBeforeClosingCommentTagValid(string $type) : bool
+    private function isTokenBeforeClosingCommentTagValid(string $type): bool
     {
         return in_array($type, $this->validTokensBeforeClosingCommentTag);
     }
@@ -68,7 +68,7 @@ class MethodArgumentsSniff implements Sniff
      * @param int $stackPtr
      * @return bool
      */
-    private function validateCommentBlockExists(File $phpcsFile, int $previousCommentClosePtr, int $stackPtr) : bool
+    private function validateCommentBlockExists(File $phpcsFile, int $previousCommentClosePtr, int $stackPtr): bool
     {
         $tokens = $phpcsFile->getTokens();
         for ($tempPtr = $previousCommentClosePtr + 1; $tempPtr < $stackPtr; $tempPtr++) {
@@ -85,7 +85,7 @@ class MethodArgumentsSniff implements Sniff
      * @param string $type
      * @return bool
      */
-    private function isInvalidType(string $type) : bool
+    private function isInvalidType(string $type): bool
     {
         return in_array(strtolower($type), $this->invalidTypes);
     }
@@ -98,7 +98,7 @@ class MethodArgumentsSniff implements Sniff
      * @param int $closedParenthesisPtr
      * @return array
      */
-    private function getMethodArguments(File $phpcsFile, int $openParenthesisPtr, int $closedParenthesisPtr) : array
+    private function getMethodArguments(File $phpcsFile, int $openParenthesisPtr, int $closedParenthesisPtr): array
     {
         $tokens = $phpcsFile->getTokens();
         $methodArguments = [];
@@ -121,7 +121,7 @@ class MethodArgumentsSniff implements Sniff
      * @param array $paramDefinitions
      * @return array
      */
-    private function getMethodParameters(array $paramDefinitions) : array
+    private function getMethodParameters(array $paramDefinitions): array
     {
         $paramName = [];
         for ($i = 0; $i < count($paramDefinitions); $i++) {
@@ -143,7 +143,7 @@ class MethodArgumentsSniff implements Sniff
         File $phpcsFile,
         int $previousCommentOpenPtr,
         int $previousCommentClosePtr
-    ) : bool {
+    ): bool {
         return $this->validateInheritdocAnnotationExists(
             $phpcsFile,
             $previousCommentOpenPtr,
@@ -163,7 +163,7 @@ class MethodArgumentsSniff implements Sniff
         File $phpcsFile,
         int $previousCommentOpenPtr,
         int $previousCommentClosePtr
-    ) : bool {
+    ): bool {
         return $this->validateInheritdocAnnotationExists(
             $phpcsFile,
             $previousCommentOpenPtr,
@@ -186,7 +186,7 @@ class MethodArgumentsSniff implements Sniff
         int $previousCommentOpenPtr,
         int $previousCommentClosePtr,
         string $inheritdocAnnotation
-    ) : bool {
+    ): bool {
         $tokens = $phpcsFile->getTokens();
         for ($ptr = $previousCommentOpenPtr; $ptr < $previousCommentClosePtr; $ptr++) {
             if (strtolower($tokens[$ptr]['content']) === $inheritdocAnnotation) {
@@ -213,7 +213,7 @@ class MethodArgumentsSniff implements Sniff
         int $previousCommentOpenPtr,
         int $previousCommentClosePtr,
         int $stackPtr
-    ) : void {
+    ): void {
         if ($argumentsCount > 0 && $parametersCount === 0) {
             $inheritdocAnnotationWithoutBracesExists = $this->validateInheritdocAnnotationWithoutBracesExists(
                 $phpcsFile,
@@ -256,7 +256,7 @@ class MethodArgumentsSniff implements Sniff
         int $argumentsCount,
         int $parametersCount,
         int $stackPtr
-    ) : void {
+    ): void {
         if ($argumentsCount < $parametersCount && $argumentsCount > 0) {
             $phpcsFile->addFixableError(
                 'Extra @param found in method annotation',
@@ -287,7 +287,7 @@ class MethodArgumentsSniff implements Sniff
         File $phpcsFile,
         array $methodArguments,
         array $paramDefinitions
-    ) : void {
+    ): void {
         $parameterNames = $this->getMethodParameters($paramDefinitions);
         if (!in_array($methodArguments[$ptr], $parameterNames)) {
             $error = $methodArguments[$ptr]. ' parameter is missing in method annotation';
@@ -310,7 +310,7 @@ class MethodArgumentsSniff implements Sniff
         array $methodArguments,
         File $phpcsFile,
         array $paramPointers
-    ) : void {
+    ): void {
         if (!in_array($paramDefinitionsArguments, $methodArguments)) {
             $phpcsFile->addFixableError(
                 $paramDefinitionsArguments . ' parameter is missing in method arguments signature',
@@ -333,7 +333,7 @@ class MethodArgumentsSniff implements Sniff
         array $methodArguments,
         File $phpcsFile,
         array $paramPointers
-    ) : void {
+    ): void {
         $parameterNames = $this->getMethodParameters($paramDefinitions);
         $paramDefinitionsCount = count($paramDefinitions);
         for ($ptr = 0; $ptr < $paramDefinitionsCount; $ptr++) {
@@ -366,7 +366,7 @@ class MethodArgumentsSniff implements Sniff
         array $paramPointers,
         File $phpcsFile,
         array $methodArguments
-    ) : void {
+    ): void {
         $argumentsCount = count($methodArguments);
         $parametersCount = count($paramPointers);
         if ($argumentsCount <= $parametersCount && $argumentsCount > 0) {
@@ -408,7 +408,7 @@ class MethodArgumentsSniff implements Sniff
         array $methodArguments,
         array $paramDefinitions,
         array $paramPointers
-    ) : void {
+    ): void {
         switch (count($paramDefinitions)) {
             case 0:
                 $phpcsFile->addFixableError(
@@ -480,7 +480,7 @@ class MethodArgumentsSniff implements Sniff
         array $methodArguments,
         int $previousCommentOpenPtr,
         int $previousCommentClosePtr
-    ) : void {
+    ): void {
         $argumentCount = count($methodArguments);
         $paramCount = count($paramPointers);
         $this->validateParameterAnnotationForArgumentExists(

@@ -181,7 +181,7 @@ class Table extends GenericElement implements
      *
      * @return array
      */
-    public function getInternalConstraints() : array
+    public function getInternalConstraints(): array
     {
         $constraints = [];
         foreach ($this->getConstraints() as $constraint) {
@@ -353,7 +353,7 @@ class Table extends GenericElement implements
      *
      * @return string
      */
-    public function getCharset() : string
+    public function getCharset(): string
     {
         return $this->charset;
     }
@@ -363,7 +363,7 @@ class Table extends GenericElement implements
      *
      * @return string
      */
-    public function getCollation() : string
+    public function getCollation(): string
     {
         return $this->collation;
     }

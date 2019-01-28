@@ -37,7 +37,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      * @param bool $expected
      * @return void
      */
-    public function testIsSwatchAttribute(string $dataValue, bool $expected) : void
+    public function testIsSwatchAttribute(string $dataValue, bool $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -52,7 +52,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideIsSwatchAttributeTestData() : array
+    public function provideIsSwatchAttributeTestData(): array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_TEXT, true],
@@ -67,7 +67,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      * @param bool $expected
      * @return void
      */
-    public function testIsTextSwatch(string $dataValue, bool $expected) : void
+    public function testIsTextSwatch(string $dataValue, bool $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -82,7 +82,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideIsTextSwatchAttributeTestData() : array
+    public function provideIsTextSwatchAttributeTestData(): array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_TEXT, true],
@@ -97,7 +97,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      * @param bool $expected
      * @return void
      */
-    public function testIsVisualSwatch(string $dataValue, bool $expected) : void
+    public function testIsVisualSwatch(string $dataValue, bool $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -112,7 +112,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideIsVisualSwatchAttributeTestData() : array
+    public function provideIsVisualSwatchAttributeTestData(): array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_VISUAL, true],
@@ -124,7 +124,7 @@ class SwatchAttributeTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testIfAttributeHasNotAdditionData() : void
+    public function testIfAttributeHasNotAdditionData(): void
     {
         /** @var Json $json */
         $json = new Json();

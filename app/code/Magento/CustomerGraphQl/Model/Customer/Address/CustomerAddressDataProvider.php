@@ -66,7 +66,7 @@ class CustomerAddressDataProvider
      * @param AddressInterface $addressObject
      * @return array
      */
-    private function curateAddressDefaultValues(array $address, AddressInterface $addressObject) : array
+    private function curateAddressDefaultValues(array $address, AddressInterface $addressObject): array
     {
         $customerModel = $this->customerFactory->create();
         $this->customerResourceModel->load($customerModel, $addressObject->getCustomerId());

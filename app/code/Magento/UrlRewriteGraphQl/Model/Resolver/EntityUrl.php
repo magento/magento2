@@ -88,7 +88,7 @@ class EntityUrl implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findCanonicalUrl(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findCanonicalUrl(string $requestPath): ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         $urlRewrite = $this->findUrlFromRequestPath($requestPath);
         if ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
@@ -109,7 +109,7 @@ class EntityUrl implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findUrlFromRequestPath(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findUrlFromRequestPath(string $requestPath): ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -125,7 +125,7 @@ class EntityUrl implements ResolverInterface
      * @param string $targetPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findUrlFromTargetPath(string $targetPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function findUrlFromTargetPath(string $targetPath): ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -141,7 +141,7 @@ class EntityUrl implements ResolverInterface
      * @param string $type
      * @return string
      */
-    private function sanitizeType(string $type) : string
+    private function sanitizeType(string $type): string
     {
         return strtoupper(str_replace('-', '_', $type));
     }

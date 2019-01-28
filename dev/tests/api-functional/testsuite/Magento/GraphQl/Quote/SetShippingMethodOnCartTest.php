@@ -205,7 +205,7 @@ class SetShippingMethodOnCartTest extends GraphQlAbstract
         string $shippingMethodCode,
         string $shippingCarrierCode,
         string $shippingAddressId
-    ) : string {
+    ): string {
         return <<<QUERY
 mutation {
   setShippingMethodsOnCart(input: 

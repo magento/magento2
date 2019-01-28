@@ -49,7 +49,7 @@ class Enum implements ConfigElementInterface
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -59,7 +59,7 @@ class Enum implements ConfigElementInterface
      *
      * @return EnumValue[]
      */
-    public function getValues() : array
+    public function getValues(): array
     {
         return $this->values;
     }
@@ -69,7 +69,7 @@ class Enum implements ConfigElementInterface
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }

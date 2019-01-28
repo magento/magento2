@@ -10,7 +10,7 @@ class TSample
     private $value;
     private $variadicValue;
 
-    public function returnVoid() : void
+    public function returnVoid(): void
     {
         // Nothing to do here
     }
@@ -18,7 +18,7 @@ class TSample
     /**
      * @return null|string
      */
-    public function getNullableValue() : ?string
+    public function getNullableValue(): ?string
     {
         return null;
     }
@@ -26,7 +26,7 @@ class TSample
     /**
      * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }

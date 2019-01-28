@@ -54,7 +54,7 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
      *
      * @return \Magento\Catalog\Model\Product
      */
-    public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item) : \Magento\Catalog\Model\Product
+    public function getProductForThumbnail(\Magento\Wishlist\Model\Item $item): \Magento\Catalog\Model\Product
     {
         return $this->itemResolver->getFinalProduct($item);
     }

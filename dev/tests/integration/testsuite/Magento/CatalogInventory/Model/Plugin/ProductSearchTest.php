@@ -28,7 +28,7 @@ class ProductSearchTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      */
-    public function testExecute() : void
+    public function testExecute(): void
     {
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -51,7 +51,7 @@ class ProductSearchTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 0
      */
-    public function testExecuteNotShowOutOfStock() : void
+    public function testExecuteNotShowOutOfStock(): void
     {
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);

@@ -17,5 +17,5 @@ interface FeedInterface
      *
      * @return string
      */
-    public function getFormattedContent() : string;
+    public function getFormattedContent(): string;
 }

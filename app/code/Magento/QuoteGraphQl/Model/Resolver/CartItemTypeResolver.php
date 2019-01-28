@@ -32,7 +32,7 @@ class CartItemTypeResolver implements TypeResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (!isset($data['product'])) {
             throw new LocalizedException(__('Missing key "product" in cart data'));

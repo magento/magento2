@@ -68,7 +68,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider skuDataProvider
      */
-    public function testGetProduct(string $sku) : void
+    public function testGetProduct(string $sku): void
     {
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);

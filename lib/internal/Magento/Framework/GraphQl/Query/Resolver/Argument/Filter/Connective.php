@@ -41,7 +41,7 @@ class Connective
      *
      * @return Operator
      */
-    public function getOperator() : Operator
+    public function getOperator(): Operator
     {
         return $this->operator;
     }

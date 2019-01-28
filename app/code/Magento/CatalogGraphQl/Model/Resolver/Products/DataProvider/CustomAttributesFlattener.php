@@ -18,7 +18,7 @@ class CustomAttributesFlattener
      * @param array $categoryData
      * @return array
      */
-    public function flatten(array $categoryData) : array
+    public function flatten(array $categoryData): array
     {
         if (!isset($categoryData['custom_attributes'])) {
             return $categoryData;

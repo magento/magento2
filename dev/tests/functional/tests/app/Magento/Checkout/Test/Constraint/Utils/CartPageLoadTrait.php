@@ -19,7 +19,7 @@ trait CartPageLoadTrait
      * @param CheckoutCart $checkoutCart
      * @return void
      */
-    public function waitForCartPageLoaded(CheckoutCart $checkoutCart) : void
+    public function waitForCartPageLoaded(CheckoutCart $checkoutCart): void
     {
         $checkoutCart->getCartBlock()->waitForLoader();
         if (!$checkoutCart->getCartBlock()->cartIsEmpty()) {

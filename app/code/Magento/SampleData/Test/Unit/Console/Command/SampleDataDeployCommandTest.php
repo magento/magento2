@@ -168,7 +168,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     protected function expectedComposerArguments(
         array $sampleDataPackages,
         string $pathToComposerJson
-    ) : array {
+    ): array {
         return [
             'command' => 'require',
             '--working-dir' => $pathToComposerJson,

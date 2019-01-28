@@ -33,7 +33,7 @@ class CustomizableOptionTypeResolver implements TypeResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         $map = $this->mapper->getMappedTypes(self::ENTITY_TYPE);
         if (isset($map[$data['type']])) {

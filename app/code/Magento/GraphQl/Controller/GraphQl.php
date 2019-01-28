@@ -102,7 +102,7 @@ class GraphQl implements FrontControllerInterface
      * @param RequestInterface $request
      * @return ResponseInterface
      */
-    public function dispatch(RequestInterface $request) : ResponseInterface
+    public function dispatch(RequestInterface $request): ResponseInterface
     {
         $statusCode = 200;
         try {

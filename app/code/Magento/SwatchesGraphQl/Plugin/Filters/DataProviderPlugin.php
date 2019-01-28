@@ -57,7 +57,7 @@ class DataProviderPlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType) : array
+    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType): array
     {
         $swatchFilters = [];
         /** @var AbstractFilter $filter */

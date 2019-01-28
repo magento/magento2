@@ -1555,7 +1555,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
-    public function testAddUpdateProductWithInvalidUrlKeys() : void
+    public function testAddUpdateProductWithInvalidUrlKeys(): void
     {
         $products = [
             'simple1' => 'cuvee-merlot-cabernet-igp-pays-d-oc-frankrijk',

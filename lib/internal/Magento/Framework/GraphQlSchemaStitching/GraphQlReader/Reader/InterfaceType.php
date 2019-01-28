@@ -39,7 +39,7 @@ class InterfaceType implements TypeMetaReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\InterfaceType) {
             $typeName = $typeMeta->name;
@@ -75,7 +75,7 @@ class InterfaceType implements TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta
      * @return string
      */
-    private function getInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta) : string
+    private function getInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta): string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $interfaceTypeMeta->astNode->directives;

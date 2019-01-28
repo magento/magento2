@@ -30,7 +30,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    public function getConfig(\Magento\Framework\DataObject $config): \Magento\Framework\DataObject
     {
         $config->addData([
             'popup_css' => $this->assetRepo->getUrl(

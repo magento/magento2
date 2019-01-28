@@ -133,7 +133,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @return array
      */
-    protected function getStoresData() : array
+    protected function getStoresData(): array
     {
         return $this->storesData->getStoresData($this->runMode, $this->scopeCode);
     }
@@ -145,7 +145,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @deprecated
      * @see \Magento\Store\Model\StoreResolver::getStoresData
      */
-    protected function readStoresData() : array
+    protected function readStoresData(): array
     {
         return $this->getStoresData();
     }
@@ -157,7 +157,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getRequestedStoreByCode($storeCode) : \Magento\Store\Api\Data\StoreInterface
+    protected function getRequestedStoreByCode($storeCode): \Magento\Store\Api\Data\StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
@@ -175,7 +175,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * @return \Magento\Store\Api\Data\StoreInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getDefaultStoreById($id) : \Magento\Store\Api\Data\StoreInterface
+    protected function getDefaultStoreById($id): \Magento\Store\Api\Data\StoreInterface
     {
         try {
             $store = $this->storeRepository->getActiveStoreById($id);

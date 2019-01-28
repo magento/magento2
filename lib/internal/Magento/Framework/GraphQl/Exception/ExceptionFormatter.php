@@ -50,7 +50,7 @@ class ExceptionFormatter
      * @return array
      * @throws \Throwable
      */
-    public function create(\Throwable $exception, $internalErrorMessage = null) : array
+    public function create(\Throwable $exception, $internalErrorMessage = null): array
     {
         if (!$this->shouldShowDetail()) {
             $reportId = uniqid("graph-ql-");
@@ -73,7 +73,7 @@ class ExceptionFormatter
      *
      * @return bool
      */
-    public function shouldShowDetail() : bool
+    public function shouldShowDetail(): bool
     {
         return $this->appState->getMode() === State::MODE_DEVELOPER;
     }

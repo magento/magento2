@@ -91,7 +91,7 @@ class QueryBuilder
         string $tableName,
         int $currentScope,
         int $customerGroupId
-    ) : Select {
+    ): Select {
         $select = $this->resource->getConnection()->select();
         $select->joinInner(
             ['entities' => $tableName],
@@ -119,7 +119,7 @@ class QueryBuilder
         int $currentScope,
         int $customerGroupId,
         Select $select
-    ) : Select {
+    ): Select {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->scopeResolver->getScope($currentScope);
         if (!$store instanceof \Magento\Store\Model\Store) {
@@ -161,7 +161,7 @@ class QueryBuilder
         int $currentScope,
         AbstractAttribute $attribute,
         Select $select
-    ) : Select {
+    ): Select {
         $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
         $table = $this->resource->getTableName(
             'catalog_product_index_eav' . ($attribute->getBackendType() === 'decimal' ? '_decimal' : '')

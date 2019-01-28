@@ -45,7 +45,7 @@ class EnumLookup
      * @return string
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getEnumValueFromField(string $enumName, string $fieldValue) : string
+    public function getEnumValueFromField(string $enumName, string $fieldValue): string
     {
         $priceViewEnum = $this->typeConfig->getConfigElement($enumName);
         if ($priceViewEnum instanceof Enum) {

@@ -74,7 +74,7 @@ class EntityAttributeList
     public function getDefaultEntityAttributes(
         string $entityCode,
         MetadataServiceInterface $metadataService = null
-    ) : array {
+    ): array {
         $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder

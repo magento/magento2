@@ -437,7 +437,7 @@ class Observer
      * @param Email $email
      * @return Observer
      */
-    private function setAlertStoreId($alert, \Magento\ProductAlert\Model\Email $email) : Observer
+    private function setAlertStoreId($alert, \Magento\ProductAlert\Model\Email $email): Observer
     {
         $alertStoreId = $alert->getStoreId();
         if ($alertStoreId) {

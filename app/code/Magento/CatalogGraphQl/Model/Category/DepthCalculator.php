@@ -20,7 +20,7 @@ class DepthCalculator
      * @param FieldNode $fieldNode
      * @return int
      */
-    public function calculate(FieldNode $fieldNode) : int
+    public function calculate(FieldNode $fieldNode): int
     {
         $selections = $fieldNode->selectionSet->selections ?? [];
         $depth = count($selections) ? 1 : 0;

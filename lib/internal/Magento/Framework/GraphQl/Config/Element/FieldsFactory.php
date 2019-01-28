@@ -45,7 +45,7 @@ class FieldsFactory
      */
     public function createFromConfigData(
         array $fieldsData
-    ) : array {
+    ): array {
         $fields = [];
         foreach ($fieldsData as $fieldData) {
             $arguments = [];

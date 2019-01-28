@@ -93,7 +93,7 @@ class Product implements ResolverInterface
      * @param ResolveInfo $info
      * @return string[]
      */
-    private function getProductFields(ResolveInfo $info) : array
+    private function getProductFields(ResolveInfo $info): array
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {

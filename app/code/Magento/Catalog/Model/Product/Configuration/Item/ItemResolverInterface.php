@@ -22,5 +22,5 @@ interface ItemResolverInterface
      * @param ItemInterface $item
      * @return ProductInterface
      */
-    public function getFinalProduct(ItemInterface $item) : ProductInterface;
+    public function getFinalProduct(ItemInterface $item): ProductInterface;
 }

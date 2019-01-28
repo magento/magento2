@@ -107,7 +107,7 @@ class CreateCustomerAddress implements ResolverInterface
      * @return AddressInterface
      * @throws GraphQlInputException
      */
-    private function createCustomerAddress(int $customerId, array $addressData) : AddressInterface
+    private function createCustomerAddress(int $customerId, array $addressData): AddressInterface
     {
         /** @var AddressInterface $address */
         $address = $this->addressInterfaceFactory->create();

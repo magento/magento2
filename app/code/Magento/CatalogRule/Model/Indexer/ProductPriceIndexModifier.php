@@ -51,7 +51,7 @@ class ProductPriceIndexModifier implements PriceModifierInterface
     /**
      * @inheritdoc
      */
-    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
+    public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []): void
     {
         $connection = $this->resourceConnection->getConnection($this->connectionName);
 

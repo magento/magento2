@@ -50,7 +50,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate() : Schema
+    public function generate(): Schema
     {
         $schema = $this->schemaFactory->create(
             [

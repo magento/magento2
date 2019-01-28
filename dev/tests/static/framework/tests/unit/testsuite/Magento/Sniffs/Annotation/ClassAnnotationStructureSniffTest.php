@@ -39,7 +39,7 @@ class ClassAnnotationStructureSniffTest extends \PHPUnit\Framework\TestCase
      * @param string $source
      * @param string $destination
      */
-    private function copyFile($source, $destination) : void
+    private function copyFile($source, $destination): void
     {
         $sourcePath = $source;
         $destinationPath = $destination;

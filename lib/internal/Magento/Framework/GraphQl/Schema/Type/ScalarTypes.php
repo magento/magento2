@@ -16,7 +16,7 @@ class ScalarTypes
      * @param string $typeName
      * @return bool
      */
-    public function isScalarType(string $typeName) : bool
+    public function isScalarType(string $typeName): bool
     {
         $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
         return isset($internalTypes[$typeName]) ? true : false;
@@ -27,7 +27,7 @@ class ScalarTypes
      * @return \GraphQL\Type\Definition\ScalarType|\GraphQL\Type\Definition\Type
      * @throws \LogicException
      */
-    public function getScalarTypeInstance(string $typeName) : \GraphQL\Type\Definition\Type
+    public function getScalarTypeInstance(string $typeName): \GraphQL\Type\Definition\Type
     {
         $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
         if ($this->isScalarType($typeName)) {
@@ -43,7 +43,7 @@ class ScalarTypes
      * @param \GraphQL\Type\Definition\ScalarType|\GraphQL\Type\Definition\Type $definedType
      * @return ListOfType
      */
-    public function createList(\GraphQL\Type\Definition\Type $definedType) : ListOfType
+    public function createList(\GraphQL\Type\Definition\Type $definedType): ListOfType
     {
         return new ListOfType($definedType);
     }
@@ -54,7 +54,7 @@ class ScalarTypes
      * @param \GraphQL\Type\Definition\ScalarType|\GraphQL\Type\Definition\Type $definedType
      * @return NonNull
      */
-    public function createNonNull(\GraphQL\Type\Definition\Type $definedType) : NonNull
+    public function createNonNull(\GraphQL\Type\Definition\Type $definedType): NonNull
     {
         return new NonNull($definedType);
     }

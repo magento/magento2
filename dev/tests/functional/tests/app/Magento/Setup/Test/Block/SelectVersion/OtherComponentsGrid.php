@@ -38,7 +38,7 @@ class OtherComponentsGrid extends Block
      * @param array $packages
      * @return void
      */
-    public function setVersions(array $packages) : void
+    public function setVersions(array $packages): void
     {
         foreach ($packages as $package) {
             $selector = sprintf($this->itemComponent, $package['name']);
@@ -56,7 +56,7 @@ class OtherComponentsGrid extends Block
      *
      * @return array
      */
-    public function getSelectedPackages() : array
+    public function getSelectedPackages(): array
     {
         return $this->selectedPackages;
     }
@@ -67,7 +67,7 @@ class OtherComponentsGrid extends Block
      * @param int $count
      * @return void
      */
-    public function setItemsPerPage(int $count) : void
+    public function setItemsPerPage(int $count): void
     {
         $this->_rootElement->find($this->perPage, Locator::SELECTOR_CSS, 'select')->setValue($count);
     }
@@ -78,7 +78,7 @@ class OtherComponentsGrid extends Block
      * @param ElementInterface $element
      * @return Item
      */
-    private function getComponentRow(ElementInterface $element) : Item
+    private function getComponentRow(ElementInterface $element): Item
     {
         return $this->blockFactory->create(
             Item::class,

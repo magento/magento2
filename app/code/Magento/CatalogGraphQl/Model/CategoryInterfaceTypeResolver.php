@@ -19,7 +19,7 @@ class CategoryInterfaceTypeResolver implements \Magento\Framework\GraphQl\Query\
      * {@inheritdoc}
      * @throws GraphQlInputException
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         return 'CategoryTree';
     }

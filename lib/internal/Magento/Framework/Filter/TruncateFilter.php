@@ -70,7 +70,7 @@ class TruncateFilter implements \Zend_Filter_Interface
      * @param string $string
      * @return Result
      */
-    public function filter($string) : Result
+    public function filter($string): Result
     {
         /** @var Result $result */
         $result = $this->resultFactory->create(['value' => $string, 'remainder' => '']);

@@ -57,7 +57,7 @@ class StorePathInfoValidator
     public function getValidStoreCode(
         \Magento\Framework\App\Request\Http $request,
         string $pathInfo = ''
-    ) : ?string {
+    ): ?string {
         if (empty($pathInfo)) {
             $pathInfo = $this->pathInfo->getPathInfo(
                 $request->getRequestUri(),
@@ -94,7 +94,7 @@ class StorePathInfoValidator
      * @param string $pathInfo
      * @return string
      */
-    private function getStoreCode(string $pathInfo) : string
+    private function getStoreCode(string $pathInfo): string
     {
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         return current($pathParts);

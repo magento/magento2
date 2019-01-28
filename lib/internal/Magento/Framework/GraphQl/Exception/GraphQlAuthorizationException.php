@@ -39,7 +39,7 @@ class GraphQlAuthorizationException extends AuthorizationException implements \G
     /**
      * @inheritdoc
      */
-    public function isClientSafe() : bool
+    public function isClientSafe(): bool
     {
         return $this->isSafe;
     }
@@ -47,7 +47,7 @@ class GraphQlAuthorizationException extends AuthorizationException implements \G
     /**
      * @inheritdoc
      */
-    public function getCategory() : string
+    public function getCategory(): string
     {
         return self::EXCEPTION_CATEGORY;
     }

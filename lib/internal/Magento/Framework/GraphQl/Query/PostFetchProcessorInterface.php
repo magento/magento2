@@ -18,5 +18,5 @@ interface PostFetchProcessorInterface
      * @param array $resultData
      * @return array
      */
-    public function process(array $resultData) : array;
+    public function process(array $resultData): array;
 }

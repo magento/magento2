@@ -17,7 +17,7 @@ class GroupedProductTypeResolver implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (isset($data['type_id']) && $data['type_id'] == 'grouped') {
             return 'GroupedProduct';

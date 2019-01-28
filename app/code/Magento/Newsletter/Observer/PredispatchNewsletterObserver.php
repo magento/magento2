@@ -50,7 +50,7 @@ class PredispatchNewsletterObserver implements ObserverInterface
      *
      * @param Observer $observer
      */
-    public function execute(Observer $observer) : void
+    public function execute(Observer $observer): void
     {
         if (!$this->scopeConfig->getValue(
             self::XML_PATH_NEWSLETTER_ACTIVE,

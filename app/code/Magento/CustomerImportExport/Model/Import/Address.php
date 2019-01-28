@@ -585,7 +585,7 @@ class Address extends AbstractCustomer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareDataForUpdate(array $rowData):array
+    protected function _prepareDataForUpdate(array $rowData): array
     {
         $multiSeparator = $this->getMultipleValueSeparator();
         $email = strtolower($rowData[self::COLUMN_EMAIL]);

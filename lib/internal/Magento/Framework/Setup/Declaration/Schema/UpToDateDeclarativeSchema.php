@@ -42,7 +42,7 @@ class UpToDateDeclarativeSchema implements UpToDateValidatorInterface
     /**
      * @return string
      */
-    public function getNotUpToDateMessage() : string
+    public function getNotUpToDateMessage(): string
     {
         return 'Declarative Schema is not up to date';
     }
@@ -50,7 +50,7 @@ class UpToDateDeclarativeSchema implements UpToDateValidatorInterface
     /**
      * @return bool
      */
-    public function isUpToDate() : bool
+    public function isUpToDate(): bool
     {
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
         $dbSchema = $this->schemaConfig->getDbConfig();

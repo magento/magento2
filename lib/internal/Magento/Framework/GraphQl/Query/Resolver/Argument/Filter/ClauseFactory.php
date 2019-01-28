@@ -40,7 +40,7 @@ class ClauseFactory
         string $fieldName,
         string $clauseType,
         $clauseValue
-    ) : Clause {
+    ): Clause {
         return $this->objectManager->create(
             Clause::class,
             [

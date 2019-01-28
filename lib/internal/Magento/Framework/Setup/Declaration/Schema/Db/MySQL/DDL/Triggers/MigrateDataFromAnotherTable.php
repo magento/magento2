@@ -41,7 +41,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function isApplicable(string $statement) : bool
+    public function isApplicable(string $statement): bool
     {
         return (bool) preg_match(self::MATCH_PATTERN, $statement);
     }
@@ -49,7 +49,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $tableHistory) : callable
+    public function getCallback(ElementHistory $tableHistory): callable
     {
         /** @var Table $table */
         $table = $tableHistory->getNew();

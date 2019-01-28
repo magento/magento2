@@ -34,7 +34,7 @@ class Interfaces implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $configElement, OutputTypeInterface $outputType) : array
+    public function format(TypeInterface $configElement, OutputTypeInterface $outputType): array
     {
         $config = [];
         if ($configElement instanceof Type && !empty($configElement->getInterfaces())) {

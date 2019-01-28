@@ -67,7 +67,7 @@ class TypeFactory implements ConfigElementFactoryInterface
     public function create(
         array $typeData,
         array $fields
-    ) : Type {
+    ): Type {
         return $this->objectManager->create(
             Type::class,
             [

@@ -710,7 +710,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param Collection $collection
      * @return Collection
      */
-    private function addExtensionAttributes(Collection $collection) : Collection
+    private function addExtensionAttributes(Collection $collection): Collection
     {
         foreach ($collection->getItems() as $item) {
             $this->readExtensions->execute($item);
@@ -769,7 +769,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param array $images
      * @return array
      */
-    private function determineImageRoles(ProductInterface $product, array $images) : array
+    private function determineImageRoles(ProductInterface $product, array $images): array
     {
         $imagesWithRoles = [];
         foreach ($images as $image) {
@@ -838,7 +838,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param string $sku
      * @return void
      */
-    private function removeProductFromLocalCache(string $sku) :void
+    private function removeProductFromLocalCache(string $sku): void
     {
         $preparedSku = $this->prepareSku($sku);
         unset($this->instances[$preparedSku]);
@@ -851,7 +851,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param string $cacheKey
      * @return void
      */
-    private function saveProductInLocalCache(Product $product, string $cacheKey) : void
+    private function saveProductInLocalCache(Product $product, string $cacheKey): void
     {
         $preparedSku = $this->prepareSku($product->getSku());
         $this->instances[$preparedSku][$cacheKey] = $product;

@@ -59,7 +59,7 @@ class Operator
      *
      * @return array
      */
-    public static function getOperators() : array
+    public static function getOperators(): array
     {
         $type = new \ReflectionClass(Operator::class);
         return $type->getConstants();
@@ -70,7 +70,7 @@ class Operator
      *
      * @return string
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return strtoupper($this->value);
     }

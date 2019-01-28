@@ -81,7 +81,7 @@ class Search
      * @return SearchResult
      * @throws \Exception
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
+    public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info): SearchResult
     {
         $idField = $this->metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
@@ -137,7 +137,7 @@ class Search
      * @param SearchCriteriaInterface $searchCriteria
      * @return int[]
      */
-    private function paginateList(SearchResult $searchResult, SearchCriteriaInterface $searchCriteria) : array
+    private function paginateList(SearchResult $searchResult, SearchCriteriaInterface $searchCriteria): array
     {
         $length = $searchCriteria->getPageSize();
         // Search starts pages from 0

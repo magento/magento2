@@ -48,7 +48,7 @@ class FeedFactory implements FeedFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(array $data, string $format = FeedFactoryInterface::FORMAT_RSS) : FeedInterface
+    public function create(array $data, string $format = FeedFactoryInterface::FORMAT_RSS): FeedInterface
     {
         if (!isset($this->formats[$format])) {
             throw new \Magento\Framework\Exception\InputException(

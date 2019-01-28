@@ -63,7 +63,7 @@ class GraphQlReader implements ReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function read($scope = null) : array
+    public function read($scope = null): array
     {
         $results = [];
         $scope = $scope ?: $this->defaultScope;
@@ -98,7 +98,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function readPartialTypes(string $graphQlSchemaContent) : array
+    private function readPartialTypes(string $graphQlSchemaContent): array
     {
         $partialResults = [];
 
@@ -129,7 +129,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function parseTypes(string $graphQlSchemaContent) : array
+    private function parseTypes(string $graphQlSchemaContent): array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
@@ -239,7 +239,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string
      */
-    private function addPlaceHolderInSchema(string $graphQlSchemaContent) :string
+    private function addPlaceHolderInSchema(string $graphQlSchemaContent): string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
         $typesKindsPattern = '(type|interface|input)';
@@ -270,7 +270,7 @@ class GraphQlReader implements ReaderInterface
      * @param array $partialResults
      * @return array
      */
-    private function removePlaceholderFromResults(array $partialResults) : array
+    private function removePlaceholderFromResults(array $partialResults): array
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
         //remove parsed placeholders

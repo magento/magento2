@@ -16,7 +16,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testExecute() : void
+    public function testExecute(): void
     {
         $this->getRequest()
             ->setPostValue('searchKey', 'simple')
@@ -30,7 +30,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         );
     }
 
-    public function testExecuteNonExistingSearchKey() : void
+    public function testExecuteNonExistingSearchKey(): void
     {
         $this->getRequest()
             ->setPostValue('searchKey', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -44,7 +44,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      */
-    public function testExecuteNotVisibleIndividuallyProducts() : void
+    public function testExecuteNotVisibleIndividuallyProducts(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);

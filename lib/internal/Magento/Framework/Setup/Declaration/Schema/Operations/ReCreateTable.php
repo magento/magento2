@@ -97,7 +97,7 @@ class ReCreateTable implements OperationInterface
      * @param ElementHistory $elementHistory
      * @return Table
      */
-    private function getRecreatedTable(ElementHistory $elementHistory) : Table
+    private function getRecreatedTable(ElementHistory $elementHistory): Table
     {
         /** @var Table $newTable */
         $newTable = $elementHistory->getNew();

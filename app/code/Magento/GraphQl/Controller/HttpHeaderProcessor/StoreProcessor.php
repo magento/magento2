@@ -38,7 +38,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      * {@inheritDoc}
      * @throws NoSuchEntityException
      */
-    public function processHeaderValue(string $headerValue) : void
+    public function processHeaderValue(string $headerValue): void
     {
         if ($headerValue) {
             $storeCode = ltrim(rtrim($headerValue));

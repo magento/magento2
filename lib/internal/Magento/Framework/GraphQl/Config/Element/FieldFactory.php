@@ -41,7 +41,7 @@ class FieldFactory
     public function createFromConfigData(
         array $fieldData,
         array $arguments = []
-    ) : Field {
+    ): Field {
         $fieldType = $fieldData['type'];
         $isList = false;
 

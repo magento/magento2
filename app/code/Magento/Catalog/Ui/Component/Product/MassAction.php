@@ -42,7 +42,7 @@ class MassAction extends AbstractComponent
     /**
      * {@inheritdoc}
      */
-    public function prepare() : void
+    public function prepare(): void
     {
         $config = $this->getConfiguration();
 
@@ -66,7 +66,7 @@ class MassAction extends AbstractComponent
     /**
      * {@inheritdoc}
      */
-    public function getComponentName() : string
+    public function getComponentName(): string
     {
         return static::NAME;
     }
@@ -77,7 +77,7 @@ class MassAction extends AbstractComponent
      * @param string $actionType
      * @return bool
      */
-    public function isActionAllowed($actionType) : bool
+    public function isActionAllowed($actionType): bool
     {
         $isAllowed = true;
         switch ($actionType) {

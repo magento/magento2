@@ -30,7 +30,7 @@ class PlaceholderImagesPool
     /**
      * @return array
      */
-    public function getWidgetPlaceholders() : array
+    public function getWidgetPlaceholders(): array
     {
         return $this->widgetPlaceholders;
     }

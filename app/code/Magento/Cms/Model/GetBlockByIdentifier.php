@@ -40,7 +40,7 @@ class GetBlockByIdentifier implements GetBlockByIdentifierInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $identifier, int $storeId) : BlockInterface
+    public function execute(string $identifier, int $storeId): BlockInterface
     {
         $block = $this->blockFactory->create();
         $block->setStoreId($storeId);

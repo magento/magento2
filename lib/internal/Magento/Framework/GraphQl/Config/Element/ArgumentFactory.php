@@ -39,7 +39,7 @@ class ArgumentFactory
      */
     public function createFromConfigData(
         array $argumentData
-    ) : Argument {
+    ): Argument {
         return $this->objectManager->create(
             Argument::class,
             [

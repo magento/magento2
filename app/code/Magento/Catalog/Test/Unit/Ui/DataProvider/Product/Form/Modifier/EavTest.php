@@ -468,7 +468,7 @@ class EavTest extends AbstractModifierTest
         $attrValue,
         array $expected,
         $locked = false
-    ) : void {
+    ): void {
         $configPath = 'arguments/data/config';
         $groupCode = 'product-details';
         $sortOrder = '0';

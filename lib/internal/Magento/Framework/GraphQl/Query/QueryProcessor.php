@@ -54,7 +54,7 @@ class QueryProcessor
         ContextInterface $contextValue = null,
         array $variableValues = null,
         string $operationName = null
-    ) : array {
+    ): array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
             $this->queryComplexityLimiter->execute();
         }

@@ -99,7 +99,7 @@ class OrderListTest extends WebapiAbstract
      *
      * @return array
      */
-    private function getSearchData() : array
+    private function getSearchData(): array
     {
         /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = $this->objectManager->get(

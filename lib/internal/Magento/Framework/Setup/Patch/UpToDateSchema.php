@@ -57,7 +57,7 @@ class UpToDateSchema implements UpToDateValidatorInterface
     /**
      * @return string
      */
-    public function getNotUpToDateMessage() : string
+    public function getNotUpToDateMessage(): string
     {
         return 'Schema patches are not up to date';
     }
@@ -65,7 +65,7 @@ class UpToDateSchema implements UpToDateValidatorInterface
     /**
      * @return bool
      */
-    public function isUpToDate() : bool
+    public function isUpToDate(): bool
     {
         foreach ($this->moduleList->getNames() as $moduleName) {
             foreach ($this->patchReader->read($moduleName) as $patchName) {

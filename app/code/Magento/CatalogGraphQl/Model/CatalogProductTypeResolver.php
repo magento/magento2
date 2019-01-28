@@ -17,7 +17,7 @@ class CatalogProductTypeResolver implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (isset($data['type_id'])) {
             if ($data['type_id'] == 'simple') {

@@ -51,7 +51,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
@@ -64,7 +64,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return void
      */
-    public function testDispatch() : void
+    public function testDispatch(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -114,7 +114,7 @@ QUERY;
      *
      * @return void
      */
-    public function testError() : void
+    public function testError(): void
     {
         $this->markTestSkipped('Causes failiure with php unit and php 7.2');
         $query

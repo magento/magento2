@@ -21,7 +21,7 @@ class AnnotationFormatValidator
      * @param int $commentEndPtr
      * @return int
      */
-    private function getShortDescriptionEndPosition(File $phpcsFile, int $shortPtr, $commentEndPtr) : int
+    private function getShortDescriptionEndPosition(File $phpcsFile, int $shortPtr, $commentEndPtr): int
     {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $shortPtr;
@@ -48,7 +48,7 @@ class AnnotationFormatValidator
         File $phpcsFile,
         int $shortPtr,
         int $commentEndPtr
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $this->getShortDescriptionEndPosition(
             $phpcsFile,
@@ -80,7 +80,7 @@ class AnnotationFormatValidator
         int $shortPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $this->getShortDescriptionEndPosition(
             $phpcsFile,
@@ -118,7 +118,7 @@ class AnnotationFormatValidator
         int $stackPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         if ($tokens[$shortPtr]['line'] !== $tokens[$stackPtr]['line'] + 1) {
             $error = 'No blank lines are allowed before short description';
@@ -165,7 +165,7 @@ class AnnotationFormatValidator
         int $shortPtrEnd,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $longPtr = $phpcsFile->findNext($emptyTypeTokens, $shortPtrEnd + 1, $commentEndPtr - 1, true);
         if (strtolower($tokens[$longPtr]['content']) === '@inheritdoc') {
@@ -191,7 +191,7 @@ class AnnotationFormatValidator
      * @param int $commentStartPtr
      * @param array $emptyTypeTokens
      */
-    public function validateTagsSpacingFormat(File $phpcsFile, int $commentStartPtr, array $emptyTypeTokens) : void
+    public function validateTagsSpacingFormat(File $phpcsFile, int $commentStartPtr, array $emptyTypeTokens): void
     {
         $tokens = $phpcsFile->getTokens();
         if (isset($tokens[$commentStartPtr]['comment_tags'][0])) {
@@ -213,7 +213,7 @@ class AnnotationFormatValidator
      * @param File $phpcsFile
      * @param int $commentStartPtr
      */
-    public function validateTagGroupingFormat(File $phpcsFile, int $commentStartPtr) : void
+    public function validateTagGroupingFormat(File $phpcsFile, int $commentStartPtr): void
     {
         $tokens = $phpcsFile->getTokens();
         $tagGroups = [];
@@ -262,7 +262,7 @@ class AnnotationFormatValidator
         int $commentStartPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $prevPtr = $phpcsFile->findPrevious($emptyTypeTokens, $commentEndPtr - 1, $commentStartPtr, true);
         if ($tokens[$prevPtr]['line'] < ($tokens[$commentEndPtr]['line'] - 1)) {
@@ -286,7 +286,7 @@ class AnnotationFormatValidator
         int $shortPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         if (isset($tokens[$commentStartPtr]['comment_tags'][0])
         ) {

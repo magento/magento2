@@ -22,5 +22,5 @@ interface FormatterInterface
      * @param OutputTypeInterface $outputType
      * @return array
      */
-    public function format(TypeElementInterface $configElement, OutputTypeInterface $outputType) : array;
+    public function format(TypeElementInterface $configElement, OutputTypeInterface $outputType): array;
 }

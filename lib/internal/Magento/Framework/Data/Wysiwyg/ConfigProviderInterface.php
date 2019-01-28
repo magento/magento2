@@ -17,5 +17,5 @@ interface ConfigProviderInterface
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
      */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject;
+    public function getConfig(\Magento\Framework\DataObject $config): \Magento\Framework\DataObject;
 }

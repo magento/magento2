@@ -274,7 +274,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[] Array of error messages
      */
-    public function validate(InputInterface $input) : array
+    public function validate(InputInterface $input): array
     {
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
@@ -294,7 +294,7 @@ class InstallCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return string[] Array of inputs
      */
-    private function interactiveQuestions(InputInterface $input, OutputInterface $output) : array
+    private function interactiveQuestions(InputInterface $input, OutputInterface $output): array
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];

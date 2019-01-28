@@ -25,12 +25,12 @@ interface UpToDateValidatorInterface
      *
      * @return string
      */
-    public function getNotUpToDateMessage() : string ;
+    public function getNotUpToDateMessage(): string ;
 
     /**
      * Validate component whether it is up to date or not
      *
      * @return bool
      */
-    public function isUpToDate() : bool ;
+    public function isUpToDate(): bool ;
 }
