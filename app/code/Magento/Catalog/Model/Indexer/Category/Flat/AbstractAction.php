@@ -217,6 +217,7 @@ class AbstractAction
                         break;
                     }
                     // fall-through intentional
+                    // no break
                 case \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL:
                     $options = $column['PRECISION'] . ',' . $column['SCALE'];
                     $isUnsigned = null;
