@@ -72,6 +72,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                         'custom_options' => $this->getOptions(),
                     ],
                 ],
+                'price' => $item->getPrice(),
             ],
             $response
         );
