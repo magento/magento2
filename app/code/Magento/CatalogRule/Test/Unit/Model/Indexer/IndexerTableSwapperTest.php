@@ -11,7 +11,7 @@ use Magento\CatalogRule\Model\Indexer\IndexerTableSwapper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Magento\CatalogRule\Model\Indexer\IndexerTableSwapper class.

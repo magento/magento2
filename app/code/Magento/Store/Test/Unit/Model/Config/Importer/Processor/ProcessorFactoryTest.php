@@ -11,7 +11,7 @@ use Magento\Store\Model\Config\Importer\Processor\Create;
 use Magento\Store\Model\Config\Importer\Processor\Delete;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @inheritdoc

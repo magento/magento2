@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\UpdateExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 

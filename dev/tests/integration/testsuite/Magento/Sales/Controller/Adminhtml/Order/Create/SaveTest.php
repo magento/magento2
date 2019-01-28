@@ -14,7 +14,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\TestFramework\TestCase\AbstractBackendController;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class SaveTest extends AbstractBackendController
 {

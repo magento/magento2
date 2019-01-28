@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

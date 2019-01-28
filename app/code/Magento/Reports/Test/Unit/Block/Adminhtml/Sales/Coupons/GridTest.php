@@ -118,7 +118,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\DataObject $filterData,
         string $resourceCollectionName,
         int $collectionSize
-    ): \PHPUnit_Framework_MockObject_MockObject {
+    ): \PHPUnit\Framework\MockObject\MockObject {
         $collectionMock = $this->getMockBuilder($resourceCollectionName)
             ->disableOriginalConstructor()
             ->getMock();

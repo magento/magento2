@@ -408,7 +408,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $productMock
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getProductTypeMock(\PHPUnit_Framework_MockObject_MockObject $productMock)
+    private function getProductTypeMock(\PHPUnit\Framework\MockObject\MockObject $productMock)
     {
         $currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->disableOriginalConstructor()
@@ -469,7 +469,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param float $amount
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getAmountMock($amount): \PHPUnit_Framework_MockObject_MockObject
+    protected function getAmountMock($amount): \PHPUnit\Framework\MockObject\MockObject
     {
         $amountMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
             ->setMethods([
@@ -495,7 +495,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param int $percentage
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getTierPriceMock(\PHPUnit_Framework_MockObject_MockObject $amountMock, $priceQty, $percentage)
+    protected function getTierPriceMock(\PHPUnit\Framework\MockObject\MockObject $amountMock, $priceQty, $percentage)
     {
         $tierPrice = [
             'price_qty' => $priceQty,

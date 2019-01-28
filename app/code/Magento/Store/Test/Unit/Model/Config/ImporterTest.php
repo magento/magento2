@@ -10,7 +10,7 @@ use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for Importer.

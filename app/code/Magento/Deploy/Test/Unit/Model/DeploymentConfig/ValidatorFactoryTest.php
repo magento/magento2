@@ -8,7 +8,7 @@ namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 use Magento\Deploy\Model\DeploymentConfig\ValidatorFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Config\Validator;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 {

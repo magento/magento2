@@ -9,7 +9,7 @@ use Magento\Config\App\Config\Source\InitialSnapshotConfigSource;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\FlagManager;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @inheritdoc

@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Provider;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class for testing not synchronized DataProvider.

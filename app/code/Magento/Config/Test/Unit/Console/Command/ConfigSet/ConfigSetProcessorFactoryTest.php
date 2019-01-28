@@ -11,7 +11,7 @@ use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for ConfigSetProcessorFactory.

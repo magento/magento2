@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Ups\Test\Unit\Model;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Ups\Model\Carrier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateResultErrorFactory;

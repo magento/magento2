@@ -7,7 +7,7 @@
 namespace Magento\CodeMessDetector\Test\Unit\Rule\Design;
 
 use PHPUnit\Framework\TestCase as TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder as InvokedRecorder;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
 use Magento\CodeMessDetector\Rule\Design\FinalImplementation;

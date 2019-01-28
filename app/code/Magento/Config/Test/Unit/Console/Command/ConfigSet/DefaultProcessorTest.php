@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for DefaultProcessor.

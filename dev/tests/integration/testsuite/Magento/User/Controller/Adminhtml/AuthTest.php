@@ -321,7 +321,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * @param string $originalClassName
      */
     protected function addMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $originalClassName
     ) {
         $userMock = $this->_objectManager->create(

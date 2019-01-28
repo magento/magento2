@@ -14,7 +14,7 @@ use Magento\Review\Model\ResourceModel\Rating;
 use Magento\Review\Model\ResourceModel\Review;
 use Magento\Review\Observer\ProcessProductAfterDeleteEventObserver;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ProcessProductAfterDeleteEventObserverTest

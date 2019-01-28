@@ -9,7 +9,7 @@ use Magento\Setup\Controller\ExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ExtensionGridTest

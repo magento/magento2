@@ -287,7 +287,7 @@ class ConditionsElement extends SimpleElement
             try {
                 $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($type);
                 $isSetType = true;
-            } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+            } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
                 $isSetType = false;
                 $this->exception = $e;
                 $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);
@@ -338,7 +338,7 @@ class ConditionsElement extends SimpleElement
                     } elseif ($this->fillText($rule, $param)) {
                         $isSet = true;
                     }
-                } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
                     $isSet = false;
                     $this->exception = $e;
                     $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);

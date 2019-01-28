@@ -335,8 +335,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      * @param array $options
      */
     private function injectVisibilityProps(
-        \PHPUnit_Framework_MockObject_MockObject $attributeMock,
-        \PHPUnit_Framework_MockObject_MockObject $attributeBooleanMock,
+        \PHPUnit\Framework\MockObject\MockObject $attributeMock,
+        \PHPUnit\Framework\MockObject\MockObject $attributeBooleanMock,
         array $options = []
     ) {
         if (isset($options[self::ATTRIBUTE_CODE]['visible'])) {

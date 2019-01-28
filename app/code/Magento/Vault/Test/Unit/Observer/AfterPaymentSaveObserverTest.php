@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 {

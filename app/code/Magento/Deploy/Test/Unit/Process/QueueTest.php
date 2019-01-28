@@ -14,7 +14,7 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Deployment Queue class unit tests

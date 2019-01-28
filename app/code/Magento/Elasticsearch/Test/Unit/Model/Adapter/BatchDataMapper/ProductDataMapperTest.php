@@ -195,7 +195,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * @param array attributeData
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
+    private function getAttribute(array $attributeData): \PHPUnit\Framework\MockObject\MockObject
     {
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);

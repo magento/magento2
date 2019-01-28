@@ -75,8 +75,8 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCallsDelegation(
         $connection,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterOne,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterTwo,
+        \PHPUnit\Framework\MockObject\MockObject $fieldConverterOne,
+        \PHPUnit\Framework\MockObject\MockObject $fieldConverterTwo,
         $queryModifier
     ) {
         $fieldConverterOne->expects($this->once())

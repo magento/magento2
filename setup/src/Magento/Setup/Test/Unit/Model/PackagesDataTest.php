@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Composer\Package\RootPackage;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests Magento\Setup\Model\PackagesData

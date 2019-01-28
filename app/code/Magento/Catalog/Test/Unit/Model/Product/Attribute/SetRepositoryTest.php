@@ -201,7 +201,7 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param $setEntityTypeId
      */
     protected function setMockForValidation(
-        \PHPUnit_Framework_MockObject_MockObject $attributeSetMock,
+        \PHPUnit\Framework\MockObject\MockObject $attributeSetMock,
         $setEntityTypeId
     ) {
         $typeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);

@@ -172,7 +172,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createProductMock(): \PHPUnit_Framework_MockObject_MockObject
+    private function createProductMock(): \PHPUnit\Framework\MockObject\MockObject
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

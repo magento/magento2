@@ -10,7 +10,7 @@ use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\ValidatorFactory;
 use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 class ImporterPoolTest extends \PHPUnit\Framework\TestCase
 {

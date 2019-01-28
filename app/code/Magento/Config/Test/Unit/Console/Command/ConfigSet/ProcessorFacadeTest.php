@@ -19,7 +19,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for ProcessorFacade.

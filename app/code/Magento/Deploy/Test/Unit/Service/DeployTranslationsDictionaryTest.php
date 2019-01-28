@@ -13,7 +13,7 @@ use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Translation Dictionaries deploy service class unit tests

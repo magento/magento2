@@ -26,7 +26,7 @@ class ProxyTesting
      */
     public function invokeWithExpectations(
         $object,
-        \PHPUnit_Framework_MockObject_MockObject $proxiedObject,
+        \PHPUnit\Framework\MockObject\MockObject $proxiedObject,
         $method,
         $params = [],
         $proxiedResult = null,

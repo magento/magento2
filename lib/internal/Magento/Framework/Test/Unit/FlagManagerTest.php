@@ -9,7 +9,7 @@ use Magento\Framework\FlagFactory;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagManager;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Class FlagManagerTest

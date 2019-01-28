@@ -10,7 +10,7 @@ use Magento\Deploy\Service\MinifyTemplates;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Minify Templates service class unit tests

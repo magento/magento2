@@ -13,7 +13,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Unit test for Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes
@@ -48,7 +48,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
      * @param array $supportedTypes
      * @return HideUnsupportedAttributeTypes
      */
-    private function createTarget(\PHPUnit_Framework_MockObject_MockObject $request, array $supportedTypes = [])
+    private function createTarget(\MockObject $request, array $supportedTypes = [])
     {
         return $this->objectManager->getObject(
             HideUnsupportedAttributeTypes::class,
@@ -90,7 +90,7 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit\Framework\TestCase
      * @return EventObserver|\PHPUnit_Framework_MockObject_MockObject
      * @internal param null|MockObject $block
      */
-    private function createEventMock(\PHPUnit_Framework_MockObject_MockObject $form = null)
+    private function createEventMock(\MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
             ->setMethods(['getForm', 'getBlock'])

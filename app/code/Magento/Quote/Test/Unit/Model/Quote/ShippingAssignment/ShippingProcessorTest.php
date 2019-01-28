@@ -12,7 +12,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
 use Magento\Quote\Model\ShippingAddressManagement;
 use Magento\Quote\Model\ShippingMethodManagement;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ShippingProcessorTest

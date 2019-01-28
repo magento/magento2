@@ -222,7 +222,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $order
      * @param array $methods
      */
-    private function _prepareNeverInvokedOrderMethods(\PHPUnit_Framework_MockObject_MockObject $order, $methods = [])
+    private function _prepareNeverInvokedOrderMethods(\PHPUnit\Framework\MockObject\MockObject $order, $methods = [])
     {
         foreach ($methods as $method) {
             $order->expects($this->never())->method($method);

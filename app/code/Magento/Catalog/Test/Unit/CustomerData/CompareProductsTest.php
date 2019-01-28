@@ -84,7 +84,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * @param array $items
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getItemCollectionMock(array $items) : \PHPUnit_Framework_MockObject_MockObject
+    private function getItemCollectionMock(array $items) : \PHPUnit\Framework\MockObject\MockObject
     {
         $itemCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -142,7 +142,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getProductMock(array $data) : \PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock(array $data) : \PHPUnit\Framework\MockObject\MockObject
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

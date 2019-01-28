@@ -45,7 +45,7 @@ use Magento\Quote\Model\ShippingAssignment;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use \PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -513,7 +513,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param string $paymentProviderCode
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    private function getPaymentMock(string $paymentProviderCode): PHPUnit_Framework_MockObject_MockObject
+    private function getPaymentMock(string $paymentProviderCode): MockObject
     {
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
@@ -535,7 +535,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Catalog\Model\Product\Type\Simple|PHPUnit_Framework_MockObject_MockObject $simpleProductTypeMock
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    private function getProductMock($simpleProductTypeMock): PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock($simpleProductTypeMock): MockObject
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -551,7 +551,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Catalog\Model\Product|PHPUnit_Framework_MockObject_MockObject $productMock
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    private function getQuoteItemMock($productType, $productMock): PHPUnit_Framework_MockObject_MockObject
+    private function getQuoteItemMock($productType, $productMock): MockObject
     {
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
@@ -573,7 +573,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $quoteItemMock,
         string $productType,
         array $infoBuyRequest
-    ): PHPUnit_Framework_MockObject_MockObject {
+    ): MockObject {
         $quoteAddressItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuoteItem', 'setProductType', 'setProductOptions', 'getParentItem'])
@@ -658,7 +658,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $orderAddressMock,
         $orderPaymentMock,
         $orderItemMock
-    ): PHPUnit_Framework_MockObject_MockObject {
+    ): MockObject {
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(

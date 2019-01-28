@@ -30,7 +30,7 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\Store\Model\ScopeInterface;
 

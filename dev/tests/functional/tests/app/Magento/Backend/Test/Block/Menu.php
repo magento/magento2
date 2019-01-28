@@ -96,7 +96,7 @@ class Menu extends Block
         // Resolve an issue on with "Offset within element cannot be scrolled into view" on low screen resolution
         try {
             $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->hover();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException  $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException  $e) {
         }
         $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->click();
         if ($waitMenuItemNotVisible) {

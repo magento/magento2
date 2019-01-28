@@ -22,7 +22,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Static Content deploy service class unit tests

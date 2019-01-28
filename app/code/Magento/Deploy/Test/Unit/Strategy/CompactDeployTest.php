@@ -10,7 +10,7 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Compact deployment service class implementation unit tests

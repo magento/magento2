@@ -514,7 +514,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : \PHPUnit\Framework\MockObject\MockObject {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -564,7 +564,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @param string $className
      */
     protected function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $className
     ) {
         $mocked = $this->_objectManager->create(

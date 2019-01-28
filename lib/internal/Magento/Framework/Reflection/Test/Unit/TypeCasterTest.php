@@ -8,7 +8,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Type caster Test

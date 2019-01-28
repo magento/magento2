@@ -26,7 +26,7 @@ use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\AdminOrder\Product;
 use Magento\Quote\Model\QuoteFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

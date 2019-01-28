@@ -68,7 +68,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     public function testResolve(
         array $fields,
         $attributeId,
-        \PHPUnit_Framework_MockObject_MockObject $field,
+        \PHPUnit\Framework\MockObject\MockObject $field,
         array $expectedResult
     ) {
         $item = $this->getMockBuilder(\Magento\Framework\DataObject::class)

@@ -12,7 +12,7 @@ use Magento\CodeMessDetector\Rule\Design\AllPurposeAction;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ActionInterface;
 use PHPUnit\Framework\TestCase as TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
 use PHPMD\Report;
 use PHPMD\Node\ClassNode;

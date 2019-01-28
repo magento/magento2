@@ -20,7 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
