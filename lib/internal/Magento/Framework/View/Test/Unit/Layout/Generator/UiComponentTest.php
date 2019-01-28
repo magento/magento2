@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
-use \Magento\Framework\View\Layout\Generator\UiComponent;
+use Magento\Framework\View\Layout\Generator\UiComponent;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ScheduledStructure;

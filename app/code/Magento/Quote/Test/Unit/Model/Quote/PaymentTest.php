@@ -12,7 +12,7 @@ use Magento\Payment\Model\Checks\SpecificationFactory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
-use \Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\Quote\Payment;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

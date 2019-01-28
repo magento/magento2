@@ -6,7 +6,7 @@
 namespace Magento\NewRelicReporting\Test\Unit\Model;
 
 use Magento\NewRelicReporting\Model\CronEvent;
-use \Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClient;
 
 /**
  * Class CronEventTest

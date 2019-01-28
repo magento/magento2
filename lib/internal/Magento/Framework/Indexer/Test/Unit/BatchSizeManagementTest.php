@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\Indexer\BatchSizeManagement;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\BatchSizeManagement;
 
 class BatchSizeManagementTest extends \PHPUnit\Framework\TestCase
 {

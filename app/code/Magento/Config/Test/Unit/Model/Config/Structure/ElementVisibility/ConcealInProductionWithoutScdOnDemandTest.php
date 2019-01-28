@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility;
 
 use Magento\Framework\App\DeploymentConfig;
-use \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction;
-use \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionFactory;
+use Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction;
+use Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionFactory;
 use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
 use Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionWithoutScdOnDemand;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;

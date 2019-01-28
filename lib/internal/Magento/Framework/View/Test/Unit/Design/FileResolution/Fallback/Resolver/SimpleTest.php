@@ -10,7 +10,7 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Fallback\RulePool;
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 

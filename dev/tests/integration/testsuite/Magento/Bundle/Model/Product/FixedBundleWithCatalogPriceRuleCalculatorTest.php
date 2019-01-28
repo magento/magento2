@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * @magentoAppArea frontend

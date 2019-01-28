@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use \Magento\Framework\View\Element\Html\Select;
+use Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\Escaper;
 
 class SelectTest extends \PHPUnit\Framework\TestCase

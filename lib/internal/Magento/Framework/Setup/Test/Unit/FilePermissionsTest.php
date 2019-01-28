@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Setup\Test\Unit;
 
-use \Magento\Framework\Setup\FilePermissions;
+use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 

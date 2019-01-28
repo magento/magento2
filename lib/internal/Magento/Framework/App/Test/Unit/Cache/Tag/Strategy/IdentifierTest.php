@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Identifier;
+use Magento\Framework\App\Cache\Tag\Strategy\Identifier;
 
 class IdentifierTest extends \PHPUnit\Framework\TestCase
 {

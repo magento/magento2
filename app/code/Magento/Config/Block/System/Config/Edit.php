@@ -11,8 +11,8 @@
  */
 namespace Magento\Config\Block\System\Config;
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @api

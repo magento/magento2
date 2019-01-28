@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
-use \Magento\Weee\Pricing\Adjustment;
+use Magento\Weee\Pricing\Adjustment;
 
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;

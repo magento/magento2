@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\Pool;
+use Magento\Framework\Pricing\Price\Pool;
 
 /**
  * Test for Pool

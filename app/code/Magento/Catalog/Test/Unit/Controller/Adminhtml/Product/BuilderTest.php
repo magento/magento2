@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreFactory;

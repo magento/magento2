@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use \Magento\Framework\Stdlib\Test\Unit\Cookie\PhpCookieManagerTest;
+use Magento\Framework\Stdlib\Test\Unit\Cookie\PhpCookieManagerTest;
 
 /**
  * Mock global setcookie function

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 $baseDir = realpath(__DIR__ . '/../../../../');
 require $baseDir . '/app/autoload.php';

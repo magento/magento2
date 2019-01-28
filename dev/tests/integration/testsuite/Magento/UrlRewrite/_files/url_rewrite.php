@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\UrlRewrite\Model\OptionProvider;
-use \Magento\UrlRewrite\Model\UrlRewrite;
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Store\Model\StoreManagerInterface;
-use \Magento\Store\Model\Store;
-use \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
-use \Magento\Framework\ObjectManagerInterface;
-use \Magento\Cms\Model\ResourceModel\Page as PageResource;
-use \Magento\Cms\Model\Page;
+use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\UrlRewrite;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
+use Magento\Cms\Model\Page;
 
 /** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';

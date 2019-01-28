@@ -8,9 +8,9 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\Composer\ComposerFactory;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use \Magento\Framework\App\Filesystem\DirectoryList;
-use \Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class ProductMetadata

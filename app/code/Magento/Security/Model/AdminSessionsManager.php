@@ -7,7 +7,7 @@
 namespace Magento\Security\Model;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
  * Admin Sessions Manager Model

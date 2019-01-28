@@ -6,7 +6,7 @@
 
 namespace Magento\ProductVideo\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ChangeTemplateObserverTest extends \PHPUnit\Framework\TestCase
 {

@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Quote\Model\ShippingAddressManagement;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

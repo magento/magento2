@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\BasePackageInfo;
+use Magento\Setup\Model\BasePackageInfo;
 
 /**
  * Tests BasePackageInfo

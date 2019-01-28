@@ -5,7 +5,7 @@
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
-use \Magento\Swatches\Model\Swatch as SwatchModel;
+use Magento\Swatches\Model\Swatch as SwatchModel;
 
 /**
  * Backend swatch abstract block

@@ -9,8 +9,8 @@ use Magento\Signifyd\Model\SignifydGateway\Client\ResponseHandler;
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Zend_Http_Response as Response;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Zend_Http_Response as Response;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset\MaterializationStrategy;
 
-use \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy;
+use Magento\Framework\App\View\Asset\MaterializationStrategy\Copy;
 
 class CopyTest extends \PHPUnit\Framework\TestCase
 {

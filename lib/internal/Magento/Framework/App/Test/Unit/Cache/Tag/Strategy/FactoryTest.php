@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Factory;
+use Magento\Framework\App\Cache\Tag\Strategy\Factory;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {

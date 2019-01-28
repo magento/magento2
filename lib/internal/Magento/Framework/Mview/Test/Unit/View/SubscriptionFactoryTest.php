@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
-use \Magento\Framework\Mview\View\SubscriptionFactory;
+use Magento\Framework\Mview\View\SubscriptionFactory;
 
 class SubscriptionFactoryTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
-use \Magento\Tax\Model\Sales\Total\Quote\Tax;
+use Magento\Tax\Model\Sales\Total\Quote\Tax;
 
 /**
  * Test class for \Magento\Tax\Model\Sales\Total\Quote\Tax

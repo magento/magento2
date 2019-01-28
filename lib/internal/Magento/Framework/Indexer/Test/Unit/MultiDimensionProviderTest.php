@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use \Magento\Framework\Indexer\MultiDimensionProvider;
-use \Magento\Framework\Indexer\DimensionProviderInterface;
-use \Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\MultiDimensionProvider;
+use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\Dimension;
 
 class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
 {

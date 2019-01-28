@@ -7,7 +7,7 @@
 namespace Magento\Framework\Indexer\Test\Unit\ScopeResolver;
 
 use Magento\Framework\Search\Request\Dimension;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver

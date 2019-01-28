@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Xml;
 
-use \Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
+use Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
 
 /**
  * Reader for etc/queue_publisher.xml configs.

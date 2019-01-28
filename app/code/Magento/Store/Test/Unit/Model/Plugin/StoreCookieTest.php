@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * Unit tests for \Magento\Store\Model\Plugin\StoreCookie class.

@@ -5,8 +5,8 @@
  */
 namespace Magento\Swatches\Plugin\Catalog;
 
-use \Magento\Framework\App\Cache\Type\Block;
-use \Magento\Framework\App\Cache\Type\Collection;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\App\Cache\Type\Collection;
 
 class CacheInvalidate
 {

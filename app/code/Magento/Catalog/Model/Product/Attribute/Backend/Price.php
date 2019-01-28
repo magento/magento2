@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
-use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
 /**

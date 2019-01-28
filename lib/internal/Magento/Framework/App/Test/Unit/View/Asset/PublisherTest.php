@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset;
 
-use \Magento\Framework\App\View\Asset\Publisher;
-use \Magento\Framework\App\View\Asset\MaterializationStrategy;
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\App\View\Asset\MaterializationStrategy;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;

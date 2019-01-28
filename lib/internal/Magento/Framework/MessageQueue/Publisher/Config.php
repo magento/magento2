@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem\Iterator;
+use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem\Iterator;
 
 /**
  * Publisher config provides access data declared in etc/queue_publisher.xml

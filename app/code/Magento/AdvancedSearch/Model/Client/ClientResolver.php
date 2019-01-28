@@ -5,7 +5,7 @@
  */
 namespace Magento\AdvancedSearch\Model\Client;
 
-use \Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 
 /**

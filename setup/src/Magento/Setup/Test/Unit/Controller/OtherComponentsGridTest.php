@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\OtherComponentsGrid;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\OtherComponentsGrid;
+use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Composer\InfoCommand;
 
 class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase

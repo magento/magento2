@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Block\Adminhtml\Group;
 
-use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**

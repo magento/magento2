@@ -6,7 +6,7 @@
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
 
 use Magento\NewRelicReporting\Model\Apm\Deployments;
-use \Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClient;
 
 /**
  * Class DeploymentsTest

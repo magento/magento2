@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\D
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Links;
-use \Magento\Framework\Escaper;
+use Magento\Framework\Escaper;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;

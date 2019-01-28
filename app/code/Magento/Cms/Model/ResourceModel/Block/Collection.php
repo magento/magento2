@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\ResourceModel\Block;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use \Magento\Cms\Model\ResourceModel\AbstractCollection;
+use Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
  * CMS Block Collection

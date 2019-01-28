@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Model\Resolver;
 
-use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
  * Resolver for swatches layer filter type.

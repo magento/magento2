@@ -6,7 +6,7 @@
 
 namespace Magento\Shipping\Test\Unit\Model\Carrier;
 
-use \Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
+use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

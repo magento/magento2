@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filter\Test\Unit\Input;
 
-use \Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\Filter\Input\MaliciousCode;
 
 class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
 {

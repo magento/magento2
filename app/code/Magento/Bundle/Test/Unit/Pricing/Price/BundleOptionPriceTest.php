@@ -11,7 +11,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Bundle\Pricing\Price\BundleOptions;
 use Magento\Bundle\Pricing\Adjustment\Calculator;
-use \Magento\Bundle\Model\Selection;
+use Magento\Bundle\Model\Selection;
 
 class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
 {

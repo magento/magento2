@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
-use \Magento\Framework\MessageQueue\Topology\Config\Validator\Format;
+use Magento\Framework\MessageQueue\Topology\Config\Validator\Format;
 
 class FormatTest extends \PHPUnit\Framework\TestCase
 {

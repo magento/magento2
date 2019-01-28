@@ -15,7 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use \Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Class ProductFieldMapper

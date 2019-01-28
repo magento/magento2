@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\CronJob;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order;
 
 class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
 {

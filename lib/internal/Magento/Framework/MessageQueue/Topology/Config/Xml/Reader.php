@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Topology\Config\Xml;
 
-use \Magento\Framework\MessageQueue\Topology\Config\ReaderInterface;
+use Magento\Framework\MessageQueue\Topology\Config\ReaderInterface;
 
 /**
  * Reader for etc/queue_topology.xml configs.

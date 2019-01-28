@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Marketplace;
+use Magento\Setup\Controller\Marketplace;
 
 class MarketplaceTest extends \PHPUnit\Framework\TestCase
 {

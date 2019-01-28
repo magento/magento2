@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Topology\Config;
 
-use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
+use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 
 /**
  * Instances of this class represent config items declared in etc/queue_topology.xsd

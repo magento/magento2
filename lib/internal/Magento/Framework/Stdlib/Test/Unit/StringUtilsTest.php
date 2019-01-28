@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit;
 
-use \Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Magento\Framework\Stdlib\StringUtilsTest test case

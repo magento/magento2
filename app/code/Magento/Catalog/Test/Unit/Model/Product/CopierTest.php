@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use \Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product\Copier;
 use Magento\Catalog\Model\Product;
 
 /**

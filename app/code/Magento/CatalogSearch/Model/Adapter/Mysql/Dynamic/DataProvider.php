@@ -20,7 +20,7 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\StoreManager;
-use \Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

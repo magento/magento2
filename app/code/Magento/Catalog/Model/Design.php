@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model;
 
-use \Magento\Framework\TranslateInterface;
+use Magento\Framework\TranslateInterface;
 
 /**
  * Catalog Custom Category design Model

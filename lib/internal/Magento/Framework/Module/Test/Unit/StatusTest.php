@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\Status;
+use Magento\Framework\Module\Status;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 class StatusTest extends \PHPUnit\Framework\TestCase

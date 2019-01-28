@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
-use \PHPUnit\Framework\TestCase;
-use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
-use \Magento\Catalog\Model\Product;
-use \Magento\Framework\View\Element\Template\Context;
-use \Magento\Framework\Registry;
-use \Magento\Framework\Pricing\PriceCurrencyInterface;
-use \Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
+use PHPUnit\Framework\TestCase;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\View\Attributes

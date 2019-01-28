@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Invoice\AbstractInvoice;
 
-use \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Email;
+use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Email;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Indexer;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Generator of consecutive entity ID ranges that must be handled as a batch.

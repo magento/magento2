@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
-use \Magento\Framework\Filesystem\Driver\Http;
+use Magento\Framework\Filesystem\Driver\Http;
 
 class HttpTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,12 +6,12 @@
 
 namespace Magento\Theme\Model\Design\Config;
 
-use \Magento\Framework\Exception\LocalizedException;
-use \Magento\Theme\Api\Data\DesignConfigInterface;
-use \Magento\Theme\Api\Data\DesignConfigDataInterface;
-use \Magento\Framework\Mail\TemplateInterfaceFactory as TemplateFactory;
-use \Magento\Framework\Filter\Template;
-use \Magento\Framework\Filter\Template\Tokenizer\Parameter as ParameterTokenizer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Theme\Api\Data\DesignConfigInterface;
+use Magento\Theme\Api\Data\DesignConfigDataInterface;
+use Magento\Framework\Mail\TemplateInterfaceFactory as TemplateFactory;
+use Magento\Framework\Filter\Template;
+use Magento\Framework\Filter\Template\Tokenizer\Parameter as ParameterTokenizer;
 
 /**
  * Design configuration validator

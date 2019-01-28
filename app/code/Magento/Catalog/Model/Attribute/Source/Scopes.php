@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Attribute\Source;
 
-use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
 class Scopes implements \Magento\Framework\Data\OptionSourceInterface
 {

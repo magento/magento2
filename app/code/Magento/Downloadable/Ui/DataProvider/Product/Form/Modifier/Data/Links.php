@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data;
 
-use \Magento\Framework\Escaper;
+use Magento\Framework\Escaper;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;

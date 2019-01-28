@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Sales\Order;
 
-use \Magento\Tax\Model\Sales\Order\TaxManagement;
+use Magento\Tax\Model\Sales\Order\TaxManagement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
 {

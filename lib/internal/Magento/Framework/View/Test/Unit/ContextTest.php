@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use \Magento\Framework\View\Context;
+use Magento\Framework\View\Context;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

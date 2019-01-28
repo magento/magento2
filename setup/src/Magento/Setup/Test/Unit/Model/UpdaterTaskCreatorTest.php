@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\ObjectManagerProvider;
-use \Magento\Setup\Model\UpdaterTaskCreator;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\UpdaterTaskCreator;
 
 class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
 {

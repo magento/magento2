@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Status\History;
 
-use \Magento\Sales\Model\Order\Status\History\Validator;
+use Magento\Sales\Model\Order\Status\History\Validator;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {

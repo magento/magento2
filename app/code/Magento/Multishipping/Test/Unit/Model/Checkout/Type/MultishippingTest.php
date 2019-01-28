@@ -46,7 +46,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use \PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Directory\Model\AllowedCountries;

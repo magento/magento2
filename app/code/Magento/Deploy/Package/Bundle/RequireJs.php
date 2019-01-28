@@ -8,7 +8,7 @@ namespace Magento\Deploy\Package\Bundle;
 use Magento\Deploy\Config\BundleConfig;
 use Magento\Deploy\Package\BundleInterface;
 use Magento\Framework\Filesystem;
-use \Magento\Framework\Filesystem\File\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\Minification;
 

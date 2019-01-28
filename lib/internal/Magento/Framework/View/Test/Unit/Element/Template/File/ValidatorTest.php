@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Class ValidatorTest

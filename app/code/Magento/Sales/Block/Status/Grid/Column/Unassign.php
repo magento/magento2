@@ -6,7 +6,7 @@
 namespace Magento\Sales\Block\Status\Grid\Column;
 
 use Magento\Framework\App\ObjectManager;
-use \Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

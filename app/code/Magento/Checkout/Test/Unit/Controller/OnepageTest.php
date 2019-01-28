@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Controller;
 
-use \Magento\Checkout\Controller\Onepage;
+use Magento\Checkout\Controller\Onepage;
 
 /**
  * Class OnepageTest

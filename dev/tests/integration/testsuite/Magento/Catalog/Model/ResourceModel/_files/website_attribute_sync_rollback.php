@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Store\Api\StoreRepositoryInterface;
-use \Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\Registry;
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Roll back fixtures

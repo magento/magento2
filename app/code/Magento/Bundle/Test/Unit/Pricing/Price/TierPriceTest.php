@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use \Magento\Bundle\Pricing\Price\TierPrice;
+use Magento\Bundle\Pricing\Price\TierPrice;
 
 use Magento\Customer\Model\Group;
 

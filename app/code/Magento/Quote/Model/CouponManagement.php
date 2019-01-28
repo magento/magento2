@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Model;
 
-use \Magento\Quote\Api\CouponManagementInterface;
+use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;

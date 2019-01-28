@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * @magentoDbIsolation disabled

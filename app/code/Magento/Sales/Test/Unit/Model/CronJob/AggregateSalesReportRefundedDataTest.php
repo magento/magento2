@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
-use \Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
+use Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
 
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportRefundedDataTest

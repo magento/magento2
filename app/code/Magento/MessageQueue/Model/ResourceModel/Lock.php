@@ -5,8 +5,8 @@
  */
 namespace Magento\MessageQueue\Model\ResourceModel;
 
-use \Magento\Framework\MessageQueue\Lock\ReaderInterface;
-use \Magento\Framework\MessageQueue\Lock\WriterInterface;
+use Magento\Framework\MessageQueue\Lock\ReaderInterface;
+use Magento\Framework\MessageQueue\Lock\WriterInterface;
 
 /**
  * Class Lock to handle database lock table db transactions.

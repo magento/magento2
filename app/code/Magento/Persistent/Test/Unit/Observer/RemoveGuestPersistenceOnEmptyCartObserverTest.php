@@ -6,7 +6,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use \Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
+use Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
 
 class RemoveGuestPersistenceOnEmptyCartObserverTest extends \PHPUnit\Framework\TestCase
 {

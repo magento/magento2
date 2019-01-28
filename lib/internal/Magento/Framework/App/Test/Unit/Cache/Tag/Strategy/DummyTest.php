@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Dummy;
+use Magento\Framework\App\Cache\Tag\Strategy\Dummy;
 
 class DummyTest extends \PHPUnit\Framework\TestCase
 {

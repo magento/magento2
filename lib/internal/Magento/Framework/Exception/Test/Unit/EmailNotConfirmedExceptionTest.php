@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Exception\Test\Unit;
 
-use \Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Phrase;
 
 /**

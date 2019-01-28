@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Model\Data;
 
-use \Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Customer

@@ -7,7 +7,7 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Validator;
 
-use \Magento\Framework\MessageQueue\Publisher\Config\Validator\EnabledConnection;
+use Magento\Framework\MessageQueue\Publisher\Config\Validator\EnabledConnection;
 
 class EnabledConnectionTest extends \PHPUnit\Framework\TestCase
 {

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit;
 
-use \Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\ErrorProcessor;
 
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;

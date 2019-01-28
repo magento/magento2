@@ -10,7 +10,7 @@ use Magento\Framework\App as App;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\FailureToSendException;
-use \Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order;
 
 /**
  * Sales module base helper

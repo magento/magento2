@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-use \Magento\TestFramework\CodingStandard\ToolInterface;
+use Magento\TestFramework\CodingStandard\ToolInterface;
 
 class CodeMessDetector implements ToolInterface
 {

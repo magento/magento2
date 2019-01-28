@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Unit\Helper;
 
-use \Magento\Checkout\Helper\Cart;
+use Magento\Checkout\Helper\Cart;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\DataObject;

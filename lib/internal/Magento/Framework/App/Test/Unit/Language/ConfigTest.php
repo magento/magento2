@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Language;
 
-use \Magento\Framework\App\Language\Config;
+use Magento\Framework\App\Language\Config;
 
 /**
  * Test for configuration of language

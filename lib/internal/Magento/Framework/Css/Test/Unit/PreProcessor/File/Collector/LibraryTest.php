@@ -6,7 +6,7 @@
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\Collector;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Framework\Css\PreProcessor\File\Collector\Library;
+use Magento\Framework\Css\PreProcessor\File\Collector\Library;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 

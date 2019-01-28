@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Translate\Test\Unit;
 
-use \Magento\Framework\Translate\Inline;
+use Magento\Framework\Translate\Inline;
 
 class InlineTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit\Role;
 
-use \Magento\Framework\Acl\Role\Registry;
+use Magento\Framework\Acl\Role\Registry;
 
 class RegistryTest extends \PHPUnit\Framework\TestCase
 {

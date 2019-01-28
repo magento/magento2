@@ -18,7 +18,7 @@ use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
-use \Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Framework\App\Filesystem\DirectoryList;

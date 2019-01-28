@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Dependency\Data;
 
-use \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
+use Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

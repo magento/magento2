@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Favicon;
 
-use \Magento\Theme\Model\Favicon\Favicon;
+use Magento\Theme\Model\Favicon\Favicon;
 use Magento\Config\Model\Config\Backend\Image\Favicon as ImageFavicon;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
