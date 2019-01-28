@@ -5,8 +5,10 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\ExpressConfigProvider;
 use Magento\Paypal\Model\SmartButtonConfig;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ExpressConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -41,7 +43,7 @@ class ExpressConfigProviderTest extends \PHPUnit\Framework\TestCase
         $payment->expects($this->atLeastOnce())->method('getCheckoutRedirectUrl')->willReturn('http://redirect.url');
         $paymentHelper->expects($this->atLeastOnce())->method('getMethodInstance')->willReturn($payment);
 
-        /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject $urlBuilderMock */
+        /** @var UrlInterface|MockObject $urlBuilderMock */
         $urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
 
         $smartButtonConfigMock = $this->createMock(SmartButtonConfig::class);

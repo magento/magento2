@@ -73,7 +73,7 @@ class SmartButton extends Template implements ShortcutInterface
      *
      * @return bool
      */
-    protected function shouldRender(): bool
+    private function shouldRender(): bool
     {
         $isInCatalog = $this->getIsInCatalogProduct();
         $isInContext = (bool)(int) $this->config->getValue('in_context');

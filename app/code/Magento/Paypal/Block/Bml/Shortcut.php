@@ -10,6 +10,7 @@ use Magento\Catalog\Block as CatalogBlock;
 use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class shortcut
@@ -114,7 +115,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->_bmlMethodCode = $bmlMethodCode;
         $this->config = $config
             ? $config->create()
-            : \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigFactory::class)->create();
+            : ObjectManager::getInstance()->get(ConfigFactory::class)->create();
         $this->config->setMethod($this->_paymentMethodCode);
         parent::__construct($context, $data);
     }
