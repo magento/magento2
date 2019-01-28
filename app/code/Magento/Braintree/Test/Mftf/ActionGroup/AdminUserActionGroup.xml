@@ -41,7 +41,7 @@
 
 
     <!--Delete User-->
-    <actionGroup name="AdminDeleteUserActionGroup">
+    <actionGroup name="AdminDeleteNewUserActionGroup">
 
         <click stepKey="clickOnUser" selector="{{AdminDeleteUserSection.theUser}}"/>
         <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>

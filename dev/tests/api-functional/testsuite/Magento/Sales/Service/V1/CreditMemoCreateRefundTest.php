@@ -115,8 +115,7 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
         );
         $this->assertNotEmpty($result);
         $order = $this->objectManager->get(OrderRepositoryInterface::class)->get($order->getId());
-        //Totally refunded orders still can be processed and shipped.
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState());
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState());
     }
 
     private function getItemsForRest($order)

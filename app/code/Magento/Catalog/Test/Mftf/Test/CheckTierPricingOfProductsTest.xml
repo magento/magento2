@@ -108,6 +108,10 @@
         </actionGroup>
         <actionGroup ref="ClearProductsFilterActionGroup" stepKey="ClearProductsFilterActionGroup"/>
 
+        <!--Flush cache-->
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
+
         <!--Edit customer info-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
             <argument name="customer" value="$$customer$$"/>
@@ -147,9 +151,9 @@
         <!--Create new order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="storeView" value="customStoreView"/>
         </actionGroup>
-        <click selector="{{OrdersGridSection.website('secondStoreView')}}" stepKey="ClickToSelectStore"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
+
         <click  selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct"/>
         <waitForPageLoad stepKey="waitForProductsOpened"/>
         <!--TEST CASE #1-->
@@ -318,13 +322,17 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <createData entity="DefaultConfigCatalogPrice" stepKey="defaultConfigCatalogPrice"/>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
-                <argument name="websiteName" value="secondWebsite"/>
-            </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
                 <argument name="ruleName" value="ship"/>
             </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="secondWebsite"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!--Do reindex and flush cache-->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
     </test>
 </tests>

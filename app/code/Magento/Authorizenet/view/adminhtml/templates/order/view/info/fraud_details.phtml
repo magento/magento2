@@ -44,8 +44,8 @@ $fraudDetails = $payment->getAdditionalInformation('fraud_details');
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['fraud_filters'])): ?>
-                <b><?= $block->escapeHtml(__('Fraud Filters')) ?>:
-                </b></br>
+                <strong><?= $block->escapeHtml(__('Fraud Filters')) ?>:
+                </strong></br>
                 <?php foreach($fraudDetails['fraud_filters'] as $filter): ?>
                     <?= $block->escapeHtml($filter['name']) ?>:
                     <?= $block->escapeHtml($filter['action']) ?>
