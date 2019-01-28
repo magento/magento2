@@ -58,7 +58,7 @@ class SearchTermManager
                 && $this->searchTermsUseRate[$searchTerm['term']]['used'] < $searchTerm['count']
             ) {
                 $description .= ' ' . $searchTerm['term'];
-                $this->searchTermsUseRate[$searchTerm['term']]['used'] += 1;
+                ++$this->searchTermsUseRate[$searchTerm['term']]['used'];
             }
         }
     }

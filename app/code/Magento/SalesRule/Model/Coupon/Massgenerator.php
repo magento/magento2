@@ -183,7 +183,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
                 ->setCode($code)
                 ->save();
 
-            $this->generatedCount += 1;
+            ++$this->generatedCount;
             $this->generatedCodes[] = $code;
         }
 

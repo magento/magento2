@@ -137,7 +137,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
                 ->expects($this->at($index))
                 ->method($mockMethod)
                 ->will($this->returnValue($returnValue));
-            $index += 1;
+            ++$index;
         }
 
         $this->filePermissions->getApplicationNonWritableDirectories();
@@ -253,7 +253,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
                 ->expects($this->at($index))
                 ->method($mockMethod)
                 ->will($this->returnValue($returnValue));
-            $index += 1;
+            ++$index;
         }
 
         $this->assertEquals(

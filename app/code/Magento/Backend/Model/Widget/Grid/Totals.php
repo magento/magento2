@@ -43,7 +43,7 @@ class Totals extends \Magento\Backend\Model\Widget\Grid\AbstractTotals
         $itemsCount = 0;
         foreach ($collection as $item) {
             if (!$item->hasChildren()) {
-                $itemsCount += 1;
+                ++$itemsCount;
             } else {
                 $itemsCount += count($item->getChildren());
             }

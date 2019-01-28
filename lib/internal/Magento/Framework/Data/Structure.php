@@ -377,14 +377,14 @@ class Structure
         $offset = $position;
         if ($position > 0) {
             if ($position >= $currentOffset + 1) {
-                $offset -= 1;
+                --$offset;
             }
         } elseif ($position < 0) {
             if ($position < $currentOffset + 1 - count($this->_elements[$parentId][self::CHILDREN])) {
                 if ($position === -1) {
                     $offset = null;
                 } else {
-                    $offset += 1;
+                    ++$offset;
                 }
             }
         }
@@ -433,7 +433,7 @@ class Structure
     {
         $newOffset = $this->_getChildOffset($parentId, $siblingId) + $delta;
         if ($delta < 0) {
-            $newOffset += 1;
+            ++$newOffset;
         }
         if ($newOffset < 0) {
             $newOffset = 0;

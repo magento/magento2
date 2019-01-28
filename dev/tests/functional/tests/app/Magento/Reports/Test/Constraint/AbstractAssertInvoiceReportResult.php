@@ -69,8 +69,8 @@ abstract class AbstractAssertInvoiceReportResult extends AbstractConstraint
     protected function prepareExpectedResult(array $expectedInvoiceData)
     {
         $totalInvoice = $this->order->getPrice()['invoice'][0]['grand_invoice_total'];
-        $expectedInvoiceData['invoiced'] += 1;
-        $expectedInvoiceData['qty'] += 1;
+        ++$expectedInvoiceData['invoiced'];
+        ++$expectedInvoiceData['qty'];
         $expectedInvoiceData['total-invoiced'] += $totalInvoice;
 
         return $expectedInvoiceData;

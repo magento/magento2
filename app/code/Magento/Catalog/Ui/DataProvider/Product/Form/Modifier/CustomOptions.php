@@ -1152,7 +1152,7 @@ class CustomOptions extends AbstractModifier
 
             if (count($group['optgroup'])) {
                 $options[] = $group;
-                $groupIndex += 1;
+                ++$groupIndex;
             }
         }
 

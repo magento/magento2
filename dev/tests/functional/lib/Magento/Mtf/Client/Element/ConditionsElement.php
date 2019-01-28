@@ -514,7 +514,7 @@ class ConditionsElement extends SimpleElement
             }
             $param = $this->mapParams[$this->findKeyParam];
             $element = $context->find(sprintf($this->param, strlen($param), $param), Locator::SELECTOR_XPATH);
-            $this->findKeyParam += 1;
+            ++$this->findKeyParam;
         } while (!$element->isVisible());
 
         return $element;

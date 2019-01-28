@@ -272,7 +272,7 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
                 'conditions' => empty($childCondition) ? null : $childCondition
             ], [$this, 'filterCondition']);
 
-            $indent += 1;
+            ++$indent;
             $key = "{$prefix}{$indent}";
             $isContinue = isset($condition[$key]);
         }

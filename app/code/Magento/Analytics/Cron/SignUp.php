@@ -72,7 +72,7 @@ class SignUp
             return false;
         }
 
-        $attemptsCount -= 1;
+        --$attemptsCount;
         $this->flagManager->saveFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
         $signUpResult = $this->connector->execute('signUp');
         if ($signUpResult === false) {

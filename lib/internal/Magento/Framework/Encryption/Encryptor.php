@@ -390,7 +390,7 @@ class Encryptor implements EncryptorInterface
     {
         $this->validateKey($key);
         $this->keys[] = $key;
-        $this->keyVersion += 1;
+        ++$this->keyVersion;
         return $this;
     }
 

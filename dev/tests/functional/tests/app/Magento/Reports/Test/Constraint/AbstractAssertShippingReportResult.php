@@ -70,7 +70,7 @@ abstract class AbstractAssertShippingReportResult extends AbstractConstraint
     protected function prepareExpectedResult(array $expectedShippingData, array $shipmentResult)
     {
         $totalShipping = $this->order->getPrice()[0]['grand_shipment_total'];
-        $expectedShippingData['qty'] += 1;
+        ++$expectedShippingData['qty'];
         $expectedShippingData['total-sales-shipping'] += $totalShipping;
 
         $preparedResult = [$expectedShippingData, $shipmentResult];

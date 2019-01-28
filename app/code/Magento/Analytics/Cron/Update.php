@@ -75,7 +75,7 @@ class Update
             ->getFlagData(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE);
 
         if ($attemptsCount) {
-            $attemptsCount -= 1;
+            --$attemptsCount;
             $result = $this->connector->execute('update');
         }
 
