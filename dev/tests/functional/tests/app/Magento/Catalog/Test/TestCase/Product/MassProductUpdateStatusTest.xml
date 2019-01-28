@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateStatusTest" summary="Update status of Products Using Mass Actions" ticketId="MAGETWO-60847">
         <variation name="MassProductStatusUpdateTestVariation1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialProducts" xsi:type="array">
                 <item name ="0" xsi:type="string">catalogProductSimple::simple_10_dollar</item>
                 <item name ="1" xsi:type="string">catalogProductSimple::simple_10_dollar</item>
