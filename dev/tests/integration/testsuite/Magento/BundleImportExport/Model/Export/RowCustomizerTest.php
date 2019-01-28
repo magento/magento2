@@ -39,7 +39,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareData(): void
     {
-        $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
+        $parsedAdditionalAttributes = 'text_attribute!=@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
         $allAdditionalAttributes = $parsedAdditionalAttributes . ',weight_type=0,price_type=1';
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
@@ -77,7 +77,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'name' => 'Bundle Product Items',
             'name_' . $storeCode => 'Bundle Product Items_' . $storeCode,
         ];
-        $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
+        $parsedAdditionalAttributes = 'text_attribute!=@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
         $allAdditionalAttributes = $parsedAdditionalAttributes . ',weight_type=0,price_type=1';
         $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
