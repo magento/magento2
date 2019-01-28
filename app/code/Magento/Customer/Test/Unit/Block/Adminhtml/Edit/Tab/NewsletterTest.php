@@ -54,7 +54,7 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
      */
     protected $backendSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);

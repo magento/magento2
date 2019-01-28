@@ -43,7 +43,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_checkoutSession;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

@@ -34,7 +34,7 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setup()
+    protected function setup()
     {
         $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);

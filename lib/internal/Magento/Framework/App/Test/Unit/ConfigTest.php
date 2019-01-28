@@ -32,7 +32,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $appConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()

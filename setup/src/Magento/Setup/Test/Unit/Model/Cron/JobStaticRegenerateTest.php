@@ -14,7 +14,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
      */
     private $jobStaticRegenerate;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock(
             [

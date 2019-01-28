@@ -35,7 +35,7 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleLoader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->dependencyChecker =

@@ -22,7 +22,7 @@ class SearchTermDescriptionGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $searchTermManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->descriptionGeneratorMock =
             $this->createMock(\Magento\Setup\Model\Description\DescriptionGenerator::class);

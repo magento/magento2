@@ -20,7 +20,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }

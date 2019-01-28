@@ -29,7 +29,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\Framework\Pricing\Adjustment\Calculator($this->amountFactoryMock);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->model = null;
         $this->amountFactoryMock = null;

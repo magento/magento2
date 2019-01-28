@@ -29,7 +29,7 @@ class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $formattedPriceInfoBuilderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();

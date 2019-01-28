@@ -28,7 +28,7 @@ class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->gridExtensionMock = $this->createMock(Extension::class);
 

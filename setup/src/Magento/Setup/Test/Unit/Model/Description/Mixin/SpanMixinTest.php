@@ -22,7 +22,7 @@ class SpanMixinTest extends \PHPUnit\Framework\TestCase
      */
     private $wordWrapperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->randomWordSelectorMock =
             $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector::class);

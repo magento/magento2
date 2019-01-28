@@ -27,7 +27,7 @@ class TranslationTest extends \PHPUnit\Framework\TestCase
      */
     private $configType;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();

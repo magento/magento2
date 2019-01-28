@@ -32,7 +32,7 @@ class ValidationRulesTest extends SetupTestCase
      */
     private $cliCommad;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->schemaConfig = $objectManager->create(SchemaConfig::class);

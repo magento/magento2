@@ -51,7 +51,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     private $websiteSource;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()

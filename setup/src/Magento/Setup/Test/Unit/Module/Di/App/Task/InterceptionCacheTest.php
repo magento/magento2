@@ -19,7 +19,7 @@ class InterceptionCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $interceptionsListMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
             ->setMethods([])

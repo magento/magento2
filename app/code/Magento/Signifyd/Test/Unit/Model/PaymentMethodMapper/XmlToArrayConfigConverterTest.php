@@ -21,7 +21,7 @@ class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $filePath;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
 

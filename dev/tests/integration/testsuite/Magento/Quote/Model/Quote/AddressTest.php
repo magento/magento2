@@ -41,7 +41,7 @@ class AddressTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Initialize quote and customer fixtures
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Quote\Model\Quote::class

@@ -281,7 +281,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->objectManager->create(\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep::class)->run();
     }

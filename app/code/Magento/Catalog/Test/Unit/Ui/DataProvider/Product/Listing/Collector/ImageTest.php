@@ -46,7 +46,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $imageInterfaceFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()

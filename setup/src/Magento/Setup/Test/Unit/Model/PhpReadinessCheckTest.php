@@ -38,7 +38,7 @@ class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $phpReadinessCheck;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $this->phpInfo = $this->createMock(\Magento\Setup\Model\PhpInformation::class);

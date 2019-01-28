@@ -25,7 +25,7 @@ class StoreWebsiteRelationTest extends \PHPUnit\Framework\TestCase
     /** @var  Select | \PHPUnit_Framework_MockObject_MockObject */
     private $select;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()

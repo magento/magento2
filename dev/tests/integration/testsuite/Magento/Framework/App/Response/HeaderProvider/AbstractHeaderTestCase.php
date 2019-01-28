@@ -10,7 +10,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
     /** @var  \Magento\Framework\App\Response\Http */
     private $interceptedResponse;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->_objectManager->configure(

@@ -32,7 +32,7 @@ class PermissionsTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 

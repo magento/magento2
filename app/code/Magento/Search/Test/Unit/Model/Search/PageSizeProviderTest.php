@@ -21,7 +21,7 @@ class PageSizeProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $pageSizeBySearchEngineMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->pageSizeBySearchEngineMock = $this->getMockBuilder(\Magento\Search\Model\EngineResolver::class)
             ->disableOriginalConstructor()

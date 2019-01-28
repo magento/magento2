@@ -47,7 +47,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get(\Magento\Customer\Model\GroupRegistry::class);
@@ -58,7 +58,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Execute per test cleanup.
      */
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }

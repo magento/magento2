@@ -48,7 +48,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $configSource;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

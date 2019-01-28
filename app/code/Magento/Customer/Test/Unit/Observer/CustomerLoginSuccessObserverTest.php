@@ -34,7 +34,7 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 

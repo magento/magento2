@@ -32,7 +32,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);

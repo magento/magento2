@@ -55,7 +55,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $status;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

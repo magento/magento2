@@ -43,7 +43,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $transactionId = 'xsd7n';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentModelMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()

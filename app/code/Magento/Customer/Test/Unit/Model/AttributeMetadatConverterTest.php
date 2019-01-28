@@ -43,7 +43,7 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Customer\Model\Attribute | \PHPUnit_Framework_MockObject_MockObject */
     private $attribute;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->setMethods(['create'])

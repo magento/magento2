@@ -90,7 +90,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }

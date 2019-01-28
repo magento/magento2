@@ -146,7 +146,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->getMock();
         }
 
-        public function tearDown()
+        protected function tearDown()
         {
             global $mockTranslateSetCookie;
             $mockTranslateSetCookie = false;

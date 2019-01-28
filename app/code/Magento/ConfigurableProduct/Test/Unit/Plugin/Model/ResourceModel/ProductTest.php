@@ -32,7 +32,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);

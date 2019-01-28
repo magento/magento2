@@ -32,7 +32,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $customerGenerator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->groupCollectionFactoryMock =
             $this->createPartialMock(

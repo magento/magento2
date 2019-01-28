@@ -88,7 +88,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset(
             $this->context,

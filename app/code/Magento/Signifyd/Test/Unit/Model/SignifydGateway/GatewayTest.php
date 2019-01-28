@@ -43,7 +43,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      */
     private $caseRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->createCaseBuilder = $this->getMockBuilder(CreateCaseBuilderInterface::class)
             ->getMockForAbstractClass();

@@ -30,7 +30,7 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageMagic;
 
-    public function setup()
+    protected function setup()
     {
         $objectManager = new ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();

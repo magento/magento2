@@ -42,7 +42,7 @@ class SettingCheckerTest extends \PHPUnit\Framework\TestCase
      */
     private $env;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

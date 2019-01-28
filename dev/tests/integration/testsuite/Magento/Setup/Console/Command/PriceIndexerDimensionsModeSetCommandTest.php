@@ -28,7 +28,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     /**
      * setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
 

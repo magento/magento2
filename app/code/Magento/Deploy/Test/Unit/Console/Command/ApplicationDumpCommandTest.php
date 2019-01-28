@@ -60,7 +60,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()

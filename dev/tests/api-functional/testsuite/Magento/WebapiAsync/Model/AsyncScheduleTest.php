@@ -132,7 +132,7 @@ class AsyncScheduleTest extends WebapiAbstract
         }
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

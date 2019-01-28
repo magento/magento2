@@ -48,7 +48,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->facadeMock = $this->getMockBuilder(SensitiveConfigSetFacade::class)
             ->disableOriginalConstructor()

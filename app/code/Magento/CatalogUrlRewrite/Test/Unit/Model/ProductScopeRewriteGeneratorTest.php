@@ -50,7 +50,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->serializer->expects($this->any())

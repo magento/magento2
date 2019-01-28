@@ -99,7 +99,7 @@ abstract class AbstractCmsBlockEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         foreach ($this->storeName as $store) {
             if (in_array($store, $this->skippedStores)) {

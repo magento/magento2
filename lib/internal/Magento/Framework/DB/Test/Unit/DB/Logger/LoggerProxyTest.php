@@ -28,7 +28,7 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
     }

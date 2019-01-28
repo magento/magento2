@@ -106,7 +106,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedArray, $this->source->get());
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($_ENV['CONFIG__UNIT__TEST__VALUE']);
     }

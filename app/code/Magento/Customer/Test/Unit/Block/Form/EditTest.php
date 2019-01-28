@@ -27,7 +27,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfigMock =  $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()

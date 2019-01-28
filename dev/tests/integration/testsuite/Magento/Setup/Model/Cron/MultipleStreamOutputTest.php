@@ -12,7 +12,7 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
      */
     private $multipleStreamOutput;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->multipleStreamOutput = new MultipleStreamOutput(
             [
@@ -22,7 +22,7 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         file_put_contents(__DIR__ . '/_files/a.txt', '');
         file_put_contents(__DIR__ . '/_files/b.txt', '');

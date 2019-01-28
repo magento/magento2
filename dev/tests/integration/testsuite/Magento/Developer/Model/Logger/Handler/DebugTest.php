@@ -71,7 +71,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      */
     private $appConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         /** @var Filesystem $filesystem */
         $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
@@ -101,7 +101,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->etcDirectory->delete('env.php');
         $this->etcDirectory->renameFile('env.base.php', 'env.php');

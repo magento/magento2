@@ -36,7 +36,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
      */
     private $filePermissions;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);

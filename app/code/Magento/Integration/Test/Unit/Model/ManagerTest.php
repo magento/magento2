@@ -74,7 +74,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->integrationServiceMock);
         unset($this->integrationManager);

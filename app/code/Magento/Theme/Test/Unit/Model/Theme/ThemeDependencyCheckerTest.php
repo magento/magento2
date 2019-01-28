@@ -30,7 +30,7 @@ class ThemeDependencyCheckerTest extends \PHPUnit\Framework\TestCase
      */
     private $themePackageInfo;
 
-    public function setup()
+    protected function setup()
     {
         $this->themePackageInfo = $this->createMock(\Magento\Theme\Model\Theme\ThemePackageInfo::class);
         $this->themeCollection = $this->createMock(\Magento\Theme\Model\Theme\Data\Collection::class);

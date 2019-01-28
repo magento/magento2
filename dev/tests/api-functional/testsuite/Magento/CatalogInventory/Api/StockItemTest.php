@@ -40,7 +40,7 @@ class StockItemTest extends WebapiAbstract
     /**
      * Execute per test initialization
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

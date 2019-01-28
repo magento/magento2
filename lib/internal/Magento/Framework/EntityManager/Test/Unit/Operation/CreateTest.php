@@ -43,7 +43,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $create;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()

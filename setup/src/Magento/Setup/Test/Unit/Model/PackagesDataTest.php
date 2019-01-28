@@ -52,7 +52,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
      */
     private $typeMapper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerInformation = $this->getComposerInformation();
         $this->timeZoneProvider = $this->getMockBuilder(\Magento\Setup\Model\DateTime\TimeZoneProvider::class)

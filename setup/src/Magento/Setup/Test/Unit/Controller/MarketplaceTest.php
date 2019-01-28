@@ -27,7 +27,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->packagesAuth = $this->createMock(\Magento\Setup\Model\PackagesAuth::class);
         $this->packagesData = $this->createMock(\Magento\Setup\Model\PackagesData::class);

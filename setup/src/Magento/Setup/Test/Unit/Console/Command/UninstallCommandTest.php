@@ -28,7 +28,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);

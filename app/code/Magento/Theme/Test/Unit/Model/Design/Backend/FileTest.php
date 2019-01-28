@@ -28,7 +28,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $mime;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
         $registry = $this->getMockObject(\Magento\Framework\Registry::class);
@@ -74,7 +74,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->fileBackend);
     }

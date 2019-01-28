@@ -20,7 +20,7 @@ class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $this->model = new PayloadValidator($this->fullModuleList);

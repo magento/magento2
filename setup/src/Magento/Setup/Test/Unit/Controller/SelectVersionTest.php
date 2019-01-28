@@ -23,7 +23,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->systemPackage = $this->createMock(\Magento\Setup\Model\SystemPackage::class);
         $this->controller = new SelectVersion(

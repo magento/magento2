@@ -201,7 +201,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->ratingIndex->open();
         if ($this->reviewInitial instanceof Review) {

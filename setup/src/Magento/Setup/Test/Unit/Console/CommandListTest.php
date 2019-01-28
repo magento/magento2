@@ -20,7 +20,7 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
       */
     private $serviceManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->serviceManager = $this->createMock(\Zend\ServiceManager\ServiceManager::class);
         $this->commandList = new CommandList($this->serviceManager);

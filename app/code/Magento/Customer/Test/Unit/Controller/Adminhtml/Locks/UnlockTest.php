@@ -66,7 +66,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)

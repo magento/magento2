@@ -52,7 +52,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     private $reportController;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

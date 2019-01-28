@@ -41,7 +41,7 @@ class ImageTest extends \Magento\Ui\Test\Unit\Component\Form\Element\DataType\Me
      */
     private $image;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

@@ -95,7 +95,7 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $orderRepositoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->creditmemoFactoryMock = $this->getMockBuilder(CreditmemoFactory::class)

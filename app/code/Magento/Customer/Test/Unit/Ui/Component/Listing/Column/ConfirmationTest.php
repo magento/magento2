@@ -44,7 +44,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
      */
     protected $accountConfirmation;
 
-    public function setup()
+    protected function setup()
     {
         $this->processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()

@@ -63,7 +63,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $storeSource;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()

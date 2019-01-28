@@ -51,7 +51,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);

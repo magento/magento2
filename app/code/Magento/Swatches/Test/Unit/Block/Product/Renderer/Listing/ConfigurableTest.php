@@ -61,7 +61,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $variationPricesMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->arrayUtils = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
         $this->jsonEncoder = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);

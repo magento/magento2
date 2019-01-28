@@ -35,7 +35,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProviderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);

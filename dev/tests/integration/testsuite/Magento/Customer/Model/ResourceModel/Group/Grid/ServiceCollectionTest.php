@@ -13,7 +13,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceCollection */
     protected $collection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class

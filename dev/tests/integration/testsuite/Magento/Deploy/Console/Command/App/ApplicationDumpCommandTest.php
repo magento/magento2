@@ -65,7 +65,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\FileReader::class);
@@ -307,7 +307,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),

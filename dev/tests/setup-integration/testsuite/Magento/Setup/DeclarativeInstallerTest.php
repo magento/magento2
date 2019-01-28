@@ -51,7 +51,7 @@ class DeclarativeInstallerTest extends SetupTestCase
      */
     private $describeTable;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);

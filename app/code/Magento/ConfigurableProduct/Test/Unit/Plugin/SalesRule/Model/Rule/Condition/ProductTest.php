@@ -46,7 +46,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $validatorPlugin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validator = $this->createValidator();

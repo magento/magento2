@@ -24,7 +24,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->model = $this->objectManager->get(\Magento\Wishlist\Model\Item::class);

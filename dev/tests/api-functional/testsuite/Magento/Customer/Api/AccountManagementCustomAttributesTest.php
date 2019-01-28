@@ -65,7 +65,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -82,7 +82,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $this->fileSystem = Bootstrap::getObjectManager()->get(\Magento\Framework\Filesystem::class);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {

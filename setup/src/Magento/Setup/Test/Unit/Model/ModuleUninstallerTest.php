@@ -53,7 +53,7 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
      */
     private $patchApplierMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleRegistryUninstaller = $this->createMock(\Magento\Setup\Model\ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(

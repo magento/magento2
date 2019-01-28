@@ -31,7 +31,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -53,7 +53,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

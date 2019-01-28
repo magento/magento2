@@ -32,7 +32,7 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         /** @var

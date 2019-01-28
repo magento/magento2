@@ -69,7 +69,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
      */
     private $senderResolverMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerRegistryMock = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
 

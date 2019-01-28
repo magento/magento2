@@ -32,7 +32,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->registry);
     }

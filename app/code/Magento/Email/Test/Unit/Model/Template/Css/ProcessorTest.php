@@ -26,7 +26,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $fallbackContext;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->assetRepository = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()

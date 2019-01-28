@@ -22,7 +22,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var  ReadHandler  */
     private $readHandler;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->websiteLink = $this->getMockBuilder(ResourceModel\Website\Link::class)
             ->disableOriginalConstructor()

@@ -74,7 +74,7 @@ class ProductViewTest extends GraphQlAbstract
         $config->reinit();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);

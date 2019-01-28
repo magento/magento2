@@ -15,7 +15,7 @@ class AdditionalInfoTest extends \PHPUnit\Framework\TestCase
     /** @var  AdditionalInfo */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new AdditionalInfo();
     }

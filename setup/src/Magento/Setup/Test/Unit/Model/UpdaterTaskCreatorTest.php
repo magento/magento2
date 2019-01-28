@@ -31,7 +31,7 @@ class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->updater = $this->createMock(\Magento\Setup\Model\Updater::class);
         $this->objectManagerProvider =

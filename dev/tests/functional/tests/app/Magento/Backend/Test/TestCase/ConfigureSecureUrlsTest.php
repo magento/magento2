@@ -145,7 +145,7 @@ class ConfigureSecureUrlsTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->configurationAdminPage->open();
         $this->configurationAdminPage->getForm()

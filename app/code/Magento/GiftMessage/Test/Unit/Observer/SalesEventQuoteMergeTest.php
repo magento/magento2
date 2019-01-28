@@ -27,7 +27,7 @@ class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManger = new ObjectManager($this);
         $this->salesEventQuoteMerge = $objectManger->getObject(SalesEventQuoteMerge::class);

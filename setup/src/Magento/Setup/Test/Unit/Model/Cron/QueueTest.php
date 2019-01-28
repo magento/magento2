@@ -29,7 +29,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     private $queue;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->reader = $this->createMock(\Magento\Setup\Model\Cron\Queue\Reader::class);
         $this->writer = $this->createMock(\Magento\Setup\Model\Cron\Queue\Writer::class);

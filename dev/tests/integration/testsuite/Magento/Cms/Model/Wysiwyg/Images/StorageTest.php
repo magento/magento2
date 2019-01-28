@@ -64,7 +64,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);

@@ -55,7 +55,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fileSystemMock = $this->createPartialMock(
             \Magento\Framework\Filesystem::class,

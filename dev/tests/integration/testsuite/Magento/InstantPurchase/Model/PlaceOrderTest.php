@@ -27,7 +27,7 @@ class PlaceOrderTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

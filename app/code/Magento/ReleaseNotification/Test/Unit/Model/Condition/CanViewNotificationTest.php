@@ -33,7 +33,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();

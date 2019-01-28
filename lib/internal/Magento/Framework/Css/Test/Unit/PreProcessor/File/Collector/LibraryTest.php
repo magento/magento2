@@ -68,7 +68,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
      * Setup tests
      * @return void
      */
-    public function setup()
+    protected function setup()
     {
         $this->fileListFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList\Factory::class)
             ->disableOriginalConstructor()->getMock();

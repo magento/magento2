@@ -61,7 +61,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->translationFactory = $this->getMockBuilder(TranslateFactory::class)
             ->disableOriginalConstructor()

@@ -14,7 +14,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */

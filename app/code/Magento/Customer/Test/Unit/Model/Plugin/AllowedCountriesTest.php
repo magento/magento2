@@ -26,7 +26,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
     /** @var  AllowedCountries */
     private $plugin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->shareConfig = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()

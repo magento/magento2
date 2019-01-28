@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->serverArray = $_SERVER;
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $_SERVER = $this->serverArray;
     }

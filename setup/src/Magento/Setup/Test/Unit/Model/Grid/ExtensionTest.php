@@ -32,7 +32,7 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerInformationMock =  $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()

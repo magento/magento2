@@ -27,7 +27,7 @@ class DescriptionSentenceGeneratorTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dictionaryMock = $this->createMock(\Magento\Setup\Model\Dictionary::class);
         $this->sentenceGenerator = new \Magento\Setup\Model\Description\DescriptionSentenceGenerator(

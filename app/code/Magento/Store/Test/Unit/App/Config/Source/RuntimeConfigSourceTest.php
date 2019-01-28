@@ -37,7 +37,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceConnection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);

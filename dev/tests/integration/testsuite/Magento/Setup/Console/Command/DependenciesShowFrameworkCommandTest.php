@@ -19,7 +19,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $commandTester;
 
-    public function setUp()
+    protected function setUp()
     {
         $modules = [
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
@@ -49,7 +49,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (file_exists(__DIR__ . '/_files/output/framework.csv')) {
             unlink(__DIR__ . '/_files/output/framework.csv');

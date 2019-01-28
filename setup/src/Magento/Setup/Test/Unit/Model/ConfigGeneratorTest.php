@@ -29,7 +29,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $configDataMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

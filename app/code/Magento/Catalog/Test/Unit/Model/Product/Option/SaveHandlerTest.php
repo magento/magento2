@@ -33,7 +33,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $optionRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

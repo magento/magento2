@@ -40,7 +40,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->driver = new File();
         $this->absolutePath = dirname(__DIR__) . '/_files/';

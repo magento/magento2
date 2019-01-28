@@ -64,7 +64,7 @@ class HandleTest extends \PHPUnit\Framework\TestCase
      */
     private $dataProviderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
 

@@ -68,7 +68,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
      */
     private $sequenceApplier;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

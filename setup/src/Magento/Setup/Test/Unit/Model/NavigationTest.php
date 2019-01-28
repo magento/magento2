@@ -25,7 +25,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $navigation;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->serviceLocatorMock =
             $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);

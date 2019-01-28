@@ -31,7 +31,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -42,7 +42,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @inheritDoc
      */
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
         //$this->session->unsCustomerGroupData();

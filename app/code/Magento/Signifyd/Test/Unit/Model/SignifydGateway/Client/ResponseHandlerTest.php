@@ -54,7 +54,7 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $response;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 

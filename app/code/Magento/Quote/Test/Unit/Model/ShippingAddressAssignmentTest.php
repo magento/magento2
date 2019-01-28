@@ -43,7 +43,7 @@ class ShippingAddressAssignmentTest extends \PHPUnit\Framework\TestCase
      */
     private $shippingAssignmentMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->cartExtensionFactoryMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\CartExtensionFactory::class,

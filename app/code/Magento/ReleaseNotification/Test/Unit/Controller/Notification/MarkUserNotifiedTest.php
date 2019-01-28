@@ -59,7 +59,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
      */
     private $action;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storageMock = $this->getMockBuilder(StorageInterface::class)
             ->setMethods(['getId'])

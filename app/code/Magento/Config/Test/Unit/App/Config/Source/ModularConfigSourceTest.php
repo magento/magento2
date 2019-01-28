@@ -25,7 +25,7 @@ class ModularConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

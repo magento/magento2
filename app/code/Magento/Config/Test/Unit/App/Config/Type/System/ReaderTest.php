@@ -38,7 +38,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

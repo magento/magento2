@@ -49,7 +49,7 @@ class ConfigWriterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()

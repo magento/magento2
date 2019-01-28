@@ -93,7 +93,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->request->setQuery(new Parameters());
     }

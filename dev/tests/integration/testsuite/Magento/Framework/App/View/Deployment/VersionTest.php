@@ -28,7 +28,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     private $fileName = 'deployed_version.txt';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fileStorage = ObjectManager::getInstance()->create(
             File::class,

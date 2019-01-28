@@ -37,7 +37,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->methodFactoryMock = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterfaceFactory::class)
             ->setMethods(['create'])

@@ -36,7 +36,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $payment;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new ObjectManager($this);
 

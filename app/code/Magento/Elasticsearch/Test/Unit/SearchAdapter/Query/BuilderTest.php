@@ -56,7 +56,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->setMethods(['getEntityType'])

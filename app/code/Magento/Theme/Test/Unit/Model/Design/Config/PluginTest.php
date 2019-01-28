@@ -30,7 +30,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     /** @var  Plugin */
     protected $plugin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManager = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,

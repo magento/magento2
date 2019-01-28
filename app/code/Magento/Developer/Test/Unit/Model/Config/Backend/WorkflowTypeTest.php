@@ -34,7 +34,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->appStateMock = $this->createMock(State::class);
         $this->objectManagerHelper = new ObjectManager($this);

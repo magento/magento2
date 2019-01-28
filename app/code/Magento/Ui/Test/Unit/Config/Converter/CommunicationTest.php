@@ -15,7 +15,7 @@ class CommunicationTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->converter = new Communication(new ConverterUtils());
     }

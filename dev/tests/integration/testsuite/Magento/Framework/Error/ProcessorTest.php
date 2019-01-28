@@ -12,12 +12,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Error\Processor */
     private $processor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->processor = $this->createProcessor();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if ($this->processor->reportId) {
             unlink($this->processor->_reportDir . '/' . $this->processor->reportId);

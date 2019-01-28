@@ -40,7 +40,7 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
      */
     private $shareConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->countriesFactoryMock =
             $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class)

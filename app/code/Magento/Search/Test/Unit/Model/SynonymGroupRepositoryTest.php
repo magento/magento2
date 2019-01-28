@@ -22,7 +22,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceModel;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->factory = $this->createPartialMock(\Magento\Search\Model\SynonymGroupFactory::class, ['create']);
         $this->resourceModel = $this->createMock(\Magento\Search\Model\ResourceModel\SynonymGroup::class);

@@ -12,7 +12,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManagerProvider

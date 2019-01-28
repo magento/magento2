@@ -79,7 +79,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $createController;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();

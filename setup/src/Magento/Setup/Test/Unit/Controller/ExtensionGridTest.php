@@ -55,7 +55,7 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
     const FORMATTED_TIME = '01:55PM';
     /**#@-*/
 
-    public function setUp()
+    protected function setUp()
     {
         $this->lastSyncData = [
             "lastSyncDate" => [

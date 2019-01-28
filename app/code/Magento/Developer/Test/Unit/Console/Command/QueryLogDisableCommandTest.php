@@ -33,7 +33,7 @@ class QueryLogDisableCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->configWriter = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()

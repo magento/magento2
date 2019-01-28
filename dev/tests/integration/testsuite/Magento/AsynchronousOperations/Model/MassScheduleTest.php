@@ -140,7 +140,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($this->skus), $result->getRequestItems());
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->publisherConsumerController->stopConsumers();
         $this->clearProducts();

@@ -24,7 +24,7 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
      */
     private $packagesData;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->packagesData = $this->getMockBuilder(PackagesData::class)
             ->disableOriginalConstructor()

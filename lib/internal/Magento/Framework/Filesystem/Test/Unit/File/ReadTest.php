@@ -51,7 +51,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->file = new Read($this->path, $this->driver);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->file = null;
         $this->driver = null;

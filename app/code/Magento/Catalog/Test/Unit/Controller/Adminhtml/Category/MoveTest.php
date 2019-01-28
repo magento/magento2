@@ -56,7 +56,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
      */
     private $messageManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->setMethods(['create'])

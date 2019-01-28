@@ -22,13 +22,13 @@ class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->command = new I18nPackCommand();
         $this->tester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeCsv('A');
         $this->removeCsv('B');

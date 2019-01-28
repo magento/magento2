@@ -61,7 +61,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $requestFieldName = 'id';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()

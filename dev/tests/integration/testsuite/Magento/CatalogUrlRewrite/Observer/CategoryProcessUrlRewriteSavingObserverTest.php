@@ -51,7 +51,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         return $actualResults;
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);

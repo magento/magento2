@@ -39,7 +39,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }

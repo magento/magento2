@@ -173,7 +173,7 @@ QUERY;
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
     }

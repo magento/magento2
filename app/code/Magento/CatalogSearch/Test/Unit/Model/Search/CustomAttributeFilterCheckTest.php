@@ -21,7 +21,7 @@ class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
     /** @var CustomAttributeFilterCheck */
     private $customAttributeFilterCheck;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

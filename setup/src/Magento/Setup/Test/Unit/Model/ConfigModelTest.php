@@ -46,7 +46,7 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
      */
     private $configOptionsList;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collector = $this->createMock(\Magento\Setup\Model\ConfigOptionsListCollector::class);
         $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);

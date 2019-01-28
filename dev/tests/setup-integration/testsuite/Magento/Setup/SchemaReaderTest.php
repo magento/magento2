@@ -26,7 +26,7 @@ class SchemaReaderTest extends SetupTestCase
      */
     private $moduleManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(ReaderComposite::class);

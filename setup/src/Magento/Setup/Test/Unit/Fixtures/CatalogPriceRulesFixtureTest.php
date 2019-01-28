@@ -23,7 +23,7 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 

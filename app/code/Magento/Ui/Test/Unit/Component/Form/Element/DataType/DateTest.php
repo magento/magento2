@@ -32,7 +32,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->localeDateMock = $this->createMock(TimezoneInterface::class);

@@ -31,7 +31,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $zendServiceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $zendServiceLocator

@@ -34,7 +34,7 @@ class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $dependencyReadinessCheck;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerJsonFinder =
             $this->createMock(\Magento\Framework\Composer\ComposerJsonFinder::class);

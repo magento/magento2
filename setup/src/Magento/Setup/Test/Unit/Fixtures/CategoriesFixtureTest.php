@@ -40,7 +40,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $categoryFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);

@@ -128,7 +128,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

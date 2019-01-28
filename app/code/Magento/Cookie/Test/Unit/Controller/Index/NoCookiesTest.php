@@ -43,7 +43,7 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
     const REDIRECT_PATH = '\a\path';
     const REDIRECT_ARGUMENTS = '&arg1key=arg1value';
 
-    public function setup()
+    protected function setup()
     {
         $objectManager = new ObjectManager($this);
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock();

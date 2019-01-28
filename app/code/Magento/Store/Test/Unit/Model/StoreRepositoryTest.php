@@ -46,7 +46,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $appConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storeFactory = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])

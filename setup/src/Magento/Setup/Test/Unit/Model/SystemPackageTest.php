@@ -113,7 +113,7 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
      */
     private $composerInformation;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerAppFactory = $this->createMock(
             \Magento\Framework\Composer\MagentoComposerApplicationFactory::class

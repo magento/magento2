@@ -39,7 +39,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      */
     private $dataPersistorMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData']);

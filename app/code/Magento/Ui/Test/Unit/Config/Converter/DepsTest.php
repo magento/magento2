@@ -16,7 +16,7 @@ class DepsTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->converter = new Deps(new ConverterUtils());
     }

@@ -41,7 +41,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
      */
     private $environment;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->permissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);

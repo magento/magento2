@@ -46,7 +46,7 @@ class MinimalTierPriceCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     private $calculator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->price = $this->createMock(TierPrice::class);
         $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);

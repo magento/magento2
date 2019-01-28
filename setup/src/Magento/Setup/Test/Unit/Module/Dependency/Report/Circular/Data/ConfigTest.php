@@ -24,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleFirst = $this->createMock(\Magento\Setup\Module\Dependency\Report\Circular\Data\Module::class);
         $this->moduleSecond = $this->createMock(\Magento\Setup\Module\Dependency\Report\Circular\Data\Module::class);

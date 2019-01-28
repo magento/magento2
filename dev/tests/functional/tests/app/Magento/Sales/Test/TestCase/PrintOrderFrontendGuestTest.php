@@ -66,7 +66,7 @@ class PrintOrderFrontendGuestTest extends Scenario
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->browser->closeWindow();
     }

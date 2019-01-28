@@ -31,7 +31,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
      */
     private $prefix;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dbAdapter = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()

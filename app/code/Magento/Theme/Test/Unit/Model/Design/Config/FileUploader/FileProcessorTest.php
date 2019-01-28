@@ -41,7 +41,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var FileProcessor */
     protected $fileProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()

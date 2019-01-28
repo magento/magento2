@@ -43,7 +43,7 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

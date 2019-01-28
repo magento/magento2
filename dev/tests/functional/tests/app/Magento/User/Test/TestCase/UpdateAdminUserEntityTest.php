@@ -182,7 +182,7 @@ class UpdateAdminUserEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         if ($this->dashboard->getAdminPanelHeader()->isVisible()) {
             $this->dashboard->getAdminPanelHeader()->logOut();

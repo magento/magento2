@@ -30,7 +30,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var  ProductInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productWebsiteLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()

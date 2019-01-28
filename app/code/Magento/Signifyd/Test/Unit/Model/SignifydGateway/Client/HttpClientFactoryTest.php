@@ -50,7 +50,7 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $httpClient;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 

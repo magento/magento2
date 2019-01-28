@@ -44,7 +44,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)

@@ -49,7 +49,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $dataPersistor;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->designConfigRepository = $this->createMock(\Magento\Theme\Model\DesignConfigRepository::class);

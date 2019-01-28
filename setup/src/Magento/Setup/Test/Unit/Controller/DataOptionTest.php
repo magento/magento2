@@ -35,7 +35,7 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
         $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);

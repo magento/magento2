@@ -24,7 +24,7 @@ class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
      */
     private $cacheConfigMock;
 
-    public function setup()
+    protected function setup()
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);

@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    public function setUp()
+    protected function setUp()
     {
         $factoryMock = $this->createMock(EntityFactoryInterface::class);
         $this->collection = new Collection($factoryMock);

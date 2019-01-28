@@ -49,7 +49,7 @@ class InstallTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->webLogger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
         $installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);

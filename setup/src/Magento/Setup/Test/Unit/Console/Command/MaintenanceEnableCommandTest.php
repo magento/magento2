@@ -27,7 +27,7 @@ class MaintenanceEnableCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);

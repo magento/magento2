@@ -143,7 +143,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->_consumerFactory);
         unset($this->_nonceFactory);

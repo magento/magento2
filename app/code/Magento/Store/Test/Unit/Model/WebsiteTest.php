@@ -27,7 +27,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $websiteFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
 

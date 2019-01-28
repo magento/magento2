@@ -49,7 +49,7 @@ class AttributeSetTest extends \PHPUnit\Framework\TestCase
      */
     private $originalSetMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filterMock = $this->createMock(IndexableAttributeFilter::class);
         $this->subjectMock = $this->createMock(EavAttributeSet::class);

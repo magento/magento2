@@ -263,7 +263,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $collection->count());
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         // restore default timezone
         $this->setSpecificTimezone('America/Los_Angeles');

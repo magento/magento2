@@ -32,7 +32,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
         $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);

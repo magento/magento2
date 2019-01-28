@@ -24,7 +24,7 @@ class AttributeColumnTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeMetadata;
 
-    public function setup()
+    protected function setup()
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();

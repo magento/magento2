@@ -19,7 +19,7 @@ class AddressDataGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $addressGenerator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressGenerator = new \Magento\Setup\Model\Address\AddressDataGenerator();
     }

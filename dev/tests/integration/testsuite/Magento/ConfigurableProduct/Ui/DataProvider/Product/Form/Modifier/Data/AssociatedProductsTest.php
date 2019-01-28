@@ -17,7 +17,7 @@ class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     private $registry;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);

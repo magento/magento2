@@ -30,7 +30,7 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
      */
     private $webLogger;
 
-    public function setUp()
+    protected function setUp()
     {
         self::$log = '';
 

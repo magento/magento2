@@ -128,7 +128,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }

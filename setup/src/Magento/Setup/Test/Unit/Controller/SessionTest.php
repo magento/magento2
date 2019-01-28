@@ -25,7 +25,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     private $serviceManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);

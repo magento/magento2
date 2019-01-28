@@ -12,7 +12,7 @@ class BrakeMixinTest extends \PHPUnit\Framework\TestCase
      */
     private $mixin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mixin = new \Magento\Setup\Model\Description\Mixin\BrakeMixin();
     }

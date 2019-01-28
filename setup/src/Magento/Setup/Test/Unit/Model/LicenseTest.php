@@ -20,7 +20,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
      */
     private $filesystemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directoryReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);

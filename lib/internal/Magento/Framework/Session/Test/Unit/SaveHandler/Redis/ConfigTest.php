@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);

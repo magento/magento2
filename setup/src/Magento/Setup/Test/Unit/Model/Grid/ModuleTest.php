@@ -71,7 +71,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleData = [];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleData = [
             'magento/sample-module-one' => [

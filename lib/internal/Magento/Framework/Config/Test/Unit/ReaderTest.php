@@ -22,7 +22,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $reader;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->source = $this->getMockBuilder(SourceInterface::class)
             ->getMockForAbstractClass();

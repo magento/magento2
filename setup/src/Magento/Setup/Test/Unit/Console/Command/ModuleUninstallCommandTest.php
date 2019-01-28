@@ -105,7 +105,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);

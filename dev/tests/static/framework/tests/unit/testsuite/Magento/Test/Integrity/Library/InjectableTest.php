@@ -34,7 +34,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->injectable = new Injectable();
         $this->fileReflection = $this->getMockBuilder(

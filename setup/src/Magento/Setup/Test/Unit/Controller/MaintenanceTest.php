@@ -24,7 +24,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->controller = new Maintenance($this->maintenanceMode);

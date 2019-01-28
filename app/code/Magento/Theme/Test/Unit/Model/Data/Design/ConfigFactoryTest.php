@@ -42,7 +42,7 @@ class ConfigFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $website;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->designConfigFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigInterfaceFactory::class,

@@ -20,7 +20,7 @@ class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
      */
     private $urlRewriteBunchReplacer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->urlRewriteBunchReplacer = new UrlRewriteBunchReplacer(

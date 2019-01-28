@@ -37,7 +37,7 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
      */
     private $themeList;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->arrayManager = new ArrayManager();
         $this->themeList = $this->getMockBuilder(ListInterface::class)->getMockForAbstractClass();

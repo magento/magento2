@@ -66,7 +66,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $selectContainerBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->selectContainerFactoryMock = $this->getMockBuilder(SelectContainerFactory::class)
             ->disableOriginalConstructor()

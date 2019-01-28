@@ -71,7 +71,7 @@ class OrderGetTest extends \PHPUnit\Framework\TestCase
      */
     private $collectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->giftMessageOrderRepositoryMock = $this->createMock(
             \Magento\GiftMessage\Api\OrderRepositoryInterface::class

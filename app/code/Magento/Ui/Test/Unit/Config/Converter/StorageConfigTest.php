@@ -21,7 +21,7 @@ class StorageConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $urlConverter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
         $this->converter = new StorageConfig($this->urlConverter, new ConverterUtils());

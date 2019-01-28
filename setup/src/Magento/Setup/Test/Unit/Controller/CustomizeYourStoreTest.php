@@ -35,7 +35,7 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleList;
 
-    public function setup()
+    protected function setup()
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);

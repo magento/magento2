@@ -37,7 +37,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      */
     protected $componentRegistrar;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

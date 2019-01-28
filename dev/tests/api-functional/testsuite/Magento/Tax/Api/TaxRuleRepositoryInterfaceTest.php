@@ -51,7 +51,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Api\SearchCriteriaBuilder::class
@@ -84,7 +84,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $this->getFixtureTaxRules();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $taxRules = $this->getFixtureTaxRules();
         if (count($taxRules)) {

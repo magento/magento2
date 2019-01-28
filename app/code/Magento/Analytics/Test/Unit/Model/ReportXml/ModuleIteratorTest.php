@@ -22,7 +22,7 @@ class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleIterator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
             ->disableOriginalConstructor()

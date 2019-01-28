@@ -21,7 +21,7 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $fileParserMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fileParserMock = $this->createPartialMock(Parser::class, ['getDom', 'xmlToArray']);
 

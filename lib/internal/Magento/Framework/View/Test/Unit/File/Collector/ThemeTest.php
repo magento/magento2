@@ -53,7 +53,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     private $componentRegistrar;
 
-    public function setup()
+    protected function setup()
     {
         $this->themeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->getMock();

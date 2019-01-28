@@ -71,7 +71,7 @@ class ReturnProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|StoreInterface */
     private $storeMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
             ->disableOriginalConstructor()

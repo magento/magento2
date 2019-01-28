@@ -34,7 +34,7 @@ class RefreshCustomerDataTest extends \PHPUnit\Framework\TestCase
      */
     private $sessionManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()

@@ -61,7 +61,7 @@ class CircularTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (file_exists($this->sourceFilename)) {
             unlink($this->sourceFilename);

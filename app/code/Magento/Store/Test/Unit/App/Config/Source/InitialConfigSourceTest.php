@@ -39,7 +39,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->readerMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

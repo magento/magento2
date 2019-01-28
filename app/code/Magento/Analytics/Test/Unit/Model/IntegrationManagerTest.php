@@ -40,7 +40,7 @@ class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $integrationManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->integrationServiceMock = $this->getMockBuilder(IntegrationServiceInterface::class)

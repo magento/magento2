@@ -87,7 +87,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
@@ -119,7 +119,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {

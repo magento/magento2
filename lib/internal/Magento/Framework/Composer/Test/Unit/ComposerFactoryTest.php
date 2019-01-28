@@ -25,14 +25,14 @@ class ComposerFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var File */
     private $fileDriver;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fileDriver = new File();
         $this->originalComposerHome = getenv('COMPOSER_HOME');
         putenv('COMPOSER_HOME');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if ($this->originalComposerHome) {
             putenv('COMPOSER_HOME=' . $this->originalComposerHome);

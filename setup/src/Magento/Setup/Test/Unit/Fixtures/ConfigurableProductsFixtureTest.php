@@ -37,7 +37,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $attributePatternMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()

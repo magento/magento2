@@ -42,7 +42,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
      */
     private $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()

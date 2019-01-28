@@ -15,7 +15,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->converter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
     }

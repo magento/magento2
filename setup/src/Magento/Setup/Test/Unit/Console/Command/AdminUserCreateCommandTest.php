@@ -34,7 +34,7 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->installerFactoryMock = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());

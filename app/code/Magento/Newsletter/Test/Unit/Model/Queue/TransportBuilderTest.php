@@ -53,7 +53,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFactoryMock = $this->createMock(\Magento\Framework\Mail\Template\FactoryInterface::class);

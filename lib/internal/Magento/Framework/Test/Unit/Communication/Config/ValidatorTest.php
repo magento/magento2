@@ -26,7 +26,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $methodsMap;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->methodsMap = $this->createMock(MethodsMap::class);
 

@@ -13,7 +13,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $fullTextSearchCheck;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fullTextSearchCheck = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(\Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class);

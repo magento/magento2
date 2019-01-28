@@ -35,7 +35,7 @@ class CustomerGroupConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config::class)
             ->disableOriginalConstructor()

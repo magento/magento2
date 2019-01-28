@@ -39,7 +39,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
      */
     private $vaultProvider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->vaultProvider = $this->createMock(MethodInterface::class);

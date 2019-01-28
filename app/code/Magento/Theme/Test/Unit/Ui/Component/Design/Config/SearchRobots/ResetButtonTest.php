@@ -44,7 +44,7 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
      */
     private $resetButton;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()

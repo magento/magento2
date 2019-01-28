@@ -78,7 +78,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->pathInfo =  $this->objectManager->getObject(\Magento\Framework\App\Request\PathInfo::class);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $_SERVER = $this->serverArray;
     }

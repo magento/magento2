@@ -49,7 +49,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

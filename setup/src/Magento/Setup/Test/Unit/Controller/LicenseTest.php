@@ -20,7 +20,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->licenseModel = $this->createMock(\Magento\Setup\Model\License::class);
         $this->controller = new License($this->licenseModel);

@@ -69,7 +69,7 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()

@@ -35,7 +35,7 @@ class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $themeDependencyCheckerFactory;
 
-    public function setup()
+    protected function setup()
     {
         $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $this->packageDependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);

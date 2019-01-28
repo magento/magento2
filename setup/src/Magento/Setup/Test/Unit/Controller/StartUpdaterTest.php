@@ -45,7 +45,7 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private $updaterTaskCreator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->payloadValidator = $this->createMock(\Magento\Setup\Model\PayloadValidator::class);
         $this->updaterTaskCreator = $this->createMock(\Magento\Setup\Model\UpdaterTaskCreator::class);

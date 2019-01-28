@@ -138,7 +138,7 @@ class UnlockAdminUserTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

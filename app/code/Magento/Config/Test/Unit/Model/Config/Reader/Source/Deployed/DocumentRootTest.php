@@ -27,7 +27,7 @@ class DocumentRootTest extends \PHPUnit\Framework\TestCase
      */
     private $documentRoot;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

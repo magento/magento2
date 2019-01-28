@@ -25,7 +25,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var Save */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()

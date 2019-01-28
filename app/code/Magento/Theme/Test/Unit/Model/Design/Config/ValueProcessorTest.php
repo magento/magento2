@@ -18,7 +18,7 @@ class ValueProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ValueProcessor */
     protected $valueProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->backendModelFactory = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
             ->disableOriginalConstructor()

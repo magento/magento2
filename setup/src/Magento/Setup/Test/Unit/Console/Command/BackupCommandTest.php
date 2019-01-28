@@ -36,7 +36,7 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);

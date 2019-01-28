@@ -37,7 +37,7 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
 

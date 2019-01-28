@@ -29,7 +29,7 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $this->infoCommand = $this->createMock(\Magento\Composer\InfoCommand::class);

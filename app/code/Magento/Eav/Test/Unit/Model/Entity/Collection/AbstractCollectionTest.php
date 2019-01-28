@@ -130,7 +130,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->model = null;
     }

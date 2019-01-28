@@ -65,7 +65,7 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
      */
     private $quence;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->output = $this->getMockForAbstractClass(
             \Symfony\Component\Console\Output\OutputInterface::class,

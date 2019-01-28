@@ -33,7 +33,7 @@ class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageResource;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
             ->disableOriginalConstructor(true)

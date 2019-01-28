@@ -20,7 +20,7 @@ class DependenciesShowModulesCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $commandTester;
 
-    public function setUp()
+    protected function setUp()
     {
 
         $modules = [
@@ -46,7 +46,7 @@ class DependenciesShowModulesCommandTest extends \PHPUnit\Framework\TestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (file_exists(__DIR__ . '/_files/output/modules.csv')) {
             unlink(__DIR__ . '/_files/output/modules.csv');

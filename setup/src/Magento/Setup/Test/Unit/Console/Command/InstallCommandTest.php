@@ -68,7 +68,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $adminUserMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->input = [
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST => 'localhost',

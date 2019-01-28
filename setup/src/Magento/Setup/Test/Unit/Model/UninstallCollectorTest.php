@@ -24,7 +24,7 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
      */
     private $result;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =

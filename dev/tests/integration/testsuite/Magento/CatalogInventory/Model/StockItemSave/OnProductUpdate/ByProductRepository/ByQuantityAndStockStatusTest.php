@@ -32,7 +32,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);

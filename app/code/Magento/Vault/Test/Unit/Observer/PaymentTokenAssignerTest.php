@@ -35,7 +35,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
      */
     private $observer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
         $this->observer = new PaymentTokenAssigner($this->paymentTokenManagement);

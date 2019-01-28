@@ -23,7 +23,7 @@ class EditActionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
-    public function setup()
+    protected function setup()
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();

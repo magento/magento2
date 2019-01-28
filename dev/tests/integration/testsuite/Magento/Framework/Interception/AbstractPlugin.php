@@ -36,7 +36,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         if (!$this->_objectManager) {
             return;
@@ -49,7 +49,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    public function tearDown()
+    protected function tearDown()
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
     }

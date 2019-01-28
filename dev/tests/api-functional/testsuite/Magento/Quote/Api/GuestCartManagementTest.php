@@ -46,7 +46,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->createdQuotes[] = $quoteId;
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);

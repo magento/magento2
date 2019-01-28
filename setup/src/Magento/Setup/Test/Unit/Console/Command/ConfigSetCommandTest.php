@@ -27,7 +27,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $option = $this->createMock(\Magento\Framework\Setup\Option\TextConfigOption::class);
         $option

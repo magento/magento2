@@ -45,7 +45,7 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
     /** @var CollectionModifier|\PHPUnit_Framework_MockObject_MockObject */
     private $collectionModifier;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collectionFactoryMock = $this
             ->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)

@@ -63,7 +63,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(FileReader::class);
@@ -253,7 +253,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),

@@ -46,7 +46,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()->getMock();

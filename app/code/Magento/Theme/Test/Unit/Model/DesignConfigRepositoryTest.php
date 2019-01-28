@@ -41,7 +41,7 @@ class DesignConfigRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $validator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configStorage = $this->createMock(\Magento\Theme\Model\Design\Config\Storage::class);
         $this->reinitableConfig = $this->getMockForAbstractClass(

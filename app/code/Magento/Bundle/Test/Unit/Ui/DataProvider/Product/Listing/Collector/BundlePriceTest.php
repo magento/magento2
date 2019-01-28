@@ -37,7 +37,7 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
      */
     private $formattedPriceInfoBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();

@@ -216,7 +216,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $this->assertNull($response);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

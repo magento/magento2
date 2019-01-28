@@ -53,7 +53,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file = new Write($this->path, $this->driver, $this->mode);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->file = null;
         $this->driver = null;

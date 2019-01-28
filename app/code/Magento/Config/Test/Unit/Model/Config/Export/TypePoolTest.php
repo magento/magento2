@@ -16,7 +16,7 @@ class TypePoolTest extends \PHPUnit\Framework\TestCase
      */
     private $excludeListMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
             ->disableOriginalConstructor()

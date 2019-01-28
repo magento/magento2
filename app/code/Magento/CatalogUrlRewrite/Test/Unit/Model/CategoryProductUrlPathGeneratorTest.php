@@ -26,7 +26,7 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $generator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
             ->disableOriginalConstructor()

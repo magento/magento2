@@ -110,7 +110,7 @@ class UpdateItemOptionsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         unset(
             $this->productRepository,

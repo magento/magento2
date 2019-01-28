@@ -25,7 +25,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_customerViewHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerSession = $this->_objectManager->get(

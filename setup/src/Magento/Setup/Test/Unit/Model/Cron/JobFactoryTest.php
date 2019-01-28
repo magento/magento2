@@ -26,7 +26,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $jobFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $serviceManager =
             $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, [], '', false);

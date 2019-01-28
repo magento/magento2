@@ -47,7 +47,7 @@ class DataPatchInstallationTest extends SetupTestCase
      */
     private $tableData;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);

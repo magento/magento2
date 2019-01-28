@@ -22,7 +22,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $cronScriptReadinessCheck;
 
-    public function setUp()
+    protected function setUp()
     {
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->read = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);

@@ -54,7 +54,7 @@ class RollbackCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);

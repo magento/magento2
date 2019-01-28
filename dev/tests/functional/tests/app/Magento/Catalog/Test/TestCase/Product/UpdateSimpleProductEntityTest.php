@@ -153,7 +153,7 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown()
     {
         if ($this->configData) {
             $this->objectManager->create(

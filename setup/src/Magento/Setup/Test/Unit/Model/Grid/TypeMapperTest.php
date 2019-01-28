@@ -21,7 +21,7 @@ class TypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new TypeMapper();
     }

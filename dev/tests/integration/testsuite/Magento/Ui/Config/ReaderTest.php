@@ -15,7 +15,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $reader;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
 
@@ -35,7 +35,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $objectManager = Bootstrap::getObjectManager();
 

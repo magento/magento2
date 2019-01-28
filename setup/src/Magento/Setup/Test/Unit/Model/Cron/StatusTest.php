@@ -35,7 +35,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     private $setupLoggerFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->varReaderWriter = $this->getMockForAbstractClass(

@@ -31,7 +31,7 @@ class StructureManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $structureManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->structureMock = $this->getMockBuilder(Structure::class)

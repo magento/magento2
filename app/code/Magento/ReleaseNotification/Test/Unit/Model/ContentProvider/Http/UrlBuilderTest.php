@@ -21,7 +21,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $urlBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();

@@ -28,7 +28,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
 
     private $setFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
 

@@ -26,7 +26,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     private $urlConverter;
 
-    public function setUp()
+    protected function setUp()
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');

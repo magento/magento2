@@ -24,7 +24,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     protected $module;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dependencyFirst =
             $this->createMock(\Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class);

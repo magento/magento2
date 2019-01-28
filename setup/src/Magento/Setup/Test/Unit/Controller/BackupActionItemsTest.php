@@ -46,7 +46,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directoryList =
             $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
