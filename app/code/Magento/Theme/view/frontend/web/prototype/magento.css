@@ -5,8 +5,8 @@
 
 .ui-dialog {
     background: #fff;
-    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
     z-index: 1000;
 }
 
@@ -19,9 +19,9 @@
 .ui-widget-overlay {
     background: #000;
     filter: alpha(opacity = 60);
-    -moz-opacity: .44;
-    -webkit-opacity: .44;
-    opacity: .44;
+    -moz-opacity: 0.44;
+    -webkit-opacity: 0.44;
+    opacity: 0.44;
     position: absolute;
     left: 0;
     top: 0;
@@ -111,15 +111,15 @@
 }
 
 .ui-dialog .ui-dialog-buttonset button {
-  border: none;
-  border-radius: 0;
-  font: 600 14px/16px;
-  text-transform: uppercase;
-  margin: 0 10px 0 0;
-  padding: 9px 11px 9px;
-  box-shadow: none;
-  text-shadow: none;
-  text-decoration: none;
+    border: none;
+    border-radius: 0;
+    font: 600 14px/16px;
+    text-transform: uppercase;
+    margin: 0 10px 0 0;
+    padding: 9px 11px 9px;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
 }
 
 .ui-resizable {
@@ -208,14 +208,14 @@
 }
 
 .action.translate {
-	display: block;
-	line-height: 25px;
-	height: 25px;
-	width: 25px;
+    display: block;
+    line-height: 25px;
+    height: 25px;
+    width: 25px;
 }
 
 .action.translate:after {
-	font-family: 'icons';
-	font-size: 24px;
-	content: '\e006';
+    font-family: 'icons';
+    font-size: 24px;
+    content: '\e006';
 }

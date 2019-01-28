@@ -4,30 +4,30 @@
  */
 
 /* Action "Back" as cross  */
-[class^=" catalog-product-"] .page-actions .action-back,
-[class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" catalog-product-"] .page-actions .action-back:active,
-[class^=" newsletter-"] .page-actions .action-back,
-[class^=" newsletter-"] .page-actions .action-back:hover,
-[class^=" newsletter-"] .page-actions .action-back:active {
+[class^=' catalog-product-'] .page-actions .action-back,
+[class^=' catalog-product-'] .page-actions .action-back:hover,
+[class^=' catalog-product-'] .page-actions .action-back:active,
+[class^=' newsletter-'] .page-actions .action-back,
+[class^=' newsletter-'] .page-actions .action-back:hover,
+[class^=' newsletter-'] .page-actions .action-back:active {
     overflow: hidden;
     padding: 5px 6px 3px;
     margin-left: 12px;
     color: #7a7976;
 }
 
-[class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" newsletter-"] .page-actions .action-back:hover {
+[class^=' catalog-product-'] .page-actions .action-back:hover,
+[class^=' newsletter-'] .page-actions .action-back:hover {
     color: #000;
 }
 
-[class^=" catalog-product-"] .page-actions .action-back.mage-error,
-[class^=" newsletter-"] .page-actions .action-back.mage-error {
+[class^=' catalog-product-'] .page-actions .action-back.mage-error,
+[class^=' newsletter-'] .page-actions .action-back.mage-error {
     color: #b57c72;
 }
 
-[class^=" catalog-product-"] .page-actions .action-back:before,
-[class^=" newsletter-"] .page-actions .action-back:before {
+[class^=' catalog-product-'] .page-actions .action-back:before,
+[class^=' newsletter-'] .page-actions .action-back:before {
     display: inline-block;
     font-family: 'MUI-Icons';
     font-style: normal;
@@ -38,8 +38,8 @@
     font-size: 16px;
 }
 
-[class^=" catalog-product-"] .page-actions .action-back span,
-[class^=" newsletter-"] .page-actions .action-back span {
+[class^=' catalog-product-'] .page-actions .action-back span,
+[class^=' newsletter-'] .page-actions .action-back span {
     display: inline-block;
     overflow: hidden;
     text-indent: -999em;
@@ -98,7 +98,8 @@
     left: 0;
     width: 33px;
     height: 33px;
-    background: url(Magento_ModuleB::images/gallery-image-base-label.png) no-repeat;
+    background: url(Magento_ModuleB::images/gallery-image-base-label.png)
+        no-repeat;
     content: '';
     z-index: 2;
 }
@@ -114,7 +115,7 @@
     right: 0;
     top: 0;
     bottom: 0;
-    background: rgba(247, 242, 236, .8);
+    background: rgba(247, 242, 236, 0.8);
     content: attr(data-image-hidden-label);
     text-align: center;
     text-transform: uppercase;
@@ -126,7 +127,7 @@
 
 .eq-ie8 .image-fade {
     background: #f7f2ec;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
 }
 
 .image.hidden-for-front .image-fade {
@@ -157,13 +158,13 @@
     z-index: 1;
 }
 
-.image .actions [class^="action-"],
-.image[data-image-hidden]:hover .actions [class^="action-"],
-.image.hidden-for-front:hover .actions [class^="action-"] {
+.image .actions [class^='action-'],
+.image[data-image-hidden]:hover .actions [class^='action-'],
+.image.hidden-for-front:hover .actions [class^='action-'] {
     visibility: hidden;
 }
 
-.image:hover .actions [class^="action-"],
+.image:hover .actions [class^='action-'],
 .image[data-image-hidden]:hover .actions .action-delete,
 .hidden-for-front:hover .actions .action-delete {
     visibility: visible;
@@ -216,7 +217,7 @@
     display: none;
 }
 
-.image-placeholder input[type="file"] {
+.image-placeholder input[type='file'] {
     position: absolute;
     top: 0;
     right: 0;
@@ -381,7 +382,7 @@
 }
 
 /* Quantity filed on product */
-.field-quantity_and_stock_status input[type="text"],
+.field-quantity_and_stock_status input[type='text'],
 .field-weight .control .field:first-child {
     width: 140px;
     margin-right: 15px;
@@ -522,7 +523,7 @@
 }
 
 @media screen and (max-width: 960px) {
-    [class^="fields-group-"] .field {
+    [class^='fields-group-'] .field {
         width: auto !important;
     }
 }
@@ -614,7 +615,7 @@
     filter: none;
 }
 
-#product-variations-matrix .action-upload input[type="file"] {
+#product-variations-matrix .action-upload input[type='file'] {
     position: absolute;
     left: 0;
     top: 0;

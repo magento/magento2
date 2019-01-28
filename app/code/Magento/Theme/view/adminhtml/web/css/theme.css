@@ -10,8 +10,9 @@
 }
 
 .js-files-container .js-file {
-    background: url("Magento_Theme::images/js_icon.gif") no-repeat scroll 5px 50% #ECECEC;
-    border: 1px solid #CCCCCC;
+    background: url('Magento_Theme::images/js_icon.gif') no-repeat scroll 5px
+        50% #ececec;
+    border: 1px solid #cccccc;
     padding: 5px 5px 10px 30px;
     margin-left: 10px;
 }
@@ -24,7 +25,7 @@
 
 .js-files-container li:after {
     clear: both;
-    content: ".";
+    content: '.';
     display: block;
     font-size: 0;
     height: 0;
@@ -32,8 +33,9 @@
     overflow: hidden;
 }
 
-.js-files-container li .up, .js-files-container li .down {
-    border: 1px solid #CCCCCC;
+.js-files-container li .up,
+.js-files-container li .down {
+    border: 1px solid #cccccc;
     cursor: pointer;
     display: block;
     height: 15px;
@@ -46,11 +48,13 @@
 }
 
 .js-files-container li .up {
-    background: url("Magento_Theme::images/bkg_movable-arrows.png") no-repeat scroll 50% 3px #ECECEC;
+    background: url('Magento_Theme::images/bkg_movable-arrows.png') no-repeat
+        scroll 50% 3px #ececec;
 }
 
 .js-files-container li .down {
-    background: url("Magento_Theme::images/bkg_movable-arrows.png") no-repeat scroll 50% -27px #ECECEC;
+    background: url('Magento_Theme::images/bkg_movable-arrows.png') no-repeat
+        scroll 50% -27px #ececec;
     bottom: 0;
     top: auto;
 }
@@ -59,11 +63,11 @@
     float: right;
 }
 
-.eq-ie8 .js-files-container li input[type="button"],
-.eq-ie8 .js-files-container li input[type="button"]:hover,
-.eq-ie8 .js-files-container li input[type="button"]:active,
-.eq-ie8 .js-files-container li input[type="button"]:focus,
-.eq-ie8 .js-files-container li input[type="button"][disabled] {
+.eq-ie8 .js-files-container li input[type='button'],
+.eq-ie8 .js-files-container li input[type='button']:hover,
+.eq-ie8 .js-files-container li input[type='button']:active,
+.eq-ie8 .js-files-container li input[type='button']:focus,
+.eq-ie8 .js-files-container li input[type='button'][disabled] {
     filter: none;
 }
 

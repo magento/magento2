@@ -18,7 +18,7 @@
 }
 
 @media screen and (max-width: 960px) {
-    [class^="fields-group-"] .field {
+    [class^='fields-group-'] .field {
         width: auto !important;
     }
 }
@@ -59,7 +59,7 @@
     filter: none;
 }
 
-#product-variations-matrix .action-upload input[type="file"] {
+#product-variations-matrix .action-upload input[type='file'] {
     position: absolute;
     left: 0;
     top: 0;
@@ -163,10 +163,9 @@
 
 #product_options_container .data-table td,
 #attribute-tier_price-container .data-table td,
-
 #product_options_container .data-table td.opt-price-type,
 #product_options_container .data-table td.select-opt-price-type,
-#product_options_container .data-table td.select-opt-price{
+#product_options_container .data-table td.select-opt-price {
     width: 13%;
 }
 

@@ -11,7 +11,7 @@ div.ui-tabs > ul {
 div.ui-tabs li {
     position: relative;
     z-index: 98;
-    display:inline-block;
+    display: inline-block;
     border: 1px solid #ccc;
     margin: 0 3px;
     padding: 7px 10px;
@@ -42,7 +42,7 @@ div.ui-tabs .ui-tabs-active > a {
 
 div.ui-tabs > div {
     position: relative;
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     padding: 20px;
     z-index: 99;
     font-size: 1.1em;

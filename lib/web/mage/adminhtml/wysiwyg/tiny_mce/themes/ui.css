@@ -23,7 +23,7 @@
     display: inline-block;
     margin: 0 5px;
     background: #ffc0cb;
-    outline: 2px solid #F7AAAA !important;
+    outline: 2px solid #f7aaaa !important;
     padding: 2px 4px;
     vertical-align: bottom;
     height: 20px;
@@ -47,7 +47,7 @@
 }
 
 .magento-placeholder-error[data-mce-selected] {
-    outline: 2px solid #E12525 !important;
+    outline: 2px solid #e12525 !important;
 }
 
 .magento-placeholder-error img,

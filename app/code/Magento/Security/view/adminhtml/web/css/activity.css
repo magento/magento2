@@ -20,7 +20,7 @@ body {
 }
 
 .page-wrapper header {
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
     padding-left: 3rem;
     padding-right: 3rem;
     padding-bottom: 1rem;
@@ -31,7 +31,8 @@ body {
     padding: 1rem 0;
 }
 
-.information-table td, .information-table th {
+.information-table td,
+.information-table th {
     padding: 5px;
     padding-left: 10px;
 }

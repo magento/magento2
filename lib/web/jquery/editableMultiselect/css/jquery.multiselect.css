@@ -39,7 +39,7 @@
 
 .mselect-input {
     width: 99%;
-    margin:0;
+    margin: 0;
 }
 .mselect-list-item .mselect-checked + span {
     background: #cdecf6;
@@ -60,7 +60,7 @@
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    content: "\e067";
+    content: '\e067';
 }
 
 .mselect-list-item input:checked + span:before {
@@ -74,7 +74,7 @@
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    content: "\e067";
+    content: '\e067';
 }
 
 .mselect-list-item input[type='checkbox'] {
@@ -162,7 +162,7 @@
 .mselect-save:before {
     font-size: 16px;
     color: #666;
-    color: rgba(20,20,20,0.3);
+    color: rgba(20, 20, 20, 0.3);
     vertical-align: baseline;
     font-family: 'MUI-Icons';
     font-style: normal;
@@ -183,23 +183,23 @@
 .mselect-delete:hover:before,
 .mselect-save:hover:before {
     color: #333;
-    color: rgba(20,20,20,0.6);
+    color: rgba(20, 20, 20, 0.6);
 }
 
 .mselect-cancel:before {
-    content: "\e069"
+    content: '\e069';
 }
 
 .mselect-edit:before {
-    content: "\e05b"
+    content: '\e05b';
 }
 
 .mselect-delete:before {
-    content: "\e07f"
+    content: '\e07f';
 }
 
 .mselect-save:before {
-    content: "\e067";
+    content: '\e067';
 }
 
 .mselect-list-item:hover .mselect-delete,

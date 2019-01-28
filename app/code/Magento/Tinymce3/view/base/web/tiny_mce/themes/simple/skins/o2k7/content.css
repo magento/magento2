@@ -1,17 +1,26 @@
-body, td, pre {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px;}
+body,
+td,
+pre {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+}
 
-body {background: #FFF;}
-.mceVisualAid {border: 1px dashed #BBB;}
+body {
+    background: #fff;
+}
+.mceVisualAid {
+    border: 1px dashed #bbb;
+}
 
 /* IE */
 
 * html body {
-scrollbar-3dlight-color: #F0F0EE;
-scrollbar-arrow-color: #676662;
-scrollbar-base-color: #F0F0EE;
-scrollbar-darkshadow-color: #DDDDDD;
-scrollbar-face-color: #E0E0DD;
-scrollbar-highlight-color: #F0F0EE;
-scrollbar-shadow-color: #F0F0EE;
-scrollbar-track-color: #F5F5F5;	
+    scrollbar-3dlight-color: #f0f0ee;
+    scrollbar-arrow-color: #676662;
+    scrollbar-base-color: #f0f0ee;
+    scrollbar-darkshadow-color: #dddddd;
+    scrollbar-face-color: #e0e0dd;
+    scrollbar-highlight-color: #f0f0ee;
+    scrollbar-shadow-color: #f0f0ee;
+    scrollbar-track-color: #f5f5f5;
 }

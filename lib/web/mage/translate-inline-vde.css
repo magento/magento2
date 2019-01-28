@@ -4,10 +4,12 @@
  */
 
 .trnslate-inline-area [data-translate],
-.trnslate-inline-text-area [data-translate-mode=text],
-.trnslate-inline-script-area [data-translate-mode=script],
-.trnslate-inline-alt-area [data-translate-mode=alt],
-.trnslate-inline-area .translate-inline { outline: dashed 2px darkgray!important;}
+.trnslate-inline-text-area [data-translate-mode='text'],
+.trnslate-inline-script-area [data-translate-mode='script'],
+.trnslate-inline-alt-area [data-translate-mode='alt'],
+.trnslate-inline-area .translate-inline {
+    outline: dashed 2px darkgray !important;
+}
 
 .translate-dialog {
     border: 0;
@@ -20,7 +22,7 @@
 
 .translate-dialog .ui-dialog-content {
     background: white;
-    border: 5px rgba(223, 243, 250, 1.0) solid;
+    border: 5px rgba(223, 243, 250, 1) solid;
     -webkit-border-radius: 5px;
     -webkit-border-bottom-right-radius: 0px;
     -moz-border-radius: 5px;
@@ -55,7 +57,7 @@
     padding-right: 0;
     margin-right: 0;
     float: right;
-    background: rgba(223, 243, 250, 1.0);
+    background: rgba(223, 243, 250, 1);
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 5px;
@@ -86,7 +88,7 @@
 }
 
 .translate-dialog .ui-dialog-buttonpane button.translate-dialog-cancel {
-    background-color: rgba(223, 243, 250, 1.0);
+    background-color: rgba(223, 243, 250, 1);
     text-decoration: underline;
     margin-right: 2px;
 }
@@ -105,18 +107,24 @@
     border-radius: 5px;
 }
 
-.translate-dialog .ui-dialog-buttonpane button.translate-dialog-cancel .ui-button-text {
+.translate-dialog
+    .ui-dialog-buttonpane
+    button.translate-dialog-cancel
+    .ui-button-text {
     text-decoration: underline;
 }
 
-.translate-dialog .ui-dialog-buttonpane button.translate-dialog-cancel .ui-button-text:hover {
+.translate-dialog
+    .ui-dialog-buttonpane
+    button.translate-dialog-cancel
+    .ui-button-text:hover {
     cursor: pointer;
     background-color: #618499;
 }
 
 .translate-dialog .ui-dialog-buttonpane button.translate-dialog-cancel {
     padding-top: 2px;
-    background-color: rgba(223, 243, 250, 1.0);
+    background-color: rgba(223, 243, 250, 1);
     text-decoration: underline;
 }
 
@@ -125,11 +133,17 @@
     background-color: #618499;
 }
 
-.translate-dialog .ui-dialog-buttonpane button.translate-dialog-save .ui-button-text {
+.translate-dialog
+    .ui-dialog-buttonpane
+    button.translate-dialog-save
+    .ui-button-text {
     color: white;
 }
 
-.translate-dialog .ui-dialog-buttonpane button.translate-dialog-save .ui-button-text:hover {
+.translate-dialog
+    .ui-dialog-buttonpane
+    button.translate-dialog-save
+    .ui-button-text:hover {
     cursor: pointer;
     background-color: #d75f07;
 }
@@ -183,7 +197,7 @@
 }
 
 .invisible {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .translate-dialog-form-submit-loader {
@@ -194,7 +208,7 @@
     left: 50%;
     top: 50%;
     margin: -50px 0 0 -50px;
-    background-color: rgba(255, 246, 237, .8);
+    background-color: rgba(255, 246, 237, 0.8);
     text-align: center;
     line-height: 75px;
     z-index: 10000;

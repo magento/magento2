@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-#swatch-visual-options-panel{
+#swatch-visual-options-panel {
     overflow: visible;
 }
 
@@ -153,7 +153,7 @@
     min-width: 65px;
 }
 
-.data-table .col-swatch-min-width input[type="text"] {
+.data-table .col-swatch-min-width input[type='text'] {
     padding: inherit;
 }
 
