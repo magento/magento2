@@ -26,14 +26,18 @@ define([
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
-                option;
+                option = null;
 
             if (!value) {
                 return;
             }
 
             option = options[value];
-
+            
+            if (!option) {
+                return;
+            }
+            
             if (option['is_zipcode_optional']) {
                 this.error(false);
                 this.validation = _.omit(this.validation, 'required-entry');
