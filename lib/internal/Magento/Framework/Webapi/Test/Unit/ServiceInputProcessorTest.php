@@ -274,7 +274,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testAssociativeArrayPropertiesWithItemArray()
     {
-        $data = ['associativeArray' => ['item' => ['value1','value2']]];
+        $data = ['associativeArray' => ['item' => ['value1', 'value2']]];
         $result = $this->serviceInputProcessor->process(
             \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
             'associativeArray',

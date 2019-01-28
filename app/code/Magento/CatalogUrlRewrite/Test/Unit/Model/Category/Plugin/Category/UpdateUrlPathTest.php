@@ -130,7 +130,7 @@ class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
     public function testAroundSaveWithRootCategory()
     {
         $parentId = 1;
-        $categoryStoreIds = [0,1,2];
+        $categoryStoreIds = [0, 1, 2];
         $generatedUrlPath = 'parent_category/child_category';
 
         $this->categoryUrlPathGenerator

@@ -256,7 +256,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 '1',
-                ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
+                ['price'=>'11', 'created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
                 '1',
                 false,
                 'datetime',
@@ -264,7 +264,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
+                ['price'=>'11', 'created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
                 '1',
                 false,
                 'time',
@@ -272,7 +272,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>null,'color_value'=>'11', ],
+                ['price'=>'11', 'created_at'=>null, 'color_value'=>'11', ],
                 '1',
                 true,
                 'datetime',
@@ -300,7 +300,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
+                ['image'=>'11', 'created_at'=>'00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -373,7 +373,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
+                ['quantity_and_stock_status'=>'11', 'created_at'=>'00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -381,7 +381,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['quantity_and_stock_status'=>['is_in_stock' => '1', 'qty' => '12'],'created_at'=>'00-00-00 00:00:00'],
+                ['quantity_and_stock_status'=>['is_in_stock' => '1', 'qty' => '12'], 'created_at'=>'00-00-00 00:00:00'],
                 '1',
                 false,
                 'string',
@@ -389,7 +389,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '1',
-                ['price'=>'11','created_at'=>'1995-12-31 23:59:59','options'=>['value1','value2']],
+                ['price'=>'11', 'created_at'=>'1995-12-31 23:59:59', 'options'=>['value1', 'value2']],
                 '1',
                 false,
                 'string',

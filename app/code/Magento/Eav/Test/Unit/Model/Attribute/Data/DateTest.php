@@ -127,7 +127,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'value' => '2000-01-01',
-                'rules' => ['date_range_min' => strtotime('2001-01-01'),'date_range_max' => strtotime('2002-01-01')],
+                'rules' => ['date_range_min' => strtotime('2001-01-01'), 'date_range_max' => strtotime('2002-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
                 'expectedResult' => ['Please enter a valid date between 01/01/2001 and 01/01/2002 at Label.'],

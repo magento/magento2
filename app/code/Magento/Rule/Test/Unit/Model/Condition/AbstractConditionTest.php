@@ -69,7 +69,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
             [1, '==', [3, 1, 5], false],
             [1, '!=', [1, 5], true],
 
-            [[1,2,3], '==', '1,2,3', false],
+            [[1, 2, 3], '==', '1,2,3', false],
             [[1], '==', 1, false],
 
             // Note: validated value is on the right, so read expression in the array from right to left

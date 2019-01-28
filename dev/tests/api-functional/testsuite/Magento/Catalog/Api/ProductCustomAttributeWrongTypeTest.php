@@ -127,7 +127,7 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
                 "custom_attributes"=> [
                     [
                         "attribute_code"=> "meta_title",
-                        "value"=> [1,2,3]
+                        "value"=> [1, 2, 3]
                     ],
                 ],
             ],

@@ -70,7 +70,7 @@ class ExpressTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->nvp = $this->createPartialMock(
             Nvp::class,
-            ['getData','setProcessableErrors', 'callDoAuthorization']
+            ['getData', 'setProcessableErrors', 'callDoAuthorization']
         );
         $this->nvp->method('getData')->willReturn([]);
         $this->nvp->method('setProcessableErrors')->willReturnSelf();

@@ -135,7 +135,7 @@ class DumpTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
-                [],[],
+                [], [],
             ],
             [
                 [

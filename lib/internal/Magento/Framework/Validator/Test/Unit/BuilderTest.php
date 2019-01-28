@@ -138,7 +138,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                 $validator->setMin(20);
                 $validator->setMax(100);
             }
-        ), ], ],'property' => 'sku', 'type' => 'property', ], ];
+        ), ], ], 'property' => 'sku', 'type' => 'property', ], ];
 
         $expectedValidator = new \Magento\Framework\Validator();
         $expectedValidator->addValidator(

@@ -83,7 +83,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                             $info['description'] = '';
                         }
 
-                        $details = $block->getInfoOrder() ?: ['name','price','review','description','actions'];
+                        $details = $block->getInfoOrder() ?: ['name', 'price', 'review', 'description', 'actions'];
                         foreach ($details as $detail) {
                             /* @escapeNotVerified */ echo $info[$detail];
                         }

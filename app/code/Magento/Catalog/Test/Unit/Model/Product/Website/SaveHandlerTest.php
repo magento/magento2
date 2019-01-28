@@ -42,7 +42,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testWithMultipleStoreMode()
     {
-        $websiteIds = [1,2];
+        $websiteIds = [1, 2];
         $this->storeManager->expects($this->once())
             ->method("isSingleStoreMode")
             ->willReturn(false);

@@ -1290,7 +1290,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     public function websitesProvider()
     {
         return [
-            [[1,2,3]]
+            [[1, 2, 3]]
         ];
     }
 
@@ -1320,7 +1320,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 2 => ['second'],
                 3 => ['third']
             ]);
-        $this->product->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
+        $this->product->expects($this->once())->method('setWebsiteIds')->willReturn([2, 3]);
         $this->product->method('getSku')->willReturn('simple');
 
         $this->assertEquals($this->product, $this->model->save($this->product));

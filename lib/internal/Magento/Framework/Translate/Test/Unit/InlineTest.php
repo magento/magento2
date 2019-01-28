@@ -137,10 +137,10 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         return [
             ['test', 'test'],
             ['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'aaaaaa'],
-            [['test1', 'test2'], ['test1', 'test2'],],
-            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3'],],
-            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4'],],
-            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5'],],
+            [['test1', 'test2'], ['test1', 'test2'], ],
+            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3'], ],
+            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4'], ],
+            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5'], ],
         ];
     }
 

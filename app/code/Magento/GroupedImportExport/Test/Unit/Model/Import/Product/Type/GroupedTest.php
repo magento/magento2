@@ -216,7 +216,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ]
             ],
             [
-                'skus' => ['newSku' => [],'oldSku' => []],
+                'skus' => ['newSku' => [], 'oldSku' => []],
                 'bunch' => [
                     'associated_skus' => 'sku_assoc1=1, sku_assoc2=2',
                     'sku' => 'productsku',

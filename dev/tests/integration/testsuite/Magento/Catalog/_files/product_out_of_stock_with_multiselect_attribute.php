@@ -35,5 +35,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setMultiselectAttribute([$optionIds[1], $optionIds[2], $optionIds[3]])
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 0,'is_in_stock' => 0])
+    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_in_stock' => 0])
     ->save();

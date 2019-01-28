@@ -70,7 +70,7 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $countries = [];
         $regions = [];
-        $topDestinationCountries = ['UA','AF'];
+        $topDestinationCountries = ['UA', 'AF'];
 
         $layout = [];
         $layout['components']['block-summary']['children']['block-shipping']['children']

@@ -930,9 +930,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $expectedData = [
             'entity_id' =>  $oldSku[$sku]['entity_id'], //entity_id_val
-            'type_id' => $oldSku[$sku]['type_id'],// type_id_val
+            'type_id' => $oldSku[$sku]['type_id'], // type_id_val
             'attr_set_id' => $oldSku[$sku]['attr_set_id'], //attr_set_id_val
-            'attr_set_code' => $_attrSetIdToName[$oldSku[$sku]['attr_set_id']],//attr_set_id_val
+            'attr_set_code' => $_attrSetIdToName[$oldSku[$sku]['attr_set_id']], //attr_set_id_val
         ];
         $this->skuProcessor->expects($this->once())->method('addNewSku')->with($sku, $expectedData);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
@@ -1034,14 +1034,14 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $expectedData = [
             'entity_id' => null,
-            'type_id' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE],//value
+            'type_id' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE], //value
             //attr_set_id_val
             'attr_set_id' => $_attrSetNameToId[
                 $rowData[
                     \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET
                 ]
             ],
-            'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
+            'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET], //value
             'row_id' => null
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(

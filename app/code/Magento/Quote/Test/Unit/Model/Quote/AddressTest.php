@@ -335,12 +335,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $webSiteId = 6789;
         $baseCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->setMethods(['getCurrentCurrencyCode', 'convert'])
             ->getMockForAbstractClass();
 
         $currentCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->setMethods(['getCurrentCurrencyCode', 'convert'])
             ->getMockForAbstractClass();
 
         $currentCurrencyCode = 'UAH';

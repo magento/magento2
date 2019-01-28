@@ -414,7 +414,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     $this->_getFixture('watermark.png'),
                     50,
                     [ 3, 3 ],
-                    [ 23,3 ]
+                    [ 23, 3 ]
                 ],
                 // Watermark with no alpha channel, 100%
                 [

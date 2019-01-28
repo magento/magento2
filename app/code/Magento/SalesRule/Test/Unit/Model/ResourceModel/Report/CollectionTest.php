@@ -144,7 +144,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($ruleMock));
 
-        $ruleFilter = [1,2,3];
+        $ruleFilter = [1, 2, 3];
         $this->object->addRuleFilter($ruleFilter);
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
@@ -177,7 +177,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($ruleMock));
 
-        $ruleFilter = [1,2,30];
+        $ruleFilter = [1, 2, 30];
         $this->object->addRuleFilter($ruleFilter);
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }

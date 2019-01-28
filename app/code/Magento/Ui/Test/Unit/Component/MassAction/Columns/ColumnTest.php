@@ -77,7 +77,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareItems()
     {
-        $testItems = ['item1','item2', 'item3'];
+        $testItems = ['item1', 'item2', 'item3'];
 
         $this->assertEquals($testItems, $this->column->prepareItems($testItems));
     }

@@ -228,7 +228,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     public function isActionAllowedDataProvider()
     {
         return [
-            'other' => [true, 'other', 0,],
+            'other' => [true, 'other', 0, ],
             'delete-allowed' => [true, 'delete', 1, 'Magento_Catalog::products'],
             'delete-not-allowed' => [false, 'delete', 1, 'Magento_Catalog::products', false],
             'status-allowed' => [true, 'status', 1, 'Magento_Catalog::products'],

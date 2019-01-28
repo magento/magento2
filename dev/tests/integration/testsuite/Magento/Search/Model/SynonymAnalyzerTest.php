@@ -32,7 +32,7 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
         return [
             'WithSynonymsFromStoreViewScope' => [
                 'phrase' => 'elizabeth is the english queen',
-                'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
+                'expectedResult' => [['elizabeth'], ['is'], ['the'], ['british', 'english'], ['queen', 'monarch']]
             ],
             'WithSynonymsFromWebsiteScope' => [
                 'phrase' => 'orange hill',
@@ -44,7 +44,7 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
             ],
             'WithCaseMismatch' => [
                 'phrase' => 'GNU\'s Not Unix',
-                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'],]
+                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'], ]
             ],
             'WithMultiWordPhrase' => [
                 'phrase' => 'Coastline of Great Britain stretches for 11,073 miles',
@@ -72,7 +72,7 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
             ],
             'multipleSpaces' => [
                 'phrase' => 'GNU\'s Not   Unix',
-                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'],]
+                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'], ]
             ],
             'oneMoreTest' => [
                 'phrase' => 'schlicht',

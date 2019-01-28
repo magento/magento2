@@ -139,7 +139,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ],
             'invalid' => [
                 ['_media_image' => 1],
-                ['result' => true,'messages' => []],
+                ['result' => true, 'messages' => []],
             ],
         ];
     }

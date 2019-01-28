@@ -135,7 +135,7 @@ class MassAssignGroupTest extends AbstractBackendController
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
-        $params = ['group'=> 0,'namespace'=> 'customer_listing',
+        $params = ['group'=> 0, 'namespace'=> 'customer_listing',
         ];
         $this->getRequest()->setParams($params)->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massAssignGroup');

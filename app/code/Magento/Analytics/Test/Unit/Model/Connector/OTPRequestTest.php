@@ -93,7 +93,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
-            'body'=> ['access-token' => 'thisisaccesstoken','url' => 'http://www.mystore.com'],
+            'body'=> ['access-token' => 'thisisaccesstoken', 'url' => 'http://www.mystore.com'],
         ];
     }
 

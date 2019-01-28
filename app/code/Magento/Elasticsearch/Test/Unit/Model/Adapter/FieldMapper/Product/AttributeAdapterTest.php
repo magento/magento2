@@ -338,9 +338,9 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
     public function isFilterableProvider()
     {
         return [
-            [true, false, true,],
-            [true, false, true,],
-            [false, false, false,]
+            [true, false, true, ],
+            [true, false, true, ],
+            [false, false, false, ]
         ];
     }
 
@@ -350,8 +350,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
     public function isStringServiceFieldTypeProvider()
     {
         return [
-            ['string', 'text', false,],
-            ['text', 'text', true,]
+            ['string', 'text', false, ],
+            ['text', 'text', true, ]
         ];
     }
 

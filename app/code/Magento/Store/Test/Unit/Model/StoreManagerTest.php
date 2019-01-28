@@ -123,19 +123,19 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
                 'expectedStores' =>  [1 => $storeMock]
             ],
             'withoutDefaultAndCodeKey' => [
-                'storesList' => [$defaultStoreMock,$storeMock],
+                'storesList' => [$defaultStoreMock, $storeMock],
                 'withDefault' => false,
                 'codeKey' => true,
                 'expectedStores' =>  ['first_store' => $storeMock]
             ],
             'withDefaultAndId' => [
-                'storesList' => [$defaultStoreMock,$storeMock],
+                'storesList' => [$defaultStoreMock, $storeMock],
                 'withDefault' => true,
                 'codeKey' => false,
                 'expectedStores' =>  [0 => $defaultStoreMock, 1 => $storeMock]
             ],
             'withDefaultAndCodeKey' => [
-                'storesList' => [$defaultStoreMock,$storeMock],
+                'storesList' => [$defaultStoreMock, $storeMock],
                 'withDefault' => true,
                 'codeKey' => true,
                 'expectedStores' =>  ['default' => $defaultStoreMock, 'first_store' => $storeMock]

@@ -98,7 +98,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $document = [
             'nameOfField' => [
-                'value1','value2'
+                'value1', 'value2'
             ]
         ];
         $field = 'nameOfField';

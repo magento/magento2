@@ -98,7 +98,7 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
         $customerGroupId = 2;
         $customerTaxClassId = 3;
         $customerId = 4;
-        $rateIds = [5,6];
+        $rateIds = [5, 6];
         $expected = implode(
             '-',
             [

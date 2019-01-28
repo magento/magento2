@@ -184,7 +184,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityAttributeId','getEntityTypeId'])
+            ->setMethods(['getEntityAttributeId', 'getEntityTypeId'])
             ->getMockForAbstractClass();
         $abstractModelMock->expects($this->any())->method('getEntityAttributeId')->willReturn($entityAttributeId);
         $abstractModelMock->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);

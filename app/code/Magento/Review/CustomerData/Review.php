@@ -31,6 +31,6 @@ class Review implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        return (array)$this->reviewSession->getFormData(true) + ['nickname' => '','title' => '', 'detail' => ''];
+        return (array)$this->reviewSession->getFormData(true) + ['nickname' => '', 'title' => '', 'detail' => ''];
     }
 }

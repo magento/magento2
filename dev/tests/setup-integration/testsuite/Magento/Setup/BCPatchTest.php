@@ -87,7 +87,7 @@ class BCPatchTest extends SetupTestCase
         self::assertTrue($this->dbVersionInfo->isDataUpToDate('Magento_TestSetupDeclarationModule5'));
         self::assertTrue($this->dbVersionInfo->isSchemaUpToDate('Magento_TestSetupDeclarationModule5'));
         self::assertEquals(
-            [6,12],
+            [6, 12],
             $this->tableData->describeTableData('reference_table', 'some_integer')
         );
         self::assertEquals(

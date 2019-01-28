@@ -382,8 +382,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
             $mediaGalleryEntries[] = $mediaGalleryEntryMock;
             $mediaUrls[] = [$mediaFile, 'product_swatch_image_large', 'http://full_path_to_image' . $mediaFile];
-            $mediaUrls[] = [$mediaFile, 'product_swatch_image_medium' ,'http://full_path_to_image' . $mediaFile];
-            $mediaUrls[] = [$mediaFile, 'product_swatch_image_small','http://full_path_to_image' . $mediaFile];
+            $mediaUrls[] = [$mediaFile, 'product_swatch_image_medium' , 'http://full_path_to_image' . $mediaFile];
+            $mediaUrls[] = [$mediaFile, 'product_swatch_image_small', 'http://full_path_to_image' . $mediaFile];
         }
 
         $this->productMock->expects($this->once())

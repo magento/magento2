@@ -53,7 +53,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWebsiteIdByProductId()
     {
-        $websiteIds = [1,2];
+        $websiteIds = [1, 2];
         $productId = 1;
         $this->dbSelect->expects($this->once())
             ->method("from")
@@ -71,8 +71,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveWebsiteIds()
     {
-        $newWebsiteIds = [2,3];
-        $websiteIds = [1,2];
+        $newWebsiteIds = [2, 3];
+        $websiteIds = [1, 2];
         $productId = 1;
         $product = $this->createMock(ProductInterface::class);
         $product->expects($this->atLeastOnce())

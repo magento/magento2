@@ -211,7 +211,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [false, 'http://localhost/review/product/listAjax', 3],
-            [true, 'https://localhost/review/product/listAjax' ,3],
+            [true, 'https://localhost/review/product/listAjax' , 3],
         ];
     }
 }

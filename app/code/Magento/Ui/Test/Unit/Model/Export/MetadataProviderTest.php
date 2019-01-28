@@ -97,12 +97,12 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
     public function getColumnsDataProvider(): array
     {
         return [
-            [['ID'],['"ID"']],
-            [['Name'],['Name']],
-            [['Id'],['Id']],
-            [['id'],['id']],
-            [['IDTEST'],['"IDTEST"']],
-            [['ID TEST'],['"ID TEST"']],
+            [['ID'], ['"ID"']],
+            [['Name'], ['Name']],
+            [['Id'], ['Id']],
+            [['id'], ['id']],
+            [['IDTEST'], ['"IDTEST"']],
+            [['ID TEST'], ['"ID TEST"']],
         ];
     }
 

@@ -24,7 +24,7 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
                         \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
                         null,
                         self::INTEGRATION_ID
-                    ],[\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 0],
+                    ], [\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 0],
                 ]
             )
         );

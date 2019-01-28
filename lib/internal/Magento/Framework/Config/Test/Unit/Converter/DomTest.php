@@ -31,7 +31,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['cdata.xml', 'cdata.php'],
-            ['attributes.xml', 'attributes.php',],
+            ['attributes.xml', 'attributes.php', ],
         ];
     }
 }

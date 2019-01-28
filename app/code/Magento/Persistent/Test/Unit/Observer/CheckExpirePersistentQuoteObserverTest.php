@@ -64,7 +64,7 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
         $this->observerMock = $this->createPartialMock(
             \Magento\Framework\Event\Observer::class,
-            ['getControllerAction','__wakeUp']
+            ['getControllerAction', '__wakeUp']
         );
         $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);

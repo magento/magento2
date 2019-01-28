@@ -107,7 +107,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData','setData', 'getStoreId'])
+            ->setMethods(['getData', 'setData', 'getStoreId'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->willReturnMap(
             [
@@ -169,7 +169,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])
+            ->setMethods(['getData', 'setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->with('tier_price')->willReturn(1);
 

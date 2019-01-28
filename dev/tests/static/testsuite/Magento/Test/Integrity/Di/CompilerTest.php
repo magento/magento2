@@ -212,7 +212,7 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
 
         $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
 
-        $patterns = ['/' . preg_quote($generationPath) . '/',];
+        $patterns = ['/' . preg_quote($generationPath) . '/', ];
         $replacements = [''];
 
         $componentRegistrar = new ComponentRegistrar();

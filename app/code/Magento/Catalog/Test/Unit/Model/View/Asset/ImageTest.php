@@ -178,7 +178,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                     'keep_frame' => 'frame',
                     'keep_transparency' => 'transparency',
                     'constrain_only' => 'doconstrainonly',
-                    'background' => [233,1,0],
+                    'background' => [233, 1, 0],
                     'angle' => null,
                     'quality' => 80,
                 ],

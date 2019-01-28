@@ -77,7 +77,7 @@ class RequestQuantityProcessorTest extends \PHPUnit\Framework\TestCase
             ],
             'array_of arrays' => [
                 'cartData' => [
-                    ['qty' => [1, 2 ,3]],
+                    ['qty' => [1, 2 , 3]],
                 ],
                 'expected' => [
                     ['qty' => [1, 2, 3]],

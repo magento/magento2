@@ -129,7 +129,7 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             [
-                [],[],
+                [], [],
             ],
             [
                 [

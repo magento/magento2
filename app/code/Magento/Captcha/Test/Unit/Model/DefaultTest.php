@@ -230,7 +230,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
         $this->_object->getSession()->setData(
-            ['user_create_word' => ['data' => 'AbCdEf5', 'words' => 'AbCdEf5','expires' => time() - 360]]
+            ['user_create_word' => ['data' => 'AbCdEf5', 'words' => 'AbCdEf5', 'expires' => time() - 360]]
         );
         $this->assertNull($this->_object->getWord());
     }

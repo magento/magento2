@@ -145,7 +145,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 4, 'position' => 20],
                     ['category_id' => 5, 'position' => 0],
                 ],
-                [3,4,5], //affected category_ids
+                [3, 4, 5], //affected category_ids
             ],
             [
                 [3, 4], //model category_ids
@@ -155,7 +155,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                     ['category_id' => 4, 'position' => 20],
                 ],
                 [],
-                [3,4], //affected category_ids
+                [3, 4], //affected category_ids
             ],
             [
                 [], //model category_ids
@@ -169,7 +169,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                 [
                     ['category_id' => 3, 'position' => 20],
                 ],
-                [3,4], //affected category_ids
+                [3, 4], //affected category_ids
             ],
             [
                 [3], //model category_ids

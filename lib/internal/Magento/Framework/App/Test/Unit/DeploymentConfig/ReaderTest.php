@@ -87,7 +87,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        $files = [['configKeyOne', 'config.php'], ['configKeyTwo','env.php']];
+        $files = [['configKeyOne', 'config.php'], ['configKeyTwo', 'env.php']];
         $this->configFilePool
             ->expects($this->any())
             ->method('getPath')

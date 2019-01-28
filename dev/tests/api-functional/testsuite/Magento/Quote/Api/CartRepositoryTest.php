@@ -362,6 +362,6 @@ class CartRepositoryTest extends WebapiAbstract
      */
     public function customerIdDataProvider()
     {
-        return [[999],[null],['25']];
+        return [[999], [null], ['25']];
     }
 }

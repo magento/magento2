@@ -94,13 +94,13 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         return [
             'Both items filter' => [
                 [
-                    ['field' => 'id', 'conditionType' => 'eq','value' => 1],
-                    ['field' => 'id', 'conditionType' => 'eq','value' => 2],
+                    ['field' => 'id', 'conditionType' => 'eq', 'value' => 1],
+                    ['field' => 'id', 'conditionType' => 'eq', 'value' => 2],
                 ],
                 [$firstItem, $secondItem],
             ],
-            'First item filter' => [[['field' => 'id', 'conditionType' => 'eq','value' => 1]], [$firstItem]],
-            'Second item filter' => [[['field' => 'id', 'conditionType' => 'eq','value' => 2]], [$secondItem]],
+            'First item filter' => [[['field' => 'id', 'conditionType' => 'eq', 'value' => 1]], [$firstItem]],
+            'Second item filter' => [[['field' => 'id', 'conditionType' => 'eq', 'value' => 2]], [$secondItem]],
             'Empty filter' => [[], [$firstItem, $secondItem]],
         ];
     }

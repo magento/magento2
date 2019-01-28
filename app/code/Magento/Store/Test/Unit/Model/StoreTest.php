@@ -160,7 +160,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
+            ['websiteRepository' => $websiteRepository, ]
         );
         $model->setWebsiteId($websiteId);
 
@@ -181,7 +181,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['websiteRepository' => $websiteRepository,]
+            ['websiteRepository' => $websiteRepository, ]
         );
         $model->setWebsiteId(null);
 
@@ -207,7 +207,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
+            ['groupRepository' => $groupRepository, ]
         );
         $model->setGroupId($groupId);
 
@@ -228,7 +228,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['groupRepository' => $groupRepository,]
+            ['groupRepository' => $groupRepository, ]
         );
         $model->setGroupId(null);
 
@@ -592,7 +592,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['config' => $configMock, 'currencyInstalled' => $currencyPath,]
+            ['config' => $configMock, 'currencyInstalled' => $currencyPath, ]
         );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());

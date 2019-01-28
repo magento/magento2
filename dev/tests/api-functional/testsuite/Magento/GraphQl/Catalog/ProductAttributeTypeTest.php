@@ -70,7 +70,7 @@ QUERY;
             'customer',
             \Magento\Catalog\Api\Data\ProductInterface::class
         ];
-        $attributeTypes = ['String', 'Int', 'Float','Boolean', 'Float'];
+        $attributeTypes = ['String', 'Int', 'Float', 'Boolean', 'Float'];
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $response);
     }
 

@@ -210,7 +210,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         $itemMockArray = [$itemMock];
 
         $enabledModulesMockArray = ['Module_Name2'];
-        $allModulesMockArray = ['Module_Name1','Module_Name2'];
+        $allModulesMockArray = ['Module_Name1', 'Module_Name2'];
 
         $this->moduleCollectionFactoryMock->expects($this->any())
             ->method('create')
@@ -304,7 +304,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         $itemMockArray = [$itemMock];
 
         $enabledModulesMockArray = ['Module_Name2'];
-        $allModulesMockArray = ['Module_Name1','Module_Name2'];
+        $allModulesMockArray = ['Module_Name1', 'Module_Name2'];
 
         $this->moduleCollectionFactoryMock->expects($this->any())
             ->method('create')

@@ -319,7 +319,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             false,
-            ['getAmountAuthorized','hasAmountPaid']
+            ['getAmountAuthorized', 'hasAmountPaid']
         );
 
         $infoInstanceMock->expects($this->once())

@@ -329,7 +329,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     'indexer_5' => $this->once(),
                 ],
                 'executed_indexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
-                'executed_shared_indexers' => [['indexer_2'],['indexer_3']],
+                'executed_shared_indexers' => [['indexer_2'], ['indexer_3']],
             ],
             'With dependencies and multiple indexers in request' => [
                 'inputIndexers' => [

@@ -78,7 +78,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareItems()
     {
-        $testItems = ['item1','item2', 'item3'];
+        $testItems = ['item1', 'item2', 'item3'];
         $column = $this->objectManager->getObject(
             \Magento\Ui\Component\Listing\Columns\Column::class,
             ['context' => $this->contextMock]

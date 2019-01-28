@@ -264,7 +264,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData',])
+            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData', ])
             ->getMock();
 
         $product->expects($this->any())
@@ -287,7 +287,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', 'getProduct',])
+            ->setMethods(['getPrice', 'getProduct', ])
             ->getMockForAbstractClass();
 
         $item->expects($this->any())

@@ -96,7 +96,7 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemInterfaceMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['hasAdminArea','getWebsiteId'])
+            ->setMethods(['hasAdminArea', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockManagement = $this->getMockBuilder(StockManagement::class)
