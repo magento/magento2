@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class CusomterDataBuilderTest extends TestCase
+class CustomerDataBuilderTest extends TestCase
 {
     /**
      * @var CustomerDataBuilder
