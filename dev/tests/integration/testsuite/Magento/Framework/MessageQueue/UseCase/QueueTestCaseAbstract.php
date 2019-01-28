@@ -104,7 +104,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
      */
     public static function tearDownAfterClass()
     {
-        if (version_compare(phpversion(), '7') == -1) {
+        if (version_compare(PHP_VERSION, '7') == -1) {
             $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
             $closeConnection->setAccessible(true);
 

@@ -37,7 +37,7 @@ $debug = function ($val) {
  * has tons of potential big security holes
  */
 
-if (php_sapi_name() === 'cli-server') {
+if (PHP_SAPI === 'cli-server') {
     $debug("URI: {$_SERVER["REQUEST_URI"]}");
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.

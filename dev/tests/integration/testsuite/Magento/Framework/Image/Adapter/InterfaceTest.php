@@ -314,7 +314,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _convertCoordinates($pixel, $angle, $oldSize, $size)
     {
-        $angle = $angle * pi() / 180;
+        $angle = $angle * M_PI / 180;
         $center = ['x' => $oldSize[0] / 2, 'y' => $oldSize[1] / 2];
 
         $pixel['x'] -= $center['x'];

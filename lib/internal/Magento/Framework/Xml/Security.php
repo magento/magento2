@@ -30,7 +30,7 @@ class Security
      */
     private function isPhpFpm()
     {
-        return substr(php_sapi_name(), 0, 3) === 'fpm';
+        return substr(PHP_SAPI, 0, 3) === 'fpm';
     }
 
     /**
