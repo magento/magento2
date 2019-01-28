@@ -366,6 +366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @inheritdoc
+     *
      * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
      */
     public function isShippingLabelsAvailable()
@@ -448,7 +449,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $package->addChild('FirstClassMailType', 'PARCEL');
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars avaialble
+            //only 5 chars available
             $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
@@ -1167,6 +1168,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * Return USPS county name by country ISO 3166-1-alpha-2 code
+     *
      * Return false for unknown countries
      *
      * @param string $countryId
@@ -1246,7 +1248,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'FO' => 'Faroe Islands',
             'FR' => 'France',
             'GA' => 'Gabon',
-            'GB' => 'Great Britain and Northern Ireland',
+            'GB' => 'United Kingdom of Great Britain and Northern Ireland',
             'GD' => 'Grenada',
             'GE' => 'Georgia, Republic of',
             'GF' => 'French Guiana',
@@ -1364,7 +1366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'ST' => 'Sao Tome and Principe',
             'SV' => 'El Salvador',
             'SY' => 'Syrian Arab Republic',
-            'SZ' => 'Swaziland',
+            'SZ' => 'Eswatini',
             'TC' => 'Turks and Caicos Islands',
             'TD' => 'Chad',
             'TG' => 'Togo',

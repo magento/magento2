@@ -37,4 +37,17 @@
         <click selector="#save" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSavingConfig"/>
     </actionGroup>
+
+    <actionGroup name="SelectCountriesWithRequiredRegion">
+        <arguments>
+            <argument name="countries" type="countryArray"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminConfigGeneralPage"/>
+        <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab" />
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+        <scrollTo selector="{{StateOptionsSection.countriesWithRequiredRegions}}" stepKey="scrollToForm"/>
+        <selectOption selector="{{StateOptionsSection.countriesWithRequiredRegions}}" parameterArray="[{{countries.country}}]" stepKey="selectCountriesWithRequiredRegion"/>
+        <click selector="#save" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+    </actionGroup>
 </actionGroups>
