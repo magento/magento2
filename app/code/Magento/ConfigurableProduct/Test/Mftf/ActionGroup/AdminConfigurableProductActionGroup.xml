@@ -130,4 +130,24 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
+
+    <actionGroup name="createConfigurationsForTwoAttribute" extends="generateConfigurationsByAttributeCode">
+        <arguments>
+            <argument name="secondAttributeCode" type="string"/>
+        </arguments>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <remove keyForRemoval="clickFilters"/>
+        <remove keyForRemoval="fillFilterAttributeCodeField"/>
+        <remove keyForRemoval="clickApplyFiltersButton"/>
+        <remove keyForRemoval="clickOnFirstCheckbox"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attributeCode)}}" stepKey="clickOnFirstAttributeCheckbox" after="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(secondAttributeCode)}}" stepKey="clickOnSecondAttributeCheckbox" after="clickOnFirstAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(attributeCode)}}" stepKey="grabFirstAttributeDefaultLabel" after="clickOnSecondAttributeCheckbox"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.defaultLabel(secondAttributeCode)}}" stepKey="grabSecondAttributeDefaultLabel" after="grabFirstAttributeDefaultLabel"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabFirstAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForFistAttribute" after="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute({$grabSecondAttributeDefaultLabel})}}" stepKey="clickOnSelectAllForSecondAttribute" after="clickOnSelectAllForFistAttribute"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+    </actionGroup>
 </actionGroups>
