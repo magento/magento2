@@ -157,7 +157,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
             . '/_files/' . $listFilePattern;
-        $listFiles = glob($globFilesListPattern);
+        $listFiles = glob($globFilesListPattern, GLOB_NOSORT);
         if (count($listFiles)) {
             foreach ($listFiles as $listFile) {
                 $filesDefinedInList = array_merge(

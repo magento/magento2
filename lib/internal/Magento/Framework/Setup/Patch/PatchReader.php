@@ -90,7 +90,7 @@ class PatchReader
         $specificPatchPath = $patchesPath . DIRECTORY_SEPARATOR . $this->getTypeFolder();
         $patchesMask = $specificPatchPath . DIRECTORY_SEPARATOR . '*.php';
 
-        foreach (Glob::glob($patchesMask) as $patchPath) {
+        foreach (Glob::glob($patchesMask, GLOB_NOSORT) as $patchPath) {
             $moduleName = $this->getModuleNameForNamespace($moduleName);
             $patchClasses[] = $moduleName . '\\Setup\\' .
                 self::SETUP_PATCH_FOLDER . '\\' .

@@ -34,7 +34,7 @@ function deleteDirectory($dir)
     if (!is_dir($dir)) {
         return unlink($dir);
     }
-    foreach (scandir($dir) as $item) {
+    foreach (scandir($dir, SCANDIR_SORT_NONE) as $item) {
         if ($item == '.' || $item == '..') {
             continue;
         }

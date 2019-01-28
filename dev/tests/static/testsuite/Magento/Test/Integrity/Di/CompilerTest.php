@@ -126,7 +126,7 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
                 realpath(__DIR__) . '/../_files/blacklist/compiler_plugins*.txt'
             );
             $blacklistItems = [];
-            foreach (glob($blacklistFiles) as $fileName) {
+            foreach (glob($blacklistFiles, GLOB_NOSORT) as $fileName) {
                 $blacklistItems = array_merge(
                     $blacklistItems,
                     file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)

@@ -18,7 +18,7 @@ $iterator = new RecursiveIteratorIterator(
 );
 
 //collect test modules dirs name
-$testModuleNames = array_diff(scandir($pathToCommittedTestModules), ['..', '.']);
+$testModuleNames = array_diff(scandir($pathToCommittedTestModules, SCANDIR_SORT_NONE), ['..', '.']);
 
 //remove test modules from magento codebase
 foreach ($testModuleNames as $name) {

@@ -1564,7 +1564,7 @@ class Files
     public function readLists($globPattern)
     {
         $patterns = [];
-        foreach (glob($globPattern) as $list) {
+        foreach (glob($globPattern, GLOB_NOSORT) as $list) {
             $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
 

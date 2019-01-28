@@ -67,7 +67,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     public static function getBlacklist(string $pattern)
     {
         $blacklist = [];
-        foreach (glob($pattern) as $list) {
+        foreach (glob($pattern, GLOB_NOSORT) as $list) {
             $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         return $blacklist;

@@ -58,7 +58,7 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
         $files = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $mask = $moduleDir . '/etc/*/routes.xml';
-            $files = array_merge($files, glob($mask));
+            $files = array_merge($files, glob($mask, GLOB_NOSORT));
         }
         $mergedConfig = new \Magento\Framework\Config\Dom(
             '<config><router/></config>',

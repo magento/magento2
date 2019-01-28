@@ -47,7 +47,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
     {
         $whitelistedClasses = [];
         $path = sprintf('%s/_files/controller_acl_test_whitelist_*.txt', __DIR__);
-        foreach (glob($path) as $listFile) {
+        foreach (glob($path, GLOB_NOSORT) as $listFile) {
             $whitelistedClasses = array_merge(
                 $whitelistedClasses,
                 file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)

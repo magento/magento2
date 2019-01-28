@@ -7,7 +7,7 @@
 if (isset($_GET['type']) && $_GET['type'] == 'deployed') {
     $themePath = isset($_GET['theme_path']) ? $_GET['theme_path'] : 'adminhtml/Magento/backend';
     $directory = __DIR__ . '/../../../../pub/static/' . $themePath;
-    $locales = array_diff(scandir($directory), ['..', '.']);
+    $locales = array_diff(scandir($directory, SCANDIR_SORT_NONE), ['..', '.']);
 } else {
     require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
     $localeConfig = $magentoObjectManager->create(\Magento\Framework\Locale\Config::class);

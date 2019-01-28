@@ -41,7 +41,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
                 realpath(__DIR__) . '/_files/whitelist/public_code*.txt'
             );
             $whiteListItems = [];
-            foreach (glob($whiteListFiles) as $fileName) {
+            foreach (glob($whiteListFiles, GLOB_NOSORT) as $fileName) {
                 $whiteListItems = array_merge(
                     $whiteListItems,
                     file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)

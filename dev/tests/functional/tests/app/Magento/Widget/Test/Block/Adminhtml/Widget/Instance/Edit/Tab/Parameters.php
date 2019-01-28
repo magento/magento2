@@ -60,7 +60,7 @@ class Parameters extends Tab
     {
         $path = $this->path . str_replace(' ', '', $fields['code']) . '.php';
         $path = str_replace('\\', DIRECTORY_SEPARATOR, MTF_TESTS_PATH . $path);
-        $paths = glob($path);
+        $paths = glob($path, GLOB_NOSORT);
         $path = str_replace([MTF_TESTS_PATH, '.php'], '', $paths[0]);
 
         return str_replace('/', '\\', $path);

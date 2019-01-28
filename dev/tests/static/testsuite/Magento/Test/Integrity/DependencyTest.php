@@ -226,7 +226,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/*.php';
         $dbRuleTables = [];
-        foreach (glob($replaceFilePattern) as $fileName) {
+        foreach (glob($replaceFilePattern, GLOB_NOSORT) as $fileName) {
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [

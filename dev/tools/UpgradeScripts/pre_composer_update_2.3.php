@@ -367,7 +367,7 @@ function deleteFilepath($path) {
         return;
     }
     if (is_dir($path)) {
-        $files = array_diff(scandir($path), array('..', '.'));
+        $files = array_diff(scandir($path, SCANDIR_SORT_NONE), array('..', '.'));
         foreach ($files as $file) {
             deleteFilepath("$path/$file");
         }
