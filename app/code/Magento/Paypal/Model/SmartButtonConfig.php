@@ -30,19 +30,27 @@ class SmartButtonConfig
     private $defaultStyles;
 
     /**
+     * @var array
+     */
+    private $allowedFunding;
+
+    /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param array $defaultStyles
+     * @param array $allowedFunding
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
-        $defaultStyles = []
+        $defaultStyles = [],
+        $allowedFunding = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $this->defaultStyles = $defaultStyles;
+        $this->allowedFunding = $allowedFunding;
     }
 
     /**
@@ -57,7 +65,7 @@ class SmartButtonConfig
             'merchantId' => $this->config->getValue('merchant_id'),
             'environment' => ((int)$this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
             'locale' => $this->localeResolver->getLocale(),
-            'allowedFunding' => $this->getAllowedFunding(),
+            'allowedFunding' => $this->getAllowedFunding($page),
             'disallowedFunding' => $this->getDisallowedFunding(),
             'styles' => $this->getButtonStyles($page)
         ];
@@ -77,11 +85,12 @@ class SmartButtonConfig
     /**
      * Returns allowed funding
      *
+     * @param string $page
      * @return array
      */
-    private function getAllowedFunding(): array
+    private function getAllowedFunding($page): array
     {
-        return [];
+        return array_values(array_diff($this->allowedFunding[$page], $this->getDisallowedFunding()));
     }
 
     /**
