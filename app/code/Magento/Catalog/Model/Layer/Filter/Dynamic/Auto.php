@@ -108,7 +108,7 @@ class Auto implements AlgorithmInterface
         $maxPrice = $this->getMaxPriceInt();
         $index = 1;
         do {
-            $range = pow(10, strlen(floor($maxPrice)) - $index);
+            $range = 10**( strlen(floor($maxPrice)) - $index);
             $items = $this->resource->getCount($range);
             $index++;
         } while ($range > self::MIN_RANGE_POWER && count($items) < 2);

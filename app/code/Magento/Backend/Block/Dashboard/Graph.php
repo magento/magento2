@@ -314,7 +314,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         if ($minvalue >= 0 && $maxvalue >= 0) {
             if ($maxvalue > 10) {
-                $p = pow(10, $this->_getPow($maxvalue));
+                $p = 10** $this->_getPow($maxvalue);
                 $maxy = ceil($maxvalue / $p) * $p;
                 $yLabels = range($miny, $maxy, $p);
             } else {

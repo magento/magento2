@@ -92,7 +92,7 @@ class CategoriesFixture extends Fixture
         }
         $this->maxNestingLevel = $this->fixtureModel->getValue('categories_nesting_level', 3);
 
-        $categoriesNumberOnLevel = abs(ceil(pow($this->categoriesNumber, 1 / $this->maxNestingLevel) - 2));
+        $categoriesNumberOnLevel = abs(ceil($this->categoriesNumber**( 1 / $this->maxNestingLevel) - 2));
         foreach ($this->getRootCategoriesIds() as $parentCategoryId) {
             $category = $this->categoryFactory->create();
             $category->load($parentCategoryId);

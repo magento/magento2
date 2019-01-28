@@ -149,9 +149,9 @@ class Algorithm
         }
 
         if ($standardDeviation <= 0) {
-            $intervalsNumber = pow(10, self::TEN_POWER_ROUNDING_FACTOR);
+            $intervalsNumber = 10** self::TEN_POWER_ROUNDING_FACTOR;
         } else {
-            $intervalsNumber = $valueRange * pow($count, 1 / 3) / (3.5 * $standardDeviation);
+            $intervalsNumber = $valueRange * $count**( 1 / 3) / (3.5 * $standardDeviation);
         }
         $this->_intervalsNumber = max(ceil($intervalsNumber), self::MIN_INTERVALS_NUMBER);
         $this->_intervalsNumber = (int)min($this->_intervalsNumber, self::MAX_INTERVALS_NUMBER);
@@ -457,7 +457,7 @@ class Algorithm
         }
 
         $result = [];
-        $tenPower = pow(10, self::TEN_POWER_ROUNDING_FACTOR);
+        $tenPower = 10** self::TEN_POWER_ROUNDING_FACTOR;
         $roundingFactorCoefficients = [10, 5, 2];
         while ($tenPower >= self::MIN_POSSIBLE_VALUE) {
             if ($tenPower == self::MIN_POSSIBLE_VALUE) {

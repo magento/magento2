@@ -546,7 +546,7 @@ class ConfigurableProductsFixture extends Fixture
             $config['attributeSet'] = $this->convertAttributesToDBFormat($attributeSet);
             $config['attributes'] = $attributes;
             $config['options'] = $options;
-            $config['variationCount'] = is_array($options) ? array_product($options) : pow($options, $attributes);
+            $config['variationCount'] = is_array($options) ? array_product($options) : $options** $attributes;
             $skuPull[] = $config['sku'];
         }
 

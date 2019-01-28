@@ -117,7 +117,7 @@ class Memory
             throw new \OutOfBoundsException("A 32-bit system is unable to process such a number.");
         }
         if ($unitSymbol) {
-            $result *= pow(1024, $pow);
+            $result *= 1024** $pow;
         }
         return (int)$result;
     }

@@ -201,13 +201,13 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         $chars = count($this->salesRuleCoupon->getCharset($this->getFormat()));
         $size = $this->getQty();
         $length = (int)$this->getLength();
-        $maxCodes = pow($chars, $length);
+        $maxCodes = $chars** $length;
         $probability = $size / $maxCodes;
 
         if ($probability > $maxProbability) {
             do {
                 $length++;
-                $maxCodes = pow($chars, $length);
+                $maxCodes = $chars** $length;
                 $probability = $size / $maxCodes;
             } while ($probability > $maxProbability);
             $this->setLength($length);

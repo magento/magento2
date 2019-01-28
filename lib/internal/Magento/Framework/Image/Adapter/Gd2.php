@@ -121,7 +121,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + pow(2, 16)) * 1.65
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + 2** 16) * 1.65
         );
     }
 
@@ -136,7 +136,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _convertToByte($memoryValue)
     {
         if (stripos($memoryValue, 'G') !== false) {
-            return (int)$memoryValue * pow(1024, 3);
+            return (int)$memoryValue * 1024** 3;
         } elseif (stripos($memoryValue, 'M') !== false) {
             return (int)$memoryValue * 1024 * 1024;
         } elseif (stripos($memoryValue, 'K') !== false) {
