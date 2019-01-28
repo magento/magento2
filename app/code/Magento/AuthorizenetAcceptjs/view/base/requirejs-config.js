@@ -14,6 +14,6 @@ var config = {
     },
     paths: {
         acceptjssandbox: 'https://jstest.authorize.net/v1/Accept',
-        acceptjs: 'https://jst.authorize.net/v1/Accept'
+        acceptjs: 'https://js.authorize.net/v1/Accept'
     }
 };

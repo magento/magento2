@@ -26,6 +26,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private const KEY_SHOULD_EMAIL_CUSTOMER = 'email_customer';
     private const KEY_ADDITIONAL_INFO_KEYS = 'paymentInfoKeys';
     private const KEY_CLIENT_KEY = 'public_client_key';
+    private const KEY_CVV_ENABLED = 'cvv_enabled';
     private const ENDPOINT_URL_SANDBOX = 'https://apitest.authorize.net/xml/v1/request.api';
     private const ENDPOINT_URL_PRODUCTION = 'https://api.authorize.net/xml/v1/request.api';
     private const SOLUTION_ID_SANDBOX = 'AAA102993';
@@ -145,6 +146,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function shouldEmailCustomer($storeId = null): bool
     {
         return (bool)$this->getValue(Config::KEY_SHOULD_EMAIL_CUSTOMER, $storeId);
+    }
+
+    /**
+     * Should the cvv field be shown
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isCvvEnabled($storeId = null): bool
+    {
+        return (bool)$this->getValue(Config::KEY_CVV_ENABLED, $storeId);
     }
 
     /**

@@ -15,3 +15,4 @@ Authorize.net,Authorize.net
 "avsResultCode", "AVS Response Code"
 "cvvResultCode","CVV Response Code"
 "cavvResultCode","CAVV Response Code"
+"Enable Credit Card Verification Field","Enable Credit Card Verification Field"

@@ -52,6 +52,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'clientKey' => $this->config->getClientKey($storeId),
                     'apiLoginID' => $this->config->getLoginId($storeId),
                     'environment' => $this->config->getEnvironment($storeId),
+                    'useCvv' => $this->config->isCvvEnabled($storeId),
                 ]
             ]
         ];

@@ -6,18 +6,18 @@
 define([
     'jquery',
     'Magento_Payment/js/view/payment/cc-form',
-    'Magento_AuthorizenetAcceptjs/js/view/payment/acceptjs-factory',
-    'Magento_AuthorizenetAcceptjs/js/view/payment/validator-handler',
+    'Magento_AuthorizenetAcceptjs/js/view/payment/acceptjs-client',
     'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Ui/js/model/messageList',
     'Magento_Payment/js/model/credit-card-validation/validator'
-], function ($, Component, acceptjsFactory, validatorHandler, fullScreenLoader) {
+], function ($, Component, AcceptjsClient, fullScreenLoader, globalMessageList) {
     'use strict';
 
     return Component.extend({
         defaults: {
             active: false,
             template: 'Magento_AuthorizenetAcceptjs/payment/authorizenet-acceptjs',
-            authnetResponse: null,
+            tokens: null,
             ccForm: 'Magento_Payment/payment/cc-form',
             acceptjsClient: null
         },
@@ -30,7 +30,6 @@ define([
         initObservable: function () {
             this._super()
                 .observe(['active']);
-            validatorHandler.initialize();
 
             return this;
         },
@@ -47,6 +46,9 @@ define([
          */
         initFormElement: function (element) {
             this.formElement = element;
+            this.acceptjsClient = AcceptjsClient({
+                environment: window.checkoutConfig.payment[this.getCode()].environment
+            });
             $(this.formElement).validation();
         },
 
@@ -57,8 +59,8 @@ define([
             return {
                 method: this.getCode(),
                 'additional_data': {
-                    opaqueDataDescriptor: this.authnetResponse ? this.authnetResponse.opaqueData.dataDescriptor : null,
-                    opaqueDataValue: this.authnetResponse ? this.authnetResponse.opaqueData.dataValue : null
+                    opaqueDataDescriptor: this.tokens ? this.tokens.opaqueDataDescriptor : null,
+                    opaqueDataValue: this.tokens ? this.tokens.opaqueDataValue : null
                 }
             };
         },
@@ -80,67 +82,53 @@ define([
          * Prepare data to place order
          */
         beforePlaceOrder: function () {
-            var self = this;
-
-            if (self.acceptjsClient) {
-                self.processPayment();
-            } else {
-                acceptjsFactory().done(function (client) {
-                    self.acceptjsClient = client;
-                    self.processPayment.call(self);
-                });
-            }
-        },
-
-        /**
-         * Creates a token from the payment information in the form
-         */
-        processPayment: function () {
-            var authData = {},
+            var self = this,
+                authData = {},
                 cardData = {},
                 secureData = {};
 
-            if ($(this.formElement).valid()) {
-                authData.clientKey = window.checkoutConfig.payment[this.getCode()].clientKey;
-                authData.apiLoginID = window.checkoutConfig.payment[this.getCode()].apiLoginID;
-
-                cardData.cardNumber = this.creditCardNumber();
-                cardData.month = this.creditCardExpMonth();
-                cardData.year = this.creditCardExpYear();
-                cardData.cardCode = this.creditCardVerificationNumber();
-
-                secureData.authData = authData;
-                secureData.cardData = cardData;
-
-                this.acceptjsClient.dispatchData(secureData, this.handleResponse.bind(this));
+            if (!$(this.formElement).valid()) {
+                return;
             }
-        },
 
-        /**
-         * Handle response from authnet-acceptjs
-         */
-        handleResponse: function (response) {
-            this.authnetResponse = response;
-            this.placeOrder();
-        },
+            authData.clientKey = window.checkoutConfig.payment[this.getCode()].clientKey;
+            authData.apiLoginID = window.checkoutConfig.payment[this.getCode()].apiLoginID;
 
-        /**
-         * Action to place order
-         */
-        placeOrder: function () {
-            var self = this;
+            cardData.cardNumber = this.creditCardNumber();
+            cardData.month = this.creditCardExpMonth();
+            cardData.year = this.creditCardExpYear();
+            cardData.cardCode = this.creditCardVerificationNumber();
+
+            secureData.authData = authData;
+            secureData.cardData = cardData;
 
             fullScreenLoader.startLoader();
 
-            validatorHandler.validate(this.authnetResponse, function (valid) {
-                fullScreenLoader.stopLoader();
+            this.acceptjsClient.createTokens(secureData)
+                .always(function () {
+                    fullScreenLoader.stopLoader();
+                })
+                .done(function (tokens) {
+                    self.tokens = tokens;
+                    self.placeOrder();
+                })
+                .fail(function (messages) {
+                    self.tokens = null;
+                    self._showErrors(messages);
+                });
+        },
 
-                if (valid) {
-                    return self._super();
-                }
+        /**
+         * Show error messages
+         *
+         * @param {String[]} errorMessages
+         */
+        _showErrors: function (errorMessages) {
+            $.each(errorMessages, function (index, message) {
+                globalMessageList.addErrorMessage({
+                    message: message
+                });
             });
-
-            return false;
         }
     });
-})
+});
