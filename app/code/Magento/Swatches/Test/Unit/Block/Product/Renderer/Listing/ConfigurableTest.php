@@ -106,7 +106,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchConfigWithoutSwatches()
     {
@@ -122,7 +122,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchNotUsedInProductListing()
     {
@@ -145,7 +145,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchUsedInProductListing()
     {

@@ -66,7 +66,7 @@ class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testGetInvalidGeneratorType()
     {

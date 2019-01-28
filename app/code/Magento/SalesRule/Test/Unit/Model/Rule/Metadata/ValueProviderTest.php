@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Rule\Metadata;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * @covers Magento\SalesRule\Model\Rule\Metadata\ValueProvider
+ * @covers \Magento\SalesRule\Model\Rule\Metadata\ValueProvider
  */
 class ValueProviderTest extends \PHPUnit\Framework\TestCase
 {

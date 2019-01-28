@@ -11,7 +11,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\MessageValidator;
 
 /**
- * @covers Magento\Framework\MessageQueue\MessageValidator
+ * @covers \Magento\Framework\MessageQueue\MessageValidator
  * @SuppressWarnings(PHPMD)
  */
 class MessageValidatorTest extends \PHPUnit\Framework\TestCase
@@ -81,7 +81,7 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Data in topic "customer.created" must be of type "Magento\Customer\Api\Data\CustomerInt
      */
     public function testEncodeInvalidMessageMethodType()

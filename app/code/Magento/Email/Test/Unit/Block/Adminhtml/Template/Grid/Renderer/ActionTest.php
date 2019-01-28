@@ -6,7 +6,7 @@
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
- * @covers Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action
+ * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action
  */
 class ActionTest extends \PHPUnit\Framework\TestCase
 {

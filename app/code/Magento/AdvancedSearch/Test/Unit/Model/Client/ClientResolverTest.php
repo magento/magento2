@@ -91,7 +91,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException \LogicException
      */
     public function testCreateLogicException()
     {

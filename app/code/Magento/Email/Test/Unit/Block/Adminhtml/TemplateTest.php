@@ -6,7 +6,7 @@
 namespace Magento\Email\Test\Unit\Block\Adminhtml;
 
 /**
- * @covers Magento\Email\Block\Adminhtml\Template
+ * @covers \Magento\Email\Block\Adminhtml\Template
  */
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {

@@ -58,7 +58,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedException Fallback rule 'unsupported_type' is not supported
+     * @expectedException \Fallback rule 'unsupported_type' is not supported
      */
     public function testGetRuleUnsupportedType()
     {

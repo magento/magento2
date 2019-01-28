@@ -156,7 +156,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Trigger unsupported event type
      */
     public function testWrongEventTypeException()
@@ -165,7 +165,7 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Trigger unsupported time type
      */
     public function testWrongTimeTypeException()

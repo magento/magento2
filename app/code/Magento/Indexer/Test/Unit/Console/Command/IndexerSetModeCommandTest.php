@@ -32,7 +32,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Missing argument 'mode'. Accepted values for mode are 'realtime' or 'schedule'
      */
     public function testExecuteInvalidArgument()
@@ -44,7 +44,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Accepted values for mode are 'realtime' or 'schedule'
      */
     public function testExecuteInvalidMode()

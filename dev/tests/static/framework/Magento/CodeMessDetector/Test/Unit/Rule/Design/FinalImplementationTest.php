@@ -66,7 +66,7 @@ class FinalImplementationTest extends TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException \BadMethodCallException
      */
     public function testRuleFailsOnNotFinalizableNodes()
     {

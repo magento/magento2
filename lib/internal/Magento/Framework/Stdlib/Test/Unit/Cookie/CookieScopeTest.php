@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 /**
  * Test CookieScope
  *
- * @coversDefaultClass Magento\Framework\Stdlib\Cookie\CookieScope
+ * @coversDefaultClass \Magento\Framework\Stdlib\Cookie\CookieScope
  */
 class CookieScopeTest extends \PHPUnit\Framework\TestCase
 {
