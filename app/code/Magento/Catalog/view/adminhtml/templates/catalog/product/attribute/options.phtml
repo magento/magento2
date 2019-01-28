@@ -88,7 +88,7 @@ $stores = $block->getStoresSortedBySortOrder();
     $values = [];
     foreach($block->getOptionValues() as $value) {
         $value = $value->getData();
-        $values[] = is_array($value) ? array_map(function($str) {
+        $values[] = is_array($value) ? array_map(function ($str) {
             return htmlspecialchars_decode($str, ENT_QUOTES);
         }, $value) : $value;
     }

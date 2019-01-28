@@ -1437,7 +1437,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         ];
 
         $usedAttributes = array_map(
-            function($attr) {
+            function ($attr) {
                 return $attr->getAttributeCode();
             },
             $this->getUsedProductAttributes($product)
