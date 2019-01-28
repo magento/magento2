@@ -36,6 +36,6 @@ class View extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
         }
 
         $this->_redirect('paypal/*/');
-        return;
+        
     }
 }

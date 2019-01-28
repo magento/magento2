@@ -26,6 +26,6 @@ class Form extends \Magento\Payment\Block\Transparent\Form
      */
     protected function initializeMethod()
     {
-        return;
+        
     }
 }

@@ -602,7 +602,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function validateUpdate($handle, $updateXml)
     {
-        return;
+        
     }
 
     /**

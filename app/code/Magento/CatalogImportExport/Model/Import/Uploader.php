@@ -356,6 +356,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     protected function chmod($file)
     {
-        return;
+        
     }
 }

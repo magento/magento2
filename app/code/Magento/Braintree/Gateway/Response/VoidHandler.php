@@ -17,7 +17,7 @@ class VoidHandler extends TransactionIdHandler
      */
     protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
     {
-        return;
+        
     }
 
     /**

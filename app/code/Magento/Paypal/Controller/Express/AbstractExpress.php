@@ -240,7 +240,7 @@ abstract class AbstractExpress extends AppAction implements
      */
     public function getCustomerBeforeAuthUrl()
     {
-        return;
+        
     }
 
     /**

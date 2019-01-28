@@ -19,7 +19,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
-        return;
+        
     }
 
     /**

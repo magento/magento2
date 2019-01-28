@@ -35,7 +35,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function getModuleName()
     {
-        return;
+        
     }
 
     /**
@@ -56,7 +56,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function getActionName()
     {
-        return;
+        
     }
 
     /**

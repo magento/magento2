@@ -56,7 +56,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidPartialXml()
     {
-        return;
+        
     }
 
     /**
@@ -64,7 +64,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return;
+        
     }
 
     /**
@@ -72,7 +72,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownInvalidPartialXml()
     {
-        return;
+        
     }
 
     /**
@@ -80,6 +80,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXmlName()
     {
-        return;
+        
     }
 }

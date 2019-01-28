@@ -18,7 +18,7 @@ class AsyncHandler
      */
     public function methodWithStringParam($param)
     {
-        return;
+        
     }
 
     /**
@@ -27,7 +27,7 @@ class AsyncHandler
      */
     public function methodWithBoolParam($param)
     {
-        return;
+        
     }
 
     /**
@@ -36,6 +36,6 @@ class AsyncHandler
      */
     public function methodWithMixedParam($param)
     {
-        return;
+        
     }
 }

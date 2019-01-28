@@ -299,7 +299,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return;
+        
     }
 
     /**

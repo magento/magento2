@@ -161,7 +161,7 @@ class Bundle
         $extension = $product->getExtensionAttributes();
         $extension->setBundleProductOptions($options);
         $product->setExtensionAttributes($extension);
-        return;
+        
     }
 
     /**

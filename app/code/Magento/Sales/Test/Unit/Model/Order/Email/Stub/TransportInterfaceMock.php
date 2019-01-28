@@ -16,7 +16,7 @@ class TransportInterfaceMock implements TransportInterface
      */
     public function sendMessage()
     {
-        return;
+        
     }
 
     /**

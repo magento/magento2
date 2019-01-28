@@ -159,5 +159,5 @@ namespace Magento\Setup\Model\Cron;
 
 function chmod()
 {
-    return;
+    
 }

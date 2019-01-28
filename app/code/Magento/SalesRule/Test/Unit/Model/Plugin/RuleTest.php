@@ -30,7 +30,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->genericClosure = function () {
-            return;
+            
         };
 
         $this->plugin = $objectManager->getObject(\Magento\SalesRule\Model\Plugin\Rule::class);

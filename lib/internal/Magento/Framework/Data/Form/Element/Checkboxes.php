@@ -130,7 +130,7 @@ class Checkboxes extends AbstractElement
         if (in_array((string)$value, $checked)) {
             return 'checked';
         }
-        return;
+        
     }
 
     /**
@@ -151,7 +151,7 @@ class Checkboxes extends AbstractElement
                 return 'disabled';
             }
         }
-        return;
+        
     }
 
     /**
@@ -163,7 +163,7 @@ class Checkboxes extends AbstractElement
         if ($onclick = $this->getData('onclick')) {
             return str_replace('$value', $value, $onclick);
         }
-        return;
+        
     }
 
     /**
@@ -175,7 +175,7 @@ class Checkboxes extends AbstractElement
         if ($onchange = $this->getData('onchange')) {
             return str_replace('$value', $value, $onchange);
         }
-        return;
+        
     }
 
     /**

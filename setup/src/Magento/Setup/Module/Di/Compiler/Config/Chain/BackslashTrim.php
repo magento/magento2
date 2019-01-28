@@ -66,6 +66,6 @@ class BackslashTrim implements ModificationInterface
                 $this->resolveArguments($value);
             }
         }
-        return;
+        
     }
 }

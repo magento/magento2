@@ -45,7 +45,7 @@ class MethodAnnotationFixture
      */
     public function getProductListDefaultBy()
     {
-        return;
+        
     }
 
     /**
@@ -55,7 +55,7 @@ class MethodAnnotationFixture
      */
     public function getProductListDefaultSortBy13()
     {
-        return;
+        
     }
 
     /**

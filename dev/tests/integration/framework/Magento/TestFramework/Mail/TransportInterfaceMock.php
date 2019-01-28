@@ -15,7 +15,7 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
      */
     public function sendMessage()
     {
-        return;
+        
     }
 
     /**

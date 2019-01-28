@@ -19,6 +19,6 @@ class AddressAdditionalDataProcessor
      */
     public function process(AddressAdditionalDataInterface $additionalData)
     {
-        return;
+        
     }
 }

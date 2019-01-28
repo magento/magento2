@@ -22,6 +22,6 @@ class TotalsAdditionalDataProcessor
      */
     public function process(TotalsAdditionalDataInterface $additionalData, $cartId)
     {
-        return;
+        
     }
 }

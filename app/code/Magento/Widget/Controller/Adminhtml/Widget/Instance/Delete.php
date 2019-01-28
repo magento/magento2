@@ -25,6 +25,6 @@ class Delete extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
             }
         }
         $this->_redirect('adminhtml/*/');
-        return;
+        
     }
 }

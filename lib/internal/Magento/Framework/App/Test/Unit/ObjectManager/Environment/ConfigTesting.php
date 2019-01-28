@@ -22,7 +22,7 @@ class ConfigTesting implements ConfigInterface
      */
     public function setRelations(RelationsInterface $relations)
     {
-        return;
+        
     }
 
     /**
@@ -35,7 +35,7 @@ class ConfigTesting implements ConfigInterface
      */
     public function setCache(ConfigCacheInterface $cache)
     {
-        return;
+        
     }
 
     /**
@@ -104,7 +104,7 @@ class ConfigTesting implements ConfigInterface
      */
     public function extend(array $configuration)
     {
-        return;
+        
     }
 
     /**
@@ -126,7 +126,7 @@ class ConfigTesting implements ConfigInterface
      */
     public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
     {
-        return;
+        
     }
 
     /**

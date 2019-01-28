@@ -45,6 +45,6 @@ class ObjectRelationProcessor
      */
     public function validateDataIntegrity($table, array $involvedData)
     {
-        return;
+        
     }
 }

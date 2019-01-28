@@ -18,6 +18,6 @@ class Fs extends \Magento\Framework\Backup\Filesystem\Rollback\AbstractRollback
      */
     public function run()
     {
-        return;
+        
     }
 }

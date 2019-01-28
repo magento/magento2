@@ -282,7 +282,7 @@ class ProductServiceTest extends WebapiAbstract
     protected function setBundleProductOptions(&$product, $bundleProductOptions)
     {
         $product["extension_attributes"]["bundle_product_options"] = $bundleProductOptions;
-        return;
+        
     }
 
     /**
