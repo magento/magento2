@@ -60,7 +60,7 @@
 
 .abs-field-no-label {
     /**
-     *@codingStandardsIgnoreStart
+     * @codingStandardsIgnoreStart
      */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
     //@codingStandardsIgnoreEnd
@@ -111,7 +111,7 @@
 
     > .admin__field {
         border: 0;
-        margin: 0;
+        margin: 0 0 3rem 0;
         padding: 0;
         #mix-grid .row();
 
@@ -146,51 +146,6 @@
                     margin-top: -@indent__l;
                 }
             }
-        }
-
-        &.field-currently_used_for {
-            > .admin__field-control {
-                .admin__field {
-                    margin-top: 8px;
-                }
-            } 
-        }
-    }
-    .product-options {
-        > .admin__field {
-            border: 0;
-            margin: 0 0 3rem 0;
-            padding: 0;
-            #mix-grid .row();
-    
-            &.admin__field-wide {
-                &:extend(.abs-field-rows all);
-            }
-    
-            > .admin__field-control {
-                #mix-grid .column(@field-control-grid__column, @field-grid__columns);
-                float: none;
-                display: inline-block;
-            }
-    
-            > .admin__field-label {
-                #mix-grid .column(@field-label-grid__column, @field-grid__columns);
-                float: none;
-                display: inline-block;
-            }
-      
-            &:extend(.abs-field-sizes all);
-    
-            &.admin__field-no-label {
-                > .admin__field-label {
-                    display: none;
-                }
-    
-                > .admin__field-control {
-                    &:extend(.abs-field-no-label all);
-                }
-            }
-    
         }
     }
 }
@@ -266,7 +221,7 @@
             overflow: hidden;
         }
 
-        span {
+        label {
             display: inline-block;
             line-height: @field-label__line-height;
             vertical-align: middle;
@@ -284,7 +239,7 @@
 
     .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        span {
+        > label {
             &:after {
                 color: @validation__color;
                 content: '*';
@@ -333,12 +288,6 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        
-        &.field-import_file {
-            .input-file {
-                margin-top: 6px;
-            }
-        }
     }
 
     //  Hide group legend and show first field label instead
@@ -571,12 +520,13 @@
 
             & > .admin__field-label {
                 #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+                background: @color-white;
                 cursor: pointer;
                 left: 0;
                 position: absolute;
                 top: 0;
 
-                span {
+                label {
                     &:before {
                         display: block;
                     }
@@ -591,7 +541,7 @@
         }
 
         & > .admin__field-label {
-            span {
+            label {
                 &:before {
                     display: none;
                 }
@@ -722,10 +672,8 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                text-align: left;
             }
-        }
-        & > .admin__field-label { 
-            text-align: left;
         }
 
         &:nth-child(n + 2) {
