@@ -4,14 +4,14 @@
  */
 
 var config = {
-    shim: {
-        'Magento_Tinymce3/tiny_mce/tiny_mce_src': {
-            'exports': 'tinymce'
-        }
+  shim: {
+    'Magento_Tinymce3/tiny_mce/tiny_mce_src': {
+      exports: 'tinymce',
     },
-    map: {
-        '*': {
-            'tinymceDeprecated': 'Magento_Tinymce3/tiny_mce/tiny_mce_src'
-        }
-    }
+  },
+  map: {
+    '*': {
+      tinymceDeprecated: 'Magento_Tinymce3/tiny_mce/tiny_mce_src',
+    },
+  },
 };

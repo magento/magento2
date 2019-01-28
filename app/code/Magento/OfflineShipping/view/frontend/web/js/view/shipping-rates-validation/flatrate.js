@@ -4,22 +4,28 @@
  */
 
 define([
-    'uiComponent',
-    'Magento_Checkout/js/model/shipping-rates-validator',
-    'Magento_Checkout/js/model/shipping-rates-validation-rules',
-    '../../model/shipping-rates-validator/flatrate',
-    '../../model/shipping-rates-validation-rules/flatrate'
-], function (
-    Component,
-    defaultShippingRatesValidator,
-    defaultShippingRatesValidationRules,
-    flatrateShippingRatesValidator,
-    flatrateShippingRatesValidationRules
+  'uiComponent',
+  'Magento_Checkout/js/model/shipping-rates-validator',
+  'Magento_Checkout/js/model/shipping-rates-validation-rules',
+  '../../model/shipping-rates-validator/flatrate',
+  '../../model/shipping-rates-validation-rules/flatrate',
+], function(
+  Component,
+  defaultShippingRatesValidator,
+  defaultShippingRatesValidationRules,
+  flatrateShippingRatesValidator,
+  flatrateShippingRatesValidationRules,
 ) {
-    'use strict';
+  'use strict';
 
-    defaultShippingRatesValidator.registerValidator('flatrate', flatrateShippingRatesValidator);
-    defaultShippingRatesValidationRules.registerRules('flatrate', flatrateShippingRatesValidationRules);
+  defaultShippingRatesValidator.registerValidator(
+    'flatrate',
+    flatrateShippingRatesValidator,
+  );
+  defaultShippingRatesValidationRules.registerRules(
+    'flatrate',
+    flatrateShippingRatesValidationRules,
+  );
 
-    return Component;
+  return Component;
 });

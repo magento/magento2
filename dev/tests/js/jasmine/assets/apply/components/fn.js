@@ -2,20 +2,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    /**
-     * Function used to be a placeholder for mage-init directive.
-     */
-    function fn() {
-        fn.testCallback.apply(fn, arguments);
-    }
+  /**
+   * Function used to be a placeholder for mage-init directive.
+   */
+  function fn() {
+    fn.testCallback.apply(fn, arguments);
+  }
 
-    /**
-     * Function whose call wll be tested.
-     */
-    fn.testCallback = function () {};
+  /**
+   * Function whose call wll be tested.
+   */
+  fn.testCallback = function() {};
 
-    return fn;
+  return fn;
 });

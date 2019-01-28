@@ -2,34 +2,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-module.exports = function (grunt) {
-    'use strict';
+module.exports = function(grunt) {
+  'use strict';
 
-    var exec    = require('child_process').execSync,
-        spawn   = require('child_process').spawn,
-        log     = grunt.log.write,
-        ok      = grunt.log.ok,
-        error   = grunt.log.error;
+  var exec = require('child_process').execSync,
+    spawn = require('child_process').spawn,
+    log = grunt.log.write,
+    ok = grunt.log.ok,
+    error = grunt.log.error;
 
-    grunt.registerTask('deploy', function () {
-        var deploy,
-            done = this.async();
+  grunt.registerTask('deploy', function() {
+    var deploy,
+      done = this.async();
 
-        log('Cleaning "pub/static"...');
-        exec('rm -rf pub/static/*');
-        ok('"pub/static" is empty.');
+    log('Cleaning "pub/static"...');
+    exec('rm -rf pub/static/*');
+    ok('"pub/static" is empty.');
 
-        log('Deploying Magento application...');
-        deploy = spawn('php', ['bin/magento', 'setup:static-content:deploy', '-f']);
+    log('Deploying Magento application...');
+    deploy = spawn('php', ['bin/magento', 'setup:static-content:deploy', '-f']);
 
-        deploy.stdout.on('data', function (data) {
-            log(data);
-        });
-
-        deploy.stdin.on('data', function (data) {
-            error(data);
-        });
-
-        deploy.on('close', done);
+    deploy.stdout.on('data', function(data) {
+      log(data);
     });
+
+    deploy.stdin.on('data', function(data) {
+      error(data);
+    });
+
+    deploy.on('close', done);
+  });
 };

@@ -6,73 +6,77 @@
 /**
  * @deprecated since version 2.2.0
  */
-define([
-    'Magento_Ui/js/form/element/abstract',
-    'underscore'
-], function (Abstract, _) {
-    'use strict';
+define(['Magento_Ui/js/form/element/abstract', 'underscore'], function(
+  Abstract,
+  _,
+) {
+  'use strict';
 
-    return Abstract.extend({
-        defaults: {
-            'mappingValues': {
-                '1': true,
-                '2': false
-            },
-            'checked': false,
-            'mappedValue': '',
-            'links': {
-                value: false,
-                'mappedValue': '${ $.provider }:${ $.dataScope }'
-            },
-            imports: {
-                checked: 'mappedValue'
-            }
+  return Abstract.extend({
+    defaults: {
+      mappingValues: {
+        '1': true,
+        '2': false,
+      },
+      checked: false,
+      mappedValue: '',
+      links: {
+        value: false,
+        mappedValue: '${ $.provider }:${ $.dataScope }',
+      },
+      imports: {
+        checked: 'mappedValue',
+      },
+    },
+
+    /**
+     * @returns {*}
+     */
+    setMappedValue: function() {
+      var newValue;
+
+      _.some(
+        this.mappingValues,
+        function(item, key) {
+          if (item === this.value()) {
+            newValue = key;
+
+            return true;
+          }
         },
+        this,
+      );
 
-        /**
-         * @returns {*}
-         */
-        setMappedValue: function () {
-            var newValue;
+      return newValue;
+    },
 
-            _.some(this.mappingValues, function (item, key) {
-                if (item === this.value()) {
-                    newValue = key;
+    /**
+     * @returns {*}
+     */
+    initObservable: function() {
+      return this.observe('mappedValue checked')._super();
+    },
 
-                    return true;
-                }
-            }, this);
+    /**
+     * @returns {*}
+     */
+    setInitialValue: function() {
+      this.value(this.mappedValue());
+      this._super();
+      this.mappedValue(this.initialValue);
+      this.value(this.mappingValues[this.initialValue]);
+      this.initialValue = this.value();
 
-            return newValue;
-        },
+      return this;
+    },
 
-        /**
-         * @returns {*}
-         */
-        initObservable: function () {
-            return this.observe('mappedValue checked')._super();
-        },
+    /**
+     * @returns {*}
+     */
+    onUpdate: function() {
+      this.mappedValue(this.setMappedValue());
 
-        /**
-         * @returns {*}
-         */
-        setInitialValue: function () {
-            this.value(this.mappedValue());
-            this._super();
-            this.mappedValue(this.initialValue);
-            this.value(this.mappingValues[this.initialValue]);
-            this.initialValue = this.value();
-
-            return this;
-        },
-
-        /**
-         * @returns {*}
-         */
-        onUpdate: function () {
-            this.mappedValue(this.setMappedValue());
-
-            return this._super();
-        }
-    });
+      return this._super();
+    },
+  });
 });

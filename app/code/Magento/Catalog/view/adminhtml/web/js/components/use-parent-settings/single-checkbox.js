@@ -6,10 +6,8 @@
 /**
  * @api
  */
-define([
-    'Magento_Ui/js/form/element/single-checkbox'
-], function (Component) {
-    'use strict';
+define(['Magento_Ui/js/form/element/single-checkbox'], function(Component) {
+  'use strict';
 
-    return Component;
+  return Component;
 });

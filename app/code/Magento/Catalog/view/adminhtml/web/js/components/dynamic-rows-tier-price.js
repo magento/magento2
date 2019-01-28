@@ -3,31 +3,30 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'underscore',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, DynamicRows) {
-    'use strict';
+define(['underscore', 'Magento_Ui/js/dynamic-rows/dynamic-rows'], function(
+  _,
+  DynamicRows,
+) {
+  'use strict';
 
+  /**
+   * @deprecated Parent method contains labels sorting.
+   * @see Magento_Ui/js/dynamic-rows/dynamic-rows
+   */
+  return DynamicRows.extend({
     /**
-     * @deprecated Parent method contains labels sorting.
-     * @see Magento_Ui/js/dynamic-rows/dynamic-rows
+     * Init header elements
      */
-    return DynamicRows.extend({
+    initHeader: function() {
+      var labels;
 
-        /**
-         * Init header elements
-         */
-        initHeader: function () {
-            var labels;
+      this._super();
+      labels = _.clone(this.labels());
+      labels = _.sortBy(labels, function(label) {
+        return label.sortOrder;
+      });
 
-            this._super();
-            labels = _.clone(this.labels());
-            labels = _.sortBy(labels, function (label) {
-                return label.sortOrder;
-            });
-
-            this.labels(labels);
-        }
-    });
+      this.labels(labels);
+    },
+  });
 });

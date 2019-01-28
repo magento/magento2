@@ -6,69 +6,106 @@
 'use strict';
 
 function printCopyright(lang) {
-    var copyrightText = {
-            firstLine: 'Copyright © Magento, Inc. All rights reserved.',
-            secondLine: 'See COPYING.txt for license details.'
-        },
-        nlWin = '\r\n';
-    switch (lang) {
-        case 'css':
-            return '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin;
-            break;
-        case 'less':
-            return '// /**' + nlWin + '//  * ' + copyrightText.firstLine + nlWin + '//  * ' + copyrightText.secondLine + nlWin + '//  */' + nlWin;
-            break;
-        case 'html':
-            return '<!--' + nlWin + '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin + '-->' + nlWin;
-            break;
-        default:
-            return;
-    }
+  var copyrightText = {
+      firstLine: 'Copyright © Magento, Inc. All rights reserved.',
+      secondLine: 'See COPYING.txt for license details.',
+    },
+    nlWin = '\r\n';
+  switch (lang) {
+    case 'css':
+      return (
+        '/**' +
+        nlWin +
+        ' * ' +
+        copyrightText.firstLine +
+        nlWin +
+        ' * ' +
+        copyrightText.secondLine +
+        nlWin +
+        ' */' +
+        nlWin
+      );
+      break;
+    case 'less':
+      return (
+        '// /**' +
+        nlWin +
+        '//  * ' +
+        copyrightText.firstLine +
+        nlWin +
+        '//  * ' +
+        copyrightText.secondLine +
+        nlWin +
+        '//  */' +
+        nlWin
+      );
+      break;
+    case 'html':
+      return (
+        '<!--' +
+        nlWin +
+        '/**' +
+        nlWin +
+        ' * ' +
+        copyrightText.firstLine +
+        nlWin +
+        ' * ' +
+        copyrightText.secondLine +
+        nlWin +
+        ' */' +
+        nlWin +
+        '-->' +
+        nlWin
+      );
+      break;
+    default:
+      return;
+  }
 }
 
 module.exports = {
+  options: {
+    position: 'top',
+    linebreak: true,
+  },
+  setup: {
     options: {
-        position: 'top',
-        linebreak: true
+      banner: printCopyright('css'),
     },
-    setup: {
-        options: {
-            banner: printCopyright('css')
-        },
-        files: {
-            src: '<%= path.css.setup %>/*.css'
-        }
+    files: {
+      src: '<%= path.css.setup %>/*.css',
     },
-    updater: {
-        options: {
-            banner: printCopyright('css')
-        },
-        files: {
-            src: '<%= path.css.updater %>/updater.css'
-        }
+  },
+  updater: {
+    options: {
+      banner: printCopyright('css'),
     },
-    documentationCss: {
-        options: {
-            banner: printCopyright('css')
-        },
-        files: {
-            src: '<%= path.doc %>/**/*.css'
-        }
+    files: {
+      src: '<%= path.css.updater %>/updater.css',
     },
-    documentationLess: {
-        options: {
-            banner: printCopyright('less')
-        },
-        files: {
-            src: '<%= path.doc %>/**/*.less'
-        }
+  },
+  documentationCss: {
+    options: {
+      banner: printCopyright('css'),
     },
-    documentationHtml: {
-        options: {
-            banner: printCopyright('html')
-        },
-        files: {
-            src: '<%= path.doc %>/**/*.html'
-        }
-    }
+    files: {
+      src: '<%= path.doc %>/**/*.css',
+    },
+  },
+  documentationLess: {
+    options: {
+      banner: printCopyright('less'),
+    },
+    files: {
+      src: '<%= path.doc %>/**/*.less',
+    },
+  },
+  documentationHtml: {
+    options: {
+      banner: printCopyright('html'),
+    },
+    files: {
+      src: '<%= path.doc %>/**/*.html',
+    },
+  },
 };

@@ -3,18 +3,18 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
-    'use strict';
+define(['uiComponent', 'Magento_Customer/js/customer-data'], function(
+  Component,
+  customerData,
+) {
+  'use strict';
 
-    return Component.extend({
-        /** @inheritdoc */
-        initialize: function () {
-            this._super();
+  return Component.extend({
+    /** @inheritdoc */
+    initialize: function() {
+      this._super();
 
-            this.wishlist = customerData.get('wishlist');
-        }
-    });
+      this.wishlist = customerData.get('wishlist');
+    },
+  });
 });

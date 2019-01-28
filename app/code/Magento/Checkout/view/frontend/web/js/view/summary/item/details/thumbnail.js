@@ -3,76 +3,76 @@
  * See COPYING.txt for license details.
  */
 
-define(['uiComponent'], function (Component) {
-    'use strict';
+define(['uiComponent'], function(Component) {
+  'use strict';
 
-    var imageData = window.checkoutConfig.imageData;
+  var imageData = window.checkoutConfig.imageData;
 
-    return Component.extend({
-        defaults: {
-            template: 'Magento_Checkout/summary/item/details/thumbnail'
-        },
-        displayArea: 'before_details',
-        imageData: imageData,
+  return Component.extend({
+    defaults: {
+      template: 'Magento_Checkout/summary/item/details/thumbnail',
+    },
+    displayArea: 'before_details',
+    imageData: imageData,
 
-        /**
-         * @param {Object} item
-         * @return {Array}
-         */
-        getImageItem: function (item) {
-            if (this.imageData[item['item_id']]) {
-                return this.imageData[item['item_id']];
-            }
+    /**
+     * @param {Object} item
+     * @return {Array}
+     */
+    getImageItem: function(item) {
+      if (this.imageData[item['item_id']]) {
+        return this.imageData[item['item_id']];
+      }
 
-            return [];
-        },
+      return [];
+    },
 
-        /**
-         * @param {Object} item
-         * @return {null}
-         */
-        getSrc: function (item) {
-            if (this.imageData[item['item_id']]) {
-                return this.imageData[item['item_id']].src;
-            }
+    /**
+     * @param {Object} item
+     * @return {null}
+     */
+    getSrc: function(item) {
+      if (this.imageData[item['item_id']]) {
+        return this.imageData[item['item_id']].src;
+      }
 
-            return null;
-        },
+      return null;
+    },
 
-        /**
-         * @param {Object} item
-         * @return {null}
-         */
-        getWidth: function (item) {
-            if (this.imageData[item['item_id']]) {
-                return this.imageData[item['item_id']].width;
-            }
+    /**
+     * @param {Object} item
+     * @return {null}
+     */
+    getWidth: function(item) {
+      if (this.imageData[item['item_id']]) {
+        return this.imageData[item['item_id']].width;
+      }
 
-            return null;
-        },
+      return null;
+    },
 
-        /**
-         * @param {Object} item
-         * @return {null}
-         */
-        getHeight: function (item) {
-            if (this.imageData[item['item_id']]) {
-                return this.imageData[item['item_id']].height;
-            }
+    /**
+     * @param {Object} item
+     * @return {null}
+     */
+    getHeight: function(item) {
+      if (this.imageData[item['item_id']]) {
+        return this.imageData[item['item_id']].height;
+      }
 
-            return null;
-        },
+      return null;
+    },
 
-        /**
-         * @param {Object} item
-         * @return {null}
-         */
-        getAlt: function (item) {
-            if (this.imageData[item['item_id']]) {
-                return this.imageData[item['item_id']].alt;
-            }
+    /**
+     * @param {Object} item
+     * @return {null}
+     */
+    getAlt: function(item) {
+      if (this.imageData[item['item_id']]) {
+        return this.imageData[item['item_id']].alt;
+      }
 
-            return null;
-        }
-    });
+      return null;
+    },
+  });
 });

@@ -4,41 +4,41 @@
  */
 
 define([
-    'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function (Component, quote) {
-    'use strict';
+  'Magento_Checkout/js/view/summary/abstract-total',
+  'Magento_Checkout/js/model/quote',
+], function(Component, quote) {
+  'use strict';
 
-    return Component.extend({
-        defaults: {
-            template: 'Magento_Checkout/summary/grand-total'
-        },
+  return Component.extend({
+    defaults: {
+      template: 'Magento_Checkout/summary/grand-total',
+    },
 
-        /**
-         * @return {*}
-         */
-        isDisplayed: function () {
-            return this.isFullMode();
-        },
+    /**
+     * @return {*}
+     */
+    isDisplayed: function() {
+      return this.isFullMode();
+    },
 
-        /**
-         * Get pure value.
-         */
-        getPureValue: function () {
-            var totals = quote.getTotals()();
+    /**
+     * Get pure value.
+     */
+    getPureValue: function() {
+      var totals = quote.getTotals()();
 
-            if (totals) {
-                return totals['grand_total'];
-            }
+      if (totals) {
+        return totals['grand_total'];
+      }
 
-            return quote['grand_total'];
-        },
+      return quote['grand_total'];
+    },
 
-        /**
-         * @return {*|String}
-         */
-        getValue: function () {
-            return this.getFormattedPrice(this.getPureValue());
-        }
-    });
+    /**
+     * @return {*|String}
+     */
+    getValue: function() {
+      return this.getFormattedPrice(this.getPureValue());
+    },
+  });
 });

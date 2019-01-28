@@ -4,57 +4,60 @@
  */
 
 define([
-    'underscore',
-    'Magento_Ui/js/form/element/select',
-    'uiRegistry'
-], function (_, Select, uiRegistry) {
-    'use strict';
+  'underscore',
+  'Magento_Ui/js/form/element/select',
+  'uiRegistry',
+], function(_, Select, uiRegistry) {
+  'use strict';
 
-    return Select.extend({
-        /**
-         * {@inheritdoc}
-         */
-        onUpdate: function () {
-            this._super();
+  return Select.extend({
+    /**
+     * {@inheritdoc}
+     */
+    onUpdate: function() {
+      this._super();
 
-            this.updateAddBeforeForPrice();
-        },
+      this.updateAddBeforeForPrice();
+    },
 
-        /**
-         * {@inheritdoc}
-         */
-        setInitialValue: function () {
-            this._super();
+    /**
+     * {@inheritdoc}
+     */
+    setInitialValue: function() {
+      this._super();
 
-            this.updateAddBeforeForPrice();
+      this.updateAddBeforeForPrice();
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Update addbefore for price field. Change it to currency or % depends of price_type value.
-         */
-        updateAddBeforeForPrice: function () {
-            var addBefore, currentValue, priceIndex, priceName, uiPrice;
+    /**
+     * Update addbefore for price field. Change it to currency or % depends of price_type value.
+     */
+    updateAddBeforeForPrice: function() {
+      var addBefore, currentValue, priceIndex, priceName, uiPrice;
 
-            priceIndex = typeof this.imports.priceIndex == 'undefined' ? 'price' : this.imports.priceIndex;
-            priceName = this.parentName + '.' + priceIndex;
+      priceIndex =
+        typeof this.imports.priceIndex == 'undefined'
+          ? 'price'
+          : this.imports.priceIndex;
+      priceName = this.parentName + '.' + priceIndex;
 
-            uiPrice = uiRegistry.get(priceName);
+      uiPrice = uiRegistry.get(priceName);
 
-            if (uiPrice && uiPrice.addbeforePool) {
-                currentValue = this.value();
+      if (uiPrice && uiPrice.addbeforePool) {
+        currentValue = this.value();
 
-                uiPrice.addbeforePool.forEach(function (item) {
-                    if (item.value === currentValue) {
-                        addBefore = item.label;
-                    }
-                });
+        uiPrice.addbeforePool.forEach(function(item) {
+          if (item.value === currentValue) {
+            addBefore = item.label;
+          }
+        });
 
-                if (typeof addBefore != 'undefined') {
-                    uiPrice.addBefore(addBefore);
-                }
-            }
+        if (typeof addBefore != 'undefined') {
+          uiPrice.addBefore(addBefore);
         }
-    });
+      }
+    },
+  });
 });

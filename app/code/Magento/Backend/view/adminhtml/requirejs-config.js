@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            'mediaUploader':  'Magento_Backend/js/media-uploader'
-        }
-    }
+  map: {
+    '*': {
+      mediaUploader: 'Magento_Backend/js/media-uploader',
+    },
+  },
 };

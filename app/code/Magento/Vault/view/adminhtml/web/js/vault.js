@@ -5,78 +5,78 @@
 /*browser:true*/
 /*global define*/
 /* @api */
-define([
-    'jquery',
-    'uiComponent'
-], function ($, Class) {
-    'use strict';
+define(['jquery', 'uiComponent'], function($, Class) {
+  'use strict';
 
-    return Class.extend({
-        defaults: {
-            $selector: null,
-            selector: 'edit_form',
-            fieldset: '',
-            active: false,
-            imports: {
-                onActiveChange: 'active'
-            }
-        },
+  return Class.extend({
+    defaults: {
+      $selector: null,
+      selector: 'edit_form',
+      fieldset: '',
+      active: false,
+      imports: {
+        onActiveChange: 'active',
+      },
+    },
 
-        /**
-         * Set list of observable attributes
-         * @returns {exports.initObservable}
-         */
-        initObservable: function () {
-            var self = this;
+    /**
+     * Set list of observable attributes
+     * @returns {exports.initObservable}
+     */
+    initObservable: function() {
+      var self = this;
 
-            self.$selector = $('#' + self.selector);
-            this._super()
-                .observe(['active']);
+      self.$selector = $('#' + self.selector);
+      this._super().observe(['active']);
 
-            // re-init payment method events
-            self.$selector.off('changePaymentMethod.' + this.getCode())
-                .on('changePaymentMethod.' + this.getCode(), this.changePaymentMethod.bind(this));
+      // re-init payment method events
+      self.$selector
+        .off('changePaymentMethod.' + this.getCode())
+        .on(
+          'changePaymentMethod.' + this.getCode(),
+          this.changePaymentMethod.bind(this),
+        );
 
-            if (this.active()) {
-                $('#' + this.fieldset + ' input:radio:first').trigger('click');
-            }
+      if (this.active()) {
+        $('#' + this.fieldset + ' input:radio:first').trigger('click');
+      }
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Enable/disable current payment method
-         * @param {Object} event
-         * @param {String} method
-         * @returns {exports.changePaymentMethod}
-         */
-        changePaymentMethod: function (event, method) {
-            this.active(method === this.getCode());
+    /**
+     * Enable/disable current payment method
+     * @param {Object} event
+     * @param {String} method
+     * @returns {exports.changePaymentMethod}
+     */
+    changePaymentMethod: function(event, method) {
+      this.active(method === this.getCode());
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Triggered when payment changed
-         * @param {Boolean} isActive
-         */
-        onActiveChange: function (isActive) {
-            if (!isActive) {
-                this.$selector.trigger('setVaultNotActive.' + this.getCode());
+    /**
+     * Triggered when payment changed
+     * @param {Boolean} isActive
+     */
+    onActiveChange: function(isActive) {
+      if (!isActive) {
+        this.$selector.trigger('setVaultNotActive.' + this.getCode());
 
-                return;
-            }
+        return;
+      }
 
-            $('#' + this.fieldset + ' input:radio:first').trigger('click');
-            window.order.addExcludedPaymentMethod(this.getCode());
-        },
+      $('#' + this.fieldset + ' input:radio:first').trigger('click');
+      window.order.addExcludedPaymentMethod(this.getCode());
+    },
 
-        /**
-         * Get payment method code
-         * @returns {String}
-         */
-        getCode: function () {
-            return this.code;
-        }
-    });
+    /**
+     * Get payment method code
+     * @returns {String}
+     */
+    getCode: function() {
+      return this.code;
+    },
+  });
 });

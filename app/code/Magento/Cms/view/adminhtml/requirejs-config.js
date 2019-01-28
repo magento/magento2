@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            folderTree: 'Magento_Cms/js/folder-tree'
-        }
-    }
+  map: {
+    '*': {
+      folderTree: 'Magento_Cms/js/folder-tree',
+    },
+  },
 };

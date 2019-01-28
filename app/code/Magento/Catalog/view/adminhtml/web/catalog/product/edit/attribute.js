@@ -3,16 +3,14 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'jquery',
-    'mage/mage'
-], function ($) {
-    'use strict';
+define(['jquery', 'mage/mage'], function($) {
+  'use strict';
 
-    return function (config, element) {
-
-        $(element).mage('form').mage('validation', {
-            validationUrl: config.validationUrl
-        });
-    };
+  return function(config, element) {
+    $(element)
+      .mage('form')
+      .mage('validation', {
+        validationUrl: config.validationUrl,
+      });
+  };
 });

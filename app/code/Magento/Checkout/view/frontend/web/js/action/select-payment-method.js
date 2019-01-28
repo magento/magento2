@@ -6,12 +6,10 @@
 /**
  * @api
  */
-define([
-    '../model/quote'
-], function (quote) {
-    'use strict';
+define(['../model/quote'], function(quote) {
+  'use strict';
 
-    return function (paymentMethod) {
-        quote.paymentMethod(paymentMethod);
-    };
+  return function(paymentMethod) {
+    quote.paymentMethod(paymentMethod);
+  };
 });

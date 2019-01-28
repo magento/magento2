@@ -6,35 +6,32 @@
 /**
  * @deprecated since version 2.2.0
  */
-define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
-    'use strict';
+define(['Magento_Ui/js/form/element/abstract'], function(Abstract) {
+  'use strict';
 
-    return Abstract.extend({
+  return Abstract.extend({
+    /**
+     * Converts initial value to integer
+     *
+     * @returns {Abstract}
+     */
+    setInitialValue: function() {
+      this._super();
+      this.value(+this.value());
 
-        /**
-         * Converts initial value to integer
-         *
-         * @returns {Abstract}
-         */
-        setInitialValue: function () {
-            this._super();
-            this.value(+this.value());
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Converts new value to integer
+     *
+     * @returns {Boolean}
+     */
+    onUpdate: function() {
+      this._super();
+      this.value(+this.value());
 
-        /**
-         * Converts new value to integer
-         *
-         * @returns {Boolean}
-         */
-        onUpdate: function () {
-            this._super();
-            this.value(+this.value());
-
-            return this._super();
-        }
-    });
+      return this._super();
+    },
+  });
 });

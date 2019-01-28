@@ -7,12 +7,14 @@
  * @api
  */
 define([
-    '../model/quote',
-    'Magento_Checkout/js/model/shipping-save-processor'
-], function (quote, shippingSaveProcessor) {
-    'use strict';
+  '../model/quote',
+  'Magento_Checkout/js/model/shipping-save-processor',
+], function(quote, shippingSaveProcessor) {
+  'use strict';
 
-    return function () {
-        return shippingSaveProcessor.saveShippingInformation(quote.shippingAddress().getType());
-    };
+  return function() {
+    return shippingSaveProcessor.saveShippingInformation(
+      quote.shippingAddress().getType(),
+    );
+  };
 });

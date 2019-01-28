@@ -2,104 +2,103 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define([
-    'underscore',
-    'Magento_Ui/js/form/element/abstract'
-], function (_, Abstract) {
-    'use strict';
+define(['underscore', 'Magento_Ui/js/form/element/abstract'], function(
+  _,
+  Abstract,
+) {
+  'use strict';
 
-    return Abstract.extend({
-        defaults: {
-            prefixName: '',
-            prefixElementName: '',
-            elementName: '',
-            suffixName: ''
-        },
+  return Abstract.extend({
+    defaults: {
+      prefixName: '',
+      prefixElementName: '',
+      elementName: '',
+      suffixName: '',
+    },
 
-        /**
-         * Parses options and merges the result with instance
-         *
-         * @param  {Object} config
-         * @returns {Object} Chainable.
-         */
-        initConfig: function (config) {
-            this._super(config);
+    /**
+     * Parses options and merges the result with instance
+     *
+     * @param  {Object} config
+     * @returns {Object} Chainable.
+     */
+    initConfig: function(config) {
+      this._super(config);
 
-            this.configureDataScope();
+      this.configureDataScope();
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Configure data scope.
-         */
-        configureDataScope: function () {
-            var recordId,
-                prefixName,
-                suffixName;
+    /**
+     * Configure data scope.
+     */
+    configureDataScope: function() {
+      var recordId, prefixName, suffixName;
 
-            // Get recordId
-            recordId = this.parentName.split('.').last();
+      // Get recordId
+      recordId = this.parentName.split('.').last();
 
-            prefixName = this.dataScopeToHtmlArray(this.prefixName);
-            this.elementName = this.prefixElementName + recordId;
+      prefixName = this.dataScopeToHtmlArray(this.prefixName);
+      this.elementName = this.prefixElementName + recordId;
 
-            suffixName = '';
+      suffixName = '';
 
-            if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
-                suffixName = '[' + this.suffixName + ']';
-            }
-            this.inputName = prefixName + '[' + this.elementName + ']' + suffixName;
+      if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
+        suffixName = '[' + this.suffixName + ']';
+      }
+      this.inputName = prefixName + '[' + this.elementName + ']' + suffixName;
 
-            suffixName = '';
+      suffixName = '';
 
-            if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
-                suffixName = '.' + this.suffixName;
-            }
-            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName + suffixName;
+      if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
+        suffixName = '.' + this.suffixName;
+      }
+      this.dataScope =
+        'data.' + this.prefixName + '.' + this.elementName + suffixName;
 
-            this.links.value = this.provider + ':' + this.dataScope;
-        },
+      this.links.value = this.provider + ':' + this.dataScope;
+    },
 
-        /**
-         * Get HTML array from data scope.
-         *
-         * @param {String} dataScopeString
-         * @returns {String}
-         */
-        dataScopeToHtmlArray: function (dataScopeString) {
-            var dataScopeArray, dataScope, reduceFunction;
+    /**
+     * Get HTML array from data scope.
+     *
+     * @param {String} dataScopeString
+     * @returns {String}
+     */
+    dataScopeToHtmlArray: function(dataScopeString) {
+      var dataScopeArray, dataScope, reduceFunction;
 
-            /**
-             * Reduce
-             *
-             * @param {String} prev
-             * @param {String} curr
-             * @returns {String}
-             */
-            reduceFunction = function (prev, curr) {
-                return prev + '[' + curr + ']';
-            };
+      /**
+       * Reduce
+       *
+       * @param {String} prev
+       * @param {String} curr
+       * @returns {String}
+       */
+      reduceFunction = function(prev, curr) {
+        return prev + '[' + curr + ']';
+      };
 
-            dataScopeArray = dataScopeString.split('.');
+      dataScopeArray = dataScopeString.split('.');
 
-            dataScope = dataScopeArray.shift();
-            dataScope += dataScopeArray.reduce(reduceFunction, '');
+      dataScope = dataScopeArray.shift();
+      dataScope += dataScopeArray.reduce(reduceFunction, '');
 
-            return dataScope;
-        },
+      return dataScope;
+    },
 
-        /**
-         * Delete record instance
-         * update data provider dataScope
-         *
-         * @param {Object} parents
-         */
-        deleteRecord: function (parents) {
-            this.value(1);
-            parents[1].deleteRecord(parents[0].index, parents[0].recordId);
+    /**
+     * Delete record instance
+     * update data provider dataScope
+     *
+     * @param {Object} parents
+     */
+    deleteRecord: function(parents) {
+      this.value(1);
+      parents[1].deleteRecord(parents[0].index, parents[0].recordId);
 
-            return this;
-        }
-    });
+      return this;
+    },
+  });
 });

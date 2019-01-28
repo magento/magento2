@@ -2,45 +2,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Element) {
-    'use strict';
+define(['Magento_Ui/js/form/element/abstract'], function(Element) {
+  'use strict';
 
-    return Element.extend({
-        defaults: {
-            linksPurchasedSeparately: '0',
-            useDefaultPrice: false,
-            listens: {
-                linksPurchasedSeparately: 'changeDisabledStatus',
-                useDefaultPrice: 'changeDisabledStatus'
-            }
-        },
+  return Element.extend({
+    defaults: {
+      linksPurchasedSeparately: '0',
+      useDefaultPrice: false,
+      listens: {
+        linksPurchasedSeparately: 'changeDisabledStatus',
+        useDefaultPrice: 'changeDisabledStatus',
+      },
+    },
 
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
-        initialize: function () {
-            this._super();
-            this.changeDisabledStatus();
+    /**
+     * Invokes initialize method of parent class,
+     * contains initialization logic
+     */
+    initialize: function() {
+      this._super();
+      this.changeDisabledStatus();
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Disable/enable price field
-         */
-        changeDisabledStatus: function () {
-            if (this.linksPurchasedSeparately === '1') {
-                if (this.useDefaultPrice) {
-                    this.disabled(true);
-                } else {
-                    this.disabled(false);
-                }
-            } else {
-                this.disabled(true);
-            }
+    /**
+     * Disable/enable price field
+     */
+    changeDisabledStatus: function() {
+      if (this.linksPurchasedSeparately === '1') {
+        if (this.useDefaultPrice) {
+          this.disabled(true);
+        } else {
+          this.disabled(false);
         }
-    });
+      } else {
+        this.disabled(true);
+      }
+    },
+  });
 });

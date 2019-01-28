@@ -6,12 +6,12 @@
 /**
  * @deprecated since version 2.2.0
  */
-define(['uiComponent'], function (Component) {
-    'use strict';
+define(['uiComponent'], function(Component) {
+  'use strict';
 
-    return Component.extend({
-        defaults: {
-            displayArea: 'beforePlaceOrder'
-        }
-    });
+  return Component.extend({
+    defaults: {
+      displayArea: 'beforePlaceOrder',
+    },
+  });
 });

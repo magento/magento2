@@ -6,22 +6,20 @@
 /**
  * @deprecated since version 2.2.0
  */
-define([
-    'uiComponent'
-], function (Component) {
-    'use strict';
+define(['uiComponent'], function(Component) {
+  'use strict';
 
-    return Component.extend({
-        defaults: {
-            template: 'Magento_Checkout/review/actions/default'
-        },
+  return Component.extend({
+    defaults: {
+      template: 'Magento_Checkout/review/actions/default',
+    },
 
-        /**
-         * @param {Object} parent
-         * @return {Function}
-         */
-        placeOrder: function (parent) {
-            return parent.placeOrder.bind(parent);
-        }
-    });
+    /**
+     * @param {Object} parent
+     * @return {Function}
+     */
+    placeOrder: function(parent) {
+      return parent.placeOrder.bind(parent);
+    },
+  });
 });

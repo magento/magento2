@@ -3,22 +3,22 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    return {
-        /**
-         * @return {Object}
-         */
-        getRules: function () {
-            return {
-                'postcode': {
-                    'required': true
-                },
-                'country_id': {
-                    'required': true
-                }
-            };
-        }
-    };
+  return {
+    /**
+     * @return {Object}
+     */
+    getRules: function() {
+      return {
+        postcode: {
+          required: true,
+        },
+        country_id: {
+          required: true,
+        },
+      };
+    },
+  };
 });

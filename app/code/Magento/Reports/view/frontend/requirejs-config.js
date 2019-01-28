@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            recentlyViewedProducts: 'Magento_Reports/js/recently-viewed'
-        }
-    }
+  map: {
+    '*': {
+      recentlyViewedProducts: 'Magento_Reports/js/recently-viewed',
+    },
+  },
 };

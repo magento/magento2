@@ -6,11 +6,8 @@
 /**
  * @api
  */
-define([
-    'ko',
-    './customer-addresses'
-], function (ko, defaultProvider) {
-    'use strict';
+define(['ko', './customer-addresses'], function(ko, defaultProvider) {
+  'use strict';
 
-    return ko.observableArray(defaultProvider.getAddressItems());
+  return ko.observableArray(defaultProvider.getAddressItems());
 });

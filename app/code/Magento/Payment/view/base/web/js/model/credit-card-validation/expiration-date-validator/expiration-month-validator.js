@@ -3,40 +3,39 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    /**
-     * @param {*} isValid
-     * @param {*} isPotentiallyValid
-     * @return {Object}
-     */
-    function resultWrapper(isValid, isPotentiallyValid) {
-        return {
-            isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
-        };
+  /**
+   * @param {*} isValid
+   * @param {*} isPotentiallyValid
+   * @return {Object}
+   */
+  function resultWrapper(isValid, isPotentiallyValid) {
+    return {
+      isValid: isValid,
+      isPotentiallyValid: isPotentiallyValid,
+    };
+  }
+
+  return function(value) {
+    var month, monthValid;
+
+    if (value.replace(/\s/g, '') === '' || value === '0') {
+      return resultWrapper(false, true);
     }
 
-    return function (value) {
-        var month,
-            monthValid;
+    if (!/^\d*$/.test(value)) {
+      return resultWrapper(false, false);
+    }
 
-        if (value.replace(/\s/g, '') === '' || value === '0') {
-            return resultWrapper(false, true);
-        }
+    if (isNaN(value)) {
+      return resultWrapper(false, false);
+    }
 
-        if (!/^\d*$/.test(value)) {
-            return resultWrapper(false, false);
-        }
+    month = parseInt(value, 10);
+    monthValid = month > 0 && month < 13;
 
-        if (isNaN(value)) {
-            return resultWrapper(false, false);
-        }
-
-        month = parseInt(value, 10);
-        monthValid = month > 0 && month < 13;
-
-        return resultWrapper(monthValid, monthValid);
-    };
+    return resultWrapper(monthValid, monthValid);
+  };
 });

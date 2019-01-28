@@ -4,7 +4,7 @@
  */
 
 (function() {
-    $.mage.__('Phrase 1');
-    $.mage.__('Phrase 1');
-    $.mage.__("Phrase 2 %1");
+  $.mage.__('Phrase 1');
+  $.mage.__('Phrase 1');
+  $.mage.__('Phrase 2 %1');
 });

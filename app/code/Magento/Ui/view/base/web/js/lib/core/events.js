@@ -4,162 +4,152 @@
  */
 
 /* global WeakMap, Map*/
-define([
-    'ko',
-    'underscore',
-    'es6-collections'
-], function (ko, _) {
-    'use strict';
+define(['ko', 'underscore', 'es6-collections'], function(ko, _) {
+  'use strict';
 
-    var eventsMap = new WeakMap();
+  var eventsMap = new WeakMap();
 
-    /**
-     * Returns events map or a specific event
-     * data associated with a provided object.
-     *
-     * @param {Object} obj - Key in the events weakmap.
-     * @param {String} [name] - Name of the event.
-     * @returns {Map|Array|Boolean}
-     */
-    function getEvents(obj, name) {
-        var events = eventsMap.get(obj);
+  /**
+   * Returns events map or a specific event
+   * data associated with a provided object.
+   *
+   * @param {Object} obj - Key in the events weakmap.
+   * @param {String} [name] - Name of the event.
+   * @returns {Map|Array|Boolean}
+   */
+  function getEvents(obj, name) {
+    var events = eventsMap.get(obj);
 
-        if (!events) {
-            return false;
-        }
-
-        return name ? events.get(name) : events;
+    if (!events) {
+      return false;
     }
 
-    /**
-     * Adds new event handler.
-     *
-     * @param {Object} obj - Key in the events weakmap.
-     * @param {String} ns - Callback namespace.
-     * @param {Function} callback - Event callback.
-     * @param {String} name - Name of the event.
-     */
-    function addHandler(obj, ns, callback, name) {
-        var events      = getEvents(obj),
-            observable,
-            data;
+    return name ? events.get(name) : events;
+  }
 
-        observable = !ko.isObservable(obj[name]) ?
-            ko.getObservable(obj, name) :
-            obj[name];
+  /**
+   * Adds new event handler.
+   *
+   * @param {Object} obj - Key in the events weakmap.
+   * @param {String} ns - Callback namespace.
+   * @param {Function} callback - Event callback.
+   * @param {String} name - Name of the event.
+   */
+  function addHandler(obj, ns, callback, name) {
+    var events = getEvents(obj),
+      observable,
+      data;
 
-        if (observable) {
-            observable.subscribe(callback);
+    observable = !ko.isObservable(obj[name])
+      ? ko.getObservable(obj, name)
+      : obj[name];
 
-            return;
-        }
+    if (observable) {
+      observable.subscribe(callback);
 
-        if (!events) {
-            events = new Map();
-
-            eventsMap.set(obj, events);
-        }
-
-        data = {
-            callback: callback,
-            ns: ns
-        };
-
-        events.has(name) ?
-            events.get(name).push(data) :
-            events.set(name, [data]);
+      return;
     }
 
+    if (!events) {
+      events = new Map();
+
+      eventsMap.set(obj, events);
+    }
+
+    data = {
+      callback: callback,
+      ns: ns,
+    };
+
+    events.has(name) ? events.get(name).push(data) : events.set(name, [data]);
+  }
+
+  /**
+   * Invokes provided callbacks with a specified arguments.
+   *
+   * @param {Array} handlers
+   * @param {Array} args
+   * @returns {Boolean}
+   */
+  function trigger(handlers, args) {
+    var bubble = true,
+      callback;
+
+    handlers.forEach(function(handler) {
+      callback = handler.callback;
+
+      if (callback.apply(null, args) === false) {
+        bubble = false;
+      }
+    });
+
+    return bubble;
+  }
+
+  return {
     /**
-     * Invokes provided callbacks with a specified arguments.
-     *
-     * @param {Array} handlers
-     * @param {Array} args
-     * @returns {Boolean}
+     * Calls callback when name event is triggered.
+     * @param  {String}   events
+     * @param  {Function} callback
+     * @param  {Function} ns
+     * @return {Object} reference to this
      */
-    function trigger(handlers, args) {
-        var bubble = true,
-            callback;
+    on: function(events, callback, ns) {
+      var iterator;
 
-        handlers.forEach(function (handler) {
-            callback = handler.callback;
+      if (arguments.length < 2) {
+        ns = callback;
+      }
 
-            if (callback.apply(null, args) === false) {
-                bubble = false;
-            }
+      iterator = addHandler.bind(null, this, ns);
+
+      _.isObject(events)
+        ? _.each(events, iterator)
+        : iterator(callback, events);
+
+      return this;
+    },
+
+    /**
+     * Removed callback from listening to target event
+     * @param  {String} ns
+     * @return {Object} reference to this
+     */
+    off: function(ns) {
+      var storage = getEvents(this);
+
+      if (!storage) {
+        return this;
+      }
+
+      storage.forEach(function(handlers, name) {
+        handlers = handlers.filter(function(handler) {
+          return !ns ? false : handler.ns !== ns;
         });
 
-        return bubble;
-    }
+        handlers.length ? storage.set(name, handlers) : storage.delete(name);
+      });
 
-    return {
+      return this;
+    },
 
-        /**
-         * Calls callback when name event is triggered.
-         * @param  {String}   events
-         * @param  {Function} callback
-         * @param  {Function} ns
-         * @return {Object} reference to this
-         */
-        on: function (events, callback, ns) {
-            var iterator;
+    /**
+     * Triggers event and executes all attached callbacks.
+     *
+     * @param {String} name - Name of the event to be triggered.
+     * @returns {Boolean}
+     */
+    trigger: function(name) {
+      var handlers, args;
 
-            if (arguments.length < 2) {
-                ns = callback;
-            }
+      (handlers = getEvents(this, name)),
+        (args = _.toArray(arguments).slice(1));
 
-            iterator = addHandler.bind(null, this, ns);
+      if (!handlers || !name) {
+        return true;
+      }
 
-            _.isObject(events) ?
-                _.each(events, iterator) :
-                iterator(callback, events);
-
-            return this;
-        },
-
-        /**
-         * Removed callback from listening to target event
-         * @param  {String} ns
-         * @return {Object} reference to this
-         */
-        off: function (ns) {
-            var storage = getEvents(this);
-
-            if (!storage) {
-                return this;
-            }
-
-            storage.forEach(function (handlers, name) {
-                handlers = handlers.filter(function (handler) {
-                    return !ns ? false : handler.ns !== ns;
-                });
-
-                handlers.length ?
-                    storage.set(name, handlers) :
-                    storage.delete(name);
-            });
-
-            return this;
-        },
-
-        /**
-         * Triggers event and executes all attached callbacks.
-         *
-         * @param {String} name - Name of the event to be triggered.
-         * @returns {Boolean}
-         */
-        trigger: function (name) {
-            var handlers,
-                args;
-
-            handlers = getEvents(this, name),
-            args = _.toArray(arguments).slice(1);
-
-            if (!handlers || !name) {
-                return true;
-            }
-
-            return trigger(handlers, args);
-        }
-    };
+      return trigger(handlers, args);
+    },
+  };
 });

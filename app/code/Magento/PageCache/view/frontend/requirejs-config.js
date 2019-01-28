@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            pageCache:  'Magento_PageCache/js/page-cache'
-        }
-    }
+  map: {
+    '*': {
+      pageCache: 'Magento_PageCache/js/page-cache',
+    },
+  },
 };

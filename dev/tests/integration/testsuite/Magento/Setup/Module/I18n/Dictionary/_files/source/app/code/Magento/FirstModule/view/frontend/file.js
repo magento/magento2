@@ -4,5 +4,5 @@
  */
 
 (function() {
-    $.mage.__('Module js');
+  $.mage.__('Module js');
 });

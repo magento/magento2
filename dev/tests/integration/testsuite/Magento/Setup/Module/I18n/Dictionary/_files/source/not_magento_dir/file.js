@@ -4,5 +4,5 @@
  */
 
 (function() {
-    $.mage.__('Lib js unused')
+  $.mage.__('Lib js unused');
 });

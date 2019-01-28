@@ -3,6 +3,4 @@
  * See COPYING.txt for license details.
  */
 
-require([
-    'Magento_Customer/edit/post-wrapper'
-]);
+require(['Magento_Customer/edit/post-wrapper']);

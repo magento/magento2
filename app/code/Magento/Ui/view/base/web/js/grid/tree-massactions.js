@@ -6,128 +6,139 @@
 /**
  * @api
  */
-define([
-    'ko',
-    'underscore',
-    'Magento_Ui/js/grid/massactions'
-], function (ko, _, Massactions) {
-    'use strict';
+define(['ko', 'underscore', 'Magento_Ui/js/grid/massactions'], function(
+  ko,
+  _,
+  Massactions,
+) {
+  'use strict';
 
-    return Massactions.extend({
-        defaults: {
-            template: 'ui/grid/tree-massactions',
-            submenuTemplate: 'ui/grid/submenu',
-            listens: {
-                opened: 'hideSubmenus'
-            }
+  return Massactions.extend({
+    defaults: {
+      template: 'ui/grid/tree-massactions',
+      submenuTemplate: 'ui/grid/submenu',
+      listens: {
+        opened: 'hideSubmenus',
+      },
+    },
+
+    /**
+     * Initializes observable properties.
+     *
+     * @returns {Massactions} Chainable.
+     */
+    initObservable: function() {
+      this._super().recursiveObserveActions(this.actions());
+
+      return this;
+    },
+
+    /**
+     * Recursive initializes observable actions.
+     *
+     * @param {Array} actions - Action objects.
+     * @param {String} [prefix] - An optional string that will be prepended
+     *      to the "type" field of all child actions.
+     * @returns {Massactions} Chainable.
+     */
+    recursiveObserveActions: function(actions, prefix) {
+      _.each(
+        actions,
+        function(action) {
+          if (prefix) {
+            action.type = prefix + '.' + action.type;
+          }
+
+          if (action.actions) {
+            action.visible = ko.observable(false);
+            action.parent = actions;
+            this.recursiveObserveActions(action.actions, action.type);
+          }
         },
+        this,
+      );
 
-        /**
-         * Initializes observable properties.
-         *
-         * @returns {Massactions} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .recursiveObserveActions(this.actions());
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Applies specified action.
+     *
+     * @param {String} actionIndex - Actions' identifier.
+     * @returns {Massactions} Chainable.
+     */
+    applyAction: function(actionIndex) {
+      var action = this.getAction(actionIndex),
+        visibility;
 
-        /**
-         * Recursive initializes observable actions.
-         *
-         * @param {Array} actions - Action objects.
-         * @param {String} [prefix] - An optional string that will be prepended
-         *      to the "type" field of all child actions.
-         * @returns {Massactions} Chainable.
-         */
-        recursiveObserveActions: function (actions, prefix) {
-            _.each(actions, function (action) {
-                if (prefix) {
-                    action.type = prefix + '.' + action.type;
-                }
+      if (action.visible) {
+        visibility = action.visible();
 
-                if (action.actions) {
-                    action.visible = ko.observable(false);
-                    action.parent = actions;
-                    this.recursiveObserveActions(action.actions, action.type);
-                }
-            }, this);
+        this.hideSubmenus(action.parent);
+        action.visible(!visibility);
 
-            return this;
-        },
+        return this;
+      }
 
-        /**
-         * Applies specified action.
-         *
-         * @param {String} actionIndex - Actions' identifier.
-         * @returns {Massactions} Chainable.
-         */
-        applyAction: function (actionIndex) {
-            var action = this.getAction(actionIndex),
-                visibility;
+      return this._super(actionIndex);
+    },
 
-            if (action.visible) {
-                visibility = action.visible();
+    /**
+     * Retrieves action object associated with a specified index.
+     *
+     * @param {String} actionIndex - Actions' identifier.
+     * @param {Array} actions - Action objects.
+     * @returns {Object} Action object.
+     */
+    getAction: function(actionIndex, actions) {
+      var currentActions = actions || this.actions(),
+        result = false;
 
-                this.hideSubmenus(action.parent);
-                action.visible(!visibility);
+      _.find(
+        currentActions,
+        function(action) {
+          if (action.type === actionIndex) {
+            result = action;
 
-                return this;
-            }
+            return true;
+          }
 
-            return this._super(actionIndex);
-        },
-
-        /**
-         * Retrieves action object associated with a specified index.
-         *
-         * @param {String} actionIndex - Actions' identifier.
-         * @param {Array} actions - Action objects.
-         * @returns {Object} Action object.
-         */
-        getAction: function (actionIndex, actions) {
-            var currentActions = actions || this.actions(),
-                result = false;
-
-            _.find(currentActions, function (action) {
-                if (action.type === actionIndex) {
-                    result = action;
-
-                    return true;
-                }
-
-                if (action.actions) {
-                    result = this.getAction(actionIndex, action.actions);
-
-                    return result;
-                }
-            }, this);
+          if (action.actions) {
+            result = this.getAction(actionIndex, action.actions);
 
             return result;
+          }
         },
+        this,
+      );
 
-        /**
-         * Recursive hide all sub folders in given array.
-         *
-         * @param {Array} actions - Action objects.
-         * @returns {Massactions} Chainable.
-         */
-        hideSubmenus: function (actions) {
-            var currentActions = actions || this.actions();
+      return result;
+    },
 
-            _.each(currentActions, function (action) {
-                if (action.visible && action.visible()) {
-                    action.visible(false);
-                }
+    /**
+     * Recursive hide all sub folders in given array.
+     *
+     * @param {Array} actions - Action objects.
+     * @returns {Massactions} Chainable.
+     */
+    hideSubmenus: function(actions) {
+      var currentActions = actions || this.actions();
 
-                if (action.actions) {
-                    this.hideSubmenus(action.actions);
-                }
-            }, this);
+      _.each(
+        currentActions,
+        function(action) {
+          if (action.visible && action.visible()) {
+            action.visible(false);
+          }
 
-            return this;
-        }
-    });
+          if (action.actions) {
+            this.hideSubmenus(action.actions);
+          }
+        },
+        this,
+      );
+
+      return this;
+    },
+  });
 });

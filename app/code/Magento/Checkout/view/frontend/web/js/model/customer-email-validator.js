@@ -4,28 +4,30 @@
  */
 
 define([
-    'jquery',
-    'Magento_Customer/js/model/customer',
-    'mage/validation'
-], function ($, customer) {
-    'use strict';
+  'jquery',
+  'Magento_Customer/js/model/customer',
+  'mage/validation',
+], function($, customer) {
+  'use strict';
 
-    return {
-        /**
-         * Validate checkout agreements
-         *
-         * @returns {Boolean}
-         */
-        validate: function () {
-            var emailValidationResult = customer.isLoggedIn(),
-                loginFormSelector = 'form[data-role=email-with-possible-login]';
+  return {
+    /**
+     * Validate checkout agreements
+     *
+     * @returns {Boolean}
+     */
+    validate: function() {
+      var emailValidationResult = customer.isLoggedIn(),
+        loginFormSelector = 'form[data-role=email-with-possible-login]';
 
-            if (!customer.isLoggedIn()) {
-                $(loginFormSelector).validation();
-                emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
-            }
+      if (!customer.isLoggedIn()) {
+        $(loginFormSelector).validation();
+        emailValidationResult = Boolean(
+          $(loginFormSelector + ' input[name=username]').valid(),
+        );
+      }
 
-            return emailValidationResult;
-        }
-    };
+      return emailValidationResult;
+    },
+  };
 });

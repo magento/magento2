@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            addToCart: 'Magento_Msrp/js/msrp'
-        }
-    }
+  map: {
+    '*': {
+      addToCart: 'Magento_Msrp/js/msrp',
+    },
+  },
 };

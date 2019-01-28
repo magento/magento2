@@ -4,41 +4,42 @@
  */
 
 define([
-    'jquery',
-    'mageUtils',
-    '../shipping-rates-validation-rules/tablerate',
-    'mage/translate'
-], function ($, utils, validationRules, $t) {
-    'use strict';
+  'jquery',
+  'mageUtils',
+  '../shipping-rates-validation-rules/tablerate',
+  'mage/translate',
+], function($, utils, validationRules, $t) {
+  'use strict';
 
-    return {
-        validationErrors: [],
+  return {
+    validationErrors: [],
 
-        /**
-         * @param {Object} address
-         * @return {Boolean}
-         */
-        validate: function (address) {
-            var self = this;
+    /**
+     * @param {Object} address
+     * @return {Boolean}
+     */
+    validate: function(address) {
+      var self = this;
 
-            this.validationErrors = [];
-            $.each(validationRules.getRules(), function (field, rule) {
-                var message, regionFields;
+      this.validationErrors = [];
+      $.each(validationRules.getRules(), function(field, rule) {
+        var message, regionFields;
 
-                if (rule.required && utils.isEmpty(address[field])) {
-                    message = $t('Field ') + field + $t(' is required.');
-                    regionFields = ['region', 'region_id', 'region_id_input'];
+        if (rule.required && utils.isEmpty(address[field])) {
+          message = $t('Field ') + field + $t(' is required.');
+          regionFields = ['region', 'region_id', 'region_id_input'];
 
-                    if (
-                        $.inArray(field, regionFields) === -1 ||
-                        utils.isEmpty(address.region) && utils.isEmpty(address['region_id'])
-                    ) {
-                        self.validationErrors.push(message);
-                    }
-                }
-            });
-
-            return !this.validationErrors.length;
+          if (
+            $.inArray(field, regionFields) === -1 ||
+            (utils.isEmpty(address.region) &&
+              utils.isEmpty(address['region_id']))
+          ) {
+            self.validationErrors.push(message);
+          }
         }
-    };
+      });
+
+      return !this.validationErrors.length;
+    },
+  };
 });

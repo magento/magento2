@@ -3,39 +3,35 @@
  * See COPYING.txt for license details.
  */
 
-define([
-        'underscore'
-    ], function (_) {
-        'use strict';
+define(['underscore'], function(_) {
+  'use strict';
 
-        return {
+  return {
+    /**
+     * Build query to get id
+     *
+     * @param {Object} data
+     */
+    buildQuery: function(data) {
+      var filters = [];
 
-            /**
-             * Build query to get id
-             *
-             * @param {Object} data
-             */
-            buildQuery: function (data) {
-                var filters = [];
+      _.each(data, function(value, key) {
+        filters.push({
+          field: key,
+          value: value,
+          condition_type: 'in',
+        });
+      });
 
-                _.each(data, function (value, key) {
-                    filters.push({
-                        field: key,
-                        value: value,
-                        'condition_type': 'in'
-                    });
-                });
-
-                return {
-                    searchCriteria: {
-                        filterGroups: [
-                            {
-                                filters: filters
-                            }
-                        ]
-                    }
-                };
-            }
-        };
-    }
-);
+      return {
+        searchCriteria: {
+          filterGroups: [
+            {
+              filters: filters,
+            },
+          ],
+        },
+      };
+    },
+  };
+});

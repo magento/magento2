@@ -3,25 +3,28 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
-    'use strict';
+define(['uiComponent', 'Magento_Customer/js/customer-data'], function(
+  Component,
+  customerData,
+) {
+  'use strict';
 
-    var countryData = customerData.get('directory-data');
+  var countryData = customerData.get('directory-data');
 
-    return Component.extend({
-        defaults: {
-            template: 'Magento_Checkout/shipping-information/address-renderer/default'
-        },
+  return Component.extend({
+    defaults: {
+      template:
+        'Magento_Checkout/shipping-information/address-renderer/default',
+    },
 
-        /**
-         * @param {*} countryId
-         * @return {String}
-         */
-        getCountryName: function (countryId) {
-            return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
-        }
-    });
+    /**
+     * @param {*} countryId
+     * @return {String}
+     */
+    getCountryName: function(countryId) {
+      return countryData()[countryId] != undefined
+        ? countryData()[countryId].name
+        : ''; //eslint-disable-line
+    },
+  });
 });

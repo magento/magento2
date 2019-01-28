@@ -7,50 +7,53 @@
  * @api
  */
 define([
-    'jquery',
-    'underscore',
-    'jquery/ui',
-    'Magento_Ui/js/modal/confirm',
-    'mage/translate'
-], function ($, _) {
-    'use strict';
+  'jquery',
+  'underscore',
+  'jquery/ui',
+  'Magento_Ui/js/modal/confirm',
+  'mage/translate',
+], function($, _) {
+  'use strict';
 
-    $.widget('mage.alert', $.mage.confirm, {
-        options: {
-            modalClass: 'confirm',
-            title: $.mage.__('Attention'),
-            actions: {
-
-                /**
-                 * Callback always - called on all actions.
-                 */
-                always: function () {}
-            },
-            buttons: [{
-                text: $.mage.__('OK'),
-                class: 'action-primary action-accept',
-
-                /**
-                 * Click handler.
-                 */
-                click: function () {
-                    this.closeModal(true);
-                }
-            }]
-        },
-
+  $.widget('mage.alert', $.mage.confirm, {
+    options: {
+      modalClass: 'confirm',
+      title: $.mage.__('Attention'),
+      actions: {
         /**
-         * Close modal window.
+         * Callback always - called on all actions.
          */
-        closeModal: function () {
-            this.options.actions.always();
-            this.element.bind('alertclosed', _.bind(this._remove, this));
+        always: function() {},
+      },
+      buttons: [
+        {
+          text: $.mage.__('OK'),
+          class: 'action-primary action-accept',
 
-            return this._super();
-        }
-    });
+          /**
+           * Click handler.
+           */
+          click: function() {
+            this.closeModal(true);
+          },
+        },
+      ],
+    },
 
-    return function (config) {
-        return $('<div></div>').html(config.content).alert(config);
-    };
+    /**
+     * Close modal window.
+     */
+    closeModal: function() {
+      this.options.actions.always();
+      this.element.bind('alertclosed', _.bind(this._remove, this));
+
+      return this._super();
+    },
+  });
+
+  return function(config) {
+    return $('<div></div>')
+      .html(config.content)
+      .alert(config);
+  };
 });

@@ -4,10 +4,10 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            popupWindow:            'mage/popup-window',
-            confirmRedirect:        'Magento_Security/js/confirm-redirect'
-        }
-    }
+  map: {
+    '*': {
+      popupWindow: 'mage/popup-window',
+      confirmRedirect: 'Magento_Security/js/confirm-redirect',
+    },
+  },
 };

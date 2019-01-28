@@ -1,142 +1,155 @@
 tinyMCEPopup.requireLangPack();
 
 var SearchReplaceDialog = {
-	init : function(ed) {
-		var t = this, f = document.forms[0], m = tinyMCEPopup.getWindowArg("mode");
+  init: function(ed) {
+    var t = this,
+      f = document.forms[0],
+      m = tinyMCEPopup.getWindowArg('mode');
 
-		t.switchMode(m);
+    t.switchMode(m);
 
-		f[m + '_panel_searchstring'].value = tinyMCEPopup.getWindowArg("search_string");
+    f[m + '_panel_searchstring'].value = tinyMCEPopup.getWindowArg(
+      'search_string',
+    );
 
-		// Focus input field
-		f[m + '_panel_searchstring'].focus();
-		
-		mcTabs.onChange.add(function(tab_id, panel_id) {
-			t.switchMode(tab_id.substring(0, tab_id.indexOf('_')));
-		});
-	},
+    // Focus input field
+    f[m + '_panel_searchstring'].focus();
 
-	switchMode : function(m) {
-		var f, lm = this.lastMode;
+    mcTabs.onChange.add(function(tab_id, panel_id) {
+      t.switchMode(tab_id.substring(0, tab_id.indexOf('_')));
+    });
+  },
 
-		if (lm != m) {
-			f = document.forms[0];
+  switchMode: function(m) {
+    var f,
+      lm = this.lastMode;
 
-			if (lm) {
-				f[m + '_panel_searchstring'].value = f[lm + '_panel_searchstring'].value;
-				f[m + '_panel_backwardsu'].checked = f[lm + '_panel_backwardsu'].checked;
-				f[m + '_panel_backwardsd'].checked = f[lm + '_panel_backwardsd'].checked;
-				f[m + '_panel_casesensitivebox'].checked = f[lm + '_panel_casesensitivebox'].checked;
-			}
+    if (lm != m) {
+      f = document.forms[0];
 
-			mcTabs.displayTab(m + '_tab',  m + '_panel');
-			document.getElementById("replaceBtn").style.display = (m == "replace") ? "inline" : "none";
-			document.getElementById("replaceAllBtn").style.display = (m == "replace") ? "inline" : "none";
-			this.lastMode = m;
-		}
-	},
+      if (lm) {
+        f[m + '_panel_searchstring'].value =
+          f[lm + '_panel_searchstring'].value;
+        f[m + '_panel_backwardsu'].checked =
+          f[lm + '_panel_backwardsu'].checked;
+        f[m + '_panel_backwardsd'].checked =
+          f[lm + '_panel_backwardsd'].checked;
+        f[m + '_panel_casesensitivebox'].checked =
+          f[lm + '_panel_casesensitivebox'].checked;
+      }
 
-	searchNext : function(a) {
-		var ed = tinyMCEPopup.editor, se = ed.selection, r = se.getRng(), f, m = this.lastMode, s, b, fl = 0, w = ed.getWin(), wm = ed.windowManager, fo = 0;
+      mcTabs.displayTab(m + '_tab', m + '_panel');
+      document.getElementById('replaceBtn').style.display =
+        m == 'replace' ? 'inline' : 'none';
+      document.getElementById('replaceAllBtn').style.display =
+        m == 'replace' ? 'inline' : 'none';
+      this.lastMode = m;
+    }
+  },
 
-		// Get input
-		f = document.forms[0];
-		s = f[m + '_panel_searchstring'].value;
-		b = f[m + '_panel_backwardsu'].checked;
-		ca = f[m + '_panel_casesensitivebox'].checked;
-		rs = f['replace_panel_replacestring'].value;
+  searchNext: function(a) {
+    var ed = tinyMCEPopup.editor,
+      se = ed.selection,
+      r = se.getRng(),
+      f,
+      m = this.lastMode,
+      s,
+      b,
+      fl = 0,
+      w = ed.getWin(),
+      wm = ed.windowManager,
+      fo = 0;
 
-		if (tinymce.isIE) {
-			r = ed.getDoc().selection.createRange();
-		}
+    // Get input
+    f = document.forms[0];
+    s = f[m + '_panel_searchstring'].value;
+    b = f[m + '_panel_backwardsu'].checked;
+    ca = f[m + '_panel_casesensitivebox'].checked;
+    rs = f['replace_panel_replacestring'].value;
 
-		if (s == '')
-			return;
+    if (tinymce.isIE) {
+      r = ed.getDoc().selection.createRange();
+    }
 
-		function fix() {
-			// Correct Firefox graphics glitches
-			// TODO: Verify if this is actually needed any more, maybe it was for very old FF versions? 
-			r = se.getRng().cloneRange();
-			ed.getDoc().execCommand('SelectAll', false, null);
-			se.setRng(r);
-		};
+    if (s == '') return;
 
-		function replace() {
-			ed.selection.setContent(rs); // Needs to be duplicated due to selection bug in IE
-		};
+    function fix() {
+      // Correct Firefox graphics glitches
+      // TODO: Verify if this is actually needed any more, maybe it was for very old FF versions?
+      r = se.getRng().cloneRange();
+      ed.getDoc().execCommand('SelectAll', false, null);
+      se.setRng(r);
+    }
 
-		// IE flags
-		if (ca)
-			fl = fl | 4;
+    function replace() {
+      ed.selection.setContent(rs); // Needs to be duplicated due to selection bug in IE
+    }
 
-		switch (a) {
-			case 'all':
-				// Move caret to beginning of text
-				ed.execCommand('SelectAll');
-				ed.selection.collapse(true);
+    // IE flags
+    if (ca) fl = fl | 4;
 
-				if (tinymce.isIE) {
-					ed.focus();
-					r = ed.getDoc().selection.createRange();
+    switch (a) {
+      case 'all':
+        // Move caret to beginning of text
+        ed.execCommand('SelectAll');
+        ed.selection.collapse(true);
 
-					while (r.findText(s, b ? -1 : 1, fl)) {
-						r.scrollIntoView();
-						r.select();
-						replace();
-						fo = 1;
+        if (tinymce.isIE) {
+          ed.focus();
+          r = ed.getDoc().selection.createRange();
 
-						if (b) {
-							r.moveEnd("character", -(rs.length)); // Otherwise will loop forever
-						}
-					}
+          while (r.findText(s, b ? -1 : 1, fl)) {
+            r.scrollIntoView();
+            r.select();
+            replace();
+            fo = 1;
 
-					tinyMCEPopup.storeSelection();
-				} else {
-					while (w.find(s, ca, b, false, false, false, false)) {
-						replace();
-						fo = 1;
-					}
-				}
+            if (b) {
+              r.moveEnd('character', -rs.length); // Otherwise will loop forever
+            }
+          }
 
-				if (fo)
-					tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.allreplaced'));
-				else
-					tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
+          tinyMCEPopup.storeSelection();
+        } else {
+          while (w.find(s, ca, b, false, false, false, false)) {
+            replace();
+            fo = 1;
+          }
+        }
 
-				return;
+        if (fo) tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.allreplaced'));
+        else tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
 
-			case 'current':
-				if (!ed.selection.isCollapsed())
-					replace();
+        return;
 
-				break;
-		}
+      case 'current':
+        if (!ed.selection.isCollapsed()) replace();
 
-		se.collapse(b);
-		r = se.getRng();
+        break;
+    }
 
-		// Whats the point
-		if (!s)
-			return;
+    se.collapse(b);
+    r = se.getRng();
 
-		if (tinymce.isIE) {
-			ed.focus();
-			r = ed.getDoc().selection.createRange();
+    // Whats the point
+    if (!s) return;
 
-			if (r.findText(s, b ? -1 : 1, fl)) {
-				r.scrollIntoView();
-				r.select();
-			} else
-				tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
+    if (tinymce.isIE) {
+      ed.focus();
+      r = ed.getDoc().selection.createRange();
 
-			tinyMCEPopup.storeSelection();
-		} else {
-			if (!w.find(s, ca, b, false, false, false, false))
-				tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
-			else
-				fix();
-		}
-	}
+      if (r.findText(s, b ? -1 : 1, fl)) {
+        r.scrollIntoView();
+        r.select();
+      } else tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
+
+      tinyMCEPopup.storeSelection();
+    } else {
+      if (!w.find(s, ca, b, false, false, false, false))
+        tinyMCEPopup.alert(ed.getLang('searchreplace_dlg.notfound'));
+      else fix();
+    }
+  },
 };
 
 tinyMCEPopup.onInit.add(SearchReplaceDialog.init, SearchReplaceDialog);

@@ -3,13 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'jquery',
-    'mage/mage'
-], function ($) {
-    'use strict';
+define(['jquery', 'mage/mage'], function($) {
+  'use strict';
 
-    return function (data) {
-        $($.mage.redirect(data.url, 'assign', 5000));
-    };
+  return function(data) {
+    $($.mage.redirect(data.url, 'assign', 5000));
+  };
 });

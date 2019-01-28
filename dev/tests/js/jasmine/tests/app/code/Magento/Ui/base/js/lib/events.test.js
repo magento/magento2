@@ -4,55 +4,53 @@
  */
 
 /* eslint-disable max-nested-callbacks */
-define([
-    'Magento_Ui/js/lib/core/events'
-], function (EventBus) {
-    'use strict';
+define(['Magento_Ui/js/lib/core/events'], function(EventBus) {
+  'use strict';
 
-    var EVENT = 'testEvent';
+  var EVENT = 'testEvent';
 
-    describe('Magento_Ui/js/lib/core/events', function () {
-        describe('"on" method', function () {
-            afterEach(function () {
-                EventBus.off(EVENT);
-            });
+  describe('Magento_Ui/js/lib/core/events', function() {
+    describe('"on" method', function() {
+      afterEach(function() {
+        EventBus.off(EVENT);
+      });
 
-            it('calls passed callback when event is triggered', function () {
-                var callback = jasmine.createSpy();
+      it('calls passed callback when event is triggered', function() {
+        var callback = jasmine.createSpy();
 
-                EventBus.on(EVENT, callback);
+        EventBus.on(EVENT, callback);
 
-                EventBus.trigger(EVENT);
+        EventBus.trigger(EVENT);
 
-                expect(callback).toHaveBeenCalled();
-            });
+        expect(callback).toHaveBeenCalled();
+      });
 
-            it('calls callbacks in order they have been assigned', function () {
-                var expected = '',
-                    firstCallback,
-                    secondCallback;
+      it('calls callbacks in order they have been assigned', function() {
+        var expected = '',
+          firstCallback,
+          secondCallback;
 
-                /**
-                 * Test callback
-                 */
-                firstCallback = function () {
-                    expected += 'one';
-                };
+        /**
+         * Test callback
+         */
+        firstCallback = function() {
+          expected += 'one';
+        };
 
-                /**
-                 * Test callback
-                 */
-                secondCallback = function () {
-                    expected += ' two';
-                };
+        /**
+         * Test callback
+         */
+        secondCallback = function() {
+          expected += ' two';
+        };
 
-                EventBus.on(EVENT, firstCallback);
-                EventBus.on(EVENT, secondCallback);
+        EventBus.on(EVENT, firstCallback);
+        EventBus.on(EVENT, secondCallback);
 
-                EventBus.trigger(EVENT);
+        EventBus.trigger(EVENT);
 
-                expect(expected).toEqual('one two');
-            });
-        });
+        expect(expected).toEqual('one two');
+      });
     });
+  });
 });

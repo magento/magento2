@@ -4,7 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-require([
-    'Magento_Variable/variables',
-    'mage/adminhtml/browser'
-]);
+require(['Magento_Variable/variables', 'mage/adminhtml/browser']);

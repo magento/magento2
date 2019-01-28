@@ -3,6 +3,4 @@
  * See COPYING.txt for license details.
  */
 
-require([
-    'Magento_Sales/order/create/giftmessage'
-]);
+require(['Magento_Sales/order/create/giftmessage']);

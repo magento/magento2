@@ -6,31 +6,27 @@
 /**
  * @api
  */
-define([
-    'underscore',
-    'uiRegistry',
-    './select'
-], function (_, registry, Select) {
-    'use strict';
+define(['underscore', 'uiRegistry', './select'], function(_, registry, Select) {
+  'use strict';
 
-    return Select.extend({
-        defaults: {
-            customerId: null,
-            isGlobalScope: 0
-        },
+  return Select.extend({
+    defaults: {
+      customerId: null,
+      isGlobalScope: 0,
+    },
 
-        /**
-         * Website component constructor.
-         * @returns {exports}
-         */
-        initialize: function () {
-            this._super();
+    /**
+     * Website component constructor.
+     * @returns {exports}
+     */
+    initialize: function() {
+      this._super();
 
-            if (this.customerId || this.isGlobalScope) {
-                this.disable(true);
-            }
+      if (this.customerId || this.isGlobalScope) {
+        this.disable(true);
+      }
 
-            return this;
-        }
-    });
+      return this;
+    },
+  });
 });

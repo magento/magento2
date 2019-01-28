@@ -4,10 +4,10 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            captcha: 'Magento_Captcha/js/captcha',
-            'Magento_Captcha/captcha': 'Magento_Captcha/js/captcha'
-        }
-    }
+  map: {
+    '*': {
+      captcha: 'Magento_Captcha/js/captcha',
+      'Magento_Captcha/captcha': 'Magento_Captcha/js/captcha',
+    },
+  },
 };

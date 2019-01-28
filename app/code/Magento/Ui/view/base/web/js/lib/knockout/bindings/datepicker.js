@@ -4,66 +4,68 @@
  */
 /** Creates datepicker binding and registers in to ko.bindingHandlers object */
 define([
-    'ko',
-    'underscore',
-    'jquery',
-    'mage/translate',
-    'mage/calendar',
-    'moment',
-    'mageUtils'
-], function (ko, _, $, $t, calendar, moment, utils) {
-    'use strict';
+  'ko',
+  'underscore',
+  'jquery',
+  'mage/translate',
+  'mage/calendar',
+  'moment',
+  'mageUtils',
+], function(ko, _, $, $t, calendar, moment, utils) {
+  'use strict';
 
-    var defaults = {
-        dateFormat: 'mm\/dd\/yyyy',
-        showsTime: false,
-        timeFormat: null,
-        buttonImage: null,
-        buttonImageOnly: null,
-        buttonText: $t('Select Date')
-    };
+  var defaults = {
+    dateFormat: 'mm/dd/yyyy',
+    showsTime: false,
+    timeFormat: null,
+    buttonImage: null,
+    buttonImageOnly: null,
+    buttonText: $t('Select Date'),
+  };
 
-    ko.bindingHandlers.datepicker = {
-        /**
-         * Initializes calendar widget on element and stores it's value to observable property.
-         * Datepicker binding takes either observable property or object
-         *  { storage: {ko.observable}, options: {Object} }.
-         * For more info about options take a look at "mage/calendar" and jquery.ui.datepicker widget.
-         * @param {HTMLElement} el - Element, that binding is applied to
-         * @param {Function} valueAccessor - Function that returns value, passed to binding
-         */
-        init: function (el, valueAccessor) {
-            var config = valueAccessor(),
-                observable,
-                options = {};
+  ko.bindingHandlers.datepicker = {
+    /**
+     * Initializes calendar widget on element and stores it's value to observable property.
+     * Datepicker binding takes either observable property or object
+     *  { storage: {ko.observable}, options: {Object} }.
+     * For more info about options take a look at "mage/calendar" and jquery.ui.datepicker widget.
+     * @param {HTMLElement} el - Element, that binding is applied to
+     * @param {Function} valueAccessor - Function that returns value, passed to binding
+     */
+    init: function(el, valueAccessor) {
+      var config = valueAccessor(),
+        observable,
+        options = {};
 
-            _.extend(options, defaults);
+      _.extend(options, defaults);
 
-            if (typeof config === 'object') {
-                observable = config.storage;
+      if (typeof config === 'object') {
+        observable = config.storage;
 
-                _.extend(options, config.options);
-            } else {
-                observable = config;
-            }
+        _.extend(options, config.options);
+      } else {
+        observable = config;
+      }
 
-            $(el).calendar(options);
+      $(el).calendar(options);
 
-            observable() && $(el).datepicker(
-                'setDate',
-                moment(
-                    observable(),
-                    utils.convertToMomentFormat(
-                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
-                    )
-                ).toDate()
-            );
+      observable() &&
+        $(el).datepicker(
+          'setDate',
+          moment(
+            observable(),
+            utils.convertToMomentFormat(
+              options.dateFormat +
+                (options.showsTime ? ' ' + options.timeFormat : ''),
+            ),
+          ).toDate(),
+        );
 
-            $(el).blur();
+      $(el).blur();
 
-            ko.utils.registerEventHandler(el, 'change', function () {
-                observable(this.value);
-            });
-        }
-    };
+      ko.utils.registerEventHandler(el, 'change', function() {
+        observable(this.value);
+      });
+    },
+  };
 });

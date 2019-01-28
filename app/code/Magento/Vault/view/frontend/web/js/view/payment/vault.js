@@ -6,49 +6,49 @@
 /*global define*/
 /* @api */
 define([
-    'underscore',
-    'uiComponent',
-    'Magento_Checkout/js/model/payment/renderer-list',
-    'uiLayout',
-    'uiRegistry'
-], function (_, Component, rendererList, layout, registry) {
-    'use strict';
+  'underscore',
+  'uiComponent',
+  'Magento_Checkout/js/model/payment/renderer-list',
+  'uiLayout',
+  'uiRegistry',
+], function(_, Component, rendererList, layout, registry) {
+  'use strict';
 
-    var vaultGroupName = 'vaultGroup';
+  var vaultGroupName = 'vaultGroup';
 
-    layout([{
-        name: vaultGroupName,
-        component: 'Magento_Checkout/js/model/payment/method-group',
-        alias: 'vault',
-        sortOrder: 10
-    }]);
+  layout([
+    {
+      name: vaultGroupName,
+      component: 'Magento_Checkout/js/model/payment/method-group',
+      alias: 'vault',
+      sortOrder: 10,
+    },
+  ]);
 
-    registry.get(vaultGroupName, function (vaultGroup) {
-        _.each(window.checkoutConfig.payment.vault, function (config, index) {
-            rendererList.push(
-                {
-                    type: index,
-                    config: config.config,
-                    component: config.component,
-                    group: vaultGroup,
+  registry.get(vaultGroupName, function(vaultGroup) {
+    _.each(window.checkoutConfig.payment.vault, function(config, index) {
+      rendererList.push({
+        type: index,
+        config: config.config,
+        component: config.component,
+        group: vaultGroup,
 
-                    /**
-                     * Custom payment method types comparator
-                     * @param {String} typeA
-                     * @param {String} typeB
-                     * @return {Boolean}
-                     */
-                    typeComparatorCallback: function (typeA, typeB) {
-                        // vault token items have the same name as vault payment without index
-                        return typeA.substring(0, typeA.lastIndexOf('_')) === typeB;
-                    }
-                }
-            );
-        });
+        /**
+         * Custom payment method types comparator
+         * @param {String} typeA
+         * @param {String} typeB
+         * @return {Boolean}
+         */
+        typeComparatorCallback: function(typeA, typeB) {
+          // vault token items have the same name as vault payment without index
+          return typeA.substring(0, typeA.lastIndexOf('_')) === typeB;
+        },
+      });
     });
+  });
 
-    /**
-     * Add view logic here if needed
-     */
-    return Component.extend({});
+  /**
+   * Add view logic here if needed
+   */
+  return Component.extend({});
 });

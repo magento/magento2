@@ -3,27 +3,25 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'Magento_Ui/js/form/element/country'
-], function (Country) {
-    'use strict';
+define(['Magento_Ui/js/form/element/country'], function(Country) {
+  'use strict';
 
-    return Country.extend({
-        defaults: {
-            countryScope: 'data.country'
-        },
+  return Country.extend({
+    defaults: {
+      countryScope: 'data.country',
+    },
 
-        /**
-         * Set country to customer address form
-         *
-         * @param {String} value - country
-         */
-        setDifferedFromDefault: function (value) {
-            this._super();
+    /**
+     * Set country to customer address form
+     *
+     * @param {String} value - country
+     */
+    setDifferedFromDefault: function(value) {
+      this._super();
 
-            if (value) {
-                this.source.set(this.countryScope, this.indexedOptions[value].label);
-            }
-        }
-    });
+      if (value) {
+        this.source.set(this.countryScope, this.indexedOptions[value].label);
+      }
+    },
+  });
 });

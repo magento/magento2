@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            fptAttribute: 'Magento_Weee/js/fpt-attribute'
-        }
-    }
+  map: {
+    '*': {
+      fptAttribute: 'Magento_Weee/js/fpt-attribute',
+    },
+  },
 };

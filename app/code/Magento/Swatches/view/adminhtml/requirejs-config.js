@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            swatchesProductAttributes: 'Magento_Swatches/js/product-attributes'
-        }
-    }
+  map: {
+    '*': {
+      swatchesProductAttributes: 'Magento_Swatches/js/product-attributes',
+    },
+  },
 };

@@ -3,6 +3,4 @@
  * See COPYING.txt for license details.
  */
 
-require([
-    'Magento_Sales/order/view/post-wrapper'
-]);
+require(['Magento_Sales/order/view/post-wrapper']);

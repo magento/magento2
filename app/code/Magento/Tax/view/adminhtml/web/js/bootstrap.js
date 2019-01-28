@@ -3,6 +3,4 @@
  * See COPYING.txt for license details.
  */
 
-require([
-    'mage/backend/editablemultiselect'
-]);
+require(['mage/backend/editablemultiselect']);

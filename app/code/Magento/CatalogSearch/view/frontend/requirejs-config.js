@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            catalogSearch: 'Magento_CatalogSearch/form-mini'
-        }
-    }
+  map: {
+    '*': {
+      catalogSearch: 'Magento_CatalogSearch/form-mini',
+    },
+  },
 };

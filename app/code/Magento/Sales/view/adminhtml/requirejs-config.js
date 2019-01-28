@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            orderEditDialog: 'Magento_Sales/order/edit/message'
-        }
-    }
+  map: {
+    '*': {
+      orderEditDialog: 'Magento_Sales/order/edit/message',
+    },
+  },
 };

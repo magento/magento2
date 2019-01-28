@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            eavInputTypes: 'Magento_Eav/js/input-types'
-        }
-    }
+  map: {
+    '*': {
+      eavInputTypes: 'Magento_Eav/js/input-types',
+    },
+  },
 };

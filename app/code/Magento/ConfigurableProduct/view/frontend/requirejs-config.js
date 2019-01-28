@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            configurable: 'Magento_ConfigurableProduct/js/configurable'
-        }
-    }
+  map: {
+    '*': {
+      configurable: 'Magento_ConfigurableProduct/js/configurable',
+    },
+  },
 };

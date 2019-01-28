@@ -4,40 +4,31 @@
  */
 /*browser:true*/
 /*global define*/
-define(
-    [
-        'uiComponent',
-        'Magento_Checkout/js/model/payment/renderer-list'
-    ],
-    function (
-        Component,
-        rendererList
-    ) {
-        'use strict';
+define([
+  'uiComponent',
+  'Magento_Checkout/js/model/payment/renderer-list',
+], function(Component, rendererList) {
+  'use strict';
 
-        var config = window.checkoutConfig.payment,
-            braintreeType = 'braintree',
-            payPalType = 'braintree_paypal';
+  var config = window.checkoutConfig.payment,
+    braintreeType = 'braintree',
+    payPalType = 'braintree_paypal';
 
-        if (config[braintreeType].isActive) {
-            rendererList.push(
-                {
-                    type: braintreeType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
-                }
-            );
-        }
+  if (config[braintreeType].isActive) {
+    rendererList.push({
+      type: braintreeType,
+      component:
+        'Magento_Braintree/js/view/payment/method-renderer/hosted-fields',
+    });
+  }
 
-        if (config[payPalType].isActive) {
-            rendererList.push(
-                {
-                    type: payPalType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal'
-                }
-            );
-        }
+  if (config[payPalType].isActive) {
+    rendererList.push({
+      type: payPalType,
+      component: 'Magento_Braintree/js/view/payment/method-renderer/paypal',
+    });
+  }
 
-        /** Add view logic here if needed */
-        return Component.extend({});
-    }
-);
+  /** Add view logic here if needed */
+  return Component.extend({});
+});

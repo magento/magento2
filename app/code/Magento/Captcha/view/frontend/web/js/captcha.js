@@ -3,68 +3,71 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'jquery',
-    'jquery/ui'
-], function ($) {
-    'use strict';
+define(['jquery', 'jquery/ui'], function($) {
+  'use strict';
+
+  /**
+   * @api
+   */
+  $.widget('mage.captcha', {
+    options: {
+      refreshClass: 'refreshing',
+      reloadSelector: '.captcha-reload',
+      imageSelector: '.captcha-img',
+      imageLoader: '',
+    },
 
     /**
-     * @api
+     * Method binds click event to reload image
+     * @private
      */
-    $.widget('mage.captcha', {
-        options: {
-            refreshClass: 'refreshing',
-            reloadSelector: '.captcha-reload',
-            imageSelector: '.captcha-img',
-            imageLoader: ''
+    _create: function() {
+      this.element.on(
+        'click',
+        this.options.reloadSelector,
+        $.proxy(this.refresh, this),
+      );
+    },
+
+    /**
+     * Method triggers an AJAX request to refresh the CAPTCHA image
+     */
+    refresh: function() {
+      var imageLoader = this.options.imageLoader;
+
+      if (imageLoader) {
+        this.element.find(this.options.imageSelector).attr('src', imageLoader);
+      }
+      this.element.addClass(this.options.refreshClass);
+
+      $.ajax({
+        url: this.options.url,
+        type: 'post',
+        async: false,
+        dataType: 'json',
+        context: this,
+        data: {
+          formId: this.options.type,
         },
 
         /**
-         * Method binds click event to reload image
-         * @private
+         * @param {Object} response
          */
-        _create: function () {
-            this.element.on('click', this.options.reloadSelector, $.proxy(this.refresh, this));
+        success: function(response) {
+          if (response.imgSrc) {
+            this.element
+              .find(this.options.imageSelector)
+              .attr('src', response.imgSrc);
+          }
         },
 
-        /**
-         * Method triggers an AJAX request to refresh the CAPTCHA image
-         */
-        refresh: function () {
-            var imageLoader = this.options.imageLoader;
+        /** Complete callback. */
+        complete: function() {
+          this.element.removeClass(this.options.refreshClass);
+        },
+      });
+    },
+  });
 
-            if (imageLoader) {
-                this.element.find(this.options.imageSelector).attr('src', imageLoader);
-            }
-            this.element.addClass(this.options.refreshClass);
-
-            $.ajax({
-                url: this.options.url,
-                type: 'post',
-                async: false,
-                dataType: 'json',
-                context: this,
-                data: {
-                    'formId': this.options.type
-                },
-
-                /**
-                 * @param {Object} response
-                 */
-                success: function (response) {
-                    if (response.imgSrc) {
-                        this.element.find(this.options.imageSelector).attr('src', response.imgSrc);
-                    }
-                },
-
-                /** Complete callback. */
-                complete: function () {
-                    this.element.removeClass(this.options.refreshClass);
-                }
-            });
-        }
-    });
-
-    return $.mage.captcha;
+  return $.mage.captcha;
 });

@@ -4,77 +4,87 @@
  */
 
 define([
-    './logger',
-    './entry-factory',
-    './console-output-handler',
-    './formatter',
-    './message-pool',
-    './levels-pool',
-    'Magento_Ui/js/lib/core/storage/local',
-    'underscore',
-    './logger-utils'
-], function (Logger, entryFactory, ConsoleHandler, Formatter, messagePoll, levelsPoll, storage, _, LoggerUtils) {
-    'use strict';
+  './logger',
+  './entry-factory',
+  './console-output-handler',
+  './formatter',
+  './message-pool',
+  './levels-pool',
+  'Magento_Ui/js/lib/core/storage/local',
+  'underscore',
+  './logger-utils',
+], function(
+  Logger,
+  entryFactory,
+  ConsoleHandler,
+  Formatter,
+  messagePoll,
+  levelsPoll,
+  storage,
+  _,
+  LoggerUtils,
+) {
+  'use strict';
 
-    var STORAGE_NAMESPACE = 'CONSOLE_LOGGER';
+  var STORAGE_NAMESPACE = 'CONSOLE_LOGGER';
 
-    /**
-     * Singleton Logger's sub-class instance of which is configured to display its
-     * messages to the console. It also provides the support of predefined messages
-     * and persists its display level.
-     */
-    function ConsoleLogger() {
-        var formatter = new Formatter(),
-            consoleHandler = new ConsoleHandler(formatter),
-            savedLevel = storage.get(STORAGE_NAMESPACE),
-            utils = new LoggerUtils(this);
+  /**
+   * Singleton Logger's sub-class instance of which is configured to display its
+   * messages to the console. It also provides the support of predefined messages
+   * and persists its display level.
+   */
+  function ConsoleLogger() {
+    var formatter = new Formatter(),
+      consoleHandler = new ConsoleHandler(formatter),
+      savedLevel = storage.get(STORAGE_NAMESPACE),
+      utils = new LoggerUtils(this);
 
-        Logger.call(this, consoleHandler, entryFactory);
+    Logger.call(this, consoleHandler, entryFactory);
 
-        if (savedLevel) {
-            this.displayLevel_ = savedLevel;
-        }
-
-        this.utils = utils;
-        this.messages = messagePoll;
-        this.levels = levelsPoll.getLevels();
+    if (savedLevel) {
+      this.displayLevel_ = savedLevel;
     }
 
-    _.extend(ConsoleLogger, Logger);
+    this.utils = utils;
+    this.messages = messagePoll;
+    this.levels = levelsPoll.getLevels();
+  }
 
-    ConsoleLogger.prototype = Object.create(Logger.prototype);
-    ConsoleLogger.prototype.constructor = ConsoleLogger;
+  _.extend(ConsoleLogger, Logger);
 
-    /**
-     * Overrides parent method to save the provided display level.
-     *
-     * @override
-     */
-    ConsoleLogger.prototype.setDisplayLevel = function (level) {
-        Logger.prototype.setDisplayLevel.call(this, level);
+  ConsoleLogger.prototype = Object.create(Logger.prototype);
+  ConsoleLogger.prototype.constructor = ConsoleLogger;
 
-        storage.set(STORAGE_NAMESPACE, level);
-    };
+  /**
+   * Overrides parent method to save the provided display level.
+   *
+   * @override
+   */
+  ConsoleLogger.prototype.setDisplayLevel = function(level) {
+    Logger.prototype.setDisplayLevel.call(this, level);
 
-    /**
-     * Adds the support of predefined messages.
-     *
-     * @protected
-     * @override
-     */
-    ConsoleLogger.prototype.createEntry_ = function (message, level, data) {
-        var code;
+    storage.set(STORAGE_NAMESPACE, level);
+  };
 
-        if (messagePoll.hasMessage(message)) {
-            data = data || {};
-            code = message;
-            message = messagePoll.getMessage(code);
+  /**
+   * Adds the support of predefined messages.
+   *
+   * @protected
+   * @override
+   */
+  ConsoleLogger.prototype.createEntry_ = function(message, level, data) {
+    var code;
 
-            data.messageCode = code;
-        }
+    if (messagePoll.hasMessage(message)) {
+      data = data || {};
+      code = message;
+      message = messagePoll.getMessage(code);
 
-        return Logger.prototype.createEntry_.call(this, message, level, data);
-    };
+      data.messageCode = code;
+    }
 
-    return new ConsoleLogger();
+    return Logger.prototype.createEntry_.call(this, message, level, data);
+  };
+
+  return new ConsoleLogger();
 });

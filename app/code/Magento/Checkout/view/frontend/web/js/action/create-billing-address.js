@@ -6,12 +6,12 @@
 /**
  * @api
  */
-define([
-    'Magento_Checkout/js/model/address-converter'
-], function (addressConverter) {
-    'use strict';
+define(['Magento_Checkout/js/model/address-converter'], function(
+  addressConverter,
+) {
+  'use strict';
 
-    return function (addressData) {
-        return addressConverter.formAddressDataToQuoteAddress(addressData);
-    };
+  return function(addressData) {
+    return addressConverter.formAddressDataToQuoteAddress(addressData);
+  };
 });

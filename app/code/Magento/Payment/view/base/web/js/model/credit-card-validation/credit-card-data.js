@@ -4,14 +4,14 @@
  */
 
 /* @api */
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    return {
-        creditCard: null,
-        creditCardNumber: null,
-        expirationMonth: null,
-        expirationYear: null,
-        cvvCode: null
-    };
+  return {
+    creditCard: null,
+    creditCardNumber: null,
+    expirationMonth: null,
+    expirationYear: null,
+    cvvCode: null,
+  };
 });

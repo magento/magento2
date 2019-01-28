@@ -3,12 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'ko'
-], function (ko) {
-    'use strict';
+define(['ko'], function(ko) {
+  'use strict';
 
-    return {
-        isVisible: ko.observable(false)
-    };
+  return {
+    isVisible: ko.observable(false),
+  };
 });

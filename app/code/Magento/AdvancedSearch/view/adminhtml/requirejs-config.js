@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            testConnection: 'Magento_AdvancedSearch/js/testconnection'
-        }
-    }
+  map: {
+    '*': {
+      testConnection: 'Magento_AdvancedSearch/js/testconnection',
+    },
+  },
 };

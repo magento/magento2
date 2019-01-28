@@ -3,9 +3,9 @@
  * See COPYING.txt for license details.
  */
 var config = {
-    map: {
-        '*': {
-            'Magento_SendFriend/back-event': 'Magento_SendFriend/js/back-event'
-        }
-    }
+  map: {
+    '*': {
+      'Magento_SendFriend/back-event': 'Magento_SendFriend/js/back-event',
+    },
+  },
 };

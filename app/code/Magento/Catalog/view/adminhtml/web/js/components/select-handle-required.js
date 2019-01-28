@@ -6,20 +6,17 @@
 /**
  * @deprecated since version 2.2.0
  */
-define([
-    'Magento_Ui/js/form/element/select'
-], function (Select) {
-    'use strict';
+define(['Magento_Ui/js/form/element/select'], function(Select) {
+  'use strict';
 
-    return Select.extend({
-
-        /**
-         * Disable required validation, when 'use config option' checked
-         */
-        handleRequired: function (newValue) {
-            this.validation['required-entry'] = !newValue;
-            this.required(!newValue);
-            this.error(false);
-        }
-    });
+  return Select.extend({
+    /**
+     * Disable required validation, when 'use config option' checked
+     */
+    handleRequired: function(newValue) {
+      this.validation['required-entry'] = !newValue;
+      this.required(!newValue);
+      this.error(false);
+    },
+  });
 });

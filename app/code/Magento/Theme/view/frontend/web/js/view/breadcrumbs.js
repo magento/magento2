@@ -4,63 +4,61 @@
  */
 
 define([
-    'jquery',
-    'mage/template',
-    'Magento_Theme/js/model/breadcrumb-list',
-    'text!Magento_Theme/templates/breadcrumbs.html',
-    'jquery/ui'
-], function ($, mageTemplate, breadcrumbList, tpl) {
-    'use strict';
+  'jquery',
+  'mage/template',
+  'Magento_Theme/js/model/breadcrumb-list',
+  'text!Magento_Theme/templates/breadcrumbs.html',
+  'jquery/ui',
+], function($, mageTemplate, breadcrumbList, tpl) {
+  'use strict';
+
+  /**
+   * Breadcrumb Widget.
+   */
+  $.widget('mage.breadcrumbs', {
+    /** @inheritdoc */
+    _init: function() {
+      this._super();
+      this._render();
+    },
 
     /**
-     * Breadcrumb Widget.
+     * Render breadcrumb.
+     *
+     * @private
      */
-    $.widget('mage.breadcrumbs', {
+    _render: function() {
+      var html,
+        crumbs = breadcrumbList,
+        template = mageTemplate(tpl);
 
-        /** @inheritdoc */
-        _init: function () {
-            this._super();
-            this._render();
-        },
+      this._decorate(crumbs);
 
-        /**
-         * Render breadcrumb.
-         *
-         * @private
-         */
-        _render: function () {
-            var html,
-                crumbs = breadcrumbList,
-                template = mageTemplate(tpl);
+      html = template({
+        breadcrumbs: crumbs,
+      });
 
-            this._decorate(crumbs);
+      if (html.length) {
+        $(this.element).html(html);
+      }
+    },
 
-            html = template({
-                'breadcrumbs': crumbs
-            });
+    /**
+     * Decorate list.
+     *
+     * @param {Array} list
+     * @private
+     */
+    _decorate: function(list) {
+      if (list.length) {
+        list[0].first = true;
+      }
 
-            if (html.length) {
-                $(this.element).html(html);
-            }
-        },
+      if (list.length > 1) {
+        list[list.length - 1].last = true;
+      }
+    },
+  });
 
-        /**
-         * Decorate list.
-         *
-         * @param {Array} list
-         * @private
-         */
-        _decorate: function (list) {
-
-            if (list.length) {
-                list[0].first = true;
-            }
-
-            if (list.length > 1) {
-                list[list.length - 1].last = true;
-            }
-        }
-    });
-
-    return $.mage.breadcrumbs;
+  return $.mage.breadcrumbs;
 });

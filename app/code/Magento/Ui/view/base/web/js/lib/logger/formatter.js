@@ -3,52 +3,49 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'moment',
-    'mage/utils/template'
-], function (moment, mageTemplate) {
-    'use strict';
+define(['moment', 'mage/utils/template'], function(moment, mageTemplate) {
+  'use strict';
+
+  /**
+   * @param {String} dateFormat
+   * @param {String} template
+   */
+  function LogFormatter(dateFormat, template) {
+    /**
+     * @protected
+     * @type {String}
+     */
+    this.dateFormat_ = 'YYYY-MM-DD hh:mm:ss';
 
     /**
-     * @param {String} dateFormat
-     * @param {String} template
+     * @protected
+     * @type {String}
      */
-    function LogFormatter(dateFormat, template) {
-        /**
-         * @protected
-         * @type {String}
-         */
-        this.dateFormat_ = 'YYYY-MM-DD hh:mm:ss';
+    this.template_ = '[${ $.date }] [${ $.entry.levelName }] ${ $.message }';
 
-        /**
-         * @protected
-         * @type {String}
-         */
-        this.template_ = '[${ $.date }] [${ $.entry.levelName }] ${ $.message }';
-
-        if (dateFormat) {
-            this.dateFormat_ = dateFormat;
-        }
-
-        if (template) {
-            this.template_ = template;
-        }
+    if (dateFormat) {
+      this.dateFormat_ = dateFormat;
     }
 
-    /**
-     * @param {LogEntry} entry
-     * @returns {String}
-     */
-    LogFormatter.prototype.process = function (entry) {
-        var message = mageTemplate.template(entry.message, entry.data),
-            date = moment(entry.timestamp).format(this.dateFormat_);
+    if (template) {
+      this.template_ = template;
+    }
+  }
 
-        return mageTemplate.template(this.template_, {
-            date: date,
-            entry: entry,
-            message: message
-        });
-    };
+  /**
+   * @param {LogEntry} entry
+   * @returns {String}
+   */
+  LogFormatter.prototype.process = function(entry) {
+    var message = mageTemplate.template(entry.message, entry.data),
+      date = moment(entry.timestamp).format(this.dateFormat_);
 
-    return LogFormatter;
+    return mageTemplate.template(this.template_, {
+      date: date,
+      entry: entry,
+      message: message,
+    });
+  };
+
+  return LogFormatter;
 });

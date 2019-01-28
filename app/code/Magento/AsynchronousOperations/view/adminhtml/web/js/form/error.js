@@ -3,15 +3,13 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
-    'use strict';
+define(['Magento_Ui/js/form/element/abstract'], function(Abstract) {
+  'use strict';
 
-    return Abstract.extend({
-        /** @inheritdoc */
-        onUpdate: function () {
-            this.bubble('update', this.hasChanged());
-        }
-    });
+  return Abstract.extend({
+    /** @inheritdoc */
+    onUpdate: function() {
+      this.bubble('update', this.hasChanged());
+    },
+  });
 });

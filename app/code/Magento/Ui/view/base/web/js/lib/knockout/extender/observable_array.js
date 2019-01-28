@@ -3,158 +3,155 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'ko',
-    'underscore'
-], function (ko, _) {
-    'use strict';
+define(['ko', 'underscore'], function(ko, _) {
+  'use strict';
 
-    /**
-     * Iterator function.
-     *
-     * @param {String} callback
-     * @param {Array} args
-     * @param {Object} elem
-     * @returns {*}
-     */
-    function iterator(callback, args, elem) {
-        callback = elem[callback];
+  /**
+   * Iterator function.
+   *
+   * @param {String} callback
+   * @param {Array} args
+   * @param {Object} elem
+   * @returns {*}
+   */
+  function iterator(callback, args, elem) {
+    callback = elem[callback];
 
-        if (_.isFunction(callback)) {
-            return callback.apply(elem, args);
-        }
-
-        return callback;
+    if (_.isFunction(callback)) {
+      return callback.apply(elem, args);
     }
 
+    return callback;
+  }
+
+  /**
+   * Wrapper function.
+   *
+   * @param {String} method
+   * @returns {Function}
+   */
+  function wrapper(method) {
+    return function(iteratee) {
+      var callback = iteratee,
+        elems = this(),
+        args = _.toArray(arguments);
+
+      if (_.isString(iteratee)) {
+        callback = iterator.bind(null, iteratee, args.slice(1));
+
+        args.unshift(callback);
+      }
+
+      args.unshift(elems);
+
+      return _[method].apply(_, args);
+    };
+  }
+
+  _.extend(ko.observableArray.fn, {
+    each: wrapper('each'),
+
+    map: wrapper('map'),
+
+    filter: wrapper('filter'),
+
+    some: wrapper('some'),
+
+    every: wrapper('every'),
+
+    groupBy: wrapper('groupBy'),
+
+    sortBy: wrapper('sortBy'),
+
     /**
-     * Wrapper function.
+     * Wrapper for underscore findWhere function.
      *
-     * @param {String} method
-     * @returns {Function}
+     * @param {Object} properties
+     * @return {Object}
      */
-    function wrapper(method) {
-        return function (iteratee) {
-            var callback = iteratee,
-                elems = this(),
-                args = _.toArray(arguments);
+    findWhere: function(properties) {
+      return _.findWhere(this(), properties);
+    },
 
-            if (_.isString(iteratee)) {
-                callback = iterator.bind(null, iteratee, args.slice(1));
+    /**
+     * Wrapper for underscore contains function.
+     *
+     * @param {*} value
+     * @return {Boolean}
+     */
+    contains: function(value) {
+      return _.contains(this(), value);
+    },
 
-                args.unshift(callback);
-            }
+    /**
+     * Inverse contains call.
+     *
+     * @return {Boolean}
+     */
+    hasNo: function() {
+      return !this.contains.apply(this, arguments);
+    },
 
-            args.unshift(elems);
+    /**
+     * Getter for length property.
+     *
+     * @return {Number}
+     */
+    getLength: function() {
+      return this().length;
+    },
 
-            return _[method].apply(_, args);
-        };
-    }
+    /**
+     * Create object with keys that gets from each object property.
+     *
+     * @return {Object}
+     */
+    indexBy: function(key) {
+      return _.indexBy(this(), key);
+    },
 
-    _.extend(ko.observableArray.fn, {
-        each: wrapper('each'),
+    /**
+     * Returns a copy of the array with all instances of the values removed.
+     *
+     * @return {Array}
+     */
+    without: function() {
+      var args = Array.prototype.slice.call(arguments);
 
-        map: wrapper('map'),
+      args.unshift(this());
 
-        filter: wrapper('filter'),
+      return _.without.apply(_, args);
+    },
 
-        some: wrapper('some'),
+    /**
+     * Returns the first element of an array.
+     *
+     * @return {*}
+     */
+    first: function() {
+      return _.first(this());
+    },
 
-        every: wrapper('every'),
+    /**
+     * Returns the last element of an array
+     *
+     * @return {*}
+     */
+    last: function() {
+      return _.last(this());
+    },
 
-        groupBy: wrapper('groupBy'),
+    /**
+     * Iterate and pick provided properties.
+     *
+     * @return {Array}
+     */
+    pluck: function() {
+      var args = Array.prototype.slice.call(arguments);
 
-        sortBy: wrapper('sortBy'),
+      args.unshift(this());
 
-        /**
-         * Wrapper for underscore findWhere function.
-         *
-         * @param {Object} properties
-         * @return {Object}
-         */
-        findWhere: function (properties) {
-            return _.findWhere(this(), properties);
-        },
-
-        /**
-         * Wrapper for underscore contains function.
-         *
-         * @param {*} value
-         * @return {Boolean}
-         */
-        contains: function (value) {
-            return _.contains(this(), value);
-        },
-
-        /**
-         * Inverse contains call.
-         *
-         * @return {Boolean}
-         */
-        hasNo: function () {
-            return !this.contains.apply(this, arguments);
-        },
-
-        /**
-         * Getter for length property.
-         *
-         * @return {Number}
-         */
-        getLength: function () {
-            return this().length;
-        },
-
-        /**
-         * Create object with keys that gets from each object property.
-         *
-         * @return {Object}
-         */
-        indexBy: function (key) {
-            return _.indexBy(this(), key);
-        },
-
-        /**
-         * Returns a copy of the array with all instances of the values removed.
-         *
-         * @return {Array}
-         */
-        without: function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            args.unshift(this());
-
-            return _.without.apply(_, args);
-        },
-
-        /**
-         * Returns the first element of an array.
-         *
-         * @return {*}
-         */
-        first: function () {
-            return _.first(this());
-        },
-
-        /**
-         * Returns the last element of an array
-         *
-         * @return {*}
-         */
-        last: function () {
-            return _.last(this());
-        },
-
-        /**
-         * Iterate and pick provided properties.
-         *
-         * @return {Array}
-         */
-        pluck: function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            args.unshift(this());
-
-            return _.pluck.apply(_, args);
-        }
-    });
+      return _.pluck.apply(_, args);
+    },
+  });
 });

@@ -6,47 +6,43 @@
 /**
  * @api
  */
-define([
-    'mageUtils',
-    './abstract'
-], function (utils, Abstract) {
-    'use strict';
+define(['mageUtils', './abstract'], function(utils, Abstract) {
+  'use strict';
 
-    return Abstract.extend({
-        defaults: {
-            links: {
-                value: ''
-            }
-        },
+  return Abstract.extend({
+    defaults: {
+      links: {
+        value: '',
+      },
+    },
 
-        /**
-         * Initializes file component.
-         *
-         * @returns {Media} Chainable.
-         */
-        initialize: function () {
-            this._super()
-                .initFormId();
+    /**
+     * Initializes file component.
+     *
+     * @returns {Media} Chainable.
+     */
+    initialize: function() {
+      this._super().initFormId();
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Defines form ID with which file input will be associated.
-         *
-         * @returns {Media} Chainable.
-         */
-        initFormId: function () {
-            var namespace;
+    /**
+     * Defines form ID with which file input will be associated.
+     *
+     * @returns {Media} Chainable.
+     */
+    initFormId: function() {
+      var namespace;
 
-            if (this.formId) {
-                return this;
-            }
+      if (this.formId) {
+        return this;
+      }
 
-            namespace   = this.name.split('.');
-            this.formId = namespace[0];
+      namespace = this.name.split('.');
+      this.formId = namespace[0];
 
-            return this;
-        }
-    });
+      return this;
+    },
+  });
 });

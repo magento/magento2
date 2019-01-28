@@ -11,113 +11,122 @@
 // #ifdef jquery_adapter
 
 (function($, tinymce) {
-	var is = tinymce.is, attrRegExp = /^(href|src|style)$/i, undefined;
+  var is = tinymce.is,
+    attrRegExp = /^(href|src|style)$/i,
+    undefined;
 
-	// jQuery is undefined
-	if (!$ && window.console) {
-		return console.log("Load jQuery first!");
-	}
+  // jQuery is undefined
+  if (!$ && window.console) {
+    return console.log('Load jQuery first!');
+  }
 
-	// Stick jQuery into the tinymce namespace
-	tinymce.$ = $;
+  // Stick jQuery into the tinymce namespace
+  tinymce.$ = $;
 
-	// Setup adapter
-	tinymce.adapter = {
-		patchEditor : function(editor) {
-			var fn = $.fn;
+  // Setup adapter
+  tinymce.adapter = {
+    patchEditor: function(editor) {
+      var fn = $.fn;
 
-			// Adapt the css function to make sure that the data-mce-style
-			// attribute gets updated with the new style information
-			function css(name, value) {
-				var self = this;
+      // Adapt the css function to make sure that the data-mce-style
+      // attribute gets updated with the new style information
+      function css(name, value) {
+        var self = this;
 
-				// Remove data-mce-style when set operation occurs
-				if (value)
-					self.removeAttr('data-mce-style');
+        // Remove data-mce-style when set operation occurs
+        if (value) self.removeAttr('data-mce-style');
 
-				return fn.css.apply(self, arguments);
-			};
+        return fn.css.apply(self, arguments);
+      }
 
-			// Apapt the attr function to make sure that it uses the data-mce- prefixed variants
-			function attr(name, value) {
-				var self = this;
+      // Apapt the attr function to make sure that it uses the data-mce- prefixed variants
+      function attr(name, value) {
+        var self = this;
 
-				// Update/retrieve data-mce- attribute variants
-				if (attrRegExp.test(name)) {
-					if (value !== undefined) {
-						// Use TinyMCE behavior when setting the specifc attributes
-						self.each(function(i, node) {
-							editor.dom.setAttrib(node, name, value);
-						});
+        // Update/retrieve data-mce- attribute variants
+        if (attrRegExp.test(name)) {
+          if (value !== undefined) {
+            // Use TinyMCE behavior when setting the specifc attributes
+            self.each(function(i, node) {
+              editor.dom.setAttrib(node, name, value);
+            });
 
-						return self;
-					} else
-						return self.attr('data-mce-' + name);
-				}
+            return self;
+          } else return self.attr('data-mce-' + name);
+        }
 
-				// Default behavior
-				return fn.attr.apply(self, arguments);
-			};
+        // Default behavior
+        return fn.attr.apply(self, arguments);
+      }
 
-			function htmlPatchFunc(func) {
-				// Returns a modified function that processes
-				// the HTML before executing the action this makes sure
-				// that href/src etc gets moved into the data-mce- variants
-				return function(content) {
-					if (content)
-						content = editor.dom.processHTML(content);
+      function htmlPatchFunc(func) {
+        // Returns a modified function that processes
+        // the HTML before executing the action this makes sure
+        // that href/src etc gets moved into the data-mce- variants
+        return function(content) {
+          if (content) content = editor.dom.processHTML(content);
 
-					return func.call(this, content);
-				};
-			};
+          return func.call(this, content);
+        };
+      }
 
-			// Patch various jQuery functions to handle tinymce specific attribute and content behavior
-			// we don't patch the jQuery.fn directly since it will most likely break compatibility
-			// with other jQuery logic on the page. Only instances created by TinyMCE should be patched.
-			function patch(jq) {
-				// Patch some functions, only patch the object once
-				if (jq.css !== css) {
-					// Patch css/attr to use the data-mce- prefixed attribute variants
-					jq.css = css;
-					jq.attr = attr;
+      // Patch various jQuery functions to handle tinymce specific attribute and content behavior
+      // we don't patch the jQuery.fn directly since it will most likely break compatibility
+      // with other jQuery logic on the page. Only instances created by TinyMCE should be patched.
+      function patch(jq) {
+        // Patch some functions, only patch the object once
+        if (jq.css !== css) {
+          // Patch css/attr to use the data-mce- prefixed attribute variants
+          jq.css = css;
+          jq.attr = attr;
 
-					// Patch HTML functions to use the DOMUtils.processHTML filter logic
-					jq.html = htmlPatchFunc(fn.html);
-					jq.append = htmlPatchFunc(fn.append);
-					jq.prepend = htmlPatchFunc(fn.prepend);
-					jq.after = htmlPatchFunc(fn.after);
-					jq.before = htmlPatchFunc(fn.before);
-					jq.replaceWith = htmlPatchFunc(fn.replaceWith);
-					jq.tinymce = editor;
+          // Patch HTML functions to use the DOMUtils.processHTML filter logic
+          jq.html = htmlPatchFunc(fn.html);
+          jq.append = htmlPatchFunc(fn.append);
+          jq.prepend = htmlPatchFunc(fn.prepend);
+          jq.after = htmlPatchFunc(fn.after);
+          jq.before = htmlPatchFunc(fn.before);
+          jq.replaceWith = htmlPatchFunc(fn.replaceWith);
+          jq.tinymce = editor;
 
-					// Each pushed jQuery instance needs to be patched
-					// as well for example when traversing the DOM
-					jq.pushStack = function() {
-						return patch(fn.pushStack.apply(this, arguments));
-					};
-				}
+          // Each pushed jQuery instance needs to be patched
+          // as well for example when traversing the DOM
+          jq.pushStack = function() {
+            return patch(fn.pushStack.apply(this, arguments));
+          };
+        }
 
-				return jq;
-			};
+        return jq;
+      }
 
-			// Add a $ function on each editor instance this one is scoped for the editor document object
-			// this way you can do chaining like this tinymce.get(0).$('p').append('text').css('color', 'red');
-			editor.$ = function(selector, scope) {
-				var doc = editor.getDoc();
+      // Add a $ function on each editor instance this one is scoped for the editor document object
+      // this way you can do chaining like this tinymce.get(0).$('p').append('text').css('color', 'red');
+      editor.$ = function(selector, scope) {
+        var doc = editor.getDoc();
 
-				return patch($(selector || doc, doc || scope));
-			};
-		}
-	};
+        return patch($(selector || doc, doc || scope));
+      };
+    },
+  };
 
-	// Patch in core NS functions
-	tinymce.extend = $.extend;
-	tinymce.extend(tinymce, {
-		map : $.map,
-		grep : function(a, f) {return $.grep(a, f || function(){return 1;});},
-		inArray : function(a, v) {return $.inArray(v, a || []);}
+  // Patch in core NS functions
+  tinymce.extend = $.extend;
+  tinymce.extend(tinymce, {
+    map: $.map,
+    grep: function(a, f) {
+      return $.grep(
+        a,
+        f ||
+          function() {
+            return 1;
+          },
+      );
+    },
+    inArray: function(a, v) {
+      return $.inArray(v, a || []);
+    },
 
-		/* Didn't iterate stylesheets
+    /* Didn't iterate stylesheets
 		each : function(o, cb, s) {
 			if (!o)
 				return 0;
@@ -133,13 +142,13 @@
 
 			return r;
 		}*/
-	});
+  });
 
-	// Patch in functions in various clases
-	// Add a "#ifndefjquery" statement around each core API function you add below
-	var patches = {
-		'tinymce.dom.DOMUtils' : {
-			/*
+  // Patch in functions in various clases
+  // Add a "#ifndefjquery" statement around each core API function you add below
+  var patches = {
+    'tinymce.dom.DOMUtils': {
+      /*
 			addClass : function(e, c) {
 				if (is(e, 'array') && is(e[0], 'string'))
 					e = e.join(',#');
@@ -168,17 +177,21 @@
 			},
 			*/
 
-			select : function(pattern, scope) {
-				var t = this;
+      select: function(pattern, scope) {
+        var t = this;
 
-				return $.find(pattern, t.get(scope) || t.get(t.settings.root_element) || t.doc, []);
-			},
+        return $.find(
+          pattern,
+          t.get(scope) || t.get(t.settings.root_element) || t.doc,
+          [],
+        );
+      },
 
-			is : function(n, patt) {
-				return $(this.get(n)).is(patt);
-			}
+      is: function(n, patt) {
+        return $(this.get(n)).is(patt);
+      },
 
-			/*
+      /*
 			show : function(e) {
 				if (is(e, 'array') && is(e[0], 'string'))
 					e = e.join(',#');
@@ -279,9 +292,9 @@
 				});
 			}
 			*/
-		}
+    },
 
-/*
+    /*
 		'tinymce.dom.Event' : {
 			add : function (o, n, f, s) {
 				var lo, cb;
@@ -326,12 +339,12 @@
 			}
 		}
 */
-	};
+  };
 
-	// Patch functions after a class is created
-	tinymce.onCreate = function(ty, c, p) {
-		tinymce.extend(p, patches[c]);
-	};
+  // Patch functions after a class is created
+  tinymce.onCreate = function(ty, c, p) {
+    tinymce.extend(p, patches[c]);
+  };
 })(window.jQuery, tinymce);
 
 // #endif

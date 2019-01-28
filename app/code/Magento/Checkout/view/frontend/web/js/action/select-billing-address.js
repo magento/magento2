@@ -6,23 +6,21 @@
 /**
  * @api
  */
-define([
-    'jquery',
-    '../model/quote'
-], function ($, quote) {
-    'use strict';
+define(['jquery', '../model/quote'], function($, quote) {
+  'use strict';
 
-    return function (billingAddress) {
-        var address = null;
+  return function(billingAddress) {
+    var address = null;
 
-        if (quote.shippingAddress() && billingAddress.getCacheKey() == //eslint-disable-line eqeqeq
-            quote.shippingAddress().getCacheKey()
-        ) {
-            address = $.extend({}, billingAddress);
-            address.saveInAddressBook = null;
-        } else {
-            address = billingAddress;
-        }
-        quote.billingAddress(address);
-    };
+    if (
+      quote.shippingAddress() &&
+      billingAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
+    ) {
+      address = $.extend({}, billingAddress);
+      address.saveInAddressBook = null;
+    } else {
+      address = billingAddress;
+    }
+    quote.billingAddress(address);
+  };
 });

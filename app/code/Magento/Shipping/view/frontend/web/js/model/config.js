@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    return function () {
-        return window.checkoutConfig.shippingPolicy;
-    };
+  return function() {
+    return window.checkoutConfig.shippingPolicy;
+  };
 });

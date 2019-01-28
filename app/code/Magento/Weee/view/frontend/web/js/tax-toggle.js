@@ -3,25 +3,23 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'jquery'
-], function ($) {
-    'use strict';
+define(['jquery'], function($) {
+  'use strict';
 
-    /**
-     * @param {Object} config
-     * @param {jQuery.Event} e
-     */
-    function onToggle(config, e) {
-        var elem = $(e.currentTarget),
-            expandedClassName = config.expandedClassName || 'cart-tax-total-expanded';
+  /**
+   * @param {Object} config
+   * @param {jQuery.Event} e
+   */
+  function onToggle(config, e) {
+    var elem = $(e.currentTarget),
+      expandedClassName = config.expandedClassName || 'cart-tax-total-expanded';
 
-        elem.toggleClass(expandedClassName);
+    elem.toggleClass(expandedClassName);
 
-        $(config.itemTaxId).toggle();
-    }
+    $(config.itemTaxId).toggle();
+  }
 
-    return function (data, el) {
-        $(el).on('click', onToggle.bind(null, data));
-    };
+  return function(data, el) {
+    $(el).on('click', onToggle.bind(null, data));
+  };
 });

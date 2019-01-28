@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/element/textarea',
-    'Magento_Catalog/js/components/visible-on-option/strategy'
-], function (Element, strategy) {
-    'use strict';
+  'Magento_Ui/js/form/element/textarea',
+  'Magento_Catalog/js/components/visible-on-option/strategy',
+], function(Element, strategy) {
+  'use strict';
 
-    return Element.extend(strategy);
+  return Element.extend(strategy);
 });

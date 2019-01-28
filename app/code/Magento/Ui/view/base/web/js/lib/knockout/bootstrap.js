@@ -5,18 +5,18 @@
 /** Loads all available knockout bindings, sets custom template engine, initializes knockout on page */
 
 define([
-    'ko',
-    './template/engine',
-    'knockoutjs/knockout-es5',
-    './bindings/bootstrap',
-    './extender/observable_array',
-    './extender/bound-nodes',
-    'domReady!'
-], function (ko, templateEngine) {
-    'use strict';
+  'ko',
+  './template/engine',
+  'knockoutjs/knockout-es5',
+  './bindings/bootstrap',
+  './extender/observable_array',
+  './extender/bound-nodes',
+  'domReady!',
+], function(ko, templateEngine) {
+  'use strict';
 
-    ko.uid = 0;
+  ko.uid = 0;
 
-    ko.setTemplateEngine(templateEngine);
-    ko.applyBindings();
+  ko.setTemplateEngine(templateEngine);
+  ko.applyBindings();
 });

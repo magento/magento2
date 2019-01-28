@@ -7,101 +7,108 @@
  * @api
  */
 define([
-    'jquery',
-    'underscore',
-    'mage/translate',
-    'jquery/ui',
-    'Magento_Ui/js/modal/modal'
-], function ($, _, $t) {
-    'use strict';
+  'jquery',
+  'underscore',
+  'mage/translate',
+  'jquery/ui',
+  'Magento_Ui/js/modal/modal',
+], function($, _, $t) {
+  'use strict';
 
-    $.widget('mage.confirm', $.mage.modal, {
-        options: {
-            modalClass: 'confirm',
-            title: '',
-            focus: '.action-accept',
-            actions: {
-
-                /**
-                 * Callback always - called on all actions.
-                 */
-                always: function () {},
-
-                /**
-                 * Callback confirm.
-                 */
-                confirm: function () {},
-
-                /**
-                 * Callback cancel.
-                 */
-                cancel: function () {}
-            },
-            buttons: [{
-                text: $t('Cancel'),
-                class: 'action-secondary action-dismiss',
-
-                /**
-                 * Click handler.
-                 */
-                click: function (event) {
-                    this.closeModal(event);
-                }
-            }, {
-                text: $t('OK'),
-                class: 'action-primary action-accept',
-
-                /**
-                 * Click handler.
-                 */
-                click: function (event) {
-                    this.closeModal(event, true);
-                }
-            }]
-        },
+  $.widget('mage.confirm', $.mage.modal, {
+    options: {
+      modalClass: 'confirm',
+      title: '',
+      focus: '.action-accept',
+      actions: {
+        /**
+         * Callback always - called on all actions.
+         */
+        always: function() {},
 
         /**
-         * Create widget.
+         * Callback confirm.
          */
-        _create: function () {
-            this._super();
-            this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this));
-            this.openModal();
-        },
+        confirm: function() {},
 
         /**
-         * Remove modal window.
+         * Callback cancel.
          */
-        _remove: function () {
-            this.modal.remove();
+        cancel: function() {},
+      },
+      buttons: [
+        {
+          text: $t('Cancel'),
+          class: 'action-secondary action-dismiss',
+
+          /**
+           * Click handler.
+           */
+          click: function(event) {
+            this.closeModal(event);
+          },
         },
+        {
+          text: $t('OK'),
+          class: 'action-primary action-accept',
 
-        /**
-         * Open modal window.
-         */
-        openModal: function () {
-            return this._super();
+          /**
+           * Click handler.
+           */
+          click: function(event) {
+            this.closeModal(event, true);
+          },
         },
+      ],
+    },
 
-        /**
-         * Close modal window.
-         */
-        closeModal: function (event, result) {
-            result = result || false;
+    /**
+     * Create widget.
+     */
+    _create: function() {
+      this._super();
+      this.modal
+        .find(this.options.modalCloseBtn)
+        .off()
+        .on('click', _.bind(this.closeModal, this));
+      this.openModal();
+    },
 
-            if (result) {
-                this.options.actions.confirm(event);
-            } else {
-                this.options.actions.cancel(event);
-            }
-            this.options.actions.always(event);
-            this.element.bind('confirmclosed', _.bind(this._remove, this));
+    /**
+     * Remove modal window.
+     */
+    _remove: function() {
+      this.modal.remove();
+    },
 
-            return this._super();
-        }
-    });
+    /**
+     * Open modal window.
+     */
+    openModal: function() {
+      return this._super();
+    },
 
-    return function (config) {
-        return $('<div></div>').html(config.content).confirm(config);
-    };
+    /**
+     * Close modal window.
+     */
+    closeModal: function(event, result) {
+      result = result || false;
+
+      if (result) {
+        this.options.actions.confirm(event);
+      } else {
+        this.options.actions.cancel(event);
+      }
+      this.options.actions.always(event);
+      this.element.bind('confirmclosed', _.bind(this._remove, this));
+
+      return this._super();
+    },
+  });
+
+  return function(config) {
+    return $('<div></div>')
+      .html(config.content)
+      .confirm(config);
+  };
 });

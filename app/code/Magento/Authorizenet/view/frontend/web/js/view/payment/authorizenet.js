@@ -4,19 +4,17 @@
  */
 
 define([
-    'uiComponent',
-    'Magento_Checkout/js/model/payment/renderer-list'
-],
-function (Component, rendererList) {
-    'use strict';
+  'uiComponent',
+  'Magento_Checkout/js/model/payment/renderer-list',
+], function(Component, rendererList) {
+  'use strict';
 
-    rendererList.push(
-        {
-            type: 'authorizenet_directpost',
-            component: 'Magento_Authorizenet/js/view/payment/method-renderer/authorizenet-directpost'
-        }
-    );
+  rendererList.push({
+    type: 'authorizenet_directpost',
+    component:
+      'Magento_Authorizenet/js/view/payment/method-renderer/authorizenet-directpost',
+  });
 
-    /** Add view logic here if needed */
-    return Component.extend({});
+  /** Add view logic here if needed */
+  return Component.extend({});
 });

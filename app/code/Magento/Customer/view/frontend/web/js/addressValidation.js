@@ -4,122 +4,131 @@
  */
 
 define([
-    'jquery',
-    'underscore',
-    'mageUtils',
-    'mage/translate',
-    'Magento_Checkout/js/model/postcode-validator',
-    'jquery/ui',
-    'validation'
-], function ($, __, utils, $t, postCodeValidator) {
-    'use strict';
+  'jquery',
+  'underscore',
+  'mageUtils',
+  'mage/translate',
+  'Magento_Checkout/js/model/postcode-validator',
+  'jquery/ui',
+  'validation',
+], function($, __, utils, $t, postCodeValidator) {
+  'use strict';
 
-    $.widget('mage.addressValidation', {
-        options: {
-            selectors: {
-                button: '[data-action=save-address]',
-                zip: '#zip',
-                country: 'select[name="country_id"]:visible'
-            }
-        },
+  $.widget('mage.addressValidation', {
+    options: {
+      selectors: {
+        button: '[data-action=save-address]',
+        zip: '#zip',
+        country: 'select[name="country_id"]:visible',
+      },
+    },
 
-        zipInput: null,
-        countrySelect: null,
+    zipInput: null,
+    countrySelect: null,
 
+    /**
+     * Validation creation
+     *
+     * @protected
+     */
+    _create: function() {
+      var button = $(this.options.selectors.button, this.element);
+
+      this.zipInput = $(this.options.selectors.zip, this.element);
+      this.countrySelect = $(this.options.selectors.country, this.element);
+
+      this.element.validation({
         /**
-         * Validation creation
-         *
-         * @protected
+         * Submit Handler
+         * @param {Element} form - address form
          */
-        _create: function () {
-            var button = $(this.options.selectors.button, this.element);
-
-            this.zipInput = $(this.options.selectors.zip, this.element);
-            this.countrySelect = $(this.options.selectors.country, this.element);
-
-            this.element.validation({
-
-                /**
-                 * Submit Handler
-                 * @param {Element} form - address form
-                 */
-                submitHandler: function (form) {
-
-                    button.attr('disabled', true);
-                    form.submit();
-                }
-            });
-
-            this._addPostCodeValidation();
+        submitHandler: function(form) {
+          button.attr('disabled', true);
+          form.submit();
         },
+      });
 
-        /**
-         * Add postcode validation
-         *
-         * @protected
-         */
-        _addPostCodeValidation: function () {
-            var self = this;
+      this._addPostCodeValidation();
+    },
 
-            this.zipInput.on('keyup', __.debounce(function (event) {
-                    var valid = self._validatePostCode(event.target.value);
+    /**
+     * Add postcode validation
+     *
+     * @protected
+     */
+    _addPostCodeValidation: function() {
+      var self = this;
 
-                    self._renderValidationResult(valid);
-                }, 500)
-            );
+      this.zipInput.on(
+        'keyup',
+        __.debounce(function(event) {
+          var valid = self._validatePostCode(event.target.value);
 
-            this.countrySelect.on('change', function () {
-                var valid = self._validatePostCode(self.zipInput.val());
+          self._renderValidationResult(valid);
+        }, 500),
+      );
 
-                self._renderValidationResult(valid);
-            });
-        },
+      this.countrySelect.on('change', function() {
+        var valid = self._validatePostCode(self.zipInput.val());
 
-        /**
-         * Validate post code value.
-         *
-         * @protected
-         * @param {String} postCode - post code
-         * @return {Boolean} Whether is post code valid
-         */
-        _validatePostCode: function (postCode) {
-            var countryId = this.countrySelect.val();
+        self._renderValidationResult(valid);
+      });
+    },
 
-            if (postCode === null) {
-                return true;
-            }
+    /**
+     * Validate post code value.
+     *
+     * @protected
+     * @param {String} postCode - post code
+     * @return {Boolean} Whether is post code valid
+     */
+    _validatePostCode: function(postCode) {
+      var countryId = this.countrySelect.val();
 
-            return postCodeValidator.validate(postCode, countryId, this.options.postCodes);
-        },
+      if (postCode === null) {
+        return true;
+      }
 
-        /**
-         * Renders warning messages for invalid post code.
-         *
-         * @protected
-         * @param {Boolean} valid
-         */
-        _renderValidationResult: function (valid) {
-            var warnMessage,
-                alertDiv = this.zipInput.next();
+      return postCodeValidator.validate(
+        postCode,
+        countryId,
+        this.options.postCodes,
+      );
+    },
 
-            if (!valid) {
-                warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
+    /**
+     * Renders warning messages for invalid post code.
+     *
+     * @protected
+     * @param {Boolean} valid
+     */
+    _renderValidationResult: function(valid) {
+      var warnMessage,
+        alertDiv = this.zipInput.next();
 
-                if (postCodeValidator.validatedPostCodeExample.length) {
-                    warnMessage += $t(' Example: ') + postCodeValidator.validatedPostCodeExample.join('; ') + '. ';
-                }
-                warnMessage += $t('If you believe it is the right one you can ignore this notice.');
-            }
+      if (!valid) {
+        warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
 
-            alertDiv.children(':first').text(warnMessage);
-
-            if (valid) {
-                alertDiv.hide();
-            } else {
-                alertDiv.show();
-            }
+        if (postCodeValidator.validatedPostCodeExample.length) {
+          warnMessage +=
+            $t(' Example: ') +
+            postCodeValidator.validatedPostCodeExample.join('; ') +
+            '. ';
         }
-    });
+        warnMessage += $t(
+          'If you believe it is the right one you can ignore this notice.',
+        );
+      }
 
-    return $.mage.addressValidation;
+      alertDiv.children(':first').text(warnMessage);
+
+      if (valid) {
+        alertDiv.hide();
+      } else {
+        alertDiv.show();
+      }
+    },
+  });
+
+  return $.mage.addressValidation;
 });

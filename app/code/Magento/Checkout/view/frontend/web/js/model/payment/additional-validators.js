@@ -6,51 +6,52 @@
 /**
  * @api
  */
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    var validators = [];
+  var validators = [];
 
-    return {
-        /**
-         * Register unique validator
-         *
-         * @param {*} validator
-         */
-        registerValidator: function (validator) {
-            validators.push(validator);
-        },
+  return {
+    /**
+     * Register unique validator
+     *
+     * @param {*} validator
+     */
+    registerValidator: function(validator) {
+      validators.push(validator);
+    },
 
-        /**
-         * Returns array of registered validators
-         *
-         * @returns {Array}
-         */
-        getValidators: function () {
-            return validators;
-        },
+    /**
+     * Returns array of registered validators
+     *
+     * @returns {Array}
+     */
+    getValidators: function() {
+      return validators;
+    },
 
-        /**
-         * Process validators
-         *
-         * @returns {Boolean}
-         */
-        validate: function () {
-            var validationResult = true;
+    /**
+     * Process validators
+     *
+     * @returns {Boolean}
+     */
+    validate: function() {
+      var validationResult = true;
 
-            if (validators.length <= 0) {
-                return validationResult;
-            }
+      if (validators.length <= 0) {
+        return validationResult;
+      }
 
-            validators.forEach(function (item) {
-                if (item.validate() == false) { //eslint-disable-line eqeqeq
-                    validationResult = false;
+      validators.forEach(function(item) {
+        if (item.validate() == false) {
+          //eslint-disable-line eqeqeq
+          validationResult = false;
 
-                    return false;
-                }
-            });
-
-            return validationResult;
+          return false;
         }
-    };
+      });
+
+      return validationResult;
+    },
+  };
 });

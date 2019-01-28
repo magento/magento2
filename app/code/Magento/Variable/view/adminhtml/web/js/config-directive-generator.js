@@ -3,23 +3,18 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'underscore'
-], function (_) {
-    'use strict';
+define(['underscore'], function(_) {
+  'use strict';
 
-    return _.extend({
-        directiveTemplate: '{{config path="%s"}}',
+  return _.extend({
+    directiveTemplate: '{{config path="%s"}}',
 
-        /**
-         * @param {String} path
-         * @return {String}
-         */
-        processConfig: function (path) {
-            return this.directiveTemplate.replace('%s', path);
-
-        }
-
-    });
-
+    /**
+     * @param {String} path
+     * @return {String}
+     */
+    processConfig: function(path) {
+      return this.directiveTemplate.replace('%s', path);
+    },
+  });
 });

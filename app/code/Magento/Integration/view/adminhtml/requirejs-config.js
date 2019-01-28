@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            integration: 'Magento_Integration/js/integration'
-        }
-    }
+  map: {
+    '*': {
+      integration: 'Magento_Integration/js/integration',
+    },
+  },
 };

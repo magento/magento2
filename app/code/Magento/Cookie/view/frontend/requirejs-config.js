@@ -4,10 +4,10 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            requireCookie: 'Magento_Cookie/js/require-cookie',
-            cookieNotices: 'Magento_Cookie/js/notices'
-        }
-    }
+  map: {
+    '*': {
+      requireCookie: 'Magento_Cookie/js/require-cookie',
+      cookieNotices: 'Magento_Cookie/js/notices',
+    },
+  },
 };

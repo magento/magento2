@@ -4,48 +4,48 @@
  */
 
 /* @api */
-define([], function () {
-    'use strict';
+define([], function() {
+  'use strict';
 
-    /**
-     * @param {*} isValid
-     * @param {*} isPotentiallyValid
-     * @return {Object}
-     */
-    function resultWrapper(isValid, isPotentiallyValid) {
-        return {
-            isValid: isValid,
-            isPotentiallyValid: isPotentiallyValid
-        };
+  /**
+   * @param {*} isValid
+   * @param {*} isPotentiallyValid
+   * @return {Object}
+   */
+  function resultWrapper(isValid, isPotentiallyValid) {
+    return {
+      isValid: isValid,
+      isPotentiallyValid: isPotentiallyValid,
+    };
+  }
+
+  /**
+   * CVV number validation.
+   * Validate digit count for CVV code.
+   *
+   * @param {*} value
+   * @param {Number} maxLength
+   * @return {Object}
+   */
+  return function(value, maxLength) {
+    var DEFAULT_LENGTH = 3;
+
+    maxLength = maxLength || DEFAULT_LENGTH;
+
+    if (!/^\d*$/.test(value)) {
+      return resultWrapper(false, false);
     }
 
-    /**
-     * CVV number validation.
-     * Validate digit count for CVV code.
-     *
-     * @param {*} value
-     * @param {Number} maxLength
-     * @return {Object}
-     */
-    return function (value, maxLength) {
-        var DEFAULT_LENGTH = 3;
+    if (value.length === maxLength) {
+      return resultWrapper(true, true);
+    }
 
-        maxLength = maxLength || DEFAULT_LENGTH;
+    if (value.length < maxLength) {
+      return resultWrapper(false, true);
+    }
 
-        if (!/^\d*$/.test(value)) {
-            return resultWrapper(false, false);
-        }
-
-        if (value.length === maxLength) {
-            return resultWrapper(true, true);
-        }
-
-        if (value.length < maxLength) {
-            return resultWrapper(false, true);
-        }
-
-        if (value.length > maxLength) {
-            return resultWrapper(false, false);
-        }
-    };
+    if (value.length > maxLength) {
+      return resultWrapper(false, false);
+    }
+  };
 });

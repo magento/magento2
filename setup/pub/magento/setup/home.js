@@ -4,7 +4,11 @@
  */
 
 'use strict';
-angular.module('home', ['ngStorage'])
-    .controller('homeController', ['$scope', '$http', '$localStorage', function ($scope, $http, $localStorage) {
-         $scope.page_title = "Magento setup tool";
-    }]);
+angular.module('home', ['ngStorage']).controller('homeController', [
+  '$scope',
+  '$http',
+  '$localStorage',
+  function($scope, $http, $localStorage) {
+    $scope.page_title = 'Magento setup tool';
+  },
+]);

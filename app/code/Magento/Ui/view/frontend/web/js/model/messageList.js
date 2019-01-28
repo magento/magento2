@@ -3,10 +3,8 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    './messages'
-], function (Messages) {
-    'use strict';
+define(['./messages'], function(Messages) {
+  'use strict';
 
-    return new Messages();
+  return new Messages();
 });

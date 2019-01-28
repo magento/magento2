@@ -4,35 +4,35 @@
  */
 
 define([
-    'uiComponent',
-    'Magento_Customer/js/customer-data',
-    'jquery',
-    'mage/mage',
-    'mage/decorate'
-], function (Component, customerData, $) {
-    'use strict';
+  'uiComponent',
+  'Magento_Customer/js/customer-data',
+  'jquery',
+  'mage/mage',
+  'mage/decorate',
+], function(Component, customerData, $) {
+  'use strict';
 
-    var sidebarInitialized = false;
+  var sidebarInitialized = false;
 
-    /**
-     * Initialize sidebar
-     */
-    function initSidebar() {
-        if (sidebarInitialized) {
-            return;
-        }
-
-        sidebarInitialized = true;
-        $('[data-role=compare-products-sidebar]').decorate('list', true);
+  /**
+   * Initialize sidebar
+   */
+  function initSidebar() {
+    if (sidebarInitialized) {
+      return;
     }
 
-    return Component.extend({
-        /** @inheritdoc */
-        initialize: function () {
-            this._super();
-            this.compareProducts = customerData.get('compare-products');
+    sidebarInitialized = true;
+    $('[data-role=compare-products-sidebar]').decorate('list', true);
+  }
 
-            initSidebar();
-        }
-    });
+  return Component.extend({
+    /** @inheritdoc */
+    initialize: function() {
+      this._super();
+      this.compareProducts = customerData.get('compare-products');
+
+      initSidebar();
+    },
+  });
 });

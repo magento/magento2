@@ -6,42 +6,42 @@
 /**
  * @api
  */
-define([
-    'underscore',
-    'uiRegistry',
-    './abstract'
-], function (_, registry, Abstract) {
-    'use strict';
+define(['underscore', 'uiRegistry', './abstract'], function(
+  _,
+  registry,
+  Abstract,
+) {
+  'use strict';
 
-    return Abstract.extend({
-        defaults: {
-            imports: {
-                update: '${ $.parentName }.country_id:value'
-            }
-        },
+  return Abstract.extend({
+    defaults: {
+      imports: {
+        update: '${ $.parentName }.country_id:value',
+      },
+    },
 
-        /**
-         * @param {String} value
-         */
-        update: function (value) {
-            var country = registry.get(this.parentName + '.' + 'country_id'),
-                options = country.indexedOptions,
-                option;
+    /**
+     * @param {String} value
+     */
+    update: function(value) {
+      var country = registry.get(this.parentName + '.' + 'country_id'),
+        options = country.indexedOptions,
+        option;
 
-            if (!value) {
-                return;
-            }
+      if (!value) {
+        return;
+      }
 
-            option = options[value];
+      option = options[value];
 
-            if (option['is_zipcode_optional']) {
-                this.error(false);
-                this.validation = _.omit(this.validation, 'required-entry');
-            } else {
-                this.validation['required-entry'] = true;
-            }
+      if (option['is_zipcode_optional']) {
+        this.error(false);
+        this.validation = _.omit(this.validation, 'required-entry');
+      } else {
+        this.validation['required-entry'] = true;
+      }
 
-            this.required(!option['is_zipcode_optional']);
-        }
-    });
+      this.required(!option['is_zipcode_optional']);
+    },
+  });
 });

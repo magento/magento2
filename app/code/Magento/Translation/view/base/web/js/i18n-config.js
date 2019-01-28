@@ -3,14 +3,14 @@
  * See COPYING.txt for license details.
  */
 
-(function () {
-    'use strict';
+(function() {
+  'use strict';
 
-    require.config({
-        config: {
-            'Magento_Ui/js/lib/knockout/bindings/i18n': {
-                inlineTranslation: true
-            }
-        }
-    });
+  require.config({
+    config: {
+      'Magento_Ui/js/lib/knockout/bindings/i18n': {
+        inlineTranslation: true,
+      },
+    },
+  });
 })();

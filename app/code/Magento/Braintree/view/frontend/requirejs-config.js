@@ -4,9 +4,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            braintree: 'https://js.braintreegateway.com/js/braintree-2.32.0.min.js'
-        }
-    }
+  map: {
+    '*': {
+      braintree: 'https://js.braintreegateway.com/js/braintree-2.32.0.min.js',
+    },
+  },
 };

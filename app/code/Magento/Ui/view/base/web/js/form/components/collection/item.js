@@ -6,195 +6,189 @@
 /**
  * @api
  */
-define([
-    'underscore',
-    'mageUtils',
-    '../tab'
-], function (_, utils, Tab) {
-    'use strict';
+define(['underscore', 'mageUtils', '../tab'], function(_, utils, Tab) {
+  'use strict';
 
-    var previewConfig = {
-        separator: ' ',
-        prefix: ''
-    };
+  var previewConfig = {
+    separator: ' ',
+    prefix: '',
+  };
 
-    /**
-     * Parses incoming data and returns result merged with default preview config
-     *
-     * @param  {Object|String} data
-     * @return {Object}
-     */
-    function parsePreview(data) {
-        if (typeof data == 'string') {
-            data = {
-                items: data
-            };
-        }
-
-        data.items = utils.stringToArray(data.items);
-
-        return _.defaults(data, previewConfig);
+  /**
+   * Parses incoming data and returns result merged with default preview config
+   *
+   * @param  {Object|String} data
+   * @return {Object}
+   */
+  function parsePreview(data) {
+    if (typeof data == 'string') {
+      data = {
+        items: data,
+      };
     }
 
-    return Tab.extend({
-        defaults: {
-            label: '',
-            uniqueNs: 'activeCollectionItem',
-            previewTpl: 'ui/form/components/collection/preview'
-        },
+    data.items = utils.stringToArray(data.items);
 
-        /**
-         * Extends instance with default config, calls initializes of parent class
-         */
-        initialize: function () {
-            _.bindAll(this, 'buildPreview', 'hasPreview');
+    return _.defaults(data, previewConfig);
+  }
 
-            return this._super();
-        },
+  return Tab.extend({
+    defaults: {
+      label: '',
+      uniqueNs: 'activeCollectionItem',
+      previewTpl: 'ui/form/components/collection/preview',
+    },
 
-        /**
-         * Calls initProperties of parent class, initializes properties
-         * of instance.
-         *
-         * @return {Object} - reference to instance
-         */
-        initConfig: function () {
-            this._super();
+    /**
+     * Extends instance with default config, calls initializes of parent class
+     */
+    initialize: function() {
+      _.bindAll(this, 'buildPreview', 'hasPreview');
 
-            this.displayed = [];
+      return this._super();
+    },
 
-            return this;
-        },
+    /**
+     * Calls initProperties of parent class, initializes properties
+     * of instance.
+     *
+     * @return {Object} - reference to instance
+     */
+    initConfig: function() {
+      this._super();
 
-        /**
-         * Calls initObservable of parent class, initializes observable
-         * properties of instance.
-         *
-         * @return {Object} - reference to instance
-         */
-        initObservable: function () {
-            this._super()
-                .observe({
-                    noPreview: true,
-                    indexed: {}
-                });
+      this.displayed = [];
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Is being called when child element has been initialized,
-         *     calls initElement of parent class, binds to element's update event,
-         *     calls insertToArea and insertToIndexed methods passing element to it
-         *
-         * @param  {Object} elem
-         */
-        initElement: function (elem) {
-            this._super()
-                .insertToIndexed(elem);
+    /**
+     * Calls initObservable of parent class, initializes observable
+     * properties of instance.
+     *
+     * @return {Object} - reference to instance
+     */
+    initObservable: function() {
+      this._super().observe({
+        noPreview: true,
+        indexed: {},
+      });
 
-            return this;
-        },
+      return this;
+    },
 
-        /**
-         * Adds element to observable indexed object of instance
-         *
-         * @param  {Object} elem
-         * @return {Object} - reference to instance
-         */
-        insertToIndexed: function (elem) {
-            var indexed = this.indexed();
+    /**
+     * Is being called when child element has been initialized,
+     *     calls initElement of parent class, binds to element's update event,
+     *     calls insertToArea and insertToIndexed methods passing element to it
+     *
+     * @param  {Object} elem
+     */
+    initElement: function(elem) {
+      this._super().insertToIndexed(elem);
 
-            indexed[elem.index] = elem;
+      return this;
+    },
 
-            this.indexed(indexed);
+    /**
+     * Adds element to observable indexed object of instance
+     *
+     * @param  {Object} elem
+     * @return {Object} - reference to instance
+     */
+    insertToIndexed: function(elem) {
+      var indexed = this.indexed();
 
-            return this;
-        },
+      indexed[elem.index] = elem;
 
-        /**
-         * Destroys current instance along with all of its' children.
-         * Overrides base method to clear data when this method is called.
-         */
-        destroy: function () {
-            this._super();
-            this._clearData();
-        },
+      this.indexed(indexed);
 
-        /**
-         * Clears all data associated with component.
-         * @private
-         *
-         * @returns {Item} Chainable.
-         */
-        _clearData: function () {
-            this.source.remove(this.dataScope);
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Destroys current instance along with all of its' children.
+     * Overrides base method to clear data when this method is called.
+     */
+    destroy: function() {
+      this._super();
+      this._clearData();
+    },
 
-        /**
-         * Formats incoming previews array via parsePreview function.
-         *
-         * @param  {Array} previews
-         * @return {Array} - formatted previews
-         */
-        formatPreviews: function (previews) {
-            return previews.map(parsePreview);
-        },
+    /**
+     * Clears all data associated with component.
+     * @private
+     *
+     * @returns {Item} Chainable.
+     */
+    _clearData: function() {
+      this.source.remove(this.dataScope);
 
-        /**
-         * Creates string view of previews
-         *
-         * @param  {Object} data
-         * @return {Strict} - formatted preview string
-         */
-        buildPreview: function (data) {
-            var preview = this.getPreview(data.items),
-                prefix = data.prefix;
+      return this;
+    },
 
-            return prefix + preview.join(data.separator);
-        },
+    /**
+     * Formats incoming previews array via parsePreview function.
+     *
+     * @param  {Array} previews
+     * @return {Array} - formatted previews
+     */
+    formatPreviews: function(previews) {
+      return previews.map(parsePreview);
+    },
 
-        /**
-         * Defines if instance has preview for incoming data
-         *
-         * @param  {Object}  data
-         * @return {Boolean}
-         */
-        hasPreview: function (data) {
-            return !!this.getPreview(data.items).length;
-        },
+    /**
+     * Creates string view of previews
+     *
+     * @param  {Object} data
+     * @return {Strict} - formatted preview string
+     */
+    buildPreview: function(data) {
+      var preview = this.getPreview(data.items),
+        prefix = data.prefix;
 
-        /**
-         * Creates an array of previews for elements specified in incoming
-         * items array, calls updatePreview afterwards.
-         *
-         * @param  {Array} items - An array of element's indexes.
-         * @returns {Array} An array of previews.
-         */
-        getPreview: function (items) {
-            var elems = this.indexed(),
-                displayed = this.displayed,
-                preview;
+      return prefix + preview.join(data.separator);
+    },
 
-            items = items.map(function (index) {
-                var elem = elems[index];
+    /**
+     * Defines if instance has preview for incoming data
+     *
+     * @param  {Object}  data
+     * @return {Boolean}
+     */
+    hasPreview: function(data) {
+      return !!this.getPreview(data.items).length;
+    },
 
-                preview = elem && elem.visible() ? elem.getPreview() : '';
+    /**
+     * Creates an array of previews for elements specified in incoming
+     * items array, calls updatePreview afterwards.
+     *
+     * @param  {Array} items - An array of element's indexes.
+     * @returns {Array} An array of previews.
+     */
+    getPreview: function(items) {
+      var elems = this.indexed(),
+        displayed = this.displayed,
+        preview;
 
-                preview = Array.isArray(preview) ?
-                    _.compact(preview).join(', ') :
-                    preview;
+      items = items.map(function(index) {
+        var elem = elems[index];
 
-                utils.toggle(displayed, index, !!preview);
+        preview = elem && elem.visible() ? elem.getPreview() : '';
 
-                return preview;
-            });
+        preview = Array.isArray(preview)
+          ? _.compact(preview).join(', ')
+          : preview;
 
-            this.noPreview(!displayed.length);
+        utils.toggle(displayed, index, !!preview);
 
-            return _.compact(items);
-        }
-    });
+        return preview;
+      });
+
+      this.noPreview(!displayed.length);
+
+      return _.compact(items);
+    },
+  });
 });

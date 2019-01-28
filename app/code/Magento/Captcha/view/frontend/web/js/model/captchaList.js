@@ -3,42 +3,42 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery'], function ($) {
-    'use strict';
+define(['jquery'], function($) {
+  'use strict';
 
-    var captchaList = [];
+  var captchaList = [];
 
-    return {
-        /**
-         * @param {Object} captcha
-         */
-        add: function (captcha) {
-            captchaList.push(captcha);
-        },
+  return {
+    /**
+     * @param {Object} captcha
+     */
+    add: function(captcha) {
+      captchaList.push(captcha);
+    },
 
-        /**
-         * @param {String} formId
-         * @return {Object}
-         */
-        getCaptchaByFormId: function (formId) {
-            var captcha = null;
+    /**
+     * @param {String} formId
+     * @return {Object}
+     */
+    getCaptchaByFormId: function(formId) {
+      var captcha = null;
 
-            $.each(captchaList, function (key, item) {
-                if (formId === item.formId) {
-                    captcha = item;
+      $.each(captchaList, function(key, item) {
+        if (formId === item.formId) {
+          captcha = item;
 
-                    return false;
-                }
-            });
-
-            return captcha;
-        },
-
-        /**
-         * @return {Array}
-         */
-        getCaptchaList: function () {
-            return captchaList;
+          return false;
         }
-    };
+      });
+
+      return captcha;
+    },
+
+    /**
+     * @return {Array}
+     */
+    getCaptchaList: function() {
+      return captchaList;
+    },
+  };
 });

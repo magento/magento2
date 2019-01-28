@@ -6,271 +6,266 @@
 /**
  * @api
  */
-define([
-    'ko',
-    'underscore',
-    'mageUtils',
-    'uiLayout',
-    'uiElement'
-], function (ko, _, utils, layout, Element) {
-    'use strict';
+define(['ko', 'underscore', 'mageUtils', 'uiLayout', 'uiElement'], function(
+  ko,
+  _,
+  utils,
+  layout,
+  Element,
+) {
+  'use strict';
 
-    return Element.extend({
-        defaults: {
-            template: 'ui/grid/paging/paging',
-            totalTmpl: 'ui/grid/paging-total',
-            pageSize: 20,
-            current: 1,
-            selectProvider: 'ns = ${ $.ns }, index = ids',
+  return Element.extend({
+    defaults: {
+      template: 'ui/grid/paging/paging',
+      totalTmpl: 'ui/grid/paging-total',
+      pageSize: 20,
+      current: 1,
+      selectProvider: 'ns = ${ $.ns }, index = ids',
 
-            sizesConfig: {
-                component: 'Magento_Ui/js/grid/paging/sizes',
-                name: '${ $.name }_sizes',
-                storageConfig: {
-                    provider: '${ $.storageConfig.provider }',
-                    namespace: '${ $.storageConfig.namespace }'
-                }
-            },
-
-            imports: {
-                pageSize: '${ $.sizesConfig.name }:value',
-                totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
-            },
-
-            exports: {
-                pageSize: '${ $.provider }:params.paging.pageSize',
-                current: '${ $.provider }:params.paging.current'
-            },
-
-            listens: {
-                'pages': 'onPagesChange',
-                'pageSize': 'onPageSizeChange',
-                'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
-            },
-
-            modules: {
-                sizes: '${ $.sizesConfig.name }'
-            }
+      sizesConfig: {
+        component: 'Magento_Ui/js/grid/paging/sizes',
+        name: '${ $.name }_sizes',
+        storageConfig: {
+          provider: '${ $.storageConfig.provider }',
+          namespace: '${ $.storageConfig.namespace }',
         },
+      },
+
+      imports: {
+        pageSize: '${ $.sizesConfig.name }:value',
+        totalSelected: '${ $.selectProvider }:totalSelected',
+        totalRecords: '${ $.provider }:data.totalRecords',
+      },
+
+      exports: {
+        pageSize: '${ $.provider }:params.paging.pageSize',
+        current: '${ $.provider }:params.paging.current',
+      },
+
+      listens: {
+        pages: 'onPagesChange',
+        pageSize: 'onPageSizeChange',
+        totalRecords: 'updateCounter',
+        '${ $.provider }:params.filters': 'goFirst',
+      },
+
+      modules: {
+        sizes: '${ $.sizesConfig.name }',
+      },
+    },
+
+    /**
+     * Initializes paging component.
+     *
+     * @returns {Paging} Chainable.
+     */
+    initialize: function() {
+      this._super()
+        .initSizes()
+        .updateCounter();
+
+      return this;
+    },
+
+    /**
+     * Initializes observable properties.
+     *
+     * @returns {Paging} Chainable.
+     */
+    initObservable: function() {
+      this._super().track([
+        'totalSelected',
+        'totalRecords',
+        'pageSize',
+        'pages',
+        'current',
+      ]);
+
+      this._current = ko.pureComputed({
+        read: ko.getObservable(this, 'current'),
 
         /**
-         * Initializes paging component.
-         *
-         * @returns {Paging} Chainable.
+         * Validates page change according to user's input.
+         * Sets current observable to result of validation.
+         * Calls reload method then.
          */
-        initialize: function () {
-            this._super()
-                .initSizes()
-                .updateCounter();
-
-            return this;
+        write: function(value) {
+          this.setPage(value)._current.notifySubscribers(this.current);
         },
 
-        /**
-         * Initializes observable properties.
-         *
-         * @returns {Paging} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .track([
-                    'totalSelected',
-                    'totalRecords',
-                    'pageSize',
-                    'pages',
-                    'current'
-                ]);
+        owner: this,
+      });
 
-            this._current = ko.pureComputed({
-                read: ko.getObservable(this, 'current'),
+      return this;
+    },
 
-                /**
-                 * Validates page change according to user's input.
-                 * Sets current observable to result of validation.
-                 * Calls reload method then.
-                 */
-                write: function (value) {
-                    this.setPage(value)
-                        ._current.notifySubscribers(this.current);
-                },
+    /**
+     * Initializes sizes component.
+     *
+     * @returns {Paging} Chainable.
+     */
+    initSizes: function() {
+      layout([this.sizesConfig]);
 
-                owner: this
-            });
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Gets first item index on current page.
+     *
+     * @returns {Number}
+     */
+    getFirstItemIndex: function() {
+      return this.pageSize * (this.current - 1) + 1;
+    },
 
-        /**
-         * Initializes sizes component.
-         *
-         * @returns {Paging} Chainable.
-         */
-        initSizes: function () {
-            layout([this.sizesConfig]);
+    /**
+     * Gets last item index on current page.
+     *
+     * @returns {Number}
+     */
+    getLastItemIndex: function() {
+      var lastItem = this.getFirstItemIndex() + this.pageSize - 1;
 
-            return this;
-        },
+      return this.totalRecords < lastItem ? this.totalRecords : lastItem;
+    },
 
-        /**
-         * Gets first item index on current page.
-         *
-         * @returns {Number}
-         */
-        getFirstItemIndex: function () {
-            return this.pageSize * (this.current - 1) + 1;
-        },
+    /**
+     * Sets cursor to the provied value.
+     *
+     * @param {(Number|String)} value - New value of the cursor.
+     * @returns {Paging} Chainable.
+     */
+    setPage: function(value) {
+      this.current = this.normalize(value);
 
-        /**
-         * Gets last item index on current page.
-         *
-         * @returns {Number}
-         */
-        getLastItemIndex: function () {
-            var lastItem = this.getFirstItemIndex() + this.pageSize - 1;
+      return this;
+    },
 
-            return this.totalRecords < lastItem ? this.totalRecords : lastItem;
-        },
+    /**
+     * Increments current page value.
+     *
+     * @returns {Paging} Chainable.
+     */
+    next: function() {
+      this.setPage(this.current + 1);
 
-        /**
-         * Sets cursor to the provied value.
-         *
-         * @param {(Number|String)} value - New value of the cursor.
-         * @returns {Paging} Chainable.
-         */
-        setPage: function (value) {
-            this.current = this.normalize(value);
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Decrements current page value.
+     *
+     * @returns {Paging} Chainable.
+     */
+    prev: function() {
+      this.setPage(this.current - 1);
 
-        /**
-         * Increments current page value.
-         *
-         * @returns {Paging} Chainable.
-         */
-        next: function () {
-            this.setPage(this.current + 1);
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Goes to the first page.
+     *
+     * @returns {Paging} Chainable.
+     */
+    goFirst: function() {
+      this.current = 1;
 
-        /**
-         * Decrements current page value.
-         *
-         * @returns {Paging} Chainable.
-         */
-        prev: function () {
-            this.setPage(this.current - 1);
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Goes to the last page.
+     *
+     * @returns {Paging} Chainable.
+     */
+    goLast: function() {
+      this.current = this.pages;
 
-        /**
-         * Goes to the first page.
-         *
-         * @returns {Paging} Chainable.
-         */
-        goFirst: function () {
-            this.current = 1;
+      return this;
+    },
 
-            return this;
-        },
+    /**
+     * Checks if current page is the first one.
+     *
+     * @returns {Boolean}
+     */
+    isFirst: function() {
+      return this.current === 1;
+    },
 
-        /**
-         * Goes to the last page.
-         *
-         * @returns {Paging} Chainable.
-         */
-        goLast: function () {
-            this.current = this.pages;
+    /**
+     * Checks if current page is the last one.
+     *
+     * @returns {Boolean}
+     */
+    isLast: function() {
+      return this.current === this.pages;
+    },
 
-            return this;
-        },
+    /**
+     * Updates number of pages.
+     */
+    updateCounter: function() {
+      this.pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
 
-        /**
-         * Checks if current page is the first one.
-         *
-         * @returns {Boolean}
-         */
-        isFirst: function () {
-            return this.current === 1;
-        },
+      return this;
+    },
 
-        /**
-         * Checks if current page is the last one.
-         *
-         * @returns {Boolean}
-         */
-        isLast: function () {
-            return this.current === this.pages;
-        },
+    /**
+     * Calculates new page cursor based on the
+     * previous and current page size values.
+     *
+     * @returns {Number} Updated cursor value.
+     */
+    updateCursor: function() {
+      var cursor = this.current - 1,
+        size = this.pageSize,
+        oldSize = this.previousSize,
+        delta = (cursor * (oldSize - size)) / size;
 
-        /**
-         * Updates number of pages.
-         */
-        updateCounter: function () {
-            this.pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
+      delta = size > oldSize ? Math.ceil(delta) : Math.floor(delta);
 
-            return this;
-        },
+      cursor += delta + 1;
 
-        /**
-         * Calculates new page cursor based on the
-         * previous and current page size values.
-         *
-         * @returns {Number} Updated cursor value.
-         */
-        updateCursor: function () {
-            var cursor  = this.current - 1,
-                size    = this.pageSize,
-                oldSize = this.previousSize,
-                delta   = cursor * (oldSize  - size) / size;
+      this.previousSize = size;
 
-            delta = size > oldSize ?
-                Math.ceil(delta) :
-                Math.floor(delta);
+      this.setPage(cursor);
 
-            cursor += delta + 1;
+      return this;
+    },
 
-            this.previousSize = size;
+    /**
+     * Converts provided value to a number and puts
+     * it in range between 1 and total amount of pages.
+     *
+     * @param {(Number|String)} value - Value to be normalized.
+     * @returns {Number}
+     */
+    normalize: function(value) {
+      value = +value;
 
-            this.setPage(cursor);
+      if (isNaN(value)) {
+        return 1;
+      }
 
-            return this;
-        },
+      return utils.inRange(Math.round(value), 1, this.pages);
+    },
 
-        /**
-         * Converts provided value to a number and puts
-         * it in range between 1 and total amount of pages.
-         *
-         * @param {(Number|String)} value - Value to be normalized.
-         * @returns {Number}
-         */
-        normalize: function (value) {
-            value = +value;
+    /**
+     * Handles changes of the page size.
+     */
+    onPageSizeChange: function() {
+      this.updateCounter().updateCursor();
+    },
 
-            if (isNaN(value)) {
-                return 1;
-            }
-
-            return utils.inRange(Math.round(value), 1, this.pages);
-        },
-
-        /**
-         * Handles changes of the page size.
-         */
-        onPageSizeChange: function () {
-            this.updateCounter()
-                .updateCursor();
-        },
-
-        /**
-         * Handles changes of the pages amount.
-         */
-        onPagesChange: function () {
-            this.updateCursor();
-        }
-    });
+    /**
+     * Handles changes of the pages amount.
+     */
+    onPagesChange: function() {
+      this.updateCursor();
+    },
+  });
 });
