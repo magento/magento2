@@ -7,13 +7,13 @@
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
-
 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var \Magento\Framework\Registry $registry */
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
 
 /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
 $wishlist = $objectManager->create(\Magento\Wishlist\Model\Wishlist::class);
@@ -28,9 +28,7 @@ try {
     $wishlist->loadByCustomerId($secondCustomer->getId());
     $wishlist->delete();
 } catch (NoSuchEntityException $e) {
-    /**
-     * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
-     */
+    /** Tests which are wrapped with MySQL transaction clear all data by transaction rollback.*/
 }
 
 $registry->unregister('isSecureArea');
