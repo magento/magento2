@@ -101,6 +101,7 @@
         <data key="state"></data>
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">444-44-444-44</data>
     </entity>
 </entities>
